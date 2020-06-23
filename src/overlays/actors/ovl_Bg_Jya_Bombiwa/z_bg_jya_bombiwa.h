@@ -7,8 +7,8 @@
 struct BgJyaBombiwa;
 
 typedef struct BgJyaBombiwa {
-    /* 0x0000 */ Actor actor;
-    /* 0x014C */ char unk_14C[0x7C];
+    /* 0x0000 */ DynaPolyActor dyna;
+    /* 0x0164 */ char unk_164[0x64];
 } BgJyaBombiwa; // size = 0x01C8
 
 extern const ActorInit Bg_Jya_Bombiwa_InitVars;
