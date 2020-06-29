@@ -249,8 +249,8 @@ void Fault_Sleep(u32 duration) {
 }
 
 void Fault_PadCallback(Input* input) {
-    //! @bug This function is not called correctly and thus will crash from reading a bad pointer at 0x800C7E4C
-    PadMgr_RequestPadData(input, 0);
+    //! @bug This function is not called correctly and thus will crash from reading a bad pointer at 0x800C7E4C | (fixed?)
+    PadMgr_RequestPadData(&gPadMgr, input, 0);
 }
 
 void Fault_UpdatePadImpl() {
@@ -519,7 +519,14 @@ void Fault_Wait5Seconds(void) {
     sFaultStructPtr->faultActive = true;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/fault/Fault_WaitForButtonCombo.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/code/fault/Fault_WaitForButtonCombo.s")
+void Fault_WaitForButtonCombo(void) {
+    osSyncPrintf("\x1b[37mKeyWaitB (ＬＲＺ \x1b[37m上\x1b[33m下 \x1b[33m上\x1b[37m下 \x1b[37m左\x1b[33m左 \x1b[33m右\x1b[37m右 \x1b[32mＢ\x1b[34mＡ\x1b[31mSTART\x1b[37m)\x1b[m\n");
+    osSyncPrintf("\x1b[37mKeyWaitB'(ＬＲ左\x1b[33m右 +\x1b[31mSTART\x1b[37m)\x1b[m\n");
+    Fault_Sleep(0x10U);
+    Fault_UpdatePadImpl();
+    osWritebackDCacheAll();
+}
 
 void Fault_DrawMemDumpPage(const char* title, u32* addr, u32 param_3) {
     u32* alignedAddr;
