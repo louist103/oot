@@ -16,15 +16,9 @@ void BgJya1flift_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgJya1flift_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void BgJya1flift_InitDynapoly(BgJya1flift* this, GlobalContext* globalCtx, void* arg2, s32 arg3);
-void BgJya1flift_InitCollision(Actor* thisx, GlobalContext* globalCtx);
-void func_80892DB0(BgJya1flift* this);
-void func_80892DCC(BgJya1flift* this, GlobalContext* globalCtx);
-void BgJya1flift_DoNothing(BgJya1flift* this, GlobalContext* globalCtx);
 void BgJya1flift_ChangeDirection(BgJya1flift* this);
 void BgJya1flift_Move(BgJya1flift* this, GlobalContext* globalCtx);
-void func_80892E0C(BgJya1flift* this);
-void BgJya1flift_ResetMoveDelay(BgJya1flift* this);
-void BgJya1flift_DelayMove(BgJya1flift* this, GlobalContext* globalCtx);
+
 void printinfo(Player* player, BgJya1flift* this, GlobalContext* globalCtx);
 extern u8 D_808930E0 = 0;
 
@@ -72,7 +66,7 @@ void BgJya1flift_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_ProcessInitChain(thisx, sInitChain);
     thisx->room = -1;
     D_808930E0 = 1;
-    this->dyna.actor.posRot.pos.y= 50.0f;
+    this->dyna.actor.posRot.pos.y= this->dyna.actor.initPosRot.pos.y;
     this->actionFunc = BgJya1flift_Move;
     this->hasInitialized = 1;
 }
@@ -82,7 +76,6 @@ void BgJya1flift_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
     if (this->hasInitialized != 0) {
         D_808930E0 = 0;
-        Collider_DestroyCylinder(globalCtx, &this->collider);
         DynaPolyInfo_Free(globalCtx, &globalCtx->colCtx.dyna, this->dyna.dynaPolyId);
     }
 }
@@ -133,8 +126,6 @@ void BgJya1flift_Update(Actor* thisx, GlobalContext* globalCtx) {
     Player* player = PLAYER;
     this->actionFunc(this, globalCtx);
     printinfo(player, this, globalCtx);
-    Collider_CylinderUpdate(thisx, &this->collider);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider);
     return;
 }
 void BgJya1flift_Draw(Actor* thisx, GlobalContext* globalCtx) {
