@@ -58,14 +58,11 @@ void BgJya1flift_InitDynapoly(BgJya1flift* this, GlobalContext* globalCtx, void*
 void BgJya1flift_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgJya1flift* this = THIS;
     this->hasInitialized = 0;
-    if (D_808930E0 != 0) {
-        Actor_Kill(thisx);
-        return;
-    }
+
     BgJya1flift_InitDynapoly(this, globalCtx, &D_060004A8, 0);
     Actor_ProcessInitChain(thisx, sInitChain);
-    thisx->room = -1;
-    D_808930E0 = 1;
+    thisx->room = 0;
+  
     this->dyna.actor.posRot.pos.y= this->dyna.actor.initPosRot.pos.y;
     this->actionFunc = BgJya1flift_Move;
     this->hasInitialized = 1;
@@ -117,6 +114,11 @@ void BgJya1flift_Move(BgJya1flift* this, GlobalContext* globalCtx) {
             player->actor.posRot.pos.z = this->dyna.actor.posRot.pos.z;
             Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
         } 
+        if (CHECK_PAD(input[0].cur, L_TRIG)) {
+            this->dyna.actor.posRot.rot.y -= 5;
+            player->actor.posRot.rot.y = this->dyna.actor.posRot.rot.y;
+            Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
+        }
     }
 }
 
@@ -145,12 +147,16 @@ void printinfo(Player* player, BgJya1flift* this, GlobalContext* globalCtx) {
     GfxPrint_Printf(printer, "LINK POS X: %.0f", player->actor.posRot.pos.x);
     GfxPrint_SetPos(printer, 1, 10);
     GfxPrint_Printf(printer, "LINK POS Z: %.0f", player->actor.posRot.pos.z);
-    GfxPrint_SetColor(printer, 255, 255, 255, 255);
     GfxPrint_SetPos(printer, 1, 11);
-    GfxPrint_Printf(printer, "LIFT POS Y: %.0f", this->dyna.actor.posRot.pos.y);
+    GfxPrint_Printf(printer, "LINK ROT Y: %.0f", player->actor.posRot.rot.y);
+    GfxPrint_SetColor(printer, 255, 255, 255, 255);
     GfxPrint_SetPos(printer, 1, 12);
-    GfxPrint_Printf(printer, "LIFT POS X: %.0f", this->dyna.actor.posRot.pos.x);
+    GfxPrint_Printf(printer, "LIFT POS Y: %.0f", this->dyna.actor.posRot.pos.y);
     GfxPrint_SetPos(printer, 1, 13);
+    GfxPrint_Printf(printer, "LIFT POS X: %.0f", this->dyna.actor.posRot.pos.x);
+    GfxPrint_SetPos(printer, 1, 14);
+    GfxPrint_Printf(printer, "LIFT POS Z: %.0f", this->dyna.actor.posRot.pos.z);
+    GfxPrint_SetPos(printer, 1, 15);
     GfxPrint_Printf(printer, "LIFT POS Z: %.0f", this->dyna.actor.posRot.pos.z);
     gfxCtx->polyOpa.p = GfxPrint_Close(printer);
     GfxPrint_Destroy(printer);
