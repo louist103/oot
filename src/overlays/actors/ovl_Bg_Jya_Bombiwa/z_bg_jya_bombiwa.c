@@ -11,7 +11,7 @@ void BgJyaBombiwa_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void func_808951A0(BgJyaBombiwa* this, GlobalContext* globalCtx, void* arg2, DynaPolyMoveFlag flag);
 void func_80895228(BgJyaBombiwa* this, GlobalContext* globalCtx);
-
+/*
 const ActorInit Bg_Jya_Bombiwa_InitVars = {
     ACTOR_BG_JYA_BOMBIWA,
     ACTORTYPE_BG,
@@ -22,7 +22,7 @@ const ActorInit Bg_Jya_Bombiwa_InitVars = {
     (ActorFunc)BgJyaBombiwa_Destroy,
     (ActorFunc)BgJyaBombiwa_Update,
     (ActorFunc)BgJyaBombiwa_Draw,
-};
+};*/
 static ColliderJntSphItemInit sJntSphItemsInit[1] = {
     {
         { 0x00, { 0x00000000, 0x00, 0x00 }, { 0x00000008, 0x00, 0x00 }, 0x00, 0x01, 0x00 },
@@ -105,45 +105,43 @@ void BgJyaBombiwa_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 void func_8089539C(BgJyaBombiwa* this, GlobalContext* globalCtx) {
     Vec3f temp;
     Vec3f temp2;
+    s16 tempS;
+    s8 rotationSpeed;
+    s8 burstVelocity;
+    s32 i;
     s16 tScale;
-    s16 phi_s0;
-    s16 rotationSpeed;
-    s16 burstVelocity;
-    s16 temp_s2;
-    u8 tempU;
-    Gfx** dlist;
-    dlist = D_0600EDC0;
-    temp_s2 = 0;
-   //while (temp_s2 != 0x10) {
-    for (temp_s2; temp_s2 != 0x10; temp_s2++){
+
+    for (i = 0; i != 0x10; i++) {
         temp.x = ((Math_Rand_ZeroOne() * 80.0f) + this->dyna.actor.posRot.pos.x) - 40.0f;
         temp.y = (Math_Rand_ZeroOne() * 140.0f) + this->dyna.actor.posRot.pos.y;
         temp.z = ((Math_Rand_ZeroOne() * 80.0f) + this->dyna.actor.posRot.pos.z) - 40.0f;
         temp2.x = (Math_Rand_ZeroOne() - 0.5f) * 10.0f;
         temp2.y = Math_Rand_ZeroOne() * 12.0f;
         temp2.z = (Math_Rand_ZeroOne() - 0.5f) * 10.0f;
-        tempU = (s16)(temp_s2 * 1.8f);
-        phi_s0 = tempU + 3;
-        tScale = (phi_s0 > 16) ? 5 : 1;
+
+        tScale = (s32)(i * 1.8f) + 3;
+        if (tScale > 15) {
+            tempS = 5;
+        } else {
+            tempS = 1;
+        }
         if (Math_Rand_ZeroOne() < 0.4f) {
-            phi_s0  |= 0x40;
+            tempS |= 0x40;
             rotationSpeed = 0xC;
             burstVelocity = 8;
         } else {
-            phi_s0  |= 0x20;
-            
+            tempS |= 0x20;
+
             rotationSpeed = 0xC;
             burstVelocity = 8;
-            if (tScale < 0xA) {
+            if (tScale < 10) {
                 rotationSpeed = 0x50;
-                burstVelocity = 0x50;
+                burstVelocity = 80;
             }
-        }//                                          Gravity influence
-        func_80029E8C(globalCtx, &temp, &temp2, &temp, -400, phi_s0, rotationSpeed, burstVelocity, 0, tScale, 1, 20, 80,
-                      -1, OBJECT_JYA_OBJ, dlist);
-        //temp_s2 += 1;
+        } //                                          Gravity influence
+        func_80029E8C(globalCtx, &temp, &temp2, &temp, -400, tempS, rotationSpeed, burstVelocity, 0, tScale, 1, 20, 80,
+                      -1, OBJECT_JYA_OBJ, D_0600EDC0);
     }
-
     temp.x = this->dyna.actor.posRot.pos.x;
     temp.y = this->dyna.actor.posRot.pos.y + 70.0f;
     temp.z = this->dyna.actor.posRot.pos.z;

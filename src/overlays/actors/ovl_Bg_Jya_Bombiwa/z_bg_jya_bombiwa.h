@@ -16,3 +16,4 @@ typedef struct BgJyaBombiwa {
 extern const ActorInit Bg_Jya_Bombiwa_InitVars;
 
 #endif
+
