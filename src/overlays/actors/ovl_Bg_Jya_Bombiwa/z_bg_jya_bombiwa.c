@@ -102,59 +102,51 @@ void BgJyaBombiwa_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/actors/ovl_Bg_Jya_Bombiwa/func_8089539C.s")
-void func_8089539C(void* this, GlobalContext* globalCtx) {
+void func_8089539C(BgJyaBombiwa* this, GlobalContext* globalCtx) {
     Vec3f temp;
     Vec3f temp2;
-    s16 temp_s0;
-    s16 temp_s1;
-    s32 temp_s2;
+    s16 tScale;
+    s16 temp_s2;
     s16 phi_s0;
-    s32 phi_s3;
-    s32 phi_s4;
-    s32 phi_s0_2;
+    s16 rotationSpeed;
+    s16 burstVelocity;
 
-    //temp_s6 = &temp.x;
-    //temp_s7 = &temp2.x;
+
     temp_s2 = 0;
-    //loop_1:
-    while (temp_s2 != 0x10) {
-        temp.x = ((Math_Rand_ZeroOne() * 80.0f) + arg0->unk24) - 40.0f;
-        temp.y = (Math_Rand_ZeroOne() * 140.0f) + arg0->unk28;
-        temp.z = ((Math_Rand_ZeroOne() * 80.0f) + arg0->unk2C) - 40.0f;
+   //while (temp_s2 != 0x10) {
+    for (temp_s2; temp_s2 != 0x10; temp_s2++){
+        temp.x = ((Math_Rand_ZeroOne() * 80.0f) + this->dyna.actor.posRot.pos.x) - 40.0f;
+        temp.y = (Math_Rand_ZeroOne() * 140.0f) + this->dyna.actor.posRot.pos.y;
+        temp.z = ((Math_Rand_ZeroOne() * 80.0f) + this->dyna.actor.posRot.pos.z) - 40.0f;
         temp2.x = (Math_Rand_ZeroOne() - 0.5f) * 10.0f;
         temp2.y = Math_Rand_ZeroOne() * 12.0f;
         temp2.z = (Math_Rand_ZeroOne() - 0.5f) * 10.0f;
-        temp_s1 = (((f32)temp_s2 * 1.8f) + 3);
-        phi_s0_2 = 1;
-        if (temp_s1 >= 0x10) {
-            phi_s0_2 = 5;
+        tScale = (((f32)temp_s2 * 1.8f) + 3);
+        if (tScale >= 0x10) {
+            phi_s0 = 5;
         }
         if (Math_Rand_ZeroOne() < 0.4f) {
-            phi_s0 = ((phi_s0_2 | 0x40);
-            phi_s3 = 0xC;
-            phi_s4 = 8;
+            phi_s0 = (phi_s0 | 0x40);
+            rotationSpeed = 0xC;
+            burstVelocity = 8;
         } else {
-            temp_s0 = (s32)((phi_s0_2 | 0x20);
-            phi_s0 = temp_s0;
-            phi_s3 = 0xC;
-            phi_s4 = 8;
-            if (temp_s1 < 0xA) {
-                phi_s0 = temp_s0;
-                phi_s3 = 0x50;
-                phi_s4 = 0x50;
+            phi_s0 = (phi_s0 | 0x20);
+            
+            rotationSpeed = 0xC;
+            burstVelocity = 8;
+            if (tScale < 0xA) {
+                rotationSpeed = 0x50;
+                burstVelocity = 0x50;
             }
-        }
-        func_80029E8C(arg1, &temp.x, &temp2.x, &temp.x, -0x190, phi_s0, phi_s3, phi_s4, 0, temp_s1, 1, 0x14, 0x50, -1,
-                      0xF1, &D_0600EDC0);
-        temp_s2 += 1;
+        }//                                          Gravity influence
+        func_80029E8C(globalCtx, &temp, &temp2, &temp, -400, phi_s0, rotationSpeed, burstVelocity, 0, tScale, 1, 20, 80, -1, OBJECT_JYA_OBJ, &D_0600EDC0);
+        //temp_s2 += 1;
     }
- //   if (temp_s2 != 0x10) {
-  //      goto loop_1;
-   // }
-    temp.x = this->unk24;
-    temp.y = this->unk28 + 70.0f;
-    temp.z = this->unk2C;
-    func_80033480(globalCtx, (Vec3f*)temp_s6, 100.0f, 0xA, 0x64, 0xA0, 1);
+
+    temp.x = this->dyna.actor.posRot.pos.x;
+    temp.y = this->dyna.actor.posRot.pos.y + 70.0f;
+    temp.z = this->dyna.actor.posRot.pos.z;
+    func_80033480(globalCtx, &temp, 100.0f, 0xA, 0x64, 0xA0, 1);
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/actors/ovl_Bg_Jya_Bombiwa/BgJyaBombiwa_Update.s")
