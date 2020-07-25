@@ -102,86 +102,61 @@ void BgJyaBombiwa_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/actors/ovl_Bg_Jya_Bombiwa/func_8089539C.s")
-void func_8089539C(BgJyaBombiwa* this, GlobalContext* globalCtx) {
-    // f32 spC4;
-    // f32 spC0;
-    // f32 spBC;
-    //f32 spB8;
-    f32 spB4;
-    f32 spB0;
-    //f32 tempx;
-    //f32 tempy;
-    //f32 tempz;
-
-    
-    // s32 temp_s0;
-    // s32 temp_s1;
-    // s32 temp_s2;
- 
-    s16 phi_s0;
-    s16 phi_s3;
-    s16 phi_s4;
-    s16 phi_s0_2;
+void func_8089539C(void* this, GlobalContext* globalCtx) {
     Vec3f temp;
-    s8 phi_s2;
-    s16 tempA;
-    s32 pad;
-    GlobalContext* globalCtx2;
-   
-    spB4 = .5f;
-    temp.x = 0.5f;
-//phi_s0_2 = 1.8f;
-    phi_s0_2 = 1.8f;
-     phi_s2 = 0;
-    while (phi_s2 != 0x10){
-     // loop1
-        temp.x = ((f32)((Math_Rand_ZeroOne() * 80.0f) + this->dyna.actor.posRot.pos.x) - (long)40.0f);
-        
-        temp.y = (Math_Rand_ZeroOne() * 140.0f) + this->dyna.actor.posRot.pos.y;
-        temp.z = ((Math_Rand_ZeroOne() * 80.0f) + this->dyna.actor.posRot.pos.z) - 40.0f;
-        spB0 = (Math_Rand_ZeroOne() - 0.5f) * 10.0f;
-        spB4 = Math_Rand_ZeroOne() * 12.0f;
-        spB4 = (Math_Rand_ZeroOne() - 0.5f) * 10.0f;
-        
-        tempA = 3;
-        phi_s0 = (f32)phi_s2;
-        
-        if ((((((s16)phi_s0) * phi_s0_2) + tempA) + ((s16)1)) >= 0x10) {
+    Vec3f temp2;
+    s16 temp_s0;
+    s16 temp_s1;
+    s32 temp_s2;
+    s16 phi_s0;
+    s32 phi_s3;
+    s32 phi_s4;
+    s32 phi_s0_2;
+
+    //temp_s6 = &temp.x;
+    //temp_s7 = &temp2.x;
+    temp_s2 = 0;
+    //loop_1:
+    while (temp_s2 != 0x10) {
+        temp.x = ((Math_Rand_ZeroOne() * 80.0f) + arg0->unk24) - 40.0f;
+        temp.y = (Math_Rand_ZeroOne() * 140.0f) + arg0->unk28;
+        temp.z = ((Math_Rand_ZeroOne() * 80.0f) + arg0->unk2C) - 40.0f;
+        temp2.x = (Math_Rand_ZeroOne() - 0.5f) * 10.0f;
+        temp2.y = Math_Rand_ZeroOne() * 12.0f;
+        temp2.z = (Math_Rand_ZeroOne() - 0.5f) * 10.0f;
+        temp_s1 = (((f32)temp_s2 * 1.8f) + 3);
+        phi_s0_2 = 1;
+        if (temp_s1 >= 0x10) {
             phi_s0_2 = 5;
-            do { } while (0);
         }
-        //tempA = 3;
-        globalCtx2 = globalCtx;
-        
-        if ((Math_Rand_ZeroOne()) < (0.4f)) {
-            phi_s0 = (s16)(phi_s0_2 | 0x40);
+        if (Math_Rand_ZeroOne() < 0.4f) {
+            phi_s0 = ((phi_s0_2 | 0x40);
             phi_s3 = 0xC;
             phi_s4 = 8;
         } else {
-            // temp_s0 = (s32)((phi_s0_2 | 0x20) << 0x10) >> 0x10;
-            // phi_s0 = (s32)((phi_s0_2 | 0x20) << 0x10) >> 0x10;
+            temp_s0 = (s32)((phi_s0_2 | 0x20);
+            phi_s0 = temp_s0;
             phi_s3 = 0xC;
             phi_s4 = 8;
-            if (((s16)((f32)0 * 5) + tempA) < 0xA) {
-                // phi_s0 = temp_s0;
-                phi_s4 = (u8)0x50;
+            if (temp_s1 < 0xA) {
+                phi_s0 = temp_s0;
                 phi_s3 = 0x50;
+                phi_s4 = 0x50;
             }
         }
-
-        func_80029E8C(globalCtx2, &temp.z, &spB0, &temp.z, -0x190, phi_s0, phi_s3, phi_s4, 0, (((f32)0 * 1.8f) + 3), 1,
-                      0x14, 0x50, -1, 0xF1, D_0600EDC0);
-        // temp_s2 = phi_s2 + 1;
-        phi_s2++;
-    } 
-    // if (temp_s2 != 0x10) {
-    //    goto loop_1;
-    //}
-    // spBC = this->dyna.actor.posRot.pos.x;
-    // spC0 = this->dyna.actor.posRot.pos.y + 70.0f;
-    // spC4 = this->dyna.actor.posRot.pos.z;
-    func_80033480(globalCtx2, (Vec3f*)&this->dyna.actor.posRot.pos.z, 100.0f, 0xA, 0x64, 0xA0, 1);
+        func_80029E8C(arg1, &temp.x, &temp2.x, &temp.x, -0x190, phi_s0, phi_s3, phi_s4, 0, temp_s1, 1, 0x14, 0x50, -1,
+                      0xF1, &D_0600EDC0);
+        temp_s2 += 1;
+    }
+ //   if (temp_s2 != 0x10) {
+  //      goto loop_1;
+   // }
+    temp.x = this->unk24;
+    temp.y = this->unk28 + 70.0f;
+    temp.z = this->unk2C;
+    func_80033480(globalCtx, (Vec3f*)temp_s6, 100.0f, 0xA, 0x64, 0xA0, 1);
 }
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/actors/ovl_Bg_Jya_Bombiwa/BgJyaBombiwa_Update.s")
 
 
