@@ -47,7 +47,7 @@ static InitChainEntry sInitChain[] = {
 
 extern UNK_TYPE D_0600E710;
 extern Gfx D_0600E490[];
-extern u32 D_0600EDC0;
+extern Gfx D_0600EDC0[];
 extern UNK_TYPE D_80895854 = 0x3FE66666;
 extern f32 D_80895858 = 0.4f;
 
@@ -106,12 +106,13 @@ void func_8089539C(BgJyaBombiwa* this, GlobalContext* globalCtx) {
     Vec3f temp;
     Vec3f temp2;
     s16 tScale;
-    s16 temp_s2;
     s16 phi_s0;
     s16 rotationSpeed;
     s16 burstVelocity;
-
-
+    s16 temp_s2;
+    u8 tempU;
+    Gfx** dlist;
+    dlist = D_0600EDC0;
     temp_s2 = 0;
    //while (temp_s2 != 0x10) {
     for (temp_s2; temp_s2 != 0x10; temp_s2++){
@@ -121,16 +122,15 @@ void func_8089539C(BgJyaBombiwa* this, GlobalContext* globalCtx) {
         temp2.x = (Math_Rand_ZeroOne() - 0.5f) * 10.0f;
         temp2.y = Math_Rand_ZeroOne() * 12.0f;
         temp2.z = (Math_Rand_ZeroOne() - 0.5f) * 10.0f;
-        tScale = (((f32)temp_s2 * 1.8f) + 3);
-        if (tScale >= 0x10) {
-            phi_s0 = 5;
-        }
+        tempU = (s16)(temp_s2 * 1.8f);
+        phi_s0 = tempU + 3;
+        tScale = (phi_s0 > 16) ? 5 : 1;
         if (Math_Rand_ZeroOne() < 0.4f) {
-            phi_s0 = (phi_s0 | 0x40);
+            phi_s0  |= 0x40;
             rotationSpeed = 0xC;
             burstVelocity = 8;
         } else {
-            phi_s0 = (phi_s0 | 0x20);
+            phi_s0  |= 0x20;
             
             rotationSpeed = 0xC;
             burstVelocity = 8;
@@ -139,7 +139,8 @@ void func_8089539C(BgJyaBombiwa* this, GlobalContext* globalCtx) {
                 burstVelocity = 0x50;
             }
         }//                                          Gravity influence
-        func_80029E8C(globalCtx, &temp, &temp2, &temp, -400, phi_s0, rotationSpeed, burstVelocity, 0, tScale, 1, 20, 80, -1, OBJECT_JYA_OBJ, &D_0600EDC0);
+        func_80029E8C(globalCtx, &temp, &temp2, &temp, -400, phi_s0, rotationSpeed, burstVelocity, 0, tScale, 1, 20, 80,
+                      -1, OBJECT_JYA_OBJ, dlist);
         //temp_s2 += 1;
     }
 
