@@ -90,20 +90,17 @@ void EnNiwGirl_Destroy(Actor *thisx, GlobalContext *globalCtx) {
 }
 
 void EnNiwGirl_PlayJumpAnimation(EnNiwGirl* this, GlobalContext* globalCtx) {
-    f32 tempFrames;
-
-    tempFrames = SkelAnime_GetFrameCount(&D_06000378);
+    f32 tempFrames = SkelAnime_GetFrameCount(&D_06000378);
     SkelAnime_ChangeAnim(&this->skelAnime, &D_06000378, 1.0f, 0.0f, tempFrames, 0, -10.0f);
     this->actor.flags &= ~1;
     this->actionFunc = func_80AB9210;
 }
 
 void func_80AB9210(EnNiwGirl* this, GlobalContext* globalCtx) {
-    Path* path;
+    Path* path = &globalCtx->setupPathList[this->unkFlag];
     f32 xDistBetween;
     f32 zDistBetween;
 
-    path = &globalCtx->setupPathList[this->unkFlag];
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     Math_SmoothScaleMaxF(&this->actor.speedXZ, 3.0f, 0.2f, 0.4f);
     /*
@@ -130,25 +127,19 @@ void func_80AB9210(EnNiwGirl* this, GlobalContext* globalCtx) {
     *Only allow Link to talk to her when she is playing the jumping animation
     */
     if ((this->jumpTimer == 0) || (func_8008F080(globalCtx) != 0)) {
-        this->jumpTimer = 0x3C;
+        this->jumpTimer = 60;
         this->actionFunc = EnNiwGirl_Talk;
-    } else {
     }
 }
 
 void EnNiwGirl_Talk(EnNiwGirl* this, GlobalContext* globalCtx) {
-    u32 currentMask;
-
     SkelAnime_ChangeAnim(&this->skelAnime, &D_06009C78, 1.0f, 0.0f, SkelAnime_GetFrameCount(&D_06009C78), 0, -10.0f);
     this->actor.flags = (this->actor.flags | 1);
     this->actor.textId = 0x7000; // 	I can't catch that Cucco! 
-    if (((gSaveContext.eventChkInf[8]) & 1) != 0) {
-        if (this->unk_27A == 0) {
-            this->actor.textId = 0x70EA; //That scary-looking man took off out of here really fast ! (Ganon?)
-        }
+    if ((((gSaveContext.eventChkInf[8]) & 1))&& (this->unk_27A == 0)) {
+            this->actor.textId = 0x70EA; //That scary-looking man took off out of here really fast !
     }
-    currentMask = func_8008F080(globalCtx) - 1;
-        switch (currentMask) {
+        switch ((func_8008F080(globalCtx) - 1)) {
             case 0:
                 this->actor.textId = 0x7118; //Oh wow! It's Keaton! Hi, Keaton ! 
                 break;
@@ -186,9 +177,9 @@ void EnNiwGirl_Talk(EnNiwGirl* this, GlobalContext* globalCtx) {
          if ((this->jumpTimer == 0) && !func_8010BDBC(&globalCtx->msgCtx)){
             this->jumpTimer = Math_Rand_ZeroFloat(100.0f) + 250.0f;
             this->actionFunc = EnNiwGirl_PlayJumpAnimation;
-            return;
-         }
+        }else {
          func_8002F2CC(&this->actor, globalCtx, 100.0f);
+        }
      }
  }
 
@@ -212,11 +203,11 @@ void EnNiwGirl_Update(Actor *thisx, GlobalContext *globalCtx) {
     if (tempActionFunc == this->actionFunc) {
         this->unk_2D4.unk_18 = player->actor.posRot.pos;
         if (LINK_IS_CHILD) {
-            this->unk_2D4.unk_18.y = (player->actor.posRot.pos.y - 10.0f);
+            this->unk_2D4.unk_18.y = player->actor.posRot.pos.y - 10.0f;
         }
         func_80034A14(thisx, &this->unk_2D4, 2, 4);
-         this->unk_260 = this->unk_2D4.unk_08;
-         this->unk_266 = this->unk_2D4.unk_0E;
+        this->unk_260 = this->unk_2D4.unk_08;
+        this->unk_266 = this->unk_2D4.unk_0E;
     } else {
         Math_SmoothScaleMaxMinS(&this->unk_266.y, 0, 5, 3000, 0);
         Math_SmoothScaleMaxMinS(&this->unk_260.y, 0, 5, 3000, 0);
