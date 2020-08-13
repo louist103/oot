@@ -50,48 +50,22 @@ static InitChainEntry sInitChain[] = {
 
 extern UNK_TYPE D_060066A8;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/actors/ovl_Bg_Ydan_Maruta/BgYdanMaruta_Init.s")
-/*void BgYdanMaruta_Init(Actor* thisx, GlobalContext* globalCtx) {
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/actors/ovl_Bg_Ydan_Maruta/BgYdanMaruta_Init.s")
+void BgYdanMaruta_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgYdanMaruta* this = THIS;
-    //Vec3f sp70[3];
-    //Vec3f sp70[1];
-    //Vec3f sp70[2];
-    //f32 sp70[2];
-    //f32 sp5C;
-    //f32 sp58;
     Vec3f sp4C[3];
     f32 sinRotY;
-  //  f32 sp40;
     s32 localConst;
-    //ColliderTris *sp2C;
-   // ? *temp_v0;
     Vec3f temp_v0_2;
-    //ColliderTris *temp_a1;
-    //f32 *temp_t7;
     f32 cosRotY;
- //   f32 temp_f16;
-   // f32 temp_f16_2;
-   // s16 temp_t8;
-   // s32 *temp_v1;
-    //s32 *tempColliderItems;
-   // Vec3f *temp_v1_3;
-   // f32 phi_f16;
-    //Vec3f phi_v0;
-    //s32 *phi_v1;
-   // f32 phi_f16_2;
-  //  Vec3f phi_v0_2;
-   // s32 *phi_v1_2;
     u8 i;
     ColliderTrisItemInit *tempColliderItems;
 
     localConst = 0;
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    //temp_a1 = &this->collider;
-    //sp2C = temp_a1;
     Collider_InitTris(globalCtx, &this->collider);
     Collider_SetTris(globalCtx, &this->collider, (Actor *) &this->dyna.actor, &sTrisInit, &this->items);
-   // temp_t8 = this->dyna.actor.params;
-    this->unk_168 = this->dyna.actor.params;
+    this->unk_168 = (u8)this->dyna.actor.params;
     this->dyna.actor.params = (s16) (((s32) this->dyna.actor.params >> 8) & 0xFF);
     if (this->dyna.actor.params == 0) {
         this->actionFunc = func_808BEFF4;
@@ -112,52 +86,19 @@ extern UNK_TYPE D_060066A8;
     }
     sinRotY = Math_Sins(this->dyna.actor.shape.rot.y);
     cosRotY = Math_Coss(this->dyna.actor.shape.rot.y);
-   // temp_v1 = tempColliderItems;
-   // temp_v0 = &sp4C + 0xC;
-   // temp_f16 = (tempColliderItems->dim) * cosRotY;
-    //phi_f16 = (tempColliderItems->dim) * cosRotY;;
-  //  phi_v0 = sp4C;
-   // phi_v1 = tempColliderItems;
-    //phi_f16_2 = tempColliderItems;
-  //  phi_v0_2 = &sp4C + 0xC;;
-  //  phi_v1_2 = phi_s1;
-  //  if ((&sp4C + 0xC) != &sp70[0]) {
-//loop_6:
+
     for (i = 0; i < 3 ; i++){
         sp4C[i].x = ((tempColliderItems->dim.vtx[0].x) * cosRotY + this->dyna.actor.posRot.pos.x);
         sp4C[i].y = (tempColliderItems->body.bumper.effect + this->dyna.actor.posRot.pos.y);
         sp4C[i].z = (this->dyna.actor.posRot.pos.z - (tempColliderItems->body.bumper.flags * sinRotY));
     }
-       // temp_v0_2 = phi_v0 + 0xC;
-        //tempColliderItems = phi_v1 + 0xC;
-        temp_v0_2.x = (phi_f16 + this->dyna.actor.posRot.pos.x);
-        temp_v0_2.y = (tempColliderItems->unk10 + this->dyna.actor.posRot.pos.y);
-        temp_v0_2.z = (this->dyna.actor.posRot.pos.z - (tempColliderItems->unkC * sinRotY));
-        temp_f16_2 = tempColliderItems->unk18 * cosRotY;
-        phi_f16 = temp_f16_2;
-        phi_v0 = temp_v0_2;
-        phi_v1 = tempColliderItems;
-        //phi_f16_2 = temp_f16_2;
-     //   phi_v0_2 = temp_v0_2;
-       // phi_v1_2 = tempColliderItems;
-        if (temp_v0_2 != &sp70[0]) {
-            goto loop_6;
-        }
-  //  }
-    //temp_v1_3 = phi_v1_2 + 0xC;
-   // temp_v1_3 = tempColliderItems;
-  //  phi_v0_2.x = (tempColliderItems->dim.vtx[0].x * cosRotY + this->dyna.actor.posRot.pos.x);
-  //  phi_v0_2.y = (tempColliderItems->body.bumper.effect + this->dyna.actor.posRot.pos.y);
-  //  phi_v0_2.z = (this->dyna.actor.posRot.pos.z - (tempColliderItems->body.bumper.flags * sinRotY));
-   // sinRotY = sinRotY;
-  //  sp40 = cosRotY;
     func_800627A0(&this->collider, 0,&sp4C[0], &sp4C[1], &sp4C[2]);
     //temp_t7 = sp70[2].x;
     sp4C[1].x = (tempColliderItems->dim.vtx[2].x * cosRotY) + this->dyna.actor.posRot.pos.x;
     sp4C[1].y = tempColliderItems->dim.vtx[1].y + this->dyna.actor.posRot.pos.y;
     sp4C[1].z = this->dyna.actor.posRot.pos.z - (tempColliderItems->dim.vtx[2].x * sinRotY);
     func_800627A0(&this->collider, 1,  &sp4C[0], &sp4C[1], &sp4C[2]);
-}*/
+}
 
 
 
