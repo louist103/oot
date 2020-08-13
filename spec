@@ -1443,7 +1443,7 @@ endseg
 beginseg
     name "ovl_Bg_Ydan_Maruta"
     include "build/src/overlays/actors/ovl_Bg_Ydan_Maruta/z_bg_ydan_maruta.o"
-    include "build/data/overlays/actors/z_bg_ydan_maruta.data.o"
+   // include "build/data/overlays/actors/z_bg_ydan_maruta.data.o"
     include "build/data/overlays/actors/z_bg_ydan_maruta.reloc.o"
 endseg
 
