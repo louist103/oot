@@ -1,0 +1,41 @@
+/*
+ * File: z_bg_spot08_bakudankabe
+ * Overlay: ovl_Bg_Spot08_Bakudankabe
+ * Description: Destructible Wall (Zora's Fountain)
+ */
+
+#include "z_bg_spot08_bakudankabe.h"
+
+#define FLAGS 0x00400000
+
+#define THIS ((BgSpot08Bakudankabe*)thisx)
+
+void BgSpot08Bakudankabe_Init(Actor* thisx, GlobalContext* globalCtx);
+void BgSpot08Bakudankabe_Destroy(Actor* thisx, GlobalContext* globalCtx);
+void BgSpot08Bakudankabe_Update(Actor* thisx, GlobalContext* globalCtx);
+void BgSpot08Bakudankabe_Draw(Actor* thisx, GlobalContext* globalCtx);
+
+/*
+const ActorInit Bg_Spot08_Bakudankabe_InitVars = {
+    ACTOR_BG_SPOT08_BAKUDANKABE,
+    ACTORTYPE_BG,
+    FLAGS,
+    OBJECT_SPOT08_OBJ,
+    sizeof(BgSpot08Bakudankabe),
+    (ActorFunc)BgSpot08Bakudankabe_Init,
+    (ActorFunc)BgSpot08Bakudankabe_Destroy,
+    (ActorFunc)BgSpot08Bakudankabe_Update,
+    (ActorFunc)BgSpot08Bakudankabe_Draw,
+};
+*/
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/actors/ovl_Bg_Spot08_Bakudankabe/func_808B02D0.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/actors/ovl_Bg_Spot08_Bakudankabe/func_808B0324.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/actors/ovl_Bg_Spot08_Bakudankabe/BgSpot08Bakudankabe_Init.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/actors/ovl_Bg_Spot08_Bakudankabe/BgSpot08Bakudankabe_Destroy.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/actors/ovl_Bg_Spot08_Bakudankabe/BgSpot08Bakudankabe_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/actors/ovl_Bg_Spot08_Bakudankabe/BgSpot08Bakudankabe_Draw.s")
