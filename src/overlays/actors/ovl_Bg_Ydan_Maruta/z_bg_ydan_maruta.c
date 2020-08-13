@@ -26,14 +26,16 @@ const ActorInit Bg_Ydan_Maruta_InitVars = {
 };
 
 //s32 D_808BF300[] = {0x00000000, 0x20000000, 0x00040000, 0x00000004, 0x00000000, 0x11010000, 0x435C0000, 0xC1200000, 0x00000000, 0x435C0000, 0x41200000, 0x00000000, 0xC35C0000, 0x41200000, 0x00000000};
-static ColliderTrisItemInit sTrisItemsInit[1] = {
+static ColliderTrisItemInit sTrisItemsInit[2] = {
     {
         { 0x00, { 0x20000000, 0x00, 0x04 }, { 0x00000004, 0x00, 0x00 }, 0x11, 0x01, 0x00 },
         { { { 220.0f, -10.0f, 0.0f }, { 220.0f, 10.0f, 0.0f }, { -220.0f, 10.0f, 0.0f } } },
     },
+    {
+        { 0x00, { 0x20000000, 0x00, 0x04 }, { 0x00000004, 0x00, 0x00 }, 0x11, 0x01, 0x00 },
+        { { { 16.0f, 0.0f, 0.0f }, { 16.0f, 135.0f, 0.0f }, { -16.0f, 135.0f, 0.0f } } },
+    },
 };
-s32 D_808BF33C[] = {0x00000000, 0x20000000, 0x00040000, 0x00000004, 0x00000000, 0x11010000, 0x41800000, 0x00000000, 0x00000000, 0x41800000, 0x43070000, 0x00000000, 0xC1800000, 0x43070000, 0x00000000};
-
 //s32 D_808BF378[] = {0x0A110900, 0x20020000, 0x00000002, 0x808BF300};
 static ColliderTrisInit sTrisInit =
 {
@@ -48,16 +50,16 @@ static InitChainEntry sInitChain[] = {
 
 extern UNK_TYPE D_060066A8;
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/actors/ovl_Bg_Ydan_Maruta/BgYdanMaruta_Init.s")
-void BgYdanMaruta_Init(Actor* thisx, GlobalContext* globalCtx) {
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/actors/ovl_Bg_Ydan_Maruta/BgYdanMaruta_Init.s")
+/*void BgYdanMaruta_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgYdanMaruta* this = THIS;
-    ? sp70;
-    Vec3f sp64;
-    Vec3f sp60;
-    //f32 sp60;
+    //Vec3f sp70[3];
+    //Vec3f sp70[1];
+    //Vec3f sp70[2];
+    //f32 sp70[2];
     //f32 sp5C;
     //f32 sp58;
-    Vec3f sp4C;
+    Vec3f sp4C[3];
     f32 sinRotY;
   //  f32 sp40;
     s32 localConst;
@@ -67,19 +69,20 @@ void BgYdanMaruta_Init(Actor* thisx, GlobalContext* globalCtx) {
     //ColliderTris *temp_a1;
     //f32 *temp_t7;
     f32 cosRotY;
-    f32 temp_f16;
-    f32 temp_f16_2;
+ //   f32 temp_f16;
+   // f32 temp_f16_2;
    // s16 temp_t8;
    // s32 *temp_v1;
-    s32 *temp_v1_2;
-    void *temp_v1_3;
-    f32 phi_f16;
-    Vec3f phi_v0;
-    s32 *phi_v1;
-    f32 phi_f16_2;
-    Vec3f phi_v0_2;
+    //s32 *tempColliderItems;
+   // Vec3f *temp_v1_3;
+   // f32 phi_f16;
+    //Vec3f phi_v0;
+    //s32 *phi_v1;
+   // f32 phi_f16_2;
+  //  Vec3f phi_v0_2;
    // s32 *phi_v1_2;
-    s32 *phi_s1;
+    u8 i;
+    ColliderTrisItemInit *tempColliderItems;
 
     localConst = 0;
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
@@ -92,64 +95,69 @@ void BgYdanMaruta_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->dyna.actor.params = (s16) (((s32) this->dyna.actor.params >> 8) & 0xFF);
     if (this->dyna.actor.params == 0) {
         this->actionFunc = func_808BEFF4;
-        phi_s1 = &sTrisItemsInit;
+        tempColliderItems = &sTrisItemsInit[0];
     } else {
         DynaPolyInfo_SetActorMove(&this->dyna, 0);
-        DynaPolyInfo_Alloc(D_060066A8, (void *) &localConst);
+        DynaPolyInfo_Alloc(&D_060066A8, (void *) &localConst);
         this->dyna.dynaPolyId = DynaPolyInfo_RegisterActor(globalCtx, &globalCtx->colCtx.dyna,&this->dyna.actor, localConst);
         this->dyna.actor.initPosRot.pos.y = (f32) (this->dyna.actor.initPosRot.pos.y + -280.0f);
-        if (Flags_GetSwitch(globalCtx, (s32) this->unk_168) != 0) {
+        if (Flags_GetSwitch(globalCtx, this->unk_168) != 0) {
             this->actionFunc = func_808BF25C;
             this->dyna.actor.posRot.pos.y = this->dyna.actor.initPosRot.pos.y;
-            phi_s1 = D_808BF33C;
+            tempColliderItems = &sTrisItemsInit[1];
         } else {
             this->actionFunc = func_808BF078;
-            phi_s1 = D_808BF33C;
+            tempColliderItems = &sTrisItemsInit[1];
         }
     }
     sinRotY = Math_Sins(this->dyna.actor.shape.rot.y);
     cosRotY = Math_Coss(this->dyna.actor.shape.rot.y);
-   // temp_v1 = phi_s1;
+   // temp_v1 = tempColliderItems;
    // temp_v0 = &sp4C + 0xC;
-    temp_f16 = phi_s1->unk18 * cosRotY;
-    phi_f16 = temp_f16;
-    phi_v0 = &sp4C + 0xC;;
-    phi_v1 = phi_s1;
-    phi_f16_2 = phi_s1;
-    phi_v0_2 = &sp4C + 0xC;;
+   // temp_f16 = (tempColliderItems->dim) * cosRotY;
+    //phi_f16 = (tempColliderItems->dim) * cosRotY;;
+  //  phi_v0 = sp4C;
+   // phi_v1 = tempColliderItems;
+    //phi_f16_2 = tempColliderItems;
+  //  phi_v0_2 = &sp4C + 0xC;;
   //  phi_v1_2 = phi_s1;
-    if ((&sp4C + 0xC) != &sp70) {
-loop_6:
-        temp_v0_2 = phi_v0 + 0xC;
-        temp_v1_2 = phi_v1 + 0xC;
+  //  if ((&sp4C + 0xC) != &sp70[0]) {
+//loop_6:
+    for (i = 0; i < 3 ; i++){
+        sp4C[i].x = ((tempColliderItems->dim.vtx[0].x) * cosRotY + this->dyna.actor.posRot.pos.x);
+        sp4C[i].y = (tempColliderItems->body.bumper.effect + this->dyna.actor.posRot.pos.y);
+        sp4C[i].z = (this->dyna.actor.posRot.pos.z - (tempColliderItems->body.bumper.flags * sinRotY));
+    }
+       // temp_v0_2 = phi_v0 + 0xC;
+        //tempColliderItems = phi_v1 + 0xC;
         temp_v0_2.x = (phi_f16 + this->dyna.actor.posRot.pos.x);
-        temp_v0_2.y = (temp_v1_2->unk10 + this->dyna.actor.posRot.pos.y);
-        temp_v0_2.z = (this->dyna.actor.posRot.pos.z - (temp_v1_2->unkC * sinRotY));
-        temp_f16_2 = temp_v1_2->unk18 * cosRotY;
+        temp_v0_2.y = (tempColliderItems->unk10 + this->dyna.actor.posRot.pos.y);
+        temp_v0_2.z = (this->dyna.actor.posRot.pos.z - (tempColliderItems->unkC * sinRotY));
+        temp_f16_2 = tempColliderItems->unk18 * cosRotY;
         phi_f16 = temp_f16_2;
         phi_v0 = temp_v0_2;
-        phi_v1 = temp_v1_2;
-        phi_f16_2 = temp_f16_2;
-        phi_v0_2 = temp_v0_2;
-       // phi_v1_2 = temp_v1_2;
-        if (temp_v0_2 != &sp70) {
+        phi_v1 = tempColliderItems;
+        //phi_f16_2 = temp_f16_2;
+     //   phi_v0_2 = temp_v0_2;
+       // phi_v1_2 = tempColliderItems;
+        if (temp_v0_2 != &sp70[0]) {
             goto loop_6;
         }
-    }
+  //  }
     //temp_v1_3 = phi_v1_2 + 0xC;
-    temp_v1_3 = temp_v1_2 + 0xC;
-    phi_v0_2.x = (phi_f16_2 + this->dyna.actor.posRot.pos.x);
-    phi_v0_2.y = (temp_v1_3->unk10 + this->dyna.actor.posRot.pos.y);
-    phi_v0_2.z = (this->dyna.actor.posRot.pos.z - (temp_v1_3->unkC * sinRotY));
+   // temp_v1_3 = tempColliderItems;
+  //  phi_v0_2.x = (tempColliderItems->dim.vtx[0].x * cosRotY + this->dyna.actor.posRot.pos.x);
+  //  phi_v0_2.y = (tempColliderItems->body.bumper.effect + this->dyna.actor.posRot.pos.y);
+  //  phi_v0_2.z = (this->dyna.actor.posRot.pos.z - (tempColliderItems->body.bumper.flags * sinRotY));
    // sinRotY = sinRotY;
   //  sp40 = cosRotY;
-    func_800627A0(&this->collider, 0, (Vec3f *) &sp4C, &sp60, &sp64);
-    //temp_t7 = sp60.x;
-    sp60.x = (phi_s1->unk30 * cosRotY) + this->dyna.actor.posRot.pos.x;
-    sp60.y = phi_s1->unk1C + this->dyna.actor.posRot.pos.y;
-    sp60.z = this->dyna.actor.posRot.pos.z - (phi_s1->unk30 * sinRotY);
-    func_800627A0(&this->collider, 1, (Vec3f *) &sp4C, &sp64, &sp60);
-}
+    func_800627A0(&this->collider, 0,&sp4C[0], &sp4C[1], &sp4C[2]);
+    //temp_t7 = sp70[2].x;
+    sp4C[1].x = (tempColliderItems->dim.vtx[2].x * cosRotY) + this->dyna.actor.posRot.pos.x;
+    sp4C[1].y = tempColliderItems->dim.vtx[1].y + this->dyna.actor.posRot.pos.y;
+    sp4C[1].z = this->dyna.actor.posRot.pos.z - (tempColliderItems->dim.vtx[2].x * sinRotY);
+    func_800627A0(&this->collider, 1,  &sp4C[0], &sp4C[1], &sp4C[2]);
+}*/
 
 
 
