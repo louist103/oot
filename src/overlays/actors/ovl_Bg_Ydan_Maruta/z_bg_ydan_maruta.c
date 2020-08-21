@@ -54,8 +54,9 @@ extern UNK_TYPE D_060066A8;
 extern Gfx D_06008D88[];
 extern Gfx D_06006570[];
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/actors/ovl_Bg_Ydan_Maruta/BgYdanMaruta_Init.s")
-//#ifdef NON_MATCHING
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/actors/ovl_Bg_Ydan_Maruta/BgYdanMaruta_Init.s")
+#ifdef NON_MATCHING
+//Register issues
 void BgYdanMaruta_Init(Actor* thisx, GlobalContext* globalCtx) {
    s32 i;
    BgYdanMaruta *this = (BgYdanMaruta *) thisx;
@@ -100,9 +101,9 @@ void BgYdanMaruta_Init(Actor* thisx, GlobalContext* globalCtx) {
     sp4C[1].z = thisx->posRot.pos.z - (items->dim.vtx[2].x * sinRotY);
     func_800627A0(&this->collider, 1,  &sp4C[0], &sp4C[2], &sp4C[1]);
 }
-//#else
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/actors/ovl_Bg_Ydan_Maruta/BgYdanMaruta_Init.s")
-//#endif
+#else
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/actors/ovl_Bg_Ydan_Maruta/BgYdanMaruta_Init.s")
+#endif
 
 
 void BgYdanMaruta_Destroy(Actor *thisx, GlobalContext *globalCtx) {
@@ -137,6 +138,7 @@ void func_808BF078(BgYdanMaruta *this, GlobalContext *globalCtx) {
 }
 
 #ifdef NON_EQUIVALENT
+//Casting issues and a branch issue
 void func_808BF108(BgYdanMaruta *this, GlobalContext *globalCtx) {
     s16 phi_v0;
     if (this->unk_16A != 0) {
