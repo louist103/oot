@@ -2,6 +2,12 @@
 
 ```diff
 - WARNING! -
+This branch has been heavily modified! DO NOT base any actual decomp work off of this branch. Only use this branch if you are looking to modify BgJya1flift
+```
+
+
+```diff
+- WARNING! -
 
 The ROM this repository builds cannot be 'shifted', primarily due to some hardcoded pointers which have yet
 to be dumped. Thus this repository is currently in an experimental and research phase and cannot yet be used
@@ -11,10 +17,6 @@ traditionally as a source code base for general changes.
 This is a WIP decompilation of The Legend of Zelda: Ocarina of Time.
 The purpose of the project is to recreate a source code base for the game from scratch, using information found inside the game along with static and/or dynamic analysis.
 The only build currently supported is Master Quest (Debug), but other versions are planned to be supported.
-
-It builds the following ROM:
-
-* zelda_ocarina_mq_dbg.z64 `md5: f0b7f35375f9cc8ca1b2d59d78e35405`
 
 **Note:** This repository does not include any of the assets necessary to build the ROM.
 A prior copy of the game is required to extract the needed assets.
