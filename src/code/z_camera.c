@@ -1,7 +1,7 @@
 #include <ultra64.h>
 #include <global.h>
 #include <vt.h>
-
+#undef NON_MATCHING
 typedef struct {
     s16 val;
     s16 param;
@@ -3998,3 +3998,4 @@ s16 func_8005B1A4(Camera* camera) {
 
     return camera->unk_164;
 }
+#define NON_MATCHING

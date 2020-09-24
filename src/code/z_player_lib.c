@@ -610,16 +610,16 @@ u8* sMouthTextures[] = {
     0x06004C00,
 };
 
-Color_RGB8 sTunicColors[] = {
+/*Color_RGB8 sTunicColors[] = {
     { 30, 105, 27 },
     { 100, 20, 0 },
     { 0, 60, 100 },
-};
+};*/
 
-Color_RGB8 sGauntletColors[] = {
+/*Color_RGB8 sGauntletColors[] = {
     { 255, 255, 255 },
     { 254, 207, 15 },
-};
+};*/
 
 Gfx* sBootDListGroups[][2] = {
     { 0x06025918, 0x06025A60 },
@@ -647,8 +647,8 @@ void func_8008F470(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDraw
 
     gSPSegment(oGfxCtx->polyOpa.p++, 0x09, SEGMENTED_TO_VIRTUAL(sMouthTextures[mouthIndex]));
 
-    color = &sTunicColors[tunic];
-    gDPSetEnvColor(oGfxCtx->polyOpa.p++, color->r, color->g, color->b, 0);
+    //color = &sTunicColors[tunic];
+    gDPSetEnvColor(oGfxCtx->polyOpa.p++,(u32)(Math_Rand_ZeroOne()*255.0f), (u32)(Math_Rand_ZeroOne()*255.0f), (u32)(Math_Rand_ZeroOne()*255.0f), (u32)(Math_Rand_ZeroOne()*255.0f));
 
     sDListsLodOffset = lod * 2;
 
@@ -661,8 +661,9 @@ void func_8008F470(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDraw
             if (strengthUpgrade >= PLAYER_STR_SILVER_G) {
                 gDPPipeSync(oGfxCtx->polyOpa.p++);
 
-                color = &sGauntletColors[strengthUpgrade - PLAYER_STR_SILVER_G];
-                gDPSetEnvColor(oGfxCtx->polyOpa.p++, color->r, color->g, color->b, 0);
+                //color = &sGauntletColors[strengthUpgrade - PLAYER_STR_SILVER_G];
+                gDPSetEnvColor(oGfxCtx->polyOpa.p++,(u32)(Math_Rand_ZeroOne()*255.0f), (u32)(Math_Rand_ZeroOne()*255.0f), (u32)(Math_Rand_ZeroOne()*255.0f), (u32)(Math_Rand_ZeroOne()*255.0f));
+
 
                 gSPDisplayList(oGfxCtx->polyOpa.p++, D_06025218);
                 gSPDisplayList(oGfxCtx->polyOpa.p++, D_06025598);

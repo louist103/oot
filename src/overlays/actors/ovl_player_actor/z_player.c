@@ -9011,14 +9011,14 @@ InitChainEntry D_80854708[] = {
     ICHAIN_F32(unk_4C, 500, ICHAIN_STOP),
 };
 
-EffectBlureInit2 D_8085470C = {
-    0, 8, 0, { 255, 255, 255, 255 }, { 255, 255, 255, 64 }, { 255, 255, 255, 0 }, { 255, 255, 255, 0 }, 4,
-    0, 2, 0, { 0, 0, 0, 0 },         { 0, 0, 0, 0 },
-};
-
-Vec3s D_80854730 = { -57, 3377, 0 };
-
 void Player_InitCommon(Player* this, GlobalContext* globalCtx, SkeletonHeader* skelHeader) {
+    u8 i;
+    EffectBlureInit2 D_8085470C = {
+        0, 8, 0, { 255, 255, 255, 255 }, { 255, 255, 255, 64 }, { 255, 255, 255, 0 }, { 255, 255, 255, 0 }, 4,
+        0, 2, 0, { 0, 0, 0, 0 },         { 0, 0, 0, 0 },
+    };
+
+    Vec3s D_80854730 = { -57, 3377, 0 };
     this->ageProperties = &sAgeProperties[gSaveContext.linkAge];
     Actor_ProcessInitChain(&this->actor, D_80854708);
     this->swordEffectIndex = TOTAL_EFFECT_COUNT;
@@ -9032,6 +9032,12 @@ void Player_InitCommon(Player* this, GlobalContext* globalCtx, SkeletonHeader* s
                                 this->transitionDrawTable2, PLAYER_LIMB_MAX);
     this->skelAnime2.unk_3E = D_80854730;
 
+    for (i = 0; i < 4; i++) {
+        D_8085470C.p1StartColor[i] = (u8)(Math_Rand_ZeroOne() * 255.0f);
+        D_8085470C.p1EndColor[i] = (u8)(Math_Rand_ZeroOne() * 255.0f);
+        D_8085470C.p2StartColor[i] = (u8)(Math_Rand_ZeroOne() * 255.0f);
+        D_8085470C.p2EndColor[i] = (u8)(Math_Rand_ZeroOne() * 255.0f);
+    }
     Effect_Add(globalCtx, &this->swordEffectIndex, EFFECT_BLURE2, 0, 0, &D_8085470C);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawFunc_Teardrop, this->ageProperties->unk_04);
     this->unk_46C = -1;
@@ -10115,7 +10121,8 @@ void Player_UpdateCommon(Player* this, GlobalContext* globalCtx, Input* input) {
                     func_80837B9C(this, globalCtx);
                 } else if ((this->actor.bgCheckFlags & 1) || (this->stateFlags1 & 0x8000000)) {
                     func_80836448(globalCtx, this,
-                                  func_808332B8(this) ? &D_04003310 : (this->shockTimer != 0) ? &D_04002F08 : &D_04002878);
+                                  func_808332B8(this) ? &D_04003310
+                                                      : (this->shockTimer != 0) ? &D_04002F08 : &D_04002878);
                 }
             } else {
                 if ((this->actor.parent == NULL) &&

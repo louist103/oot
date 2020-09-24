@@ -579,7 +579,7 @@ beginseg
     include "build/data/overlays/actors/z_lmap_mark.rodata.o"
     include "build/data/overlays/actors/z_kaleido_scope.reloc.o"
 endseg
-
+#define NON_MATCHING
 beginseg
     name "ovl_player_actor"
     include "build/src/overlays/actors/ovl_player_actor/z_player.o"
