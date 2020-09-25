@@ -5,7 +5,7 @@ MAKEFLAGS += --no-builtin-rules
 # If COMPARE is 1, check the output md5sum after building
 COMPARE ?= 1
 # If NON_MATCHING is 1, define the NON_MATCHING C flag when building
-NON_MATCHING ?= 0
+NON_MATCHING ?= 1
 # If ORIG_COMPILER is 1, compile with QEMU_IRIX and the original compiler
 ORIG_COMPILER ?= 0
 
@@ -112,23 +112,23 @@ O_FILES       := $(foreach f,$(S_FILES:.s=.o),build/$f) \
 # create build directories
 $(shell mkdir -p build/baserom $(foreach dir,$(SRC_DIRS) $(ASM_DIRS) $(TEXTURE_DIRS) $(TEXTURE_BIN_DIRS) $(SCENE_DIRS),build/$(dir)))
 
-build/src/libultra_boot_O1/%.o: OPTFLAGS := -O1
+build/src/libultra_boot_O1/%.o: OPTFLAGS := -O2
 build/src/libultra_boot_O2/%.o: OPTFLAGS := -O2
 build/src/code/fault.o: CFLAGS += -trapuv
-build/src/code/fault.o: OPTFLAGS := -O2 -g3
+build/src/code/fault.o: OPTFLAGS := -O2 
 build/src/code/fault_drawer.o: CFLAGS += -trapuv
-build/src/code/fault_drawer.o: OPTFLAGS := -O2 -g3
-build/src/code/ucode_disas.o: OPTFLAGS := -O2 -g3
-build/src/code/code_801068B0.o: OPTFLAGS := -g
-build/src/code/code_80106860.o: OPTFLAGS := -g
-build/src/code/code_801067F0.o: OPTFLAGS := -g
+build/src/code/fault_drawer.o: OPTFLAGS := -O2
+build/src/code/ucode_disas.o: OPTFLAGS := -O2
+build/src/code/code_801068B0.o: OPTFLAGS := -O2
+build/src/code/code_80106860.o: OPTFLAGS := -O2
+build/src/code/code_801067F0.o: OPTFLAGS := -O2
 
 # Todo: split libultra_code into libultra_code_O1, etc..
-build/src/libultra_code/sqrt.o: OPTFLAGS := -O2 -g3
-build/src/libultra_code/absf.o: OPTFLAGS := -O2 -g3
-build/src/libultra_code/osSetTimer.o: OPTFLAGS := -O1
-build/src/libultra_code/osStopTimer.o: OPTFLAGS := -O1
-build/src/libultra_code/llcvt.o: OPTFLAGS := -O1
+build/src/libultra_code/sqrt.o: OPTFLAGS := -O2
+build/src/libultra_code/absf.o: OPTFLAGS := -O2
+build/src/libultra_code/osSetTimer.o: OPTFLAGS := -O2
+build/src/libultra_code/osStopTimer.o: OPTFLAGS := -O2
+build/src/libultra_code/llcvt.o: OPTFLAGS := -O2
 build/src/libultra_code/llcvt.o: MIPS_VERSION := -mips3 -32
 
 build/src/libultra_boot_O1/%.o: CC := $(CC_OLD)

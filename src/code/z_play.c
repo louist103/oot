@@ -420,7 +420,7 @@ void Gameplay_Init(GlobalContext* globalCtx) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Gameplay_Init.s")
 #endif
 
-#ifdef NON_MATCHING
+u8 gColorRando = 0;
 // regalloc and stack usage differences
 // also missing an extra move instruction
 void Gameplay_Update(GlobalContext* globalCtx) {
@@ -428,9 +428,11 @@ void Gameplay_Update(GlobalContext* globalCtx) {
     Input* input;
     u32 i; // 0x78
     s32 temp;
-
+    
     input = globalCtx->state.input;
-
+    if(CHECK_PAD(input[2].press,L_TRIG)){
+        gColorRando^=1;
+    }
     if ((SREG(1) < 0) || (DREG(0) != 0)) {
         SREG(1) = 0;
         ZeldaArena_Display();
@@ -1047,9 +1049,6 @@ void Gameplay_Update(GlobalContext* globalCtx) {
     func_80070C24(globalCtx, &globalCtx->envCtx, &globalCtx->lightCtx, &globalCtx->pauseCtx, &globalCtx->msgCtx,
                   &globalCtx->unk_10A20, globalCtx->state.gfxCtx);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Gameplay_Update.s")
-#endif
 
 void Gameplay_DrawOverlayElements(GlobalContext* globalCtx) {
     if ((globalCtx->pauseCtx.state != 0) || (globalCtx->pauseCtx.flag != 0)) {

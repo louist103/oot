@@ -610,17 +610,6 @@ u8* sMouthTextures[] = {
     0x06004C00,
 };
 
-Color_RGB8 sTunicColors[] = {
-    { 30, 105, 27 },
-    { 100, 20, 0 },
-    { 0, 60, 100 },
-};
-
-Color_RGB8 sGauntletColors[] = {
-    { 255, 255, 255 },
-    { 254, 207, 15 },
-};
-
 Gfx* sBootDListGroups[][2] = {
     { 0x06025918, 0x06025A60 },
     { 0x06025BA8, 0x06025DB0 },
@@ -630,15 +619,17 @@ void func_8008F470(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDraw
                    s32 tunic, s32 boots, s32 face, OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw,
                    void* arg) {
     Color_RGB8* color;
+    extern gColorRando;
     s32 eyeIndex = (limbDrawTable[22].x & 0xF) - 1;
     s32 mouthIndex = (limbDrawTable[22].x >> 4) - 1;
-
+    u32 colors[4];
+    u8 i;
     OPEN_DISPS(globalCtx->state.gfxCtx, "../z_player_lib.c", 1721);
-
-    if (eyeIndex < 0) {
-        eyeIndex = sEyeMouthIndexes[face][0];
+    if (gColorRando) {
+        if (eyeIndex < 0) {
+            eyeIndex = sEyeMouthIndexes[face][0];
+        }
     }
-
     gSPSegment(oGfxCtx->polyOpa.p++, 0x08, SEGMENTED_TO_VIRTUAL(sEyeTextures[eyeIndex]));
 
     if (mouthIndex < 0) {
@@ -647,8 +638,11 @@ void func_8008F470(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDraw
 
     gSPSegment(oGfxCtx->polyOpa.p++, 0x09, SEGMENTED_TO_VIRTUAL(sMouthTextures[mouthIndex]));
 
-    color = &sTunicColors[tunic];
-    gDPSetEnvColor(oGfxCtx->polyOpa.p++, color->r, color->g, color->b, 0);
+    // color = &sTunicColors[tunic];
+    for (i = 0; i < 4; i++) {
+        colors[i] = (u32)(Math_Rand_ZeroOne() * 255.0f);
+    }
+    gDPSetEnvColor(oGfxCtx->polyOpa.p++, colors[0], colors[1], colors[2], colors[3]);
 
     sDListsLodOffset = lod * 2;
 
@@ -660,9 +654,13 @@ void func_8008F470(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDraw
 
             if (strengthUpgrade >= PLAYER_STR_SILVER_G) {
                 gDPPipeSync(oGfxCtx->polyOpa.p++);
-
-                color = &sGauntletColors[strengthUpgrade - PLAYER_STR_SILVER_G];
-                gDPSetEnvColor(oGfxCtx->polyOpa.p++, color->r, color->g, color->b, 0);
+                if (gColorRando) {
+                    for (i = 0; i < 4; i++) {
+                        colors[i] = (u32)(Math_Rand_ZeroOne() * 255.0f);
+                    }
+                }
+                // color = &sGauntletColors[strengthUpgrade - PLAYER_STR_SILVER_G];
+                gDPSetEnvColor(oGfxCtx->polyOpa.p++, colors[0], colors[1], colors[2], colors[3]);
 
                 gSPDisplayList(oGfxCtx->polyOpa.p++, D_06025218);
                 gSPDisplayList(oGfxCtx->polyOpa.p++, D_06025598);
