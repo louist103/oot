@@ -625,11 +625,11 @@ void func_8008F470(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDraw
     u32 colors[4];
     u8 i;
     OPEN_DISPS(globalCtx->state.gfxCtx, "../z_player_lib.c", 1721);
-    if (gColorRando) {
+
         if (eyeIndex < 0) {
             eyeIndex = sEyeMouthIndexes[face][0];
         }
-    }
+
     gSPSegment(oGfxCtx->polyOpa.p++, 0x08, SEGMENTED_TO_VIRTUAL(sEyeTextures[eyeIndex]));
 
     if (mouthIndex < 0) {
@@ -639,9 +639,11 @@ void func_8008F470(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDraw
     gSPSegment(oGfxCtx->polyOpa.p++, 0x09, SEGMENTED_TO_VIRTUAL(sMouthTextures[mouthIndex]));
 
     // color = &sTunicColors[tunic];
-    for (i = 0; i < 4; i++) {
-        colors[i] = (u32)(Math_Rand_ZeroOne() * 255.0f);
-    }
+                if (gColorRando) {
+                    for (i = 0; i < 4; i++) {
+                        colors[i] = (u32)(Math_Rand_ZeroOne() * 255.0f);
+                    }
+                }
     gDPSetEnvColor(oGfxCtx->polyOpa.p++, colors[0], colors[1], colors[2], colors[3]);
 
     sDListsLodOffset = lod * 2;
