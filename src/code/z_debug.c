@@ -1,6 +1,4 @@
-#include <ultra64.h>
-#include <ultra64/controller.h>
-#include <global.h>
+#include "global.h"
 
 typedef struct {
     u8 x;
@@ -15,24 +13,22 @@ typedef struct {
 } InputCombo;
 
 GameInfo* gGameInfo;
-int D_8015FA94; // no known symbols
+s32 D_8015FA94; // no known symbols
 PrintTextBuffer D_8015FA98[0x16];
 
 s16 D_8011E0B0 = 0; // PrintTextBuffer index
 Color_RGBA8 printTextColors[] = {
-    { 0xFF, 0xFF, 0x20, 0xC0 }, { 0xFF, 0x96, 0x80, 0xC0 }, { 0x80, 0x60, 0x00, 0x40 }, { 0xC0, 0x80, 0x10, 0x80 },
-    { 0xFF, 0xC0, 0x20, 0x80 }, { 0xE6, 0xE6, 0xDC, 0x40 }, { 0x80, 0x96, 0xFF, 0x80 }, { 0x80, 0xFF, 0x20, 0x80 },
+    { 255, 255, 32, 192 }, { 255, 150, 128, 192 }, { 128, 96, 0, 64 },     { 192, 128, 16, 128 },
+    { 255, 192, 32, 128 }, { 230, 230, 220, 64 },  { 128, 150, 255, 128 }, { 128, 255, 32, 128 },
 };
 
 InputCombo inputCombos[REG_GROUPS] = {
-    { L_TRIG, U_CBUTTONS },       { L_TRIG, L_CBUTTONS },   { L_TRIG, D_CBUTTONS },     { L_TRIG, A_BUTTON },
-    { R_TRIG, D_CBUTTONS },       { L_TRIG, R_CBUTTONS },   { L_TRIG, R_TRIG },         { L_TRIG, L_JPAD },
-    { L_TRIG, R_JPAD },           { L_TRIG, U_JPAD },       { L_TRIG, B_BUTTON },       { L_TRIG, Z_TRIG },
-    { L_TRIG, D_JPAD },           { R_TRIG, A_BUTTON },     { R_TRIG, B_BUTTON },       { R_TRIG, Z_TRIG },
-    { R_TRIG, L_TRIG },           { R_TRIG, U_CBUTTONS },   { R_TRIG, R_CBUTTONS },     { R_TRIG, L_JPAD },
-    { R_TRIG, L_CBUTTONS },       { R_TRIG, START_BUTTON }, { L_TRIG, START_BUTTON },   { R_TRIG, R_JPAD },
-    { R_TRIG, U_JPAD },           { START_BUTTON, R_TRIG }, { START_BUTTON, A_BUTTON }, { START_BUTTON, B_BUTTON },
-    { START_BUTTON, R_CBUTTONS },
+    { BTN_L, BTN_CUP },    { BTN_L, BTN_CLEFT }, { BTN_L, BTN_CDOWN }, { BTN_L, BTN_A },          { BTN_R, BTN_CDOWN },
+    { BTN_L, BTN_CRIGHT }, { BTN_L, BTN_R },     { BTN_L, BTN_DLEFT }, { BTN_L, BTN_DRIGHT },     { BTN_L, BTN_DUP },
+    { BTN_L, BTN_B },      { BTN_L, BTN_Z },     { BTN_L, BTN_DDOWN }, { BTN_R, BTN_A },          { BTN_R, BTN_B },
+    { BTN_R, BTN_Z },      { BTN_R, BTN_L },     { BTN_R, BTN_CUP },   { BTN_R, BTN_CRIGHT },     { BTN_R, BTN_DLEFT },
+    { BTN_R, BTN_CLEFT },  { BTN_R, BTN_START }, { BTN_L, BTN_START }, { BTN_R, BTN_DRIGHT },     { BTN_R, BTN_DUP },
+    { BTN_START, BTN_R },  { BTN_START, BTN_A }, { BTN_START, BTN_B }, { BTN_START, BTN_CRIGHT },
 };
 
 char regChar[] = " SOPQMYDUIZCNKXcsiWAVHGmnBdkb";
@@ -54,7 +50,7 @@ void func_800636C0() {
 
 // Called when free movement is active.
 // 8011D394 to enable camera debugger
-void func_8006375C(s32 arg0, s32 arg1, float* d_80855320) {
+void func_8006375C(s32 arg0, s32 arg1, const char* text) {
 }
 
 // Copy Camera Debugger Text
@@ -114,11 +110,12 @@ void func_8006390C(Input* input) {
     s32 i;
 
     regGroup = (gGameInfo->regGroup * REG_PAGES + gGameInfo->regPage) * REG_PER_PAGE - REG_PER_PAGE;
-    dpad = input->cur.in.button & (U_JPAD | L_JPAD | R_JPAD | D_JPAD);
-    if (CHECK_PAD(input->cur, L_TRIG) || CHECK_PAD(input->cur, R_TRIG) || CHECK_PAD(input->cur, START_BUTTON)) {
+    dpad = input->cur.button & (BTN_DUP | BTN_DLEFT | BTN_DRIGHT | BTN_DDOWN);
+    if (CHECK_BTN_ALL(input->cur.button, BTN_L) || CHECK_BTN_ALL(input->cur.button, BTN_R) ||
+        CHECK_BTN_ALL(input->cur.button, BTN_START)) {
         input_combo = inputCombos;
         for (i = 0; i < REG_GROUPS; i++) {
-            if (~(~input_combo->push | input->cur.in.button) || ~(~input_combo->held | input->press.in.button)) {
+            if (~(~input_combo->push | input->cur.button) || ~(~input_combo->held | input->press.button)) {
                 input_combo++;
             } else {
                 break;
@@ -154,25 +151,27 @@ void func_8006390C(Input* input) {
                     gGameInfo->dpadLast = dpad;
                 }
 
-                increment =
-                    (dpad & R_JPAD)
-                        ? (CHECK_PAD(input->cur, A_BUTTON | B_BUTTON)
-                               ? 1000
-                               : CHECK_PAD(input->cur, A_BUTTON) ? 100 : CHECK_PAD(input->cur, B_BUTTON) ? 10 : 1)
-                        : (dpad & L_JPAD)
-                              ? (CHECK_PAD(input->cur, A_BUTTON | B_BUTTON)
-                                     ? -1000
-                                     : CHECK_PAD(input->cur, A_BUTTON) ? -100
-                                                                       : CHECK_PAD(input->cur, B_BUTTON) ? -10 : -1)
-                              : 0;
+                increment = (CHECK_BTN_ANY(dpad, BTN_DRIGHT))
+                                ? (CHECK_BTN_ALL(input->cur.button, BTN_A | BTN_B)
+                                       ? 1000
+                                       : CHECK_BTN_ALL(input->cur.button, BTN_A)
+                                             ? 100
+                                             : CHECK_BTN_ALL(input->cur.button, BTN_B) ? 10 : 1)
+                                : (CHECK_BTN_ANY(dpad, BTN_DLEFT))
+                                      ? (CHECK_BTN_ALL(input->cur.button, BTN_A | BTN_B)
+                                             ? -1000
+                                             : CHECK_BTN_ALL(input->cur.button, BTN_A)
+                                                   ? -100
+                                                   : CHECK_BTN_ALL(input->cur.button, BTN_B) ? -10 : -1)
+                                      : 0;
 
                 gGameInfo->data[gGameInfo->regCur + regGroup] += increment;
-                if (dpad & U_JPAD) {
+                if (CHECK_BTN_ANY(dpad, BTN_DUP)) {
                     gGameInfo->regCur--;
                     if (gGameInfo->regCur < 0) {
                         gGameInfo->regCur = REG_PER_PAGE - 1;
                     }
-                } else if (dpad & D_JPAD) {
+                } else if (CHECK_BTN_ANY(dpad, BTN_DDOWN)) {
                     gGameInfo->regCur++;
                     if (gGameInfo->regCur >= REG_PER_PAGE) {
                         gGameInfo->regCur = 0;
@@ -201,16 +200,16 @@ void func_80063C04(GfxPrint* gfxPrint) {
     name[0] = 'R';
     name[1] = regChar[gGameInfo->regGroup]; // r_group type char
     name[2] = '\0';
-    GfxPrint_SetColor(gfxPrint, 0, 0x80, 0x80, 0x80);
+    GfxPrint_SetColor(gfxPrint, 0, 128, 128, 128);
 
     for (i = 0; i != REG_PER_PAGE; i++) {
         if (i == gGameInfo->regCur) {
-            GfxPrint_SetColor(gfxPrint, 0, 0xff, 0xff, 0xff);
+            GfxPrint_SetColor(gfxPrint, 0, 255, 255, 255);
         }
         GfxPrint_SetPos(gfxPrint, 3, i + 5);
         GfxPrint_Printf(gfxPrint, "%s%02d%6d", &name, page + i, gGameInfo->data[i + regGroup]);
         if (i == gGameInfo->regCur) {
-            GfxPrint_SetColor(gfxPrint, 0, 0x80, 0x80, 0x80);
+            GfxPrint_SetColor(gfxPrint, 0, 128, 128, 128);
         }
     }
 }
@@ -220,14 +219,13 @@ void func_80063D7C(GraphicsContext* gfxCtx) {
     Gfx* sp78;
     GfxPrint gfxPrint;
     Gfx* tempRet;
-    u32 pad;
-    Gfx* dispRefs[4]; // stores state of GfxCtx next ptrs
 
-    Graph_OpenDisps(dispRefs, gfxCtx, "../z_debug.c", 628);
+    OPEN_DISPS(gfxCtx, "../z_debug.c", 628);
+
     GfxPrint_Init(&gfxPrint);
-    sp78 = gfxCtx->polyOpa.p;
-    tempRet = Graph_GfxPlusOne(gfxCtx->polyOpa.p);
-    gSPDisplayList(gfxCtx->overlay.p++, tempRet);
+    sp78 = oGfxCtx->polyOpa.p;
+    tempRet = Graph_GfxPlusOne(oGfxCtx->polyOpa.p);
+    gSPDisplayList(oGfxCtx->overlay.p++, tempRet);
     GfxPrint_Open(&gfxPrint, tempRet);
 
     if ((OREG(0) == 1) || (OREG(0) == 8)) {
@@ -242,8 +240,11 @@ void func_80063D7C(GraphicsContext* gfxCtx) {
     sp7C = GfxPrint_Close(&gfxPrint);
     gSPEndDisplayList(sp7C++);
     Graph_BranchDlist(sp78, sp7C);
-    gfxCtx->polyOpa.p = sp7C;
+    oGfxCtx->polyOpa.p = sp7C;
+
     if (0) {}
-    Graph_CloseDisps(dispRefs, gfxCtx, "../z_debug.c", 664);
+
+    CLOSE_DISPS(gfxCtx, "../z_debug.c", 664);
+
     GfxPrint_Destroy(&gfxPrint);
 }
