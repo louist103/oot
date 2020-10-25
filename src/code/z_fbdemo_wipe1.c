@@ -1,4 +1,4 @@
-#include <global.h>
+#include "global.h"
 
 Vtx sWipeVtx[] = {
     VTX(-1299, 750, 0, 13653, 2048, 0xAD, 0x30, 0xB8, 0xFF),  VTX(-750, 1299, 0, 15019, 2048, 0xD0, 0x53, 0xB8, 0xFF),
@@ -215,7 +215,7 @@ void TransitionWipe_Draw(TransitionWipe* this, Gfx** gfxP) {
     gDPPipeSync(gfx++);
     tex = Gfx_BranchTexScroll(&gfx, this->texX, this->texY, 0, 0);
     gSPSegment(gfx++, 8, tex);
-    gDPSetPrimColor(gfx++, 0, 0x80, this->color.r, this->color.g, this->color.b, 0xFF);
+    gDPSetPrimColor(gfx++, 0, 0x80, this->color.r, this->color.g, this->color.b, 255);
     gSPMatrix(gfx++, &this->projection, G_MTX_LOAD | G_MTX_PROJECTION);
     gSPPerspNormalize(gfx++, this->normal);
     gSPMatrix(gfx++, &this->lookAt, G_MTX_MUL | G_MTX_PROJECTION);

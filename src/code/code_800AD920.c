@@ -1,4 +1,4 @@
-#include <global.h>
+#include "global.h"
 
 // Note : This file is related to z_vismono, the original name was probably z_vis<something after "mono" alphabetically>
 
@@ -9,14 +9,14 @@ extern u16 D_0E000000[];
 void func_800AD920(struct_80166500* this) {
     this->useRgba = false;
     this->setScissor = false;
-    this->primColor.r = 0xFF;
-    this->primColor.g = 0xFF;
-    this->primColor.b = 0xFF;
-    this->primColor.a = 0xFF;
-    this->envColor.a = 0xFF;
-    this->envColor.r = 0x00;
-    this->envColor.g = 0x00;
-    this->envColor.b = 0x00;
+    this->primColor.r = 255;
+    this->primColor.g = 255;
+    this->primColor.b = 255;
+    this->primColor.a = 255;
+    this->envColor.a = 255;
+    this->envColor.r = 0;
+    this->envColor.g = 0;
+    this->envColor.b = 0;
 }
 
 // Destroy
