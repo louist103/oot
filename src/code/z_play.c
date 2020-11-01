@@ -1,6 +1,6 @@
 #include "global.h"
 #include "vt.h"
-
+#include <alloca.h>
 void* D_8012D1F0 = NULL;
 UNK_TYPE D_8012D1F4 = 0; // unused
 Input* D_8012D1F8 = NULL;
@@ -420,17 +420,23 @@ void Gameplay_Init(GameState* thisx) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Gameplay_Init.s")
 #endif
 
-#ifdef NON_MATCHING
+//#ifdef NON_MATCHING
 // regalloc and stack usage differences
 // also missing an extra move instruction
+s8 test = 0;
 void Gameplay_Update(GlobalContext* globalCtx) {
     s32 sp80;
     Input* input;
     u32 i; // 0x78
     s32 temp;
-
     input = globalCtx->state.input;
 
+    
+    if (CHECK_BTN_ALL(input[0].cur.button, (BTN_CRIGHT | BTN_B | BTN_START))){
+        globalCtx->state.running = false;
+        SET_NEXT_GAMESTATE(&globalCtx->state, Title_Init, TitleContext);
+     }
+    
     if ((SREG(1) < 0) || (DREG(0) != 0)) {
         SREG(1) = 0;
         ZeldaArena_Display();
@@ -1047,9 +1053,9 @@ void Gameplay_Update(GlobalContext* globalCtx) {
     func_80070C24(globalCtx, &globalCtx->envCtx, &globalCtx->lightCtx, &globalCtx->pauseCtx, &globalCtx->msgCtx,
                   &globalCtx->unk_10A20, globalCtx->state.gfxCtx);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Gameplay_Update.s")
-#endif
+//#else
+//#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Gameplay_Update.s")
+//#endif
 
 void Gameplay_DrawOverlayElements(GlobalContext* globalCtx) {
     if ((globalCtx->pauseCtx.state != 0) || (globalCtx->pauseCtx.flag != 0)) {
