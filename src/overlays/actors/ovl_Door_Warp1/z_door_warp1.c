@@ -32,6 +32,8 @@ void func_8099A5EC(DoorWarp1* this, GlobalContext* globalCtx);
 void func_8099B014(DoorWarp1* this, GlobalContext* globalCtx);
 void func_80999508(DoorWarp1* this, GlobalContext* globalCtx);
 
+extern s16 currentEnterence;
+
 const ActorInit Door_Warp1_InitVars = {
     ACTOR_DOOR_WARP1,
     ACTORTYPE_ITEMACTION,
@@ -493,6 +495,7 @@ void func_80999A68(DoorWarp1* this, GlobalContext* globalCtx) {
         Flags_SetEventChkInf(0x25);
         Item_Give(globalCtx, 0x6D);
         globalCtx->nextEntranceIndex = 0x0301;
+        gSaveContext.entranceIndex = 0x0301;
         // gSaveContext.nextCutsceneIndex = 0xFFF1;
 
     } else if (globalCtx->sceneNum == 0x11) { // Deku Tree
@@ -501,10 +504,12 @@ void func_80999A68(DoorWarp1* this, GlobalContext* globalCtx) {
         Flags_SetEventChkInf(9);
         Item_Give(globalCtx, 0x6C);
         globalCtx->nextEntranceIndex = 0x040B;
+       gSaveContext.entranceIndex = 0x40B;
         // gSaveContext.nextCutsceneIndex = 0xFFF1U;
 
     } else if (globalCtx->sceneNum == 0x13) { // JabuJabu
         globalCtx->nextEntranceIndex = 0x000C;
+        gSaveContext.entranceIndex = 0x000C;
         // gSaveContext.linkAge = 0;
         globalCtx->linkAgeOnLoad = 0;
         // gSaveContext.nextCutsceneIndex = 0;
@@ -686,6 +691,7 @@ void func_8099A5EC(DoorWarp1* this, GlobalContext* globalCtx) {
         gSaveContext.eventChkInf[4] |= 0x100;
         Item_Give(globalCtx, ITEM_MEDALLION_FOREST);
         globalCtx->nextEntranceIndex = 0x0305;
+        gSaveContext.entranceIndex = 0x305;
         // gSaveContext.nextCutsceneIndex = 0;
         // gSaveContext.chamberCutsceneNum = CHAMBER_CS_FOREST;
 
@@ -694,6 +700,7 @@ void func_8099A5EC(DoorWarp1* this, GlobalContext* globalCtx) {
         gSaveContext.eventChkInf[4] |= 0x200;
         Item_Give(globalCtx, ITEM_MEDALLION_FIRE);
         globalCtx->nextEntranceIndex = 0x0417;
+        gSaveContext.entranceIndex = 0x417;
         // gSaveContext.nextCutsceneIndex = 0xFFF3U;
 
     } else if (globalCtx->sceneNum == 0x16) {
@@ -701,6 +708,7 @@ void func_8099A5EC(DoorWarp1* this, GlobalContext* globalCtx) {
         gSaveContext.eventChkInf[4] |= 0x400;
         Item_Give(globalCtx, ITEM_MEDALLION_WATER);
         globalCtx->nextEntranceIndex = 0x0413;
+        gSaveContext.entranceIndex = 0x0413;
         // gSaveContext.nextCutsceneIndex = 0;
         // gSaveContext.chamberCutsceneNum = ITEM_MEDALLION_WATER;
 
@@ -715,6 +723,7 @@ void func_8099A5EC(DoorWarp1* this, GlobalContext* globalCtx) {
 
         Item_Give(globalCtx, ITEM_MEDALLION_SHADOW);
         globalCtx->nextEntranceIndex = 0x05EC;
+        gSaveContext.entranceIndex = 0x05EC;
         // gSaveContext.nextCutsceneIndex = 0;
         // gSaveContext.chamberCutsceneNum = CHAMBER_CS_SHADOW;
     }

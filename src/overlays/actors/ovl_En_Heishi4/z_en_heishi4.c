@@ -87,11 +87,11 @@ void EnHeishi4_Init(Actor* thisx, GlobalContext* globalCtx) {
             break;
     }
     this->unk_27C = ((thisx->params >> 8) & 0xFF);
-    osSyncPrintf("\n\n");
-    osSyncPrintf(VT_FGCOL(GREEN) " ☆☆☆☆☆ 兵士２セット完了！ ☆☆☆☆☆ %d\n" VT_RST, thisx->params);
-    osSyncPrintf(VT_FGCOL(YELLOW) " ☆☆☆☆☆ 識別完了！\t    ☆☆☆☆☆ %d\n" VT_RST, this->type);
-    osSyncPrintf(VT_FGCOL(PURPLE) " ☆☆☆☆☆ メッセージ完了！   ☆☆☆☆☆ %x\n\n" VT_RST, (thisx->params >> 8) & 0xF);
-    osSyncPrintf("\n\n");
+    //osSyncPrintf("\n\n");
+    //osSyncPrintf(VT_FGCOL(GREEN) " ☆☆☆☆☆ 兵士２セット完了！ ☆☆☆☆☆ %d\n" VT_RST, thisx->params);
+    //osSyncPrintf(VT_FGCOL(YELLOW) " ☆☆☆☆☆ 識別完了！\t    ☆☆☆☆☆ %d\n" VT_RST, this->type);
+    //osSyncPrintf(VT_FGCOL(PURPLE) " ☆☆☆☆☆ メッセージ完了！   ☆☆☆☆☆ %x\n\n" VT_RST, (thisx->params >> 8) & 0xF);
+    //osSyncPrintf("\n\n");
 }
 
 void EnHeishi4_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -160,7 +160,7 @@ void func_80A56544(EnHeishi4* this, GlobalContext* globalCtx) {
 
     SkelAnime_ChangeAnim(&this->skelAnime, &D_06005C30, 1.0f, 0.0f, (s16)frames, 0, -10.0f);
     if (LINK_AGE_IN_YEARS != YEARS_CHILD) {
-        osSyncPrintf(VT_FGCOL(GREEN) " ☆☆☆☆☆ ぎゃぁ！オトナだー ☆☆☆☆☆ \n" VT_RST);
+        //osSyncPrintf(VT_FGCOL(GREEN) " ☆☆☆☆☆ ぎゃぁ！オトナだー ☆☆☆☆☆ \n" VT_RST);
         Actor_Kill(&this->actor);
     } else {
         this->actionFunc = func_80A56614;
@@ -205,7 +205,7 @@ void func_80A56614(EnHeishi4* this, GlobalContext* globalCtx) {
 
 void func_80A5673C(EnHeishi4* this, GlobalContext* globalCtx) {
     if (gSaveContext.eventChkInf[4] & 0x20) {
-        osSyncPrintf(VT_FGCOL(YELLOW) " ☆☆☆☆☆ マスターソード祝入手！ ☆☆☆☆☆ \n" VT_RST);
+       // osSyncPrintf(VT_FGCOL(YELLOW) " ☆☆☆☆☆ マスターソード祝入手！ ☆☆☆☆☆ \n" VT_RST);
         Actor_Kill(&this->actor);
         return;
     }
@@ -217,11 +217,11 @@ void func_80A5673C(EnHeishi4* this, GlobalContext* globalCtx) {
             this->actor.textId = 0x7007;
             this->unk_282 = 5;
             this->unk_284 = 1;
-            osSyncPrintf(VT_FGCOL(YELLOW) " ☆☆☆☆☆ デモ開始！ ☆☆☆☆☆ \n" VT_RST);
+           // osSyncPrintf(VT_FGCOL(YELLOW) " ☆☆☆☆☆ デモ開始！ ☆☆☆☆☆ \n" VT_RST);
         } else {
             this->actor.textId = 0x7008;
             this->unk_282 = 6;
-            osSyncPrintf(VT_FGCOL(BLUE) " ☆☆☆☆☆ 返事なし ☆☆☆☆☆ \n" VT_RST);
+           // osSyncPrintf(VT_FGCOL(BLUE) " ☆☆☆☆☆ 返事なし ☆☆☆☆☆ \n" VT_RST);
         }
         this->actionFunc = func_80A56874;
     } else {

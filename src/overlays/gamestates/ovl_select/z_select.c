@@ -583,7 +583,10 @@ void Select_Init(GameState* thisx) {
     SelectContext* this = (SelectContext*)thisx;
     u32 size;
     s32 pad;
-
+    gSaveContext.entranceIndex = 0x40F;    
+    this->state.running = false;
+    
+    SET_NEXT_GAMESTATE(thisx,Gameplay_Init, GlobalContext);
     this->state.main = Select_Main;
     this->state.destroy = Select_Destroy;
     this->scenes = sScenes;
