@@ -160,7 +160,7 @@ void GameState_Draw(GameState* gameState, GraphicsContext* gfxCtx) {
 
     sLastButtonPressed = gameState->input[0].press.button | gameState->input[0].cur.button;
     if (R_DISABLE_INPUT_DISPLAY == 0) {
-        GameState_DrawInputDisplay(sLastButtonPressed, &newDList);
+       // GameState_DrawInputDisplay(sLastButtonPressed, &newDList);
     }
 
     if (R_ENABLE_AUDIO_DBG & 1) {

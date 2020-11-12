@@ -92,8 +92,11 @@ static UNK_PTR D_80AF0870[] = {
 };
 
 static s32 sUnused = 0;
-
-#include "z_en_ru1_cutscene_data.c" EARLY
+s32 D_80AF0880;
+s32 D_80AF10A4;
+s32 D_80AF1724;
+s32 D_80AF1728;
+//#include "z_en_ru1_cutscene_data.c" EARLY
 
 static u32 D_80AF1938 = 0;
 
@@ -1017,15 +1020,15 @@ void func_80AECCB0(EnRu1* this, GlobalContext* globalCtx) {
     f32 spawnX;
     f32 spawnY;
     f32 spawnZ;
-    s32 pad[2];
 
     yawTowardsLink = thisx->yawTowardsLink;
     pos = &thisx->posRot.pos;
     spawnX = ((kREG(1) + 12.0f) * Math_Sins(yawTowardsLink)) + pos->x;
     spawnY = pos->y;
     spawnZ = ((kREG(1) + 12.0f) * Math_Coss(yawTowardsLink)) + pos->z;
-    this->unk_278 = Actor_SpawnAsChild(&globalCtx->actorCtx, this, globalCtx, ACTOR_DOOR_WARP1, spawnX, spawnY, spawnZ,
-                                       0, yawTowardsLink, 0, 5);
+    this->unk_278 = Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_DOOR_WARP1, spawnX, spawnY, spawnZ,
+                                       0, yawTowardsLink, 0, 0);
+                                       Actor_Kill(&this->actor);
 }
 
 void func_80AECDA0(EnRu1* this, GlobalContext* globalCtx) {
