@@ -5,6 +5,7 @@
  */
 
 #include "z_en_dha.h"
+#include "overlays/actors/ovl_En_Dh/z_en_dh.h"
 
 #define FLAGS 0x00000015
 
