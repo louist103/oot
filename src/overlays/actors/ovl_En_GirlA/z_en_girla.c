@@ -19,7 +19,7 @@ void func_80A3BEAC(GlobalContext* globalCtx, EnGirlA* this);
 void func_80A3BEE0(GlobalContext* globalCtx, EnGirlA* this);
 void func_80A3BFE4(EnGirlA* this, GlobalContext* globalCtx);
 void func_80A3C3BC(EnGirlA* this, GlobalContext* globalCtx);
-void func_80A3C498(Actor* thisx, GlobalContext* globalCtx, s32 flags);
+void EnGirlA_DrawHiLights(Actor* thisx, GlobalContext* globalCtx, s32 flags);
 void EnGirlA_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 s32 func_80A3AAA8(GlobalContext* globalCtx, EnGirlA* this);
@@ -48,20 +48,20 @@ s32 func_80A3B4D8(GlobalContext* globalCtx, EnGirlA* this);
 s32 func_80A3B54C(GlobalContext* globalCtx, EnGirlA* this);
 s32 func_80A3B5C0(GlobalContext* globalCtx, EnGirlA* this);
 
-void func_80A3B714(GlobalContext* globalCtx, EnGirlA* this);
-void func_80A3B634(GlobalContext* globalCtx, EnGirlA* this);
-void func_80A3B678(GlobalContext* globalCtx, EnGirlA* this);
-void func_80A3B780(GlobalContext* globalCtx, EnGirlA* this);
-void func_80A3BA40(GlobalContext* globalCtx, EnGirlA* this);
-void func_80A3B7BC(GlobalContext* globalCtx, EnGirlA* this);
-void func_80A3B800(GlobalContext* globalCtx, EnGirlA* this);
-void func_80A3B83C(GlobalContext* globalCtx, EnGirlA* this);
-void func_80A3B878(GlobalContext* globalCtx, EnGirlA* this);
-void func_80A3B8B4(GlobalContext* globalCtx, EnGirlA* this);
-void func_80A3B8F0(GlobalContext* globalCtx, EnGirlA* this);
-void func_80A3B92C(GlobalContext* globalCtx, EnGirlA* this);
-void func_80A3B968(GlobalContext* globalCtx, EnGirlA* this);
-void func_80A3B9A4(GlobalContext* globalCtx, EnGirlA* this);
+void EnGirlA_SellDekuNuts(GlobalContext* globalCtx, EnGirlA* this);
+void EnGirlA_SellArrows(GlobalContext* globalCtx, EnGirlA* this);
+void EnGirlA_SellBombs(GlobalContext* globalCtx, EnGirlA* this);
+void EnGirlA_SellSticks(GlobalContext* globalCtx, EnGirlA* this);
+void EnGirlA_SellBottledItem(GlobalContext* globalCtx, EnGirlA* this);
+void EnGirlA_SellGiantsKnife(GlobalContext* globalCtx, EnGirlA* this);
+void EnGirlA_SellHylanShield(GlobalContext* globalCtx, EnGirlA* this);
+void EnGirlA_SellDekuShield(GlobalContext* globalCtx, EnGirlA* this);
+void EnGirlA_SellGoronTunic(GlobalContext* globalCtx, EnGirlA* this);
+void EnGirlA_SellZoraTunic(GlobalContext* globalCtx, EnGirlA* this);
+void EnGirlA_SellRecoveryHeart(GlobalContext* globalCtx, EnGirlA* this);
+void EnGirlA_SellMilk(GlobalContext* globalCtx, EnGirlA* this);
+void EnGirlA_SellEgg(GlobalContext* globalCtx, EnGirlA* this);
+void EnGirlA_SellMilk2(GlobalContext* globalCtx, EnGirlA* this);
 void func_80A3B9D4(GlobalContext* globalCtx, EnGirlA* this);
 void func_80A3BA04(GlobalContext* globalCtx, EnGirlA* this);
 void func_80A3BB6C(GlobalContext* globalCtx, EnGirlA* this);
@@ -82,15 +82,56 @@ const ActorInit En_GirlA_InitVars = {
 };
 
 static char* sitemsForSale[] = {
-    "デクの実×5   ",  "矢×30        ",  "矢×50        ",  "爆弾×5       ",  "デクの実×10  ",  "デクの棒      ",
-    "爆弾×10      ",  "さかな        ", "赤クスリ      ", "緑クスリ      ", "青クスリ      ", "巨人のナイフ  ",
-    "ハイリアの盾  ", "デクの盾      ", "ゴロンの服    ", "ゾ─ラの服    ",  "回復のハート  ", "ロンロン牛乳  ",
-    "鶏の卵        ", "インゴー牛乳  ", "インゴー卵    ", "もだえ石      ", "大人の財布    ", "ハートの欠片  ",
-    "ボムチュウ    ", "ボムチュウ    ", "ボムチュウ    ", "ボムチュウ    ", "ボムチュウ    ", "デクのタネ    ",
-    "キータンのお面", "こわそなお面  ", "ドクロのお面  ", "ウサギずきん  ", "まことの仮面  ", "ゾーラのお面  ",
-    "ゴロンのお面  ", "ゲルドのお面  ", "ＳＯＬＤＯＵＴ", "炎            ", "虫            ", "チョウチョ    ",
-    "ポウ          ", "妖精の魂      ", "矢×10        ",  "爆弾×20      ",  "爆弾×30      ",  "爆弾×5       ",
-    "赤クスリ      ", "赤クスリ      ",
+    "デクの実×5   ",//Deku fruit
+    "矢×30        ",//Arrow 
+    "矢×50        ",//Arrow 
+    "爆弾×5       ",//bomb
+    "デクの実×10  ",//Deku fruit
+    "デクの棒      ",//デクの棒
+    "爆弾×10      ",//Bomb
+    "さかな        ",//Fish
+    "赤クスリ      ",//Red medicine
+    "緑クスリ      ",//Green medicine
+    "青クスリ      ",//Blue medicine
+    "巨人のナイフ  ",//Giant knife
+    "ハイリアの盾  ",//Hyria Shield
+    "デクの盾      ",//Deku Shield
+    "ゴロンの服    ",//Goron's clothes
+    "ゾ─ラの服    ",//Zora's clothes
+    "回復のハート  ",//Heart of recovery
+    "ロンロン牛乳  ",//Ron Ron milk
+    "鶏の卵        ",//Chicken egg
+    "インゴー牛乳  ",//Ingo milk
+    "インゴー卵    ",//Ingo egg
+    "もだえ石      ",//Modae stone
+    "大人の財布    ",//Adult wallet
+    "ハートの欠片  ",//Heart fragment
+    "ボムチュウ    ",//Bombchu
+    "ボムチュウ    ",//Bombchu
+    "ボムチュウ    ",//Bombchu
+    "ボムチュウ    ",//Bombchu
+    "ボムチュウ    ",//Bombchu
+    "デクのタネ    ",//Deku seeds
+    "キータンのお面",//Ketan's mask
+    "こわそなお面  ",//Scary face
+    "ドクロのお面  ",//Skull mask
+    "ウサギずきん  ",//Rabbit hood
+    "まことの仮面  ",//True mask
+    "ゾーラのお面  ",//Zora's mask
+    "ゴロンのお面  ",//Goron's mask
+    "ゲルドのお面  ",//Gerd's mask
+    "ＳＯＬＤＯＵＴ",
+    "炎            ",
+    "虫            ",
+    "チョウチョ    ",
+    "ポウ          ",
+    "妖精の魂      ",
+    "矢×10        ",//Arrow
+    "爆弾×20      ",//Bomb
+    "爆弾×30      ",//Bomb
+    "爆弾×5       ",//Bomb
+    "赤クスリ      ",//Red medicine
+    "赤クスリ      "//Red medicine
 };
 
 static s16 sMasks[8] = { ITEM_MASK_KEATON, ITEM_MASK_SPOOKY, ITEM_MASK_SKULL, ITEM_MASK_BUNNY,
@@ -113,45 +154,44 @@ typedef struct {
 } ShopItemEntry; // size = 0x20
 
 static ShopItemEntry sItemEntries[] = {
-    { OBJECT_GI_NUTS, 0x0011, func_8002ED80, 15, 5, 0x00B2, 0x007F, GI_NUTS_5_2, func_80A3ABF8, func_80A3B714,
+    { OBJECT_GI_NUTS, 0x0011, func_8002ED80, 15, 5, 0x00B2, 0x007F, GI_NUTS_5_2, func_80A3ABF8, EnGirlA_SellDekuNuts,
       func_80A3BB6C },
     { OBJECT_GI_ARROW, 0x0025, func_8002EBCC, 60, 30, 0x00C1, 0x009B, GI_ARROWS_MEDIUM, func_80A3AAA8,
-      func_80A3B634, func_80A3BB6C },
+      EnGirlA_SellArrows, func_80A3BB6C },
     { OBJECT_GI_ARROW, 0x0026, func_8002EBCC, 90, 50, 0x00B0, 0x007D, GI_ARROWS_LARGE, func_80A3AAA8,
-      func_80A3B634, func_80A3BB6C },
-    { OBJECT_GI_BOMB_1, 0x001F, func_8002EBCC, 25, 5, 0x00A3, 0x008B, GI_BOMBS_5, func_80A3AB58, func_80A3B678,
+      EnGirlA_SellArrows, func_80A3BB6C },
+    { OBJECT_GI_BOMB_1, 0x001F, func_8002EBCC, 25, 5, 0x00A3, 0x008B, GI_BOMBS_5, func_80A3AB58, EnGirlA_SellBombs,
       func_80A3BB6C },
-    { OBJECT_GI_NUTS, 0x0011, func_8002ED80, 30, 10, 0x00A2, 0x0087, GI_NUTS_10, func_80A3ABF8, func_80A3B714,
+    { OBJECT_GI_NUTS, 0x0011, func_8002ED80, 30, 10, 0x00A2, 0x0087, GI_NUTS_10, func_80A3ABF8, EnGirlA_SellDekuNuts,
       func_80A3BB6C },
-    { OBJECT_GI_STICK, 0x001A, NULL, 10, 1, 0x00A1, 0x0088, GI_STICKS_1, func_80A3ACAC, func_80A3B780,
+    { OBJECT_GI_STICK, 0x001A, NULL, 10, 1, 0x00A1, 0x0088, GI_STICKS_1, func_80A3ACAC, EnGirlA_SellSticks,
       func_80A3BB6C },
-    { OBJECT_GI_BOMB_1, 0x001F, func_8002EBCC, 50, 10, 0x00B1, 0x007C, GI_BOMBS_10, func_80A3AB58,
-      func_80A3B678, func_80A3BB6C },
-    { OBJECT_GI_FISH, 0x003E, func_8002ED80, 200, 1, 0x00B3, 0x007E, GI_FISH, func_80A3AD60, NULL,
+    { OBJECT_GI_BOMB_1, 0x001F, func_8002EBCC, 50, 10, 0x00B1, 0x007C, GI_BOMBS_10, func_80A3AB58, EnGirlA_SellBombs,
       func_80A3BB6C },
+    { OBJECT_GI_FISH, 0x003E, func_8002ED80, 200, 1, 0x00B3, 0x007E, GI_FISH, func_80A3AD60, NULL, func_80A3BB6C },
     { OBJECT_GI_LIQUID, 0x0037, func_8002EBCC, 30, 1, 0x00A5, 0x008E, GI_POTION_RED, func_80A3ADD4,
-      func_80A3BA40, func_80A3BB6C },
+      EnGirlA_SellBottledItem, func_80A3BB6C },
     { OBJECT_GI_LIQUID, 0x0036, func_8002EBCC, 30, 1, 0x00A6, 0x008F, GI_POTION_GREEN, func_80A3AE48,
-      func_80A3BA40, func_80A3BB6C },
+      EnGirlA_SellBottledItem, func_80A3BB6C },
     { OBJECT_GI_LIQUID, 0x0038, func_8002EBCC, 60, 1, 0x00A7, 0x0090, GI_POTION_BLUE, func_80A3AEBC,
-      func_80A3BA40, func_80A3BB6C },
+      EnGirlA_SellBottledItem, func_80A3BB6C },
     { OBJECT_GI_LONGSWORD, 0x0042, func_8002EBCC, 1000, 1, 0x00A8, 0x0091, GI_SWORD_KNIFE, func_80A3AF30,
-      func_80A3B7BC, func_80A3BB6C },
+      EnGirlA_SellGiantsKnife, func_80A3BB6C },
     { OBJECT_GI_SHIELD_2, 0x002B, func_8002EBCC, 80, 1, 0x00A9, 0x0092, GI_SHIELD_HYLIAN, func_80A3AFC4,
-      func_80A3B800, func_80A3BB6C },
+      EnGirlA_SellHylanShield, func_80A3BB6C },
     { OBJECT_GI_SHIELD_1, 0x001C, func_8002EBCC, 40, 1, 0x009F, 0x0089, GI_SHIELD_DEKU, func_80A3B040,
-      func_80A3B83C, func_80A3BB6C },
-    { OBJECT_GI_CLOTHES, 0x003B, NULL, 200, 1, 0x00AA, 0x0093, GI_TUNIC_GORON, func_80A3B0BC, func_80A3B878,
+      EnGirlA_SellDekuShield, func_80A3BB6C },
+    { OBJECT_GI_CLOTHES, 0x003B, NULL, 200, 1, 0x00AA, 0x0093, GI_TUNIC_GORON, func_80A3B0BC, EnGirlA_SellGoronTunic,
       func_80A3BC0C },
-    { OBJECT_GI_CLOTHES, 0x003C, NULL, 300, 1, 0x00AB, 0x0094, GI_TUNIC_ZORA, func_80A3B160, func_80A3B8B4,
+    { OBJECT_GI_CLOTHES, 0x003C, NULL, 300, 1, 0x00AB, 0x0094, GI_TUNIC_ZORA, func_80A3B160, EnGirlA_SellZoraTunic,
       func_80A3BC3C },
-    { OBJECT_GI_HEART, 0x0008, NULL, 10, 16, 0x00AC, 0x0095, GI_HEART, func_80A3B204, func_80A3B8F0,
+    { OBJECT_GI_HEART, 0x0008, NULL, 10, 16, 0x00AC, 0x0095, GI_HEART, func_80A3B204, EnGirlA_SellRecoveryHeart,
       func_80A3BB6C },
-    { OBJECT_GI_MILK, 0x002F, func_80A3C498, 100, 1, 0x00AD, 0x0097, GI_MILK_BOTTLE, func_80A3B250,
-      func_80A3B92C, func_80A3BB6C },
-    { OBJECT_GI_EGG, 0x0028, func_8002EBCC, 100, 1, 0x00AE, 0x0099, GI_WEIRD_EGG, func_80A3B2AC, func_80A3B968,
+    { OBJECT_GI_MILK, 0x002F, EnGirlA_DrawHiLights, 100, 1, 0x00AD, 0x0097, GI_MILK_BOTTLE, func_80A3B250,
+      EnGirlA_SellMilk, func_80A3BB6C },
+    { OBJECT_GI_EGG, 0x0028, func_8002EBCC, 100, 1, 0x00AE, 0x0099, GI_WEIRD_EGG, func_80A3B2AC, EnGirlA_SellEgg,
       func_80A3BB6C },
-    { OBJECT_GI_MILK, 0x002F, func_80A3C498, 10000, 1, 0x00B4, 0x0085, GI_NONE, func_80A3B308, func_80A3B9A4,
+    { OBJECT_GI_MILK, 0x002F, EnGirlA_DrawHiLights, 10000, 1, 0x00B4, 0x0085, GI_NONE, func_80A3B308, EnGirlA_SellMilk2,
       func_80A3BB6C },
     { OBJECT_GI_EGG, 0x0028, func_8002EBCC, 10000, 1, 0x00B5, 0x0085, GI_NONE, func_80A3B318, func_80A3B9D4,
       func_80A3BB6C },
@@ -173,15 +213,15 @@ static ShopItemEntry sItemEntries[] = {
       func_80A3BC6C },
     { OBJECT_GI_SEED, 0x0047, func_8002EBCC, 30, 30, 0x00DF, 0x00DE, GI_SEEDS_30, func_80A3B3A8, func_80A3BA04,
       func_80A3BB6C },
-    { OBJECT_GI_KI_TAN_MASK, 0x0030, func_8002EBCC, 0, 1, 0x70B2, 0x70BE, GI_MASK_KEATON, func_80A3B3A8,
-      func_80A3BA04, func_80A3BB6C },
-    { OBJECT_GI_REDEAD_MASK, 0x0031, func_8002EBCC, 0, 1, 0x70B1, 0x70BD, GI_MASK_SPOOKY, func_80A3B3A8,
-      func_80A3BA04, func_80A3BB6C },
-    { OBJECT_GI_SKJ_MASK, 0x004E, func_8002EBCC, 0, 1, 0x70B0, 0x70BC, GI_MASK_SKULL, func_80A3B3A8,
-      func_80A3BA04, func_80A3BB6C },
-    { OBJECT_GI_RABIT_MASK, 0x004F, func_8002EBCC, 0, 1, 0x70B3, 0x70BF, GI_MASK_BUNNY, func_80A3B3A8,
-      func_80A3BA04, func_80A3BB6C },
-    { OBJECT_GI_TRUTH_MASK, 0x0050, func_80A3C498, 0, 1, 0x70AF, 0x70C3, GI_MASK_TRUTH, func_80A3B3A8,
+    { OBJECT_GI_KI_TAN_MASK, 0x0030, func_8002EBCC, 0, 1, 0x70B2, 0x70BE, GI_MASK_KEATON, func_80A3B3A8, func_80A3BA04,
+      func_80A3BB6C },
+    { OBJECT_GI_REDEAD_MASK, 0x0031, func_8002EBCC, 0, 1, 0x70B1, 0x70BD, GI_MASK_SPOOKY, func_80A3B3A8, func_80A3BA04,
+      func_80A3BB6C },
+    { OBJECT_GI_SKJ_MASK, 0x004E, func_8002EBCC, 0, 1, 0x70B0, 0x70BC, GI_MASK_SKULL, func_80A3B3A8, func_80A3BA04,
+      func_80A3BB6C },
+    { OBJECT_GI_RABIT_MASK, 0x004F, func_8002EBCC, 0, 1, 0x70B3, 0x70BF, GI_MASK_BUNNY, func_80A3B3A8, func_80A3BA04,
+      func_80A3BB6C },
+    { OBJECT_GI_TRUTH_MASK, 0x0050, EnGirlA_DrawHiLights, 0, 1, 0x70AF, 0x70C3, GI_MASK_TRUTH, func_80A3B3A8,
       func_80A3BA04, func_80A3BB6C },
     { OBJECT_GI_ZORAMASK, 0x005B, NULL, 0, 1, 0x70B9, 0x70C1, GI_MASK_ZORA, func_80A3B3A8, func_80A3BA04,
       func_80A3BB6C },
@@ -189,32 +229,30 @@ static ShopItemEntry sItemEntries[] = {
       func_80A3BB6C },
     { OBJECT_GI_GERUDOMASK, 0x005C, NULL, 0, 1, 0x70BA, 0x70C2, GI_MASK_GERUDO, func_80A3B3A8, func_80A3BA04,
       func_80A3BB6C },
-    { OBJECT_GI_SOLDOUT, 0x0058, func_8002EBCC, 0, 0, 0x00BD, 0x70C2, GI_MASK_GERUDO, func_80A3B454, NULL,
-      NULL },
-    { OBJECT_GI_FIRE, 0x0066, func_8002EBCC, 300, 1, 0x00B9, 0x00B8, GI_BLUE_FIRE, func_80A3B464, func_80A3BA40,
-      func_80A3BB6C },
-    { OBJECT_GI_INSECT, 0x0067, func_80A3C498, 50, 1, 0x00BB, 0x00BA, GI_BUGS, func_80A3B4D8, func_80A3BA40,
-      func_80A3BB6C },
-    { OBJECT_GI_GHOST, 0x006F, func_80A3C498, 50, 1, 0x506F, 0x5070, GI_BIG_POE, func_80A3B54C, func_80A3BA40,
-      func_80A3BB6C },
-    { OBJECT_GI_GHOST, 0x0069, func_80A3C498, 30, 1, 0x506D, 0x506E, GI_POE, func_80A3B54C, func_80A3BA40,
-      func_80A3BB6C },
-    { OBJECT_GI_SOUL, 0x006A, func_80A3C498, 50, 1, 0x00B7, 0x00B6, GI_FAIRY, func_80A3B5C0, func_80A3BA40,
-      func_80A3BB6C },
+    { OBJECT_GI_SOLDOUT, 0x0058, func_8002EBCC, 0, 0, 0x00BD, 0x70C2, GI_MASK_GERUDO, func_80A3B454, NULL, NULL },
+    { OBJECT_GI_FIRE, 0x0066, func_8002EBCC, 300, 1, 0x00B9, 0x00B8, GI_BLUE_FIRE, func_80A3B464,
+      EnGirlA_SellBottledItem, func_80A3BB6C },
+    { OBJECT_GI_INSECT, 0x0067, EnGirlA_DrawHiLights, 50, 1, 0x00BB, 0x00BA, GI_BUGS, func_80A3B4D8,
+      EnGirlA_SellBottledItem, func_80A3BB6C },
+    { OBJECT_GI_GHOST, 0x006F, EnGirlA_DrawHiLights, 50, 1, 0x506F, 0x5070, GI_BIG_POE, func_80A3B54C,
+      EnGirlA_SellBottledItem, func_80A3BB6C },
+    { OBJECT_GI_GHOST, 0x0069, EnGirlA_DrawHiLights, 30, 1, 0x506D, 0x506E, GI_POE, func_80A3B54C,
+      EnGirlA_SellBottledItem, func_80A3BB6C },
+    { OBJECT_GI_SOUL, 0x006A, EnGirlA_DrawHiLights, 50, 1, 0x00B7, 0x00B6, GI_FAIRY, func_80A3B5C0,
+      EnGirlA_SellBottledItem, func_80A3BB6C },
     { OBJECT_GI_ARROW, 0x0024, func_8002EBCC, 20, 10, 0x00A0, 0x008A, GI_ARROWS_SMALL, func_80A3AAA8,
-      func_80A3B634, func_80A3BB6C },
-    { OBJECT_GI_BOMB_1, 0x001F, func_8002EBCC, 80, 20, 0x001C, 0x0006, GI_BOMBS_20, func_80A3AB58,
-      func_80A3B678, func_80A3BB6C },
-    { OBJECT_GI_BOMB_1, 0x001F, func_8002EBCC, 120, 30, 0x001D, 0x001E, GI_BOMBS_30, func_80A3AB58,
-      func_80A3B678, func_80A3BB6C },
-    { OBJECT_GI_BOMB_1, 0x001F, func_8002EBCC, 35, 5, 0x00CB, 0x00CA, GI_BOMBS_5, func_80A3AB58, func_80A3B678,
+      EnGirlA_SellArrows, func_80A3BB6C },
+    { OBJECT_GI_BOMB_1, 0x001F, func_8002EBCC, 80, 20, 0x001C, 0x0006, GI_BOMBS_20, func_80A3AB58, EnGirlA_SellBombs,
+      func_80A3BB6C },
+    { OBJECT_GI_BOMB_1, 0x001F, func_8002EBCC, 120, 30, 0x001D, 0x001E, GI_BOMBS_30, func_80A3AB58, EnGirlA_SellBombs,
+      func_80A3BB6C },
+    { OBJECT_GI_BOMB_1, 0x001F, func_8002EBCC, 35, 5, 0x00CB, 0x00CA, GI_BOMBS_5, func_80A3AB58, EnGirlA_SellBombs,
       func_80A3BB6C },
     { OBJECT_GI_LIQUID, 0x0037, func_8002EBCC, 40, 1, 0x0064, 0x0062, GI_POTION_RED, func_80A3ADD4,
-      func_80A3BA40, func_80A3BB6C },
+      EnGirlA_SellBottledItem, func_80A3BB6C },
     { OBJECT_GI_LIQUID, 0x0037, func_8002EBCC, 50, 1, 0x0065, 0x0063, GI_POTION_RED, func_80A3ADD4,
-      func_80A3BA40, func_80A3BB6C },
+      EnGirlA_SellBottledItem, func_80A3BB6C },
 };
-
 
 void func_80A3A750(EnGirlA* this, EnGirlAActionFunc func) {
     this->actionFunc = func;
@@ -282,13 +320,13 @@ s32 func_80A3A758(EnGirlA* this) {
 
 void func_80A3A8D0(EnGirlA* this, GlobalContext* globalCtx) {
     s16 params = this->actor.params;
-    //Initial setting
+    // Initial setting
     osSyncPrintf("%s(%2d)初期設定\n", sitemsForSale[params], params);
 
     if ((params >= 50) && (params < 0)) {
         Actor_Kill(&this->actor);
         osSyncPrintf(VT_COL(RED, WHITE));
-        //The argument is strange
+        // The argument is strange
         osSyncPrintf("引数がおかしいよ(arg_data=%d)！！\n", this->actor.params);
         osSyncPrintf(VT_RST);
         __assert("0", "../z_en_girlA.c", 1421);
@@ -300,7 +338,7 @@ void func_80A3A8D0(EnGirlA* this, GlobalContext* globalCtx) {
     if (this->bankIndex < 0) {
         Actor_Kill(&this->actor);
         osSyncPrintf(VT_COL(RED, WHITE));
-        //There is no bank! !!
+        // There is no bank! !!
         osSyncPrintf("バンクが無いよ！！(%s)\n", sitemsForSale[params]);
         osSyncPrintf(VT_RST);
         __assert("0", "../z_en_girlA.c", 1434);
@@ -316,7 +354,7 @@ void EnGirlA_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     func_80A3A758(this);
     func_80A3A8D0(this, globalCtx);
-    //Initial setting
+    // Initial setting
     osSyncPrintf("%s(%2d)初期設定\n", sitemsForSale[this->actor.params], this->actor.params);
 }
 
@@ -623,12 +661,12 @@ s32 func_80A3B5C0(GlobalContext* globalCtx, EnGirlA* this) {
     return 1;
 }
 
-void func_80A3B634(GlobalContext* globalCtx, EnGirlA* this) {
+void EnGirlA_SellArrows(GlobalContext* globalCtx, EnGirlA* this) {
     Inventory_ChangeAmmo(ITEM_BOW, this->numberToSell);
     Rupees_ChangeBy(-this->itemPrice);
 }
 
-void func_80A3B678(GlobalContext* globalCtx, EnGirlA* this) {
+void EnGirlA_SellBombs(GlobalContext* globalCtx, EnGirlA* this) {
     switch (this->numberToSell) {
         case 5:
             Item_Give(globalCtx, ITEM_BOMBS_5);
@@ -646,7 +684,7 @@ void func_80A3B678(GlobalContext* globalCtx, EnGirlA* this) {
     Rupees_ChangeBy(-this->itemPrice);
 }
 
-void func_80A3B714(GlobalContext* globalCtx, EnGirlA* this) {
+void EnGirlA_SellDekuNuts(GlobalContext* globalCtx, EnGirlA* this) {
     switch (this->numberToSell) {
         case 5:
             Item_Give(globalCtx, ITEM_NUTS_5);
@@ -658,53 +696,53 @@ void func_80A3B714(GlobalContext* globalCtx, EnGirlA* this) {
     Rupees_ChangeBy(-this->itemPrice);
 }
 
-void func_80A3B780(GlobalContext* globalCtx, EnGirlA* this) {
+void EnGirlA_SellSticks(GlobalContext* globalCtx, EnGirlA* this) {
     Item_Give(globalCtx, ITEM_STICK);
     Rupees_ChangeBy(-this->itemPrice);
 }
 
-void func_80A3B7BC(GlobalContext* globalCtx, EnGirlA* this) {
+void EnGirlA_SellGiantsKnife(GlobalContext* globalCtx, EnGirlA* this) {
     func_800849EC(globalCtx);
     gSaveContext.swordHealth = 8;
     Rupees_ChangeBy(-this->itemPrice);
 }
 
-void func_80A3B800(GlobalContext* globalCtx, EnGirlA* this) {
+void EnGirlA_SellHylanShield(GlobalContext* globalCtx, EnGirlA* this) {
     Item_Give(globalCtx, ITEM_SHIELD_HYLIAN);
     Rupees_ChangeBy(-this->itemPrice);
 }
 
-void func_80A3B83C(GlobalContext* globalCtx, EnGirlA* this) {
+void EnGirlA_SellDekuShield(GlobalContext* globalCtx, EnGirlA* this) {
     Item_Give(globalCtx, ITEM_SHIELD_DEKU);
     Rupees_ChangeBy(-this->itemPrice);
 }
 
-void func_80A3B878(GlobalContext* globalCtx, EnGirlA* this) {
+void EnGirlA_SellGoronTunic(GlobalContext* globalCtx, EnGirlA* this) {
     Item_Give(globalCtx, ITEM_TUNIC_GORON);
     Rupees_ChangeBy(-this->itemPrice);
 }
 
-void func_80A3B8B4(GlobalContext* globalCtx, EnGirlA* this) {
+void EnGirlA_SellZoraTunic(GlobalContext* globalCtx, EnGirlA* this) {
     Item_Give(globalCtx, ITEM_TUNIC_ZORA);
     Rupees_ChangeBy(-this->itemPrice);
 }
 
-void func_80A3B8F0(GlobalContext* globalCtx, EnGirlA* this) {
+void EnGirlA_SellRecoveryHeart(GlobalContext* globalCtx, EnGirlA* this) {
     Health_ChangeBy(globalCtx, this->numberToSell);
     Rupees_ChangeBy(-this->itemPrice);
 }
 
-void func_80A3B92C(GlobalContext* globalCtx, EnGirlA* this) {
+void EnGirlA_SellMilk(GlobalContext* globalCtx, EnGirlA* this) {
     Item_Give(globalCtx, ITEM_MILK_BOTTLE);
     Rupees_ChangeBy(-this->itemPrice);
 }
 
-void func_80A3B968(GlobalContext* globalCtx, EnGirlA* this) {
+void EnGirlA_SellEgg(GlobalContext* globalCtx, EnGirlA* this) {
     Item_Give(globalCtx, ITEM_WEIRD_EGG);
     Rupees_ChangeBy(-this->itemPrice);
 }
 
-void func_80A3B9A4(GlobalContext* globalCtx, EnGirlA* this) {
+void EnGirlA_SellMilk2(GlobalContext* globalCtx, EnGirlA* this) {
     Rupees_ChangeBy(-this->itemPrice);
 }
 
@@ -717,7 +755,7 @@ void func_80A3BA04(GlobalContext* globalCtx, EnGirlA* this) {
     Rupees_ChangeBy(-this->itemPrice);
 }
 
-void func_80A3BA40(GlobalContext* globalCtx, EnGirlA* this) { // Sell bottled item?
+void EnGirlA_SellBottledItem(GlobalContext* globalCtx, EnGirlA* this) { // Sell bottled item?
     switch (this->actor.params) {
         case 7:
             Item_Give(globalCtx, ITEM_FISH);
@@ -749,12 +787,12 @@ void func_80A3BA40(GlobalContext* globalCtx, EnGirlA* this) { // Sell bottled it
     }
     Rupees_ChangeBy(-this->itemPrice);
 }
-//Randomly discount item price
+// Randomly discount item price
 void func_80A3BB6C(GlobalContext* globalCtx, EnGirlA* this) {
-    static s16 D_80A3CCB4[8] = { 5, 10, 15, 20, 25, 30, 35, 40 };
+    static s16 sDiscounts[8] = { 5, 10, 15, 20, 25, 30, 35, 40 };
     if (this->actor.params == 12) {
         if (gSaveContext.infTable[7] & 0x40) {
-            Rupees_ChangeBy(-(this->itemPrice - D_80A3CCB4[(s32)Math_Rand_ZeroFloat(7.9f)]));
+            Rupees_ChangeBy(-(this->itemPrice - sDiscounts[(s32)Math_Rand_ZeroFloat(7.9f)]));
             return;
         }
     }
@@ -1007,7 +1045,7 @@ void EnGirlA_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_198(this, globalCtx);
 }
 
-void func_80A3C498(Actor* thisx, GlobalContext* globalCtx, s32 flags) {
+void EnGirlA_DrawHiLights(Actor* thisx, GlobalContext* globalCtx, s32 flags) {
     func_8002EBCC(thisx, globalCtx, 0);
     func_8002ED80(thisx, globalCtx, 0);
 }
@@ -1015,7 +1053,7 @@ void func_80A3C498(Actor* thisx, GlobalContext* globalCtx, s32 flags) {
 void EnGirlA_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnGirlA* this = THIS;
 
-    Matrix_RotateY(((this->unk_1B8 * 360.0f) / 65536.0f) * 0.017453292f, MTXMODE_APPLY);
+    Matrix_RotateY(DEGF_TO_RADF((this->unk_1B8 * 360.0f) / 65536.0f), MTXMODE_APPLY);
     if (this->unk_1D0 != NULL) {
         this->unk_1D0(thisx, globalCtx, 0);
     }
