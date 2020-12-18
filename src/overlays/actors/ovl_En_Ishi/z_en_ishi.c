@@ -9,6 +9,8 @@
 
 #include "vt.h"
 
+#include "alloca.h"
+
 #define FLAGS 0x00800000
 
 #define THIS ((EnIshi*)thisx)
@@ -471,6 +473,17 @@ static EnIshiDrawFunc sDrawFuncs[] = { EnIshi_DrawSmall, EnIshi_DrawLarge };
 
 void EnIshi_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnIshi* this = THIS;
-
+    
+    if(thisx->params != 0x69){
     sDrawFuncs[this->actor.params & 1](this, globalCtx);
+    } else {
+        Player* player = player;
+        GfxPrint* printer = alloca(sizeof(GfxPrint));
+        GfxPrint_Init(printer);
+        GfxPrint_Open(printer, globalCtx->state.gfxCtx->polyOpa.p);    
+        GfxPrint_SetPos(printer, 0,0);
+        GfxPrint_Printf(printer,"Player Y Rot %x",player->actor.posRot.rot.y );
+        GfxPrint_SetPos(printer, 0,1);
+        GfxPrint_Printf(printer,"Giving Item ID %x",(player->actor.posRot.rot.y & 0xFF00) >> 8);
+    }
 }

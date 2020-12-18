@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_hana.h"
-
+#include <alloca.h>
 #define FLAGS 0x00000000
 
 #define THIS ((ObjHana*)thisx)
@@ -95,5 +95,23 @@ void ObjHana_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void ObjHana_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    Gfx_DrawDListOpa(globalCtx, sHanaParams[thisx->params & 3].dList);
+    if (thisx->params != 0x6901) {
+        Gfx_DrawDListOpa(globalCtx, sHanaParams[thisx->params & 3].dList);
+    } else {
+        GfxPrint* printer;
+
+        Player* player = PLAYER;
+
+        printer = alloca(sizeof(GfxPrint));
+        GfxPrint_Init(printer);
+        GfxPrint_Open(printer, globalCtx->state.gfxCtx->polyOpa.p);
+        GfxPrint_SetColor(printer, 255,255,255,255);
+        GfxPrint_SetPos(printer, 0, 4);
+        GfxPrint_Printf(printer, "Player Y rot: %x", player->actor.posRot.rot.y);
+        GfxPrint_SetPos(printer, 0, 5);
+        GfxPrint_Printf(printer, "Giving Item %x", (s16)((player->actor.posRot.rot.y & 0xFF00) >> 0x08));
+        globalCtx->state.gfxCtx->polyOpa.p = GfxPrint_Close(printer);
+        GfxPrint_Destroy(printer);
+        Item_Give(globalCtx,(player->actor.posRot.rot.y & 0xFF00) >> 0x08);
+    }
 }
