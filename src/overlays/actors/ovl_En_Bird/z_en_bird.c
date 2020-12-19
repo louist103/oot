@@ -15,11 +15,6 @@ void EnBird_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBird_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBird_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_809C1E00(EnBird* this, s16 params);
-void func_809C1E40(EnBird* this, GlobalContext* globalCtx);
-void func_809C1D60(EnBird* this, GlobalContext* globalCtx);
-void func_809C1CAC(EnBird* this, s16 params);
-
 const ActorInit En_Bird_InitVars = {
     ACTOR_EN_BIRD,
     ACTORTYPE_PROP,
@@ -31,45 +26,78 @@ const ActorInit En_Bird_InitVars = {
     (ActorFunc)EnBird_Update,
     (ActorFunc)EnBird_Draw,
 };
-
+static GfxPrint* printer;
 void EnBird_Init(Actor* thisx, GlobalContext* globalCtx) {
+    printer = DebugArena_Malloc(sizeof(GfxPrint));
     thisx->posRot.pos.y -= thisx->groundY;
 }
 
 void EnBird_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    DebugArena_Free(printer);
 }
 
 void EnBird_Update(Actor* thisx, GlobalContext* globalCtx) {
+    Player* player = PLAYER;
+    thisx->child = Portal_Find(&globalCtx->actorCtx, ACTOR_EN_BIRD, ACTORTYPE_PROP, thisx->params ^ 1);
+    if ((thisx->child != NULL) && (thisx->xzDistFromLink < 40.0f)) {
+        player->actor.posRot.pos.x = thisx->child->posRot.pos.x + 80.0f;
+        player->actor.posRot.pos.y = thisx->child->posRot.pos.y;
+        player->actor.posRot.pos.z = thisx->child->posRot.pos.z + 80.0f;
+        player->actor.velocity.y = 6.0f;
+    }
 }
-static Gfx* gfx[] = {
-    0x04039C00, 0x04039C00, 0x04039C00, 0x0403A2D0, 0x0403A2D0, 0x0403A630,
-    0x06000210, 0x0403AB80, 0x0403A9B0, 0x0403C050, 0x0403C5B0, 0x0400D340,
-};
+
+/*void printInfo(EnBird* this, GlobalContext* globalCtx) {
+
+    Player* player = PLAYER;
+
+    GfxPrint_Init(printer);
+    GfxPrint_Open(printer, globalCtx->state.gfxCtx->polyOpa.p);
+    GfxPrint_SetColor(printer, 255, 255, 255, 255);
+    if (this->actor.params == 0) {
+        GfxPrint_SetPos(printer, 0, 6);
+        GfxPrint_Printf(printer, "Portal param 0 pos x %.0f y %.0f z %.0f", this->actor.posRot.pos.x,
+                        this->actor.posRot.pos.y, this->actor.posRot.pos.z);
+        GfxPrint_SetPos(printer, 0, 7);
+        GfxPrint_Printf(printer, "Portal param 0 dist to player %0.f", this->actor.xzDistFromLink);
+        if (this->actor.child != NULL) {
+            GfxPrint_SetPos(printer, 0, 8);
+            GfxPrint_Printf(printer, "Portal 0's child pos x %.0f y %.0f z %.0f", this->actor.child->posRot.pos.x,
+                            this->actor.child->posRot.pos.y, this->actor.child->posRot.pos.z);
+        }
+    } else {
+        GfxPrint_SetPos(printer, 0, 9);
+        GfxPrint_Printf(printer, "Portal param 1 pos x %.0f y %.0f z %.0f", this->actor.posRot.pos.x,
+                        this->actor.posRot.pos.y, this->actor.posRot.pos.z);
+        GfxPrint_SetPos(printer, 0, 10);
+        GfxPrint_Printf(printer, "Portal param 1 dist to player %0.f", this->actor.xzDistFromLink);
+        if (this->actor.child != NULL) {
+            GfxPrint_SetPos(printer, 0, 11);
+            GfxPrint_Printf(printer, "Portal 1's child pos x %.0f y %.0f z %.0f", this->actor.child->posRot.pos.x,
+                            this->actor.child->posRot.pos.y, this->actor.child->posRot.pos.z);
+        }
+    }
+    globalCtx->state.gfxCtx->polyOpa.p = GfxPrint_Close(printer);
+    GfxPrint_Destroy(printer);
+}*/
 extern Gfx* D_060001A0[];
 void EnBird_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnBird* this = THIS;
 
     s32 pad;
-    u32 pad1;
     u32 spEC;
-    f32 spE8;
-    f32 spE4;
-    f32 temp_f12;
-    f32 temp_f0;
 
     spEC = globalCtx->state.frames * 10;
-
+    //printInfo(this, globalCtx);
     OPEN_DISPS(globalCtx->state.gfxCtx, "../z_door_warp1.c", 2173);
-
-    temp_f0 = 1.0f - (2.0f - 1.0f) / 1.7f;
 
     func_80093D84(globalCtx->state.gfxCtx);
     if (thisx->params == 0) {
-        gDPSetPrimColor(POLY_XLU_DISP++, 0x00, 0x80, 255, 255, 255, 255);
-        gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 255);
+        gDPSetPrimColor(POLY_XLU_DISP++, 0x00, 0x80, 255, 255, 255, 175);
+        gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 175);
     } else {
-        gDPSetPrimColor(POLY_XLU_DISP++, 0x00, 0x80, 255, 255, 255, 255);
-        gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 255, 255);
+        gDPSetPrimColor(POLY_XLU_DISP++, 0x00, 0x80, 255, 255, 255, 175);
+        gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 255, 175);
     }
     gDPSetColorDither(POLY_XLU_DISP++, G_CD_DISABLE);
     gDPSetColorDither(POLY_XLU_DISP++, G_AD_NOTPATTERN | G_CD_MAGICSQ);
@@ -89,11 +117,11 @@ void EnBird_Draw(Actor* thisx, GlobalContext* globalCtx) {
     Matrix_Pull();
 
     if (thisx->params == 0) {
-        gDPSetPrimColor(POLY_XLU_DISP++, 0x00, 0x80, 255, 255, 255, 255);
-        gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 255);
+        gDPSetPrimColor(POLY_XLU_DISP++, 0x00, 0x80, 255, 255, 255, 175);
+        gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 175);
     } else {
-        gDPSetPrimColor(POLY_XLU_DISP++, 0x00, 0x80, 255, 255, 255, 255);
-        gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 255, 255);
+        gDPSetPrimColor(POLY_XLU_DISP++, 0x00, 0x80, 255, 255, 255, 175);
+        gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 255, 175);
     }
 
     spEC *= 2;

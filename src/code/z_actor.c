@@ -2778,6 +2778,19 @@ Actor* Actor_Spawn(ActorContext* actorCtx, GlobalContext* globalCtx, s16 actorId
     return actor;
 }
 
+Actor* Portal_Find(ActorContext* actorCtx, s32 actorId, s32 actorType, s16 params) {
+    Actor* actor = actorCtx->actorList[actorType].first;
+
+    while (actor != NULL) {
+        if ((actorId == actor->id) && (params == actor->params)) {
+            return actor;
+        }
+        actor = actor->next;
+    }
+
+    return NULL;
+}
+
 Actor* Actor_SpawnAsChild(ActorContext* actorCtx, Actor* parent, GlobalContext* globalCtx, s16 actorId, f32 posX,
                           f32 posY, f32 posZ, s16 rotX, s16 rotY, s16 rotZ, s16 params) {
     Actor* spawnedActor = Actor_Spawn(actorCtx, globalCtx, actorId, posX, posY, posZ, rotX, rotY, rotZ, params);

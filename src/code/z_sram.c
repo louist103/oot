@@ -201,24 +201,24 @@ SavePlayerData sDebugSavePlayerData = {
     0,                                                  // bgsFlag
     0,                                                  // ocarinaGameReward
     {
-        { ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE }, // buttonItems
-        { SLOT_NONE, SLOT_NONE, SLOT_NONE },            // cButtonSlots
-        0,                                              // equipment
-    },                                                  // childEquips
+        { ITEM_SWORD_MASTER, ITEM_ARROW_FIRE, ITEM_ARROW_ICE, ITEM_OCARINA_FAIRY }, // buttonItems
+        { SLOT_ARROW_FIRE, SLOT_ARROW_ICE, SLOT_OCARINA },                          // cButtonSlots
+        0,                                                                          // equipment
+    },                                                                              // childEquips
     {
-        { ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE }, // buttonItems
-        { SLOT_NONE, SLOT_NONE, SLOT_NONE },            // cButtonSlots
-        0,                                              // equipment
-    },                                                  // adultEquips
-    0,                                                  // unk_38
-    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },       // unk_3C
-    0x51,                                               // savedSceneNum
+        { ITEM_SWORD_MASTER, ITEM_ARROW_FIRE, ITEM_ARROW_ICE, ITEM_OCARINA_FAIRY }, // buttonItems
+        { SLOT_ARROW_FIRE, SLOT_ARROW_ICE, SLOT_OCARINA },                          // cButtonSlots
+        0,                                                                          // equipment
+    },                                                                              // adultEquips
+    0,                                                                              // unk_38
+    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },                                   // unk_3C
+    0x51,                                                                           // savedSceneNum
 };
 
 ItemEquips sDebugSaveEquips = {
-    { ITEM_SWORD_MASTER, ITEM_BOW, ITEM_BOMB, ITEM_OCARINA_FAIRY }, // buttonItems
-    { SLOT_BOW, SLOT_BOMB, SLOT_OCARINA },                          // cButtonSlots
-    0x1122,                                                         // equipment
+    { ITEM_SWORD_MASTER, ITEM_ARROW_FIRE, ITEM_ARROW_ICE, ITEM_OCARINA_FAIRY }, // buttonItems
+    { SLOT_ARROW_FIRE, SLOT_ARROW_ICE, SLOT_OCARINA },                          // cButtonSlots
+    0x1122,                                                                     // equipment
 };
 
 Inventory sDebugSaveInventory = {
