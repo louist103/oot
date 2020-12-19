@@ -1994,13 +1994,9 @@ void Actor_UpdateAll(GlobalContext* globalCtx, ActorContext* actorCtx) {
     Actor* sp74;
     ActorEntry* actorEntry;
     s32 i;
-    Input* input = globalCtx->state.input;
+
     player = PLAYER;
 
-    if (CHECK_BTN_ALL(input[0].cur.button, BTN_L)) {
-        Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_BIRD, player->actor.posRot.pos.x - 100.0f,
-                    player->actor.posRot.pos.y, player->actor.posRot.pos.z - 100.0f, 0, 0, 0, 0);
-    }
     if (0) {
         // This assert is optimized out but it exists due to its presence in rodata
         if (gMaxActorId != ACTOR_ID_MAX) {

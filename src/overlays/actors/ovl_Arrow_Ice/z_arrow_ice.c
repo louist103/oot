@@ -55,12 +55,38 @@ void ArrowIce_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->timer = 0;
     this->unk_164 = 0.0f;
 }
+static Actor* Portal_Find(ActorContext* actorCtx, s32 actorId, s32 actorType, s16 params) {
+    Actor* actor = actorCtx->actorList[actorType].first;
+
+    while (actor != NULL) {
+        if ((actorId == actor->id) && (params == actor->params)) {
+            return actor;
+        }
+        actor = actor->next;
+    }
+
+    return NULL;
+}
 
 void ArrowIce_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    Actor* actor;
     func_800876C8(globalCtx);
+
+    if (!Object_IsLoaded(&globalCtx->objectCtx, OBJECT_WARP1)) {
+        Object_Spawn(&globalCtx->objectCtx, OBJECT_WARP1);
+    }
+    actor = Portal_Find(&globalCtx->actorCtx, ACTOR_EN_BIRD, ACTORTYPE_PROP,1);
+    if ((actor == NULL)) {
+        Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_BIRD, thisx->posRot.pos.x, thisx->posRot.pos.y,
+                    thisx->posRot.pos.z, 0, 0, 0, 1);
+    } else {
+        actor->posRot.pos = thisx->posRot.pos;
+    }
     // Translates to: "Disappearance"
     LOG_STRING("消滅", "../z_arrow_ice.c", 415);
 }
+
+
 
 void ArrowIce_Charge(ArrowIce* this, GlobalContext* globalCtx) {
     EnArrow* arrow;

@@ -7,7 +7,7 @@
 #include "z_arrow_fire.h"
 #include "overlays/actors/ovl_En_Arrow/z_en_arrow.h"
 
-#define FLAGS 0x02000010
+#define FLAGS 0x02000030
 
 #define THIS ((ArrowFire*)thisx)
 
@@ -55,11 +55,37 @@ void ArrowFire_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_15C = 0.0f;
 }
 
+static Actor* Portal_Find(ActorContext* actorCtx, s32 actorId, s32 actorType, s16 params) {
+    Actor* actor = actorCtx->actorList[actorType].first;
+
+    while (actor != NULL) {
+        if ((actorId == actor->id) && (params == actor->params)) {
+            return actor;
+        }
+        actor = actor->next;
+    }
+
+    return NULL;
+}
+
 void ArrowFire_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    Actor* actor;
     func_800876C8(globalCtx);
+    if (!Object_IsLoaded(&globalCtx->objectCtx, OBJECT_WARP1)) {
+        Object_Spawn(&globalCtx->objectCtx, OBJECT_WARP1);
+    }
+    actor = Portal_Find(&globalCtx->actorCtx, ACTOR_EN_BIRD, ACTORTYPE_PROP,0);
+    if ((actor == NULL)) {
+        Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_BIRD, thisx->posRot.pos.x, thisx->posRot.pos.y,
+                    thisx->posRot.pos.z, 0, 0, 0, 0);
+    } else {
+        actor->posRot.pos = thisx->posRot.pos;
+    }
     // Translates to: "Disappearance"
     LOG_STRING("消滅", "../z_arrow_fire.c", 421);
 }
+
+
 
 void ArrowFire_Charge(ArrowFire* this, GlobalContext* globalCtx) {
     EnArrow* arrow;
@@ -98,7 +124,7 @@ void ArrowFire_Hit(ArrowFire* this, GlobalContext* globalCtx) {
     f32 scale;
     f32 offset;
     u16 timer;
-
+    Player* player = PLAYER;
     if (this->actor.projectedW < 50.0f) {
         scale = 10.0f;
     } else {
