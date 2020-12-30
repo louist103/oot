@@ -194,8 +194,17 @@ build/undefined_syms.txt: undefined_syms.txt
 clean:
 	$(RM) -r $(ROM) $(ELF) build
 
+clean-tools:
+	cd tools && $(MAKE) clean
+	$(RM) -r tools/ido_recomp
+	##$(RM) -r tools/ido_recomp
+
+
 setup:
 	git submodule update --init --recursive
+	git clone https://github.com/Emill/ido-static-recomp.git tools/ido_recomp
+	cd tools/ido_recomp && python3 build.py -O2 ../ido7.1_compiler/
+	cd tools/ido_recomp && python3 build.py -O2 ../ido5.3_compiler/
 	$(MAKE) -C tools -j
 	python3 fixbaserom.py
 	python3 extract_baserom.py
