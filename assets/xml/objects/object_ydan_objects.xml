@@ -1,0 +1,31 @@
+<Root>
+    <File Name="object_ydan_objects" Segment="6">
+        <DList Name="gHasiWaterBlockDList" Offset="0x7508"/>
+        <DList Name="gHasiWaterDList" Offset="0x5DE0"/>
+        <DList Name="gHasi3BlocksDList" Offset="0x5018"/>
+        <Texture Name="gHasiWaterTex" Format="ci8" Width="32" Height="32" Offset="0x5950"/>
+        <Texture Name="gHasiWaterPalette" Format="rgb5a1" Width="16" Height="16" Offset="0x57B0"/>
+        <Texture Name="gHasiWaterBlockBottomTex" Format="rgb5a1" Width="32" Height="32" Offset="0x0800"/>
+        <Texture Name="gHasiWaterBlockSideTex" Format="rgb5a1" Width="32" Height="32" Offset="0x0000"/>
+        <Texture Name="gHasiWaterBlockTopTex" Format="ci8" Width="32" Height="32" Offset="0x6BC8"/>
+        <Texture Name="gHasiWaterBlockTopPalette" Format="rgb5a1" Width="16" Height="16" Offset="0x69C0"/>
+        <Texture Name="gHasi3BlocksSideTex" Format="ci8" Width="32" Height="32" Offset="0x42F8"/>
+        <Texture Name="gHasi3BlockPalette" Format="rgb5a1" Width="16" Height="16" Offset="0x38F0"/>
+        <Texture Name="gHasi3BlocksTopTex" Format="ci8" Width="32" Height="32" Offset="0x3AF8"/>
+        <Collision Name="gHasi3BlockCol" Offset="0x5780"/>
+        <Collision Name="gHasiWaterBlockCol" Offset="0x7798"/>
+        <Collision Name="gMarutaCol" Offset="0x66A8"/>
+        <DList Name="gMarutaDList1" Offset="0x8D88"/>
+        <DList Name="gMarutaDList2" Offset="0x6570"/>
+        <Texture Name="gMarutaTex1" Format="ci8" Width="32" Height="64" Offset="0x79D8"/>
+        <Texture Name="gMarutaPalette" Format="rgb5a1" Width="16" Height="16" Offset="0x77D0"/>
+        <Texture Name="gMarutaUnkTex" Format="rgb5a1" Width="32" Height="32" Offset="0x2000"/>
+        <Collision Name="gSpCol1" Offset="0x6050"/>
+        <Collision Name="gSpCol2" Offset="0x6460"/>
+        <DList Name="gSpDList1" Offset="0x61B0"/>
+        <DList Name="gSpDList2" Offset="0x3850"/>
+        <DList Name="gSpDList3" Offset="0x5F40"/>
+        <Texture Name="gSpTex1" Format="ia16" Width="32" Height="64" Offset="0x1000"/>
+        <Texture Name="gYdanDoorTex1" Format="rgb5a1" Width="32" Height="64" Offset="0x2800"/>
+    </File>
+</Root>
