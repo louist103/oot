@@ -430,7 +430,13 @@ void Gameplay_Update(GlobalContext* globalCtx) {
     s32 temp;
 
     input = globalCtx->state.input;
-
+    if(CHECK_BTN_ANY(input->cur.button, BTN_L)){
+        Player* player = PLAYER;
+        if(!Object_IsLoaded(&globalCtx->objectCtx,OBJECT_NY)){
+            Object_Spawn(&globalCtx->objectCtx,OBJECT_NY);
+        }
+        Actor_Spawn(&globalCtx->actorCtx,globalCtx,ACTOR_EN_NY,player->actor.posRot.pos.x+50.0f,player->actor.posRot.pos.y,player->actor.posRot.pos.z + 50.0f,0,0,0,0);
+    }
     if ((SREG(1) < 0) || (DREG(0) != 0)) {
         SREG(1) = 0;
         ZeldaArena_Display();

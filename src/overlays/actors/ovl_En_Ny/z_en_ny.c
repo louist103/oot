@@ -28,6 +28,8 @@ extern Gfx* D_06001DD0[];
 extern Gfx* D_06001EA8[];
 extern Gfx* D_06001FC8[];
 
+static GfxPrint printer;
+
 const ActorInit En_Ny_InitVars = {
     ACTOR_EN_NY,
     ACTORTYPE_ENEMY,
@@ -122,7 +124,7 @@ void func_80ABCD84(EnNy* this) {
 }
 
 void func_80ABCD94(EnNy* this) {
-    this->unk_1DC = 0x14;
+    this->unk_1DC = 20;
     this->actionFunc = func_80ABCE90;
 }
 
@@ -133,7 +135,7 @@ void func_80ABCDAC(EnNy* this) {
 void func_80ABCDBC(EnNy* this) {
     this->unk_1F4 = 0.0f;
     func_80ABCD40(this);
-    this->unk_1DC = 0xB4;
+    this->unk_1DC = 180;
     this->actionFunc = func_80ABCF4C;
 }
 
@@ -144,7 +146,7 @@ void func_80ABCDFC(EnNy* this) {
 }
 
 void func_80ABCE38(EnNy* this) {
-    this->unk_1DC = 0x3C;
+    this->unk_1DC = 60;
     this->actionFunc = func_80ABD11C;
 }
 
@@ -329,12 +331,33 @@ void EnNy_Update(Actor* thisx, GlobalContext* globalCtx) {
     f32 temp_f20;
     f32 temp_f22;
     s32 i;
+    
+    GfxPrint_Init(&printer);
+    GfxPrint_Open(&printer,globalCtx->state.gfxCtx->polyOpa.p);
+    GfxPrint_SetColor(&printer,255,255,255,255);
+    GfxPrint_SetPos(&printer,3,4);
+    GfxPrint_Printf(&printer,"UPDATE 1");
+    GfxPrint_SetPos(&printer,3,5);
+    GfxPrint_Printf(&printer,"UNK_1C8=%d",this->unk_1C8);
+    GfxPrint_SetPos(&printer,3,6);
+    GfxPrint_Printf(&printer,"UNK_1CC=%d",this->unk_1CC);
+    GfxPrint_SetPos(&printer,3,7);
+    GfxPrint_Printf(&printer,"UNK_1D8=%d",this->unk_1D8);
+    GfxPrint_SetPos(&printer,3,8);
+    GfxPrint_Printf(&printer,"UNK_1DC=%d",this->unk_1DC);
+    GfxPrint_SetPos(&printer,3,9);
+    GfxPrint_Printf(&printer,"UNK_1EC=%.2f",this->unk_1EC);
+    GfxPrint_SetPos(&printer,3,10);
+    GfxPrint_Printf(&printer,"UNK_1D0=%d",this->unk_1D0);
+    globalCtx->state.gfxCtx->polyOpa.p = GfxPrint_Close(&printer);
+    GfxPrint_Destroy(&printer);
 
     this->unk_1C8++;
     temp_f20 = this->unk_1E0 - 0.25f;
     if (this->unk_1CA != 0) {
         this->unk_1CA--;
     }
+    
     Actor_SetHeight(thisx, 0.0f);
     Actor_SetScale(thisx, 0.01f);
     this->collider.list[0].dim.scale = (1.33f * temp_f20) + 1.0f;
@@ -366,6 +389,7 @@ void EnNy_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
     CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    
 }
 
 void func_80ABD728(EnNy* this, GlobalContext* globalCtx) {
@@ -442,7 +466,13 @@ void func_80ABD9AC(EnNy* this, GlobalContext* globalCtx) {
 
 void func_80ABDBB8(Actor* thisx, GlobalContext* globalCtx) {
     EnNy* this = THIS;
-
+    GfxPrint_Init(&printer);
+    GfxPrint_Open(&printer,globalCtx->state.gfxCtx->polyOpa.p);
+    GfxPrint_SetPos(&printer,3,2);
+    GfxPrint_SetColor(&printer,255,255,255,255);
+    GfxPrint_Printf(&printer,"UPDATE 2(Set in Update)");
+    globalCtx->state.gfxCtx->polyOpa.p = GfxPrint_Close(&printer);
+    GfxPrint_Destroy(&printer);
     this->unk_1C8++;
     if (this->unk_1CA != 0) {
         this->unk_1CA--;
@@ -455,6 +485,15 @@ void func_80ABDBF8(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
     f32 sp3C;
     f32 temp_f0;
+
+
+    GfxPrint_Init(&printer);
+    GfxPrint_Open(&printer,globalCtx->state.gfxCtx->polyOpa.p);
+    GfxPrint_SetPos(&printer,3,2);
+    GfxPrint_SetColor(&printer,255,255,255,255);
+    GfxPrint_Printf(&printer,"UPDATE 3(Set in Init as ALT)");
+    globalCtx->state.gfxCtx->polyOpa.p = GfxPrint_Close(&printer);
+    GfxPrint_Destroy(&printer);
 
     sp3C = this->unk_1E0 - 0.25f;
     this->unk_1C8++;
@@ -482,9 +521,19 @@ static Vec3f sOffset[] = {
 };
 
 void EnNy_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    
     s32 pad;
     EnNy* this = THIS;
 
+
+    GfxPrint_Init(&printer);
+    GfxPrint_Open(&printer, globalCtx->state.gfxCtx->polyOpa.p);
+    GfxPrint_SetColor(&printer,255,255,255,255);
+    GfxPrint_SetPos(&printer,10,10);
+    
+    GfxPrint_Printf(&printer,"INSIDE MAIN DRAW");
+    globalCtx->state.gfxCtx->polyOpa.p = GfxPrint_Close(&printer);
+    GfxPrint_Destroy(&printer);
     OPEN_DISPS(globalCtx->state.gfxCtx, "../z_en_ny.c", 837);
     func_800628A4(0, &this->collider);
     func_8002ED80(&this->actor, globalCtx, 1);
@@ -522,15 +571,23 @@ void EnNy_Draw(Actor* thisx, GlobalContext* globalCtx) {
             EffectSsEnFire_SpawnVec3f(globalCtx, &this->actor, &tempVec, 100, 0, 0, -1);
         }
     }
+    
 }
 // Draw Effect?
 
-void func_80ABE040(Actor* thisx, GlobalContext* globalCtx) {
+void func_80ABE040(Actor* thisx, GlobalContext* globalCtx) {//Death effect
     EnNy* this = THIS;
     Vec3f* temp;
     f32 scale;
     s32 i;
-
+    
+    GfxPrint_Init(&printer);
+    GfxPrint_Open(&printer, globalCtx->state.gfxCtx->polyOpa.p);
+    GfxPrint_SetPos(&printer,10,10);
+    GfxPrint_SetColor(&printer,255,255,255,255);
+    GfxPrint_Printf(&printer,"INSIDE ALT DRAW");
+    globalCtx->state.gfxCtx->polyOpa.p = GfxPrint_Close(&printer);
+    GfxPrint_Destroy(&printer);
     OPEN_DISPS(globalCtx->state.gfxCtx, "../z_en_ny.c", 900);
     func_80093D18(globalCtx->state.gfxCtx);
     gDPSetEnvColor(POLY_OPA_DISP++, 0x00, 0x00, 0x00, 0xFF);
@@ -563,4 +620,5 @@ void func_80ABE040(Actor* thisx, GlobalContext* globalCtx) {
             EffectSsEnFire_SpawnVec3f(globalCtx, thisx, &tempVec, 100, 0, 0, -1);
         }
     }
+
 }
