@@ -19,7 +19,7 @@ void EnDha_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Dha_InitVars = {
     ACTOR_EN_DHA,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     OBJECT_DH,
     sizeof(EnDha),
