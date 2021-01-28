@@ -27,7 +27,7 @@ extern UNK_TYPE D_06008F6C;
 
 const ActorInit En_Ko_InitVars = {
     ACTOR_EN_KO,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_GAMEPLAY_KEEP,
     sizeof(EnKo),
@@ -37,11 +37,27 @@ const ActorInit En_Ko_InitVars = {
     (ActorFunc)EnKo_Draw,
 };
 
-ColliderCylinderInit D_80A9A100 = {
-    { COLTYPE_UNK10, 0x00, 0x00, 0x39, 0x20, COLSHAPE_CYLINDER },
-    { 0x00, { 0x00000000, 0x00, 0x00 }, { 0x00000000, 0x00, 0x00 }, 0x00, 0x00, 0x01 },
+static ColliderCylinderInit D_80A9A100 = {
+    {
+        COLTYPE_NONE,
+        AT_NONE,
+        AC_NONE,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_2,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK0,
+        { 0x00000000, 0x00, 0x00 },
+        { 0x00000000, 0x00, 0x00 },
+        TOUCH_NONE,
+        BUMP_NONE,
+        OCELEM_ON,
+    },
     { 20, 46, 0, { 0, 0, 0 } },
 };
+
+
 CollisionCheckInfoInit2 D_80A9A12C = { 0, 0, 0, 0, 0xFF };
 
 void* D_80A9A138[] = { 0x06000240, 0x06000D40, 0x06001140, 0x00000000 };

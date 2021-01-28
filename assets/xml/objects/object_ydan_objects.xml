@@ -1,0 +1,18 @@
+<Root>
+    <File Name="object_ydan_objects" Segment="6">
+        <DList Name="gYdanHasiDL_007508" Offset="0x7508"/>
+        <DList Name="gYdanHasiDL_005DE0" Offset="0x5DE0"/>
+        <DList Name="gYdanHasiDL_005018" Offset="0x5018"/>
+        <Collision Name="gYdanHasiCol_005780" Offset="0x5780"/>
+        <Collision Name="gYdanHasiCol_007798" Offset="0x7798"/>
+        <Collision Name="gYdanMarutaCol_0066A8" Offset="0x66A8"/>
+        <DList Name="gYdanMarutaDL_008D88" Offset="0x8D88"/>
+        <DList Name="gYdanMarutaDL_006570" Offset="0x6570"/>
+        <DList Name="gYdanSpDlist_003850" Offset="0x3850"/>
+        <DList Name="gYdanSpDlist_005F40" Offset="0x5F40"/>
+        <Collision Name="gYdanSpCol1" Offset="0x6050"/>
+        <DList Name="gYdanSpDlist_0061B0" Offset="0x61B0"/>
+        <Collision Name="gYdanSpCol2" Offset="0x6460"/>
+        
+    </File>
+</Root>
