@@ -190,15 +190,11 @@ s32 Scene_ExecuteCommands(GlobalContext* globalCtx, SceneCmd* sceneCmd) {
     return 0;
 }
 
-// Scene Command 0x00: Link Spawn List
-#ifdef NON_MATCHING
-// regalloc differences
 void func_80098508(GlobalContext* globalCtx, SceneCmd* cmd) {
-    ActorEntry* linkEntry = (ActorEntry*)SEGMENTED_TO_VIRTUAL(cmd->spawnList.segment) +
-                            globalCtx->setupEntranceList[globalCtx->curSpawn].spawn;
+    ActorEntry* linkEntry = globalCtx->linkActorEntry = (ActorEntry*)SEGMENTED_TO_VIRTUAL(cmd->spawnList.segment) +
+                                                        globalCtx->setupEntranceList[globalCtx->curSpawn].spawn;
     s16 linkObjectId;
 
-    globalCtx->linkActorEntry = linkEntry;
     globalCtx->linkAgeOnLoad = ((void)0, gSaveContext.linkAge);
 
     linkObjectId = gLinkObjectIds[((void)0, gSaveContext.linkAge)];
@@ -206,10 +202,6 @@ void func_80098508(GlobalContext* globalCtx, SceneCmd* cmd) {
     gActorOverlayTable[linkEntry->id].initInfo->objectId = linkObjectId;
     Object_Spawn(&globalCtx->objectCtx, linkObjectId);
 }
-#else
-void func_80098508(GlobalContext* globalCtx, SceneCmd* cmd);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_scene/func_80098508.s")
-#endif
 
 // Scene Command 0x01: Actor List
 void func_800985DC(GlobalContext* globalCtx, SceneCmd* cmd) {
@@ -228,13 +220,13 @@ void func_80098674(GlobalContext* globalCtx, SceneCmd* cmd) {
 
     colHeader = SEGMENTED_TO_VIRTUAL(cmd->colHeader.segment);
 
-    colHeader->vertexArray = SEGMENTED_TO_VIRTUAL(colHeader->vertexArray);
-    colHeader->polygonArray = SEGMENTED_TO_VIRTUAL(colHeader->polygonArray);
-    colHeader->polygonTypes = SEGMENTED_TO_VIRTUAL(colHeader->polygonTypes);
-    colHeader->cameraData = SEGMENTED_TO_VIRTUAL(colHeader->cameraData);
+    colHeader->vtxList = SEGMENTED_TO_VIRTUAL(colHeader->vtxList);
+    colHeader->polyList = SEGMENTED_TO_VIRTUAL(colHeader->polyList);
+    colHeader->surfaceTypeList = SEGMENTED_TO_VIRTUAL(colHeader->surfaceTypeList);
+    colHeader->cameraDataList = SEGMENTED_TO_VIRTUAL(colHeader->cameraDataList);
     colHeader->waterBoxes = SEGMENTED_TO_VIRTUAL(colHeader->waterBoxes);
 
-    func_8003C078(&globalCtx->colCtx, globalCtx, colHeader);
+    BgCheck_Allocate(&globalCtx->colCtx, globalCtx, colHeader);
 }
 
 // Scene Command 0x04: Room List
@@ -392,11 +384,11 @@ void func_80098D80(GlobalContext* globalCtx, SceneCmd* cmd) {
     }
 
     dayTime = gSaveContext.dayTime;
-    globalCtx->envCtx.unk_04.x = -(Math_Sins(dayTime - 0x8000) * 120.0f) * 25.0f;
+    globalCtx->envCtx.unk_04.x = -(Math_SinS(dayTime - 0x8000) * 120.0f) * 25.0f;
     dayTime = gSaveContext.dayTime;
-    globalCtx->envCtx.unk_04.y = (Math_Coss(dayTime - 0x8000) * 120.0f) * 25.0f;
+    globalCtx->envCtx.unk_04.y = (Math_CosS(dayTime - 0x8000) * 120.0f) * 25.0f;
     dayTime = gSaveContext.dayTime;
-    globalCtx->envCtx.unk_04.z = (Math_Coss(dayTime - 0x8000) * 20.0f) * 25.0f;
+    globalCtx->envCtx.unk_04.z = (Math_CosS(dayTime - 0x8000) * 20.0f) * 25.0f;
 
     if (((globalCtx->envCtx.unk_02 == 0) && (gSaveContext.cutsceneIndex < 0xFFF0)) ||
         (gSaveContext.entranceIndex == 0x0604)) {
@@ -535,7 +527,7 @@ RomFile sNaviMsgFiles[] = {
 
 s16 gLinkObjectIds[] = { OBJECT_LINK_BOY, OBJECT_LINK_CHILD };
 
-u32 gObjectTableSize = 402;
+u32 gObjectTableSize = ARRAY_COUNT(gObjectTable);
 
 RomFile gObjectTable[] = {
     ROM_FILE_UNSET,

@@ -14,7 +14,7 @@ glabel func_809F74C4
 /* 01120 809F74E0 00002825 */  or      $a1, $zero, $zero          ## $a1 = 00000000
 /* 01124 809F74E4 248400B4 */  addiu   $a0, $a0, 0x00B4           ## $a0 = 000000B4
 /* 01128 809F74E8 24060004 */  addiu   $a2, $zero, 0x0004         ## $a2 = 00000004
-/* 0112C 809F74EC 0C01E1A7 */  jal     Math_SmoothScaleMaxMinS
+/* 0112C 809F74EC 0C01E1A7 */  jal     Math_SmoothStepToS
               
 /* 01130 809F74F0 240703E8 */  addiu   $a3, $zero, 0x03E8         ## $a3 = 000003E8
 /* 01134 809F74F4 860F00B4 */  lh      $t7, 0x00B4($s0)           ## 000000B4
@@ -36,8 +36,8 @@ glabel func_809F74C4
 /* 01174 809F7534 8FA50034 */  lw      $a1, 0x0034($sp)           
 /* 01178 809F7538 C7A0002C */  lwc1    $f0, 0x002C($sp)           
 /* 0117C 809F753C 44802000 */  mtc1    $zero, $f4                 ## $f4 = 0.00
-/* 01180 809F7540 3C188003 */  lui     $t8, %hi(ActorShadow_DrawFunc_Circle)
-/* 01184 809F7544 2718B5EC */  addiu   $t8, %lo(ActorShadow_DrawFunc_Circle)
+/* 01180 809F7540 3C188003 */  lui     $t8, %hi(ActorShadow_DrawCircle)
+/* 01184 809F7544 2718B5EC */  addiu   $t8, %lo(ActorShadow_DrawCircle)
 /* 01188 809F7548 46040032 */  c.eq.s  $f0, $f4                   
 /* 0118C 809F754C 3C01809F */  lui     $at, %hi(D_809F7F8C)       ## $at = 809F0000
 /* 01190 809F7550 4502000A */  bc1fl   .L809F757C                 

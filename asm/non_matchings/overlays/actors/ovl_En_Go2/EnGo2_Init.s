@@ -41,25 +41,25 @@ glabel EnGo2_Init
 /* 037A4 80A464D4 00808025 */  or      $s0, $a0, $zero            ## $s0 = 00000000
 /* 037A8 80A464D8 AFBF002C */  sw      $ra, 0x002C($sp)
 /* 037AC 80A464DC AFA50044 */  sw      $a1, 0x0044($sp)
-/* 037B0 80A464E0 3C068003 */  lui     $a2, %hi(ActorShadow_DrawFunc_Circle)
-/* 037B4 80A464E4 24C6B5EC */  addiu   $a2, %lo(ActorShadow_DrawFunc_Circle)
+/* 037B0 80A464E0 3C068003 */  lui     $a2, %hi(ActorShadow_DrawCircle)
+/* 037B4 80A464E4 24C6B5EC */  addiu   $a2, %lo(ActorShadow_DrawCircle)
 /* 037B8 80A464E8 24050000 */  addiu   $a1, $zero, 0x0000         ## $a1 = 00000000
 /* 037BC 80A464EC 248400B4 */  addiu   $a0, $a0, 0x00B4           ## $a0 = 000000B4
 /* 037C0 80A464F0 0C00AC78 */  jal     ActorShape_Init
 
 /* 037C4 80A464F4 3C0741E0 */  lui     $a3, 0x41E0                ## $a3 = 41E00000
 /* 037C8 80A464F8 2605014C */  addiu   $a1, $s0, 0x014C           ## $a1 = 0000014C
-/* 037CC 80A464FC 3C060601 */  lui     $a2, 0x0601                ## $a2 = 06010000
+/* 037CC 80A464FC 3C060601 */  lui     $a2, %hi(D_0600FEF0)                ## $a2 = 06010000
 /* 037D0 80A46500 260E04B8 */  addiu   $t6, $s0, 0x04B8           ## $t6 = 000004B8
 /* 037D4 80A46504 260F0524 */  addiu   $t7, $s0, 0x0524           ## $t7 = 00000524
 /* 037D8 80A46508 24180012 */  addiu   $t8, $zero, 0x0012         ## $t8 = 00000012
 /* 037DC 80A4650C AFB80018 */  sw      $t8, 0x0018($sp)
 /* 037E0 80A46510 AFAF0014 */  sw      $t7, 0x0014($sp)
 /* 037E4 80A46514 AFAE0010 */  sw      $t6, 0x0010($sp)
-/* 037E8 80A46518 24C6FEF0 */  addiu   $a2, $a2, 0xFEF0           ## $a2 = 0600FEF0
+/* 037E8 80A46518 24C6FEF0 */  addiu   $a2, $a2, %lo(D_0600FEF0)           ## $a2 = 0600FEF0
 /* 037EC 80A4651C AFA50034 */  sw      $a1, 0x0034($sp)
 /* 037F0 80A46520 8FA40044 */  lw      $a0, 0x0044($sp)
-/* 037F4 80A46524 0C0291BE */  jal     SkelAnime_InitSV
+/* 037F4 80A46524 0C0291BE */  jal     SkelAnime_InitFlex
 /* 037F8 80A46528 00003825 */  or      $a3, $zero, $zero          ## $a3 = 00000000
 /* 037FC 80A4652C 260501BC */  addiu   $a1, $s0, 0x01BC           ## $a1 = 000001BC
 /* 03800 80A46530 AFA50030 */  sw      $a1, 0x0030($sp)
@@ -76,7 +76,7 @@ glabel EnGo2_Init
 /* 03824 80A46554 3C0680A5 */  lui     $a2, %hi(D_80A48140)       ## $a2 = 80A50000
 /* 03828 80A46558 24C68140 */  addiu   $a2, $a2, %lo(D_80A48140)  ## $a2 = 80A48140
 /* 0382C 80A4655C 26040098 */  addiu   $a0, $s0, 0x0098           ## $a0 = 00000098
-/* 03830 80A46560 0C0187BF */  jal     func_80061EFC
+/* 03830 80A46560 0C0187BF */  jal     CollisionCheck_SetInfo2
 /* 03834 80A46564 00002825 */  or      $a1, $zero, $zero          ## $a1 = 00000000
 /* 03838 80A46568 8619001C */  lh      $t9, 0x001C($s0)           ## 0000001C
 /* 0383C 80A4656C 3328001F */  andi    $t0, $t9, 0x001F           ## $t0 = 00000000

@@ -19,12 +19,12 @@ glabel EnTr_Draw
 /* 011D0 80B23EC0 11C0000B */  beq     $t6, $zero, .L80B23EF0
 /* 011D4 80B23EC4 00000000 */  nop
 /* 011D8 80B23EC8 848F02D8 */  lh      $t7, 0x02D8($a0)           ## 000002D8
-/* 011DC 80B23ECC 3C098003 */  lui     $t1, %hi(ActorShadow_DrawFunc_Circle)
+/* 011DC 80B23ECC 3C098003 */  lui     $t1, %hi(ActorShadow_DrawCircle)
 /* 011E0 80B23ED0 3C0680B2 */  lui     $a2, %hi(D_80B24414)       ## $a2 = 80B20000
 /* 011E4 80B23ED4 000FC080 */  sll     $t8, $t7,  2
 /* 011E8 80B23ED8 00B8C821 */  addu    $t9, $a1, $t8
 /* 011EC 80B23EDC 8F281D8C */  lw      $t0, 0x1D8C($t9)           ## 00001D8C
-/* 011F0 80B23EE0 2529B5EC */  addiu   $t1, %lo(ActorShadow_DrawFunc_Circle)
+/* 011F0 80B23EE0 2529B5EC */  addiu   $t1, %lo(ActorShadow_DrawCircle)
 /* 011F4 80B23EE4 24C64414 */  addiu   $a2, $a2, %lo(D_80B24414)  ## $a2 = 80B24414
 /* 011F8 80B23EE8 15000003 */  bne     $t0, $zero, .L80B23EF8
 /* 011FC 80B23EEC 27A4003C */  addiu   $a0, $sp, 0x003C           ## $a0 = FFFFFFE4
@@ -76,7 +76,7 @@ glabel EnTr_Draw
 /* 012AC 80B23F9C AFAB0010 */  sw      $t3, 0x0010($sp)
 /* 012B0 80B23FA0 AFB00018 */  sw      $s0, 0x0018($sp)
 /* 012B4 80B23FA4 AFA00014 */  sw      $zero, 0x0014($sp)
-/* 012B8 80B23FA8 0C0286B2 */  jal     SkelAnime_DrawSV
+/* 012B8 80B23FA8 0C0286B2 */  jal     SkelAnime_DrawFlexOpa
 /* 012BC 80B23FAC 02202025 */  or      $a0, $s1, $zero            ## $a0 = 00000000
 /* 012C0 80B23FB0 3C0680B2 */  lui     $a2, %hi(D_80B24424)       ## $a2 = 80B20000
 /* 012C4 80B23FB4 24C64424 */  addiu   $a2, $a2, %lo(D_80B24424)  ## $a2 = 80B24424

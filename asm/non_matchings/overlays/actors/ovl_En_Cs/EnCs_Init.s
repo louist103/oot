@@ -13,25 +13,25 @@ glabel EnCs_Init
 /* 00148 809E19F8 10000056 */  beq     $zero, $zero, .L809E1B54
 /* 0014C 809E19FC 8FBF002C */  lw      $ra, 0x002C($sp)
 .L809E1A00:
-/* 00150 809E1A00 3C068003 */  lui     $a2, %hi(ActorShadow_DrawFunc_Circle)
-/* 00154 809E1A04 24C6B5EC */  addiu   $a2, %lo(ActorShadow_DrawFunc_Circle)
+/* 00150 809E1A00 3C068003 */  lui     $a2, %hi(ActorShadow_DrawCircle)
+/* 00154 809E1A04 24C6B5EC */  addiu   $a2, %lo(ActorShadow_DrawCircle)
 /* 00158 809E1A08 260400B4 */  addiu   $a0, $s0, 0x00B4           ## $a0 = 000000B4
 /* 0015C 809E1A0C 24050000 */  addiu   $a1, $zero, 0x0000         ## $a1 = 00000000
 /* 00160 809E1A10 0C00AC78 */  jal     ActorShape_Init
 
 /* 00164 809E1A14 3C074198 */  lui     $a3, 0x4198                ## $a3 = 41980000
 /* 00168 809E1A18 2605014C */  addiu   $a1, $s0, 0x014C           ## $a1 = 0000014C
-/* 0016C 809E1A1C 3C060601 */  lui     $a2, 0x0601                ## $a2 = 06010000
+/* 0016C 809E1A1C 3C060601 */  lui     $a2, %hi(D_06008540)                ## $a2 = 06010000
 /* 00170 809E1A20 260F0284 */  addiu   $t7, $s0, 0x0284           ## $t7 = 00000284
 /* 00174 809E1A24 261802E4 */  addiu   $t8, $s0, 0x02E4           ## $t8 = 000002E4
 /* 00178 809E1A28 24190010 */  addiu   $t9, $zero, 0x0010         ## $t9 = 00000010
 /* 0017C 809E1A2C AFB90018 */  sw      $t9, 0x0018($sp)
 /* 00180 809E1A30 AFB80014 */  sw      $t8, 0x0014($sp)
 /* 00184 809E1A34 AFAF0010 */  sw      $t7, 0x0010($sp)
-/* 00188 809E1A38 24C68540 */  addiu   $a2, $a2, 0x8540           ## $a2 = 06008540
+/* 00188 809E1A38 24C68540 */  addiu   $a2, $a2, %lo(D_06008540)           ## $a2 = 06008540
 /* 0018C 809E1A3C AFA50038 */  sw      $a1, 0x0038($sp)
 /* 00190 809E1A40 8FA4004C */  lw      $a0, 0x004C($sp)
-/* 00194 809E1A44 0C0291BE */  jal     SkelAnime_InitSV
+/* 00194 809E1A44 0C0291BE */  jal     SkelAnime_InitFlex
 /* 00198 809E1A48 00003825 */  or      $a3, $zero, $zero          ## $a3 = 00000000
 /* 0019C 809E1A4C 26050194 */  addiu   $a1, $s0, 0x0194           ## $a1 = 00000194
 /* 001A0 809E1A50 AFA50034 */  sw      $a1, 0x0034($sp)
@@ -49,7 +49,7 @@ glabel EnCs_Init
 /* 001C8 809E1A78 3C06809E */  lui     $a2, %hi(D_809E28EC)       ## $a2 = 809E0000
 /* 001CC 809E1A7C 24C628EC */  addiu   $a2, $a2, %lo(D_809E28EC)  ## $a2 = 809E28EC
 /* 001D0 809E1A80 24A528F8 */  addiu   $a1, $a1, %lo(D_809E28F8)  ## $a1 = 809E28F8
-/* 001D4 809E1A84 0C0187BF */  jal     func_80061EFC
+/* 001D4 809E1A84 0C0187BF */  jal     CollisionCheck_SetInfo2
 /* 001D8 809E1A88 26040098 */  addiu   $a0, $s0, 0x0098           ## $a0 = 00000098
 /* 001DC 809E1A8C 44800000 */  mtc1    $zero, $f0                 ## $f0 = 0.00
 /* 001E0 809E1A90 24080004 */  addiu   $t0, $zero, 0x0004         ## $t0 = 00000004
@@ -58,11 +58,11 @@ glabel EnCs_Init
 /* 001EC 809E1A9C 44070000 */  mfc1    $a3, $f0
 /* 001F0 809E1AA0 8FA4004C */  lw      $a0, 0x004C($sp)
 /* 001F4 809E1AA4 02002825 */  or      $a1, $s0, $zero            ## $a1 = 00000000
-/* 001F8 809E1AA8 0C00B92D */  jal     func_8002E4B4
+/* 001F8 809E1AA8 0C00B92D */  jal     Actor_UpdateBgCheckInfo
 /* 001FC 809E1AAC E7A00010 */  swc1    $f0, 0x0010($sp)
 /* 00200 809E1AB0 3C03809E */  lui     $v1, %hi(D_809E2918)       ## $v1 = 809E0000
 /* 00204 809E1AB4 24632918 */  addiu   $v1, $v1, %lo(D_809E2918)  ## $v1 = 809E2918
-/* 00208 809E1AB8 0C028800 */  jal     SkelAnime_GetFrameCount
+/* 00208 809E1AB8 0C028800 */  jal     Animation_GetLastFrame
 
 /* 0020C 809E1ABC 8C640000 */  lw      $a0, 0x0000($v1)           ## 809E2918
 /* 00210 809E1AC0 44822000 */  mtc1    $v0, $f4                   ## $f4 = 0.00
@@ -77,7 +77,7 @@ glabel EnCs_Init
 /* 00234 809E1AE4 E7A60010 */  swc1    $f6, 0x0010($sp)
 /* 00238 809E1AE8 24070000 */  addiu   $a3, $zero, 0x0000         ## $a3 = 00000000
 /* 0023C 809E1AEC AFA90014 */  sw      $t1, 0x0014($sp)
-/* 00240 809E1AF0 0C029468 */  jal     SkelAnime_ChangeAnim
+/* 00240 809E1AF0 0C029468 */  jal     Animation_Change
 
 /* 00244 809E1AF4 E7A80018 */  swc1    $f8, 0x0018($sp)
 /* 00248 809E1AF8 860B001C */  lh      $t3, 0x001C($s0)           ## 0000001C

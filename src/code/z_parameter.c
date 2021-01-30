@@ -608,7 +608,7 @@ void func_80083108(GlobalContext* globalCtx) {
         ((globalCtx->sceneNum == SCENE_SPOT20) && (gSaveContext.cutsceneIndex == 0xFFF0))) {
         gSaveContext.unk_13E7 = 0;
 
-        if ((player->stateFlags1 & 0x00800000) || (globalCtx->unk_11E5C >= 2) ||
+        if ((player->stateFlags1 & 0x00800000) || (globalCtx->shootingGalleryStatus > 1) ||
             ((globalCtx->sceneNum == SCENE_BOWLING) && Flags_GetSwitch(globalCtx, 0x38))) {
             if (gSaveContext.equips.buttonItems[0] != ITEM_NONE) {
                 gSaveContext.unk_13E7 = 1;
@@ -629,7 +629,7 @@ void func_80083108(GlobalContext* globalCtx) {
                         Interface_LoadItemIcon1(globalCtx, 0);
                     } else {
                         gSaveContext.equips.buttonItems[0] = ITEM_BOW;
-                        if (globalCtx->unk_11E5C >= 2) {
+                        if (globalCtx->shootingGalleryStatus > 1) {
                             if (LINK_AGE_IN_YEARS == YEARS_CHILD) {
                                 gSaveContext.equips.buttonItems[0] = ITEM_SLINGSHOT;
                             }
@@ -653,7 +653,7 @@ void func_80083108(GlobalContext* globalCtx) {
                     Interface_ChangeAlpha(1);
                 } else if (gSaveContext.minigameState == 1) {
                     Interface_ChangeAlpha(8);
-                } else if (globalCtx->unk_11E5C >= 2) {
+                } else if (globalCtx->shootingGalleryStatus > 1) {
                     Interface_ChangeAlpha(8);
                 } else if ((globalCtx->sceneNum == SCENE_BOWLING) && Flags_GetSwitch(globalCtx, 0x38)) {
                     Interface_ChangeAlpha(8);
@@ -1304,15 +1304,10 @@ void func_80084BF4(GlobalContext* globalCtx, u16 flag) {
 
 s16 sAmmoRefillCounts[] = { 5, 10, 20, 30, 5, 10, 30, 0, 5, 20, 1, 5, 20, 50, 200, 10 };
 
-#ifdef NON_MATCHING
-// regalloc, minor ordering and stack usage differences
 u8 Item_Give(GlobalContext* globalCtx, u8 item) {
     s16 i;
     s16 slot;
-    s16 oldItem;
-    s16 bottleSlot;
-    s16 prevTradeItem;
-    s8 bombCount;
+    s16 temp;
 
     slot = SLOT(item);
     if (item >= ITEM_STICKS_5) {
@@ -1571,16 +1566,12 @@ u8 Item_Give(GlobalContext* globalCtx, u8 item) {
     } else if (item == ITEM_BOMB) {
         // Translates to: "Bomb  Bomb  Bomb  Bomb Bomb   Bomb Bomb"
         osSyncPrintf(" 爆弾  爆弾  爆弾  爆弾 爆弾   爆弾 爆弾 \n");
-        bombCount = AMMO(ITEM_BOMB) + 1;
-        AMMO(ITEM_BOMB) = bombCount;
-        if (bombCount > CUR_CAPACITY(UPG_BOMB_BAG)) {
+        if ((AMMO(ITEM_BOMB) += 1) > CUR_CAPACITY(UPG_BOMB_BAG)) {
             AMMO(ITEM_BOMB) = CUR_CAPACITY(UPG_BOMB_BAG);
         }
         return ITEM_NONE;
     } else if ((item >= ITEM_BOMBS_5) && (item <= ITEM_BOMBS_30)) {
-        bombCount = AMMO(ITEM_BOMB) + sAmmoRefillCounts[item - ITEM_BOMBS_5];
-        AMMO(ITEM_BOMB) = bombCount;
-        if (bombCount > CUR_CAPACITY(UPG_BOMB_BAG)) {
+        if ((AMMO(ITEM_BOMB) += sAmmoRefillCounts[item - ITEM_BOMBS_5]) > CUR_CAPACITY(UPG_BOMB_BAG)) {
             AMMO(ITEM_BOMB) = CUR_CAPACITY(UPG_BOMB_BAG);
         }
         return ITEM_NONE;
@@ -1713,50 +1704,52 @@ u8 Item_Give(GlobalContext* globalCtx, u8 item) {
         Rupees_ChangeBy(sAmmoRefillCounts[item - ITEM_RUPEE_GREEN + 10]);
         return ITEM_NONE;
     } else if (item == ITEM_BOTTLE) {
+        temp = SLOT(item);
+
         for (i = 0; i < 4; i++) {
-            if (gSaveContext.inventory.items[SLOT(item) + i] == ITEM_NONE) {
-                gSaveContext.inventory.items[SLOT(item) + i] = item;
+            if (gSaveContext.inventory.items[temp + i] == ITEM_NONE) {
+                gSaveContext.inventory.items[temp + i] = item;
                 return ITEM_NONE;
             }
         }
     } else if (((item >= ITEM_POTION_RED) && (item <= ITEM_POE)) || (item == ITEM_MILK)) {
-        bottleSlot = SLOT(item);
+        temp = SLOT(item);
 
         if ((item != ITEM_MILK_BOTTLE) && (item != ITEM_LETTER_RUTO)) {
             if (item == ITEM_MILK) {
                 item = ITEM_MILK_BOTTLE;
-                bottleSlot = SLOT(item);
+                temp = SLOT(item);
             }
 
             for (i = 0; i < 4; i++) {
-                if (gSaveContext.inventory.items[bottleSlot + i] == ITEM_BOTTLE) {
+                if (gSaveContext.inventory.items[temp + i] == ITEM_BOTTLE) {
                     // Translates to: "Item_Pt(1)=%d Item_Pt(2)=%d Item_Pt(3)=%d   Empty Bottle=%d   Content=%d"
                     osSyncPrintf("Item_Pt(1)=%d Item_Pt(2)=%d Item_Pt(3)=%d   空瓶=%d   中味=%d\n",
                                  gSaveContext.equips.cButtonSlots[0], gSaveContext.equips.cButtonSlots[1],
-                                 gSaveContext.equips.cButtonSlots[2], bottleSlot + i, item);
+                                 gSaveContext.equips.cButtonSlots[2], temp + i, item);
 
-                    if ((bottleSlot + i) == gSaveContext.equips.cButtonSlots[0]) {
+                    if ((temp + i) == gSaveContext.equips.cButtonSlots[0]) {
                         gSaveContext.equips.buttonItems[1] = item;
                         Interface_LoadItemIcon2(globalCtx, 1);
                         gSaveContext.buttonStatus[1] = BTN_ENABLED;
-                    } else if ((bottleSlot + i) == gSaveContext.equips.cButtonSlots[1]) {
+                    } else if ((temp + i) == gSaveContext.equips.cButtonSlots[1]) {
                         gSaveContext.equips.buttonItems[2] = item;
                         Interface_LoadItemIcon2(globalCtx, 2);
                         gSaveContext.buttonStatus[2] = BTN_ENABLED;
-                    } else if ((bottleSlot + i) == gSaveContext.equips.cButtonSlots[2]) {
+                    } else if ((temp + i) == gSaveContext.equips.cButtonSlots[2]) {
                         gSaveContext.equips.buttonItems[3] = item;
                         Interface_LoadItemIcon1(globalCtx, 3);
                         gSaveContext.buttonStatus[3] = BTN_ENABLED;
                     }
 
-                    gSaveContext.inventory.items[bottleSlot + i] = item;
+                    gSaveContext.inventory.items[temp + i] = item;
                     return ITEM_NONE;
                 }
             }
         } else {
             for (i = 0; i < 4; i++) {
-                if (gSaveContext.inventory.items[bottleSlot + i] == ITEM_NONE) {
-                    gSaveContext.inventory.items[bottleSlot + i] = item;
+                if (gSaveContext.inventory.items[temp + i] == ITEM_NONE) {
+                    gSaveContext.inventory.items[temp + i] = item;
                     return ITEM_NONE;
                 }
             }
@@ -1766,12 +1759,12 @@ u8 Item_Give(GlobalContext* globalCtx, u8 item) {
             gSaveContext.itemGetInf[1] |= 0x8000;
         }
 
-        prevTradeItem = INV_CONTENT(item);
+        temp = INV_CONTENT(item);
         INV_CONTENT(item) = item;
 
-        if (prevTradeItem != ITEM_NONE) {
+        if (temp != ITEM_NONE) {
             for (i = 1; i < 4; i++) {
-                if (prevTradeItem == gSaveContext.equips.buttonItems[i]) {
+                if (temp == gSaveContext.equips.buttonItems[i]) {
                     if (item != ITEM_SOLD_OUT) {
                         gSaveContext.equips.buttonItems[i] = item;
                         Interface_LoadItemIcon1(globalCtx, i);
@@ -1786,20 +1779,17 @@ u8 Item_Give(GlobalContext* globalCtx, u8 item) {
         return ITEM_NONE;
     }
 
-    oldItem = gSaveContext.inventory.items[slot];
-    osSyncPrintf("Item_Register(%d)=%d  %d\n", slot, item, oldItem);
+    temp = gSaveContext.inventory.items[slot];
+    osSyncPrintf("Item_Register(%d)=%d  %d\n", slot, item, temp);
     INV_CONTENT(item) = item;
 
-    return oldItem;
+    return temp;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/Item_Give.s")
-#endif
 
 u8 Item_CheckObtainability(u8 item) {
     s16 i;
     s16 slot;
-    s32 bottleSlot;
+    s32 temp;
 
     slot = SLOT(item);
     if (item >= ITEM_STICKS_5) {
@@ -1898,22 +1888,22 @@ u8 Item_CheckObtainability(u8 item) {
     } else if (item == ITEM_BOTTLE) {
         return ITEM_NONE;
     } else if (((item >= ITEM_POTION_RED) && (item <= ITEM_POE)) || (item == ITEM_MILK)) {
-        bottleSlot = SLOT(item);
+        temp = SLOT(item);
 
         if ((item != ITEM_MILK_BOTTLE) && (item != ITEM_LETTER_RUTO)) {
             if (item == ITEM_MILK) {
                 item = ITEM_MILK_BOTTLE;
-                bottleSlot = SLOT(item);
+                temp = SLOT(item);
             }
 
             for (i = 0; i < 4; i++) {
-                if (gSaveContext.inventory.items[bottleSlot + i] == ITEM_BOTTLE) {
+                if (gSaveContext.inventory.items[temp + i] == ITEM_BOTTLE) {
                     return ITEM_NONE;
                 }
             }
         } else {
             for (i = 0; i < 4; i++) {
-                if (gSaveContext.inventory.items[bottleSlot + i] == ITEM_NONE) {
+                if (gSaveContext.inventory.items[temp + i] == ITEM_NONE) {
                     return ITEM_NONE;
                 }
             }
@@ -2560,33 +2550,24 @@ void Interface_DrawMagicBar(GlobalContext* globalCtx) {
 
         func_80094520(globalCtx->state.gfxCtx);
 
-        gDPSetPrimColor(OVERLAY_DISP++, 0, 0, sMagicBorderR, sMagicBorderG, sMagicBorderB,
-                        interfaceCtx->magicAlpha);
+        gDPSetPrimColor(OVERLAY_DISP++, 0, 0, sMagicBorderR, sMagicBorderG, sMagicBorderB, interfaceCtx->magicAlpha);
         gDPSetEnvColor(OVERLAY_DISP++, 100, 50, 50, 255);
 
-        OVERLAY_DISP =
-            Gfx_TextureIA8(OVERLAY_DISP, D_020038C0, 8, 16, R_MAGIC_BAR_X, magicBarY, 8, 16, 1024, 1024);
+        OVERLAY_DISP = Gfx_TextureIA8(OVERLAY_DISP, D_020038C0, 8, 16, R_MAGIC_BAR_X, magicBarY, 8, 16, 1024, 1024);
 
         OVERLAY_DISP = Gfx_TextureIA8(OVERLAY_DISP, D_02003940, 24, 16, R_MAGIC_BAR_X + 8, magicBarY,
-                                            gSaveContext.unk_13F4, 16, 1024, 1024);
+                                      gSaveContext.unk_13F4, 16, 1024, 1024);
 
-        gDPSetTextureImage(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 1, D_020038C0);
-        gDPSetTile(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                   G_TX_NOMASK, G_TX_NOLOD, G_TX_MIRROR | G_TX_WRAP, 3, G_TX_NOLOD);
-        gDPLoadSync(OVERLAY_DISP++);
-        gDPLoadBlock(OVERLAY_DISP++, G_TX_LOADTILE, 0, 0, 63, 2048);
-        gDPPipeSync(OVERLAY_DISP++);
-        gDPSetTile(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_8b, 1, 0, G_TX_RENDERTILE, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                   G_TX_NOMASK, G_TX_NOLOD, G_TX_MIRROR | G_TX_WRAP, 3, G_TX_NOLOD);
-        gDPSetTileSize(OVERLAY_DISP++, G_TX_RENDERTILE, 0, 0, 28, 60);
+        gDPLoadTextureBlock(OVERLAY_DISP++, D_020038C0, G_IM_FMT_IA, G_IM_SIZ_8b, 8, 16, 0, G_TX_MIRROR | G_TX_WRAP,
+                            G_TX_NOMIRROR | G_TX_WRAP, 3, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
         gSPTextureRectangle(OVERLAY_DISP++, ((R_MAGIC_BAR_X + gSaveContext.unk_13F4) + 8) << 2, magicBarY << 2,
                             ((R_MAGIC_BAR_X + gSaveContext.unk_13F4) + 16) << 2, (magicBarY + 16) << 2, G_TX_RENDERTILE,
                             256, 0, 1024, 1024);
 
         gDPPipeSync(OVERLAY_DISP++);
-        gDPSetCombineLERP(OVERLAY_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, 0, 0, 0, PRIMITIVE,
-                          PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, 0, 0, 0, PRIMITIVE);
+        gDPSetCombineLERP(OVERLAY_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, 0, 0, 0, PRIMITIVE, PRIMITIVE,
+                          ENVIRONMENT, TEXEL0, ENVIRONMENT, 0, 0, 0, PRIMITIVE);
         gDPSetEnvColor(OVERLAY_DISP++, 0, 0, 0, 255);
 
         if (gSaveContext.unk_13F0 == 4) {
@@ -2603,16 +2584,16 @@ void Interface_DrawMagicBar(GlobalContext* globalCtx) {
 
             // Fill the rest of the bar with the normal magic color
             gDPPipeSync(OVERLAY_DISP++);
-            gDPSetPrimColor(OVERLAY_DISP++, 0, 0, R_MAGIC_FILL_COLOR(0), R_MAGIC_FILL_COLOR(1),
-                            R_MAGIC_FILL_COLOR(2), interfaceCtx->magicAlpha);
+            gDPSetPrimColor(OVERLAY_DISP++, 0, 0, R_MAGIC_FILL_COLOR(0), R_MAGIC_FILL_COLOR(1), R_MAGIC_FILL_COLOR(2),
+                            interfaceCtx->magicAlpha);
 
             gSPTextureRectangle(OVERLAY_DISP++, R_MAGIC_FILL_X << 2, (magicBarY + 3) << 2,
                                 (R_MAGIC_FILL_X + gSaveContext.unk_13F8) << 2, (magicBarY + 10) << 2, G_TX_RENDERTILE,
                                 0, 0, 1024, 1024);
         } else {
             // Fill the whole bar with the normal magic color
-            gDPSetPrimColor(OVERLAY_DISP++, 0, 0, R_MAGIC_FILL_COLOR(0), R_MAGIC_FILL_COLOR(1),
-                            R_MAGIC_FILL_COLOR(2), interfaceCtx->magicAlpha);
+            gDPSetPrimColor(OVERLAY_DISP++, 0, 0, R_MAGIC_FILL_COLOR(0), R_MAGIC_FILL_COLOR(1), R_MAGIC_FILL_COLOR(2),
+                            interfaceCtx->magicAlpha);
 
             gDPLoadMultiBlock_4b(OVERLAY_DISP++, D_02003AC0, 0, G_TX_RENDERTILE, G_IM_FMT_I, 16, 16, 0,
                                  G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
@@ -2666,15 +2647,8 @@ void func_80088B34(s16 arg0) {
 void Interface_DrawActionLabel(GraphicsContext* gfxCtx, void* texture) {
     OPEN_DISPS(gfxCtx, "../z_parameter.c", 2820);
 
-    gDPSetTextureImage(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 1, texture);
-    gDPSetTile(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, G_TX_NOMIRROR | G_TX_WRAP,
-               G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD);
-    gDPLoadSync(OVERLAY_DISP++);
-    gDPLoadBlock(OVERLAY_DISP++, G_TX_LOADTILE, 0, 0, 191, 683);
-    gDPPipeSync(OVERLAY_DISP++);
-    gDPSetTile(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_4b, 3, 0, G_TX_RENDERTILE, 0, G_TX_NOMIRROR | G_TX_WRAP,
-               G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD);
-    gDPSetTileSize(OVERLAY_DISP++, G_TX_RENDERTILE, 0, 0, 188, 60);
+    gDPLoadTextureBlock_4b(OVERLAY_DISP++, texture, G_IM_FMT_IA, 48, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
+                           G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
     gSP1Quadrangle(OVERLAY_DISP++, 0, 2, 3, 1, 0);
 
@@ -2700,12 +2674,10 @@ void Interface_DrawItemButtons(GlobalContext* globalCtx) {
     // Also loads the Item Button Texture reused by other buttons afterwards
     gDPPipeSync(OVERLAY_DISP++);
     gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
-    gDPSetPrimColor(OVERLAY_DISP++, 0, 0, R_B_BTN_COLOR(0), R_B_BTN_COLOR(1), R_B_BTN_COLOR(2),
-                    interfaceCtx->bAlpha);
+    gDPSetPrimColor(OVERLAY_DISP++, 0, 0, R_B_BTN_COLOR(0), R_B_BTN_COLOR(1), R_B_BTN_COLOR(2), interfaceCtx->bAlpha);
     gDPSetEnvColor(OVERLAY_DISP++, 0, 0, 0, 255);
-    OVERLAY_DISP =
-        Gfx_TextureIA8(OVERLAY_DISP, &D_02000A00[0], 32, 32, R_ITEM_BTN_X(0), R_ITEM_BTN_Y(0),
-                       R_ITEM_BTN_WIDTH(0), R_ITEM_BTN_WIDTH(0), R_ITEM_BTN_DD(0) * 2, R_ITEM_BTN_DD(0) * 2);
+    OVERLAY_DISP = Gfx_TextureIA8(OVERLAY_DISP, &D_02000A00[0], 32, 32, R_ITEM_BTN_X(0), R_ITEM_BTN_Y(0),
+                                  R_ITEM_BTN_WIDTH(0), R_ITEM_BTN_WIDTH(0), R_ITEM_BTN_DD(0) * 2, R_ITEM_BTN_DD(0) * 2);
 
     // C-Left Button Color & Texture
     gDPPipeSync(OVERLAY_DISP++);
@@ -2740,21 +2712,12 @@ void Interface_DrawItemButtons(GlobalContext* globalCtx) {
             gDPPipeSync(OVERLAY_DISP++);
             gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 255, interfaceCtx->startAlpha);
             gDPSetEnvColor(OVERLAY_DISP++, 0, 0, 0, 0);
-            gDPSetCombineLERP(OVERLAY_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE,
-                              0, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
+            gDPSetCombineLERP(OVERLAY_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0,
+                              PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
 
-            gDPSetTextureImage(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 1,
-                               (u32)interfaceCtx->do_actionSegment + 0x300);
-            gDPSetTile(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0,
-                       G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK,
-                       G_TX_NOLOD);
-            gDPLoadSync(OVERLAY_DISP++);
-            gDPLoadBlock(OVERLAY_DISP++, G_TX_LOADTILE, 0, 0, 191, 683);
-            gDPPipeSync(OVERLAY_DISP++);
-            gDPSetTile(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_4b, 3, 0, G_TX_RENDERTILE, 0,
-                       G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK,
-                       G_TX_NOLOD);
-            gDPSetTileSize(OVERLAY_DISP++, G_TX_RENDERTILE, 0, 0, 188, 60);
+            gDPLoadTextureBlock_4b(OVERLAY_DISP++, (u32)interfaceCtx->do_actionSegment + 0x300, G_IM_FMT_IA, 48, 16, 0,
+                                   G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
+                                   G_TX_NOLOD, G_TX_NOLOD);
 
             dxdy = 1024.0f / (R_START_LABEL_DD(gSaveContext.language) / 100.0f);
             width = 48.0f / (R_START_LABEL_DD(gSaveContext.language) / 100.0f);
@@ -2788,21 +2751,12 @@ void Interface_DrawItemButtons(GlobalContext* globalCtx) {
             gDPPipeSync(OVERLAY_DISP++);
             gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 255, temp);
             gDPSetEnvColor(OVERLAY_DISP++, 0, 0, 0, 0);
-            gDPSetCombineLERP(OVERLAY_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE,
-                              0, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
+            gDPSetCombineLERP(OVERLAY_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0,
+                              PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
 
-            gDPSetTextureImage(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 1,
-                               sCUpLabelTextures[gSaveContext.language]);
-            gDPSetTile(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0,
-                       G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK,
-                       G_TX_NOLOD);
-            gDPLoadSync(OVERLAY_DISP++);
-            gDPLoadBlock(OVERLAY_DISP++, G_TX_LOADTILE, 0, 0, 63, 1024);
-            gDPPipeSync(OVERLAY_DISP++);
-            gDPSetTile(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_4b, 2, 0, G_TX_RENDERTILE, 0,
-                       G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK,
-                       G_TX_NOLOD);
-            gDPSetTileSize(OVERLAY_DISP++, G_TX_RENDERTILE, 0, 0, 124, 28);
+            gDPLoadTextureBlock_4b(OVERLAY_DISP++, sCUpLabelTextures[gSaveContext.language], G_IM_FMT_IA, 32, 8, 0,
+                                   G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
+                                   G_TX_NOLOD, G_TX_NOLOD);
 
             gSPTextureRectangle(OVERLAY_DISP++, R_C_UP_ICON_X << 2, R_C_UP_ICON_Y << 2, (R_C_UP_ICON_X + 32) << 2,
                                 (R_C_UP_ICON_Y + 8) << 2, G_TX_RENDERTILE, 0, 0, 1024, 1024);
@@ -2831,9 +2785,9 @@ void Interface_DrawItemButtons(GlobalContext* globalCtx) {
                                 interfaceCtx->cRightAlpha);
             }
 
-            OVERLAY_DISP = Gfx_TextureIA8(
-                OVERLAY_DISP, &D_02000A00[temp + 1], 0x20, 0x20, R_ITEM_BTN_X(temp), R_ITEM_BTN_Y(temp),
-                R_ITEM_BTN_WIDTH(temp), R_ITEM_BTN_WIDTH(temp), R_ITEM_BTN_DD(temp) * 2, R_ITEM_BTN_DD(temp) * 2);
+            OVERLAY_DISP = Gfx_TextureIA8(OVERLAY_DISP, &D_02000A00[temp + 1], 0x20, 0x20, R_ITEM_BTN_X(temp),
+                                          R_ITEM_BTN_Y(temp), R_ITEM_BTN_WIDTH(temp), R_ITEM_BTN_WIDTH(temp),
+                                          R_ITEM_BTN_DD(temp) * 2, R_ITEM_BTN_DD(temp) * 2);
         }
     }
 
@@ -2843,9 +2797,8 @@ void Interface_DrawItemButtons(GlobalContext* globalCtx) {
 void Interface_DrawItemIconTexture(GlobalContext* globalCtx, void* texture, s16 button) {
     OPEN_DISPS(globalCtx->state.gfxCtx, "../z_parameter.c", 3079);
 
-    gDPLoadTextureBlock(OVERLAY_DISP++, texture, G_IM_FMT_RGBA, G_IM_SIZ_32b, 32, 32, 0,
-                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
-                        G_TX_NOLOD);
+    gDPLoadTextureBlock(OVERLAY_DISP++, texture, G_IM_FMT_RGBA, G_IM_SIZ_32b, 32, 32, 0, G_TX_NOMIRROR | G_TX_WRAP,
+                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
     gSPTextureRectangle(OVERLAY_DISP++, R_ITEM_ICON_X(button) << 2, R_ITEM_ICON_Y(button) << 2,
                         (R_ITEM_ICON_X(button) + R_ITEM_ICON_WIDTH(button)) << 2,
@@ -2877,10 +2830,10 @@ void Interface_DrawAmmoCount(GlobalContext* globalCtx, s16 button, s16 alpha) {
 
         if ((button == 0) && (gSaveContext.minigameState == 1)) {
             ammo = globalCtx->interfaceCtx.hbaAmmo;
-        } else if ((button == 0) && (globalCtx->unk_11E5C >= 2)) {
-            ammo = globalCtx->unk_11E5C - 1;
+        } else if ((button == 0) && (globalCtx->shootingGalleryStatus > 1)) {
+            ammo = globalCtx->shootingGalleryStatus - 1;
         } else if ((button == 0) && (globalCtx->sceneNum == SCENE_BOWLING) && Flags_GetSwitch(globalCtx, 0x38)) {
-            ammo = globalCtx->bombchuBowlingAmmo;
+            ammo = globalCtx->bombchuBowlingStatus;
             if (ammo < 0) {
                 ammo = 0;
             }
@@ -2903,11 +2856,11 @@ void Interface_DrawAmmoCount(GlobalContext* globalCtx, s16 button, s16 alpha) {
 
         if (i != 0) {
             OVERLAY_DISP = Gfx_TextureIA8(OVERLAY_DISP, &D_020035C0[i], 8, 8, R_ITEM_AMMO_X(button),
-                                                R_ITEM_AMMO_Y(button), 8, 8, 1024, 1024);
+                                          R_ITEM_AMMO_Y(button), 8, 8, 1024, 1024);
         }
 
         OVERLAY_DISP = Gfx_TextureIA8(OVERLAY_DISP, &D_020035C0[ammo], 8, 8, R_ITEM_AMMO_X(button) + 6,
-                                            R_ITEM_AMMO_Y(button), 8, 8, 1024, 1024);
+                                      R_ITEM_AMMO_Y(button), 8, 8, 1024, 1024);
     }
 
     CLOSE_DISPS(globalCtx->state.gfxCtx, "../z_parameter.c", 3158);
@@ -2928,9 +2881,8 @@ void Interface_DrawActionButton(GlobalContext* globalCtx) {
               G_MTX_MODELVIEW | G_MTX_LOAD);
     gSPVertex(OVERLAY_DISP++, interfaceCtx->vtx_128, 4, 0);
 
-    gDPLoadTextureBlock(OVERLAY_DISP++, &D_02000A00[0], G_IM_FMT_IA, G_IM_SIZ_8b, 32, 32, 0,
-                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
-                        G_TX_NOLOD);
+    gDPLoadTextureBlock(OVERLAY_DISP++, &D_02000A00[0], G_IM_FMT_IA, G_IM_SIZ_8b, 32, 32, 0, G_TX_NOMIRROR | G_TX_WRAP,
+                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
     gSP1Quadrangle(OVERLAY_DISP++, 0, 2, 3, 1, 0);
 
@@ -3066,6 +3018,14 @@ u16 D_80125B54 = 0xC220;       // unused
 u16 D_80125B58 = 0xC20C;       // unused
 s16 D_80125B5C[] = { 91, 91 }; // unused
 
+// Due to an unknown reason, bss ordering changes within the 5 static variables in the function below.
+// In order to restore the correct order, we need a specific number of bss variables in the file before that point.
+// For this, we introduce 3 dummy variables which end up in padding at the end of the file's bss, so they don't actually
+// take space.
+s8 sBssDummy1;
+s8 sBssDummy2;
+s8 sBssDummy3;
+
 #ifdef NON_MATCHING
 // mostly regalloc, minor ordering and stack usage differences
 void Interface_Draw(GlobalContext* globalCtx) {
@@ -3095,7 +3055,7 @@ void Interface_Draw(GlobalContext* globalCtx) {
     if (pauseCtx->flag == 0) {
         Interface_InitVertices(globalCtx);
         func_8008A994(interfaceCtx);
-        Health_Draw(globalCtx);
+        HealthMeter_Draw(globalCtx);
 
         func_80094520(globalCtx->state.gfxCtx);
 
@@ -3124,14 +3084,13 @@ void Interface_Draw(GlobalContext* globalCtx) {
                     gDPPipeSync(OVERLAY_DISP++);
                     gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 200, 230, 255, interfaceCtx->magicAlpha);
                     gDPSetEnvColor(OVERLAY_DISP++, 0, 0, 20, 255);
-                    OVERLAY_DISP =
-                        Gfx_TextureIA8(OVERLAY_DISP, D_02001E00, 16, 16, 26, 190, 16, 16, 1024, 1024);
+                    OVERLAY_DISP = Gfx_TextureIA8(OVERLAY_DISP, D_02001E00, 16, 16, 26, 190, 16, 16, 1024, 1024);
 
                     // Small Key Counter
                     gDPPipeSync(OVERLAY_DISP++);
                     gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 255, interfaceCtx->magicAlpha);
-                    gDPSetCombineLERP(OVERLAY_DISP++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0,
-                                      PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0);
+                    gDPSetCombineLERP(OVERLAY_DISP++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE,
+                                      TEXEL0, 0, PRIMITIVE, 0);
 
                     interfaceCtx->counterDigits[2] = 0;
                     interfaceCtx->counterDigits[3] = gSaveContext.inventory.dungeonKeys[gSaveContext.mapIndex];
@@ -3143,14 +3102,13 @@ void Interface_Draw(GlobalContext* globalCtx) {
 
                     phi_s2 = 42;
                     if (interfaceCtx->counterDigits[2] != 0) {
-                        OVERLAY_DISP =
-                            Gfx_TextureI8(OVERLAY_DISP, &D_02003040[interfaceCtx->counterDigits[2]], 8, 16,
-                                          phi_s2, 190, 8, 16, 1024, 1024);
+                        OVERLAY_DISP = Gfx_TextureI8(OVERLAY_DISP, &D_02003040[interfaceCtx->counterDigits[2]], 8, 16,
+                                                     phi_s2, 190, 8, 16, 1024, 1024);
                         phi_s2 = 50;
                     }
 
-                    OVERLAY_DISP = Gfx_TextureI8(OVERLAY_DISP, &D_02003040[interfaceCtx->counterDigits[3]],
-                                                       8, 16, phi_s2, 190, 8, 16, 1024, 1024);
+                    OVERLAY_DISP = Gfx_TextureI8(OVERLAY_DISP, &D_02003040[interfaceCtx->counterDigits[3]], 8, 16,
+                                                 phi_s2, 190, 8, 16, 1024, 1024);
                 }
 
                 phi_s2 = 42;
@@ -3173,8 +3131,8 @@ void Interface_Draw(GlobalContext* globalCtx) {
             gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 100, 100, 100, interfaceCtx->magicAlpha);
         }
 
-        gDPSetCombineLERP(OVERLAY_DISP++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0,
-                          0, PRIMITIVE, 0);
+        gDPSetCombineLERP(OVERLAY_DISP++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0,
+                          PRIMITIVE, 0);
 
         interfaceCtx->counterDigits[0] = interfaceCtx->counterDigits[1] = 0;
         interfaceCtx->counterDigits[2] = gSaveContext.rupees;
@@ -3197,8 +3155,8 @@ void Interface_Draw(GlobalContext* globalCtx) {
         phi_s1 = sRupeeDigitsCount[CUR_UPG_VALUE(UPG_WALLET)];
 
         for (phi_s3 = 0; phi_s3 < phi_s1; phi_s3++, phi_s0++, phi_s2 += 8) {
-            OVERLAY_DISP = Gfx_TextureI8(OVERLAY_DISP, &D_02003040[interfaceCtx->counterDigits[phi_s0]], 8,
-                                               16, phi_s2, 206, 8, 16, 1024, 1024);
+            OVERLAY_DISP = Gfx_TextureI8(OVERLAY_DISP, &D_02003040[interfaceCtx->counterDigits[phi_s0]], 8, 16, phi_s2,
+                                         206, 8, 16, 1024, 1024);
         }
 
         Interface_DrawMagicBar(globalCtx);
@@ -3221,34 +3179,24 @@ void Interface_Draw(GlobalContext* globalCtx) {
             if (gSaveContext.equips.buttonItems[0] != ITEM_NONE) {
                 Interface_DrawItemIconTexture(globalCtx, (void*)(u32)interfaceCtx->icon_itemSegment, 0);
 
-                if ((player->stateFlags1 & 0x00800000) || (globalCtx->unk_11E5C >= 2) ||
+                if ((player->stateFlags1 & 0x00800000) || (globalCtx->shootingGalleryStatus > 1) ||
                     ((globalCtx->sceneNum == SCENE_BOWLING) && Flags_GetSwitch(globalCtx, 0x38))) {
                     gDPPipeSync(OVERLAY_DISP++);
-                    gDPSetCombineLERP(OVERLAY_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0,
-                                      PRIMITIVE, 0, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE,
-                                      0);
+                    gDPSetCombineLERP(OVERLAY_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE,
+                                      0, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
                     Interface_DrawAmmoCount(globalCtx, 0, interfaceCtx->bAlpha);
                 }
             }
         } else {
             // B Button Do Action Label
             gDPPipeSync(OVERLAY_DISP++);
-            gDPSetCombineLERP(OVERLAY_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE,
-                              0, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
+            gDPSetCombineLERP(OVERLAY_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0,
+                              PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
             gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 255, interfaceCtx->bAlpha);
 
-            gDPSetTextureImage(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 1,
-                               (u32)interfaceCtx->do_actionSegment + 0x180);
-            gDPSetTile(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 0, 0x0000, G_TX_LOADTILE, 0,
-                       G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK,
-                       G_TX_NOLOD);
-            gDPLoadSync(OVERLAY_DISP++);
-            gDPLoadBlock(OVERLAY_DISP++, G_TX_LOADTILE, 0, 0, 191, 683);
-            gDPPipeSync(OVERLAY_DISP++);
-            gDPSetTile(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_4b, 3, 0x0000, G_TX_RENDERTILE, 0,
-                       G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK,
-                       G_TX_NOLOD);
-            gDPSetTileSize(OVERLAY_DISP++, G_TX_RENDERTILE, 0, 0, 188, 60);
+            gDPLoadTextureBlock_4b(OVERLAY_DISP++, (u32)interfaceCtx->do_actionSegment + 0x180, G_IM_FMT_IA, 48, 16, 0,
+                                   G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
+                                   G_TX_NOLOD, G_TX_NOLOD);
 
             R_B_LABEL_DD = 1024.0f / (WREG(37 + gSaveContext.language) / 100.0f);
             gSPTextureRectangle(OVERLAY_DISP++, R_B_LABEL_X(gSaveContext.language) << 2,
@@ -3265,8 +3213,8 @@ void Interface_Draw(GlobalContext* globalCtx) {
             gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
             Interface_DrawItemIconTexture(globalCtx, (void*)((u32)interfaceCtx->icon_itemSegment + 0x1000), 1);
             gDPPipeSync(OVERLAY_DISP++);
-            gDPSetCombineLERP(OVERLAY_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE,
-                              0, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
+            gDPSetCombineLERP(OVERLAY_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0,
+                              PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
             Interface_DrawAmmoCount(globalCtx, 1, interfaceCtx->cLeftAlpha);
         }
 
@@ -3278,8 +3226,8 @@ void Interface_Draw(GlobalContext* globalCtx) {
             gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
             Interface_DrawItemIconTexture(globalCtx, (void*)((u32)interfaceCtx->icon_itemSegment + 0x2000), 2);
             gDPPipeSync(OVERLAY_DISP++);
-            gDPSetCombineLERP(OVERLAY_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE,
-                              0, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
+            gDPSetCombineLERP(OVERLAY_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0,
+                              PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
             Interface_DrawAmmoCount(globalCtx, 2, interfaceCtx->cDownAlpha);
         }
 
@@ -3291,8 +3239,8 @@ void Interface_Draw(GlobalContext* globalCtx) {
             gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
             Interface_DrawItemIconTexture(globalCtx, (void*)((u32)interfaceCtx->icon_itemSegment + 0x3000), 3);
             gDPPipeSync(OVERLAY_DISP++);
-            gDPSetCombineLERP(OVERLAY_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE,
-                              0, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
+            gDPSetCombineLERP(OVERLAY_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0,
+                              PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
             Interface_DrawAmmoCount(globalCtx, 3, interfaceCtx->cRightAlpha);
         }
 
@@ -3347,22 +3295,14 @@ void Interface_Draw(GlobalContext* globalCtx) {
                 gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 255, pauseCtx->unk_258);
                 gSPVertex(OVERLAY_DISP++, &pauseCtx->vtx_168[16], 4, 0);
 
-                gDPSetTextureImage(OVERLAY_DISP++, G_IM_FMT_RGBA, G_IM_SIZ_32b, 1, gItemIcons[pauseCtx->unk_24E]);
-                gDPSetTile(OVERLAY_DISP++, G_IM_FMT_RGBA, G_IM_SIZ_32b, 0, 0x0000, G_TX_LOADTILE, 0,
-                           G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK,
-                           G_TX_NOLOD);
-                gDPLoadSync(OVERLAY_DISP++);
-                gDPLoadBlock(OVERLAY_DISP++, G_TX_LOADTILE, 0, 0, 1023, 128);
-                gDPPipeSync(OVERLAY_DISP++);
-                gDPSetTile(OVERLAY_DISP++, G_IM_FMT_RGBA, G_IM_SIZ_32b, 8, 0x0000, G_TX_RENDERTILE, 0,
-                           G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK,
-                           G_TX_NOLOD);
-                gDPSetTileSize(OVERLAY_DISP++, G_TX_RENDERTILE, 0, 0, 124, 124);
+                gDPLoadTextureBlock(OVERLAY_DISP++, gItemIcons[pauseCtx->unk_24E], G_IM_FMT_RGBA, G_IM_SIZ_32b, 32, 32,
+                                    0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
+                                    G_TX_NOLOD, G_TX_NOLOD);
             } else {
                 // Magic Arrow Equip Effect
                 phi_s3_2 = pauseCtx->unk_24E - 0xBF;
-                gDPSetPrimColor(OVERLAY_DISP++, 0, 0, sMagicArrowEffectsR[phi_s3_2],
-                                sMagicArrowEffectsG[phi_s3_2], sMagicArrowEffectsB[phi_s3_2], pauseCtx->unk_258);
+                gDPSetPrimColor(OVERLAY_DISP++, 0, 0, sMagicArrowEffectsR[phi_s3_2], sMagicArrowEffectsG[phi_s3_2],
+                                sMagicArrowEffectsB[phi_s3_2], pauseCtx->unk_258);
 
                 if ((pauseCtx->unk_258 > 0) && (pauseCtx->unk_258 < 0xFF)) {
                     phi_s3_2 = (pauseCtx->unk_258 / 8) / 2;
@@ -3377,17 +3317,9 @@ void Interface_Draw(GlobalContext* globalCtx) {
                 }
 
                 gSPVertex(OVERLAY_DISP++, &pauseCtx->vtx_168[16], 4, 0);
-                gDPSetTextureImage(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 1, D_080895C0);
-                gDPSetTile(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 0, 0x0000, G_TX_LOADTILE, 0,
-                           G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK,
-                           G_TX_NOLOD);
-                gDPLoadSync(OVERLAY_DISP++);
-                gDPLoadBlock(OVERLAY_DISP++, G_TX_LOADTILE, 0, 0, 511, 512);
-                gDPPipeSync(OVERLAY_DISP++);
-                gDPSetTile(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_8b, 4, 0x0000, G_TX_RENDERTILE, 0,
-                           G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK,
-                           G_TX_NOLOD);
-                gDPSetTileSize(OVERLAY_DISP++, G_TX_RENDERTILE, 0, 0, 124, 124);
+                gDPLoadTextureBlock(OVERLAY_DISP++, D_080895C0, G_IM_FMT_IA, G_IM_SIZ_8b, 32, 32, 0,
+                                    G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
+                                    G_TX_NOLOD, G_TX_NOLOD);
             }
 
             gSP1Quadrangle(OVERLAY_DISP++, 0, 2, 3, 1, 0);
@@ -3400,17 +3332,9 @@ void Interface_Draw(GlobalContext* globalCtx) {
                 // Carrots rendering if the action corresponds to riding a horse
                 if (interfaceCtx->unk_1EE == 8) {
                     // Load Carrot Icon
-                    gDPSetTextureImage(OVERLAY_DISP++, G_IM_FMT_RGBA, G_IM_SIZ_32b, 1, &D_02002100);
-                    gDPSetTile(OVERLAY_DISP++, G_IM_FMT_RGBA, G_IM_SIZ_32b, 0, 0x0000, G_TX_LOADTILE, 0,
-                               G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP,
-                               G_TX_NOMASK, G_TX_NOLOD);
-                    gDPLoadSync(OVERLAY_DISP++);
-                    gDPLoadBlock(OVERLAY_DISP++, G_TX_LOADTILE, 0, 0, 255, 256);
-                    gDPPipeSync(OVERLAY_DISP++);
-                    gDPSetTile(OVERLAY_DISP++, G_IM_FMT_RGBA, G_IM_SIZ_32b, 4, 0x0000, G_TX_RENDERTILE, 0,
-                               G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP,
-                               G_TX_NOMASK, G_TX_NOLOD);
-                    gDPSetTileSize(OVERLAY_DISP++, G_TX_RENDERTILE, 0, 0, 60, 60);
+                    gDPLoadTextureBlock(OVERLAY_DISP++, &D_02002100, G_IM_FMT_RGBA, G_IM_SIZ_32b, 16, 16, 0,
+                                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
+                                        G_TX_NOLOD, G_TX_NOLOD);
 
                     // Draw 6 carrots
                     phi_s1 = ZREG(14);
@@ -3433,17 +3357,9 @@ void Interface_Draw(GlobalContext* globalCtx) {
                 gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 255, interfaceCtx->bAlpha);
 
                 // Target Icon
-                gDPSetTextureImage(OVERLAY_DISP++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, D_02002600);
-                gDPSetTile(OVERLAY_DISP++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0x0000, G_TX_LOADTILE, 0,
-                           G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK,
-                           G_TX_NOLOD);
-                gDPLoadSync(OVERLAY_DISP++);
-                gDPLoadBlock(OVERLAY_DISP++, G_TX_LOADTILE, 0, 0, 383, 342);
-                gDPPipeSync(OVERLAY_DISP++);
-                gDPSetTile(OVERLAY_DISP++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 6, 0x0000, G_TX_RENDERTILE, 0,
-                           G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK,
-                           G_TX_NOLOD);
-                gDPSetTileSize(OVERLAY_DISP++, G_TX_RENDERTILE, 0, 0, 92, 60);
+                gDPLoadTextureBlock(OVERLAY_DISP++, D_02002600, G_IM_FMT_RGBA, G_IM_SIZ_16b, 24, 16, 0,
+                                    G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
+                                    G_TX_NOLOD, G_TX_NOLOD);
 
                 gSPTextureRectangle(OVERLAY_DISP++, (WREG(32) + 28) << 2, ZREG(15) << 2, (WREG(32) + 52) << 2,
                                     (ZREG(15) + 16) << 2, G_TX_RENDERTILE, 0, 0, 1024, 1024);
@@ -3509,7 +3425,7 @@ void Interface_Draw(GlobalContext* globalCtx) {
         if ((globalCtx->pauseCtx.state == 0) && (globalCtx->pauseCtx.flag == 0) && (globalCtx->unk_10A20 == 0) &&
             (msgCtx->msgMode == 0) && !(player->stateFlags2 & 0x01000000) && (globalCtx->sceneLoadFlag == 0) &&
             (globalCtx->transitionMode == 0) && !Gameplay_InCsMode(globalCtx) && (gSaveContext.minigameState != 1) &&
-            (globalCtx->unk_11E5C < 2) &&
+            (globalCtx->shootingGalleryStatus <= 1) &&
             !((globalCtx->sceneNum == SCENE_BOWLING) && Flags_GetSwitch(globalCtx, 0x38))) {
             sp274 = 0;
             switch (gSaveContext.timer1State) {
@@ -3850,7 +3766,7 @@ void Interface_Draw(GlobalContext* globalCtx) {
                 gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 255, 255);
                 gDPSetEnvColor(OVERLAY_DISP++, 0, 0, 0, 0);
                 OVERLAY_DISP = Gfx_TextureIA8(OVERLAY_DISP, D_02002000, 16, 16, gSaveContext.timerX[sp274],
-                                                    gSaveContext.timerY[sp274] + 2, 16, 16, 1024, 1024);
+                                              gSaveContext.timerY[sp274] + 2, 16, 16, 1024, 1024);
 
                 // Timer Counter
                 gDPPipeSync(OVERLAY_DISP++);
@@ -3872,9 +3788,9 @@ void Interface_Draw(GlobalContext* globalCtx) {
 
                 for (phi_s3 = 0; phi_s3 < 5; phi_s3++) {
                     OVERLAY_DISP = Gfx_TextureI8(OVERLAY_DISP, &D_02003040[sTimerDigits[phi_s3]], 8, 16,
-                                                       gSaveContext.timerX[sp274] + sTimerDigitLeftPos[phi_s3],
-                                                       gSaveContext.timerY[sp274], sDigitWidth[phi_s3], VREG(42),
-                                                       VREG(43) * 2, VREG(43) * 2);
+                                                 gSaveContext.timerX[sp274] + sTimerDigitLeftPos[phi_s3],
+                                                 gSaveContext.timerY[sp274], sDigitWidth[phi_s3], VREG(42),
+                                                 VREG(43) * 2, VREG(43) * 2);
                 }
             }
         }
@@ -4051,7 +3967,7 @@ void Interface_Update(GlobalContext* globalCtx) {
         }
     }
 
-    Health_HandleCriticalAlarm(globalCtx);
+    HealthMeter_HandleCriticalAlarm(globalCtx);
     D_80125A58 = func_8008F2F8(globalCtx);
 
     if (D_80125A58 == 1) {
@@ -4064,7 +3980,7 @@ void Interface_Update(GlobalContext* globalCtx) {
         }
     }
 
-    Health_UpdateData(globalCtx);
+    HealthMeter_Update(globalCtx);
 
     if ((gSaveContext.timer1State >= 3) && (globalCtx->pauseCtx.state == 0) && (globalCtx->pauseCtx.flag == 0) &&
         (msgCtx->msgMode == 0) && !(player->stateFlags2 & 0x01000000) && (globalCtx->sceneLoadFlag == 0) &&

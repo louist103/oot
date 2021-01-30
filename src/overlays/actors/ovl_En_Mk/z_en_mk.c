@@ -15,10 +15,16 @@ void EnMk_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnMk_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnMk_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+extern UNK_TYPE D_06000368;
+extern UNK_TYPE D_06000724;
+extern UNK_TYPE D_06000AC0;
+extern UNK_TYPE D_06000D88;
+extern UNK_TYPE D_06005DF0;
+
 /*
 const ActorInit En_Mk_InitVars = {
     ACTOR_EN_MK,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_MK,
     sizeof(EnMk),
@@ -26,6 +32,26 @@ const ActorInit En_Mk_InitVars = {
     (ActorFunc)EnMk_Destroy,
     (ActorFunc)EnMk_Update,
     (ActorFunc)EnMk_Draw,
+};
+
+static ColliderCylinderInit D_80AAD620 = {
+    {
+        COLTYPE_NONE,
+        AT_NONE,
+        AC_ON | AC_TYPE_ENEMY,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK0,
+        { 0x00000000, 0x00, 0x00 },
+        { 0xFFCFFFFF, 0x00, 0x00 },
+        TOUCH_NONE,
+        BUMP_ON,
+        OCELEM_ON,
+    },
+    { 30, 40, 0, { 0, 0, 0 } },
 };
 */
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/actors/ovl_En_Mk/EnMk_Init.s")

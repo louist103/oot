@@ -9,10 +9,19 @@ void EnSa_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSa_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnSa_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+extern UNK_TYPE D_02005730;
+extern UNK_TYPE D_02010E20;
+extern UNK_TYPE D_06001D50;
+extern UNK_TYPE D_06007B80;
+extern UNK_TYPE D_0600B1A0;
+extern UNK_TYPE D_0600BAEC;
+extern UNK_TYPE D_0600C500;
+extern UNK_TYPE D_06012100;
+
 /*
 const ActorInit En_Sa_InitVars = {
     ACTOR_EN_SA,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_SA,
     sizeof(EnSa),
@@ -20,6 +29,26 @@ const ActorInit En_Sa_InitVars = {
     (ActorFunc)EnSa_Destroy,
     (ActorFunc)EnSa_Update,
     (ActorFunc)EnSa_Draw,
+};
+
+static ColliderCylinderInit D_80AF7260 = {
+    {
+        COLTYPE_NONE,
+        AT_NONE,
+        AC_NONE,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_2,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK0,
+        { 0x00000000, 0x00, 0x00 },
+        { 0x00000000, 0x00, 0x00 },
+        TOUCH_NONE,
+        BUMP_NONE,
+        OCELEM_ON,
+    },
+    { 20, 46, 0, { 0, 0, 0 } },
 };
 */
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/actors/ovl_En_Sa/func_80AF5560.s")
