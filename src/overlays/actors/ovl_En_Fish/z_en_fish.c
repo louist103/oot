@@ -1,5 +1,6 @@
 #include "z_en_fish.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
+#include "objects/gameplay_field_keep/gameplay_field_keep.h"
 
 #define FLAGS 0x00000000
 
@@ -10,20 +11,27 @@ void EnFish_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnFish_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnFish_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
-const ActorInit En_Fish_InitVars = {
-    ACTOR_EN_FISH,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    OBJECT_GAMEPLAY_KEEP,
-    sizeof(EnFish),
-    (ActorFunc)EnFish_Init,
-    (ActorFunc)EnFish_Destroy,
-    (ActorFunc)EnFish_Update,
-    (ActorFunc)EnFish_Draw,
-};
+// extern FlexSkeletonHeader D_04018FE0;
+// extern AnimationHeader D_0401909C;
+// extern AnimationHeader D_040185FC;
 
-static ColliderJntSphElementInit D_80A1701C[1] = {
+/*
+// D_80A1701C
+static ColliderJntSphItemInit sJntSphItemsInit[1] = {
+    {
+        { 0x00, { 0x00000000, 0x00, 0x00 }, { 0xFFCFFFFF, 0x00, 0x00 }, 0x00, 0x00, 0x01 },
+        { 0, { { 0, 0, 0 }, 5 }, 100 },
+    },
+};
+// D_80A17040
+static ColliderJntSphInit sJntSphInit =
+{
+    { COLTYPE_UNK10, 0x00, 0x00, 0x39, 0x10, COLSHAPE_JNTSPH },
+    1, sJntSphItemsInit,
+};
+*/
+
+static ColliderJntSphElementInit sJntSphItemsInit[1] = {
     {
         {
             ELEMTYPE_UNK0,
@@ -37,7 +45,7 @@ static ColliderJntSphElementInit D_80A1701C[1] = {
     },
 };
 
-static ColliderJntSphInit D_80A17040 = {
+static ColliderJntSphInit sJntSphInit = {
     {
         COLTYPE_NONE,
         AT_NONE,
@@ -47,73 +55,59 @@ static ColliderJntSphInit D_80A17040 = {
         COLSHAPE_JNTSPH,
     },
     1,
-    D_80A1701C,
+    sJntSphItemsInit,
 };
-*/
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/actors/ovl_En_Fish/func_80A15280.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/actors/ovl_En_Fish/func_80A152AC.s")
+const ActorInit En_Fish_InitVars = {
+    ACTOR_EN_FISH,
+    ACTORCAT_ITEMACTION,
+    FLAGS,
+    OBJECT_GAMEPLAY_KEEP,
+    sizeof(EnFish),
+    (ActorFunc)EnFish_Init,
+    (ActorFunc)EnFish_Destroy,
+    (ActorFunc)EnFish_Update,
+    (ActorFunc)EnFish_Draw,
+};
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/actors/ovl_En_Fish/func_80A15310.s")
+// D_80A17070
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/actors/ovl_En_Fish/func_80A15374.s")
+void EnFish_Init(Actor* thisx, GlobalContext* globalCtx) {
+    EnFish* this = THIS;
+    // this->actor.colChkInfo.mass = 0x32U;
+    thisx->gravity = -1.0f;
+    thisx->shape.rot.x = 0;
+    thisx->shape.rot.z = 0x4000;
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 8.0f);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &gFieldUnusedFishSkel, &gFieldUnusedFishAnim, this->limbDrawTable,
+                   this->unk_21A, 6);
+}
+u8 hitFloor;
+void EnFish_Update(Actor* thisx, GlobalContext* globalCtx) {
+    if ((thisx->floorHeight != thisx->world.pos.y)&&(hitFloor==false)) {
+        Actor_MoveForward(thisx);
+    } else if(hitFloor == false) {
+        hitFloor = true;
+        thisx->world.pos.y += 2.0f;
+    }
+    Actor_UpdateBgCheckInfo(globalCtx, thisx, 75.0f, 30.0f, 30.0f, 5);
+    SkelAnime_Update(&THIS->skelAnime);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/actors/ovl_En_Fish/func_80A153AC.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/actors/ovl_En_Fish/func_80A15444.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/actors/ovl_En_Fish/EnFish_Init.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/actors/ovl_En_Fish/EnFish_Destroy.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/actors/ovl_En_Fish/func_80A155D0.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/actors/ovl_En_Fish/func_80A15688.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/actors/ovl_En_Fish/func_80A15774.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/actors/ovl_En_Fish/func_80A157A4.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/actors/ovl_En_Fish/func_80A157FC.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/actors/ovl_En_Fish/func_80A158EC.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/actors/ovl_En_Fish/func_80A15944.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/actors/ovl_En_Fish/func_80A15AD4.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/actors/ovl_En_Fish/func_80A15B2C.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/actors/ovl_En_Fish/func_80A15D18.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/actors/ovl_En_Fish/func_80A15D68.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/actors/ovl_En_Fish/func_80A15F24.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/actors/ovl_En_Fish/func_80A15F84.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/actors/ovl_En_Fish/func_80A160BC.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/actors/ovl_En_Fish/func_80A16200.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/actors/ovl_En_Fish/func_80A163DC.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/actors/ovl_En_Fish/func_80A16450.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/actors/ovl_En_Fish/func_80A16618.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/actors/ovl_En_Fish/func_80A16670.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/actors/ovl_En_Fish/func_80A16898.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/actors/ovl_En_Fish/func_80A169C8.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/actors/ovl_En_Fish/func_80A16A64.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/actors/ovl_En_Fish/func_80A16C68.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/actors/ovl_En_Fish/func_80A16DEC.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/actors/ovl_En_Fish/EnFish_Update.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/actors/ovl_En_Fish/EnFish_Draw.s")
+void EnFish_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+}
+// GfxPrint printer;
+void EnFish_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    EnFish* this = THIS;
+    // GfxPrint_Init(&printer);
+    // GfxPrint_Open(&printer,globalCtx->state.gfxCtx->polyOpa.p);
+    // GfxPrint_SetPos(&printer,0,0);
+    // GfxPrint_SetColor(&printer,255,255,255,255);
+    // GfxPrint_Printf(&printer, "Fish ROT %x",(s16)this->actor.shape.rot.z);
+    // GfxPrint_SetPos(&printer,0,01);
+    // GfxPrint_Printf(&printer,"Fish rot* %x",&thisx->shape.rot);
+    // globalCtx->state.gfxCtx->polyOpa.p = GfxPrint_Close(&printer);
+    // GfxPrint_Destroy(&printer);
+    func_80093D18(globalCtx->state.gfxCtx);
+    SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, 0, 0, thisx);
+}
