@@ -5,13 +5,15 @@ MAKEFLAGS += --no-builtin-rules
 # If COMPARE is 1, check the output md5sum after building
 COMPARE ?= 1
 # If NON_MATCHING is 1, define the NON_MATCHING C flag when building
-NON_MATCHING ?= 0
+NON_MATCHING ?= 1
 # If ORIG_COMPILER is 1, compile with QEMU_IRIX and the original compiler
 ORIG_COMPILER ?= 0
 
 ifeq ($(NON_MATCHING),1)
   CFLAGS := -DNON_MATCHING
+  CFLAGS := -DNON_EQUIVALENT
   CPPFLAGS := -DNON_MATCHING
+  CPPFLAGS := -DNON_EQUIVALENT
   COMPARE := 0
 endif
 
@@ -137,39 +139,39 @@ TEXTURE_FILES_OUT := $(foreach f,$(TEXTURE_FILES_RGBA32:.rgba32.png=.rgba32.inc.
 # create build directories
 $(shell mkdir -p build/baserom $(foreach dir,$(SRC_DIRS) $(ASM_DIRS) $(TEXTURE_DIRS) $(ASSET_BIN_DIRS),build/$(dir)))
 
-build/src/libultra_boot_O1/%.o: OPTFLAGS := -O1
+build/src/libultra_boot_O1/%.o: OPTFLAGS := -O2
 build/src/libultra_boot_O2/%.o: OPTFLAGS := -O2
-build/src/libultra_code_O1/%.o: OPTFLAGS := -O1
+build/src/libultra_code_O1/%.o: OPTFLAGS := -O2
 build/src/libultra_code_O2/%.o: OPTFLAGS := -O2
-build/src/libultra_code_O2_g3/%.o: OPTFLAGS := -O2 -g3
+build/src/libultra_code_O2_g3/%.o: OPTFLAGS := -O2
 
 build/src/libultra_boot_O1/ll.o: MIPS_VERSION := -mips3 -32
 build/src/libultra_code_O1/llcvt.o: MIPS_VERSION := -mips3 -32
 
 build/src/code/fault.o: CFLAGS += -trapuv
-build/src/code/fault.o: OPTFLAGS := -O2 -g3
+build/src/code/fault.o: OPTFLAGS := -O2
 build/src/code/fault_drawer.o: CFLAGS += -trapuv
-build/src/code/fault_drawer.o: OPTFLAGS := -O2 -g3
-build/src/code/ucode_disas.o: OPTFLAGS := -O2 -g3
-build/src/code/code_801068B0.o: OPTFLAGS := -g
-build/src/code/code_80106860.o: OPTFLAGS := -g
-build/src/code/code_801067F0.o: OPTFLAGS := -g
+build/src/code/fault_drawer.o: OPTFLAGS := -O2
+build/src/code/ucode_disas.o: OPTFLAGS := -O2
+build/src/code/code_801068B0.o: OPTFLAGS := -O2
+build/src/code/code_80106860.o: OPTFLAGS := -O2
+build/src/code/code_801067F0.o: OPTFLAGS := -O2
 
-build/src/libultra_boot_O1/%.o: CC := $(CC_OLD)
-build/src/libultra_boot_O2/%.o: CC := $(CC_OLD)
-build/src/libultra_code_O1/%.o: CC := python3 tools/asm_processor/build.py $(CC_OLD) -- $(AS) $(ASFLAGS) --
-build/src/libultra_code_O2/%.o: CC := python3 tools/asm_processor/build.py $(CC_OLD) -- $(AS) $(ASFLAGS) --
-build/src/libultra_code_O2_g3/%.o: CC := python3 tools/asm_processor/build.py $(CC_OLD) -- $(AS) $(ASFLAGS) --
+
+build/src/libultra_boot_O1/%.o:  mips-linux-gnu-gcc -c -O2 -mips3 -G 0 -nostdinc -Iinclude -Isrc -DGCC_COMPILE -Ibuild -I. -DNON_MATCHING=1 -DNON_EQUIVALENT=1 -DAVOID_UB=1 -mno-shared -march=vr4300 -mfix4300 -mabi=32 -mhard-float -mdivide-breaks -fno-stack-protector -fno-common -fno-zero-initialized-in-bss -mno-abicalls -fno-strict-aliasing -fno-inline-functions -fno-inline-small-functions -fno-toplevel-reorder -ffreestanding -fwrapv -Wall -Wextra -fno-gcse -fno-cse-follow-jumps 
+build/src/libultra_boot_O2/%.o:  mips-linux-gnu-gcc -c -O2 -mips3 -G 0 -nostdinc -Iinclude -Isrc -DGCC_COMPILE -Ibuild -I. -DNON_MATCHING=1 -DNON_EQUIVALENT=1 -DAVOID_UB=1 -mno-shared -march=vr4300 -mfix4300 -mabi=32 -mhard-float -mdivide-breaks -fno-stack-protector -fno-common -fno-zero-initialized-in-bss -mno-abicalls -fno-strict-aliasing -fno-inline-functions -fno-inline-small-functions -fno-toplevel-reorder -ffreestanding -fwrapv -Wall -Wextra -fno-gcse -fno-cse-follow-jumps 
+build/src/libultra_code_O1/%.o:  mips-linux-gnu-gcc -c -O2 -mips3 -G 0 -nostdinc -Iinclude -Isrc -DGCC_COMPILE -Ibuild -I. -DNON_MATCHING=1 -DNON_EQUIVALENT=1 -DAVOID_UB=1 -mno-shared -march=vr4300 -mfix4300 -mabi=32 -mhard-float -mdivide-breaks -fno-stack-protector -fno-common -fno-zero-initialized-in-bss -mno-abicalls -fno-strict-aliasing -fno-inline-functions -fno-inline-small-functions -fno-toplevel-reorder -ffreestanding -fwrapv -Wall -Wextra -fno-gcse -fno-cse-follow-jumps 
+build/src/libultra_code_O2/%.o: mips-linux-gnu-gcc -c -O2 -mips3 -G 0 -nostdinc -Iinclude -Isrc -DGCC_COMPILE -Ibuild -I. -DNON_MATCHING=1 -DNON_EQUIVALENT=1 -DAVOID_UB=1 -mno-shared -march=vr4300 -mfix4300 -mabi=32 -mhard-float -mdivide-breaks -fno-stack-protector -fno-common -fno-zero-initialized-in-bss -mno-abicalls -fno-strict-aliasing -fno-inline-functions -fno-inline-small-functions -fno-toplevel-reorder -ffreestanding -fwrapv -Wall -Wextra -fno-gcse -fno-cse-follow-jumps 
+build/src/libultra_code_O2_g3/%.o: mips-linux-gnu-gcc -c -O2 -mips3 -G 0 -nostdinc -Iinclude -Isrc -DGCC_COMPILE -Ibuild -I. -DNON_MATCHING=1 -DNON_EQUIVALENT=1 -DAVOID_UB=1 -mno-shared -march=vr4300 -mfix4300 -mabi=32 -mhard-float -mdivide-breaks -fno-stack-protector -fno-common -fno-zero-initialized-in-bss -mno-abicalls -fno-strict-aliasing -fno-inline-functions -fno-inline-small-functions -fno-toplevel-reorder -ffreestanding -fwrapv -Wall -Wextra -fno-gcse -fno-cse-follow-jumps 
 
 build/src/code/jpegutils.o: CC := python3 tools/asm_processor/build.py $(CC_OLD) -- $(AS) $(ASFLAGS) --
 build/src/code/jpegdecoder.o: CC := python3 tools/asm_processor/build.py $(CC_OLD) -- $(AS) $(ASFLAGS) --
 
-build/src/boot/%.o: CC := python3 tools/asm_processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
+build/src/boot/%.o: mips-linux-gnu-gcc -c -O2 -mips3 -G 0 -nostdinc -Iinclude -Isrc -DGCC_COMPILE -Ibuild -I. -DNON_MATCHING=1 -DNON_EQUIVALENT=1 -DAVOID_UB=1 -mno-shared -march=vr4300 -mfix4300 -mabi=32 -mhard-float -mdivide-breaks -fno-stack-protector -fno-common -fno-zero-initialized-in-bss -mno-abicalls -fno-strict-aliasing -fno-inline-functions -fno-inline-small-functions -fno-toplevel-reorder -ffreestanding -fwrapv -Wall -Wextra -fno-gcse -fno-cse-follow-jumps 
 build/src/code/%.o: CC := python3 tools/asm_processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
 build/src/overlays/actors/%.o: CC := python3 tools/asm_processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
 build/src/overlays/effects/%.o: CC := python3 tools/asm_processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
 build/src/overlays/gamestates/%.o: CC := python3 tools/asm_processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
-
 #### Main Targets ###
 
 all: $(ROM)
@@ -220,6 +222,14 @@ build/data/%.o: data/%.s
 build/assets/%.o: assets/%.c
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $^
 	$(OBJCOPY) -O binary $@ $@.bin
+
+#build/src/overlays/effects/%.o: src/overlays/effects/%.c
+#	mips-linux-gnu-gcc -c -O2 -mips3 -G 0 -nostdinc -Iinclude -Isrc -DGCC_COMPILE -Iassets -Ibuild -I. -DNON_MATCHING=1 -DNON_EQUIVALENT=1 -DAVOID_UB=1 -mno-shared -march=vr4300 -mfix4300 -mabi=32 -mhard-float -mdivide-breaks -fno-stack-protector -fno-common -fno-zero-initialized-in-bss -mno-abicalls -fno-strict-aliasing -fno-inline-functions -fno-inline-small-functions -fno-toplevel-reorder -ffreestanding -fwrapv -Wall -Wextra -fno-gcse -fno-cse-follow-jumps -o $@ $^
+#	$(CC_CHECK) $^
+#	$(ZAPD) bovl -i $@ -cfg $^ --outputpath $(@D)/$(notdir $(@D))_reloc.s
+#	-test -f $(@D)/$(notdir $(@D))_reloc.s && $(AS) $(ASFLAGS) $(@D)/$(notdir $(@D))_reloc.s -o $(@D)/$(notdir $(@D))_reloc.o
+#	@$(OBJDUMP) -d $@ > $(@:.o=.s)
+#
 
 build/src/overlays/%.o: src/overlays/%.c
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $^

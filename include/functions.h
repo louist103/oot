@@ -3,12 +3,27 @@
 
 #include "z64.h"
 
+
 f32 fabsf(f32 f);
+#ifdef GCC_COMPILE
+#define fabsf __builtin_fabsf
+#else
 #pragma intrinsic(fabsf)
+#endif
+
 f32 sqrtf(f32 f);
+#ifdef GCC_COMPILE
+#define fabsf __builtin_fabsf
+#else
 #pragma intrinsic(sqrtf)
+#endif
+
 f64 sqrt(f64 d);
+#ifdef GCC_COMPILE
+#define fabsf __builtin_fabsf
+#else
 #pragma intrinsic(sqrt)
+#endif
 
 void cleararena(void);
 void bootproc(void);
