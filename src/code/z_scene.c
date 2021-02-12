@@ -919,7 +919,7 @@ RomFile gObjectTable[] = {
     ROM_FILE(object_gi_ghost),
     ROM_FILE(object_gi_soul),
     ROM_FILE(object_bowl),
-    ROM_FILE(object_demo_kekkai),
+    ROM_FILE_UNSET,
     ROM_FILE(object_efc_doughnut),
     ROM_FILE(object_gi_dekupouch),
     ROM_FILE(object_ganon_anime1),

@@ -1,5 +1,7 @@
 #include "global.h"
 
+#define DELETED {0}
+
 #define ENTRANCE(scene, spawn, continueBgm, displayTitleCard, fadeIn, fadeOut)                                     \
     {                                                                                                              \
         scene, spawn,                                                                                              \
@@ -797,20 +799,20 @@ EntranceInfo gEntranceTable[] = {
     { (u32) _##name##SegmentRomStart, (u32)_##name##SegmentRomEnd, 0, 0, unk_10, config, unk_12 }
 
 Scene gSceneTable[] = {
-    TITLED_SCENE(ydan_scene, g_pn_06, 1, 19, 2),
-    TITLED_SCENE(ddan_scene, g_pn_08, 1, 20, 3),
-    TITLED_SCENE(bdan_scene, g_pn_07, 1, 21, 4),
-    TITLED_SCENE(Bmori1_scene, g_pn_01, 2, 22, 5),
-    TITLED_SCENE(HIDAN_scene, g_pn_03, 2, 18, 6),
-    TITLED_SCENE(MIZUsin_scene, g_pn_04, 1, 23, 7),
-    TITLED_SCENE(jyasinzou_scene, g_pn_05, 1, 25, 8),
-    TITLED_SCENE(HAKAdan_scene, g_pn_02, 2, 24, 9),
-    TITLED_SCENE(HAKAdanCH_scene, g_pn_54, 2, 24, 10),
-    TITLED_SCENE(ice_doukutu_scene, g_pn_10, 0, 37, 0),
+    DELETED,
+    DELETED,
+    DELETED,
+    DELETED,
+    DELETED,
+    DELETED,
+    DELETED,
+    DELETED,
+    DELETED,
+    DELETED,
     UNTITLED_SCENE(ganon_scene, 2, 0, 0),
-    TITLED_SCENE(men_scene, g_pn_11, 0, 27, 0),
+    DELETED,
     TITLED_SCENE(gerudoway_scene, g_pn_49, 0, 40, 0),
-    TITLED_SCENE(ganontika_scene, g_pn_09, 0, 26, 0),
+    DELETED,
     UNTITLED_SCENE(ganon_sonogo_scene, 0, 51, 0),
     UNTITLED_SCENE(ganontikasonogo_scene, 0, 52, 0),
     TITLED_SCENE(takaraya_scene, g_pn_51, 0, 0, 0),
@@ -898,15 +900,15 @@ Scene gSceneTable[] = {
     TITLED_SCENE(spot18_scene, g_pn_41, 0, 16, 0),
     TITLED_SCENE(spot20_scene, g_pn_42, 0, 17, 0),
     TITLED_SCENE(ganon_tou_scene, g_pn_43, 0, 36, 0),
-    UNTITLED_SCENE(test01_scene, 0, 47, 0),
-    UNTITLED_SCENE(besitu_scene, 0, 49, 0),
-    UNTITLED_SCENE(depth_test_scene, 0, 0, 0),
-    UNTITLED_SCENE(syotes_scene, 0, 0, 0),
-    UNTITLED_SCENE(syotes2_scene, 0, 0, 0),
-    UNTITLED_SCENE(sutaru_scene, 0, 0, 0),
+    DELETED,
+    DELETED,
+    DELETED,
+    DELETED,
+    DELETED,
+    DELETED,
     TITLED_SCENE(hairal_niwa2_scene, g_pn_12, 0, 35, 0),
-    UNTITLED_SCENE(sasatest_scene, 0, 0, 0),
-    UNTITLED_SCENE(testroom_scene, 0, 0, 0),
+    DELETED,
+    DELETED,
 };
 
 Gfx sDefaultDisplayList[] = {
