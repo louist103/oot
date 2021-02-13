@@ -203,7 +203,7 @@ void EnKanban_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.flags |= 1;
         Collider_InitCylinder(globalCtx, &this->collider);
         Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
-        osSyncPrintf("KANBAN ARG    %x\n", this->actor.params);
+        PRINTF("KANBAN ARG    %x\n", this->actor.params);
         if (this->actor.params == ENKANBAN_FISHING) {
             if (gSaveContext.linkAge == 1) {
                 this->actor.textId = 0x409D;
@@ -448,7 +448,7 @@ void EnKanban_Update(Actor* thisx, GlobalContext* globalCtx2) {
             this->actor.bgCheckFlags = tempBgFlags;
             this->actor.yDistToWater = tempYDistToWater;
 
-            osSyncPrintf(VT_RST);
+            PRINTF(VT_RST);
             onGround = (this->actor.bgCheckFlags & 1);
             if (this->spinXFlag) {
                 this->spinRot.x += this->spinVel.x;
@@ -500,9 +500,9 @@ void EnKanban_Update(Actor* thisx, GlobalContext* globalCtx2) {
                 EffectSsGRipple_Spawn(globalCtx, &this->actor.world.pos, 300, 800, 5);
                 this->actor.velocity.y = 0.0f;
                 this->actor.gravity = 0.0f;
-                osSyncPrintf(" WAT  Y  = %f\n", this->actor.yDistToWater);
-                osSyncPrintf(" POS  Y  = %f\n", this->actor.world.pos.y);
-                osSyncPrintf(" GROUND Y  = %f\n", this->actor.floorHeight);
+                PRINTF(" WAT  Y  = %f\n", this->actor.yDistToWater);
+                PRINTF(" POS  Y  = %f\n", this->actor.world.pos.y);
+                PRINTF(" GROUND Y  = %f\n", this->actor.floorHeight);
                 break;
             }
 
@@ -705,9 +705,9 @@ void EnKanban_Update(Actor* thisx, GlobalContext* globalCtx2) {
                     bomb = bomb->next;
                 }
             }
-            osSyncPrintf(VT_FGCOL(GREEN));
-            osSyncPrintf("OCARINA_MODE %d\n", globalCtx->msgCtx.unk_E3EE);
-            osSyncPrintf(VT_RST);
+            PRINTF(VT_FGCOL(GREEN));
+            PRINTF("OCARINA_MODE %d\n", globalCtx->msgCtx.unk_E3EE);
+            PRINTF(VT_RST);
             switch (this->ocarinaFlag) {
                 case 0:
                     if (globalCtx->msgCtx.unk_E3EE == 1) {

@@ -58,24 +58,24 @@ void EnWeatherTag_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     switch (this->actor.params & 0xF) {
         case 0:
-            osSyncPrintf("\n\n");
+            PRINTF("\n\n");
             //"☆☆☆☆☆ (;o;) About ☆☆☆☆☆☆"
-            osSyncPrintf(VT_FGCOL(YELLOW) "☆☆☆☆☆ （;o;) くらいよー ☆☆☆☆☆ \n" VT_RST);
+            PRINTF(VT_FGCOL(YELLOW) "☆☆☆☆☆ （;o;) くらいよー ☆☆☆☆☆ \n" VT_RST);
             EnWeatherTag_SetupAction(this, func_80B31658);
             break;
         case 1:
-            osSyncPrintf("\n\n");
+            PRINTF("\n\n");
             //"☆☆☆☆☆ Cloudy (._.) Ah Melancholy ☆☆☆☆☆"
-            osSyncPrintf(VT_FGCOL(YELLOW) "☆☆☆☆☆ くもり (._.) あーあ 憂鬱 ☆☆☆☆☆ \n" VT_RST);
+            PRINTF(VT_FGCOL(YELLOW) "☆☆☆☆☆ くもり (._.) あーあ 憂鬱 ☆☆☆☆☆ \n" VT_RST);
             if (Flags_GetEventChkInf(0x18)) {
                 Actor_Kill(&this->actor);
             }
             EnWeatherTag_SetupAction(this, func_80B31700);
             break;
         case 2:
-            osSyncPrintf("\n\n");
+            PRINTF("\n\n");
             //"☆☆☆☆☆ Yukigafuru You won't come (._.) ☆☆☆☆☆"
-            osSyncPrintf(VT_FGCOL(YELLOW) "☆☆☆☆☆ ゆきがふるー あなたはこないー (._.) ☆☆☆☆☆ \n" VT_RST);
+            PRINTF(VT_FGCOL(YELLOW) "☆☆☆☆☆ ゆきがふるー あなたはこないー (._.) ☆☆☆☆☆ \n" VT_RST);
 
             if (gSaveContext.eventChkInf[4] & 0x400) {
                 Actor_Kill(&this->actor);
@@ -83,9 +83,9 @@ void EnWeatherTag_Init(Actor* thisx, GlobalContext* globalCtx) {
             EnWeatherTag_SetupAction(this, func_80B31850);
             break;
         case 3:
-            osSyncPrintf("\n\n");
+            PRINTF("\n\n");
             //"☆☆☆☆☆ Wow wa wa na wa saa ki ha (^o^) ☆☆☆☆☆"
-            osSyncPrintf(VT_FGCOL(YELLOW) "☆☆☆☆☆ わわわわー なーがーさーきーはー (^o^) ☆☆☆☆☆ \n" VT_RST);
+            PRINTF(VT_FGCOL(YELLOW) "☆☆☆☆☆ わわわわー なーがーさーきーはー (^o^) ☆☆☆☆☆ \n" VT_RST);
 
             if (gSaveContext.eventChkInf[4] & 0x400) {
                 Actor_Kill(&this->actor);
@@ -93,18 +93,18 @@ void EnWeatherTag_Init(Actor* thisx, GlobalContext* globalCtx) {
             EnWeatherTag_SetupAction(this, func_80B31924);
             break;
         case 4:
-            osSyncPrintf("\n\n");
+            PRINTF("\n\n");
             //"☆☆☆☆☆ Cloudy (._.) Ah Melancholy ☆☆☆☆☆"
-            osSyncPrintf(VT_FGCOL(YELLOW) "☆☆☆☆☆ くもり (._.) あーあ 憂鬱 ☆☆☆☆☆ \n" VT_RST);
+            PRINTF(VT_FGCOL(YELLOW) "☆☆☆☆☆ くもり (._.) あーあ 憂鬱 ☆☆☆☆☆ \n" VT_RST);
             if (gSaveContext.eventChkInf[4] & 0x200) {
                 Actor_Kill(&this->actor);
             }
             EnWeatherTag_SetupAction(this, func_80B317A8);
             break;
         case 5:
-            osSyncPrintf("\n\n");
+            PRINTF("\n\n");
             //"☆☆☆☆☆ Cloudy Rain Thunder (;O;) Uo Melancholy ☆☆☆☆☆"
-            osSyncPrintf(VT_FGCOL(YELLOW) "☆☆☆☆☆ くもり雨雷 (;O;) うおお 憂鬱 ☆☆☆☆☆ \n" VT_RST);
+            PRINTF(VT_FGCOL(YELLOW) "☆☆☆☆☆ くもり雨雷 (;O;) うおお 憂鬱 ☆☆☆☆☆ \n" VT_RST);
 
             temp_v0 = gSaveContext.eventChkInf[4];
             if ((((temp_v0 & 0x100) == 0) || ((temp_v0 & 0x200) == 0) || ((temp_v0 & 0x400) == 0)) ||
@@ -114,15 +114,15 @@ void EnWeatherTag_Init(Actor* thisx, GlobalContext* globalCtx) {
             EnWeatherTag_SetupAction(this, func_80B31A10);
             break;
         case 6:
-            osSyncPrintf("\n\n");
+            PRINTF("\n\n");
             //"☆☆☆☆☆ The desert becomes thicker ☆☆☆☆☆"
-            osSyncPrintf(VT_FGCOL(YELLOW) "☆☆☆☆☆ 砂漠が濃くなります ☆☆☆☆☆ \n" VT_RST);
+            PRINTF(VT_FGCOL(YELLOW) "☆☆☆☆☆ 砂漠が濃くなります ☆☆☆☆☆ \n" VT_RST);
             EnWeatherTag_SetupAction(this, func_80B31B24);
             break;
         case 7:
-            osSyncPrintf("\n\n");
+            PRINTF("\n\n");
             //"☆☆☆☆☆ Wow wa wa na wa saa ki ha (^o^) ☆☆☆☆☆"
-            osSyncPrintf(VT_FGCOL(YELLOW) "☆☆☆☆☆ わわわわー なーがーさーきーはー (^o^) ☆☆☆☆☆ \n" VT_RST);
+            PRINTF(VT_FGCOL(YELLOW) "☆☆☆☆☆ わわわわー なーがーさーきーはー (^o^) ☆☆☆☆☆ \n" VT_RST);
 
             EnWeatherTag_SetupAction(this, func_80B31C20);
             break;

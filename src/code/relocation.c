@@ -25,8 +25,8 @@ void Overlay_Relocate(void* allocatedVRamAddress, OverlayRelocationSection* over
     relocatedAddress = 0;
 
     if (gOverlayLogSeverity >= 3) {
-        osSyncPrintf("DoRelocation(%08x, %08x, %08x)\n", allocatedVRamAddress, overlayInfo, vRamAddress);
-        osSyncPrintf("text=%08x, data=%08x, rodata=%08x, bss=%08x\n", overlayInfo->textSize, overlayInfo->dataSize,
+        PRINTF("DoRelocation(%08x, %08x, %08x)\n", allocatedVRamAddress, overlayInfo, vRamAddress);
+        PRINTF("text=%08x, data=%08x, rodata=%08x, bss=%08x\n", overlayInfo->textSize, overlayInfo->dataSize,
                      overlayInfo->rodataSize, overlayInfo->bssSize);
     }
 
@@ -103,8 +103,8 @@ void Overlay_Relocate(void* allocatedVRamAddress, OverlayRelocationSection* over
                 dbg += 0xA;
             case 0x6000000:
                 if (gOverlayLogSeverity >= 3) {
-                    osSyncPrintf("%02d %08x %08x %08x ", dbg, relocDataP, relocatedValue, relocatedAddress);
-                    osSyncPrintf(" %08x %08x %08x %08x\n", ((u32)relocDataP + (u32)vRamAddress) - allocu32, relocData,
+                    PRINTF("%02d %08x %08x %08x ", dbg, relocDataP, relocatedValue, relocatedAddress);
+                    PRINTF(" %08x %08x %08x %08x\n", ((u32)relocDataP + (u32)vRamAddress) - allocu32, relocData,
                                  unrelocatedAddress, relocOffset);
                 }
         }

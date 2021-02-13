@@ -56,21 +56,21 @@ void BgMoriRakkatenjo_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     DynaPolyActor_Init(&this->dyna, DPM_PLAYER);
     // Forest Temple obj. Falling Ceiling
-    osSyncPrintf("森の神殿 obj. 落下天井 (home posY %f)\n", this->dyna.actor.home.pos.y);
+    PRINTF("森の神殿 obj. 落下天井 (home posY %f)\n", this->dyna.actor.home.pos.y);
     if ((fabsf(1991.0f - this->dyna.actor.home.pos.x) > 0.001f) ||
         (fabsf(683.0f - this->dyna.actor.home.pos.y) > 0.001f) ||
         (fabsf(-2520.0f - this->dyna.actor.home.pos.z) > 0.001f)) {
         // The set position has been changed. Let's fix the program.
-        osSyncPrintf("Warning : セット位置が変更されています。プログラムを修正しましょう。\n");
+        PRINTF("Warning : セット位置が変更されています。プログラムを修正しましょう。\n");
     }
     if (this->dyna.actor.home.rot.y != 0x8000) {
         // The set Angle has changed. Let's fix the program.
-        osSyncPrintf("Warning : セット Angle が変更されています。プログラムを修正しましょう。\n");
+        PRINTF("Warning : セット Angle が変更されています。プログラムを修正しましょう。\n");
     }
     this->moriTexObjIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_MORI_TEX);
     if (this->moriTexObjIndex < 0) {
         // Forest Temple obj Falling Ceiling Bank Danger!
-        osSyncPrintf("Error : 森の神殿 obj 落下天井 バンク危険！(%s %d)\n", "../z_bg_mori_rakkatenjo.c", 205);
+        PRINTF("Error : 森の神殿 obj 落下天井 バンク危険！(%s %d)\n", "../z_bg_mori_rakkatenjo.c", 205);
         Actor_Kill(&this->dyna.actor);
         return;
     }
@@ -209,13 +209,13 @@ void BgMoriRakkatenjo_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
     if (BgMoriRakkatenjo_IsLinkUnder(this, globalCtx)) {
         if (sCamSetting == 0) {
-            osSyncPrintf("camera changed (mori rakka tenjyo) ... \n");
+            PRINTF("camera changed (mori rakka tenjyo) ... \n");
             sCamSetting = globalCtx->cameraPtrs[0]->setting;
             Camera_SetCameraData(globalCtx->cameraPtrs[0], 1, &this->dyna.actor, NULL, 0, 0, 0);
             Camera_ChangeSetting(globalCtx->cameraPtrs[0], CAM_SET_MORI1);
         }
     } else if (sCamSetting != 0) {
-        osSyncPrintf("camera changed (previous) ... \n");
+        PRINTF("camera changed (previous) ... \n");
         Camera_ChangeSetting(globalCtx->cameraPtrs[0], CAM_SET_DUNGEON1);
         sCamSetting = 0;
     }

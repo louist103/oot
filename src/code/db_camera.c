@@ -109,17 +109,17 @@ void func_800B4920(char* varName, s16 pointCnt, CutsceneCameraPoint* csPoints) {
     s32 i;
     CutsceneCameraPoint* csPoint;
 
-    osSyncPrintf("@@@static SplinedatZ  %s[] = {\n", varName);
+    PRINTF("@@@static SplinedatZ  %s[] = {\n", varName);
     for (i = 0, csPoint = csPoints; i < pointCnt; i++, csPoint++) {
-        osSyncPrintf("@@@    /* key frame %2d */ {\n", i);
-        osSyncPrintf("@@@    /*     code     */ %d,\n", csPoint->continueFlag);
-        osSyncPrintf("@@@    /*     z        */ %d,\n", csPoint->cameraRoll);
-        osSyncPrintf("@@@    /*     T        */ %d,\n", csPoint->nextPointFrame);
-        osSyncPrintf("@@@    /*     zoom     */ %f,\n", csPoint->viewAngle);
-        osSyncPrintf("@@@    /*     pos      */ { %d, %d, %d }\n", csPoint->pos.x, csPoint->pos.y, csPoint->pos.z);
-        osSyncPrintf("@@@    },\n");
+        PRINTF("@@@    /* key frame %2d */ {\n", i);
+        PRINTF("@@@    /*     code     */ %d,\n", csPoint->continueFlag);
+        PRINTF("@@@    /*     z        */ %d,\n", csPoint->cameraRoll);
+        PRINTF("@@@    /*     T        */ %d,\n", csPoint->nextPointFrame);
+        PRINTF("@@@    /*     zoom     */ %f,\n", csPoint->viewAngle);
+        PRINTF("@@@    /*     pos      */ { %d, %d, %d }\n", csPoint->pos.x, csPoint->pos.y, csPoint->pos.z);
+        PRINTF("@@@    },\n");
     }
-    osSyncPrintf("@@@};\n@@@\n");
+    PRINTF("@@@};\n@@@\n");
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/db_camera/func_800B4A68.s")
@@ -236,20 +236,20 @@ void func_800B9060(s32 arg0) {
     s32 i;
 
     Audio_PlaySoundGeneral(NA_SE_SY_GET_RUPY, &D_801333D4, 4, &D_801333E0, &D_801333E0, &D_801333E8);
-    osSyncPrintf("@@@\n@@@\n@@@/* ****** spline point data ** start here ***** */\n@@@\n");
+    PRINTF("@@@\n@@@\n@@@/* ****** spline point data ** start here ***** */\n@@@\n");
     for (i = 0, csSlot = sDbgEditorSlots; i < 0xF; i++, csSlot++) {
         if (csSlot->csPointsCnt != 0) {
             if (i != 0) {
-                osSyncPrintf("@@@\n@@@/* ** %d ** */\n@@@\n", i);
+                PRINTF("@@@\n@@@/* ** %d ** */\n@@@\n", i);
             }
             func_800B4920("Lookat", csSlot->csPointsCnt, csSlot->atPoints);
             func_800B4920("Position", csSlot->csPointsCnt, csSlot->eyePoints);
-            osSyncPrintf("@@@static short  nPoints = %d;\n@@@\n", csSlot->csPointsCnt);
-            osSyncPrintf("@@@static short  nFrames = %d;\n@@@\n", csSlot->frameCnt);
-            osSyncPrintf("@@@static short  Mode = %d;\n@@@\n", csSlot->mode);
+            PRINTF("@@@static short  nPoints = %d;\n@@@\n", csSlot->csPointsCnt);
+            PRINTF("@@@static short  nFrames = %d;\n@@@\n", csSlot->frameCnt);
+            PRINTF("@@@static short  Mode = %d;\n@@@\n", csSlot->mode);
         }
     }
-    osSyncPrintf("@@@\n@@@\n@@@/* ****** spline point data ** finish! ***** */\n@@@\n");
+    PRINTF("@@@\n@@@\n@@@/* ****** spline point data ** finish! ***** */\n@@@\n");
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/db_camera/func_800B91B0.s")

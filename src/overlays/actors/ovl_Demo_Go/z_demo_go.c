@@ -307,7 +307,7 @@ void DemoGo_Update(Actor* thisx, GlobalContext* globalCtx) {
     DemoGo* this = THIS;
 
     if (this->action < 0 || this->action >= 7 || D_8097D44C[this->action] == 0) {
-        osSyncPrintf(VT_FGCOL(RED) "メインモードがおかしい!!!!!!!!!!!!!!!!!!!!!!!!!\n" VT_RST);
+        PRINTF(VT_FGCOL(RED) "メインモードがおかしい!!!!!!!!!!!!!!!!!!!!!!!!!\n" VT_RST);
         return;
     }
     D_8097D44C[this->action](this, globalCtx);
@@ -349,7 +349,7 @@ void DemoGo_Draw(Actor* thisx, GlobalContext* globalCtx) {
     DemoGo* this = THIS;
 
     if (this->drawConfig < 0 || this->drawConfig >= 2 || D_8097D468[this->drawConfig] == NULL) {
-        osSyncPrintf(VT_FGCOL(RED) "描画モードがおかしい!!!!!!!!!!!!!!!!!!!!!!!!!\n" VT_RST);
+        PRINTF(VT_FGCOL(RED) "描画モードがおかしい!!!!!!!!!!!!!!!!!!!!!!!!!\n" VT_RST);
         return;
     }
     D_8097D468[this->drawConfig](this, globalCtx);

@@ -144,7 +144,7 @@ void EnTa_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     switch (this->actor.params) {
         case 1:
-            osSyncPrintf(VT_FGCOL(CYAN) " 追放タロン \n" VT_RST);
+            PRINTF(VT_FGCOL(CYAN) " 追放タロン \n" VT_RST);
             if (gSaveContext.eventChkInf[6] & 0x800) {
                 Actor_Kill(&this->actor);
             } else if (LINK_IS_CHILD) {
@@ -163,14 +163,14 @@ void EnTa_Init(Actor* thisx, GlobalContext* globalCtx) {
             }
             break;
         case 2:
-            osSyncPrintf(VT_FGCOL(CYAN) " 出戻りタロン \n" VT_RST);
+            PRINTF(VT_FGCOL(CYAN) " 出戻りタロン \n" VT_RST);
             if (!(gSaveContext.eventChkInf[6] & 0x800)) {
                 Actor_Kill(&this->actor);
             } else if (LINK_IS_CHILD) {
                 Actor_Kill(&this->actor);
             } else if (globalCtx2->sceneNum == SCENE_MALON_STABLE && gSaveContext.nightFlag) {
                 Actor_Kill(&this->actor);
-                osSyncPrintf(VT_FGCOL(CYAN) " 夜はいない \n" VT_RST);
+                PRINTF(VT_FGCOL(CYAN) " 夜はいない \n" VT_RST);
             } else {
                 func_80B13AA0(this, func_80B14D98, func_80B167C0);
                 this->unk_2B4 = 0;
@@ -179,7 +179,7 @@ void EnTa_Init(Actor* thisx, GlobalContext* globalCtx) {
             }
             break;
         default:
-            osSyncPrintf(VT_FGCOL(CYAN) " その他のタロン \n" VT_RST);
+            PRINTF(VT_FGCOL(CYAN) " その他のタロン \n" VT_RST);
             if (globalCtx2->sceneNum == SCENE_SPOT15) {
                 if (gSaveContext.eventChkInf[1] & 0x10) {
                     Actor_Kill(&this->actor);
@@ -196,7 +196,7 @@ void EnTa_Init(Actor* thisx, GlobalContext* globalCtx) {
                     this->actor.shape.shadowScale = 54.0f;
                 }
             } else if (globalCtx2->sceneNum == SCENE_SOUKO) {
-                osSyncPrintf(VT_FGCOL(CYAN) " ロンロン牧場の倉庫 の タロン\n" VT_RST);
+                PRINTF(VT_FGCOL(CYAN) " ロンロン牧場の倉庫 の タロン\n" VT_RST);
                 if (!(gSaveContext.eventChkInf[1] & 0x10)) {
                     Actor_Kill(&this->actor);
                 } else if (LINK_IS_ADULT) {

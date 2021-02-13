@@ -324,7 +324,7 @@ void EnRr_SetupReleasePlayer(EnRr* this, GlobalContext* globalCtx) {
             func_8010B680(globalCtx, 0x3061, NULL);
             break;
     }
-    osSyncPrintf(VT_FGCOL(YELLOW) "%s[%d] : Rr_Catch_Cancel" VT_RST "\n", "../z_en_rr.c", 650);
+    PRINTF(VT_FGCOL(YELLOW) "%s[%d] : Rr_Catch_Cancel" VT_RST "\n", "../z_en_rr.c", 650);
     func_8002F6D4(globalCtx, &this->actor, 4.0f, this->actor.shape.rot.y, 12.0f, 8);
     if (this->actor.colorFilterTimer == 0) {
         this->actionFunc = EnRr_Approach;
@@ -419,7 +419,7 @@ void EnRr_CollisionCheck(EnRr* this, GlobalContext* globalCtx) {
     if (this->collider2.base.acFlags & AC_HIT) {
         this->collider2.base.acFlags &= ~AC_HIT;
         // Kakin (not sure what this means)
-        osSyncPrintf(VT_FGCOL(GREEN) "カキン(%d)！！" VT_RST "\n", this->frameCount);
+        PRINTF(VT_FGCOL(GREEN) "カキン(%d)！！" VT_RST "\n", this->frameCount);
         hitPos.x = this->collider2.info.bumper.hitPos.x;
         hitPos.y = this->collider2.info.bumper.hitPos.y;
         hitPos.z = this->collider2.info.bumper.hitPos.z;
@@ -446,7 +446,7 @@ void EnRr_CollisionCheck(EnRr* this, GlobalContext* globalCtx) {
                     dropType++; // magic jar
                 case RR_DMG_NORMAL:
                     // ouch
-                    osSyncPrintf(VT_FGCOL(RED) "いてっ( %d : LIFE %d : DAMAGE %d : %x )！！" VT_RST "\n",
+                    PRINTF(VT_FGCOL(RED) "いてっ( %d : LIFE %d : DAMAGE %d : %x )！！" VT_RST "\n",
                                  this->frameCount, this->actor.colChkInfo.health, this->actor.colChkInfo.damage,
                                  this->actor.colChkInfo.damageEffect);
                     this->stopScroll = false;
@@ -503,7 +503,7 @@ void EnRr_CollisionCheck(EnRr* this, GlobalContext* globalCtx) {
             this->collider1.base.ocFlags1 &= ~OC1_HIT;
             this->collider2.base.ocFlags1 &= ~OC1_HIT;
             // catch
-            osSyncPrintf(VT_FGCOL(GREEN) "キャッチ(%d)！！" VT_RST "\n", this->frameCount);
+            PRINTF(VT_FGCOL(GREEN) "キャッチ(%d)！！" VT_RST "\n", this->frameCount);
             if (globalCtx->grabPlayer(globalCtx, player)) {
                 player->actor.parent = &this->actor;
                 this->stopScroll = false;
@@ -685,7 +685,7 @@ void EnRr_Death(EnRr* this, GlobalContext* globalCtx) {
                 break;
         }
         // dropped
-        osSyncPrintf(VT_FGCOL(GREEN) "「%s」が出た！！" VT_RST "\n", sDropNames[this->dropType]);
+        PRINTF(VT_FGCOL(GREEN) "「%s」が出た！！" VT_RST "\n", sDropNames[this->dropType]);
         switch (this->dropType) {
             case RR_DROP_MAGIC:
                 Item_DropCollectible(globalCtx, &dropPos, ITEM00_MAGIC_SMALL);

@@ -72,15 +72,15 @@ void EnGm_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_ProcessInitChain(&this->actor, sInitChain);
 
     // Medi Goron"
-    osSyncPrintf(VT_FGCOL(GREEN) "%s[%d] : 中ゴロン[%d]" VT_RST "\n", "../z_en_gm.c", 133, this->actor.params);
+    PRINTF(VT_FGCOL(GREEN) "%s[%d] : 中ゴロン[%d]" VT_RST "\n", "../z_en_gm.c", 133, this->actor.params);
 
     this->objGmBankIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_GM);
 
     if (this->objGmBankIndex < 0) {
-        osSyncPrintf(VT_COL(RED, WHITE));
+        PRINTF(VT_COL(RED, WHITE));
         // "There is no model bank! !! (Medi Goron)"
-        osSyncPrintf("モデル バンクが無いよ！！（中ゴロン）\n");
-        osSyncPrintf(VT_RST);
+        PRINTF("モデル バンクが無いよ！！（中ゴロン）\n");
+        PRINTF(VT_RST);
         __assert("0", "../z_en_gm.c", 145);
     }
 

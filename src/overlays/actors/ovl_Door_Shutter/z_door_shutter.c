@@ -609,13 +609,13 @@ void func_809976B8(DoorShutter* this, GlobalContext* globalCtx) {
 void func_80997744(DoorShutter* this, GlobalContext* globalCtx) {
     f32 phi_f0;
 
-    osSyncPrintf("FHG SAKU START !!\n");
+    PRINTF("FHG SAKU START !!\n");
     if (this->unk_164 != 0) {
         this->unk_164--;
     }
     phi_f0 = (this->unk_164 % 2 != 0) ? -3.0f : 0.0f;
     Math_SmoothStepToF(&this->dyna.actor.world.pos.y, -34.0f + phi_f0, 1.0f, 20.0f, 0.0f);
-    osSyncPrintf("FHG SAKU END !!\n");
+    PRINTF("FHG SAKU END !!\n");
 }
 
 void DoorShutter_Update(Actor* thisx, GlobalContext* globalCtx) {

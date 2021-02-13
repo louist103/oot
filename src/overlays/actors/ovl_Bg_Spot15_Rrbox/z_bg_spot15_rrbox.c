@@ -69,7 +69,7 @@ void func_808B3960(BgSpot15Rrbox* this, GlobalContext* globalCtx, CollisionHeade
     this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
 
     if (this->dyna.bgId == BG_ACTOR_MAX) {
-        osSyncPrintf("Warning : move BG 登録失敗(%s %d)(name %d)(arg_data 0x%04x)\n", "../z_bg_spot15_rrbox.c", 171,
+        PRINTF("Warning : move BG 登録失敗(%s %d)(name %d)(arg_data 0x%04x)\n", "../z_bg_spot15_rrbox.c", 171,
                      this->dyna.actor.id, this->dyna.actor.params);
     }
 }
@@ -133,7 +133,7 @@ void BgSpot15Rrbox_Init(Actor* thisx, GlobalContext* globalCtx) {
     } else {
         func_808B4084(this, globalCtx);
     }
-    osSyncPrintf("(spot15 ロンロン木箱)(arg_data 0x%04x)\n", this->dyna.actor.params);
+    PRINTF("(spot15 ロンロン木箱)(arg_data 0x%04x)\n", this->dyna.actor.params);
 }
 
 void BgSpot15Rrbox_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -324,7 +324,7 @@ void func_808B43D0(BgSpot15Rrbox* this, GlobalContext* globalCtx) {
     Actor_MoveForward(actor);
 
     if (actor->world.pos.y <= -31990.0f) {
-        osSyncPrintf("Warning : ロンロン木箱落ちすぎた(%s %d)(arg_data 0x%04x)\n", "../z_bg_spot15_rrbox.c", 599,
+        PRINTF("Warning : ロンロン木箱落ちすぎた(%s %d)(arg_data 0x%04x)\n", "../z_bg_spot15_rrbox.c", 599,
                      actor->params);
 
         Actor_Kill(actor);

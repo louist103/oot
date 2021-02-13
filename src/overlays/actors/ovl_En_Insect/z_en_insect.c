@@ -573,10 +573,10 @@ void func_80A7D460(EnInsect* this, GlobalContext* globalCtx) {
         sp40 = Math3D_Vec3fDistSq(&this->actor.world.pos, &this->soilActor->actor.world.pos);
     } else {
         if (this->unk_314 & 0x10) {
-            osSyncPrintf(VT_COL(YELLOW, BLACK));
+            PRINTF(VT_COL(YELLOW, BLACK));
             // warning: target Actor is NULL
-            osSyncPrintf("warning:目標 Actor が NULL (%s %d)\n", "../z_en_mushi.c", 1046);
-            osSyncPrintf(VT_RST);
+            PRINTF("warning:目標 Actor が NULL (%s %d)\n", "../z_en_mushi.c", 1046);
+            PRINTF(VT_RST);
         }
         sp40 = 40.0f;
     }
@@ -703,10 +703,10 @@ void func_80A7D460(EnInsect* this, GlobalContext* globalCtx) {
         func_80A7C3A0(this);
     } else if ((sp3A == 2 || sp3A == 3) && (this->unk_314 & 1) && this->unk_31C <= 0 && this->unk_31A <= 0 &&
                this->actor.floorHeight < -31990.0f) {
-        osSyncPrintf(VT_COL(YELLOW, BLACK));
+        PRINTF(VT_COL(YELLOW, BLACK));
         // BG missing? To do Actor_delete
-        osSyncPrintf("BG 抜け？ Actor_delete します(%s %d)\n", "../z_en_mushi.c", 1197);
-        osSyncPrintf(VT_RST);
+        PRINTF("BG 抜け？ Actor_delete します(%s %d)\n", "../z_en_mushi.c", 1197);
+        PRINTF(VT_RST);
         Actor_Kill(&this->actor);
     }
 }

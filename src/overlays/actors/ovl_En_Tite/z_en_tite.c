@@ -225,10 +225,10 @@ void EnTite_Destroy(Actor* thisx, GlobalContext* globalCtx) {
         if (spawner->curNumSpawn > 0) {
             spawner->curNumSpawn--;
         }
-        osSyncPrintf("\n\n");
+        PRINTF("\n\n");
         // "Number of simultaneous occourances"
-        osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ 同時発生数 ☆☆☆☆☆%d\n" VT_RST, spawner->curNumSpawn);
-        osSyncPrintf("\n\n");
+        PRINTF(VT_FGCOL(GREEN) "☆☆☆☆☆ 同時発生数 ☆☆☆☆☆%d\n" VT_RST, spawner->curNumSpawn);
+        PRINTF("\n\n");
     }
     Collider_DestroyJntSph(globalCtx, &this->collider);
 }

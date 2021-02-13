@@ -59,7 +59,7 @@ DMA_TABLE_ENTRY ovl_Bg_Ddan_Jd
 DMA_TABLE_ENTRY ovl_Bg_Ddan_Kd
 DMA_TABLE_ENTRY ovl_Bg_Dodoago
 DMA_TABLE_ENTRY ovl_Bg_Dy_Yoseizo
-DMA_TABLE_ENTRY ovl_Bg_Ganon_Otyuka
+
 DMA_TABLE_ENTRY ovl_Bg_Gate_Shutter
 DMA_TABLE_ENTRY ovl_Bg_Gjyo_Bridge
 
@@ -172,9 +172,7 @@ DMA_TABLE_ENTRY ovl_Bg_Zg
 DMA_TABLE_ENTRY ovl_Boss_Dodongo
 DMA_TABLE_ENTRY ovl_Boss_Fd
 DMA_TABLE_ENTRY ovl_Boss_Fd2
-DMA_TABLE_ENTRY ovl_Boss_Ganon
-DMA_TABLE_ENTRY ovl_Boss_Ganon2
-DMA_TABLE_ENTRY ovl_Boss_Ganondrof
+
 DMA_TABLE_ENTRY ovl_Boss_Goma
 DMA_TABLE_ENTRY ovl_Boss_Mo
 DMA_TABLE_ENTRY ovl_Boss_Sst
@@ -311,8 +309,8 @@ DMA_TABLE_ENTRY ovl_En_Fu
 DMA_TABLE_ENTRY ovl_En_Fw
 DMA_TABLE_ENTRY ovl_En_Fz
 DMA_TABLE_ENTRY ovl_En_G_Switch
-DMA_TABLE_ENTRY ovl_En_Ganon_Mant
-DMA_TABLE_ENTRY ovl_En_Ganon_Organ
+
+
 DMA_TABLE_ENTRY ovl_En_Gb
 DMA_TABLE_ENTRY ovl_En_Ge1
 DMA_TABLE_ENTRY ovl_En_Ge2
@@ -1103,8 +1101,7 @@ DMA_TABLE_ENTRY kakusiana_room_10
 DMA_TABLE_ENTRY kakusiana_room_11
 DMA_TABLE_ENTRY kakusiana_room_12
 DMA_TABLE_ENTRY kakusiana_room_13
-DMA_TABLE_ENTRY entra_scene
-DMA_TABLE_ENTRY entra_room_0
+
 DMA_TABLE_ENTRY moribossroom_scene
 DMA_TABLE_ENTRY moribossroom_room_0
 DMA_TABLE_ENTRY moribossroom_room_1
@@ -1114,8 +1111,6 @@ DMA_TABLE_ENTRY shop1_scene
 DMA_TABLE_ENTRY shop1_room_0
 DMA_TABLE_ENTRY hairal_niwa_scene
 DMA_TABLE_ENTRY hairal_niwa_room_0
-DMA_TABLE_ENTRY ganon_tou_scene
-DMA_TABLE_ENTRY ganon_tou_room_0
 
 DMA_TABLE_ENTRY market_alley_scene
 DMA_TABLE_ENTRY market_alley_room_0
@@ -1123,10 +1118,7 @@ DMA_TABLE_ENTRY spot20_scene
 DMA_TABLE_ENTRY spot20_room_0
 DMA_TABLE_ENTRY market_ruins_scene
 DMA_TABLE_ENTRY market_ruins_room_0
-DMA_TABLE_ENTRY entra_n_scene
-DMA_TABLE_ENTRY entra_n_room_0
-DMA_TABLE_ENTRY enrui_scene
-DMA_TABLE_ENTRY enrui_room_0
+
 DMA_TABLE_ENTRY market_alley_n_scene
 DMA_TABLE_ENTRY market_alley_n_room_0
 DMA_TABLE_ENTRY hiral_demo_scene
@@ -1183,19 +1175,7 @@ DMA_TABLE_ENTRY HAKAdan_bs_room_1
 DMA_TABLE_ENTRY MIZUsin_bs_scene
 DMA_TABLE_ENTRY MIZUsin_bs_room_0
 DMA_TABLE_ENTRY MIZUsin_bs_room_1
-DMA_TABLE_ENTRY ganon_scene
-DMA_TABLE_ENTRY ganon_room_0
-DMA_TABLE_ENTRY ganon_room_1
-DMA_TABLE_ENTRY ganon_room_2
-DMA_TABLE_ENTRY ganon_room_3
-DMA_TABLE_ENTRY ganon_room_4
-DMA_TABLE_ENTRY ganon_room_5
-DMA_TABLE_ENTRY ganon_room_6
-DMA_TABLE_ENTRY ganon_room_7
-DMA_TABLE_ENTRY ganon_room_8
-DMA_TABLE_ENTRY ganon_room_9
-DMA_TABLE_ENTRY ganon_boss_scene
-DMA_TABLE_ENTRY ganon_boss_room_0
+
 DMA_TABLE_ENTRY jyasinboss_scene
 DMA_TABLE_ENTRY jyasinboss_room_0
 DMA_TABLE_ENTRY jyasinboss_room_1
@@ -1205,8 +1185,7 @@ DMA_TABLE_ENTRY kokiri_home4_scene
 DMA_TABLE_ENTRY kokiri_home4_room_0
 DMA_TABLE_ENTRY kokiri_home5_scene
 DMA_TABLE_ENTRY kokiri_home5_room_0
-DMA_TABLE_ENTRY ganon_final_scene
-DMA_TABLE_ENTRY ganon_final_room_0
+
 DMA_TABLE_ENTRY kakariko3_scene
 DMA_TABLE_ENTRY kakariko3_room_0
 DMA_TABLE_ENTRY hairal_niwa2_scene
@@ -1229,13 +1208,7 @@ DMA_TABLE_ENTRY shrine_r_scene
 DMA_TABLE_ENTRY shrine_r_room_0
 DMA_TABLE_ENTRY hakaana2_scene
 DMA_TABLE_ENTRY hakaana2_room_0
-DMA_TABLE_ENTRY gerudoway_scene
-DMA_TABLE_ENTRY gerudoway_room_0
-DMA_TABLE_ENTRY gerudoway_room_1
-DMA_TABLE_ENTRY gerudoway_room_2
-DMA_TABLE_ENTRY gerudoway_room_3
-DMA_TABLE_ENTRY gerudoway_room_4
-DMA_TABLE_ENTRY gerudoway_room_5
+
 DMA_TABLE_ENTRY hairal_niwa_n_scene
 DMA_TABLE_ENTRY hairal_niwa_n_room_0
 DMA_TABLE_ENTRY bowling_scene
@@ -1254,30 +1227,13 @@ DMA_TABLE_ENTRY miharigoya_scene
 DMA_TABLE_ENTRY miharigoya_room_0
 DMA_TABLE_ENTRY mahouya_scene
 DMA_TABLE_ENTRY mahouya_room_0
-DMA_TABLE_ENTRY takaraya_scene
-DMA_TABLE_ENTRY takaraya_room_0
-DMA_TABLE_ENTRY takaraya_room_1
-DMA_TABLE_ENTRY takaraya_room_2
-DMA_TABLE_ENTRY takaraya_room_3
-DMA_TABLE_ENTRY takaraya_room_4
-DMA_TABLE_ENTRY takaraya_room_5
-DMA_TABLE_ENTRY takaraya_room_6
-DMA_TABLE_ENTRY ganon_sonogo_scene
-DMA_TABLE_ENTRY ganon_sonogo_room_0
-DMA_TABLE_ENTRY ganon_sonogo_room_1
-DMA_TABLE_ENTRY ganon_sonogo_room_2
-DMA_TABLE_ENTRY ganon_sonogo_room_3
-DMA_TABLE_ENTRY ganon_sonogo_room_4
-DMA_TABLE_ENTRY ganon_demo_scene
-DMA_TABLE_ENTRY ganon_demo_room_0
+
 
 DMA_TABLE_ENTRY face_shop_scene
 DMA_TABLE_ENTRY face_shop_room_0
 DMA_TABLE_ENTRY kinsuta_scene
 DMA_TABLE_ENTRY kinsuta_room_0
-DMA_TABLE_ENTRY ganontikasonogo_scene
-DMA_TABLE_ENTRY ganontikasonogo_room_0
-DMA_TABLE_ENTRY ganontikasonogo_room_1
+
 
 DMA_TABLE_ENTRY bump_texture_static
 DMA_TABLE_ENTRY anime_model_1_static

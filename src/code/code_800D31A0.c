@@ -6,7 +6,7 @@ extern PadMgr gPadMgr;
 u32 D_8012DBC0 = false;
 
 void func_800D31A0() {
-    osSyncPrintf(VT_FGCOL(RED) "\n**** Freeze!! ****\n" VT_RST);
+    PRINTF(VT_FGCOL(RED) "\n**** Freeze!! ****\n" VT_RST);
     while (true) {
         Sleep_Msec(1000);
     }

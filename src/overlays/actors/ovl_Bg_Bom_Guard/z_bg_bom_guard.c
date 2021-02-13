@@ -45,8 +45,8 @@ void BgBomGuard_Init(Actor* thisx, GlobalContext* globalCtx) {
     CollisionHeader_GetVirtual(&D_06001C40, &colHeader);
     this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, thisx, colHeader);
 
-    osSyncPrintf("\n\n");
-    osSyncPrintf(VT_FGCOL(GREEN) " ☆☆☆☆☆ 透明ガード出現 ☆☆☆☆☆ \n" VT_RST);
+    PRINTF("\n\n");
+    PRINTF(VT_FGCOL(GREEN) " ☆☆☆☆☆ 透明ガード出現 ☆☆☆☆☆ \n" VT_RST);
 
     thisx->scale.x = 1.0f;
     thisx->scale.y = 1.0f;

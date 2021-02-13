@@ -279,13 +279,13 @@ s32 func_80A3A758(EnGirlA* this) {
 void func_80A3A8D0(EnGirlA* this, GlobalContext* globalCtx) {
     s16 params = this->actor.params;
 
-    osSyncPrintf("%s(%2d)初期設定\n", D_80A3C590[params], params);
+    PRINTF("%s(%2d)初期設定\n", D_80A3C590[params], params);
 
     if ((params >= 50) && (params < 0)) {
         Actor_Kill(&this->actor);
-        osSyncPrintf(VT_COL(RED, WHITE));
-        osSyncPrintf("引数がおかしいよ(arg_data=%d)！！\n", this->actor.params);
-        osSyncPrintf(VT_RST);
+        PRINTF(VT_COL(RED, WHITE));
+        PRINTF("引数がおかしいよ(arg_data=%d)！！\n", this->actor.params);
+        PRINTF(VT_RST);
         __assert("0", "../z_en_girlA.c", 1421);
         return;
     }
@@ -294,9 +294,9 @@ void func_80A3A8D0(EnGirlA* this, GlobalContext* globalCtx) {
 
     if (this->unk_194 < 0) {
         Actor_Kill(&this->actor);
-        osSyncPrintf(VT_COL(RED, WHITE));
-        osSyncPrintf("バンクが無いよ！！(%s)\n", D_80A3C590[params]);
-        osSyncPrintf(VT_RST);
+        PRINTF(VT_COL(RED, WHITE));
+        PRINTF("バンクが無いよ！！(%s)\n", D_80A3C590[params]);
+        PRINTF(VT_RST);
         __assert("0", "../z_en_girlA.c", 1434);
         return;
     }
@@ -310,7 +310,7 @@ void EnGirlA_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     func_80A3A758(this);
     func_80A3A8D0(this, globalCtx);
-    osSyncPrintf("%s(%2d)初期設定\n", D_80A3C590[this->actor.params], this->actor.params);
+    PRINTF("%s(%2d)初期設定\n", D_80A3C590[this->actor.params], this->actor.params);
 }
 
 void EnGirlA_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -960,7 +960,7 @@ void func_80A3BFE4(EnGirlA* this, GlobalContext* globalCtx) {
         this->unk_1CA = tmp->unk_0A;
         this->unk_1D0 = tmp->unk_04;
         this->unk_1CC = tmp->unk_02;
-        osSyncPrintf("%s(%2d)\n", D_80A3C590[params], params);
+        PRINTF("%s(%2d)\n", D_80A3C590[params], params);
         this->actor.flags &= ~1;
         Actor_SetScale(&this->actor, 0.25f);
         this->actor.shape.yOffset = 24.0f;

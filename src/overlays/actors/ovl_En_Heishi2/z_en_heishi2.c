@@ -104,9 +104,9 @@ void EnHeishi2_Init(Actor* thisx, GlobalContext* globalCtx) {
             this->actionFunc = func_80A531CC;
 
         } else {
-            osSyncPrintf("\n\n");
+            PRINTF("\n\n");
             // "No, I'm completely disappointed" (message for when shooting guard window in courtyard)
-            osSyncPrintf(VT_FGCOL(PURPLE) " ☆☆☆☆☆ いやー ついうっかり ☆☆☆☆☆ \n" VT_RST);
+            PRINTF(VT_FGCOL(PURPLE) " ☆☆☆☆☆ いやー ついうっかり ☆☆☆☆☆ \n" VT_RST);
 
             Actor_SetScale(&this->actor, 0.02f);
 
@@ -144,9 +144,9 @@ void EnHeishi2_Init(Actor* thisx, GlobalContext* globalCtx) {
                 this->actor.gravity = -1.0f;
                 break;
             case 6:
-                osSyncPrintf("\n\n");
+                PRINTF("\n\n");
                 // "Peep hole soldier!"
-                osSyncPrintf(VT_FGCOL(GREEN) " ☆☆☆☆☆ 覗き穴奥兵士ふぃ〜 ☆☆☆☆☆ \n" VT_RST);
+                PRINTF(VT_FGCOL(GREEN) " ☆☆☆☆☆ 覗き穴奥兵士ふぃ〜 ☆☆☆☆☆ \n" VT_RST);
                 Collider_DestroyCylinder(globalCtx, collider);
                 this->actor.flags &= -0xA;
                 this->actionFunc = func_80A531D8;
@@ -154,13 +154,13 @@ void EnHeishi2_Init(Actor* thisx, GlobalContext* globalCtx) {
         }
 
         this->unk_2F0 = (this->actor.params >> 8) & 0xFF;
-        osSyncPrintf("\n\n");
+        PRINTF("\n\n");
         // "Soldier Set 2 Completed!"
-        osSyncPrintf(VT_FGCOL(GREEN) " ☆☆☆☆☆ 兵士２セット完了！ ☆☆☆☆☆ %d\n" VT_RST, this->actor.params);
+        PRINTF(VT_FGCOL(GREEN) " ☆☆☆☆☆ 兵士２セット完了！ ☆☆☆☆☆ %d\n" VT_RST, this->actor.params);
         // "Identification Completed!"
-        osSyncPrintf(VT_FGCOL(YELLOW) " ☆☆☆☆☆ 識別完了！         ☆☆☆☆☆ %d\n" VT_RST, this->initParams);
+        PRINTF(VT_FGCOL(YELLOW) " ☆☆☆☆☆ 識別完了！         ☆☆☆☆☆ %d\n" VT_RST, this->initParams);
         // "Message completed!"
-        osSyncPrintf(VT_FGCOL(PURPLE) " ☆☆☆☆☆ メッセージ完了！   ☆☆☆☆☆ %x\n\n" VT_RST, (this->actor.params >> 8) & 0xF);
+        PRINTF(VT_FGCOL(PURPLE) " ☆☆☆☆☆ メッセージ完了！   ☆☆☆☆☆ %x\n\n" VT_RST, (this->actor.params >> 8) & 0xF);
     }
 }
 
@@ -196,32 +196,32 @@ void func_80A53278(EnHeishi2* this, GlobalContext* globalCtx) {
     } else if ((gSaveContext.eventChkInf[0] & 0x200) && (gSaveContext.eventChkInf[2] & 0x20) &&
                (gSaveContext.eventChkInf[3] & 0x80)) {
         // "Get all spiritual stones!"
-        osSyncPrintf(VT_FGCOL(GREEN) " ☆☆☆☆☆ 全部の精霊石GET！ ☆☆☆☆☆ \n" VT_RST);
+        PRINTF(VT_FGCOL(GREEN) " ☆☆☆☆☆ 全部の精霊石GET！ ☆☆☆☆☆ \n" VT_RST);
         this->unk_300 = 6;
         this->actor.textId = 0x7006; // "There's a lot going on in the castle right now. I can't allow even..."
         this->actionFunc = func_80A5475C;
     } else if (gSaveContext.nightFlag != 0) {
         // "Sleep early for children!"
-        osSyncPrintf(VT_FGCOL(YELLOW) " ☆☆☆☆☆ 子供ははやくネロ！ ☆☆☆☆☆ \n" VT_RST);
+        PRINTF(VT_FGCOL(YELLOW) " ☆☆☆☆☆ 子供ははやくネロ！ ☆☆☆☆☆ \n" VT_RST);
         this->unk_300 = 6;
         this->actor.textId = 0x7002; // "Welcome to Hyrule Castle Town. It's a peaceful, prosperous town."
         this->actionFunc = func_80A5475C;
 
     } else if (this->unk_30C != 0) {
         // "Anything passes"
-        osSyncPrintf(VT_FGCOL(BLUE) " ☆☆☆☆☆ なんでも通るよ ☆☆☆☆☆ \n" VT_RST);
+        PRINTF(VT_FGCOL(BLUE) " ☆☆☆☆☆ なんでも通るよ ☆☆☆☆☆ \n" VT_RST);
         this->unk_300 = 6;
         this->actor.textId = 0x7099; // "KEEP IT A SECRET FROM EVERYONE"
         this->actionFunc = func_80A5475C;
     } else if (gSaveContext.eventChkInf[1] & 4) {
         if (this->unk_30E == 0) {
             // "Start under the first sleeve!"
-            osSyncPrintf(VT_FGCOL(PURPLE) " ☆☆☆☆☆ １回目袖の下開始！ ☆☆☆☆☆ \n" VT_RST);
+            PRINTF(VT_FGCOL(PURPLE) " ☆☆☆☆☆ １回目袖の下開始！ ☆☆☆☆☆ \n" VT_RST);
             this->actor.textId = 0x7071; // "Do you really want to go through this gate that much?..."
             this->unk_30E = 1;
         } else {
             // "Start under the second sleeve!"
-            osSyncPrintf(VT_FGCOL(PURPLE) " ☆☆☆☆☆ ２回目袖の下開始！ ☆☆☆☆☆ \n" VT_RST);
+            PRINTF(VT_FGCOL(PURPLE) " ☆☆☆☆☆ ２回目袖の下開始！ ☆☆☆☆☆ \n" VT_RST);
             this->actor.textId = 0x7072; //  "Give me 10 Rupees...Yes...No"
         }
         this->unk_300 = 4;
@@ -229,7 +229,7 @@ void func_80A53278(EnHeishi2* this, GlobalContext* globalCtx) {
 
     } else {
         // "That's okay"
-        osSyncPrintf(VT_FGCOL(CYAN) " ☆☆☆☆☆ それはとおらんよぉ ☆☆☆☆☆ \n" VT_RST);
+        PRINTF(VT_FGCOL(CYAN) " ☆☆☆☆☆ それはとおらんよぉ ☆☆☆☆☆ \n" VT_RST);
         this->unk_300 = 6;
         this->actor.textId = 0x7029; // "So you say you want to see Princess Zelda, eh?..."
         this->actionFunc = func_80A5475C;
@@ -307,7 +307,7 @@ void func_80A53638(EnHeishi2* this, GlobalContext* globalCtx) {
             }
         }
         // "I've come!"
-        osSyncPrintf(VT_FGCOL(PURPLE) "☆☆☆ きたきたきたぁ！ ☆☆☆ %x\n" VT_RST, actor->dyna.actor.next);
+        PRINTF(VT_FGCOL(PURPLE) "☆☆☆ きたきたきたぁ！ ☆☆☆ %x\n" VT_RST, actor->dyna.actor.next);
         this->actionFunc = func_80A5372C;
     }
 }
@@ -393,7 +393,7 @@ void func_80A5399C(EnHeishi2* this, GlobalContext* globalCtx) {
         this->actionFunc = func_80A5475C;
     } else {
         // "I don't know"
-        osSyncPrintf(VT_FGCOL(PURPLE) " ☆☆☆☆☆ とおしゃしねぇちゅーの ☆☆☆☆☆ \n" VT_RST);
+        PRINTF(VT_FGCOL(PURPLE) " ☆☆☆☆☆ とおしゃしねぇちゅーの ☆☆☆☆☆ \n" VT_RST);
         this->actionFunc = func_80A53AD4;
     }
 }
@@ -474,7 +474,7 @@ void func_80A53D0C(EnHeishi2* this, GlobalContext* globalCtx) {
             }
         }
         // "I've come!"
-        osSyncPrintf(VT_FGCOL(PURPLE) "☆☆☆ きたきたきたぁ！ ☆☆☆ %x\n" VT_RST, gate->dyna.actor.next);
+        PRINTF(VT_FGCOL(PURPLE) "☆☆☆ きたきたきたぁ！ ☆☆☆ %x\n" VT_RST, gate->dyna.actor.next);
         this->actionFunc = func_80A53DF8;
     }
 }
@@ -679,7 +679,7 @@ void func_80A5455C(EnHeishi2* this, GlobalContext* globalCtx) {
         }
 
         // This is down!
-        osSyncPrintf(VT_FGCOL(YELLOW) " ☆☆☆☆☆ これでダウンだ！ ☆☆☆☆☆ \n" VT_RST);
+        PRINTF(VT_FGCOL(YELLOW) " ☆☆☆☆☆ これでダウンだ！ ☆☆☆☆☆ \n" VT_RST);
         this->actionFunc = func_80A546DC;
     }
 }

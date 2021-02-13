@@ -15,9 +15,9 @@ void Select_LoadTitle(SelectContext* this) {
 }
 
 void Select_LoadGame(SelectContext* this, s32 entranceIndex) {
-    osSyncPrintf(VT_FGCOL(BLUE));
-    osSyncPrintf("\n\n\nＦＩＬＥ＿ＮＯ＝%x\n\n\n", gSaveContext.fileNum);
-    osSyncPrintf(VT_RST);
+    PRINTF(VT_FGCOL(BLUE));
+    PRINTF("\n\n\nＦＩＬＥ＿ＮＯ＝%x\n\n\n", gSaveContext.fileNum);
+    PRINTF(VT_RST);
     if (gSaveContext.fileNum == 0xFF) {
         Sram_InitDebugSave();
         gSaveContext.unk_13F6 = gSaveContext.magic;
@@ -574,9 +574,9 @@ void Select_Main(GameState* thisx) {
 }
 
 void Select_Destroy(GameState* thisx) {
-    osSyncPrintf("%c", 7);
+    PRINTF("%c", 7);
     // "view_cleanup will hang, so it won't be called"
-    osSyncPrintf("*** view_cleanupはハングアップするので、呼ばない ***\n");
+    PRINTF("*** view_cleanupはハングアップするので、呼ばない ***\n");
 }
 
 void Select_Init(GameState* thisx) {

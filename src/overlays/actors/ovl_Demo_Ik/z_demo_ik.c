@@ -251,7 +251,7 @@ void func_809839D0(DemoIk* this, GlobalContext* globalCtx) {
                     break;
                 default:
                     // there is no such action
-                    osSyncPrintf("Demo_Ik_Check_DemoMode:そんな動作は無い!!!!!!!!\n");
+                    PRINTF("Demo_Ik_Check_DemoMode:そんな動作は無い!!!!!!!!\n");
             }
             this->csAction = nextCsAction;
         }
@@ -402,7 +402,7 @@ void func_80984048(DemoIk* this, GlobalContext* globalCtx) {
                     break;
                 default:
                     // there is no such action
-                    osSyncPrintf("Demo_Ik_inFace_Check_DemoMode:そんな動作は無い!!!!!!!!\n");
+                    PRINTF("Demo_Ik_inFace_Check_DemoMode:そんな動作は無い!!!!!!!!\n");
             }
             this->csAction = nextCsAction;
         }
@@ -495,7 +495,7 @@ void DemoIk_Update(Actor* thisx, GlobalContext* globalCtx) {
     if (this->actionMode < 0 || this->actionMode >= ARRAY_COUNT(sActionFuncs) ||
         sActionFuncs[this->actionMode] == NULL) {
         // The main mode is strange
-        osSyncPrintf(VT_FGCOL(RED) "メインモードがおかしい!!!!!!!!!!!!!!!!!!!!!!!!!\n" VT_RST);
+        PRINTF(VT_FGCOL(RED) "メインモードがおかしい!!!!!!!!!!!!!!!!!!!!!!!!!\n" VT_RST);
         return;
     }
     sActionFuncs[this->actionMode](this, globalCtx);
@@ -516,7 +516,7 @@ void DemoIk_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     if (this->drawMode < 0 || this->drawMode >= ARRAY_COUNT(sDrawFuncs) || sDrawFuncs[this->drawMode] == NULL) {
         // The draw mode is strange
-        osSyncPrintf(VT_FGCOL(RED) "描画モードがおかしい!!!!!!!!!!!!!!!!!!!!!!!!!\n" VT_RST);
+        PRINTF(VT_FGCOL(RED) "描画モードがおかしい!!!!!!!!!!!!!!!!!!!!!!!!!\n" VT_RST);
         return;
     }
     sDrawFuncs[this->drawMode](this, globalCtx);

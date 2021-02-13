@@ -136,7 +136,7 @@ void ObjTimeblock_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     // "Block of time"
-    osSyncPrintf("時のブロック (<arg> %04xH <type> save:%d color:%d range:%d move:%d)\n", (u16)this->dyna.actor.params,
+    PRINTF("時のブロック (<arg> %04xH <type> save:%d color:%d range:%d move:%d)\n", (u16)this->dyna.actor.params,
                  this->unk_177, this->dyna.actor.home.rot.z & 7, (this->dyna.actor.params >> 11) & 7,
                  (this->dyna.actor.params >> 10) & 1);
 }
@@ -220,7 +220,7 @@ void ObjTimeblock_Normal(ObjTimeblock* this, GlobalContext* globalCtx) {
         // Possibly points the camera to this actor
         func_80080480(globalCtx, &this->dyna.actor);
         // "◯◯◯◯ Time Block Attention Camera (frame counter  %d)\n"
-        osSyncPrintf("◯◯◯◯ Time Block 注目カメラ (frame counter  %d)\n", globalCtx->state.frames);
+        PRINTF("◯◯◯◯ Time Block 注目カメラ (frame counter  %d)\n", globalCtx->state.frames);
 
         this->demoEffectFirstPartTimer = 12;
 
@@ -277,7 +277,7 @@ void ObjTimeblock_AltBehaviorVisible(ObjTimeblock* this, GlobalContext* globalCt
         this->demoEffectTimer = 160;
         func_80080480(globalCtx, &this->dyna.actor);
         // "Time Block Attention Camera (frame counter)"
-        osSyncPrintf("◯◯◯◯ Time Block 注目カメラ (frame counter  %d)\n", globalCtx->state.frames);
+        PRINTF("◯◯◯◯ Time Block 注目カメラ (frame counter  %d)\n", globalCtx->state.frames);
         ObjTimeblock_ToggleSwitchFlag(globalCtx, this->dyna.actor.params & 0x3F);
     }
 

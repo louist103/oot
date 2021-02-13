@@ -60,12 +60,13 @@
 #define CHECK_BTN_ALL(state, combo) (~((state) | ~(combo)) == 0)
 #define CHECK_BTN_ANY(state, combo) (((state) & (combo)) != 0)
 
+#define PRINTF
 
 #define LOG(exp, value, format, file, line)         \
-    do {                                            \
-        LogUtils_LogThreadId(file, line);           \
-        osSyncPrintf(exp " = " format "\n", value); \
-    } while (0)
+    //do {                                            \
+    //    LogUtils_LogThreadId(file, line);           \
+    //    osSyncPrintf(exp " = " format "\n", value); \
+    //} while (0)
 
 #define LOG_STRING(string, file, line) LOG(#string, string, "%s", file, line)
 #define LOG_ADDRESS(exp, value, file, line) LOG(exp, value, "%08x", file, line)

@@ -38,7 +38,7 @@ s32 func_800BC56C(GlobalContext* globalCtx, s16 arg1) {
 
 // original name: "Game_play_shop_pr_vr_switch_set"
 void func_800BC590(GlobalContext* globalCtx) {
-    osSyncPrintf("Game_play_shop_pr_vr_switch_set()\n");
+    PRINTF("Game_play_shop_pr_vr_switch_set()\n");
 
     if (YREG(15) == 0x10) {
         globalCtx->unk_1242B = 2;
@@ -298,15 +298,15 @@ void Gameplay_Init(GameState* thisx) {
         globalCtx,
         gEntranceTable[((void)0, gSaveContext.entranceIndex) + ((void)0, gSaveContext.sceneSetupIndex)].scene,
         gEntranceTable[((void)0, gSaveContext.sceneSetupIndex) + ((void)0, gSaveContext.entranceIndex)].spawn);
-    osSyncPrintf("\nSCENE_NO=%d COUNTER=%d\n", ((void)0, gSaveContext.entranceIndex), gSaveContext.sceneSetupIndex);
+    PRINTF("\nSCENE_NO=%d COUNTER=%d\n", ((void)0, gSaveContext.entranceIndex), gSaveContext.sceneSetupIndex);
 
     // When entering Gerudo Valley in the right setup, trigger the GC emulator to play the ending movie.
     // The emulator constantly checks whether PC is 0x81000000, so this works even though it's not a valid address.
     if ((gEntranceTable[((void)0, gSaveContext.entranceIndex)].scene == SCENE_SPOT09) &&
         gSaveContext.sceneSetupIndex == 6) {
-        osSyncPrintf("エンディングはじまるよー\n"); // "The ending starts"
+        PRINTF("エンディングはじまるよー\n"); // "The ending starts"
         ((void (*)())0x81000000)();
-        osSyncPrintf("出戻り？\n"); // "Return?"
+        PRINTF("出戻り？\n"); // "Return?"
     }
 
     Cutscene_HandleEntranceTriggers(globalCtx);
@@ -366,12 +366,12 @@ void Gameplay_Init(GameState* thisx) {
     D_801614B0.a = 0;
     Flags_UnsetAllEnv(globalCtx);
 
-    osSyncPrintf("ZELDA ALLOC SIZE=%x\n", THA_GetSize(&globalCtx->state.tha));
+    PRINTF("ZELDA ALLOC SIZE=%x\n", THA_GetSize(&globalCtx->state.tha));
     zAllocSize = THA_GetSize(&globalCtx->state.tha);
     zAlloc = GameState_Alloc(&globalCtx->state, zAllocSize, "../z_play.c", 2918);
     zAllocAligned = (zAlloc + 8) & ~0xF;
     ZeldaArena_Init(zAllocAligned, zAllocSize - zAllocAligned + zAlloc);
-    osSyncPrintf("ゼルダヒープ %08x-%08x\n", zAllocAligned,
+    PRINTF("ゼルダヒープ %08x-%08x\n", zAllocAligned,
                  (s32)(zAllocAligned + zAllocSize) - (s32)(zAllocAligned - zAlloc)); // "Zelda Heap"
 
     Fault_AddClient(&D_801614B8, ZeldaArena_Display, NULL, NULL);
@@ -387,7 +387,7 @@ void Gameplay_Init(GameState* thisx) {
 
     playerStartCamId = player->actor.params & 0xFF;
     if (playerStartCamId != 0xFF) {
-        osSyncPrintf("player has start camera ID (" VT_FGCOL(BLUE) "%d" VT_RST ")\n", playerStartCamId);
+        PRINTF("player has start camera ID (" VT_FGCOL(BLUE) "%d" VT_RST ")\n", playerStartCamId);
         Camera_ChangeDataIdx(&globalCtx->mainCamera, playerStartCamId);
     }
 
@@ -409,7 +409,7 @@ void Gameplay_Init(GameState* thisx) {
 
     if (dREG(95) != 0) {
         D_8012D1F0 = D_801614D0;
-        osSyncPrintf("\nkawauso_data=[%x]", D_8012D1F0);
+        PRINTF("\nkawauso_data=[%x]", D_8012D1F0);
         DmaMgr_DMARomToRam(0x03FEB000, (u32)D_8012D1F0, sizeof(D_801614D0));
     }
 }
@@ -432,14 +432,14 @@ void Gameplay_Update(GlobalContext* globalCtx) {
 
     if ((HREG(80) == 18) && (HREG(81) < 0)) {
         HREG(81) = 0;
-        osSyncPrintf("object_exchange_rom_address %u\n", gObjectTableSize);
-        osSyncPrintf("RomStart RomEnd   Size\n");
+        PRINTF("object_exchange_rom_address %u\n", gObjectTableSize);
+        PRINTF("RomStart RomEnd   Size\n");
         for (i = 0; i < gObjectTableSize; i++) {
             s32 size = gObjectTable[i].vromEnd - gObjectTable[i].vromStart;
-            osSyncPrintf("%08x-%08x %08x(%8.3fKB)\n", gObjectTable[i].vromStart, gObjectTable[i].vromEnd, size,
+            PRINTF("%08x-%08x %08x(%8.3fKB)\n", gObjectTable[i].vromStart, gObjectTable[i].vromEnd, size,
                          size * 0.0009765625f);
         }
-        osSyncPrintf("\n");
+        PRINTF("\n");
     }
 
     if ((HREG(81) == 18) && (HREG(82) < 0)) {
@@ -460,7 +460,7 @@ void Gameplay_Update(GlobalContext* globalCtx) {
             switch (gTrnsnUnkState) {
                 case 2:
                     if (TransitionUnk_Init(&sTrnsnUnk, 10, 7) == 0) {
-                        osSyncPrintf("fbdemo_init呼出し失敗！\n"); // "fbdemo_init call failed!"
+                        PRINTF("fbdemo_init呼出し失敗！\n"); // "fbdemo_init call failed!"
                         gTrnsnUnkState = 0;
                     } else {
                         sTrnsnUnk.zBuffer = gZBuffer;
@@ -486,9 +486,9 @@ void Gameplay_Update(GlobalContext* globalCtx) {
                         }
 
                         if (!(gEntranceTable[globalCtx->nextEntranceIndex + sp6E].field & 0x8000)) { // Continue BGM Off
-                            osSyncPrintf("\n\n\nサウンドイニシャル来ました。111"); // "Sound initalized. 111"
+                            PRINTF("\n\n\nサウンドイニシャル来ました。111"); // "Sound initalized. 111"
                             if ((globalCtx->fadeTransition < 56) && (func_80077600() == 0)) {
-                                osSyncPrintf("\n\n\nサウンドイニシャル来ました。222"); // "Sound initalized. 222"
+                                PRINTF("\n\n\nサウンドイニシャル来ました。222"); // "Sound initalized. 222"
                                 func_800F6964(0x14);
                                 gSaveContext.seqIndex = 0xFF;
                                 gSaveContext.nightSeqIndex = 0xFF;
@@ -819,7 +819,7 @@ void Gameplay_Update(GlobalContext* globalCtx) {
                 func_800AA178(1);
 
                 if ((globalCtx->actorCtx.unk_00 != 0) && (globalCtx->actorCtx.unk_00-- < 5)) {
-                    osSyncPrintf("FINISH=%d\n", globalCtx->actorCtx.unk_00);
+                    PRINTF("FINISH=%d\n", globalCtx->actorCtx.unk_00);
                     if ((globalCtx->actorCtx.unk_00 > 0) && ((globalCtx->actorCtx.unk_00 % 2) != 0)) {
                         globalCtx->envCtx.unk_E1 = 1;
                         globalCtx->envCtx.unk_E2[0] = globalCtx->envCtx.unk_E2[1] = globalCtx->envCtx.unk_E2[2] = 0x96;
@@ -918,10 +918,10 @@ void Gameplay_Update(GlobalContext* globalCtx) {
                 if (CHECK_BTN_ALL(input[0].press.button, BTN_CUP)) {
                     if ((globalCtx->pauseCtx.state != 0) || (globalCtx->pauseCtx.flag != 0)) {
                         // Translates to: "Changing viewpoint is prohibited due to the kaleidoscope"
-                        osSyncPrintf(VT_FGCOL(CYAN) "カレイドスコープ中につき視点変更を禁止しております\n" VT_RST);
+                        PRINTF(VT_FGCOL(CYAN) "カレイドスコープ中につき視点変更を禁止しております\n" VT_RST);
                     } else if (Player_InCsMode(globalCtx)) {
                         // Translates to: "Changing viewpoint is prohibited during the cutscene"
-                        osSyncPrintf(VT_FGCOL(CYAN) "デモ中につき視点変更を禁止しております\n" VT_RST);
+                        PRINTF(VT_FGCOL(CYAN) "デモ中につき視点変更を禁止しております\n" VT_RST);
                     } else if (YREG(15) == 0x10) {
                         Audio_PlaySoundGeneral(NA_SE_SY_ERROR, &D_801333D4, 4, &D_801333E0, &D_801333E0, &D_801333E8);
                     } else {
@@ -1481,7 +1481,7 @@ void Gameplay_SpawnScene(GlobalContext* globalCtx, s32 sceneNum, s32 spawn) {
     globalCtx->sceneNum = sceneNum;
     globalCtx->sceneConfig = scene->config;
 
-    osSyncPrintf("\nSCENE SIZE %fK\n", (scene->sceneFile.vromEnd - scene->sceneFile.vromStart) * 0.0009765625f);
+    PRINTF("\nSCENE SIZE %fK\n", (scene->sceneFile.vromEnd - scene->sceneFile.vromStart) * 0.0009765625f);
 
     globalCtx->sceneSegment = Gameplay_LoadFile(globalCtx, &scene->sceneFile);
     scene->unk_13 = 0;
@@ -1492,7 +1492,7 @@ void Gameplay_SpawnScene(GlobalContext* globalCtx, s32 sceneNum, s32 spawn) {
 
     Gameplay_InitScene(globalCtx, spawn);
 
-    osSyncPrintf("ROOM SIZE=%fK\n", func_80096FE8(globalCtx, &globalCtx->roomCtx) * 0.0009765625f);
+    PRINTF("ROOM SIZE=%fK\n", func_80096FE8(globalCtx, &globalCtx->roomCtx) * 0.0009765625f);
 }
 
 void func_800C016C(GlobalContext* globalCtx, Vec3f* src, Vec3f* dest) {
@@ -1518,11 +1518,11 @@ s16 Gameplay_CreateSubCamera(GlobalContext* globalCtx) {
     }
 
     if (i == 4) {
-        osSyncPrintf(VT_COL(RED, WHITE) "camera control: error: fulled sub camera system area\n" VT_RST);
+        PRINTF(VT_COL(RED, WHITE) "camera control: error: fulled sub camera system area\n" VT_RST);
         return -1;
     }
 
-    osSyncPrintf("camera control: " VT_BGCOL(CYAN) " " VT_COL(WHITE, BLUE) " create new sub camera [%d] " VT_BGCOL(
+    PRINTF("camera control: " VT_BGCOL(CYAN) " " VT_COL(WHITE, BLUE) " create new sub camera [%d] " VT_BGCOL(
                      CYAN) " " VT_RST "\n",
                  i);
 
@@ -1551,17 +1551,17 @@ void Gameplay_ClearCamera(GlobalContext* globalCtx, s16 camId) {
     s16 camIdx = (camId == -1) ? globalCtx->activeCamera : camId;
 
     if (camIdx == 0) {
-        osSyncPrintf(VT_COL(RED, WHITE) "camera control: error: never clear camera !!\n" VT_RST);
+        PRINTF(VT_COL(RED, WHITE) "camera control: error: never clear camera !!\n" VT_RST);
     }
 
     if (globalCtx->cameraPtrs[camIdx] != NULL) {
         Camera_ChangeStatus(globalCtx->cameraPtrs[camIdx], 0x100);
         globalCtx->cameraPtrs[camIdx] = NULL;
-        osSyncPrintf("camera control: " VT_BGCOL(CYAN) " " VT_COL(WHITE, BLUE) " clear sub camera [%d] " VT_BGCOL(
+        PRINTF("camera control: " VT_BGCOL(CYAN) " " VT_COL(WHITE, BLUE) " clear sub camera [%d] " VT_BGCOL(
                          CYAN) " " VT_RST "\n",
                      camIdx);
     } else {
-        osSyncPrintf(VT_COL(RED, WHITE) "camera control: error: camera No.%d already cleared\n" VT_RST, camIdx);
+        PRINTF(VT_COL(RED, WHITE) "camera control: error: camera No.%d already cleared\n" VT_RST, camIdx);
     }
 }
 
@@ -1681,7 +1681,7 @@ void func_800C08AC(GlobalContext* globalCtx, s16 camId, s16 arg2) {
 
     for (i = 1; i < 4; i++) {
         if (globalCtx->cameraPtrs[i] != NULL) {
-            osSyncPrintf(
+            PRINTF(
                 VT_COL(RED, WHITE) "camera control: error: return to main, other camera left. %d cleared!!\n" VT_RST,
                 i);
             Gameplay_ClearCamera(globalCtx, i);

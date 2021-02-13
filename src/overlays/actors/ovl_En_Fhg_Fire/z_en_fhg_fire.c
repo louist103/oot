@@ -102,9 +102,9 @@ void EnFhgFire_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     if (thisx->params == 0x26) {
         // "light spear"
-        osSyncPrintf("yari hikari ct 1\n");
+        PRINTF("yari hikari ct 1\n");
         EnFhgFire_SetupAction(this, func_80A10008);
-        osSyncPrintf("yari hikari ct 2\n");
+        PRINTF("yari hikari ct 2\n");
         this->unk_150.x = thisx->world.rot.x;
         this->fireMode = thisx->world.rot.y;
         return;
@@ -238,7 +238,7 @@ void func_80A0F6F8(EnFhgFire* this, GlobalContext* globalCtx) {
 }
 
 void func_80A0FA90(EnFhgFire* this, GlobalContext* globalCtx) {
-    osSyncPrintf("FF MOVE 1\n");
+    PRINTF("FF MOVE 1\n");
     this->actor.shape.rot.x += (s16)(Rand_ZeroOne() * 4000.0f) + 0x4000;
 
     switch (this->fireMode) {
@@ -269,7 +269,7 @@ void func_80A0FA90(EnFhgFire* this, GlobalContext* globalCtx) {
         this->actor.scale.x = 1.0f;
     }
 
-    osSyncPrintf("FF MOVE 2\n");
+    PRINTF("FF MOVE 2\n");
 }
 
 void func_80A0FC48(EnFhgFire* this, GlobalContext* globalCtx) {
@@ -371,7 +371,7 @@ void func_80A10008(EnFhgFire* this, GlobalContext* globalCtx) {
     EnfHG* horse;
     s16 i;
 
-    osSyncPrintf("yari hikari 1\n");
+    PRINTF("yari hikari 1\n");
     horse = (EnfHG*)this->actor.parent;
     if ((this->unk_156 % 2) != 0) {
         Actor_SetScale(&this->actor, 6.0f);
@@ -382,13 +382,13 @@ void func_80A10008(EnFhgFire* this, GlobalContext* globalCtx) {
     this->actor.world.pos = horse->unk_200;
     this->actor.shape.rot.z += (s16)(Rand_ZeroOne() * 20000.0f) + 0x4000;
 
-    osSyncPrintf("yari hikari 2\n");
+    PRINTF("yari hikari 2\n");
     if (this->fireMode == 0) {
         Vec3f ballPos;
         Vec3f ballVelocity = D_80A117C8;
         Vec3f ballAccel = D_80A117D4;
 
-        osSyncPrintf("FLASH !!\n");
+        PRINTF("FLASH !!\n");
 
         for (i = 0; i < 2; i++) {
             ballPos.x = Rand_CenteredFloat(20.0f) + this->actor.world.pos.x;
@@ -445,11 +445,11 @@ void func_80A10F18(EnFhgFire* this, GlobalContext* globalCtx) {
         }
     }
 
-    osSyncPrintf("EFC 1\n");
+    PRINTF("EFC 1\n");
     if ((this->unk_150.x == 0) || ((this->actor.params == 0x27) && (horse->unk_14F != 0))) {
         Actor_Kill(&this->actor);
     }
-    osSyncPrintf("EFC 2\n");
+    PRINTF("EFC 2\n");
 }
 
 void EnFhgFire_Update(Actor* thisx, GlobalContext* globalCtx) {
@@ -478,7 +478,7 @@ void EnFhgFire_Draw(Actor* thisx, GlobalContext* globalCtx) {
                   G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, SEGMENTED_TO_VIRTUAL(D_0600FCF8));
     } else if ((thisx->params == 0x26) || (thisx->params == 0x32)) {
-        osSyncPrintf("yari hikari draw 1\n");
+        PRINTF("yari hikari draw 1\n");
         func_800D1FD4(&globalCtx->mf_11DA0);
         func_80093D84(globalCtx->state.gfxCtx);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (s8)this->unk_160);
@@ -505,7 +505,7 @@ void EnFhgFire_Draw(Actor* thisx, GlobalContext* globalCtx) {
                                     (s16)this->unk_17C, (s16)this->unk_180, 0x40, 0x40));
         gSPDisplayList(POLY_XLU_DISP++, D_0600FAA0);
     } else {
-        osSyncPrintf("FF DRAW 1\n");
+        PRINTF("FF DRAW 1\n");
         Matrix_Translate(0.0f, -100.0f, 0.0f, 1);
         func_80093D84(globalCtx->state.gfxCtx);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (s8)this->unk_160);
@@ -514,7 +514,7 @@ void EnFhgFire_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx, "../z_en_fhg_fire.c", 1892),
                   G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, D_060105E0);
-        osSyncPrintf("FF DRAW 2\n");
+        PRINTF("FF DRAW 2\n");
     }
 
     CLOSE_DISPS(globalCtx->state.gfxCtx, "../z_en_fhg_fire.c", 1900);

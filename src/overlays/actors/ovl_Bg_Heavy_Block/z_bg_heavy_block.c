@@ -151,7 +151,7 @@ void BgHeavyBlock_Init(Actor* thisx, GlobalContext* globalCtx) {
             break;
     }
     // "Largest Block Save Bit %x"
-    osSyncPrintf(VT_FGCOL(CYAN) " 最大 ブロック セーブビット %x\n" VT_RST, thisx->params);
+    PRINTF(VT_FGCOL(CYAN) " 最大 ブロック セーブビット %x\n" VT_RST, thisx->params);
 }
 
 void BgHeavyBlock_Destroy(Actor* thisx, GlobalContext* globalCtx) {

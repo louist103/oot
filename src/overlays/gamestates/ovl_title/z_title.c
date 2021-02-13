@@ -182,7 +182,7 @@ void Title_Init(GameState* thisx) {
     TitleContext* this = (TitleContext*)thisx;
 
     this->staticSegment = GameState_Alloc(&this->state, size, "../z_title.c", 611);
-    osSyncPrintf("z_title.c\n");
+    PRINTF("z_title.c\n");
     if (this->staticSegment == NULL) {
         __assert("this->staticSegment != NULL", "../z_title.c", 614);
     }

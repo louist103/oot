@@ -81,7 +81,7 @@ void BgJya1flift_InitDynapoly(BgJya1flift* this, GlobalContext* globalCtx, Colli
 
     if (this->dyna.bgId == BG_ACTOR_MAX) {
         // Warning : move BG login failed
-        osSyncPrintf("Warning : move BG 登録失敗(%s %d)(name %d)(arg_data 0x%04x)\n", "../z_bg_jya_1flift.c", 179,
+        PRINTF("Warning : move BG 登録失敗(%s %d)(name %d)(arg_data 0x%04x)\n", "../z_bg_jya_1flift.c", 179,
                      this->dyna.actor.id, this->dyna.actor.params);
     }
 }
@@ -97,7 +97,7 @@ void BgJya1flift_InitCollision(Actor* thisx, GlobalContext* globalCtx) {
 void BgJya1flift_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgJya1flift* this = THIS;
     // 1 F lift
-    osSyncPrintf("(１Ｆリフト)(flag %d)(room %d)\n", sIsSpawned, globalCtx->roomCtx.curRoom.num);
+    PRINTF("(１Ｆリフト)(flag %d)(room %d)\n", sIsSpawned, globalCtx->roomCtx.curRoom.num);
     this->hasInitialized = false;
     if (sIsSpawned) {
         Actor_Kill(thisx);

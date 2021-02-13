@@ -108,7 +108,7 @@ void BgMizuWater_Init(Actor* thisx, GlobalContext* globalCtx) {
     switch (this->type) {
         case 0:
             if (bREG(15) == 0) {
-                osSyncPrintf("<コンストラクト>%x %x %x\n", Flags_GetSwitch(globalCtx, 0x1C),
+                PRINTF("<コンストラクト>%x %x %x\n", Flags_GetSwitch(globalCtx, 0x1C),
                              Flags_GetSwitch(globalCtx, 0x1D), Flags_GetSwitch(globalCtx, 0x1E));
             }
             waterLevelActionIndex = BgMizuWater_GetWaterLevelActionIndex(-1, globalCtx);
@@ -300,7 +300,7 @@ void BgMizuWater_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
 
     if (bREG(15) == 0) {
-        osSyncPrintf("%x %x %x\n", Flags_GetSwitch(globalCtx, 0x1C), Flags_GetSwitch(globalCtx, 0x1D),
+        PRINTF("%x %x %x\n", Flags_GetSwitch(globalCtx, 0x1C), Flags_GetSwitch(globalCtx, 0x1D),
                      Flags_GetSwitch(globalCtx, 0x1E));
     }
 

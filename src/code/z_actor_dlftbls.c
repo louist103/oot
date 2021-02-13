@@ -96,7 +96,7 @@ ActorOverlay gActorOverlayTable[] = {
     ACTOR_OVERLAY(En_OE2, ALLOCTYPE_NORMAL),
     ACTOR_OVERLAY(Bg_Ydan_Hasi, ALLOCTYPE_NORMAL),
     ACTOR_OVERLAY(Bg_Ydan_Maruta, ALLOCTYPE_NORMAL),
-    ACTOR_OVERLAY(Boss_Ganondrof, ALLOCTYPE_NORMAL),
+    ACTOR_OVERLAY_UNSET,
     ACTOR_OVERLAY_UNSET,
     ACTOR_OVERLAY(En_Am, ALLOCTYPE_NORMAL),
     ACTOR_OVERLAY(En_Dekubaba, ALLOCTYPE_NORMAL),
@@ -246,7 +246,7 @@ ActorOverlay gActorOverlayTable[] = {
     ACTOR_OVERLAY(Bg_Spot16_Doughnut, ALLOCTYPE_NORMAL),
     ACTOR_OVERLAY(Bg_Bdan_Switch, ALLOCTYPE_NORMAL),
     ACTOR_OVERLAY(En_Ma1, ALLOCTYPE_NORMAL),
-    ACTOR_OVERLAY(Boss_Ganon, ALLOCTYPE_NORMAL),
+    ACTOR_OVERLAY_UNSET,
     ACTOR_OVERLAY(Boss_Sst, ALLOCTYPE_NORMAL),
     ACTOR_OVERLAY_UNSET,
     ACTOR_OVERLAY_UNSET,
@@ -276,7 +276,7 @@ ActorOverlay gActorOverlayTable[] = {
     ACTOR_OVERLAY(Bg_Spot01_Idohashira, ALLOCTYPE_NORMAL),
     ACTOR_OVERLAY(Bg_Spot01_Idomizu, ALLOCTYPE_NORMAL),
     ACTOR_OVERLAY(Bg_Po_Syokudai, ALLOCTYPE_NORMAL),
-    ACTOR_OVERLAY(Bg_Ganon_Otyuka, ALLOCTYPE_NORMAL),
+    ACTOR_OVERLAY_UNSET,
     ACTOR_OVERLAY(Bg_Spot15_Rrbox, ALLOCTYPE_NORMAL),
     ACTOR_OVERLAY(Bg_Umajump, ALLOCTYPE_NORMAL),
     ACTOR_OVERLAY_UNSET,
@@ -364,7 +364,7 @@ ActorOverlay gActorOverlayTable[] = {
     ACTOR_OVERLAY(Bg_Jya_Bombiwa, ALLOCTYPE_NORMAL),
     ACTOR_OVERLAY(Bg_Spot18_Basket, ALLOCTYPE_NORMAL),
     ACTOR_OVERLAY_UNSET,
-    ACTOR_OVERLAY(En_Ganon_Organ, ALLOCTYPE_NORMAL),
+    ACTOR_OVERLAY_UNSET,
     ACTOR_OVERLAY(En_Siofuki, ALLOCTYPE_NORMAL),
     ACTOR_OVERLAY(En_Stream, ALLOCTYPE_NORMAL),
     ACTOR_OVERLAY_UNSET,
@@ -381,7 +381,7 @@ ActorOverlay gActorOverlayTable[] = {
     ACTOR_OVERLAY(En_Cs, ALLOCTYPE_NORMAL),
     ACTOR_OVERLAY(En_Md, ALLOCTYPE_NORMAL),
     ACTOR_OVERLAY(En_Hy, ALLOCTYPE_NORMAL),
-    ACTOR_OVERLAY(En_Ganon_Mant, ALLOCTYPE_NORMAL),
+    ACTOR_OVERLAY_UNSET,
     ACTOR_OVERLAY(En_Okarina_Effect, ALLOCTYPE_NORMAL),
     ACTOR_OVERLAY(En_Mag, ALLOCTYPE_NORMAL),
     ACTOR_OVERLAY(Door_Gerudo, ALLOCTYPE_NORMAL),
@@ -392,7 +392,7 @@ ActorOverlay gActorOverlayTable[] = {
     ACTOR_OVERLAY(Bg_Zg, ALLOCTYPE_NORMAL),
     ACTOR_OVERLAY(En_Heishi4, ALLOCTYPE_NORMAL),
     ACTOR_OVERLAY(En_Zl3, ALLOCTYPE_NORMAL),
-    ACTOR_OVERLAY(Boss_Ganon2, ALLOCTYPE_NORMAL),
+    ACTOR_OVERLAY_UNSET,
     ACTOR_OVERLAY(En_Kakasi, ALLOCTYPE_NORMAL),
     ACTOR_OVERLAY(En_Takara_Man, ALLOCTYPE_NORMAL),
     ACTOR_OVERLAY(Obj_Makeoshihiki, ALLOCTYPE_NORMAL),
@@ -495,11 +495,11 @@ void ActorOverlayTable_LogPrint(void) {
     ActorOverlay* overlayEntry;
     u32 i;
 
-    osSyncPrintf("actor_dlftbls %u\n", gMaxActorId);
-    osSyncPrintf("RomStart RomEnd   SegStart SegEnd   allocp   profile  segname\n");
+    PRINTF("actor_dlftbls %u\n", gMaxActorId);
+    PRINTF("RomStart RomEnd   SegStart SegEnd   allocp   profile  segname\n");
 
     for (i = 0, overlayEntry = &gActorOverlayTable[0]; i < gMaxActorId; i++, overlayEntry++) {
-        osSyncPrintf("%08x %08x %08x %08x %08x %08x %s\n", overlayEntry->vromStart, overlayEntry->vromEnd,
+        PRINTF("%08x %08x %08x %08x %08x %08x %s\n", overlayEntry->vromStart, overlayEntry->vromEnd,
                      overlayEntry->vramStart, overlayEntry->vramEnd, overlayEntry->loadedRamAddr,
                      &overlayEntry->initInfo->id, overlayEntry->name != NULL ? overlayEntry->name : "?");
     }

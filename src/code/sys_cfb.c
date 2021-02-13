@@ -8,19 +8,19 @@ void SysCfb_Init(s32 n64dd) {
     u32 tmpFbEnd;
     if (osMemSize >= 0x800000U) {
         // 8MB or more memory is installed
-        osSyncPrintf("８Ｍバイト以上のメモリが搭載されています\n");
+        PRINTF("８Ｍバイト以上のメモリが搭載されています\n");
         tmpFbEnd = 0x8044BE80;
         if (n64dd == 1) {
             // RAM 8M mode (N64DD compatible)
-            osSyncPrintf("RAM 8M mode (N64DD対応)\n");
+            PRINTF("RAM 8M mode (N64DD対応)\n");
             sSysCfbEnd = 0x805FB000;
         } else {
             // The margin for this version is% dK bytes
-            osSyncPrintf("このバージョンのマージンは %dK バイトです\n", (0x4BC00 / 1024));
+            PRINTF("このバージョンのマージンは %dK バイトです\n", (0x4BC00 / 1024));
             sSysCfbEnd = tmpFbEnd;
         }
     } else if (osMemSize >= 0x400000U) {
-        osSyncPrintf("RAM4M mode\n");
+        PRINTF("RAM4M mode\n");
         sSysCfbEnd = 0x80400000;
     } else {
         LogUtils_HungupThread("../sys_cfb.c", 354);
@@ -29,11 +29,11 @@ void SysCfb_Init(s32 n64dd) {
     screenSize = SCREEN_WIDTH * SCREEN_HEIGHT;
     sSysCfbEnd &= ~0x3f;
     // The final address used by the system is% 08x
-    osSyncPrintf("システムが使用する最終アドレスは %08x です\n", sSysCfbEnd);
+    PRINTF("システムが使用する最終アドレスは %08x です\n", sSysCfbEnd);
     sSysCfbFbPtr[0] = sSysCfbEnd - (screenSize * 4);
     sSysCfbFbPtr[1] = sSysCfbEnd - (screenSize * 2);
     // Frame buffer addresses are% 08x and% 08x
-    osSyncPrintf("フレームバッファのアドレスは %08x と %08x です\n", sSysCfbFbPtr[0], sSysCfbFbPtr[1]);
+    PRINTF("フレームバッファのアドレスは %08x と %08x です\n", sSysCfbFbPtr[0], sSysCfbFbPtr[1]);
 }
 
 void SysCfb_Reset() {

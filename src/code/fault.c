@@ -134,7 +134,7 @@ void Fault_AddClient(FaultClient* client, void* callback, void* param0, void* pa
 end:
     osSetIntMask(mask);
     if (alreadyExists) {
-        osSyncPrintf(VT_COL(RED, WHITE) "fault_AddClient: %08x は既にリスト中にある\n" VT_RST, client);
+        PRINTF(VT_COL(RED, WHITE) "fault_AddClient: %08x は既にリスト中にある\n" VT_RST, client);
     }
 }
 
@@ -172,7 +172,7 @@ void Fault_RemoveClient(FaultClient* client) {
     osSetIntMask(mask);
 
     if (listIsEmpty) {
-        osSyncPrintf(VT_COL(RED, WHITE) "fault_RemoveClient: %08x リスト不整合です\n" VT_RST, client);
+        PRINTF(VT_COL(RED, WHITE) "fault_RemoveClient: %08x リスト不整合です\n" VT_RST, client);
     }
 }
 
@@ -201,7 +201,7 @@ void Fault_AddAddrConvClient(FaultAddrConvClient* client, void* callback, void* 
 end:
     osSetIntMask(mask);
     if (alreadyExists) {
-        osSyncPrintf(VT_COL(RED, WHITE) "fault_AddressConverterAddClient: %08x は既にリスト中にある\n" VT_RST, client);
+        PRINTF(VT_COL(RED, WHITE) "fault_AddressConverterAddClient: %08x は既にリスト中にある\n" VT_RST, client);
     }
 }
 
@@ -239,7 +239,7 @@ void Fault_RemoveAddrConvClient(FaultAddrConvClient* client) {
     osSetIntMask(mask);
 
     if (listIsEmpty) {
-        osSyncPrintf(VT_COL(RED, WHITE) "fault_AddressConverterRemoveClient: %08x は既にリスト中にある\n" VT_RST,
+        PRINTF(VT_COL(RED, WHITE) "fault_AddressConverterRemoveClient: %08x は既にリスト中にある\n" VT_RST,
                      client);
     }
 }
@@ -359,9 +359,9 @@ void Fault_LogFReg(s32 idx, f32* value) {
     s32 v0 = ((raw & 0x7f800000) >> 0x17) - 0x7f;
 
     if ((v0 >= -0x7e && v0 < 0x80) || raw == 0) {
-        osSyncPrintf("F%02d:%14.7e ", idx, *value);
+        PRINTF("F%02d:%14.7e ", idx, *value);
     } else {
-        osSyncPrintf("F%02d:  %08x(16) ", idx, *(u32*)value);
+        PRINTF("F%02d:  %08x(16) ", idx, *(u32*)value);
     }
 }
 
@@ -382,10 +382,10 @@ void Fault_PrintFPCR(u32 value) {
 void Fault_LogFPCR(u32 value) {
     s32 i;
     u32 flag = 0x20000;
-    osSyncPrintf("FPCSR:%08xH  ", value);
+    PRINTF("FPCSR:%08xH  ", value);
     for (i = 0; i < 6; i++) {
         if (value & flag) {
-            osSyncPrintf("(%s)\n", sExceptionNames[i + 18]);
+            PRINTF("(%s)\n", sExceptionNames[i + 18]);
             break;
         }
         flag >>= 1;
@@ -462,47 +462,47 @@ void Fault_LogThreadContext(OSThread* t) {
     }
 
     ctx = &t->context;
-    osSyncPrintf("\n");
-    osSyncPrintf("THREAD ID:%d (%d:%s)\n", t->id, causeStrIdx, sExceptionNames[causeStrIdx]);
+    PRINTF("\n");
+    PRINTF("THREAD ID:%d (%d:%s)\n", t->id, causeStrIdx, sExceptionNames[causeStrIdx]);
 
-    osSyncPrintf("PC:%08xH   SR:%08xH   VA:%08xH\n", (u32)ctx->pc, (u32)ctx->sr, (u32)ctx->badvaddr);
-    osSyncPrintf("AT:%08xH   V0:%08xH   V1:%08xH\n", (u32)ctx->at, (u32)ctx->v0, (u32)ctx->v1);
-    osSyncPrintf("A0:%08xH   A1:%08xH   A2:%08xH\n", (u32)ctx->a0, (u32)ctx->a1, (u32)ctx->a2);
-    osSyncPrintf("A3:%08xH   T0:%08xH   T1:%08xH\n", (u32)ctx->a3, (u32)ctx->t0, (u32)ctx->t1);
-    osSyncPrintf("T2:%08xH   T3:%08xH   T4:%08xH\n", (u32)ctx->t2, (u32)ctx->t3, (u32)ctx->t4);
-    osSyncPrintf("T5:%08xH   T6:%08xH   T7:%08xH\n", (u32)ctx->t5, (u32)ctx->t6, (u32)ctx->t7);
-    osSyncPrintf("S0:%08xH   S1:%08xH   S2:%08xH\n", (u32)ctx->s0, (u32)ctx->s1, (u32)ctx->s2);
-    osSyncPrintf("S3:%08xH   S4:%08xH   S5:%08xH\n", (u32)ctx->s3, (u32)ctx->s4, (u32)ctx->s5);
-    osSyncPrintf("S6:%08xH   S7:%08xH   T8:%08xH\n", (u32)ctx->s6, (u32)ctx->s7, (u32)ctx->t8);
-    osSyncPrintf("T9:%08xH   GP:%08xH   SP:%08xH\n", (u32)ctx->t9, (u32)ctx->gp, (u32)ctx->sp);
-    osSyncPrintf("S8:%08xH   RA:%08xH   LO:%08xH\n", (u32)ctx->s8, (u32)ctx->ra, (u32)ctx->lo);
-    osSyncPrintf("\n");
+    PRINTF("PC:%08xH   SR:%08xH   VA:%08xH\n", (u32)ctx->pc, (u32)ctx->sr, (u32)ctx->badvaddr);
+    PRINTF("AT:%08xH   V0:%08xH   V1:%08xH\n", (u32)ctx->at, (u32)ctx->v0, (u32)ctx->v1);
+    PRINTF("A0:%08xH   A1:%08xH   A2:%08xH\n", (u32)ctx->a0, (u32)ctx->a1, (u32)ctx->a2);
+    PRINTF("A3:%08xH   T0:%08xH   T1:%08xH\n", (u32)ctx->a3, (u32)ctx->t0, (u32)ctx->t1);
+    PRINTF("T2:%08xH   T3:%08xH   T4:%08xH\n", (u32)ctx->t2, (u32)ctx->t3, (u32)ctx->t4);
+    PRINTF("T5:%08xH   T6:%08xH   T7:%08xH\n", (u32)ctx->t5, (u32)ctx->t6, (u32)ctx->t7);
+    PRINTF("S0:%08xH   S1:%08xH   S2:%08xH\n", (u32)ctx->s0, (u32)ctx->s1, (u32)ctx->s2);
+    PRINTF("S3:%08xH   S4:%08xH   S5:%08xH\n", (u32)ctx->s3, (u32)ctx->s4, (u32)ctx->s5);
+    PRINTF("S6:%08xH   S7:%08xH   T8:%08xH\n", (u32)ctx->s6, (u32)ctx->s7, (u32)ctx->t8);
+    PRINTF("T9:%08xH   GP:%08xH   SP:%08xH\n", (u32)ctx->t9, (u32)ctx->gp, (u32)ctx->sp);
+    PRINTF("S8:%08xH   RA:%08xH   LO:%08xH\n", (u32)ctx->s8, (u32)ctx->ra, (u32)ctx->lo);
+    PRINTF("\n");
     Fault_LogFPCR(ctx->fpcsr);
-    osSyncPrintf("\n");
+    PRINTF("\n");
     Fault_LogFReg(0, &ctx->fp0.f.f_even);
     Fault_LogFReg(2, &ctx->fp2.f.f_even);
-    osSyncPrintf("\n");
+    PRINTF("\n");
     Fault_LogFReg(4, &ctx->fp4.f.f_even);
     Fault_LogFReg(6, &ctx->fp6.f.f_even);
-    osSyncPrintf("\n");
+    PRINTF("\n");
     Fault_LogFReg(8, &ctx->fp8.f.f_even);
     Fault_LogFReg(0xa, &ctx->fp10.f.f_even);
-    osSyncPrintf("\n");
+    PRINTF("\n");
     Fault_LogFReg(0xc, &ctx->fp12.f.f_even);
     Fault_LogFReg(0xe, &ctx->fp14.f.f_even);
-    osSyncPrintf("\n");
+    PRINTF("\n");
     Fault_LogFReg(0x10, &ctx->fp16.f.f_even);
     Fault_LogFReg(0x12, &ctx->fp18.f.f_even);
-    osSyncPrintf("\n");
+    PRINTF("\n");
     Fault_LogFReg(0x14, &ctx->fp20.f.f_even);
     Fault_LogFReg(0x16, &ctx->fp22.f.f_even);
-    osSyncPrintf("\n");
+    PRINTF("\n");
     Fault_LogFReg(0x18, &ctx->fp24.f.f_even);
     Fault_LogFReg(0x1a, &ctx->fp26.f.f_even);
-    osSyncPrintf("\n");
+    PRINTF("\n");
     Fault_LogFReg(0x1c, &ctx->fp28.f.f_even);
     Fault_LogFReg(0x1e, &ctx->fp30.f.f_even);
-    osSyncPrintf("\n");
+    PRINTF("\n");
 }
 
 OSThread* Fault_FindFaultedThread() {
@@ -537,11 +537,11 @@ void Fault_WaitForButtonCombo() {
     if (1) {}
     if (1) {}
 
-    osSyncPrintf(
+    PRINTF(
         VT_FGCOL(WHITE) "KeyWaitB (ＬＲＺ " VT_FGCOL(WHITE) "上" VT_FGCOL(YELLOW) "下 " VT_FGCOL(YELLOW) "上" VT_FGCOL(WHITE) "下 " VT_FGCOL(WHITE) "左" VT_FGCOL(
             YELLOW) "左 " VT_FGCOL(YELLOW) "右" VT_FGCOL(WHITE) "右 " VT_FGCOL(GREEN) "Ｂ" VT_FGCOL(BLUE) "Ａ" VT_FGCOL(RED) "START" VT_FGCOL(WHITE) ")" VT_RST
                                                                                                                                                      "\n");
-    osSyncPrintf(VT_FGCOL(WHITE) "KeyWaitB'(ＬＲ左" VT_FGCOL(YELLOW) "右 +" VT_FGCOL(RED) "START" VT_FGCOL(
+    PRINTF(VT_FGCOL(WHITE) "KeyWaitB'(ＬＲ左" VT_FGCOL(YELLOW) "右 +" VT_FGCOL(RED) "START" VT_FGCOL(
         WHITE) ")" VT_RST "\n");
 
     FaultDrawer_SetForeColor(0xFFFF);
@@ -866,14 +866,14 @@ void Fault_LogStackTrace(OSThread* thread, s32 height) {
     u32 addr;
     s32 pad;
 
-    osSyncPrintf("STACK TRACE\nSP       PC       (VPC)\n");
+    PRINTF("STACK TRACE\nSP       PC       (VPC)\n");
     for (line = 1; line < height && (ra != 0 || sp != 0) && pc != (u32)__osCleanupThread; line++) {
-        osSyncPrintf("%08x %08x", sp, pc);
+        PRINTF("%08x %08x", sp, pc);
         addr = Fault_ConvertAddress(pc);
         if (addr != 0) {
-            osSyncPrintf(" -> %08x", addr);
+            PRINTF(" -> %08x", addr);
         }
-        osSyncPrintf("\n");
+        PRINTF("\n");
         Fault_WalkStack(&sp, &pc, &ra);
     }
 }
@@ -948,25 +948,25 @@ void Fault_ThreadEntry(void* arg) {
 
             if (msg == (OSMesg)1) {
                 sFaultStructPtr->msgId = 1;
-                osSyncPrintf("フォルトマネージャ:OS_EVENT_CPU_BREAKを受信しました\n");
+                PRINTF("フォルトマネージャ:OS_EVENT_CPU_BREAKを受信しました\n");
             } else if (1 && msg == (OSMesg)2) {
                 sFaultStructPtr->msgId = 2;
-                osSyncPrintf("フォルトマネージャ:OS_EVENT_FAULTを受信しました\n");
+                PRINTF("フォルトマネージャ:OS_EVENT_FAULTを受信しました\n");
             } else if (msg == (OSMesg)3) {
                 Fault_UpdatePad();
                 faultedThread = NULL;
                 continue;
             } else {
                 sFaultStructPtr->msgId = 3;
-                osSyncPrintf("フォルトマネージャ:不明なメッセージを受信しました\n");
+                PRINTF("フォルトマネージャ:不明なメッセージを受信しました\n");
             }
 
             faultedThread = __osGetCurrFaultedThread();
-            osSyncPrintf("__osGetCurrFaultedThread()=%08x\n", faultedThread);
+            PRINTF("__osGetCurrFaultedThread()=%08x\n", faultedThread);
 
             if (faultedThread == NULL) {
                 faultedThread = Fault_FindFaultedThread();
-                osSyncPrintf("FindFaultedThread()=%08x\n", faultedThread);
+                PRINTF("FindFaultedThread()=%08x\n", faultedThread);
             }
         } while (faultedThread == NULL);
 
@@ -1042,9 +1042,9 @@ void Fault_Init(void) {
 }
 
 void Fault_HangupFaultClient(const char* arg0, const char* arg1) {
-    osSyncPrintf("HungUp on Thread %d\n", osGetThreadId(0));
-    osSyncPrintf("%s\n", arg0 ? arg0 : "(NULL)");
-    osSyncPrintf("%s\n", arg1 ? arg1 : "(NULL)");
+    PRINTF("HungUp on Thread %d\n", osGetThreadId(0));
+    PRINTF("%s\n", arg0 ? arg0 : "(NULL)");
+    PRINTF("%s\n", arg1 ? arg1 : "(NULL)");
     FaultDrawer_Printf("HungUp on Thread %d\n", osGetThreadId(0));
     FaultDrawer_Printf("%s\n", arg0 ? arg0 : "(NULL)");
     FaultDrawer_Printf("%s\n", arg1 ? arg1 : "(NULL)");

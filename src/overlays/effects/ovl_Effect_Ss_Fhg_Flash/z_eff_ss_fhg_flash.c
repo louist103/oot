@@ -5,7 +5,7 @@
  */
 
 #include "z_eff_ss_fhg_flash.h"
-#include "overlays/actors/ovl_Boss_Ganondrof/z_boss_ganondrof.h"
+
 
 #define rAlpha regs[0]
 #define rObjBankIdx regs[2]
@@ -55,7 +55,7 @@ u32 EffectSsFhgFlash_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, v
             this->gfx = SEGMENTED_TO_VIRTUAL(D_06012160);
             gSegments[6] = oldSeg6;
         } else {
-            osSyncPrintf("Effect_Ss_Fhg_Flash_ct():pffd->modeエラー\n");
+            PRINTF("Effect_Ss_Fhg_Flash_ct():pffd->modeエラー\n");
             return 0;
         }
     } else {
@@ -65,7 +65,7 @@ u32 EffectSsFhgFlash_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, v
         this->rScale = (s16)Rand_ZeroFloat(initParams->scale) + initParams->scale;
         this->rAlpha = 255;
         this->draw = EffectSsFhgFlash_DrawShock;
-        this->update = EffectSsFhgFlash_UpdateShock;
+
         this->rParam = initParams->param;
 
         if (initParams->param != FHGFLASH_SHOCK_NO_ACTOR) {
@@ -168,38 +168,6 @@ void EffectSsFhgFlash_UpdateLightBall(GlobalContext* globalCtx, u32 index, Effec
     }
 }
 
-void EffectSsFhgFlash_UpdateShock(GlobalContext* globalCtx, u32 index, EffectSs* this) {
-    s16 randBodypart;
-    Player* player;
-    BossGanondrof* phantomGanon;
-    s16 rand;
-
-    rand = (Rand_ZeroOne() * 20000.0f);
-    this->rXZRot = (this->rXZRot + rand) + 0x4000;
-
-    if (this->rParam == FHGFLASH_SHOCK_PLAYER) {
-        player = PLAYER;
-        randBodypart = Rand_ZeroFloat(17.9f);
-        this->pos.x = player->bodyPartsPos[randBodypart].x + Rand_CenteredFloat(10.0f);
-        this->pos.y = player->bodyPartsPos[randBodypart].y + Rand_CenteredFloat(15.0f);
-        this->pos.z = player->bodyPartsPos[randBodypart].z + Rand_CenteredFloat(10.0f);
-    } else if (this->rParam == FHGFLASH_SHOCK_PG) {
-        phantomGanon = (BossGanondrof*)this->actor;
-        randBodypart = Rand_ZeroFloat(23.9f);
-        this->pos.x = phantomGanon->bodyPartsPos[randBodypart].x + Rand_CenteredFloat(15.0f);
-        this->pos.y = phantomGanon->bodyPartsPos[randBodypart].y + Rand_CenteredFloat(20.0f);
-        this->pos.z = phantomGanon->bodyPartsPos[randBodypart].z + Rand_CenteredFloat(15.0f);
-    }
-
-    if (this->life < 100) {
-        this->rAlpha -= 50;
-
-        if (this->rAlpha < 0) {
-            this->rAlpha = 0;
-            this->life = 0;
-        }
-    }
-}
 
 Vtx D_809A50C0[] = {
     VTX(-10, -10, 0, 0, 1024, 0xFF, 0xFF, 0xFF, 0xFF),

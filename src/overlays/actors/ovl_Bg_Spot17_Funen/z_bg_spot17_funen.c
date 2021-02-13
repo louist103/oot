@@ -37,7 +37,7 @@ void BgSpot17Funen_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgSpot17Funen* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    osSyncPrintf("spot17 obj. 噴煙 (arg_data 0x%04x)\n", this->actor.params);
+    PRINTF("spot17 obj. 噴煙 (arg_data 0x%04x)\n", this->actor.params);
 }
 
 void BgSpot17Funen_Destroy(Actor* thisx, GlobalContext* globalCtx) {

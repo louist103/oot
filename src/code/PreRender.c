@@ -437,7 +437,7 @@ void func_800C2500(PreRenderContext* this, s32 x, s32 y) {
 
     // 7 == buffA[7] ?
     if (7 == buffA[7]) {
-        osSyncPrintf("Error, should not be in here \n");
+        PRINTF("Error, should not be in here \n");
         return;
     }
 

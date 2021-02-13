@@ -56,16 +56,16 @@ void Graph_DisassembleUCode(void* arg0) {
         HREG(91) = disassembler.syncErr;
         HREG(92) = disassembler.loaducodeCnt;
         if (HREG(82) == 1 || HREG(82) == 2) {
-            osSyncPrintf("vtx_cnt=%d\n", disassembler.vtxCnt);
-            osSyncPrintf("spvtx_cnt=%d\n", disassembler.spvtxCnt);
-            osSyncPrintf("tri1_cnt=%d\n", disassembler.tri1Cnt);
-            osSyncPrintf("tri2_cnt=%d\n", disassembler.tri2Cnt);
-            osSyncPrintf("quad_cnt=%d\n", disassembler.quadCnt);
-            osSyncPrintf("line_cnt=%d\n", disassembler.lineCnt);
-            osSyncPrintf("sync_err=%d\n", disassembler.syncErr);
-            osSyncPrintf("loaducode_cnt=%d\n", disassembler.loaducodeCnt);
-            osSyncPrintf("dl_depth=%d\n", disassembler.dlDepth);
-            osSyncPrintf("dl_cnt=%d\n", disassembler.dlCnt);
+            PRINTF("vtx_cnt=%d\n", disassembler.vtxCnt);
+            PRINTF("spvtx_cnt=%d\n", disassembler.spvtxCnt);
+            PRINTF("tri1_cnt=%d\n", disassembler.tri1Cnt);
+            PRINTF("tri2_cnt=%d\n", disassembler.tri2Cnt);
+            PRINTF("quad_cnt=%d\n", disassembler.quadCnt);
+            PRINTF("line_cnt=%d\n", disassembler.lineCnt);
+            PRINTF("sync_err=%d\n", disassembler.syncErr);
+            PRINTF("loaducode_cnt=%d\n", disassembler.loaducodeCnt);
+            PRINTF("dl_depth=%d\n", disassembler.dlDepth);
+            PRINTF("dl_cnt=%d\n", disassembler.dlCnt);
         }
         UCodeDisas_Destroy(&disassembler);
     }
@@ -171,9 +171,9 @@ void Graph_TaskSet00(GraphicsContext* gfxCtx) {
     osStopTimer(&timer);
 
     if (msg == (OSMesg)666) {
-        osSyncPrintf(VT_FGCOL(RED));
-        osSyncPrintf("RCPが帰ってきませんでした。"); // "RCP did not return."
-        osSyncPrintf(VT_RST);
+        PRINTF(VT_FGCOL(RED));
+        PRINTF("RCPが帰ってきませんでした。"); // "RCP did not return."
+        PRINTF(VT_RST);
         LogUtils_LogHexDump(&HW_REG(SP_MEM_ADDR_REG, u32), 0x20);
         LogUtils_LogHexDump(&DPC_START_REG, 0x20);
         LogUtils_LogHexDump(gGfxSPTaskYieldBuffer, sizeof(gGfxSPTaskYieldBuffer));
@@ -332,37 +332,37 @@ void Graph_Update(GraphicsContext* gfxCtx, GameState* gameState) {
 
         if (pool->headMagic != GFXPOOL_HEAD_MAGIC) {
             // @bug (?) : devs might've forgotten "problem = true;"
-            osSyncPrintf("%c", 7);
+            PRINTF("%c", 7);
             // Dynamic area head is destroyed
-            osSyncPrintf(VT_COL(RED, WHITE) "ダイナミック領域先頭が破壊されています\n" VT_RST);
+            PRINTF(VT_COL(RED, WHITE) "ダイナミック領域先頭が破壊されています\n" VT_RST);
             Fault_AddHungupAndCrash("../graph.c", 1070);
         }
         if (pool->tailMagic != GFXPOOL_TAIL_MAGIC) {
             problem = true;
-            osSyncPrintf("%c", 7);
+            PRINTF("%c", 7);
             // Dynamic region tail is destroyed
-            osSyncPrintf(VT_COL(RED, WHITE) "ダイナミック領域末尾が破壊されています\n" VT_RST);
+            PRINTF(VT_COL(RED, WHITE) "ダイナミック領域末尾が破壊されています\n" VT_RST);
             Fault_AddHungupAndCrash("../graph.c", 1076);
         }
     }
 
     if (THGA_IsCrash(&gfxCtx->polyOpa)) {
         problem = true;
-        osSyncPrintf("%c", 7);
+        PRINTF("%c", 7);
         // Zelda 0 is dead
-        osSyncPrintf(VT_COL(RED, WHITE) "ゼルダ0は死んでしまった(graph_alloc is empty)\n" VT_RST);
+        PRINTF(VT_COL(RED, WHITE) "ゼルダ0は死んでしまった(graph_alloc is empty)\n" VT_RST);
     }
     if (THGA_IsCrash(&gfxCtx->polyXlu)) {
         problem = true;
-        osSyncPrintf("%c", 7);
+        PRINTF("%c", 7);
         // Zelda 1 is dead
-        osSyncPrintf(VT_COL(RED, WHITE) "ゼルダ1は死んでしまった(graph_alloc is empty)\n" VT_RST);
+        PRINTF(VT_COL(RED, WHITE) "ゼルダ1は死んでしまった(graph_alloc is empty)\n" VT_RST);
     }
     if (THGA_IsCrash(&gfxCtx->overlay)) {
         problem = true;
-        osSyncPrintf("%c", 7);
+        PRINTF("%c", 7);
         // Zelda 4 is dead
-        osSyncPrintf(VT_COL(RED, WHITE) "ゼルダ4は死んでしまった(graph_alloc is empty)\n" VT_RST);
+        PRINTF(VT_COL(RED, WHITE) "ゼルダ4は死んでしまった(graph_alloc is empty)\n" VT_RST);
     }
 
     if (!problem) {
@@ -399,7 +399,7 @@ void Graph_Update(GraphicsContext* gfxCtx, GameState* gameState) {
 
     if (D_8012DBC0 && PreNmiBuff_IsResetting(gAppNmiBufferPtr) && !gameState->unk_A0) {
         // To reset mode
-        osSyncPrintf(VT_COL(YELLOW, BLACK) "PRE-NMIによりリセットモードに移行します\n" VT_RST);
+        PRINTF(VT_COL(YELLOW, BLACK) "PRE-NMIによりリセットモードに移行します\n" VT_RST);
         SET_NEXT_GAMESTATE(gameState, PreNMI_Init, PreNMIContext);
         gameState->running = false;
     }
@@ -416,7 +416,7 @@ void Graph_ThreadEntry(void* arg0) {
     nextOvl = &gGameStateOverlayTable[0];
 
     // Start graphic thread execution
-    osSyncPrintf("グラフィックスレッド実行開始\n");
+    PRINTF("グラフィックスレッド実行開始\n");
     Graph_Init(&gfxCtx);
 
     while (nextOvl) {
@@ -425,13 +425,13 @@ void Graph_ThreadEntry(void* arg0) {
 
         size = ovl->instanceSize;
         // Class size =%d bytes
-        osSyncPrintf("クラスサイズ＝%dバイト\n", size);
+        PRINTF("クラスサイズ＝%dバイト\n", size);
 
         gameState = SystemArena_MallocDebug(size, "../graph.c", 1196);
 
         if (!gameState) {
             // Failure to secure
-            osSyncPrintf("確保失敗\n");
+            PRINTF("確保失敗\n");
 
             sprintf(faultMsg, "CLASS SIZE= %d bytes", size);
             Fault_AddHungupAndCrashImpl("GAME CLASS MALLOC FAILED", faultMsg);
@@ -449,14 +449,14 @@ void Graph_ThreadEntry(void* arg0) {
     }
     Graph_Destroy(&gfxCtx);
     // End of graphic thread execution
-    osSyncPrintf("グラフィックスレッド実行終了\n");
+    PRINTF("グラフィックスレッド実行終了\n");
 }
 
 void* Graph_Alloc(GraphicsContext* gfxCtx, size_t size) {
     TwoHeadGfxArena* thga = &gfxCtx->polyOpa;
 
     if (HREG(59) == 1) {
-        osSyncPrintf("graph_alloc siz=%d thga size=%08x bufp=%08x head=%08x tail=%08x\n", size, thga->size, thga->bufp,
+        PRINTF("graph_alloc siz=%d thga size=%08x bufp=%08x head=%08x tail=%08x\n", size, thga->size, thga->bufp,
                      thga->p, thga->d);
     }
     return THGA_AllocEnd(&gfxCtx->polyOpa, ALIGN16(size));
@@ -466,7 +466,7 @@ void* Graph_Alloc2(GraphicsContext* gfxCtx, size_t size) {
     TwoHeadGfxArena* thga = &gfxCtx->polyOpa;
 
     if (HREG(59) == 1) {
-        osSyncPrintf("graph_alloc siz=%d thga size=%08x bufp=%08x head=%08x tail=%08x\n", size, thga->size, thga->bufp,
+        PRINTF("graph_alloc siz=%d thga size=%08x bufp=%08x head=%08x tail=%08x\n", size, thga->size, thga->bufp,
                      thga->p, thga->d);
     }
     return THGA_AllocEnd(&gfxCtx->polyOpa, ALIGN16(size));

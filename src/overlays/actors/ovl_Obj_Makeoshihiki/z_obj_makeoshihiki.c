@@ -69,9 +69,9 @@ void ObjMakeoshihiki_Init(Actor* thisx, GlobalContext* globalCtx) {
                            spawnPos->z, 0, block->rotY, 0,
                            ((block->color << 6) & 0xC0) | (block->type & 0xF) | 0xFF00) == NULL) {
         // Push-pull block failure
-        osSyncPrintf(VT_COL(RED, WHITE));
-        osSyncPrintf("Ｅｒｒｏｒ : 押し引きブロック発生失敗(%s %d)\n", "../z_obj_makeoshihiki.c", 194);
-        osSyncPrintf(VT_RST);
+        PRINTF(VT_COL(RED, WHITE));
+        PRINTF("Ｅｒｒｏｒ : 押し引きブロック発生失敗(%s %d)\n", "../z_obj_makeoshihiki.c", 194);
+        PRINTF(VT_RST);
         Actor_Kill(thisx);
         return;
     }
@@ -79,7 +79,7 @@ void ObjMakeoshihiki_Init(Actor* thisx, GlobalContext* globalCtx) {
         ((ObjOshihiki*)thisx->child)->cantMove = true;
     }
     thisx->world.rot.z = thisx->shape.rot.z = 0;
-    osSyncPrintf("(%s)(arg_data %04xF)(angleZ %d)\n", "../z_obj_makeoshihiki.c", thisx->params, thisx->home.rot.z);
+    PRINTF("(%s)(arg_data %04xF)(angleZ %d)\n", "../z_obj_makeoshihiki.c", thisx->params, thisx->home.rot.z);
 }
 
 void ObjMakeoshihiki_Draw(Actor* thisx, GlobalContext* globalCtx) {

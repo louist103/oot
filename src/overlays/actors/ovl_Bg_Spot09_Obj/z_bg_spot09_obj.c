@@ -139,11 +139,11 @@ s32 func_808B1D44(BgSpot09Obj* this, GlobalContext* globalCtx) {
 void BgSpot09Obj_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgSpot09Obj* this = THIS;
 
-    osSyncPrintf("Spot09 Object [arg_data : 0x%04x](大工救出フラグ 0x%x)\n", this->dyna.actor.params,
+    PRINTF("Spot09 Object [arg_data : 0x%04x](大工救出フラグ 0x%x)\n", this->dyna.actor.params,
                  gSaveContext.eventChkInf[9] & 0xF);
     this->dyna.actor.params &= 0xFF;
     if ((this->dyna.actor.params < 0) || (this->dyna.actor.params >= 5)) {
-        osSyncPrintf("Error : Spot 09 object の arg_data が判別出来ない(%s %d)(arg_data 0x%04x)\n",
+        PRINTF("Error : Spot 09 object の arg_data が判別出来ない(%s %d)(arg_data 0x%04x)\n",
                      "../z_bg_spot09_obj.c", 322, this->dyna.actor.params);
     }
 

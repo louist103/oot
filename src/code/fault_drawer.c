@@ -154,14 +154,14 @@ s32 FaultDrawer_ColorToPrintColor(u16 color) {
 void FaultDrawer_UpdatePrintColor() {
     s32 idx;
     if (sFaultDrawerStruct.osSyncPrintfEnabled) {
-        osSyncPrintf(VT_RST);
+        PRINTF(VT_RST);
         idx = FaultDrawer_ColorToPrintColor(sFaultDrawerStruct.foreColor);
         if (idx >= 0 && idx < 8) {
-            osSyncPrintf(VT_SGR("3%d"), idx);
+            PRINTF(VT_SGR("3%d"), idx);
         }
         idx = FaultDrawer_ColorToPrintColor(sFaultDrawerStruct.backColor);
         if (idx >= 0 && idx < 8) {
-            osSyncPrintf(VT_SGR("4%d"), idx);
+            PRINTF(VT_SGR("4%d"), idx);
         }
     }
 }
@@ -187,7 +187,7 @@ void FaultDrawer_SetCharPad(s8 padW, s8 padH) {
 
 void FaultDrawer_SetCursor(s32 x, s32 y) {
     if (sFaultDrawerStruct.osSyncPrintfEnabled) {
-        osSyncPrintf(VT_CUP("%d", "%d"),
+        PRINTF(VT_CUP("%d", "%d"),
                      (y - sFaultDrawerStruct.yStart) / (sFaultDrawerStruct.charH + sFaultDrawerStruct.charHPad),
                      (x - sFaultDrawerStruct.xStart) / (sFaultDrawerStruct.charW + sFaultDrawerStruct.charWPad));
     }
@@ -197,7 +197,7 @@ void FaultDrawer_SetCursor(s32 x, s32 y) {
 
 void FaultDrawer_FillScreen() {
     if (sFaultDrawerStruct.osSyncPrintfEnabled) {
-        osSyncPrintf(VT_CLS);
+        PRINTF(VT_CLS);
     }
 
     FaultDrawer_DrawRecImpl(sFaultDrawerStruct.xStart, sFaultDrawerStruct.yStart, sFaultDrawerStruct.xEnd,
@@ -222,7 +222,7 @@ u32 FaultDrawer_FormatStringFunc(u32 arg0, const char* str, s32 count) {
             switch (*str) {
                 case '\n':
                     if (sFaultDrawerStruct.osSyncPrintfEnabled) {
-                        osSyncPrintf("\n");
+                        PRINTF("\n");
                     }
 
                     sFaultDrawerStruct.cursorX = sFaultDrawerStruct.w;
@@ -236,7 +236,7 @@ u32 FaultDrawer_FormatStringFunc(u32 arg0, const char* str, s32 count) {
                     break;
                 default:
                     if (sFaultDrawerStruct.osSyncPrintfEnabled) {
-                        osSyncPrintf("%c", *str);
+                        PRINTF("%c", *str);
                     }
 
                     FaultDrawer_DrawChar(*str);

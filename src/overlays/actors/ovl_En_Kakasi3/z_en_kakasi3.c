@@ -72,9 +72,9 @@ void EnKakasi3_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 void EnKakasi3_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnKakasi3* this = THIS;
 
-    osSyncPrintf("\n\n");
+    PRINTF("\n\n");
     // Translates to: Obonur -- Related to the name of the scarecrow (Bonooru)
-    osSyncPrintf(VT_FGCOL(YELLOW) "☆☆☆☆☆ おーボヌール ☆☆☆☆☆ \n" VT_RST);
+    PRINTF(VT_FGCOL(YELLOW) "☆☆☆☆☆ おーボヌール ☆☆☆☆☆ \n" VT_RST);
     this->actor.targetMode = 6;
 
     Collider_InitCylinder(globalCtx, &this->collider);
@@ -351,7 +351,7 @@ void func_80A918E4(EnKakasi3* this, GlobalContext* globalCtx) {
 
     if (BREG(3) != 0) {
         // No way!
-        osSyncPrintf(VT_FGCOL(PURPLE) "☆☆☆☆☆ まさか！ ☆☆☆☆☆ %d\n" VT_RST, globalCtx->msgCtx.unk_E3EE);
+        PRINTF(VT_FGCOL(PURPLE) "☆☆☆☆☆ まさか！ ☆☆☆☆☆ %d\n" VT_RST, globalCtx->msgCtx.unk_E3EE);
     }
     if ((globalCtx->msgCtx.unk_E3EE == 4 || (globalCtx->msgCtx.unk_E3EE >= 5 && globalCtx->msgCtx.unk_E3EE < 11)) &&
         globalCtx->msgCtx.msgMode == 0) {
@@ -368,9 +368,9 @@ void func_80A918E4(EnKakasi3* this, GlobalContext* globalCtx) {
     if (globalCtx->msgCtx.unk_E3EE == 3 && globalCtx->msgCtx.msgMode == 0) {
         globalCtx->msgCtx.unk_E3EE = 4;
         if (BREG(3) != 0) {
-            osSyncPrintf("\n\n");
+            PRINTF("\n\n");
             // With this, other guys are OK! That's it!
-            osSyncPrintf(VT_FGCOL(CYAN) "☆☆☆☆☆ これで、他の奴もＯＫ！だ！ ☆☆☆☆☆ %d\n" VT_RST,
+            PRINTF(VT_FGCOL(CYAN) "☆☆☆☆☆ これで、他の奴もＯＫ！だ！ ☆☆☆☆☆ %d\n" VT_RST,
                          globalCtx->msgCtx.unk_E3EE);
         }
         this->unk_195 = true;
@@ -417,9 +417,9 @@ void EnKakasi3_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 i;
 
     if (BREG(2) != 0) {
-        osSyncPrintf("\n\n");
+        PRINTF("\n\n");
         // flag!
-        osSyncPrintf(VT_FGCOL(YELLOW) "☆☆☆☆☆ フラグ！ ☆☆☆☆☆ %d\n" VT_RST, gSaveContext.scarecrowSpawnSongSet);
+        PRINTF(VT_FGCOL(YELLOW) "☆☆☆☆☆ フラグ！ ☆☆☆☆☆ %d\n" VT_RST, gSaveContext.scarecrowSpawnSongSet);
     }
 
     this->unk_198++;

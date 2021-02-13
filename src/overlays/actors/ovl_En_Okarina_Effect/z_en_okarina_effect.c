@@ -48,10 +48,10 @@ void EnOkarinaEffect_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 void EnOkarinaEffect_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnOkarinaEffect* this = THIS;
 
-    osSyncPrintf("\n\n");
+    PRINTF("\n\n");
     // "Ocarina Storm Effect"
-    osSyncPrintf(VT_FGCOL(YELLOW) "☆☆☆☆☆ オカリナあらし効果ビカビカビカ〜 ☆☆☆☆☆ \n" VT_RST);
-    osSyncPrintf("\n\n");
+    PRINTF(VT_FGCOL(YELLOW) "☆☆☆☆☆ オカリナあらし効果ビカビカビカ〜 ☆☆☆☆☆ \n" VT_RST);
+    PRINTF("\n\n");
     if (globalCtx->envCtx.unk_EE[1] != 0) {
         Actor_Kill(&this->actor); // kill if an instance is already spawned
     }
@@ -78,10 +78,10 @@ void EnOkarinaEffect_ManageStorm(EnOkarinaEffect* this, GlobalContext* globalCtx
         if (globalCtx->envCtx.unk_1E != 0 || globalCtx->envCtx.unk_1F != 1) {
             this->timer--;
         }
-        osSyncPrintf("\nthis->timer=[%d]", this->timer);
+        PRINTF("\nthis->timer=[%d]", this->timer);
         if (this->timer == 308) {
             // "Let's grow some beans"
-            osSyncPrintf("\n\n\n豆よ のびろ 指定\n\n\n");
+            PRINTF("\n\n\n豆よ のびろ 指定\n\n\n");
             Flags_SetEnv(globalCtx, 5); // set storms env flag
         }
     }
@@ -98,8 +98,8 @@ void EnOkarinaEffect_ManageStorm(EnOkarinaEffect* this, GlobalContext* globalCtx
             func_800F6D58(0xF, 1, 0);
             func_800F6D58(0xE, 1, 0);
         }
-        osSyncPrintf("\n\n\nE_wether_flg=[%d]", D_8011FB30);
-        osSyncPrintf("\nrain_evt_trg=[%d]\n\n", globalCtx->envCtx.gloomySkyEvent);
+        PRINTF("\n\n\nE_wether_flg=[%d]", D_8011FB30);
+        PRINTF("\nrain_evt_trg=[%d]\n\n", globalCtx->envCtx.gloomySkyEvent);
         if (D_8011FB30 == 0 && (globalCtx->envCtx.gloomySkyEvent == 1)) {
             globalCtx->envCtx.gloomySkyEvent = 2; // end gloomy sky
         } else {

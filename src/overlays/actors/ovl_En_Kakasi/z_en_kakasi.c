@@ -68,8 +68,8 @@ void EnKakasi_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 void EnKakasi_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnKakasi* this = THIS;
 
-    osSyncPrintf("\n\n");
-    osSyncPrintf(VT_FGCOL(YELLOW) "☆☆☆☆☆ Ｌｅｔ’ｓ ＤＡＮＣＥ！ ☆☆☆☆☆ %f\n" VT_RST, this->actor.world.pos.y);
+    PRINTF("\n\n");
+    PRINTF(VT_FGCOL(YELLOW) "☆☆☆☆☆ Ｌｅｔ’ｓ ＤＡＮＣＥ！ ☆☆☆☆☆ %f\n" VT_RST, this->actor.world.pos.y);
 
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
@@ -244,7 +244,7 @@ void func_80A8F8D0(EnKakasi* this, GlobalContext* globalCtx) {
 
     if (globalCtx->msgCtx.unk_E3EE == 4 && globalCtx->msgCtx.msgMode == 0) {
         // end?
-        osSyncPrintf(VT_FGCOL(BLUE) "☆☆☆☆☆ 終り？ ☆☆☆☆☆ \n" VT_RST);
+        PRINTF(VT_FGCOL(BLUE) "☆☆☆☆☆ 終り？ ☆☆☆☆☆ \n" VT_RST);
 
         if (this->unk_19A != 0) {
             func_80106CCC(globalCtx);
@@ -287,7 +287,7 @@ void func_80A8FAA4(EnKakasi* this, GlobalContext* globalCtx) {
         return;
     }
 
-    osSyncPrintf("game_play->message.msg_mode=%d\n", globalCtx->msgCtx.msgMode);
+    PRINTF("game_play->message.msg_mode=%d\n", globalCtx->msgCtx.msgMode);
 
     if (globalCtx->msgCtx.msgMode == 0) {
         if (this->unk_194) {
@@ -347,9 +347,9 @@ void EnKakasi_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnKakasi* this = THIS;
 
     if (BREG(3) != 0) {
-        osSyncPrintf("\n\n");
+        PRINTF("\n\n");
         // flag!
-        osSyncPrintf(VT_FGCOL(YELLOW) "☆☆☆☆☆ フラグ！ ☆☆☆☆☆ %d\n" VT_RST, gSaveContext.scarecrowCustomSongSet);
+        PRINTF(VT_FGCOL(YELLOW) "☆☆☆☆☆ フラグ！ ☆☆☆☆☆ %d\n" VT_RST, gSaveContext.scarecrowCustomSongSet);
     }
     func_80093D18(globalCtx->state.gfxCtx);
     SkelAnime_DrawFlexOpa(globalCtx, this->skelanime.skeleton, this->skelanime.jointTable, this->skelanime.dListCount,

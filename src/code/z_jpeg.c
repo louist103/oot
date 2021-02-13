@@ -117,43 +117,43 @@ void Jpeg_ParseMarkers(u8* ptr, JpegContext* ctx) {
                 case 0:
                     break;
                 case MARKER_SOI: {
-                    osSyncPrintf("MARKER_SOI\n");
+                    PRINTF("MARKER_SOI\n");
                     break;
                 }
                 case MARKER_APP0: {
-                    osSyncPrintf("MARKER_APP0 %d\n", Jpeg_GetU16(ptr));
+                    PRINTF("MARKER_APP0 %d\n", Jpeg_GetU16(ptr));
                     ptr += Jpeg_GetU16(ptr);
                     break;
                 }
                 case MARKER_APP1: {
-                    osSyncPrintf("MARKER_APP1 %d\n", Jpeg_GetU16(ptr));
+                    PRINTF("MARKER_APP1 %d\n", Jpeg_GetU16(ptr));
                     ptr += Jpeg_GetU16(ptr);
                     break;
                 }
                 case MARKER_APP2: {
-                    osSyncPrintf("MARKER_APP2 %d\n", Jpeg_GetU16(ptr));
+                    PRINTF("MARKER_APP2 %d\n", Jpeg_GetU16(ptr));
                     ptr += Jpeg_GetU16(ptr);
                     break;
                 }
                 case MARKER_DQT: {
-                    osSyncPrintf("MARKER_DQT %d %d %02x\n", ctx->dqtCount, Jpeg_GetU16(ptr), ptr[2]);
+                    PRINTF("MARKER_DQT %d %d %02x\n", ctx->dqtCount, Jpeg_GetU16(ptr), ptr[2]);
                     ctx->dqtPtr[ctx->dqtCount++] = ptr + 2;
                     ptr += Jpeg_GetU16(ptr);
                     break;
                 }
                 case MARKER_DHT: {
-                    osSyncPrintf("MARKER_DHT %d %d %02x\n", ctx->dhtCount, Jpeg_GetU16(ptr), ptr[2]);
+                    PRINTF("MARKER_DHT %d %d %02x\n", ctx->dhtCount, Jpeg_GetU16(ptr), ptr[2]);
                     ctx->dhtPtr[ctx->dhtCount++] = ptr + 2;
                     ptr += Jpeg_GetU16(ptr);
                     break;
                 }
                 case MARKER_DRI: {
-                    osSyncPrintf("MARKER_DRI %d\n", Jpeg_GetU16(ptr));
+                    PRINTF("MARKER_DRI %d\n", Jpeg_GetU16(ptr));
                     ptr += Jpeg_GetU16(ptr);
                     break;
                 }
                 case MARKER_SOF: {
-                    osSyncPrintf("MARKER_SOF   %d "
+                    PRINTF("MARKER_SOF   %d "
                                  "精度%02x " // accuracy
                                  "垂直%d "   // vertical
                                  "水平%d "   // horizontal
@@ -182,19 +182,19 @@ void Jpeg_ParseMarkers(u8* ptr, JpegContext* ctx) {
                     break;
                 }
                 case MARKER_SOS: {
-                    osSyncPrintf("MARKER_SOS %d\n", Jpeg_GetU16(ptr));
+                    PRINTF("MARKER_SOS %d\n", Jpeg_GetU16(ptr));
                     ptr += Jpeg_GetU16(ptr);
                     ctx->imageData = ptr;
                     break;
                 }
                 case MARKER_EOI: {
-                    osSyncPrintf("MARKER_EOI\n");
+                    PRINTF("MARKER_EOI\n");
                     exit = true;
                     break;
                 }
                 default: {
                     // Unknown marker
-                    osSyncPrintf("マーカー不明 %02x\n", ptr[-1]);
+                    PRINTF("マーカー不明 %02x\n", ptr[-1]);
                     ptr += Jpeg_GetU16(ptr);
                     break;
                 }
@@ -233,7 +233,7 @@ s32 Jpeg_Decode(void* data, u16* zbuffer, JpegWork* workBuff, u32 workSize) {
     diff = time2 - time;
     if (1) {}
     // Wait for synchronization of fifo buffer
-    osSyncPrintf("*** fifoバッファの同期待ち time = %6.3f ms ***\n", OS_CYCLES_TO_USEC(diff) / 1000.0f);
+    PRINTF("*** fifoバッファの同期待ち time = %6.3f ms ***\n", OS_CYCLES_TO_USEC(diff) / 1000.0f);
 
     ctx.workBuf = workBuff;
     Jpeg_ParseMarkers(data, &ctx);
@@ -242,7 +242,7 @@ s32 Jpeg_Decode(void* data, u16* zbuffer, JpegWork* workBuff, u32 workSize) {
     diff = time - time2;
     if (1) {}
     // Check markers for each segment
-    osSyncPrintf("*** 各セグメントのマーカーのチェック time = %6.3f ms ***\n", OS_CYCLES_TO_USEC(diff) / 1000.0f);
+    PRINTF("*** 各セグメントのマーカーのチェック time = %6.3f ms ***\n", OS_CYCLES_TO_USEC(diff) / 1000.0f);
 
     switch (ctx.dqtCount) {
         case 1: {
@@ -269,32 +269,32 @@ s32 Jpeg_Decode(void* data, u16* zbuffer, JpegWork* workBuff, u32 workSize) {
     diff = time2 - time;
     if (1) {}
     // Create quantization table
-    osSyncPrintf("*** 量子化テーブル作成 time = %6.3f ms ***\n", OS_CYCLES_TO_USEC(diff) / 1000.0f);
+    PRINTF("*** 量子化テーブル作成 time = %6.3f ms ***\n", OS_CYCLES_TO_USEC(diff) / 1000.0f);
 
     switch (ctx.dhtCount) {
         case 1: {
             if (JpegUtils_ProcessHuffmanTable(ctx.dhtPtr[0], &hTables[0], &workBuff->codesLengths, &workBuff->codes,
                                               4)) {
-                osSyncPrintf("Error : Cant' make huffman table.\n");
+                PRINTF("Error : Cant' make huffman table.\n");
             }
             break;
         }
         case 4: {
             if (JpegUtils_ProcessHuffmanTable(ctx.dhtPtr[0], &hTables[0], &workBuff->codesLengths, &workBuff->codes,
                                               1)) {
-                osSyncPrintf("Error : Cant' make huffman table.\n");
+                PRINTF("Error : Cant' make huffman table.\n");
             }
             if (JpegUtils_ProcessHuffmanTable(ctx.dhtPtr[1], &hTables[1], &workBuff->codesLengths, &workBuff->codes,
                                               1)) {
-                osSyncPrintf("Error : Cant' make huffman table.\n");
+                PRINTF("Error : Cant' make huffman table.\n");
             }
             if (JpegUtils_ProcessHuffmanTable(ctx.dhtPtr[2], &hTables[2], &workBuff->codesLengths, &workBuff->codes,
                                               1)) {
-                osSyncPrintf("Error : Cant' make huffman table.\n");
+                PRINTF("Error : Cant' make huffman table.\n");
             }
             if (JpegUtils_ProcessHuffmanTable(ctx.dhtPtr[3], &hTables[3], &workBuff->codesLengths, &workBuff->codes,
                                               1)) {
-                osSyncPrintf("Error : Cant' make huffman table.\n");
+                PRINTF("Error : Cant' make huffman table.\n");
             }
             break;
         }
@@ -306,7 +306,7 @@ s32 Jpeg_Decode(void* data, u16* zbuffer, JpegWork* workBuff, u32 workSize) {
     diff = time - time2;
     if (1) {}
     // Huffman table creation
-    osSyncPrintf("*** ハフマンテーブル作成 time = %6.3f ms ***\n", OS_CYCLES_TO_USEC(diff) / 1000.0f);
+    PRINTF("*** ハフマンテーブル作成 time = %6.3f ms ***\n", OS_CYCLES_TO_USEC(diff) / 1000.0f);
 
     decoder.unk_05 = 2;
     decoder.hTablePtrs[0] = &hTables[0];
@@ -322,9 +322,9 @@ s32 Jpeg_Decode(void* data, u16* zbuffer, JpegWork* workBuff, u32 workSize) {
     x = 0;
     for (i = 0; i < 300; i += 4) {
         if (JpegDecoder_Decode(&decoder, &workBuff->unk_6C0, 4, i != 0, &state)) {
-            osSyncPrintf(VT_FGCOL(RED));
-            osSyncPrintf("Error : Can't decode jpeg\n");
-            osSyncPrintf(VT_RST);
+            PRINTF(VT_FGCOL(RED));
+            PRINTF("Error : Can't decode jpeg\n");
+            PRINTF(VT_RST);
         } else {
             Jpeg_SendTask(&ctx);
             osInvalDCache(&workBuff->unk_6C0, sizeof(workBuff->unk_6C0[0]));
@@ -346,7 +346,7 @@ s32 Jpeg_Decode(void* data, u16* zbuffer, JpegWork* workBuff, u32 workSize) {
     diff = time2 - time;
     if (1) {}
     // Unfold & draw
-    osSyncPrintf("*** 展開 & 描画 time = %6.3f ms ***\n", OS_CYCLES_TO_USEC(diff) / 1000.0f);
+    PRINTF("*** 展開 & 描画 time = %6.3f ms ***\n", OS_CYCLES_TO_USEC(diff) / 1000.0f);
 
     return 0;
 }

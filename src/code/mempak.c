@@ -58,11 +58,11 @@ s32 Mempak_FindFile(s32 controllerNb, char start, char end) {
         }
 
         bit <<= 1;
-        osSyncPrintf("mempak: find '%c' (%d)\n", idx, error);
+        PRINTF("mempak: find '%c' (%d)\n", idx, error);
     }
 
     PadMgr_UnlockSerialMesgQueue(&gPadMgr, mq);
-    osSyncPrintf("mempak: find '%c' - '%c' %02x\n", start, end, flag);
+    PRINTF("mempak: find '%c' - '%c' %02x\n", start, end, flag);
 
     return flag;
 }
@@ -80,7 +80,7 @@ s32 Mempak_Write(s32 controllerNb, char idx, void* buffer, s32 offset, s32 size)
         if (error == 0) {
             ret = true;
         }
-        osSyncPrintf("mempak: write %d byte '%c' (%d)->%d\n", size, idx, sMempakFiles[idx - 'A'], error);
+        PRINTF("mempak: write %d byte '%c' (%d)->%d\n", size, idx, sMempakFiles[idx - 'A'], error);
     }
     PadMgr_UnlockSerialMesgQueue(&gPadMgr, mq);
     return ret;
@@ -99,7 +99,7 @@ s32 Mempak_Read(s32 controllerNb, char idx, void* buffer, s32 offset, s32 size) 
         if (error == 0) {
             ret = true;
         }
-        osSyncPrintf("mempak: read %d byte '%c' (%d)<-%d\n", size, idx, sMempakFiles[idx - 'A'], error);
+        PRINTF("mempak: read %d byte '%c' (%d)<-%d\n", size, idx, sMempakFiles[idx - 'A'], error);
     }
     PadMgr_UnlockSerialMesgQueue(&gPadMgr, mq);
     return ret;
@@ -122,7 +122,7 @@ s32 Mempak_Alloc(s32 controllerNb, char* idx, s32 size) {
             if (error == 0) {
                 ret = 1;
             }
-            osSyncPrintf("mempak: alloc %d byte '%c' (%d)\n", size, *idx, error);
+            PRINTF("mempak: alloc %d byte '%c' (%d)\n", size, *idx, error);
         } else {
             sMempakExtName[0] = *idx - 0x27;
             if (osPfsDeleteFile(&sMempakPfsHandle, sMempakCompanyCode, sMempakGameCode, sMempakGameName,
@@ -134,7 +134,7 @@ s32 Mempak_Alloc(s32 controllerNb, char* idx, s32 size) {
             if (error == 0) {
                 ret |= 1;
             }
-            osSyncPrintf("mempak: resize %d byte '%c' (%d)\n", size, *idx, error);
+            PRINTF("mempak: resize %d byte '%c' (%d)\n", size, *idx, error);
         }
     } else {
         for (i = 0; i < ARRAY_COUNT(sMempakFiles); i++) {
@@ -147,7 +147,7 @@ s32 Mempak_Alloc(s32 controllerNb, char* idx, s32 size) {
         sMempakExtName[0] = *idx - 0x27;
         error = osPfsAllocateFile(&sMempakPfsHandle, sMempakCompanyCode, sMempakGameCode, sMempakGameName,
                                   sMempakExtName, size, &sMempakFiles[i]);
-        osSyncPrintf("mempak: alloc %d byte '%c' (%d) with search\n", size, *idx, error);
+        PRINTF("mempak: alloc %d byte '%c' (%d) with search\n", size, *idx, error);
         if (error == 0) {
             ret = 1;
         }
@@ -168,7 +168,7 @@ s32 Mempak_DeleteFile(s32 controllerNb, char idx) {
     if (error == 0) {
         ret = true;
     }
-    osSyncPrintf("mempak: delete '%c' (%d)\n", idx, error);
+    PRINTF("mempak: delete '%c' (%d)\n", idx, error);
     PadMgr_UnlockSerialMesgQueue(&gPadMgr, mq);
     return ret;
 }

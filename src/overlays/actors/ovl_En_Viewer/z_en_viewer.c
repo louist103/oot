@@ -5,7 +5,7 @@
  */
 
 #include "z_en_viewer.h"
-#include "overlays/actors/ovl_En_Ganon_Mant/z_en_ganon_mant.h"
+
 #include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x00000010
@@ -147,7 +147,7 @@ static EnViewerDrawFunc sDrawFuncs[] = {
 
 // angl
 
-EnGanonMant* sGanonCape;
+
 
 Vec3f D_80B2D448;
 
@@ -167,8 +167,8 @@ void EnViewer_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_1E5 = 0;
     this->unk_1E6 = false;
     if (params == 3 || params == 5 || params == 7 || params == 8 || params == 9) {
-        sGanonCape = (EnGanonMant*)Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx,
-                                                      ACTOR_EN_GANON_MANT, 0.0f, 0.0f, 0.0f, 0, 0, 0, 35);
+//        sGanonCape = (EnGanonMant*)Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx,
+//                                                      ACTOR_EN_GANON_MANT, 0.0f, 0.0f, 0.0f, 0, 0, 0, 35);
     }
 }
 
@@ -596,15 +596,15 @@ void func_80B2B4A8(EnViewer* this, GlobalContext* globalCtx) {
         SkelAnime_DrawFlexOpa(globalCtx, this->skin.skelAnime.skeleton, this->skin.skelAnime.jointTable,
                               this->skin.skelAnime.dListCount, 0, func_80B2B364, this);
     } else if (params == 3) {
-        SkelAnime_DrawFlexOpa(globalCtx, this->skin.skelAnime.skeleton, this->skin.skelAnime.jointTable,
-                              this->skin.skelAnime.dListCount, func_80B2B2F4, func_80B2B468, this);
-        func_80B2CC1C(globalCtx, this);
+      //  SkelAnime_DrawFlexOpa(globalCtx, this->skin.skelAnime.skeleton, this->skin.skelAnime.jointTable,
+      //                        this->skin.skelAnime.dListCount, func_80B2B2F4, func_80B2B468, this);
+      //  func_80B2CC1C(globalCtx, this);
     } else if ((params == 3) || (params == 5) || (params == 7) || (params == 8)) {
-        if ((globalCtx->csCtx.state != 0) && (globalCtx->csCtx.npcActions[1] != NULL)) {
-            SkelAnime_DrawFlexOpa(globalCtx, this->skin.skelAnime.skeleton, this->skin.skelAnime.jointTable,
-                                  this->skin.skelAnime.dListCount, 0, func_80B2B468, this);
-            func_80B2CC1C(globalCtx, this);
-        }
+        //if ((globalCtx->csCtx.state != 0) && (globalCtx->csCtx.npcActions[1] != NULL)) {
+        //    SkelAnime_DrawFlexOpa(globalCtx, this->skin.skelAnime.skeleton, this->skin.skelAnime.jointTable,
+        //                          this->skin.skelAnime.dListCount, 0, func_80B2B468, this);
+        //    func_80B2CC1C(globalCtx, this);
+       // }
     } else {
         SkelAnime_DrawOpa(globalCtx, this->skin.skelAnime.skeleton, this->skin.skelAnime.jointTable, NULL, 0, this);
     }
@@ -879,33 +879,33 @@ void func_80B2C8AC(EnViewer* this2, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx, "../z_en_viewer.c", 2034);
 }
 
-void func_80B2CC1C(GlobalContext* globalCtx, EnViewer* this) {
-    static s16 D_80B2CFEC = 0;
-    Vec3f vec1;
-    Vec3f vec2;
-
-    if (this->actor.params >> 8 == 5) {
-        if (1) {}
-        sGanonCape->unk_16B0 = BREG(54) / 10.0f;
-        sGanonCape->unk_16B4 = (BREG(60) + 25) / 100.0f;
-        sGanonCape->unk_16B8 = (BREG(55) - 45) / 10.0f;
-        sGanonCape->unk_16AC = -10000.0f;
-        sGanonCape->unk_16D0 = 0.0f;
-        sGanonCape->unk_16C8 = (BREG(67) - 10) / 10.0f;
-        vec1.x = KREG(16) - 13.0f;
-        vec1.y = KREG(17) + 3.0f + Math_SinS(D_80B2CFEC) * KREG(20);
-        vec1.z = KREG(18) - 10.0f;
-        D_80B2CFEC += KREG(19) * 0x1000 + 0x2000;
-
-        Matrix_RotateY((this->actor.shape.rot.y / (f32)0x8000) * M_PI, MTXMODE_NEW);
-        Matrix_MultVec3f(&vec1, &vec2);
-        sGanonCape->unk_16D4.x = D_80B2D448.x + vec2.x;
-        sGanonCape->unk_16D4.y = D_80B2D448.y + vec2.y;
-        sGanonCape->unk_16D4.z = D_80B2D448.z + vec2.z;
-        vec1.x = -(KREG(16) - 13.0f);
-        Matrix_MultVec3f(&vec1, &vec2);
-        sGanonCape->unk_16E0.x = D_80B2D448.x + vec2.x;
-        sGanonCape->unk_16E0.y = D_80B2D448.y + vec2.y;
-        sGanonCape->unk_16E0.z = D_80B2D448.z + vec2.z;
-    }
-}
+//void func_80B2CC1C(GlobalContext* globalCtx, EnViewer* this) {
+//    static s16 D_80B2CFEC = 0;
+//    Vec3f vec1;
+//    Vec3f vec2;
+//
+//    if (this->actor.params >> 8 == 5) {
+//        if (1) {}
+//        sGanonCape->unk_16B0 = BREG(54) / 10.0f;
+//        sGanonCape->unk_16B4 = (BREG(60) + 25) / 100.0f;
+//        sGanonCape->unk_16B8 = (BREG(55) - 45) / 10.0f;
+//        sGanonCape->unk_16AC = -10000.0f;
+//        sGanonCape->unk_16D0 = 0.0f;
+//        sGanonCape->unk_16C8 = (BREG(67) - 10) / 10.0f;
+//        vec1.x = KREG(16) - 13.0f;
+//        vec1.y = KREG(17) + 3.0f + Math_SinS(D_80B2CFEC) * KREG(20);
+//        vec1.z = KREG(18) - 10.0f;
+//        D_80B2CFEC += KREG(19) * 0x1000 + 0x2000;
+//
+//        Matrix_RotateY((this->actor.shape.rot.y / (f32)0x8000) * M_PI, MTXMODE_NEW);
+//        Matrix_MultVec3f(&vec1, &vec2);
+//        sGanonCape->unk_16D4.x = D_80B2D448.x + vec2.x;
+//        sGanonCape->unk_16D4.y = D_80B2D448.y + vec2.y;
+//        sGanonCape->unk_16D4.z = D_80B2D448.z + vec2.z;
+//        vec1.x = -(KREG(16) - 13.0f);
+//        Matrix_MultVec3f(&vec1, &vec2);
+//        sGanonCape->unk_16E0.x = D_80B2D448.x + vec2.x;
+//        sGanonCape->unk_16E0.y = D_80B2D448.y + vec2.y;
+//        sGanonCape->unk_16E0.z = D_80B2D448.z + vec2.z;
+//    }
+//}

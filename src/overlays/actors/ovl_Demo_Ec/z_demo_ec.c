@@ -164,7 +164,7 @@ void DemoEc_Init(Actor* thisx, GlobalContext* globalCtx) {
     DemoEc* this = THIS;
 
     if ((this->actor.params < 0) || (this->actor.params > 34)) {
-        osSyncPrintf(VT_FGCOL(RED) "Demo_Ec_Actor_ct:arg_dataがおかしい!!!!!!!!!!!!\n" VT_RST);
+        PRINTF(VT_FGCOL(RED) "Demo_Ec_Actor_ct:arg_dataがおかしい!!!!!!!!!!!!\n" VT_RST);
         Actor_Kill(&this->actor);
     } else {
         this->updateMode = EC_UPDATE_COMMON;
@@ -678,7 +678,7 @@ Gfx* DemoEc_GetCarpenterPostLimbDList(DemoEc* this) {
         case 13:
             return D_06005880;
         default:
-            osSyncPrintf(VT_FGCOL(RED) "かつらが無い!!!!!!!!!!!!!!!!\n" VT_RST);
+            PRINTF(VT_FGCOL(RED) "かつらが無い!!!!!!!!!!!!!!!!\n" VT_RST);
             return 0;
     }
 }
@@ -725,7 +725,7 @@ Gfx* DemoEc_GetGerudoPostLimbDList(DemoEc* this) {
         case 18:
             return D_06009690;
         default:
-            osSyncPrintf(VT_FGCOL(RED) "かつらが無い!!!!!!!!!!!!!!!!\n" VT_RST);
+            PRINTF(VT_FGCOL(RED) "かつらが無い!!!!!!!!!!!!!!!!\n" VT_RST);
             return NULL;
     }
 }
@@ -1210,7 +1210,7 @@ void DemoEc_InitNpc(DemoEc* this, GlobalContext* globalCtx) {
 
     if (sInitFuncs[type] == NULL) {
         // Demo_Ec_main_init: Initialization process is wrong arg_data
-        osSyncPrintf(VT_FGCOL(RED) " Demo_Ec_main_init:初期化処理がおかしいarg_data = %d!\n" VT_RST, type);
+        PRINTF(VT_FGCOL(RED) " Demo_Ec_main_init:初期化処理がおかしいarg_data = %d!\n" VT_RST, type);
         Actor_Kill(&this->actor);
         return;
     }
@@ -1235,7 +1235,7 @@ void DemoEc_InitCommon(DemoEc* this, GlobalContext* globalCtx) {
 
     if ((secondaryBankIndex < 0) || (primaryBankIndex < 0)) {
         // Demo_Ec_main_bank: Bank unreadable arg_data =%
-        osSyncPrintf(VT_FGCOL(RED) "Demo_Ec_main_bank:バンクを読めない arg_data = %d!\n" VT_RST, type);
+        PRINTF(VT_FGCOL(RED) "Demo_Ec_main_bank:バンクを読めない arg_data = %d!\n" VT_RST, type);
         Actor_Kill(&this->actor);
         return;
     }
@@ -1288,7 +1288,7 @@ void DemoEc_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     if ((updateMode < 0) || (updateMode >= ARRAY_COUNT(sUpdateFuncs)) || sUpdateFuncs[updateMode] == NULL) {
         // The main mode is strange !!!!!!!!!!!!!!!!!!!!!!!!!
-        osSyncPrintf(VT_FGCOL(RED) "メインモードがおかしい!!!!!!!!!!!!!!!!!!!!!!!!!\n" VT_RST);
+        PRINTF(VT_FGCOL(RED) "メインモードがおかしい!!!!!!!!!!!!!!!!!!!!!!!!!\n" VT_RST);
     } else {
         if (updateMode != EC_UPDATE_COMMON) {
             DemoEc_UseAnimationObject(this, globalCtx);
@@ -1321,7 +1321,7 @@ void DemoEc_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     if ((drawConfig < 0) || (drawConfig >= ARRAY_COUNT(sDrawFuncs)) || sDrawFuncs[drawConfig] == NULL) {
         // The main mode is strange !!!!!!!!!!!!!!!!!!!!!!!!!
-        osSyncPrintf(VT_FGCOL(RED) "描画モードがおかしい!!!!!!!!!!!!!!!!!!!!!!!!!\n" VT_RST);
+        PRINTF(VT_FGCOL(RED) "描画モードがおかしい!!!!!!!!!!!!!!!!!!!!!!!!!\n" VT_RST);
     } else {
         if (drawConfig != EC_DRAW_COMMON) {
             DemoEc_UseDrawObject(this, globalCtx);

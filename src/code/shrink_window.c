@@ -9,7 +9,7 @@ s32 sShrinkWindowCurrentVal = 0;
 void ShrinkWindow_SetVal(s32 value) {
 
     if (HREG(80) == 0x13 && HREG(81) == 1) {
-        osSyncPrintf("shrink_window_setval(%d)\n", value);
+        PRINTF("shrink_window_setval(%d)\n", value);
     }
     sShrinkWindowVal = value;
 }
@@ -20,7 +20,7 @@ u32 ShrinkWindow_GetVal(void) {
 
 void ShrinkWindow_SetCurrentVal(s32 currentVal) {
     if (HREG(80) == 0x13 && HREG(81) == 1) {
-        osSyncPrintf("shrink_window_setnowval(%d)\n", currentVal);
+        PRINTF("shrink_window_setnowval(%d)\n", currentVal);
     }
     sShrinkWindowCurrentVal = currentVal;
 }
@@ -31,7 +31,7 @@ u32 ShrinkWindow_GetCurrentVal(void) {
 
 void ShrinkWindow_Init(void) {
     if (HREG(80) == 0x13 && HREG(81) == 1) {
-        osSyncPrintf("shrink_window_init()\n");
+        PRINTF("shrink_window_init()\n");
     }
     D_8012CED0 = 0;
     sShrinkWindowVal = 0;
@@ -40,7 +40,7 @@ void ShrinkWindow_Init(void) {
 
 void ShrinkWindow_Destroy(void) {
     if (HREG(80) == 0x13 && HREG(81) == 1) {
-        osSyncPrintf("shrink_window_cleanup()\n");
+        PRINTF("shrink_window_cleanup()\n");
     }
     sShrinkWindowCurrentVal = 0;
 }

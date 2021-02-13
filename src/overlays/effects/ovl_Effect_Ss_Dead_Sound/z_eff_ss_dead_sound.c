@@ -30,7 +30,7 @@ u32 EffectSsDeadSound_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, 
     this->rRepeatMode = initParams->repeatMode;
     this->rSfxId = initParams->sfxId;
     // "constructor 3"
-    osSyncPrintf("コンストラクター3\n");
+    PRINTF("コンストラクター3\n");
 
     return 1;
 }

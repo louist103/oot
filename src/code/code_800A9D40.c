@@ -46,7 +46,7 @@ void func_800A9E14(UNK_PTR dramAddr, size_t size, UNK_TYPE arg2) {
 }
 
 void Sram_ReadWrite(UNK_TYPE arg0, UNK_PTR dramAddr, size_t size, UNK_TYPE arg3) {
-    osSyncPrintf("ssSRAMReadWrite:%08x %08x %08x %d\n", arg0, dramAddr, size, arg3);
+    PRINTF("ssSRAMReadWrite:%08x %08x %08x %d\n", arg0, dramAddr, size, arg3);
     func_800A9D40(arg0, 3, 1, 5, 0xd, 2, 0xc, 0);
     func_800A9E14(dramAddr, size, arg3);
 }

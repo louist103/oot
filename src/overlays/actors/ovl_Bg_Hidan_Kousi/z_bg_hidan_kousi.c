@@ -74,12 +74,12 @@ void BgHidanKousi_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     DynaPolyActor_Init(&this->dyna, DPM_UNK);
     Actor_SetFocus(thisx, 50.0f);
-    osSyncPrintf("◯◯◯炎の神殿オブジェクト【格子(arg_data : %0x)】出現 (%d %d)\n", thisx->params, thisx->params & 0xFF,
+    PRINTF("◯◯◯炎の神殿オブジェクト【格子(arg_data : %0x)】出現 (%d %d)\n", thisx->params, thisx->params & 0xFF,
                  ((s32)thisx->params >> 8) & 0xFF);
 
     Actor_ProcessInitChain(thisx, sInitChain);
     if (((thisx->params & 0xFF) < 0) || ((thisx->params & 0xFF) >= 3)) {
-        osSyncPrintf("arg_data おかしい 【格子】\n");
+        PRINTF("arg_data おかしい 【格子】\n");
     }
 
     CollisionHeader_GetVirtual(D_80889E70[thisx->params & 0xFF], &colHeader);

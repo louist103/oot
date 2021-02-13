@@ -63,9 +63,9 @@ void ItemEtcetera_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 objBankIndex;
 
     type = this->actor.params & 0xFF;
-    osSyncPrintf("no = %d\n", type);
+    PRINTF("no = %d\n", type);
     objBankIndex = Object_GetIndex(&globalCtx->objectCtx, sObjectIds[type]);
-    osSyncPrintf("bank_ID = %d\n", objBankIndex);
+    PRINTF("bank_ID = %d\n", objBankIndex);
     if (objBankIndex < 0) {
         __assert("0", "../z_item_etcetera.c", 241);
     } else {

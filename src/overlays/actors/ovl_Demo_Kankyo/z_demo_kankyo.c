@@ -191,7 +191,7 @@ void DemoKankyo_Init(Actor* thisx, GlobalContext* globalCtx) {
     s16 i;
     s32 objBankIndex = Object_GetIndex(&globalCtx->objectCtx, sObjIds[this->actor.params]);
 
-    osSyncPrintf("bank_ID = %d\n", objBankIndex);
+    PRINTF("bank_ID = %d\n", objBankIndex);
     if (objBankIndex < 0) {
         __assert("0", "../z_demo_kankyo.c", 521);
     } else {

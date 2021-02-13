@@ -265,7 +265,7 @@ s16 func_80A7949C(GlobalContext* globalCtx, Actor* thisx) {
 s16 func_80A79500(GlobalContext* globalCtx, Actor* thisx) {
     s16 sp1E = 1;
 
-    osSyncPrintf("message_check->(%d[%x])\n", func_8010BDBC(&globalCtx->msgCtx), thisx->textId);
+    PRINTF("message_check->(%d[%x])\n", func_8010BDBC(&globalCtx->msgCtx), thisx->textId);
     switch (func_8010BDBC(&globalCtx->msgCtx)) {
         case 0:
         case 1:

@@ -671,12 +671,6 @@ beginseg
 endseg
 
 beginseg
-    name "ovl_Bg_Ganon_Otyuka"
-    include "build/src/overlays/actors/ovl_Bg_Ganon_Otyuka/z_bg_ganon_otyuka.o"
-    include "build/src/overlays/actors/ovl_Bg_Ganon_Otyuka/ovl_Bg_Ganon_Otyuka_reloc.o"
-endseg
-
-beginseg
     name "ovl_Bg_Gate_Shutter"
     include "build/src/overlays/actors/ovl_Bg_Gate_Shutter/z_bg_gate_shutter.o"
     include "build/src/overlays/actors/ovl_Bg_Gate_Shutter/ovl_Bg_Gate_Shutter_reloc.o"
@@ -1363,28 +1357,6 @@ beginseg
     include "build/data/overlays/actors/z_boss_fd2.reloc.o"
 endseg
 
-beginseg
-    name "ovl_Boss_Ganon"
-    include "build/src/overlays/actors/ovl_Boss_Ganon/z_boss_ganon.o"
-    include "build/data/overlays/actors/z_boss_ganon.data.o"
-    include "build/data/overlays/actors/z_boss_ganon.bss.o"
-    include "build/data/overlays/actors/z_boss_ganon.reloc.o"
-endseg
-
-beginseg
-    name "ovl_Boss_Ganon2"
-    include "build/src/overlays/actors/ovl_Boss_Ganon2/z_boss_ganon2.o"
-    include "build/data/overlays/actors/z_boss_ganon2.data.o"
-    include "build/data/overlays/actors/z_boss_ganon2.bss.o"
-    include "build/data/overlays/actors/z_boss_ganon2.reloc.o"
-endseg
-
-beginseg
-    name "ovl_Boss_Ganondrof"
-    include "build/src/overlays/actors/ovl_Boss_Ganondrof/z_boss_ganondrof.o"
-    include "build/data/overlays/actors/z_boss_ganondrof.data.o"
-    include "build/data/overlays/actors/z_boss_ganondrof.reloc.o"
-endseg
 
 beginseg
     name "ovl_Boss_Goma"
@@ -2253,19 +2225,6 @@ beginseg
     include "build/src/overlays/actors/ovl_En_G_Switch/ovl_En_G_Switch_reloc.o"
 endseg
 
-beginseg
-    name "ovl_En_Ganon_Mant"
-    include "build/src/overlays/actors/ovl_En_Ganon_Mant/z_en_ganon_mant.o"
-    include "build/data/overlays/actors/z_en_ganon_mant.data.o"
-    include "build/data/overlays/actors/z_en_ganon_mant.reloc.o"
-endseg
-
-beginseg
-    name "ovl_En_Ganon_Organ"
-    include "build/src/overlays/actors/ovl_En_Ganon_Organ/z_en_ganon_organ.o"
-    include "build/data/overlays/actors/z_en_ganon_organ.data.o"
-    include "build/data/overlays/actors/z_en_ganon_organ.reloc.o"
-endseg
 
 beginseg
     name "ovl_En_Gb"
@@ -7139,20 +7098,6 @@ beginseg
 endseg
 
 beginseg
-    name "entra_scene"
-    romalign 0x1000
-    include "build/assets/scenes/overworld/entra/entra_scene.o"
-    number 2
-endseg
-
-beginseg
-    name "entra_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/overworld/entra/entra_room_0.o"
-    number 3
-endseg
-
-beginseg
     name "moribossroom_scene"
     romalign 0x1000
     include "build/assets/scenes/dungeons/moribossroom/moribossroom_scene.o"
@@ -7215,19 +7160,6 @@ beginseg
     number 3
 endseg
 
-beginseg
-    name "ganon_tou_scene"
-    romalign 0x1000
-    include "build/assets/scenes/dungeons/ganon_tou/ganon_tou_scene.o"
-    number 2
-endseg
-
-beginseg
-    name "ganon_tou_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/dungeons/ganon_tou/ganon_tou_room_0.o"
-    number 3
-endseg
 
 
 beginseg
@@ -7269,34 +7201,6 @@ beginseg
     name "market_ruins_room_0"
     romalign 0x1000
     include "build/assets/scenes/misc/market_ruins/market_ruins_room_0.o"
-    number 3
-endseg
-
-beginseg
-    name "entra_n_scene"
-    romalign 0x1000
-    include "build/assets/scenes/misc/entra_n/entra_n_scene.o"
-    number 2
-endseg
-
-beginseg
-    name "entra_n_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/misc/entra_n/entra_n_room_0.o"
-    number 3
-endseg
-
-beginseg
-    name "enrui_scene"
-    romalign 0x1000
-    include "build/assets/scenes/misc/enrui/enrui_scene.o"
-    number 2
-endseg
-
-beginseg
-    name "enrui_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/misc/enrui/enrui_room_0.o"
     number 3
 endseg
 
@@ -7692,96 +7596,6 @@ beginseg
     number 3
 endseg
 
-beginseg
-    name "ganon_scene"
-    romalign 0x1000
-    include "build/assets/scenes/dungeons/ganon/ganon_scene.o"
-    number 2
-endseg
-
-beginseg
-    name "ganon_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/dungeons/ganon/ganon_room_0.o"
-    number 3
-endseg
-
-beginseg
-    name "ganon_room_1"
-    romalign 0x1000
-    include "build/assets/scenes/dungeons/ganon/ganon_room_1.o"
-    number 3
-endseg
-
-beginseg
-    name "ganon_room_2"
-    romalign 0x1000
-    include "build/assets/scenes/dungeons/ganon/ganon_room_2.o"
-    number 3
-endseg
-
-beginseg
-    name "ganon_room_3"
-    romalign 0x1000
-    include "build/assets/scenes/dungeons/ganon/ganon_room_3.o"
-    number 3
-endseg
-
-beginseg
-    name "ganon_room_4"
-    romalign 0x1000
-    include "build/assets/scenes/dungeons/ganon/ganon_room_4.o"
-    number 3
-endseg
-
-beginseg
-    name "ganon_room_5"
-    romalign 0x1000
-    include "build/assets/scenes/dungeons/ganon/ganon_room_5.o"
-    number 3
-endseg
-
-beginseg
-    name "ganon_room_6"
-    romalign 0x1000
-    include "build/assets/scenes/dungeons/ganon/ganon_room_6.o"
-    number 3
-endseg
-
-beginseg
-    name "ganon_room_7"
-    romalign 0x1000
-    include "build/assets/scenes/dungeons/ganon/ganon_room_7.o"
-    number 3
-endseg
-
-beginseg
-    name "ganon_room_8"
-    romalign 0x1000
-    include "build/assets/scenes/dungeons/ganon/ganon_room_8.o"
-    number 3
-endseg
-
-beginseg
-    name "ganon_room_9"
-    romalign 0x1000
-    include "build/assets/scenes/dungeons/ganon/ganon_room_9.o"
-    number 3
-endseg
-
-beginseg
-    name "ganon_boss_scene"
-    romalign 0x1000
-    include "build/assets/scenes/dungeons/ganon_boss/ganon_boss_scene.o"
-    number 2
-endseg
-
-beginseg
-    name "ganon_boss_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/dungeons/ganon_boss/ganon_boss_room_0.o"
-    number 3
-endseg
 
 beginseg
     name "jyasinboss_scene"
@@ -7846,19 +7660,6 @@ beginseg
     number 3
 endseg
 
-beginseg
-    name "ganon_final_scene"
-    romalign 0x1000
-    include "build/assets/scenes/dungeons/ganon_final/ganon_final_scene.o"
-    number 2
-endseg
-
-beginseg
-    name "ganon_final_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/dungeons/ganon_final/ganon_final_room_0.o"
-    number 3
-endseg
 
 beginseg
     name "kakariko3_scene"
@@ -8014,54 +7815,6 @@ beginseg
     number 3
 endseg
 
-beginseg
-    name "gerudoway_scene"
-    romalign 0x1000
-    include "build/assets/scenes/dungeons/gerudoway/gerudoway_scene.o"
-    number 2
-endseg
-
-beginseg
-    name "gerudoway_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/dungeons/gerudoway/gerudoway_room_0.o"
-    number 3
-endseg
-
-beginseg
-    name "gerudoway_room_1"
-    romalign 0x1000
-    include "build/assets/scenes/dungeons/gerudoway/gerudoway_room_1.o"
-    number 3
-endseg
-
-beginseg
-    name "gerudoway_room_2"
-    romalign 0x1000
-    include "build/assets/scenes/dungeons/gerudoway/gerudoway_room_2.o"
-    number 3
-endseg
-
-beginseg
-    name "gerudoway_room_3"
-    romalign 0x1000
-    include "build/assets/scenes/dungeons/gerudoway/gerudoway_room_3.o"
-    number 3
-endseg
-
-beginseg
-    name "gerudoway_room_4"
-    romalign 0x1000
-    include "build/assets/scenes/dungeons/gerudoway/gerudoway_room_4.o"
-    number 3
-endseg
-
-beginseg
-    name "gerudoway_room_5"
-    romalign 0x1000
-    include "build/assets/scenes/dungeons/gerudoway/gerudoway_room_5.o"
-    number 3
-endseg
 
 beginseg
     name "hairal_niwa_n_scene"
@@ -8189,117 +7942,6 @@ beginseg
     number 3
 endseg
 
-beginseg
-    name "takaraya_scene"
-    romalign 0x1000
-    include "build/assets/scenes/indoors/takaraya/takaraya_scene.o"
-    number 2
-endseg
-
-beginseg
-    name "takaraya_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/indoors/takaraya/takaraya_room_0.o"
-    number 3
-endseg
-
-beginseg
-    name "takaraya_room_1"
-    romalign 0x1000
-    include "build/assets/scenes/indoors/takaraya/takaraya_room_1.o"
-    number 3
-endseg
-
-beginseg
-    name "takaraya_room_2"
-    romalign 0x1000
-    include "build/assets/scenes/indoors/takaraya/takaraya_room_2.o"
-    number 3
-endseg
-
-beginseg
-    name "takaraya_room_3"
-    romalign 0x1000
-    include "build/assets/scenes/indoors/takaraya/takaraya_room_3.o"
-    number 3
-endseg
-
-beginseg
-    name "takaraya_room_4"
-    romalign 0x1000
-    include "build/assets/scenes/indoors/takaraya/takaraya_room_4.o"
-    number 3
-endseg
-
-beginseg
-    name "takaraya_room_5"
-    romalign 0x1000
-    include "build/assets/scenes/indoors/takaraya/takaraya_room_5.o"
-    number 3
-endseg
-
-beginseg
-    name "takaraya_room_6"
-    romalign 0x1000
-    include "build/assets/scenes/indoors/takaraya/takaraya_room_6.o"
-    number 3
-endseg
-
-beginseg
-    name "ganon_sonogo_scene"
-    romalign 0x1000
-    include "build/assets/scenes/dungeons/ganon_sonogo/ganon_sonogo_scene.o"
-    number 2
-endseg
-
-beginseg
-    name "ganon_sonogo_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/dungeons/ganon_sonogo/ganon_sonogo_room_0.o"
-    number 3
-endseg
-
-beginseg
-    name "ganon_sonogo_room_1"
-    romalign 0x1000
-    include "build/assets/scenes/dungeons/ganon_sonogo/ganon_sonogo_room_1.o"
-    number 3
-endseg
-
-beginseg
-    name "ganon_sonogo_room_2"
-    romalign 0x1000
-    include "build/assets/scenes/dungeons/ganon_sonogo/ganon_sonogo_room_2.o"
-    number 3
-endseg
-
-beginseg
-    name "ganon_sonogo_room_3"
-    romalign 0x1000
-    include "build/assets/scenes/dungeons/ganon_sonogo/ganon_sonogo_room_3.o"
-    number 3
-endseg
-
-beginseg
-    name "ganon_sonogo_room_4"
-    romalign 0x1000
-    include "build/assets/scenes/dungeons/ganon_sonogo/ganon_sonogo_room_4.o"
-    number 3
-endseg
-
-beginseg
-    name "ganon_demo_scene"
-    romalign 0x1000
-    include "build/assets/scenes/dungeons/ganon_demo/ganon_demo_scene.o"
-    number 2
-endseg
-
-beginseg
-    name "ganon_demo_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/dungeons/ganon_demo/ganon_demo_room_0.o"
-    number 3
-endseg
 
 
 beginseg
@@ -8330,26 +7972,6 @@ beginseg
     number 3
 endseg
 
-beginseg
-    name "ganontikasonogo_scene"
-    romalign 0x1000
-    include "build/assets/scenes/dungeons/ganontikasonogo/ganontikasonogo_scene.o"
-    number 2
-endseg
-
-beginseg
-    name "ganontikasonogo_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/dungeons/ganontikasonogo/ganontikasonogo_room_0.o"
-    number 3
-endseg
-
-beginseg
-    name "ganontikasonogo_room_1"
-    romalign 0x1000
-    include "build/assets/scenes/dungeons/ganontikasonogo/ganontikasonogo_room_1.o"
-    number 3
-endseg
 
 
 

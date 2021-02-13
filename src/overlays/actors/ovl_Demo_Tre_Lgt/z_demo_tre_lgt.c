@@ -52,7 +52,7 @@ void DemoTreLgt_Init(Actor* thisx, GlobalContext* globalCtx) {
     DemoTreLgt* this = THIS;
 
     if (!SkelCurve_Init(globalCtx, &this->skelCurve, &D_06005EB8, sTransformUpdIdx[0])) {
-        osSyncPrintf("Demo_Tre_Lgt_Actor_ct();コンストラクト失敗\n");
+        PRINTF("Demo_Tre_Lgt_Actor_ct();コンストラクト失敗\n");
     }
 
     // This assert is optimized out but it exists due to its presence in rodata

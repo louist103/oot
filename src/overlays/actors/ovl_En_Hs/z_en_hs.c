@@ -80,16 +80,16 @@ void EnHs_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     if (this->actor.params == 1) {
         // chicken shop (adult era)
-        osSyncPrintf(VT_FGCOL(CYAN) " ヒヨコの店(大人の時) \n" VT_RST);
+        PRINTF(VT_FGCOL(CYAN) " ヒヨコの店(大人の時) \n" VT_RST);
         func_80A6E3A0(this, func_80A6E9AC);
         if (gSaveContext.itemGetInf[3] & 1) {
             // chicken shop closed
-            osSyncPrintf(VT_FGCOL(CYAN) " ヒヨコ屋閉店 \n" VT_RST);
+            PRINTF(VT_FGCOL(CYAN) " ヒヨコ屋閉店 \n" VT_RST);
             Actor_Kill(&this->actor);
         }
     } else {
         // chicken shop (child era)
-        osSyncPrintf(VT_FGCOL(CYAN) " ヒヨコの店(子人の時) \n" VT_RST);
+        PRINTF(VT_FGCOL(CYAN) " ヒヨコの店(子人の時) \n" VT_RST);
         func_80A6E3A0(this, func_80A6E9AC);
     }
 

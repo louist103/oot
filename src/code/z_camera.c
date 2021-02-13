@@ -431,7 +431,7 @@ f32 Camera_GetFloorYLayer(Camera* camera, Vec3f* norm, Vec3f* pos, u32* bgId) {
         }
     }
     if (i == 0) {
-        osSyncPrintf(VT_COL(YELLOW, BLACK) "camera: foward check: too many layer!\n" VT_RST);
+        PRINTF(VT_COL(YELLOW, BLACK) "camera: foward check: too many layer!\n" VT_RST);
     }
     return floorY;
 }
@@ -709,7 +709,7 @@ void Camera_CopyModeValuesToPREG(Camera* camera, s16 mode) {
     s32 i;
 
     if (PREG(82)) {
-        osSyncPrintf("camera: res: stat (%d/%d/%d)\n", camera->thisIdx, camera->setting, mode);
+        PRINTF("camera: res: stat (%d/%d/%d)\n", camera->thisIdx, camera->setting, mode);
     }
 
     values = sCameraSettings[camera->setting].cameraModes[mode].values;
@@ -718,7 +718,7 @@ void Camera_CopyModeValuesToPREG(Camera* camera, s16 mode) {
         valueP = &values[i];
         PREG(valueP->param) = valueP->val;
         if (PREG(82)) {
-            osSyncPrintf("camera: res: PREG(%02d) = %d\n", valueP->param, valueP->val);
+            PRINTF("camera: res: PREG(%02d) = %d\n", valueP->param, valueP->val);
         }
     }
     camera->animState = 0;
@@ -733,7 +733,7 @@ s32 Camera_CopyPREGToModeValues(Camera* camera) {
         valueP = &values[i];
         valueP->val = PREG(valueP->param);
         if (PREG(82)) {
-            osSyncPrintf("camera: res: %d = PREG(%02d)\n", valueP->val, valueP->param);
+            PRINTF("camera: res: %d = PREG(%02d)\n", valueP->val, valueP->param);
         }
     }
     return true;
@@ -787,7 +787,7 @@ Vec3f* Camera_BGCheckCorner(Vec3f* dst, Vec3f* linePointA, Vec3f* linePointB, Ca
     Vec3f closestPoint;
 
     if (!func_800427B4(pointAColChk->poly, pointBColChk->poly, linePointA, linePointB, &closestPoint)) {
-        osSyncPrintf(VT_COL(YELLOW, BLACK) "camera: corner check no cross point %x %x\n" VT_RST, pointAColChk,
+        PRINTF(VT_COL(YELLOW, BLACK) "camera: corner check no cross point %x %x\n" VT_RST, pointAColChk,
                      pointBColChk);
         *dst = pointAColChk->pos;
         return dst;
@@ -1117,7 +1117,7 @@ s32 Camera_CalcAtForLockOn(Camera* camera, VecSph* eyeAtDir, Vec3f* targetPos, f
     OLib_VecSphGeoToVec3f(&lookFromOffset, &playerToTargetDir);
 
     if (PREG(89)) {
-        osSyncPrintf("%f (%f %f %f) %f\n", playerToTargetDir.r / distance, lookFromOffset.x, lookFromOffset.y,
+        PRINTF("%f (%f %f %f) %f\n", playerToTargetDir.r / distance, lookFromOffset.x, lookFromOffset.y,
                      lookFromOffset.z, camera->atLERPStepScale);
     }
 
@@ -2360,7 +2360,7 @@ s32 Camera_Jump2(Camera* camera) {
         anim->yawTarget = atToEyeNextDir.yaw;
         anim->initYawDiff = 0;
         if (anim->floorY == BGCHECK_Y_MIN) {
-            osSyncPrintf(VT_COL(YELLOW, BLACK) "camera: climb: no floor \n" VT_RST);
+            PRINTF(VT_COL(YELLOW, BLACK) "camera: climb: no floor \n" VT_RST);
             anim->onFloor = -1;
             anim->floorY = playerPosRot->pos.y - 1000.0f;
         } else if (playerPosRot->pos.y - anim->floorY < playerHeight) {
@@ -2780,7 +2780,7 @@ s32 Camera_Battle1(Camera* camera) {
     OLib_Vec3fDiffToVecSphGeo(&atToEyeNextDir, at, eyeNext);
     if (camera->target == NULL || camera->target->update == NULL) {
         if (camera->target == NULL) {
-            osSyncPrintf(
+            PRINTF(
                 VT_COL(YELLOW, BLACK) "camera: warning: battle: target is not valid, change parallel\n" VT_RST);
         }
         camera->target = NULL;
@@ -2796,9 +2796,9 @@ s32 Camera_Battle1(Camera* camera) {
         anim->target = camera->target;
         camera->animState++;
         if (anim->target->id > 0) {
-            osSyncPrintf("camera: battle: target actor name " VT_FGCOL(BLUE) "%d" VT_RST "\n", anim->target->id);
+            PRINTF("camera: battle: target actor name " VT_FGCOL(BLUE) "%d" VT_RST "\n", anim->target->id);
         } else {
-            osSyncPrintf("camera: battle: target actor name " VT_COL(RED, WHITE) "%d" VT_RST "\n", anim->target->id);
+            PRINTF("camera: battle: target actor name " VT_COL(RED, WHITE) "%d" VT_RST "\n", anim->target->id);
             camera->target = NULL;
             Camera_ChangeMode(camera, CAM_MODE_TARGET);
             return true;
@@ -2831,7 +2831,7 @@ s32 Camera_Battle1(Camera* camera) {
     }
     Actor_GetFocus(&camera->targetPosRot, camera->target);
     if (anim->target != camera->target) {
-        osSyncPrintf("camera: battle: change target %d -> " VT_FGCOL(BLUE) "%d" VT_RST "\n", anim->target->id,
+        PRINTF("camera: battle: change target %d -> " VT_FGCOL(BLUE) "%d" VT_RST "\n", anim->target->id,
                      camera->target->id);
         camera->animState = 0;
         return true;
@@ -3052,7 +3052,7 @@ s32 Camera_KeepOn1(Camera* camera) {
     playerHeight = Player_GetHeight(camera->player);
     if ((camera->target == NULL) || (camera->target->update == NULL)) {
         if (camera->target == NULL) {
-            osSyncPrintf(
+            PRINTF(
                 VT_COL(YELLOW, BLACK) "camera: warning: keepon: target is not valid, change parallel\n" VT_RST);
         }
         camera->target = NULL;
@@ -3285,7 +3285,7 @@ s32 Camera_KeepOn3(Camera* camera) {
     playerHeight = Player_GetHeight(camera->player);
     if (camera->target == NULL || camera->target->update == NULL) {
         if (camera->target == NULL) {
-            osSyncPrintf(VT_COL(YELLOW, BLACK) "camera: warning: talk: target is not valid, change parallel\n" VT_RST);
+            PRINTF(VT_COL(YELLOW, BLACK) "camera: warning: talk: target is not valid, change parallel\n" VT_RST);
         }
         camera->target = NULL;
         Camera_ChangeMode(camera, CAM_MODE_TARGET);
@@ -3393,7 +3393,7 @@ s32 Camera_KeepOn3(Camera* camera) {
                 i++;
             }
         }
-        osSyncPrintf("camera: talk: BG&collision check %d time(s)\n", i);
+        PRINTF("camera: talk: BG&collision check %d time(s)\n", i);
         camera->unk_14C &= ~0xC;
         pad = ((anim->animTimer + 1) * anim->animTimer) >> 1;
         anim->eyeToAtTarget.y = (f32)BINANG_SUB(atToEyeAdj.yaw, atToEyeNextDir.yaw) / pad;
@@ -3484,7 +3484,7 @@ s32 Camera_KeepOn4(Camera* camera) {
     }
 
     if (unk20->unk_14 != *temp_s0) {
-        osSyncPrintf(VT_COL(YELLOW, BLACK) "camera: item: item type changed %d -> %d\n" VT_RST, unk20->unk_14,
+        PRINTF(VT_COL(YELLOW, BLACK) "camera: item: item type changed %d -> %d\n" VT_RST, unk20->unk_14,
                      *temp_s0);
         camera->animState = 0x14;
         camera->unk_14C |= 0x20;
@@ -3507,7 +3507,7 @@ s32 Camera_KeepOn4(Camera* camera) {
         keep4->unk_1C = NEXTSETTING;
         keep4->unk_14 = NEXTPCT;
         keep4->unk_1E = NEXTSETTING;
-        osSyncPrintf("camera: item: type %d\n", *temp_s0);
+        PRINTF("camera: item: type %d\n", *temp_s0);
         switch (*temp_s0) {
             case 1:
                 keep4->unk_00 = playerHeight * -0.6f * yNormal;
@@ -3675,7 +3675,7 @@ s32 Camera_KeepOn4(Camera* camera) {
                     spB8.pitch = D_8011D3CC[i] + spA2;
                     Camera_Vec3fVecSphGeoAdd(&D_8015BD70, &D_8015BD50, &spB8);
                 }
-                osSyncPrintf("camera: item: BG&collision check %d time(s)\n", i);
+                PRINTF("camera: item: BG&collision check %d time(s)\n", i);
             }
             unk20->unk_04 = BINANG_SUB(spB8.pitch, spA8.pitch) / (f32)unk20->unk_10;
             unk20->unk_00 = BINANG_SUB(spB8.yaw, spA8.yaw) / (f32)unk20->unk_10;
@@ -3778,7 +3778,7 @@ s32 Camera_KeepOn0(Camera* camera) {
 
     if (camera->target == NULL || camera->target->update == NULL) {
         if (camera->target == NULL) {
-            osSyncPrintf(
+            PRINTF(
                 VT_COL(YELLOW, BLACK) "camera: warning: talk: target is not valid, change normal camera\n" VT_RST);
         }
         camera->target = NULL;
@@ -4006,7 +4006,7 @@ s32 Camera_Fixed3(Camera* camera) {
     }
 
     if (BGCAM_JFIFID(sceneCamData) != anim->jfifId) {
-        osSyncPrintf("camera: position change %d \n", anim->jfifId);
+        PRINTF("camera: position change %d \n", anim->jfifId);
         anim->jfifId = BGCAM_JFIFID(sceneCamData);
         anim->updDirTimer = 5;
     }
@@ -4379,7 +4379,7 @@ s32 Camera_Data0(Camera* camera) {
 }
 
 s32 Camera_Data1(Camera* camera) {
-    osSyncPrintf("chau!chau!\n");
+    PRINTF("chau!chau!\n");
     return Camera_Normal1(camera);
 }
 
@@ -5060,9 +5060,9 @@ s32 Camera_Unique9(Camera* camera) {
                     Camera_UpdateInterface(0xF000 | ((anim->curKeyFrame->unk_01 & 0xF) << 8));
                 } else if (camera->player->stateFlags1 & 0x8000000 && player->currentBoots != PLAYER_BOOTS_IRON) {
                     func_8002DF38(camera->globalCtx, camera->target, 8);
-                    osSyncPrintf("camera: demo: player demo set WAIT\n");
+                    PRINTF("camera: demo: player demo set WAIT\n");
                 } else {
-                    osSyncPrintf("camera: demo: player demo set %d\n", anim->curKeyFrame->unk_01);
+                    PRINTF("camera: demo: player demo set %d\n", anim->curKeyFrame->unk_01);
                     func_8002DF38(camera->globalCtx, camera->target, anim->curKeyFrame->unk_01);
                 }
             }
@@ -5111,7 +5111,7 @@ s32 Camera_Unique9(Camera* camera) {
             Camera_Vec3fVecSphGeoAdd(&anim->atTarget, &targethead.pos, &scratchSph);
         } else {
             if (camera->target == NULL) {
-                osSyncPrintf(VT_COL(YELLOW, BLACK) "camera: warning: demo C: actor is not valid\n" VT_RST);
+                PRINTF(VT_COL(YELLOW, BLACK) "camera: warning: demo C: actor is not valid\n" VT_RST);
             }
 
             camera->target = NULL;
@@ -5153,7 +5153,7 @@ s32 Camera_Unique9(Camera* camera) {
                 Camera_Vec3fVecSphGeoAdd(&anim->atTarget, &atFocusPosRot.pos, &scratchSph);
             } else {
                 if (camera->target == NULL) {
-                    osSyncPrintf(VT_COL(YELLOW, BLACK) "camera: warning: demo C: actor is not valid\n" VT_RST);
+                    PRINTF(VT_COL(YELLOW, BLACK) "camera: warning: demo C: actor is not valid\n" VT_RST);
                 }
                 anim->atTarget = *at;
             }
@@ -5205,7 +5205,7 @@ s32 Camera_Unique9(Camera* camera) {
                 Camera_Vec3fVecSphGeoAdd(&anim->eyeTarget, &eyeLookAtPos, &scratchSph);
             } else {
                 if (camera->target == NULL) {
-                    osSyncPrintf(VT_COL(YELLOW, BLACK) "camera: warning: demo C: actor is not valid\n" VT_RST);
+                    PRINTF(VT_COL(YELLOW, BLACK) "camera: warning: demo C: actor is not valid\n" VT_RST);
                 }
                 camera->target = NULL;
                 anim->eyeTarget = *eyeNext;
@@ -5247,7 +5247,7 @@ s32 Camera_Unique9(Camera* camera) {
                         Camera_Vec3fVecSphGeoAdd(&anim->eyeTarget, &eyeFocusPosRot.pos, &scratchSph);
                     } else {
                         if (camera->target == NULL) {
-                            osSyncPrintf(VT_COL(YELLOW, BLACK) "camera: warning: demo C: actor is not valid\n" VT_RST);
+                            PRINTF(VT_COL(YELLOW, BLACK) "camera: warning: demo C: actor is not valid\n" VT_RST);
                         }
                         camera->target = NULL;
                         anim->eyeTarget = *eyeNext;
@@ -5464,18 +5464,18 @@ s32 Camera_Unique9(Camera* camera) {
 void Camera_DebugPrintSplineArray(char* name, s16 length, CutsceneCameraPoint cameraPoints[]) {
     s32 i;
 
-    osSyncPrintf("static SplinedatZ  %s[] = {\n", name);
+    PRINTF("static SplinedatZ  %s[] = {\n", name);
     for (i = 0; i < length; i++) {
-        osSyncPrintf("    /* key frame %2d */ {\n", i);
-        osSyncPrintf("    /*     code     */ %d,\n", cameraPoints[i].continueFlag);
-        osSyncPrintf("    /*     z        */ %d,\n", cameraPoints[i].cameraRoll);
-        osSyncPrintf("    /*     T        */ %d,\n", cameraPoints[i].nextPointFrame);
-        osSyncPrintf("    /*     zoom     */ %f,\n", cameraPoints[i].viewAngle);
-        osSyncPrintf("    /*     pos      */ { %d, %d, %d }\n", cameraPoints[i].pos.x, cameraPoints[i].pos.y,
+        PRINTF("    /* key frame %2d */ {\n", i);
+        PRINTF("    /*     code     */ %d,\n", cameraPoints[i].continueFlag);
+        PRINTF("    /*     z        */ %d,\n", cameraPoints[i].cameraRoll);
+        PRINTF("    /*     T        */ %d,\n", cameraPoints[i].nextPointFrame);
+        PRINTF("    /*     zoom     */ %f,\n", cameraPoints[i].viewAngle);
+        PRINTF("    /*     pos      */ { %d, %d, %d }\n", cameraPoints[i].pos.x, cameraPoints[i].pos.y,
                      cameraPoints[i].pos.z);
-        osSyncPrintf("    },\n");
+        PRINTF("    },\n");
     }
-    osSyncPrintf("};\n\n");
+    PRINTF("};\n\n");
 }
 
 /**
@@ -5538,7 +5538,7 @@ s32 Camera_Demo1(Camera* camera) {
             anim->curFrame = 0.0f;
             camera->animState++;
             // absolute / relative
-            osSyncPrintf(VT_SGR("1") "%06u:" VT_RST " camera: spline demo: start %s \n",
+            PRINTF(VT_SGR("1") "%06u:" VT_RST " camera: spline demo: start %s \n",
                          camera->globalCtx->state.frames, *relativeToPlayer == 0 ? "絶対" : "相対");
 
             if (PREG(93)) {
@@ -5559,7 +5559,7 @@ s32 Camera_Demo1(Camera* camera) {
                     Camera_RotateAroundPoint(&curPlayerPosRot, &csEyeUpdate, eyeNext);
                     Camera_RotateAroundPoint(&curPlayerPosRot, &csAtUpdate, at);
                 } else {
-                    osSyncPrintf(VT_COL(RED, WHITE) "camera: spline demo: owner dead\n" VT_RST);
+                    PRINTF(VT_COL(RED, WHITE) "camera: spline demo: owner dead\n" VT_RST);
                 }
             } else {
                 // simply copy the interpolated values to the eye and at
@@ -5825,7 +5825,7 @@ s32 Camera_Demo5(Camera* camera) {
     sCameraInterfaceFlags = 0x3200;
     if ((camera->target == NULL) || (camera->target->update == NULL)) {
         if (camera->target == NULL) {
-            osSyncPrintf(VT_COL(YELLOW, BLACK) "camera: warning: attention: target is not valid, stop!\n" VT_RST);
+            PRINTF(VT_COL(YELLOW, BLACK) "camera: warning: attention: target is not valid, stop!\n" VT_RST);
         }
         camera->target = NULL;
         return true;
@@ -5930,7 +5930,7 @@ s32 Camera_Demo5(Camera* camera) {
         D_8011D954[0].timerInit = camera->timer - 5;
         sp4A = 0;
         if (!func_800C0D34(camera->globalCtx, camera->target, &sp4A)) {
-            osSyncPrintf(VT_COL(YELLOW, BLACK) "camera: attention demo: this door is dummy door!\n" VT_RST);
+            PRINTF(VT_COL(YELLOW, BLACK) "camera: attention demo: this door is dummy door!\n" VT_RST);
             if (ABS(playerTargetGeo.yaw - camera->target->shape.rot.y) >= 0x4000) {
                 sp4A = camera->target->shape.rot.y;
             } else {
@@ -6291,7 +6291,7 @@ s32 Camera_Special0(Camera* camera) {
 
     if ((camera->target == NULL) || (camera->target->update == NULL)) {
         if (camera->target == NULL) {
-            osSyncPrintf(VT_COL(YELLOW, BLACK) "camera: warning: circle: target is not valid, stop!\n" VT_RST);
+            PRINTF(VT_COL(YELLOW, BLACK) "camera: warning: circle: target is not valid, stop!\n" VT_RST);
         }
         camera->target = NULL;
         return true;
@@ -6756,20 +6756,20 @@ Camera* Camera_Create(View* view, CollisionContext* colCtx, GlobalContext* globa
     Camera* newCamera = ZeldaArena_MallocDebug(sizeof(*newCamera), "../z_camera.c", 9370);
 
     if (newCamera != NULL) {
-        osSyncPrintf(VT_FGCOL(BLUE) "camera: create --- allocate %d byte" VT_RST "\n", sizeof(*newCamera) * 4);
+        PRINTF(VT_FGCOL(BLUE) "camera: create --- allocate %d byte" VT_RST "\n", sizeof(*newCamera) * 4);
         Camera_Init(newCamera, view, colCtx, globalCtx);
     } else {
-        osSyncPrintf(VT_COL(RED, WHITE) "camera: create: not enough memory\n" VT_RST);
+        PRINTF(VT_COL(RED, WHITE) "camera: create: not enough memory\n" VT_RST);
     }
     return newCamera;
 }
 
 void Camera_Destroy(Camera* camera) {
     if (camera != NULL) {
-        osSyncPrintf(VT_FGCOL(BLUE) "camera: destroy ---" VT_RST "\n");
+        PRINTF(VT_FGCOL(BLUE) "camera: destroy ---" VT_RST "\n");
         ZeldaArena_FreeDebug(camera, "../z_camera.c", 9391);
     } else {
-        osSyncPrintf(VT_COL(YELLOW, BLACK) "camera: destroy: already cleared\n" VT_RST);
+        PRINTF(VT_COL(YELLOW, BLACK) "camera: destroy: already cleared\n" VT_RST);
     }
 }
 
@@ -6848,7 +6848,7 @@ void Camera_Init(Camera* camera, View* view, CollisionContext* colCtx, GlobalCon
     sCameraInterfaceFlags = 0xFF00;
     sDbgModeIdx = -1;
     D_8011D3F0 = 3;
-    osSyncPrintf(VT_FGCOL(BLUE) "camera: initialize --- " VT_RST " UID %d\n", camera->uid);
+    PRINTF(VT_FGCOL(BLUE) "camera: initialize --- " VT_RST " UID %d\n", camera->uid);
 }
 
 void func_80057FC4(Camera* camera) {
@@ -6862,19 +6862,19 @@ void func_80057FC4(Camera* camera) {
                 camera->prevSetting = camera->setting = CAM_SET_DUNGEON0;
                 break;
             case 0:
-                osSyncPrintf("camera: room type: default set field\n");
+                PRINTF("camera: room type: default set field\n");
                 Camera_ChangeDoorCam(camera, NULL, -99, 0, 0, 18, 10);
                 camera->prevSetting = camera->setting = CAM_SET_NORMAL0;
                 break;
             default:
-                osSyncPrintf("camera: room type: default set etc (%d)\n", camera->globalCtx->roomCtx.curRoom.unk_03);
+                PRINTF("camera: room type: default set etc (%d)\n", camera->globalCtx->roomCtx.curRoom.unk_03);
                 Camera_ChangeDoorCam(camera, NULL, -99, 0, 0, 18, 10);
                 camera->prevSetting = camera->setting = CAM_SET_NORMAL0;
                 camera->unk_14C |= 4;
                 break;
         }
     } else {
-        osSyncPrintf("camera: room type: prerender\n");
+        PRINTF("camera: room type: prerender\n");
         camera->prevSetting = camera->setting = CAM_SET_FREE0;
         camera->unk_14C &= ~0x4;
     }
@@ -6943,7 +6943,7 @@ void Camera_InitPlayerSettings(Camera* camera, Player* player) {
     camera->atLERPStepScale = 1.0f;
     Camera_CopyModeValuesToPREG(camera, camera->mode);
     Camera_QRegInit();
-    osSyncPrintf(VT_FGCOL(BLUE) "camera: personalize ---" VT_RST "\n");
+    PRINTF(VT_FGCOL(BLUE) "camera: personalize ---" VT_RST "\n");
 
     if (camera->thisIdx == 0) {
         Camera_CheckWater(camera);
@@ -6956,12 +6956,12 @@ s16 Camera_ChangeStatus(Camera* camera, s16 status) {
     s32 i;
 
     if (PREG(82)) {
-        osSyncPrintf("camera: change camera status: cond %c%c\n", status == 7 ? 'o' : 'x',
+        PRINTF("camera: change camera status: cond %c%c\n", status == 7 ? 'o' : 'x',
                      camera->status != 7 ? 'o' : 'x');
     }
 
     if (PREG(82)) {
-        osSyncPrintf("camera: res: stat (%d/%d/%d)\n", camera->thisIdx, camera->setting, camera->mode);
+        PRINTF("camera: res: stat (%d/%d/%d)\n", camera->thisIdx, camera->setting, camera->mode);
     }
 
     if (status == CAM_STAT_ACTIVE && camera->status != CAM_STAT_ACTIVE) {
@@ -6970,7 +6970,7 @@ s16 Camera_ChangeStatus(Camera* camera, s16 status) {
             valueP = &values[i];
             PREG(valueP->param) = valueP->val;
             if (PREG(82)) {
-                osSyncPrintf("camera: change camera status: PREG(%02d) = %d\n", valueP->param, valueP->val);
+                PRINTF("camera: change camera status: PREG(%02d) = %d\n", valueP->param, valueP->val);
             }
         }
     }
@@ -7118,7 +7118,7 @@ s32 Camera_CheckWater(Camera* camera) {
             }
         } else if (camera->unk_14C & 0x200) {
             // player is out of a water box.
-            osSyncPrintf("camera: water: off\n");
+            PRINTF("camera: water: off\n");
             camera->unk_14C &= ~0x200;
             prevBgId = camera->bgCheckId;
             camera->bgCheckId = BGCHECK_SCENE;
@@ -7136,7 +7136,7 @@ s32 Camera_CheckWater(Camera* camera) {
         camera->waterYPos = waterY;
         if (!(camera->unk_14C & 0x100)) {
             camera->unk_14C |= 0x100;
-            osSyncPrintf("kankyo changed water, sound on\n");
+            PRINTF("kankyo changed water, sound on\n");
             func_80070600(camera->globalCtx, waterBoxProp);
             camera->unk_150 = 0x50;
         }
@@ -7168,7 +7168,7 @@ s32 Camera_CheckWater(Camera* camera) {
     } else {
         if (camera->unk_14C & 0x100) {
             camera->unk_14C &= ~0x100;
-            osSyncPrintf("kankyo changed water off, sound off\n");
+            PRINTF("kankyo changed water off, sound off\n");
             func_800706A0(camera->globalCtx);
             if (*quakeId != 0) {
                 Quake_RemoveFromIdx(*quakeId);
@@ -7198,11 +7198,11 @@ s32 Camera_DbgChangeMode(Camera* camera) {
 
     if (gDbgCamEnabled == 0 && camera->globalCtx->activeCamera == 0) {
         if (CHECK_BTN_ALL(D_8015BD7C->state.input[2].press.button, BTN_CUP)) {
-            osSyncPrintf("attention sound URGENCY\n");
+            PRINTF("attention sound URGENCY\n");
             func_80078884(NA_SE_SY_ATTENTION_URGENCY);
         }
         if (CHECK_BTN_ALL(D_8015BD7C->state.input[2].press.button, BTN_CDOWN)) {
-            osSyncPrintf("attention sound NORMAL\n");
+            PRINTF("attention sound NORMAL\n");
             func_80078884(NA_SE_SY_ATTENTION_ON);
         }
 
@@ -7215,7 +7215,7 @@ s32 Camera_DbgChangeMode(Camera* camera) {
         if (changeDir != 0) {
             sDbgModeIdx = (sDbgModeIdx + changeDir) % 6;
             if (Camera_ChangeSetting(camera, D_8011DAFC[sDbgModeIdx]) > 0) {
-                osSyncPrintf("camera: force change SET to %s!\n", sCameraSettingNames[D_8011DAFC[sDbgModeIdx]]);
+                PRINTF("camera: force change SET to %s!\n", sCameraSettingNames[D_8011DAFC[sDbgModeIdx]]);
             }
         }
     }
@@ -7319,12 +7319,12 @@ Vec3s* Camera_Update(Vec3s* outVec, Camera* camera) {
     player = camera->globalCtx->cameraPtrs[0]->player;
 
     if (R_DBG_CAM_UPDATE) {
-        osSyncPrintf("camera: in %x\n", camera);
+        PRINTF("camera: in %x\n", camera);
     }
 
     if (camera->status == CAM_STAT_CUT) {
         if (R_DBG_CAM_UPDATE) {
-            osSyncPrintf("camera: cut out %x\n", camera);
+            PRINTF("camera: cut out %x\n", camera);
         }
         *outVec = camera->inputDir;
         return outVec;
@@ -7398,7 +7398,7 @@ Vec3s* Camera_Update(Vec3s* outVec, Camera* camera) {
 
     if (camera->status == CAM_STAT_WAIT) {
         if (R_DBG_CAM_UPDATE) {
-            osSyncPrintf("camera: wait out %x\n", camera);
+            PRINTF("camera: wait out %x\n", camera);
         }
         *outVec = camera->inputDir;
         return outVec;
@@ -7409,7 +7409,7 @@ Vec3s* Camera_Update(Vec3s* outVec, Camera* camera) {
     camera->unk_14C |= 0x10;
 
     if (R_DBG_CAM_UPDATE) {
-        osSyncPrintf("camera: engine (%d %d %d) %04x \n", camera->setting, camera->mode,
+        PRINTF("camera: engine (%d %d %d) %04x \n", camera->setting, camera->mode,
                      sCameraSettings[camera->setting].cameraModes[camera->mode].funcIdx, camera->unk_14C);
     }
 
@@ -7440,11 +7440,11 @@ Vec3s* Camera_Update(Vec3s* outVec, Camera* camera) {
     }
 
     if (R_DBG_CAM_UPDATE) {
-        osSyncPrintf("camera: shrink_and_bitem %x(%d)\n", sCameraInterfaceFlags, camera->globalCtx->transitionMode);
+        PRINTF("camera: shrink_and_bitem %x(%d)\n", sCameraInterfaceFlags, camera->globalCtx->transitionMode);
     }
 
     if (R_DBG_CAM_UPDATE) {
-        osSyncPrintf("camera: engine (%s(%d) %s(%d) %s(%d)) ok!\n", &sCameraSettingNames[camera->setting],
+        PRINTF("camera: engine (%s(%d) %s(%d) %s(%d)) ok!\n", &sCameraSettingNames[camera->setting],
                      camera->setting, &sCameraModeNames[camera->mode], camera->mode,
                      &sCameraFunctionNames[sCameraSettings[camera->setting].cameraModes[camera->mode].funcIdx],
                      sCameraSettings[camera->setting].cameraModes[camera->mode].funcIdx);
@@ -7466,7 +7466,7 @@ Vec3s* Camera_Update(Vec3s* outVec, Camera* camera) {
         DbgCamera_Update(&D_8015BD80, camera);
         func_800AA358(&camera->globalCtx->view, &D_8015BD80.eye, &D_8015BD80.at, &D_8015BD80.up);
         if (R_DBG_CAM_UPDATE) {
-            osSyncPrintf("camera: debug out\n");
+            PRINTF("camera: debug out\n");
         }
         *outVec = D_8015BD80.unk_10C6;
         return outVec;
@@ -7528,9 +7528,9 @@ Vec3s* Camera_Update(Vec3s* outVec, Camera* camera) {
     }
 
     if (PREG(81)) {
-        osSyncPrintf("dir  (%d) %d(%f) %d(%f) 0(0) \n", sUpdateCameraDirection, camera->inputDir.x,
+        PRINTF("dir  (%d) %d(%f) %d(%f) 0(0) \n", sUpdateCameraDirection, camera->inputDir.x,
                      BINANG_TO_DEGF(camera->inputDir.x), camera->inputDir.y, BINANG_TO_DEGF(camera->inputDir.y));
-        osSyncPrintf("real (%d) %d(%f) %d(%f) 0(0) \n", sUpdateCameraDirection, camera->camDir.x,
+        PRINTF("real (%d) %d(%f) %d(%f) 0(0) \n", sUpdateCameraDirection, camera->camDir.x,
                      BINANG_TO_DEGF(camera->camDir.x), camera->camDir.y, BINANG_TO_DEGF(camera->camDir.y));
     }
 
@@ -7539,12 +7539,12 @@ Vec3s* Camera_Update(Vec3s* outVec, Camera* camera) {
     }
 
     if (R_DBG_CAM_UPDATE) {
-        osSyncPrintf("camera: out (%f %f %f) (%f %f %f)\n", camera->at.x, camera->at.y, camera->at.z, camera->eye.x,
+        PRINTF("camera: out (%f %f %f) (%f %f %f)\n", camera->at.x, camera->at.y, camera->at.z, camera->eye.x,
                      camera->eye.y, camera->eye.z);
-        osSyncPrintf("camera: dir (%f %d(%f) %d(%f)) (%f)\n", eyeAtAngle.r, eyeAtAngle.pitch,
+        PRINTF("camera: dir (%f %d(%f) %d(%f)) (%f)\n", eyeAtAngle.r, eyeAtAngle.pitch,
                      BINANG_TO_DEGF(eyeAtAngle.pitch), eyeAtAngle.yaw, BINANG_TO_DEGF(eyeAtAngle.yaw), camera->fov);
         if (camera->player != NULL) {
-            osSyncPrintf("camera: foot(%f %f %f) dist (%f)\n", curPlayerPosRot.pos.x, curPlayerPosRot.pos.y,
+            PRINTF("camera: foot(%f %f %f) dist (%f)\n", curPlayerPosRot.pos.x, curPlayerPosRot.pos.y,
                          curPlayerPosRot.pos.z, camera->dist);
         }
     }
@@ -7569,7 +7569,7 @@ void Camera_Finish(Camera* camera) {
 
             if (player->csMode != 0) {
                 func_8002DF54(camera->globalCtx, &player->actor, 7);
-                osSyncPrintf("camera: player demo end!!\n");
+                PRINTF("camera: player demo end!!\n");
             }
 
             defaultCam->unk_14C |= 8;
@@ -7606,7 +7606,7 @@ s32 Camera_ChangeModeFlags(Camera* camera, s16 mode, u8 flags) {
     static s32 modeChangeFlags = 0;
 
     if (QREG(89)) {
-        osSyncPrintf("+=+(%d)+=+ recive request -> %s\n", camera->globalCtx->state.frames, sCameraModeNames[mode]);
+        PRINTF("+=+(%d)+=+ recive request -> %s\n", camera->globalCtx->state.frames, sCameraModeNames[mode]);
     }
 
     if (camera->unk_14C & 0x20 && flags == 0) {
@@ -7616,12 +7616,12 @@ s32 Camera_ChangeModeFlags(Camera* camera, s16 mode, u8 flags) {
 
     if (!((sCameraSettings[camera->setting].unk_00 & 0x3FFFFFFF) & (1 << mode))) {
         if (mode == CAM_MODE_FIRSTPERSON) {
-            osSyncPrintf("camera: error sound\n");
+            PRINTF("camera: error sound\n");
             func_80078884(NA_SE_SY_ERROR);
         }
 
         if (camera->mode != CAM_MODE_NORMAL) {
-            osSyncPrintf(VT_COL(YELLOW, BLACK) "camera: change camera mode: force NORMAL: %s %s refused\n" VT_RST,
+            PRINTF(VT_COL(YELLOW, BLACK) "camera: change camera mode: force NORMAL: %s %s refused\n" VT_RST,
                          sCameraSettingNames[camera->setting], sCameraModeNames[mode]);
             camera->mode = CAM_MODE_NORMAL;
             Camera_CopyModeValuesToPREG(camera, camera->mode);
@@ -7734,7 +7734,7 @@ s32 Camera_ChangeMode(Camera* camera, s16 mode) {
 
 s32 Camera_CheckValidMode(Camera* camera, s16 mode) {
     if (QREG(89) != 0) {
-        osSyncPrintf("+=+=+=+ recive asking -> %s (%s)\n", sCameraModeNames[mode],
+        PRINTF("+=+=+=+ recive asking -> %s (%s)\n", sCameraModeNames[mode],
                      sCameraSettingNames[camera->setting]);
     }
     if (!(sCameraSettings[camera->setting].validModes & (1 << mode))) {
@@ -7761,7 +7761,7 @@ s16 Camera_ChangeSettingFlags(Camera* camera, s16 setting, s16 flags) {
     }
 
     if (setting == CAM_SET_NONE || setting >= CAM_SET_MAX) {
-        osSyncPrintf(VT_COL(RED, WHITE) "camera: error: illegal camera set (%d) !!!!\n" VT_RST, setting);
+        PRINTF(VT_COL(RED, WHITE) "camera: error: illegal camera set (%d) !!!!\n" VT_RST, setting);
         return -0x63;
     }
 
@@ -7802,7 +7802,7 @@ s16 Camera_ChangeSettingFlags(Camera* camera, s16 setting, s16 flags) {
         Camera_CopyModeValuesToPREG(camera, camera->mode);
     }
 
-    osSyncPrintf(VT_SGR("1") "%06u:" VT_RST " camera: change camera[%d] set %s\n", camera->globalCtx->state.frames,
+    PRINTF(VT_SGR("1") "%06u:" VT_RST " camera: change camera[%d] set %s\n", camera->globalCtx->state.frames,
                  camera->thisIdx, sCameraSettingNames[camera->setting]);
 
     return setting;
@@ -7831,7 +7831,7 @@ s32 Camera_ChangeDataIdx(Camera* camera, s32 camDataIdx) {
             Camera_CopyModeValuesToPREG(camera, camera->mode);
         } else if (settingChangeSuccessful < -1) {
             // @bug: This condition can never happen since settingChangeSuccesful is only ever 0 or 1.
-            osSyncPrintf(VT_COL(RED, WHITE) "camera: error: illegal camera ID (%d) !! (%d|%d|%d)\n" VT_RST, camDataIdx,
+            PRINTF(VT_COL(RED, WHITE) "camera: error: illegal camera ID (%d) !! (%d|%d|%d)\n" VT_RST, camDataIdx,
                          camera->thisIdx, 0x32, newCameraSetting);
         }
         return 0x80000000 | camDataIdx;
@@ -8008,7 +8008,7 @@ s32 Camera_ChangeDoorCam(Camera* camera, Actor* doorActor, s16 camDataIdx, f32 a
 
     if (camDataIdx == -1) {
         Camera_ChangeSetting(camera, CAM_SET_DOORC);
-        osSyncPrintf(".... change default door camera (set %d)\n", CAM_SET_DOORC);
+        PRINTF(".... change default door camera (set %d)\n", CAM_SET_DOORC);
     } else {
         s32 setting = Camera_GetCamDataSetting(camera, camDataIdx);
         camera->unk_14A |= 0x40;
@@ -8018,7 +8018,7 @@ s32 Camera_ChangeDoorCam(Camera* camera, Actor* doorActor, s16 camDataIdx, f32 a
             camera->unk_14A |= 4;
         }
 
-        osSyncPrintf("....change door camera ID %d (set %d)\n", camera->camDataIdx, camera->setting);
+        PRINTF("....change door camera ID %d (set %d)\n", camera->camDataIdx, camera->setting);
     }
 
     Camera_CopyModeValuesToPREG(camera, camera->mode);
@@ -8081,7 +8081,7 @@ void Camera_SetCameraData(Camera* camera, s16 setDataFlags, void* data0, void* d
     }
 
     if (setDataFlags & 0x10) {
-        osSyncPrintf(VT_COL(RED, WHITE) "camera: setCameraData: last argument not alive!\n" VT_RST);
+        PRINTF(VT_COL(RED, WHITE) "camera: setCameraData: last argument not alive!\n" VT_RST);
     }
 }
 

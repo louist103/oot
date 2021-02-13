@@ -76,7 +76,7 @@ void BgJyaBombiwa_SetupDynaPoly(BgJyaBombiwa* this, GlobalContext* globalCtx, vo
     if (this->dyna.bgId == BG_ACTOR_MAX) {
 
         // Warning: move BG registration failed
-        osSyncPrintf("Warning : move BG 登録失敗(%s %d)(name %d)(arg_data 0x%04x)\n", "../z_bg_jya_bombiwa.c", 174,
+        PRINTF("Warning : move BG 登録失敗(%s %d)(name %d)(arg_data 0x%04x)\n", "../z_bg_jya_bombiwa.c", 174,
                      this->dyna.actor.id, this->dyna.actor.params);
     }
 }
@@ -92,12 +92,12 @@ void BgJyaBombiwa_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgJyaBombiwa* this = THIS;
 
     if ((this->dyna.actor.params & 0x3F) != 0x29) {
-        osSyncPrintf(VT_COL(YELLOW, BLACK));
+        PRINTF(VT_COL(YELLOW, BLACK));
 
         // Warning: Switch Number changed (%s %d)(SW %d
-        osSyncPrintf("Ｗａｒｎｉｎｇ : Switch Number が変更された(%s %d)(SW %d)\n", "../z_bg_jya_bombiwa.c", 218,
+        PRINTF("Ｗａｒｎｉｎｇ : Switch Number が変更された(%s %d)(SW %d)\n", "../z_bg_jya_bombiwa.c", 218,
                      this->dyna.actor.params & 0x3F);
-        osSyncPrintf(VT_RST);
+        PRINTF(VT_RST);
     }
     BgJyaBombiwa_SetupDynaPoly(this, globalCtx, &D_0600E710, DPM_UNK);
     BgJyaBombiwa_InitCollider(this, globalCtx);
@@ -107,7 +107,7 @@ void BgJyaBombiwa_Init(Actor* thisx, GlobalContext* globalCtx) {
         Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
 
         // Rock destroyed by jya bomb
-        osSyncPrintf("(jya 爆弾で破壊岩)(arg_data 0x%04x)\n", this->dyna.actor.params);
+        PRINTF("(jya 爆弾で破壊岩)(arg_data 0x%04x)\n", this->dyna.actor.params);
     }
 }
 

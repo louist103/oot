@@ -118,7 +118,7 @@ void func_800645A0(GlobalContext* globalCtx, CutsceneContext* csCtx) {
 
     if ((gSaveContext.cutsceneTrigger != 0) && (csCtx->state == CS_STATE_IDLE)) {
         // Translates to: "CUTSCENE START REQUEST ANNOUNCEMENT!"
-        osSyncPrintf("\nデモ開始要求 発令！");
+        PRINTF("\nデモ開始要求 発令！");
         gSaveContext.cutsceneIndex = 0xFFFD;
         gSaveContext.cutsceneTrigger = 1;
     }
@@ -459,7 +459,7 @@ void Cutscene_Command_Terminator(GlobalContext* globalCtx, CutsceneContext* csCt
         gSaveContext.unk_1410 = 1;
 
         // Translates to: "FUTURE FORK DESIGNATION=No. [%d]"
-        osSyncPrintf("\n分岐先指定！！=[%d]番", cmd->base);
+        PRINTF("\n分岐先指定！！=[%d]番", cmd->base);
 
         if ((gSaveContext.gameMode != 0) && (csCtx->frames != cmd->startFrame)) {
             gSaveContext.unk_13E7 = 1;
@@ -1901,7 +1901,7 @@ void func_80068DC0(GlobalContext* globalCtx, CutsceneContext* csCtx) {
         }
 
         // Translates to: "RIGHT HERE, HUH"
-        osSyncPrintf("\n\n\n\n\nやっぱりここかいな");
+        PRINTF("\n\n\n\n\nやっぱりここかいな");
         gSaveContext.cutsceneIndex = 0;
         gSaveContext.gameMode = 0;
 
@@ -2018,7 +2018,7 @@ void Cutscene_HandleEntranceTriggers(GlobalContext* globalCtx) {
 }
 
 void Cutscene_HandleConditionalTriggers(GlobalContext* globalCtx) {
-    osSyncPrintf("\ngame_info.mode=[%d] restart_flag", ((void)0, gSaveContext.respawnFlag));
+    PRINTF("\ngame_info.mode=[%d] restart_flag", ((void)0, gSaveContext.respawnFlag));
 
     if ((gSaveContext.gameMode == 0) && (gSaveContext.respawnFlag <= 0) && (gSaveContext.cutsceneIndex < 0xFFF0)) {
         if ((gSaveContext.entranceIndex == 0x01E1) && !Flags_GetEventChkInf(0xAC)) {

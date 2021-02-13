@@ -467,7 +467,7 @@ s32 EnDaikuKakariko_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gf
             angle = this->npcInfo.unk_08;
 
             if (this->flags & 0x1000) {
-                osSyncPrintf("<%d>\n", this->neckAngle.x);
+                PRINTF("<%d>\n", this->neckAngle.x);
                 Matrix_RotateX((angle.y + this->neckAngle.y) * (M_PI / 32768.0f), MTXMODE_APPLY);
                 Matrix_RotateZ((angle.x + this->neckAngle.x) * (M_PI / 32768.0f), MTXMODE_APPLY);
             } else {

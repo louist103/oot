@@ -30,11 +30,11 @@ void func_801109B0(GlobalContext* globalCtx) {
     parameterSize = (u32)_parameter_staticSegmentRomEnd - (u32)_parameter_staticSegmentRomStart;
 
     // Translates to: "Permanent PARAMETER Segment = %x"
-    osSyncPrintf("常駐ＰＡＲＡＭＥＴＥＲセグメント=%x\n", parameterSize);
+    PRINTF("常駐ＰＡＲＡＭＥＴＥＲセグメント=%x\n", parameterSize);
 
     interfaceCtx->parameterSegment = GameState_Alloc(&globalCtx->state, parameterSize, "../z_construct.c", 159);
 
-    osSyncPrintf("parameter->parameterSegment=%x\n", interfaceCtx->parameterSegment);
+    PRINTF("parameter->parameterSegment=%x\n", interfaceCtx->parameterSegment);
 
     if (interfaceCtx->parameterSegment == NULL) {
         __assert("parameter->parameterSegment != NULL", "../z_construct.c", 161);
@@ -46,8 +46,8 @@ void func_801109B0(GlobalContext* globalCtx) {
     interfaceCtx->do_actionSegment = GameState_Alloc(&globalCtx->state, 0x480, "../z_construct.c", 166);
 
     // Translates to: "DO Action Texture Initialization"
-    osSyncPrintf("ＤＯアクション テクスチャ初期=%x\n", 0x480);
-    osSyncPrintf("parameter->do_actionSegment=%x\n", interfaceCtx->do_actionSegment);
+    PRINTF("ＤＯアクション テクスチャ初期=%x\n", 0x480);
+    PRINTF("parameter->do_actionSegment=%x\n", interfaceCtx->do_actionSegment);
 
     if (interfaceCtx->do_actionSegment == NULL) {
         __assert("parameter->do_actionSegment != NULL", "../z_construct.c", 169);
@@ -78,14 +78,14 @@ void func_801109B0(GlobalContext* globalCtx) {
     interfaceCtx->icon_itemSegment = GameState_Alloc(&globalCtx->state, 0x4000, "../z_construct.c", 190);
 
     // Translates to: "Icon Item Texture Initialization = %x"
-    osSyncPrintf("アイコンアイテム テクスチャ初期=%x\n", 0x4000);
-    osSyncPrintf("parameter->icon_itemSegment=%x\n", interfaceCtx->icon_itemSegment);
+    PRINTF("アイコンアイテム テクスチャ初期=%x\n", 0x4000);
+    PRINTF("parameter->icon_itemSegment=%x\n", interfaceCtx->icon_itemSegment);
 
     if (interfaceCtx->icon_itemSegment == NULL) {
         __assert("parameter->icon_itemSegment != NULL", "../z_construct.c", 193);
     }
 
-    osSyncPrintf("Register_Item[%x, %x, %x, %x]\n", gSaveContext.equips.buttonItems[0],
+    PRINTF("Register_Item[%x, %x, %x, %x]\n", gSaveContext.equips.buttonItems[0],
                  gSaveContext.equips.buttonItems[1], gSaveContext.equips.buttonItems[2],
                  gSaveContext.equips.buttonItems[3]);
 
@@ -117,11 +117,11 @@ void func_801109B0(GlobalContext* globalCtx) {
                             "../z_construct.c", 219);
     }
 
-    osSyncPrintf("ＥＶＥＮＴ＝%d\n", ((void)0, gSaveContext.timer1State));
+    PRINTF("ＥＶＥＮＴ＝%d\n", ((void)0, gSaveContext.timer1State));
 
     if ((gSaveContext.timer1State == 4) || (gSaveContext.timer1State == 8) || (gSaveContext.timer2State == 4) ||
         (gSaveContext.timer2State == 10)) {
-        osSyncPrintf("restart_flag=%d\n", ((void)0, gSaveContext.respawnFlag));
+        PRINTF("restart_flag=%d\n", ((void)0, gSaveContext.respawnFlag));
 
         if ((gSaveContext.respawnFlag == -1) || (gSaveContext.respawnFlag == 1)) {
             if (gSaveContext.timer1State == 4) {
@@ -149,11 +149,11 @@ void func_801109B0(GlobalContext* globalCtx) {
     if ((gSaveContext.timer1State >= 11) && (gSaveContext.timer1State < 16)) {
         gSaveContext.timer1State = 0;
         // Translates to: "Timer Stop!!!!!!!!!!!!!!!!!!!!!!"
-        osSyncPrintf("タイマー停止！！！！！！！！！！！！！！！！！！！！！  = %d\n", gSaveContext.timer1State);
+        PRINTF("タイマー停止！！！！！！！！！！！！！！！！！！！！！  = %d\n", gSaveContext.timer1State);
     }
 
     // Translates to: "Parameter Area = %x"
-    osSyncPrintf("ＰＡＲＡＭＥＴＥＲ領域＝%x\n", parameterSize + 0x5300);
+    PRINTF("ＰＡＲＡＭＥＴＥＲ領域＝%x\n", parameterSize + 0x5300);
 
     HealthMeter_Init(globalCtx);
     Map_Init(globalCtx);
@@ -190,10 +190,10 @@ void func_80110F68(GlobalContext* globalCtx) {
 
     msgCtx->textboxSegment = GameState_Alloc(&globalCtx->state, 0x2200, "../z_construct.c", 349);
 
-    osSyncPrintf("message->fukidashiSegment=%x\n", msgCtx->textboxSegment);
+    PRINTF("message->fukidashiSegment=%x\n", msgCtx->textboxSegment);
 
     // Translates to: "Textbox game_alloc=%x"
-    osSyncPrintf("吹き出しgame_alloc=%x\n", 0x2200);
+    PRINTF("吹き出しgame_alloc=%x\n", 0x2200);
 
     if (msgCtx->textboxSegment == NULL) {
         __assert("message->fukidashiSegment != NULL", "../z_construct.c", 352);

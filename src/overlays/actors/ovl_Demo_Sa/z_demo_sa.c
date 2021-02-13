@@ -559,7 +559,7 @@ void func_8098F654(DemoSa* this, GlobalContext* globalCtx) {
                     func_8098F5D0(this);
                     break;
                 default:
-                    osSyncPrintf("Demo_Sa_inEnding_Check_DemoMode:そんな動作は無い!!!!!!!!\n");
+                    PRINTF("Demo_Sa_inEnding_Check_DemoMode:そんな動作は無い!!!!!!!!\n");
             }
             this->unk_1AC = action;
         }
@@ -707,7 +707,7 @@ void func_8098FB68(DemoSa* this, GlobalContext* globalCtx) {
                     func_8098FAE0(this);
                     break;
                 default:
-                    osSyncPrintf("Demo_Sa_inPresent_Check_DemoMode:そんな動作は無い!!!!!!!!\n");
+                    PRINTF("Demo_Sa_inPresent_Check_DemoMode:そんな動作は無い!!!!!!!!\n");
             }
             this->unk_1AC = action;
         }
@@ -747,7 +747,7 @@ void DemoSa_Update(Actor* thisx, GlobalContext* globalCtx) {
     DemoSa* this = THIS;
 
     if (this->action < 0 || this->action >= 21 || sActionFuncs[this->action] == NULL) {
-        osSyncPrintf(VT_FGCOL(RED) "メインモードがおかしい!!!!!!!!!!!!!!!!!!!!!!!!!\n" VT_RST);
+        PRINTF(VT_FGCOL(RED) "メインモードがおかしい!!!!!!!!!!!!!!!!!!!!!!!!!\n" VT_RST);
         return;
     }
     sActionFuncs[this->action](this, globalCtx);
@@ -817,7 +817,7 @@ void DemoSa_Draw(Actor* thisx, GlobalContext* globalCtx) {
     DemoSa* this = THIS;
 
     if (this->drawConfig < 0 || this->drawConfig >= 3 || sDrawFuncs[this->drawConfig] == NULL) {
-        osSyncPrintf(VT_FGCOL(RED) "描画モードがおかしい!!!!!!!!!!!!!!!!!!!!!!!!!\n" VT_RST);
+        PRINTF(VT_FGCOL(RED) "描画モードがおかしい!!!!!!!!!!!!!!!!!!!!!!!!!\n" VT_RST);
         return;
     }
     sDrawFuncs[this->drawConfig](this, globalCtx);

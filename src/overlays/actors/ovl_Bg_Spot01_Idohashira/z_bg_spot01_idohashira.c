@@ -185,7 +185,7 @@ f32 func_808AB1DC(f32 arg0, f32 arg1, u16 arg2, u16 arg3, u16 arg4) {
         temp_f12 = regFloat * diff43;
         return (((((arg1 - arg0) - temp_f12) / SQ(diff23)) * diff43) * diff43) + temp_f12;
     }
-    osSyncPrintf(VT_FGCOL(RED) "Bg_Spot01_Idohashira_Get_FreeFallで割り算出来ない!!!!!!!!!!!!!!\n" VT_RST);
+    PRINTF(VT_FGCOL(RED) "Bg_Spot01_Idohashira_Get_FreeFallで割り算出来ない!!!!!!!!!!!!!!\n" VT_RST);
     return 0.0f;
 }
 
@@ -260,7 +260,7 @@ void func_808AB444(BgSpot01Idohashira* this, GlobalContext* globalCtx) {
                     Actor_Kill(&this->dyna.actor);
                     break;
                 default:
-                    osSyncPrintf("Bg_Spot01_Idohashira_Check_DemoMode:そんな動作は無い!!!!!!!!\n");
+                    PRINTF("Bg_Spot01_Idohashira_Check_DemoMode:そんな動作は無い!!!!!!!!\n");
             }
             this->npcAction = action;
         }
@@ -289,7 +289,7 @@ void BgSpot01Idohashira_Update(Actor* thisx, GlobalContext* globalCtx) {
     BgSpot01Idohashira* this = THIS;
 
     if (this->action < 0 || this->action >= 4 || sActionFuncs[this->action] == NULL) {
-        osSyncPrintf(VT_FGCOL(RED) "メインモードがおかしい!!!!!!!!!!!!!!!!!!!!!!!!!\n" VT_RST);
+        PRINTF(VT_FGCOL(RED) "メインモードがおかしい!!!!!!!!!!!!!!!!!!!!!!!!!\n" VT_RST);
         return;
     }
     sActionFuncs[this->action](this, globalCtx);
@@ -341,7 +341,7 @@ void BgSpot01Idohashira_Draw(Actor* thisx, GlobalContext* globalCtx) {
     BgSpot01Idohashira* this = THIS;
 
     if (this->drawConfig < 0 || this->drawConfig > 0 || sDrawFuncs[this->drawConfig] == NULL) {
-        osSyncPrintf(VT_FGCOL(RED) "描画モードがおかしい!!!!!!!!!!!!!!!!!!!!!!!!!\n" VT_RST);
+        PRINTF(VT_FGCOL(RED) "描画モードがおかしい!!!!!!!!!!!!!!!!!!!!!!!!!\n" VT_RST);
         return;
     }
     sDrawFuncs[this->drawConfig](this, globalCtx);

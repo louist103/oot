@@ -89,8 +89,8 @@ void EnNiwLady_Init(Actor* thisx, GlobalContext* globalCtx) {
         Actor_Kill(thisx);
         return;
     }
-    osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ ねぇちゃんうっふん ☆☆☆☆☆ %d\n" VT_RST, this->unk_278);
-    osSyncPrintf("\n\n");
+    PRINTF(VT_FGCOL(GREEN) "☆☆☆☆☆ ねぇちゃんうっふん ☆☆☆☆☆ %d\n" VT_RST, this->unk_278);
+    PRINTF("\n\n");
     this->actionFunc = func_80AB9F24;
     thisx->uncullZoneForward = 600.0f;
 }
@@ -215,7 +215,7 @@ void func_80ABA244(EnNiwLady* this, GlobalContext* globalCtx) {
                     gSaveContext.infTable[25] |= D_80ABB3B4[currentCucco->unk_2AA];
                     if (BREG(1) != 0) {
                         // GET inside the chicken fence!
-                        osSyncPrintf(VT_FGCOL(GREEN) "☆ 鶏柵内ＧＥＴ！☆ %x\n" VT_RST,
+                        PRINTF(VT_FGCOL(GREEN) "☆ 鶏柵内ＧＥＴ！☆ %x\n" VT_RST,
                                      D_80ABB3B4[currentCucco->unk_2AA]);
                     }
                 }
@@ -252,14 +252,14 @@ void func_80ABA244(EnNiwLady* this, GlobalContext* globalCtx) {
         this->unk_26E = 11;
     }
     if (func_8002F194(&this->actor, globalCtx)) {
-        osSyncPrintf("\n\n");
-        osSyncPrintf(VT_FGCOL(YELLOW) "☆☆☆☆☆ ねぇちゃん選択\t ☆☆☆☆ %d\n" VT_RST, phi_s1);
-        osSyncPrintf(VT_FGCOL(YELLOW) "☆☆☆☆☆ ねぇちゃんハート     ☆☆☆☆ %d\n" VT_RST, this->unk_26C);
-        osSyncPrintf(VT_FGCOL(YELLOW) "☆☆☆☆☆ ねぇちゃん保存       ☆☆☆☆ %d\n" VT_RST, this->unk_26A);
-        osSyncPrintf(VT_FGCOL(YELLOW) "☆☆☆☆☆ ねぇちゃん今\t ☆☆☆☆ %d\n" VT_RST, this->cuccosInPen);
-        osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ this->actor.talk_message ☆☆ %x\n" VT_RST, this->actor.textId);
-        osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ this->message_end_code   ☆☆ %d\n" VT_RST, this->unk_262);
-        osSyncPrintf("\n\n");
+        PRINTF("\n\n");
+        PRINTF(VT_FGCOL(YELLOW) "☆☆☆☆☆ ねぇちゃん選択\t ☆☆☆☆ %d\n" VT_RST, phi_s1);
+        PRINTF(VT_FGCOL(YELLOW) "☆☆☆☆☆ ねぇちゃんハート     ☆☆☆☆ %d\n" VT_RST, this->unk_26C);
+        PRINTF(VT_FGCOL(YELLOW) "☆☆☆☆☆ ねぇちゃん保存       ☆☆☆☆ %d\n" VT_RST, this->unk_26A);
+        PRINTF(VT_FGCOL(YELLOW) "☆☆☆☆☆ ねぇちゃん今\t ☆☆☆☆ %d\n" VT_RST, this->cuccosInPen);
+        PRINTF(VT_FGCOL(GREEN) "☆☆☆☆☆ this->actor.talk_message ☆☆ %x\n" VT_RST, this->actor.textId);
+        PRINTF(VT_FGCOL(GREEN) "☆☆☆☆☆ this->message_end_code   ☆☆ %d\n" VT_RST, this->unk_262);
+        PRINTF("\n\n");
         if (Text_GetFaceReaction(globalCtx, 8) == 0) {
             if (this->actor.textId == 0x503C) {
                 func_80078884(NA_SE_SY_ERROR);
@@ -274,10 +274,10 @@ void func_80ABA244(EnNiwLady* this, GlobalContext* globalCtx) {
                 this->unk_26C = 1;
                 this->unk_262 = 5;
                 this->unk_26A = this->cuccosInPen;
-                osSyncPrintf(VT_FGCOL(CYAN) "☆☆☆☆☆ 柵内BIT変更前 ☆☆ %x\n" VT_RST, gSaveContext.infTable[25]);
+                PRINTF(VT_FGCOL(CYAN) "☆☆☆☆☆ 柵内BIT変更前 ☆☆ %x\n" VT_RST, gSaveContext.infTable[25]);
                 gSaveContext.infTable[25] &= 0x1FF;
-                osSyncPrintf(VT_FGCOL(CYAN) "☆☆☆☆☆ 柵内BIT変更後 ☆☆ %x\n" VT_RST, gSaveContext.infTable[25]);
-                osSyncPrintf("\n\n");
+                PRINTF(VT_FGCOL(CYAN) "☆☆☆☆☆ 柵内BIT変更後 ☆☆ %x\n" VT_RST, gSaveContext.infTable[25]);
+                PRINTF("\n\n");
                 this->actionFunc = func_80ABA654;
                 return;
             }
@@ -301,9 +301,9 @@ void func_80ABA244(EnNiwLady* this, GlobalContext* globalCtx) {
 void func_80ABA654(EnNiwLady* this, GlobalContext* globalCtx) {
     if (this->unk_262 == func_8010BDBC(&globalCtx->msgCtx) && func_80106BC8(globalCtx) != 0) {
         func_80106CCC(globalCtx);
-        osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ ハート ☆☆☆☆☆ %d\n" VT_RST, this->unk_26C);
-        osSyncPrintf(VT_FGCOL(YELLOW) "☆☆☆☆☆ 爆弾   ☆☆☆☆☆ %d\n" VT_RST, this->unk_272);
-        osSyncPrintf("\n\n");
+        PRINTF(VT_FGCOL(GREEN) "☆☆☆☆☆ ハート ☆☆☆☆☆ %d\n" VT_RST, this->unk_26C);
+        PRINTF(VT_FGCOL(YELLOW) "☆☆☆☆☆ 爆弾   ☆☆☆☆☆ %d\n" VT_RST, this->unk_272);
+        PRINTF("\n\n");
         this->unk_26E = 0xB;
         if (!(gSaveContext.itemGetInf[0] & 0x1000)) {
             this->actor.parent = NULL;
@@ -326,7 +326,7 @@ static s16 sTradeItemTextIds[] = { 0x503E, 0x503F, 0x5047, 0x5040, 0x5042, 0x504
 
 void func_80ABA778(EnNiwLady* this, GlobalContext* globalCtx) {
     //☆☆☆☆☆ Adult message check ☆☆☆☆☆
-    osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ アダルトメッセージチェック ☆☆☆☆☆ \n" VT_RST);
+    PRINTF(VT_FGCOL(GREEN) "☆☆☆☆☆ アダルトメッセージチェック ☆☆☆☆☆ \n" VT_RST);
     this->unk_262 = 6;
     this->unk_273 = 0;
     if (!(gSaveContext.itemGetInf[2] & 0x1000)) {
@@ -451,7 +451,7 @@ void func_80ABAC84(EnNiwLady* this, GlobalContext* globalCtx) {
     if ((func_8010BDBC(&globalCtx->msgCtx) != 6) || (func_80106BC8(globalCtx) == 0)) {
         return;
     }
-    osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ 正常終了 ☆☆☆☆☆ \n" VT_RST);
+    PRINTF(VT_FGCOL(GREEN) "☆☆☆☆☆ 正常終了 ☆☆☆☆☆ \n" VT_RST);
     if (LINK_IS_ADULT) {
         if (!(gSaveContext.itemGetInf[2] & 0x1000)) {
             gSaveContext.itemGetInf[2] |= 0x1000;
@@ -467,7 +467,7 @@ void func_80ABAC84(EnNiwLady* this, GlobalContext* globalCtx) {
 }
 
 void func_80ABAD38(EnNiwLady* this, GlobalContext* globalCtx) {
-    osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ 通常メッセージチェック ☆☆☆☆☆ \n" VT_RST);
+    PRINTF(VT_FGCOL(GREEN) "☆☆☆☆☆ 通常メッセージチェック ☆☆☆☆☆ \n" VT_RST);
     this->unk_262 = 6;
     this->actionFunc = func_80ABAD7C;
 }

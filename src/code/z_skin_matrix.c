@@ -258,9 +258,9 @@ s32 SkinMatrix_Invert(MtxF* src, MtxF* dest) {
             // reaching col = 4 means the row is either all 0 or a duplicate row.
             // therefore singular matrix (0 determinant).
 
-            osSyncPrintf(VT_COL(YELLOW, BLACK));
-            osSyncPrintf("Skin_Matrix_InverseMatrix():逆行列つくれません\n");
-            osSyncPrintf(VT_RST);
+            PRINTF(VT_COL(YELLOW, BLACK));
+            PRINTF("Skin_Matrix_InverseMatrix():逆行列つくれません\n");
+            PRINTF(VT_RST);
             return 2;
         }
         if (thisCol != thisRow) { // responsible for swapping columns if zero on diagonal
@@ -599,7 +599,7 @@ Mtx* SkinMatrix_MtxFToNewMtx(GraphicsContext* gfxCtx, MtxF* src) {
     Mtx* mtx = Graph_Alloc(gfxCtx, sizeof(Mtx));
 
     if (mtx == NULL) {
-        osSyncPrintf("Skin_Matrix_to_Mtx_new() 確保失敗:NULLを返して終了\n", mtx);
+        PRINTF("Skin_Matrix_to_Mtx_new() 確保失敗:NULLを返して終了\n", mtx);
         return NULL;
     }
     SkinMatrix_MtxFToMtx(src, mtx);

@@ -127,20 +127,6 @@ void func_80B53468(void) {
     Audio_SetBGM(0x62);
 }
 
-BossGanon2* func_80B53488(EnZl3* this, GlobalContext* globalCtx) {
-    if (this->unk_3D4 == NULL) {
-        Actor* actorIt = globalCtx->actorCtx.actorLists[ACTORCAT_BOSS].head;
-
-        while (actorIt != NULL) {
-            if (actorIt->id == ACTOR_BOSS_GANON2) {
-                this->unk_3D4 = (BossGanon2*)actorIt;
-                break;
-            }
-            actorIt = actorIt->next;
-        }
-    }
-    return this->unk_3D4;
-}
 
 void func_80B534CC(EnZl3* this) {
     s32 pad[2];
@@ -828,7 +814,7 @@ void func_80B54F18(EnZl3* this, GlobalContext* globalCtx) {
 }
 
 void func_80B54FB4(EnZl3* this, GlobalContext* globalCtx) {
-    osSyncPrintf("ゼルダ姫のEn_Zl3_Actor_inFinal_Init通すよ!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+    PRINTF("ゼルダ姫のEn_Zl3_Actor_inFinal_Init通すよ!!!!!!!!!!!!!!!!!!!!!!!!!\n");
     func_80B54E14(this, &D_06008AD0, 0, 0.0f, 0);
     func_80B53554(this, 4);
     func_80B53568(this, 2);
@@ -838,7 +824,7 @@ void func_80B54FB4(EnZl3* this, GlobalContext* globalCtx) {
     this->actor.shape.rot.z = 0;
     this->unk_3C4 = this->actor.world.rot.z;
     this->actor.world.rot.z = this->actor.shape.rot.z;
-    osSyncPrintf("ゼルダ姫のEn_Zl3_Actor_inFinal_Initは通った!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+    PRINTF("ゼルダ姫のEn_Zl3_Actor_inFinal_Initは通った!!!!!!!!!!!!!!!!!!!!!!!!!\n");
 }
 
 void func_80B55054(EnZl3* this) {
@@ -982,7 +968,7 @@ void func_80B55444(EnZl3* this, GlobalContext* globalCtx) {
                 case 8:
                     this->unk_328 = 1;
                 default:
-                    osSyncPrintf("En_Zl3_inFinal_Check_DemoMode:そんな動作は無い!!!!!!!!\n");
+                    PRINTF("En_Zl3_inFinal_Check_DemoMode:そんな動作は無い!!!!!!!!\n");
             }
             this->unk_2F0 = temp_v0;
         }
@@ -1040,11 +1026,11 @@ void func_80B5572C(EnZl3* this, GlobalContext* globalCtx) {
 }
 
 void func_80B55780(EnZl3* this, GlobalContext* globalCtx) {
-    osSyncPrintf("ゼルダ姫のEn_Zl3_Actor_inFinal2_Init通すよ!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+    PRINTF("ゼルダ姫のEn_Zl3_Actor_inFinal2_Init通すよ!!!!!!!!!!!!!!!!!!!!!!!!!\n");
     func_80B54E14(this, &D_06005A0C, 0, 0.0f, 0);
     this->action = 7;
     this->drawConfig = 1;
-    osSyncPrintf("ゼルダ姫のEn_Zl3_Actor_inFinal2_Initは通った!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+    PRINTF("ゼルダ姫のEn_Zl3_Actor_inFinal2_Initは通った!!!!!!!!!!!!!!!!!!!!!!!!!\n");
     func_80B53568(this, 1);
     this->actor.flags &= ~1;
 }
@@ -1214,14 +1200,7 @@ void func_80B55F6C(EnZl3* this, GlobalContext* globalCtx) {
     if (func_8002F194(&this->actor, globalCtx)) {
         this->action = 0x12;
     } else if (ABS((s16)(this->actor.yawTowardsPlayer - this->actor.shape.rot.y)) <= 0x4300) {
-        BossGanon2* bossGanon2 = func_80B53488(this, globalCtx);
 
-        if ((bossGanon2 != NULL) && (bossGanon2->unk_324 <= 0.12345679104328156f)) {
-            this->actor.flags |= 9;
-            this->actor.flags |= 1;
-            this->actor.textId = 0x7059;
-            func_8002F2F4(&this->actor, globalCtx);
-        }
     } else {
         this->actor.flags &= ~9;
         this->actor.flags &= ~1;
@@ -1275,16 +1254,7 @@ void func_80B56214(EnZl3* this, GlobalContext* globalCtx) {
     if (func_8002F194(&this->actor, globalCtx)) {
         this->action = 21;
     } else if (ABS((s16)(this->actor.yawTowardsPlayer - this->actor.shape.rot.y)) <= 0x4300) {
-        BossGanon2* bossGanon2 = func_80B53488(this, globalCtx);
 
-        if (bossGanon2 != NULL) {
-            if (bossGanon2->unk_324 <= 0.12345679104328156f) {
-                this->actor.flags |= 9;
-                this->actor.flags |= 1;
-                this->actor.textId = 0x7059;
-                func_8002F2F4(&this->actor, globalCtx);
-            }
-        }
     } else {
         this->actor.flags &= ~9;
         this->actor.flags &= ~1;
@@ -1398,7 +1368,7 @@ void func_80B564A8(EnZl3* this, GlobalContext* globalCtx) {
                     Actor_Kill(&this->actor);
                     break;
                 default:
-                    osSyncPrintf("En_Zl3_inFinal2_Check_DemoMode:そんな動作は無い!!!!!!!!\n");
+                    PRINTF("En_Zl3_inFinal2_Check_DemoMode:そんな動作は無い!!!!!!!!\n");
             }
             this->unk_2F0 = temp_v0;
         }
@@ -1617,9 +1587,9 @@ void func_80B56F10(EnZl3* this, GlobalContext* globalCtx) {
         pathHead += waypoint;
         this->unk_30C = pathHead;
         this->unk_310 = pathHead->count;
-        osSyncPrintf("En_Zl3_Get_path_info レールデータをゲットだぜ = %d!!!!!!!!!!!!!!\n", waypoint);
+        PRINTF("En_Zl3_Get_path_info レールデータをゲットだぜ = %d!!!!!!!!!!!!!!\n", waypoint);
     } else {
-        osSyncPrintf("En_Zl3_Get_path_info レールデータが無い!!!!!!!!!!!!!!!!!!!!\n");
+        PRINTF("En_Zl3_Get_path_info レールデータが無い!!!!!!!!!!!!!!!!!!!!\n");
     }
 }
 
@@ -2648,7 +2618,7 @@ void func_80B59B6C(EnZl3* this, GlobalContext* globalCtx) {
             func_80B59828(this, globalCtx);
             break;
         default:
-            osSyncPrintf(VT_FGCOL(RED) " En_Oa3 の arg_data がおかしい!!!!!!!!!!!!!!!!!!!!!!!!!\n" VT_RST);
+            PRINTF(VT_FGCOL(RED) " En_Oa3 の arg_data がおかしい!!!!!!!!!!!!!!!!!!!!!!!!!\n" VT_RST);
             Actor_Kill(&this->actor);
     }
 }
@@ -2660,7 +2630,7 @@ void func_80B59DB8(EnZl3* this, GlobalContext* globalCtx) {
     s32 pad2;
 
     if (objIndex < 0) {
-        osSyncPrintf(VT_FGCOL(RED) "En_Zl3_main_bankアニメーションのバンクを読めない!!!!!!!!!!!!\n" VT_RST);
+        PRINTF(VT_FGCOL(RED) "En_Zl3_main_bankアニメーションのバンクを読めない!!!!!!!!!!!!\n" VT_RST);
         return;
     }
 
@@ -2684,7 +2654,7 @@ void EnZl3_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnZl3* this = THIS;
 
     if (this->action < 0 || this->action >= ARRAY_COUNT(sActionFuncs) || sActionFuncs[this->action] == NULL) {
-        osSyncPrintf(VT_FGCOL(RED) "メインモードがおかしい!!!!!!!!!!!!!!!!!!!!!!!!!\n" VT_RST);
+        PRINTF(VT_FGCOL(RED) "メインモードがおかしい!!!!!!!!!!!!!!!!!!!!!!!!!\n" VT_RST);
         return;
     }
     sActionFuncs[this->action](this, globalCtx);
@@ -2695,7 +2665,7 @@ void EnZl3_Init(Actor* thisx, GlobalContext* globalCtx) {
     ActorShape* shape = &this->actor.shape;
     s32 pad;
 
-    osSyncPrintf("ゼルダ姫のEn_Zl3_Actor_ct通すよ!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+    PRINTF("ゼルダ姫のEn_Zl3_Actor_ct通すよ!!!!!!!!!!!!!!!!!!!!!!!!!\n");
     ActorShape_Init(shape, 0.0f, ActorShadow_DrawCircle, 30.0f);
     shape->shadowAlpha = 0;
     func_80B533B0(thisx, globalCtx);
@@ -2710,7 +2680,7 @@ void EnZl3_Init(Actor* thisx, GlobalContext* globalCtx) {
             break;
     }
 
-    osSyncPrintf("ゼルダ姫のEn_Zl3_Actor_ctは通った!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+    PRINTF("ゼルダ姫のEn_Zl3_Actor_ctは通った!!!!!!!!!!!!!!!!!!!!!!!!!\n");
 }
 
 static OverrideLimbDraw sOverrideLimbDrawFuncs[] = {
@@ -2724,7 +2694,7 @@ s32 EnZl3_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
 
     if (this->unk_308 < 0 || this->unk_308 >= ARRAY_COUNT(sOverrideLimbDrawFuncs) ||
         sOverrideLimbDrawFuncs[this->unk_308] == NULL) {
-        osSyncPrintf(VT_FGCOL(RED) "描画前処理モードがおかしい!!!!!!!!!!!!!!!!!!!!!!!!!\n" VT_RST);
+        PRINTF(VT_FGCOL(RED) "描画前処理モードがおかしい!!!!!!!!!!!!!!!!!!!!!!!!!\n" VT_RST);
         return 0;
     }
     return sOverrideLimbDrawFuncs[this->unk_308](globalCtx, limbIndex, dList, pos, rot, thisx, gfx);
@@ -2793,7 +2763,7 @@ void EnZl3_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnZl3* this = THIS;
 
     if (this->drawConfig < 0 || this->drawConfig >= 3 || sDrawFuncs[this->drawConfig] == NULL) {
-        osSyncPrintf(VT_FGCOL(RED) "描画モードがおかしい!!!!!!!!!!!!!!!!!!!!!!!!!\n" VT_RST);
+        PRINTF(VT_FGCOL(RED) "描画モードがおかしい!!!!!!!!!!!!!!!!!!!!!!!!!\n" VT_RST);
         return;
     }
     sDrawFuncs[this->drawConfig](this, globalCtx);

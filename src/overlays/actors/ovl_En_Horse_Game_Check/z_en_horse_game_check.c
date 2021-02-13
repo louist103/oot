@@ -305,7 +305,7 @@ void EnHorseGameCheck_FinishMalonRace(EnHorseGameCheckMalonRace* this, GlobalCon
         globalCtx->sceneLoadFlag = 0x14;
     } else {
         // not supported
-        osSyncPrintf("En_HGC_Spot20_Ta_end():対応せず\n");
+        PRINTF("En_HGC_Spot20_Ta_end():対応せず\n");
         gSaveContext.cutsceneIndex = 0;
         globalCtx->nextEntranceIndex = 0x157;
         globalCtx->fadeTransition = 0x2E;

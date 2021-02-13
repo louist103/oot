@@ -102,7 +102,7 @@ void ObjOshihiki_InitDynapoly(ObjOshihiki* this, GlobalContext* globalCtx, Colli
 
     if (this->dyna.bgId == BG_ACTOR_MAX) {
         // Warning : move BG registration failure
-        osSyncPrintf("Warning : move BG 登録失敗(%s %d)(name %d)(arg_data 0x%04x)\n", "../z_obj_oshihiki.c", 280,
+        PRINTF("Warning : move BG 登録失敗(%s %d)(name %d)(arg_data 0x%04x)\n", "../z_obj_oshihiki.c", 280,
                      this->dyna.actor.id, this->dyna.actor.params);
     }
 }
@@ -220,7 +220,7 @@ void ObjOshihiki_CheckType(ObjOshihiki* this, GlobalContext* globalCtx) {
             break;
         default:
             // Error : type cannot be determined
-            osSyncPrintf("Error : タイプが判別できない(%s %d)(arg_data 0x%04x)\n", "../z_obj_oshihiki.c", 444,
+            PRINTF("Error : タイプが判別できない(%s %d)(arg_data 0x%04x)\n", "../z_obj_oshihiki.c", 444,
                          this->dyna.actor.params);
             break;
     }
@@ -265,7 +265,7 @@ void ObjOshihiki_SetColor(ObjOshihiki* this, GlobalContext* globalCtx) {
 
     if (i >= ARRAY_COUNT(sColors)) {
         // "Error : scene_data_ID cannot be determined"
-        osSyncPrintf("Error : scene_data_ID が判別できない。(%s %d)\n", "../z_obj_oshihiki.c", 579);
+        PRINTF("Error : scene_data_ID が判別できない。(%s %d)\n", "../z_obj_oshihiki.c", 579);
         color->r = color->g = color->b = 255;
     } else {
         src = &sColors[i][paramsColorIdx];
@@ -311,7 +311,7 @@ void ObjOshihiki_Init(Actor* thisx, GlobalContext* globalCtx2) {
     ObjOshihiki_ResetFloors(this);
     ObjOshihiki_SetupOnActor(this, globalCtx);
     // (dungeon keep push-pull block)
-    osSyncPrintf("(dungeon keep 押し引きブロック)(arg_data 0x%04x)\n", this->dyna.actor.params);
+    PRINTF("(dungeon keep 押し引きブロック)(arg_data 0x%04x)\n", this->dyna.actor.params);
 }
 
 void ObjOshihiki_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -397,7 +397,7 @@ s32 ObjOshihiki_CheckFloor(ObjOshihiki* this, GlobalContext* globalCtx) {
 s32 ObjOshihiki_CheckGround(ObjOshihiki* this, GlobalContext* globalCtx) {
     if (this->dyna.actor.world.pos.y <= -31990.0f) {
         // Warning : Push-pull block fell too much
-        osSyncPrintf("Warning : 押し引きブロック落ちすぎた(%s %d)(arg_data 0x%04x)\n", "../z_obj_oshihiki.c", 809,
+        PRINTF("Warning : 押し引きブロック落ちすぎた(%s %d)(arg_data 0x%04x)\n", "../z_obj_oshihiki.c", 809,
                      this->dyna.actor.params);
         Actor_Kill(&this->dyna.actor);
         return 0;

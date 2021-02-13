@@ -53,7 +53,7 @@ void View_Init(View* view, GraphicsContext* gfxCtx) {
 
     if (D_8012ABF0) {
         if (&D_8012ABF0) {}
-        osSyncPrintf("\nview: initialize ---\n");
+        PRINTF("\nview: initialize ---\n");
         D_8012ABF0 = false;
     }
 
@@ -318,15 +318,15 @@ s32 func_800AAA9C(View* view) {
         s32 i;
         MtxF mf;
 
-        osSyncPrintf("fovy %f near %f far %f scale %f aspect %f normal %08x\n", view->fovy, view->zNear, view->zFar,
+        PRINTF("fovy %f near %f far %f scale %f aspect %f normal %08x\n", view->fovy, view->zNear, view->zFar,
                      view->scale, aspect, view->normal);
 
         Matrix_MtxToMtxF(projection, &mf);
-        osSyncPrintf("projection\n");
+        PRINTF("projection\n");
         for (i = 0; i < 4; i++) {
-            osSyncPrintf("	%f	%f	%f	%f\n", mf.mf[i][0], mf.mf[i][1], mf.mf[i][2], mf.mf[i][3]);
+            PRINTF("	%f	%f	%f	%f\n", mf.mf[i][0], mf.mf[i][1], mf.mf[i][2], mf.mf[i][3]);
         }
-        osSyncPrintf("\n");
+        PRINTF("\n");
     }
 
     view->projection = *projection;
@@ -359,11 +359,11 @@ s32 func_800AAA9C(View* view) {
         MtxF mf;
 
         Matrix_MtxToMtxF(view->viewingPtr, &mf);
-        osSyncPrintf("viewing\n");
+        PRINTF("viewing\n");
         for (i = 0; i < 4; i++) {
-            osSyncPrintf("	%f	%f	%f	%f\n", mf.mf[i][0], mf.mf[i][1], mf.mf[i][2], mf.mf[i][3]);
+            PRINTF("	%f	%f	%f	%f\n", mf.mf[i][0], mf.mf[i][1], mf.mf[i][2], mf.mf[i][3]);
         }
-        osSyncPrintf("\n");
+        PRINTF("\n");
     }
 
     gSPMatrix(POLY_OPA_DISP++, viewing, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_PROJECTION);
@@ -612,10 +612,10 @@ s32 func_800ABE74(f32 eyeX, f32 eyeY, f32 eyeZ) {
     }
 
     if (error != 0) {
-        osSyncPrintf(VT_FGCOL(RED));
+        PRINTF(VT_FGCOL(RED));
         // "Is too large"
-        osSyncPrintf("eye が大きすぎます eye=[%8.3f %8.3f %8.3f] error=%d\n", eyeX, eyeY, eyeZ, error);
-        osSyncPrintf(VT_RST);
+        PRINTF("eye が大きすぎます eye=[%8.3f %8.3f %8.3f] error=%d\n", eyeX, eyeY, eyeZ, error);
+        PRINTF(VT_RST);
     }
 
     return error;

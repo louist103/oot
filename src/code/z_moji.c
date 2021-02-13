@@ -41,7 +41,7 @@ void func_8007B9A4(GraphicsContext* gfxCtx, u8 arg1) {
     OPEN_DISPS(gfxCtx, "../z_moji.c", 86);
 
     if ((u32)gLetterTLUT & 0xF) {
-        osSyncPrintf("moji_tlut --> %X\n", gLetterTLUT);
+        PRINTF("moji_tlut --> %X\n", gLetterTLUT);
     }
 
     if (D_8015FFC0 != (arg1 & 3)) {
@@ -61,7 +61,7 @@ void func_8007BBA8(GraphicsContext* gfxCtx, u8* arg1) {
     OPEN_DISPS(gfxCtx, "../z_moji.c", 137);
 
     if ((u32)gFontFF & 0xF) {
-        osSyncPrintf("font_ff --> %X\n", gFontFF);
+        PRINTF("font_ff --> %X\n", gFontFF);
     }
 
     gDPPipeSync(POLY_OPA_DISP++);

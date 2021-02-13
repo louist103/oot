@@ -11,13 +11,13 @@ void SystemArena_CheckPointer(void* ptr, u32 size, const char* name, const char*
     if (!ptr) {
         if (gSystemArenaLogSeverity >= LOG_SEVERITY_ERROR) {
             // "%s: %u bytes %s failed\n"
-            osSyncPrintf("%s: %u バイトの%sに失敗しました\n", name, size, action);
+            PRINTF("%s: %u バイトの%sに失敗しました\n", name, size, action);
             __osDisplayArena(&gSystemArena);
             return;
         }
     } else if (gSystemArenaLogSeverity >= LOG_SEVERITY_VERBOSE) {
         // "%s: %u bytes %s succeeded\n"
-        osSyncPrintf("%s: %u バイトの%sに成功しました\n", name, size, action);
+        PRINTF("%s: %u バイトの%sに成功しました\n", name, size, action);
     }
 }
 
@@ -85,7 +85,7 @@ void* SystemArena_Calloc(u32 num, u32 size) {
 
 void SystemArena_Display() {
     // System heap display
-    osSyncPrintf("システムヒープ表示\n");
+    PRINTF("システムヒープ表示\n");
     __osDisplayArena(&gSystemArena);
 }
 

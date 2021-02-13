@@ -426,7 +426,7 @@ void EnBox_WaitOpen(EnBox* this, GlobalContext* globalCtx) {
                     func_800F5C64(0x92B);
             }
         }
-        osSyncPrintf("Actor_Environment_Tbox_On() %d\n", this->dyna.actor.params & 0x1F);
+        PRINTF("Actor_Environment_Tbox_On() %d\n", this->dyna.actor.params & 0x1F);
         Flags_SetTreasure(globalCtx, this->dyna.actor.params & 0x1F);
     } else {
         player = PLAYER;

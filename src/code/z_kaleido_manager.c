@@ -20,11 +20,11 @@ void KaleidoManager_LoadOvl(KaleidoManagerOvl* ovl) {
     LogUtils_CheckNullPointer("KaleidoArea_allocp", sKaleidoAreaPtr, "../z_kaleido_manager.c", 99);
     ovl->loadedRamAddr = sKaleidoAreaPtr;
     Overlay_Load(ovl->vromStart, ovl->vromEnd, ovl->vramStart, ovl->vramEnd, ovl->loadedRamAddr);
-    osSyncPrintf(VT_FGCOL(GREEN));
-    osSyncPrintf("OVL(k):Seg:%08x-%08x Ram:%08x-%08x Off:%08x %s\n", ovl->vramStart, ovl->vramEnd, ovl->loadedRamAddr,
+    PRINTF(VT_FGCOL(GREEN));
+    PRINTF("OVL(k):Seg:%08x-%08x Ram:%08x-%08x Off:%08x %s\n", ovl->vramStart, ovl->vramEnd, ovl->loadedRamAddr,
                  ((u32)ovl->loadedRamAddr + ovl->vramEnd) - (u32)ovl->vramStart,
                  (u32)ovl->vramStart - (u32)ovl->loadedRamAddr, ovl->name);
-    osSyncPrintf(VT_RST);
+    PRINTF(VT_RST);
     ovl->off = (u32)ovl->loadedRamAddr - (u32)ovl->vramStart;
     gKaleidoMgrCurOvl = ovl;
 }
@@ -50,14 +50,14 @@ void KaleidoManager_Init(GlobalContext* globalCtx) {
             largestOvl = vramSize;
         }
     }
-    osSyncPrintf(VT_FGCOL(GREEN));
-    osSyncPrintf("KaleidoArea の最大サイズは %d バイトを確保します\n", largestOvl);
-    osSyncPrintf(VT_RST);
+    PRINTF(VT_FGCOL(GREEN));
+    PRINTF("KaleidoArea の最大サイズは %d バイトを確保します\n", largestOvl);
+    PRINTF(VT_RST);
     sKaleidoAreaPtr = GameState_Alloc(&globalCtx->state, largestOvl, "../z_kaleido_manager.c", 150);
     LogUtils_CheckNullPointer("KaleidoArea_allocp", sKaleidoAreaPtr, "../z_kaleido_manager.c", 151);
-    osSyncPrintf(VT_FGCOL(GREEN));
-    osSyncPrintf("KaleidoArea %08x - %08x\n", sKaleidoAreaPtr, (u32)sKaleidoAreaPtr + largestOvl);
-    osSyncPrintf(VT_RST);
+    PRINTF(VT_FGCOL(GREEN));
+    PRINTF("KaleidoArea %08x - %08x\n", sKaleidoAreaPtr, (u32)sKaleidoAreaPtr + largestOvl);
+    PRINTF(VT_RST);
     gKaleidoMgrCurOvl = 0;
 }
 void KaleidoManager_Destroy() {
@@ -87,7 +87,7 @@ void* KaleidoManager_GetRamAddr(void* vram) {
             //! @bug Devs probably forgot iter++ here
         }
 
-        osSyncPrintf("異常\n"); // Abnormal
+        PRINTF("異常\n"); // Abnormal
         return NULL;
     }
 

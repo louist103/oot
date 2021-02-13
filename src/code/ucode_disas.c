@@ -222,12 +222,12 @@ void UCodeDisas_ParseRenderMode(UCodeDisas* this, u32 mode) {
     b = (mode >> 16) & 0x3333;
 
     // clang-format off
-    if (this->enableLog == 0) {} else { osSyncPrintf("\nGBL_c1(%s, %s, %s, %s)|",
+    if (this->enableLog == 0) {} else { PRINTF("\nGBL_c1(%s, %s, %s, %s)|",
         D_8012DDDC[0][a >> 12 & 3], D_8012DDDC[1][a >> 8 & 3], D_8012DDDC[2][a >> 4 & 3], D_8012DDDC[3][a >> 0 & 3]); }
     // clang-format on
 
     if (this->enableLog) {
-        osSyncPrintf("\nGBL_c2(%s, %s, %s, %s)", D_8012DDDC[0][b >> 12 & 3], D_8012DDDC[1][b >> 8 & 3],
+        PRINTF("\nGBL_c2(%s, %s, %s, %s)", D_8012DDDC[0][b >> 12 & 3], D_8012DDDC[1][b >> 8 & 3],
                      D_8012DDDC[2][b >> 4 & 3], D_8012DDDC[3][b >> 0 & 3]);
     }
 }

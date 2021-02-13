@@ -62,7 +62,7 @@ void BgSpot01Objects2_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->objBankIndex = Object_GetIndex(&globalCtx->objectCtx, this->objectId);
         if (this->objBankIndex < 0) {
             // There was no bank setting.
-            osSyncPrintf("-----------------------------バンク設定ありませんでした.");
+            PRINTF("-----------------------------バンク設定ありませんでした.");
             Actor_Kill(&this->dyna.actor);
             return;
         }
@@ -93,7 +93,7 @@ void func_808AC2BC(BgSpot01Objects2* this, GlobalContext* globalCtx) {
 
     if (Object_IsLoaded(&globalCtx->objectCtx, this->objBankIndex)) {
         // ---- Successful bank switching!!
-        osSyncPrintf("-----バンク切り換え成功！！\n");
+        PRINTF("-----バンク切り換え成功！！\n");
         gSegments[6] = VIRTUAL_TO_PHYSICAL(globalCtx->objectCtx.status[this->objBankIndex].segment);
 
         this->dyna.actor.objBankIndex = this->objBankIndex;

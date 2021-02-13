@@ -346,7 +346,7 @@ void GfxPrint_Open(GfxPrint* this, Gfx* dlist) {
         this->dlist = dlist;
         GfxPrint_InitDlist(this);
     } else {
-        osSyncPrintf("gfxprint_open:２重オープンです\n");
+        PRINTF("gfxprint_open:２重オープンです\n");
     }
 }
 

@@ -47,7 +47,7 @@ u32 EffectSsIceSmoke_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, v
         return 1;
     }
 
-    osSyncPrintf("Effect_SS_Ice_Smoke_ct():バンク Object_Bank_Fzが有りません。\n");
+    PRINTF("Effect_SS_Ice_Smoke_ct():バンク Object_Bank_Fzが有りません。\n");
 
     return 0;
 }

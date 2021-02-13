@@ -4,7 +4,7 @@
 #include "ultra64.h"
 #include "global.h"
 
-#include "overlays/actors/ovl_Boss_Ganon2/z_boss_ganon2.h"
+//#include "overlays/actors/ovl_Boss_Ganon2/z_boss_ganon2.h"
 
 struct EnZl3;
 
@@ -56,7 +56,7 @@ typedef struct EnZl3 {
     /* 0x03C8 */ u8 unk_3C8;
     /* 0x03CC */ f32 unk_3CC;
     /* 0x03D0 */ s16 unk_3D0;
-    /* 0x03D4 */ BossGanon2* unk_3D4;
+    /* 0x03D4 */ s32 PADDING;
     /* 0x03D8 */ s32 unk_3D8;
     /* 0x03DC */ f32 unk_3DC;
     /* 0x03E0 */ f32 unk_3E0;

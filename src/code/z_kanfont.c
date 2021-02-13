@@ -35,17 +35,17 @@ void Font_LoadOrderedFont(Font* font) {
     len = font->msgLength = D_0703811C - D_070380D4;
     DmaMgr_SendRequest1(font->msgBuf, &_nes_message_data_staticSegmentRomStart[font->msgOffset], len, "../z_kanfont.c",
                         122);
-    osSyncPrintf("msg_data=%x,  msg_data0=%x   jj=%x\n", font->msgOffset, font->msgLength, jj = len);
+    PRINTF("msg_data=%x,  msg_data0=%x   jj=%x\n", font->msgOffset, font->msgLength, jj = len);
     len = jj;
     for (fontBufIndex = 0, codePointIndex = 0; font->msgBuf[codePointIndex] != MESSAGE_END; codePointIndex++) {
         if (codePointIndex > len) {
-            osSyncPrintf("ＥＲＲＯＲ！！  エラー！！！  error───！！！！\n");
+            PRINTF("ＥＲＲＯＲ！！  エラー！！！  error───！！！！\n");
             return;
         }
         if (font->msgBuf[codePointIndex] != MESSAGE_NEWLINE) {
             fontBuf = font->fontBuf + fontBufIndex * 8;
             fontStatic = _nes_font_staticSegmentRomStart;
-            osSyncPrintf("nes_mes_buf[%d]=%d\n", codePointIndex, font->msgBuf[codePointIndex]);
+            PRINTF("nes_mes_buf[%d]=%d\n", codePointIndex, font->msgBuf[codePointIndex]);
             offset = (font->msgBuf[codePointIndex] - '\x20') * FONT_CHAR_TEX_SIZE;
             DmaMgr_SendRequest1(fontBuf, fontStatic + offset, FONT_CHAR_TEX_SIZE, "../z_kanfont.c", 134);
             fontBufIndex += 0x10;

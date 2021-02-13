@@ -635,7 +635,7 @@ void func_809861C4(DemoIm* this, GlobalContext* globalCtx) {
                     this->action = 12;
                     break;
                 default:
-                    osSyncPrintf("Demo_Im_Ocarina_Check_DemoMode:そんな動作は無い!!!!!!!!\n");
+                    PRINTF("Demo_Im_Ocarina_Check_DemoMode:そんな動作は無い!!!!!!!!\n");
             }
             this->unk_274 = action;
         }
@@ -674,7 +674,7 @@ void func_809862E0(DemoIm* this, GlobalContext* globalCtx) {
                     func_80986148(this);
                     break;
                 default:
-                    osSyncPrintf("Demo_Im_Ocarina_Check_DemoMode:そんな動作は無い!!!!!!!!\n");
+                    PRINTF("Demo_Im_Ocarina_Check_DemoMode:そんな動作は無い!!!!!!!!\n");
             }
             this->unk_274 = action;
         }
@@ -801,7 +801,7 @@ void func_8098680C(DemoIm* this, GlobalContext* globalCtx) {
                     Actor_Kill(&this->actor);
                     break;
                 default:
-                    osSyncPrintf("Demo_Im_Spot00_Check_DemoMode:そんな動作は無い!!!!!!!!\n");
+                    PRINTF("Demo_Im_Spot00_Check_DemoMode:そんな動作は無い!!!!!!!!\n");
             }
             this->unk_274 = action;
         }
@@ -1062,7 +1062,7 @@ void func_809871E8(DemoIm* this, GlobalContext* globalCtx) {
                     func_80987174(this);
                     break;
                 default:
-                    osSyncPrintf("Demo_Im_inEnding_Check_DemoMode:そんな動作は無い!!!!!!!!\n");
+                    PRINTF("Demo_Im_inEnding_Check_DemoMode:そんな動作は無い!!!!!!!!\n");
             }
             this->unk_274 = action;
         }
@@ -1101,7 +1101,7 @@ void DemoIm_Update(Actor* thisx, GlobalContext* globalCtx) {
     DemoIm* this = THIS;
 
     if ((this->action < 0) || (this->action >= 31) || (sActionFuncs[this->action] == NULL)) {
-        osSyncPrintf(VT_FGCOL(RED) "メインモードがおかしい!!!!!!!!!!!!!!!!!!!!!!!!!\n" VT_RST);
+        PRINTF(VT_FGCOL(RED) "メインモードがおかしい!!!!!!!!!!!!!!!!!!!!!!!!!\n" VT_RST);
         return;
     }
     sActionFuncs[this->action](this, globalCtx);
@@ -1212,7 +1212,7 @@ void DemoIm_Draw(Actor* thisx, GlobalContext* globalCtx) {
     DemoIm* this = THIS;
 
     if ((this->drawConfig < 0) || (this->drawConfig >= 3) || (sDrawFuncs[this->drawConfig] == NULL)) {
-        osSyncPrintf(VT_FGCOL(RED) "描画モードがおかしい!!!!!!!!!!!!!!!!!!!!!!!!!\n" VT_RST);
+        PRINTF(VT_FGCOL(RED) "描画モードがおかしい!!!!!!!!!!!!!!!!!!!!!!!!!\n" VT_RST);
         return;
     }
     sDrawFuncs[this->drawConfig](this, globalCtx);

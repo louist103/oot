@@ -54,7 +54,7 @@ static UNK_PTR sUnkSegments[] = {
 void EnTana_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnTana* this = THIS;
 
-    osSyncPrintf("☆☆☆ %s ☆☆☆\n", sShelfTypes[thisx->params]);
+    PRINTF("☆☆☆ %s ☆☆☆\n", sShelfTypes[thisx->params]);
     Actor_SetScale(thisx, 1.0f);
     thisx->flags &= ~1;
     thisx->draw = sDrawFuncs[thisx->params];

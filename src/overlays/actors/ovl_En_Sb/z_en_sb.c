@@ -271,7 +271,7 @@ void EnSb_TurnAround(EnSb* this, GlobalContext* globalCtx) {
         this->bouncesLeft = 3;
         EnSb_SetupLunge(this);
         // Attack!!
-        osSyncPrintf("アタァ〜ック！！\n");
+        PRINTF("アタァ〜ック！！\n");
     }
 }
 
@@ -316,7 +316,7 @@ void EnSb_Bounce(EnSb* this, GlobalContext* globalCtx) {
             this->timer = 1;
             EnSb_SetupWaitClosed(this);
             // "Attack Complete!"
-            osSyncPrintf(VT_FGCOL(RED) "攻撃終了！！" VT_RST "\n");
+            PRINTF(VT_FGCOL(RED) "攻撃終了！！" VT_RST "\n");
         }
     }
 }

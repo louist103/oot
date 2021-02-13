@@ -1287,7 +1287,7 @@ void func_80A779DC(EnIk* this, GlobalContext* globalCtx) {
                     func_80A77474(this, globalCtx);
                     break;
                 default:
-                    osSyncPrintf("En_Ik_inConfrontion_Check_DemoMode:そんな動作は無い!!!!!!!!\n");
+                    PRINTF("En_Ik_inConfrontion_Check_DemoMode:そんな動作は無い!!!!!!!!\n");
             }
 
             this->npcAction = action;
@@ -1322,7 +1322,7 @@ void EnIk_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnIk* this = THIS;
 
     if (this->action < 0 || this->action >= ARRAY_COUNT(sActionFuncs) || sActionFuncs[this->action] == NULL) {
-        osSyncPrintf(VT_FGCOL(RED) "メインモードがおかしい!!!!!!!!!!!!!!!!!!!!!!!!!\n" VT_RST);
+        PRINTF(VT_FGCOL(RED) "メインモードがおかしい!!!!!!!!!!!!!!!!!!!!!!!!!\n" VT_RST);
         return;
     }
 
@@ -1415,7 +1415,7 @@ void EnIk_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnIk* this = THIS;
 
     if (this->drawMode < 0 || this->drawMode >= ARRAY_COUNT(sDrawFuncs) || sDrawFuncs[this->drawMode] == NULL) {
-        osSyncPrintf(VT_FGCOL(RED) "描画モードがおかしい!!!!!!!!!!!!!!!!!!!!!!!!!\n" VT_RST);
+        PRINTF(VT_FGCOL(RED) "描画モードがおかしい!!!!!!!!!!!!!!!!!!!!!!!!!\n" VT_RST);
         return;
     }
 
@@ -1433,7 +1433,7 @@ void func_80A780D0(EnIk* this, GlobalContext* globalCtx) {
             EnIk_StartMusic();
         }
     }
-    osSyncPrintf("En_Ik_inConfrontion_Init : %d !!!!!!!!!!!!!!!!\n", this->actor.params);
+    PRINTF("En_Ik_inConfrontion_Init : %d !!!!!!!!!!!!!!!!\n", this->actor.params);
 }
 
 void func_80A78160(EnIk* this, GlobalContext* globalCtx) {

@@ -136,7 +136,7 @@ s16 Quake_GetFreeIndex() {
     }
 
     if (min != 0x20000) {
-        osSyncPrintf(VT_COL(YELLOW, BLACK) "quake: too many request %d is changed new one !!\n" VT_RST, ret);
+        PRINTF(VT_COL(YELLOW, BLACK) "quake: too many request %d is changed new one !!\n" VT_RST, ret);
     }
 
     return ret;
@@ -331,7 +331,7 @@ s16 Quake_Calc(Camera* camera, QuakeCamCalc* camData) {
         req = &sQuakeRequest[idx];
         if (req->callbackIdx != 0) {
             if (globalCtx->cameraPtrs[req->camPtrIdx] == 0) {
-                osSyncPrintf(VT_COL(YELLOW, BLACK) "quake: stopped! 'coz camera [%d] killed!!\n" VT_RST,
+                PRINTF(VT_COL(YELLOW, BLACK) "quake: stopped! 'coz camera [%d] killed!!\n" VT_RST,
                              req->camPtrIdx);
                 Quake_Remove(req);
             } else {

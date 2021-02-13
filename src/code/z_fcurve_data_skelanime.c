@@ -156,7 +156,7 @@ void SkelCurve_DrawLimb(GlobalContext* globalCtx, s32 limbIndex, SkelAnimeCurve*
             }
         } else {
             // FcSkeletonInfo_draw_child (): Not supported
-            osSyncPrintf("FcSkeletonInfo_draw_child():未対応\n");
+            PRINTF("FcSkeletonInfo_draw_child():未対応\n");
         }
     }
 

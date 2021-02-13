@@ -13928,7 +13928,7 @@ void func_80852C50(GlobalContext* globalCtx, Player* this, CsCmdActorAction* arg
         D_80858AA0 = this->skelAnime.moveFlags;
 
         func_80832DBC(this);
-        osSyncPrintf("TOOL MODE=%d\n", sp24);
+        PRINTF("TOOL MODE=%d\n", sp24);
         func_80852C0C(globalCtx, this, ABS(sp24));
         func_80852B4C(globalCtx, this, linkCsAction, &D_80854B18[ABS(sp24)]);
 
@@ -13947,7 +13947,7 @@ void func_80852E14(Player* this, GlobalContext* globalCtx) {
 
         func_80832DBC(this);
         this->prevCsMode = this->csMode;
-        osSyncPrintf("DEMO MODE=%d\n", this->csMode);
+        PRINTF("DEMO MODE=%d\n", this->csMode);
         func_80852C0C(globalCtx, this, this->csMode);
         func_80852B4C(globalCtx, this, NULL, &D_80854B18[this->csMode]);
     }

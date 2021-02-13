@@ -88,32 +88,32 @@ void EnGSwitch_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->switchFlag = this->actor.params & 0x3F;
     this->numEffects = ARRAY_COUNT(this->effects);
     // index
-    osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ インデックス ☆☆☆☆☆ %x\n" VT_RST, this->type);
+    PRINTF(VT_FGCOL(GREEN) "☆☆☆☆☆ インデックス ☆☆☆☆☆ %x\n" VT_RST, this->type);
     // save
-    osSyncPrintf(VT_FGCOL(YELLOW) "☆☆☆☆☆ セーブ\t     ☆☆☆☆☆ %x\n" VT_RST, this->switchFlag);
+    PRINTF(VT_FGCOL(YELLOW) "☆☆☆☆☆ セーブ\t     ☆☆☆☆☆ %x\n" VT_RST, this->switchFlag);
     switch (this->type) {
         case ENGSWITCH_SILVER_TRACKER:
-            osSyncPrintf("\n\n");
+            PRINTF("\n\n");
             // parent switch spawn
-            osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ 親スイッチ発生 ☆☆☆☆☆ %x\n" VT_RST, this->actor.params);
+            PRINTF(VT_FGCOL(GREEN) "☆☆☆☆☆ 親スイッチ発生 ☆☆☆☆☆ %x\n" VT_RST, this->actor.params);
             sCollectedCount = 0;
             this->silverCount = this->actor.params >> 6;
             this->silverCount &= 0x3F;
             // maximum number of checks
-            osSyncPrintf(VT_FGCOL(PURPLE) "☆☆☆☆☆ 最大チェック数 ☆☆☆☆☆ %d\n" VT_RST, this->silverCount);
-            osSyncPrintf("\n\n");
+            PRINTF(VT_FGCOL(PURPLE) "☆☆☆☆☆ 最大チェック数 ☆☆☆☆☆ %d\n" VT_RST, this->silverCount);
+            PRINTF("\n\n");
             if (Flags_GetSwitch(globalCtx, this->switchFlag)) {
                 // This is a reference to Hokuto no Ken
-                osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ Ｙｏｕ ａｒｅ Ｓｈｏｃｋ！  ☆☆☆☆☆ %d\n" VT_RST, this->switchFlag);
+                PRINTF(VT_FGCOL(GREEN) "☆☆☆☆☆ Ｙｏｕ ａｒｅ Ｓｈｏｃｋ！  ☆☆☆☆☆ %d\n" VT_RST, this->switchFlag);
                 Actor_Kill(&this->actor);
             } else {
                 this->actionFunc = EnGSwitch_SilverRupeeTracker;
             }
             break;
         case ENGSWITCH_SILVER_RUPEE:
-            osSyncPrintf("\n\n");
+            PRINTF("\n\n");
             // child switch spawn
-            osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ 子スイッチ発生 ☆☆☆☆☆ %x\n" VT_RST, this->actor.params);
+            PRINTF(VT_FGCOL(GREEN) "☆☆☆☆☆ 子スイッチ発生 ☆☆☆☆☆ %x\n" VT_RST, this->actor.params);
             this->colorIdx = 5;
             this->numEffects = 20;
             Collider_InitCylinder(globalCtx, &this->collider);
@@ -121,7 +121,7 @@ void EnGSwitch_Init(Actor* thisx, GlobalContext* globalCtx) {
             this->actor.draw = EnGSwitch_DrawRupee;
             this->actor.shape.yOffset = 700.0f;
             if (Flags_GetSwitch(globalCtx, this->switchFlag)) {
-                osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ Ｙｏｕ ａｒｅ Ｓｈｏｃｋ！  ☆☆☆☆☆ %d\n" VT_RST, this->switchFlag);
+                PRINTF(VT_FGCOL(GREEN) "☆☆☆☆☆ Ｙｏｕ ａｒｅ Ｓｈｏｃｋ！  ☆☆☆☆☆ %d\n" VT_RST, this->switchFlag);
                 Actor_Kill(&this->actor);
             } else {
                 Actor_SetScale(&this->actor, 0.03f);
@@ -129,9 +129,9 @@ void EnGSwitch_Init(Actor* thisx, GlobalContext* globalCtx) {
             }
             break;
         case ENGSWITCH_ARCHERY_POT:
-            osSyncPrintf("\n\n");
+            PRINTF("\n\n");
             // Horseback archery destructible pot
-            osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ やぶさめぶち抜き壷 ☆☆☆☆☆ \n" VT_RST);
+            PRINTF(VT_FGCOL(GREEN) "☆☆☆☆☆ やぶさめぶち抜き壷 ☆☆☆☆☆ \n" VT_RST);
             this->actor.gravity = -3.0f;
             this->colorIdx = Rand_ZeroFloat(2.99f);
             Collider_InitCylinder(globalCtx, &this->collider);
@@ -145,9 +145,9 @@ void EnGSwitch_Init(Actor* thisx, GlobalContext* globalCtx) {
             if (this->objIndex < 0) {
                 Actor_Kill(&this->actor);
                 // what?
-                osSyncPrintf(VT_FGCOL(PURPLE) " なにみの？ %d\n" VT_RST "\n", this->objIndex);
+                PRINTF(VT_FGCOL(PURPLE) " なにみの？ %d\n" VT_RST "\n", this->objIndex);
                 // bank is funny
-                osSyncPrintf(VT_FGCOL(CYAN) " バンクおかしいしぞ！%d\n" VT_RST "\n", this->actor.params);
+                PRINTF(VT_FGCOL(CYAN) " バンクおかしいしぞ！%d\n" VT_RST "\n", this->actor.params);
             }
             this->collider.dim.radius = 24;
             this->collider.dim.height = 74;
@@ -215,7 +215,7 @@ void EnGSwitch_SilverRupeeTracker(EnGSwitch* this, GlobalContext* globalCtx) {
     if (this->pitchIndex < sCollectedCount) {
         if (sCollectedCount < 5) {
             // sound?
-            osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ 音？ ☆☆☆☆☆ %d\n" VT_RST, this->pitchIndex);
+            PRINTF(VT_FGCOL(GREEN) "☆☆☆☆☆ 音？ ☆☆☆☆☆ %d\n" VT_RST, this->pitchIndex);
             func_800F4BF4(&D_801333D4, NA_SE_EV_FIVE_COUNT_LUPY, rupeePitches[this->pitchIndex]);
             this->pitchIndex = sCollectedCount;
         }
@@ -223,9 +223,9 @@ void EnGSwitch_SilverRupeeTracker(EnGSwitch* this, GlobalContext* globalCtx) {
     if (sCollectedCount >= this->silverCount) {
         // It is now the end of the century.
         // This another reference to Hokuto no Ken.
-        osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ 時はまさに世紀末〜  ☆☆☆☆☆ %d\n" VT_RST, this->switchFlag);
+        PRINTF(VT_FGCOL(GREEN) "☆☆☆☆☆ 時はまさに世紀末〜  ☆☆☆☆☆ %d\n" VT_RST, this->switchFlag);
         // Last!
-        osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ らすとぉ！          ☆☆☆☆☆ \n" VT_RST);
+        PRINTF(VT_FGCOL(GREEN) "☆☆☆☆☆ らすとぉ！          ☆☆☆☆☆ \n" VT_RST);
         if ((globalCtx->sceneNum == SCENE_MEN) && (this->actor.room == 2)) {
             Flags_SetTempClear(globalCtx, this->actor.room);
         } else {
@@ -349,7 +349,7 @@ void EnGSwitch_GalleryRupee(EnGSwitch* this, GlobalContext* globalCtx) {
                 func_80078884(NA_SE_EV_HIT_SOUND);
                 func_80078884(NA_SE_SY_GET_RUPY);
                 // Yeah !
-                osSyncPrintf(VT_FGCOL(YELLOW) "☆☆☆☆☆ いぇぇーす！ＨＩＴ！！ ☆☆☆☆☆ %d\n" VT_RST, gallery->hitCount);
+                PRINTF(VT_FGCOL(YELLOW) "☆☆☆☆☆ いぇぇーす！ＨＩＴ！！ ☆☆☆☆☆ %d\n" VT_RST, gallery->hitCount);
                 EnGSwitch_Break(this, globalCtx);
                 this->killTimer = 50;
                 this->broken = true;
