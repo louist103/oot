@@ -84,14 +84,7 @@ void Object_UpdateBank(ObjectContext* objectCtx) {
     u32 size;
 
     status = &objectCtx->status[0];
-
-    for (i = 0; i < objectCtx->num; status++, i++) {
-        // Skip spawning invalid objects
-        if (gObjectTable[-status->id].vromStart == 0 && gObjectTable[-status->id].vromEnd == 0) {
-            status->id = -status->id;
-            continue;
-        }
-
+    for (i = 0; i < objectCtx->num; i++) {
         if (status->id < 0) {
             if (status->dmaRequest.vromAddr == 0) {
                 osCreateMesgQueue(&status->loadQueue, &status->loadMsg, 1);
@@ -104,6 +97,7 @@ void Object_UpdateBank(ObjectContext* objectCtx) {
                 status->id = -status->id;
             }
         }
+        status++;
     }
 }
 
@@ -128,20 +122,17 @@ s32 Object_IsLoaded(ObjectContext* objectCtx, s32 bankIndex) {
 }
 
 void func_800981B8(ObjectContext* objectCtx) {
-    s16 i;
-    s16 id;
+    s32 i;
+    s32 id;
     u32 size;
 
     for (i = 0; i < objectCtx->num; i++) {
         id = objectCtx->status[i].id;
-        
-        // Skip spawning invalid objects
-        if (gObjectTable[id].vromStart == 0 && gObjectTable[id].vromEnd == 0) {
-            osSyncPrintf("HEY LOOK I SKIPPED LOADING A FUCKED OBJECT I ACTUALLY DID WHAT I WAS SUPPOSED TO!!!!!!\n\n\n\n\n");
-            continue;
-        }
-        
         size = gObjectTable[id].vromEnd - gObjectTable[id].vromStart;
+        osSyncPrintf("OBJECT[%d] SIZE %fK SEG=%x\n", objectCtx->status[i].id, size / 1024.0f,
+                     objectCtx->status[i].segment);
+        osSyncPrintf("num=%d adrs=%x end=%x\n", objectCtx->num, (s32)objectCtx->status[i].segment + size,
+                     objectCtx->spaceEnd);
         DmaMgr_SendRequest1(objectCtx->status[i].segment, gObjectTable[id].vromStart, size, "../z_scene.c", 342);
     }
 }
@@ -916,7 +907,8 @@ RomFile gObjectTable[] = {
     ROM_FILE(object_gi_ghost),
     ROM_FILE(object_gi_soul),
     ROM_FILE(object_bowl),
-    ROM_FILE(object_demo_kekkai),
+    ROM_FILE_UNSET,
+    //ROM_FILE(object_demo_kekkai),
     ROM_FILE(object_efc_doughnut),
     ROM_FILE(object_gi_dekupouch),
     ROM_FILE(object_ganon_anime1),

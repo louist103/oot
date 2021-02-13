@@ -269,7 +269,7 @@ void Fault_Sleep(u32 duration) {
 
 void Fault_PadCallback(Input* input) {
     //! @bug This function is not called correctly and thus will crash from reading a bad pointer at 0x800C7E4C
-    PadMgr_RequestPadData(input, 0);
+    PadMgr_RequestPadData(&gPadMgr, input, 0);
 }
 
 void Fault_UpdatePadImpl() {
@@ -292,9 +292,9 @@ u32 Fault_WaitForInputImpl() {
         }
 
         if (sFaultStructPtr->faultActive) {
-            if (count-- < 1) {
-                return false;
-            }
+//            if (count-- < 1) {
+//                return false;
+//            }
         } else {
             if (kDown == BTN_A || kDown == BTN_DRIGHT) {
                 return false;
@@ -547,7 +547,7 @@ void Fault_WaitForButtonCombo() {
     FaultDrawer_SetForeColor(0xFFFF);
     FaultDrawer_SetBackColor(1);
 
-    state = 0;
+    state = 11;
     s1 = 0;
     s2 = 1;
 

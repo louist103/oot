@@ -11,6 +11,8 @@ extern Gfx D_01002720[];
 extern u8 D_01001800[];
 extern u8 D_01000000[];
 
+void Title_Draw(TitleContext* this);
+
 void Title_PrintBuildInfo(Gfx** gfxp) {
     Gfx* g;
     GfxPrint* printer;
@@ -22,9 +24,9 @@ void Title_PrintBuildInfo(Gfx** gfxp) {
     GfxPrint_Open(printer, g);
     GfxPrint_SetColor(printer, 255, 155, 255, 255);
     GfxPrint_SetPos(printer, 9, 21);
-    GfxPrint_Printf(printer, "NOT MARIO CLUB VERSION");
+    GfxPrint_Printf(printer, "HACKERMANS VERSION");
     GfxPrint_SetColor(printer, 255, 255, 255, 255);
-    GfxPrint_SetPos(printer, 7, 23);
+    GfxPrint_SetPos(printer, 5, 23);
     GfxPrint_Printf(printer, "[Creator:%s]", gBuildTeam);
     GfxPrint_SetPos(printer, 7, 24);
     GfxPrint_Printf(printer, "[Date:%s]", gBuildDate);
@@ -36,9 +38,25 @@ void Title_PrintBuildInfo(Gfx** gfxp) {
 // Note: In other rom versions this function also updates unk_1D4, coverAlpha, addAlpha, visibleDuration to calculate
 // the fade-in/fade-out + the duration of the n64 logo animation
 void Title_Calc(TitleContext* this) {
-    this->exit = 1;
+    if ((this->coverAlpha == 0) && (this->visibleDuration != 0)) {
+        this->visibleDuration--;
+        this->unk_1D4--;
+        if (this->unk_1D4 == 0) {
+            this->unk_1D4 = 400;
+        }
+    } else {
+        this->coverAlpha += this->addAlpha;
+        if (this->coverAlpha <= 0) {
+            this->coverAlpha = 0;
+            this->addAlpha = 3;
+        } else if (this->coverAlpha >= 0xFF) {
+            this->coverAlpha = 0xFF;
+            this->exit = 1;
+        }
+    }
+    this->uls &= 0x7F;
+    this->ult++;
 }
-
 void Title_SetupView(TitleContext* this, f32 x, f32 y, f32 z) {
     View* view;
     Vec3f v1;
@@ -84,7 +102,7 @@ void Title_Draw(TitleContext* this) {
     v1.y = 0;
     v1.z = 0;
     v2.z = 1119.0837;
-
+   Title_PrintBuildInfo(&this->state.gfxCtx->polyOpa.p);
     func_8002EABC(&v1, &v2, &v3, this->state.gfxCtx);
     gSPSetLights1(POLY_OPA_DISP++, sTitleLights);
     Title_SetupView(this, 0, 150.0, 300.0);

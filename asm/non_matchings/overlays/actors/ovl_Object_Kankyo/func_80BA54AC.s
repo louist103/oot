@@ -135,8 +135,8 @@ glabel func_80BA54AC
 .L80BA5660:
 /* 02BC0 80BA5660 02770019 */  multu   $s3, $s7                   
 /* 02BC4 80BA5664 00138080 */  sll     $s0, $s3,  2               
-/* 02BC8 80BA5668 3C150600 */  lui     $s5, %hi(D_06005FF0)                ## $s5 = 06000000
-/* 02BCC 80BA566C 26B55FF0 */  addiu   $s5, $s5, %lo(D_06005FF0)           ## $s5 = 06005FF0
+/* 02BC8 80BA5668 3C150600 */  lui     $s5, 0x0000               ## $s5 = 06000000 #ASM HACKS DONT TOUCH
+/* 02BCC 80BA566C 26B55FF0 */  addiu   $s5, $s5, 0x0000           ## $s5 = 06005FF0
 /* 02BD0 80BA5670 03B0C021 */  addu    $t8, $sp, $s0              
 /* 02BD4 80BA5674 03B0C821 */  addu    $t9, $sp, $s0              
 /* 02BD8 80BA5678 03B04021 */  addu    $t0, $sp, $s0              
@@ -259,8 +259,8 @@ glabel func_80BA54AC
 /* 02DAC 80BA584C 00408025 */  or      $s0, $v0, $zero            ## $s0 = 00000000
 /* 02DB0 80BA5850 AE020004 */  sw      $v0, 0x0004($s0)           ## 00000004
 /* 02DB4 80BA5854 8E2202D0 */  lw      $v0, 0x02D0($s1)           ## 000002D0
-/* 02DB8 80BA5858 3C0BDE00 */  lui     $t3, 0xDE00                ## $t3 = DE000000
-/* 02DBC 80BA585C 244C0008 */  addiu   $t4, $v0, 0x0008           ## $t4 = 00000008
+/* 02DB8 80BA5858 3C0BDE00 */  lui     $t3, 0x0000                ## $t3 = DE000000 # ASM HACKS HACKERMANSs
+/* 02DBC 80BA585C 244C0008 */  addiu   $t4, $v0, 0x0000           ## $t4 = 00000008
 /* 02DC0 80BA5860 AE2C02D0 */  sw      $t4, 0x02D0($s1)           ## 000002D0
 /* 02DC4 80BA5864 AC550004 */  sw      $s5, 0x0004($v0)           ## 00000004
 /* 02DC8 80BA5868 AC4B0000 */  sw      $t3, 0x0000($v0)           ## 00000000
