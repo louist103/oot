@@ -578,12 +578,6 @@ beginseg
     include "build/asm/overlays/data/ovl_map_mark_data/z_map_mark_data.o"
 endseg
 
-beginseg
-    name "ovl_En_Test"
-    include "build/src/overlays/actors/ovl_En_Test/z_en_test.o"
-    include "build/data/overlays/actors/z_en_test.data.o"
-    include "build/data/overlays/actors/z_en_test.reloc.o"
-endseg
 
 beginseg
     name "ovl_Arms_Hook"
@@ -664,11 +658,6 @@ beginseg
     include "build/src/overlays/actors/ovl_Bg_Dodoago/ovl_Bg_Dodoago_reloc.o"
 endseg
 
-beginseg
-    name "ovl_Bg_Dy_Yoseizo"
-    include "build/src/overlays/actors/ovl_Bg_Dy_Yoseizo/z_bg_dy_yoseizo.o"
-    include "build/src/overlays/actors/ovl_Bg_Dy_Yoseizo/ovl_Bg_Dy_Yoseizo_reloc.o"
-endseg
 
 beginseg
     name "ovl_Bg_Gate_Shutter"
@@ -770,11 +759,7 @@ beginseg
     include "build/src/overlays/actors/ovl_Bg_Hidan_Dalm/ovl_Bg_Hidan_Dalm_reloc.o"
 endseg
 
-beginseg
-    name "ovl_Bg_Hidan_Firewall"
-    include "build/src/overlays/actors/ovl_Bg_Hidan_Firewall/z_bg_hidan_firewall.o"
-    include "build/src/overlays/actors/ovl_Bg_Hidan_Firewall/ovl_Bg_Hidan_Firewall_reloc.o"
-endseg
+
 
 beginseg
     name "ovl_Bg_Hidan_Fslift"
@@ -1324,11 +1309,6 @@ beginseg
     include "build/src/overlays/actors/ovl_Bg_Ydan_Maruta/ovl_Bg_Ydan_Maruta_reloc.o"
 endseg
 
-beginseg
-    name "ovl_Bg_Ydan_Sp"
-    include "build/src/overlays/actors/ovl_Bg_Ydan_Sp/z_bg_ydan_sp.o"
-    include "build/src/overlays/actors/ovl_Bg_Ydan_Sp/ovl_Bg_Ydan_Sp_reloc.o"
-endseg
 
 beginseg
     name "ovl_Bg_Zg"
@@ -1492,11 +1472,6 @@ beginseg
     include "build/src/overlays/actors/ovl_Demo_Shd/ovl_Demo_Shd_reloc.o"
 endseg
 
-beginseg
-    name "ovl_Demo_Tre_Lgt"
-    include "build/src/overlays/actors/ovl_Demo_Tre_Lgt/z_demo_tre_lgt.o"
-    include "build/src/overlays/actors/ovl_Demo_Tre_Lgt/ovl_Demo_Tre_Lgt_reloc.o"
-endseg
 
 beginseg
     name "ovl_Door_Ana"
@@ -1850,12 +1825,7 @@ beginseg
     include "build/data/overlays/actors/z_en_bdfire.reloc.o"
 endseg
 
-beginseg
-    name "ovl_En_Bigokuta"
-    include "build/src/overlays/actors/ovl_En_Bigokuta/z_en_bigokuta.o"
-    include "build/data/overlays/actors/z_en_bigokuta.data.o"
-    include "build/data/overlays/actors/z_en_bigokuta.reloc.o"
-endseg
+
 
 beginseg
     name "ovl_En_Bili"
@@ -1911,11 +1881,7 @@ beginseg
     include "build/src/overlays/actors/ovl_En_Boom/ovl_En_Boom_reloc.o"
 endseg
 
-beginseg
-    name "ovl_En_Box"
-    include "build/src/overlays/actors/ovl_En_Box/z_en_box.o"
-    include "build/src/overlays/actors/ovl_En_Box/ovl_En_Box_reloc.o"
-endseg
+
 
 beginseg
     name "ovl_En_Brob"
@@ -1948,11 +1914,7 @@ beginseg
     include "build/src/overlays/actors/ovl_En_Bx/ovl_En_Bx_reloc.o"
 endseg
 
-beginseg
-    name "ovl_En_Changer"
-    include "build/src/overlays/actors/ovl_En_Changer/z_en_changer.o"
-    include "build/src/overlays/actors/ovl_En_Changer/ovl_En_Changer_reloc.o"
-endseg
+
 
 beginseg
     name "ovl_En_Clear_Tag"
@@ -1968,11 +1930,6 @@ beginseg
     include "build/src/overlays/actors/ovl_En_Cow/ovl_En_Cow_reloc.o"
 endseg
 
-beginseg
-    name "ovl_En_Crow"
-    include "build/src/overlays/actors/ovl_En_Crow/z_en_crow.o"
-    include "build/src/overlays/actors/ovl_En_Crow/ovl_En_Crow_reloc.o"
-endseg
 
 beginseg
     name "ovl_En_Cs"
@@ -2062,11 +2019,6 @@ beginseg
     include "build/src/overlays/actors/ovl_En_Dodojr/ovl_En_Dodojr_reloc.o"
 endseg
 
-beginseg
-    name "ovl_En_Dodongo"
-    include "build/src/overlays/actors/ovl_En_Dodongo/z_en_dodongo.o"
-    include "build/src/overlays/actors/ovl_En_Dodongo/ovl_En_Dodongo_reloc.o"
-endseg
 
 beginseg
     name "ovl_En_Dog"
@@ -2172,11 +2124,7 @@ beginseg
     include "build/data/overlays/actors/z_en_fire_rock.reloc.o"
 endseg
 
-beginseg
-    name "ovl_En_Firefly"
-    include "build/src/overlays/actors/ovl_En_Firefly/z_en_firefly.o"
-    include "build/src/overlays/actors/ovl_En_Firefly/ovl_En_Firefly_reloc.o"
-endseg
+
 
 beginseg
     name "ovl_En_Fish"
@@ -2255,12 +2203,6 @@ beginseg
     name "ovl_En_GeldB"
     include "build/src/overlays/actors/ovl_En_GeldB/z_en_geldb.o"
     include "build/src/overlays/actors/ovl_En_GeldB/ovl_En_GeldB_reloc.o"
-endseg
-
-beginseg
-    name "ovl_En_GirlA"
-    include "build/src/overlays/actors/ovl_En_GirlA/z_en_girla.o"
-    include "build/src/overlays/actors/ovl_En_GirlA/ovl_En_GirlA_reloc.o"
 endseg
 
 beginseg
@@ -2657,11 +2599,7 @@ beginseg
     include "build/src/overlays/actors/ovl_En_Ny/ovl_En_Ny_reloc.o"
 endseg
 
-beginseg
-    name "ovl_En_OE2"
-    include "build/src/overlays/actors/ovl_En_OE2/z_en_oe2.o"
-    include "build/src/overlays/actors/ovl_En_OE2/ovl_En_OE2_reloc.o"
-endseg
+
 
 beginseg
     name "ovl_En_Okarina_Effect"
@@ -2676,11 +2614,6 @@ beginseg
     include "build/src/overlays/actors/ovl_En_Okarina_Tag/ovl_En_Okarina_Tag_reloc.o"
 endseg
 
-beginseg
-    name "ovl_En_Okuta"
-    include "build/src/overlays/actors/ovl_En_Okuta/z_en_okuta.o"
-    include "build/src/overlays/actors/ovl_En_Okuta/ovl_En_Okuta_reloc.o"
-endseg
 
 beginseg
     name "ovl_En_Ossan"
@@ -2732,11 +2665,6 @@ beginseg
     include "build/src/overlays/actors/ovl_En_Po_Sisters/ovl_En_Po_Sisters_reloc.o"
 endseg
 
-beginseg
-    name "ovl_En_Poh"
-    include "build/src/overlays/actors/ovl_En_Poh/z_en_poh.o"
-    include "build/src/overlays/actors/ovl_En_Poh/ovl_En_Poh_reloc.o"
-endseg
 
 beginseg
     name "ovl_En_Pu_box"
@@ -2750,11 +2678,6 @@ beginseg
     include "build/src/overlays/actors/ovl_En_Rd/ovl_En_Rd_reloc.o"
 endseg
 
-beginseg
-    name "ovl_En_Reeba"
-    include "build/src/overlays/actors/ovl_En_Reeba/z_en_reeba.o"
-    include "build/src/overlays/actors/ovl_En_Reeba/ovl_En_Reeba_reloc.o"
-endseg
 
 beginseg
     name "ovl_En_River_Sound"
@@ -3028,11 +2951,6 @@ beginseg
     include "build/src/overlays/actors/ovl_En_Wall_Tubo/ovl_En_Wall_Tubo_reloc.o"
 endseg
 
-beginseg
-    name "ovl_En_Wallmas"
-    include "build/src/overlays/actors/ovl_En_Wallmas/z_en_wallmas.o"
-    include "build/src/overlays/actors/ovl_En_Wallmas/ovl_En_Wallmas_reloc.o"
-endseg
 
 beginseg
     name "ovl_En_Weather_Tag"
@@ -3150,13 +3068,7 @@ beginseg
     include "build/src/overlays/actors/ovl_End_Title/ovl_End_Title_reloc.o"
 endseg
 
-beginseg
-    name "ovl_Fishing"
-    include "build/src/overlays/actors/ovl_Fishing/z_fishing.o"
-    include "build/data/overlays/actors/z_fishing.data.o"
-    include "build/data/overlays/actors/z_fishing.bss.o"
-    include "build/data/overlays/actors/z_fishing.reloc.o"
-endseg
+
 
 beginseg
     name "ovl_Item_B_Heart"
@@ -3472,35 +3384,6 @@ beginseg
     include "build/baserom/object_box.o"
 endseg
 
-beginseg
-    name "object_human"
-    romalign 0x1000
-    include "build/baserom/object_human.o"
-endseg
-
-beginseg
-    name "object_okuta"
-    romalign 0x1000
-    include "build/baserom/object_okuta.o"
-endseg
-
-beginseg
-    name "object_poh"
-    romalign 0x1000
-    include "build/baserom/object_poh.o"
-endseg
-
-beginseg
-    name "object_wallmaster"
-    romalign 0x1000
-    include "build/baserom/object_wallmaster.o"
-endseg
-
-beginseg
-    name "object_dy_obj"
-    romalign 0x1000
-    include "build/baserom/object_dy_obj.o"
-endseg
 
 beginseg
     name "object_firefly"
@@ -3508,11 +3391,6 @@ beginseg
     include "build/baserom/object_firefly.o"
 endseg
 
-beginseg
-    name "object_dodongo"
-    romalign 0x1000
-    include "build/baserom/object_dodongo.o"
-endseg
 
 beginseg
     name "object_fire"
@@ -3532,11 +3410,6 @@ beginseg
     include "build/baserom/object_tite.o"
 endseg
 
-beginseg
-    name "object_reeba"
-    romalign 0x1000
-    include "build/baserom/object_reeba.o"
-endseg
 
 beginseg
     name "object_peehat"
@@ -3701,12 +3574,6 @@ beginseg
     include "build/baserom/object_bombf.o"
 endseg
 
-beginseg
-    name "object_sk2"
-    romalign 0x1000
-    include "build/assets/objects/object_sk2/object_sk2.o"
-    number 6
-endseg
 
 beginseg
     name "object_oE1"
@@ -3720,11 +3587,6 @@ beginseg
     include "build/baserom/object_oE_anime.o"
 endseg
 
-beginseg
-    name "object_oE2"
-    romalign 0x1000
-    include "build/baserom/object_oE2.o"
-endseg
 
 beginseg
     name "object_ydan_objects"
@@ -4340,11 +4202,6 @@ beginseg
     include "build/baserom/object_efc_tw.o"
 endseg
 
-beginseg
-    name "object_demo_tre_lgt"
-    romalign 0x1000
-    include "build/baserom/object_demo_tre_lgt.o"
-endseg
 
 beginseg
     name "object_gi_key"
@@ -5406,11 +5263,7 @@ beginseg
     include "build/baserom/object_ssh.o"
 endseg
 
-beginseg
-    name "object_bigokuta"
-    romalign 0x1000
-    include "build/baserom/object_bigokuta.o"
-endseg
+
 
 beginseg
     name "object_bg"
@@ -5679,11 +5532,6 @@ beginseg
     include "build/baserom/object_bwall.o"
 endseg
 
-beginseg
-    name "object_crow"
-    romalign 0x1000
-    include "build/baserom/object_crow.o"
-endseg
 
 beginseg
     name "object_cow"
@@ -6779,26 +6627,6 @@ beginseg
     number 3
 endseg
 
-beginseg
-    name "spot13_scene"
-    romalign 0x1000
-    include "build/assets/scenes/overworld/spot13/spot13_scene.o"
-    number 2
-endseg
-
-beginseg
-    name "spot13_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/overworld/spot13/spot13_room_0.o"
-    number 3
-endseg
-
-beginseg
-    name "spot13_room_1"
-    romalign 0x1000
-    include "build/assets/scenes/overworld/spot13/spot13_room_1.o"
-    number 3
-endseg
 
 beginseg
     name "spot15_scene"
@@ -6884,48 +6712,6 @@ beginseg
     number 3
 endseg
 
-beginseg
-    name "market_day_scene"
-    romalign 0x1000
-    include "build/assets/scenes/misc/market_day/market_day_scene.o"
-    number 2
-endseg
-
-beginseg
-    name "market_day_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/misc/market_day/market_day_room_0.o"
-    number 3
-endseg
-
-beginseg
-    name "market_night_scene"
-    romalign 0x1000
-    include "build/assets/scenes/misc/market_night/market_night_scene.o"
-    number 2
-endseg
-
-beginseg
-    name "market_night_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/misc/market_night/market_night_room_0.o"
-    number 3
-endseg
-
-
-beginseg
-    name "kenjyanoma_scene"
-    romalign 0x1000
-    include "build/assets/scenes/indoors/kenjyanoma/kenjyanoma_scene.o"
-    number 2
-endseg
-
-beginseg
-    name "kenjyanoma_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/indoors/kenjyanoma/kenjyanoma_room_0.o"
-    number 3
-endseg
 
 beginseg
     name "tokinoma_scene"
@@ -6964,138 +6750,7 @@ beginseg
     number 3
 endseg
 
-beginseg
-    name "kokiri_shop_scene"
-    romalign 0x1000
-    include "build/assets/scenes/shops/kokiri_shop/kokiri_shop_scene.o"
-    number 2
-endseg
 
-beginseg
-    name "kokiri_shop_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/shops/kokiri_shop/kokiri_shop_room_0.o"
-    number 3
-endseg
-
-beginseg
-    name "kokiri_home_scene"
-    romalign 0x1000
-    include "build/assets/scenes/indoors/kokiri_home/kokiri_home_scene.o"
-    number 2
-endseg
-
-beginseg
-    name "kokiri_home_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/indoors/kokiri_home/kokiri_home_room_0.o"
-    number 3
-endseg
-
-beginseg
-    name "kakusiana_scene"
-    romalign 0x1000
-    include "build/assets/scenes/misc/kakusiana/kakusiana_scene.o"
-    number 2
-endseg
-
-beginseg
-    name "kakusiana_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/misc/kakusiana/kakusiana_room_0.o"
-    number 3
-endseg
-
-beginseg
-    name "kakusiana_room_1"
-    romalign 0x1000
-    include "build/assets/scenes/misc/kakusiana/kakusiana_room_1.o"
-    number 3
-endseg
-
-beginseg
-    name "kakusiana_room_2"
-    romalign 0x1000
-    include "build/assets/scenes/misc/kakusiana/kakusiana_room_2.o"
-    number 3
-endseg
-
-beginseg
-    name "kakusiana_room_3"
-    romalign 0x1000
-    include "build/assets/scenes/misc/kakusiana/kakusiana_room_3.o"
-    number 3
-endseg
-
-beginseg
-    name "kakusiana_room_4"
-    romalign 0x1000
-    include "build/assets/scenes/misc/kakusiana/kakusiana_room_4.o"
-    number 3
-endseg
-
-beginseg
-    name "kakusiana_room_5"
-    romalign 0x1000
-    include "build/assets/scenes/misc/kakusiana/kakusiana_room_5.o"
-    number 3
-endseg
-
-beginseg
-    name "kakusiana_room_6"
-    romalign 0x1000
-    include "build/assets/scenes/misc/kakusiana/kakusiana_room_6.o"
-    number 3
-endseg
-
-beginseg
-    name "kakusiana_room_7"
-    romalign 0x1000
-    include "build/assets/scenes/misc/kakusiana/kakusiana_room_7.o"
-    number 3
-endseg
-
-beginseg
-    name "kakusiana_room_8"
-    romalign 0x1000
-    include "build/assets/scenes/misc/kakusiana/kakusiana_room_8.o"
-    number 3
-endseg
-
-beginseg
-    name "kakusiana_room_9"
-    romalign 0x1000
-    include "build/assets/scenes/misc/kakusiana/kakusiana_room_9.o"
-    number 3
-endseg
-
-beginseg
-    name "kakusiana_room_10"
-    romalign 0x1000
-    include "build/assets/scenes/misc/kakusiana/kakusiana_room_10.o"
-    number 3
-endseg
-
-beginseg
-    name "kakusiana_room_11"
-    romalign 0x1000
-    include "build/assets/scenes/misc/kakusiana/kakusiana_room_11.o"
-    number 3
-endseg
-
-beginseg
-    name "kakusiana_room_12"
-    romalign 0x1000
-    include "build/assets/scenes/misc/kakusiana/kakusiana_room_12.o"
-    number 3
-endseg
-
-beginseg
-    name "kakusiana_room_13"
-    romalign 0x1000
-    include "build/assets/scenes/misc/kakusiana/kakusiana_room_13.o"
-    number 3
-endseg
 
 beginseg
     name "moribossroom_scene"
@@ -7118,33 +6773,8 @@ beginseg
     number 3
 endseg
 
-beginseg
-    name "syatekijyou_scene"
-    romalign 0x1000
-    include "build/assets/scenes/indoors/syatekijyou/syatekijyou_scene.o"
-    number 2
-endseg
 
-beginseg
-    name "syatekijyou_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/indoors/syatekijyou/syatekijyou_room_0.o"
-    number 3
-endseg
 
-beginseg
-    name "shop1_scene"
-    romalign 0x1000
-    include "build/assets/scenes/shops/shop1/shop1_scene.o"
-    number 2
-endseg
-
-beginseg
-    name "shop1_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/shops/shop1/shop1_room_0.o"
-    number 3
-endseg
 
 beginseg
     name "hairal_niwa_scene"
@@ -7163,20 +6793,6 @@ endseg
 
 
 beginseg
-    name "market_alley_scene"
-    romalign 0x1000
-    include "build/assets/scenes/misc/market_alley/market_alley_scene.o"
-    number 2
-endseg
-
-beginseg
-    name "market_alley_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/misc/market_alley/market_alley_room_0.o"
-    number 3
-endseg
-
-beginseg
     name "spot20_scene"
     romalign 0x1000
     include "build/assets/scenes/overworld/spot20/spot20_scene.o"
@@ -7187,34 +6803,6 @@ beginseg
     name "spot20_room_0"
     romalign 0x1000
     include "build/assets/scenes/overworld/spot20/spot20_room_0.o"
-    number 3
-endseg
-
-beginseg
-    name "market_ruins_scene"
-    romalign 0x1000
-    include "build/assets/scenes/misc/market_ruins/market_ruins_scene.o"
-    number 2
-endseg
-
-beginseg
-    name "market_ruins_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/misc/market_ruins/market_ruins_room_0.o"
-    number 3
-endseg
-
-beginseg
-    name "market_alley_n_scene"
-    romalign 0x1000
-    include "build/assets/scenes/misc/market_alley_n/market_alley_n_scene.o"
-    number 2
-endseg
-
-beginseg
-    name "market_alley_n_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/misc/market_alley_n/market_alley_n_room_0.o"
     number 3
 endseg
 
@@ -7232,47 +6820,7 @@ beginseg
     number 3
 endseg
 
-beginseg
-    name "kokiri_home3_scene"
-    romalign 0x1000
-    include "build/assets/scenes/indoors/kokiri_home3/kokiri_home3_scene.o"
-    number 2
-endseg
 
-beginseg
-    name "kokiri_home3_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/indoors/kokiri_home3/kokiri_home3_room_0.o"
-    number 3
-endseg
-
-beginseg
-    name "malon_stable_scene"
-    romalign 0x1000
-    include "build/assets/scenes/indoors/malon_stable/malon_stable_scene.o"
-    number 2
-endseg
-
-beginseg
-    name "malon_stable_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/indoors/malon_stable/malon_stable_room_0.o"
-    number 3
-endseg
-
-beginseg
-    name "kakariko_scene"
-    romalign 0x1000
-    include "build/assets/scenes/indoors/kakariko/kakariko_scene.o"
-    number 2
-endseg
-
-beginseg
-    name "kakariko_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/indoors/kakariko/kakariko_room_0.o"
-    number 3
-endseg
 
 beginseg
     name "bdan_boss_scene"
@@ -7316,187 +6864,8 @@ beginseg
     number 3
 endseg
 
-beginseg
-    name "hut_scene"
-    romalign 0x1000
-    include "build/assets/scenes/indoors/hut/hut_scene.o"
-    number 2
-endseg
 
-beginseg
-    name "hut_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/indoors/hut/hut_room_0.o"
-    number 3
-endseg
 
-beginseg
-    name "daiyousei_izumi_scene"
-    romalign 0x1000
-    include "build/assets/scenes/indoors/daiyousei_izumi/daiyousei_izumi_scene.o"
-    number 2
-endseg
-
-beginseg
-    name "daiyousei_izumi_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/indoors/daiyousei_izumi/daiyousei_izumi_room_0.o"
-    number 3
-endseg
-
-beginseg
-    name "hakaana_scene"
-    romalign 0x1000
-    include "build/assets/scenes/misc/hakaana/hakaana_scene.o"
-    number 2
-endseg
-
-beginseg
-    name "hakaana_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/misc/hakaana/hakaana_room_0.o"
-    number 3
-endseg
-
-beginseg
-    name "yousei_izumi_tate_scene"
-    romalign 0x1000
-    include "build/assets/scenes/indoors/yousei_izumi_tate/yousei_izumi_tate_scene.o"
-    number 2
-endseg
-
-beginseg
-    name "yousei_izumi_tate_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/indoors/yousei_izumi_tate/yousei_izumi_tate_room_0.o"
-    number 3
-endseg
-
-beginseg
-    name "yousei_izumi_yoko_scene"
-    romalign 0x1000
-    include "build/assets/scenes/indoors/yousei_izumi_yoko/yousei_izumi_yoko_scene.o"
-    number 2
-endseg
-
-beginseg
-    name "yousei_izumi_yoko_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/indoors/yousei_izumi_yoko/yousei_izumi_yoko_room_0.o"
-    number 3
-endseg
-
-beginseg
-    name "golon_scene"
-    romalign 0x1000
-    include "build/assets/scenes/shops/golon/golon_scene.o"
-    number 2
-endseg
-
-beginseg
-    name "golon_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/shops/golon/golon_room_0.o"
-    number 3
-endseg
-
-beginseg
-    name "zoora_scene"
-    romalign 0x1000
-    include "build/assets/scenes/shops/zoora/zoora_scene.o"
-    number 2
-endseg
-
-beginseg
-    name "zoora_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/shops/zoora/zoora_room_0.o"
-    number 3
-endseg
-
-beginseg
-    name "drag_scene"
-    romalign 0x1000
-    include "build/assets/scenes/shops/drag/drag_scene.o"
-    number 2
-endseg
-
-beginseg
-    name "drag_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/shops/drag/drag_room_0.o"
-    number 3
-endseg
-
-beginseg
-    name "alley_shop_scene"
-    romalign 0x1000
-    include "build/assets/scenes/shops/alley_shop/alley_shop_scene.o"
-    number 2
-endseg
-
-beginseg
-    name "alley_shop_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/shops/alley_shop/alley_shop_room_0.o"
-    number 3
-endseg
-
-beginseg
-    name "night_shop_scene"
-    romalign 0x1000
-    include "build/assets/scenes/shops/night_shop/night_shop_scene.o"
-    number 2
-endseg
-
-beginseg
-    name "night_shop_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/shops/night_shop/night_shop_room_0.o"
-    number 3
-endseg
-
-beginseg
-    name "impa_scene"
-    romalign 0x1000
-    include "build/assets/scenes/indoors/impa/impa_scene.o"
-    number 2
-endseg
-
-beginseg
-    name "impa_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/indoors/impa/impa_room_0.o"
-    number 3
-endseg
-
-beginseg
-    name "labo_scene"
-    romalign 0x1000
-    include "build/assets/scenes/indoors/labo/labo_scene.o"
-    number 2
-endseg
-
-beginseg
-    name "labo_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/indoors/labo/labo_room_0.o"
-    number 3
-endseg
-
-beginseg
-    name "tent_scene"
-    romalign 0x1000
-    include "build/assets/scenes/indoors/tent/tent_scene.o"
-    number 2
-endseg
-
-beginseg
-    name "tent_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/indoors/tent/tent_room_0.o"
-    number 3
-endseg
 
 beginseg
     name "nakaniwa_scene"
@@ -7632,48 +7001,6 @@ beginseg
     number 3
 endseg
 
-beginseg
-    name "kokiri_home4_scene"
-    romalign 0x1000
-    include "build/assets/scenes/indoors/kokiri_home4/kokiri_home4_scene.o"
-    number 2
-endseg
-
-beginseg
-    name "kokiri_home4_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/indoors/kokiri_home4/kokiri_home4_room_0.o"
-    number 3
-endseg
-
-beginseg
-    name "kokiri_home5_scene"
-    romalign 0x1000
-    include "build/assets/scenes/indoors/kokiri_home5/kokiri_home5_scene.o"
-    number 2
-endseg
-
-beginseg
-    name "kokiri_home5_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/indoors/kokiri_home5/kokiri_home5_room_0.o"
-    number 3
-endseg
-
-
-beginseg
-    name "kakariko3_scene"
-    romalign 0x1000
-    include "build/assets/scenes/misc/kakariko3/kakariko3_scene.o"
-    number 2
-endseg
-
-beginseg
-    name "kakariko3_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/misc/kakariko3/kakariko3_room_0.o"
-    number 3
-endseg
 
 beginseg
     name "hairal_niwa2_scene"
@@ -7686,132 +7013,6 @@ beginseg
     name "hairal_niwa2_room_0"
     romalign 0x1000
     include "build/assets/scenes/indoors/hairal_niwa2/hairal_niwa2_room_0.o"
-    number 3
-endseg
-
-beginseg
-    name "hakasitarelay_scene"
-    romalign 0x1000
-    include "build/assets/scenes/indoors/hakasitarelay/hakasitarelay_scene.o"
-    number 2
-endseg
-
-beginseg
-    name "hakasitarelay_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/indoors/hakasitarelay/hakasitarelay_room_0.o"
-    number 3
-endseg
-
-beginseg
-    name "hakasitarelay_room_1"
-    romalign 0x1000
-    include "build/assets/scenes/indoors/hakasitarelay/hakasitarelay_room_1.o"
-    number 3
-endseg
-
-beginseg
-    name "hakasitarelay_room_2"
-    romalign 0x1000
-    include "build/assets/scenes/indoors/hakasitarelay/hakasitarelay_room_2.o"
-    number 3
-endseg
-
-beginseg
-    name "hakasitarelay_room_3"
-    romalign 0x1000
-    include "build/assets/scenes/indoors/hakasitarelay/hakasitarelay_room_3.o"
-    number 3
-endseg
-
-beginseg
-    name "hakasitarelay_room_4"
-    romalign 0x1000
-    include "build/assets/scenes/indoors/hakasitarelay/hakasitarelay_room_4.o"
-    number 3
-endseg
-
-beginseg
-    name "hakasitarelay_room_5"
-    romalign 0x1000
-    include "build/assets/scenes/indoors/hakasitarelay/hakasitarelay_room_5.o"
-    number 3
-endseg
-
-beginseg
-    name "hakasitarelay_room_6"
-    romalign 0x1000
-    include "build/assets/scenes/indoors/hakasitarelay/hakasitarelay_room_6.o"
-    number 3
-endseg
-
-beginseg
-    name "shrine_scene"
-    romalign 0x1000
-    include "build/assets/scenes/misc/shrine/shrine_scene.o"
-    number 2
-endseg
-
-beginseg
-    name "shrine_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/misc/shrine/shrine_room_0.o"
-    number 3
-endseg
-
-beginseg
-    name "turibori_scene"
-    romalign 0x1000
-    include "build/assets/scenes/misc/turibori/turibori_scene.o"
-    number 2
-endseg
-
-beginseg
-    name "turibori_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/misc/turibori/turibori_room_0.o"
-    number 3
-endseg
-
-beginseg
-    name "shrine_n_scene"
-    romalign 0x1000
-    include "build/assets/scenes/misc/shrine_n/shrine_n_scene.o"
-    number 2
-endseg
-
-beginseg
-    name "shrine_n_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/misc/shrine_n/shrine_n_room_0.o"
-    number 3
-endseg
-
-beginseg
-    name "shrine_r_scene"
-    romalign 0x1000
-    include "build/assets/scenes/misc/shrine_r/shrine_r_scene.o"
-    number 2
-endseg
-
-beginseg
-    name "shrine_r_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/misc/shrine_r/shrine_r_room_0.o"
-    number 3
-endseg
-
-beginseg
-    name "hakaana2_scene"
-    romalign 0x1000
-    include "build/assets/scenes/misc/hakaana2/hakaana2_scene.o"
-    number 2
-endseg
-
-beginseg
-    name "hakaana2_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/misc/hakaana2/hakaana2_room_0.o"
     number 3
 endseg
 
@@ -7829,150 +7030,6 @@ beginseg
     include "build/assets/scenes/indoors/hairal_niwa_n/hairal_niwa_n_room_0.o"
     number 3
 endseg
-
-beginseg
-    name "bowling_scene"
-    romalign 0x1000
-    include "build/assets/scenes/indoors/bowling/bowling_scene.o"
-    number 2
-endseg
-
-beginseg
-    name "bowling_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/indoors/bowling/bowling_room_0.o"
-    number 3
-endseg
-
-beginseg
-    name "hakaana_ouke_scene"
-    romalign 0x1000
-    include "build/assets/scenes/misc/hakaana_ouke/hakaana_ouke_scene.o"
-    number 2
-endseg
-
-beginseg
-    name "hakaana_ouke_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/misc/hakaana_ouke/hakaana_ouke_room_0.o"
-    number 3
-endseg
-
-beginseg
-    name "hakaana_ouke_room_1"
-    romalign 0x1000
-    include "build/assets/scenes/misc/hakaana_ouke/hakaana_ouke_room_1.o"
-    number 3
-endseg
-
-beginseg
-    name "hakaana_ouke_room_2"
-    romalign 0x1000
-    include "build/assets/scenes/misc/hakaana_ouke/hakaana_ouke_room_2.o"
-    number 3
-endseg
-
-beginseg
-    name "hylia_labo_scene"
-    romalign 0x1000
-    include "build/assets/scenes/indoors/hylia_labo/hylia_labo_scene.o"
-    number 2
-endseg
-
-beginseg
-    name "hylia_labo_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/indoors/hylia_labo/hylia_labo_room_0.o"
-    number 3
-endseg
-
-beginseg
-    name "souko_scene"
-    romalign 0x1000
-    include "build/assets/scenes/overworld/souko/souko_scene.o"
-    number 2
-endseg
-
-beginseg
-    name "souko_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/overworld/souko/souko_room_0.o"
-    number 3
-endseg
-
-beginseg
-    name "souko_room_1"
-    romalign 0x1000
-    include "build/assets/scenes/overworld/souko/souko_room_1.o"
-    number 3
-endseg
-
-beginseg
-    name "souko_room_2"
-    romalign 0x1000
-    include "build/assets/scenes/overworld/souko/souko_room_2.o"
-    number 3
-endseg
-
-beginseg
-    name "miharigoya_scene"
-    romalign 0x1000
-    include "build/assets/scenes/indoors/miharigoya/miharigoya_scene.o"
-    number 2
-endseg
-
-beginseg
-    name "miharigoya_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/indoors/miharigoya/miharigoya_room_0.o"
-    number 3
-endseg
-
-beginseg
-    name "mahouya_scene"
-    romalign 0x1000
-    include "build/assets/scenes/indoors/mahouya/mahouya_scene.o"
-    number 2
-endseg
-
-beginseg
-    name "mahouya_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/indoors/mahouya/mahouya_room_0.o"
-    number 3
-endseg
-
-
-
-beginseg
-    name "face_shop_scene"
-    romalign 0x1000
-    include "build/assets/scenes/shops/face_shop/face_shop_scene.o"
-    number 2
-endseg
-
-beginseg
-    name "face_shop_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/shops/face_shop/face_shop_room_0.o"
-    number 3
-endseg
-
-beginseg
-    name "kinsuta_scene"
-    romalign 0x1000
-    include "build/assets/scenes/misc/kinsuta/kinsuta_scene.o"
-    number 2
-endseg
-
-beginseg
-    name "kinsuta_room_0"
-    romalign 0x1000
-    include "build/assets/scenes/misc/kinsuta/kinsuta_room_0.o"
-    number 3
-endseg
-
-
 
 
 beginseg

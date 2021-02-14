@@ -11,7 +11,7 @@
 #include "overlays/actors/ovl_Door_Shutter/z_door_shutter.h"
 #include "overlays/actors/ovl_En_Boom/z_en_boom.h"
 #include "overlays/actors/ovl_En_Arrow/z_en_arrow.h"
-#include "overlays/actors/ovl_En_Box/z_en_box.h"
+//#include "overlays/actors/ovl_En_Box/z_en_box.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
 #include "overlays/actors/ovl_En_Elf/z_en_elf.h"
 #include "overlays/actors/ovl_En_Horse/z_en_horse.h"
@@ -5850,7 +5850,7 @@ s32 func_8083E5A8(Player* this, GlobalContext* globalCtx) {
                    !(this->stateFlags2 & 0x400)) {
             if (this->getItemId != GI_NONE) {
                 GetItemEntry* giEntry = &sGetItemTable[-this->getItemId - 1];
-                EnBox* chest = (EnBox*)interactedActor;
+                //EnBox* chest = (EnBox*)interactedActor;
 
                 if (giEntry->itemId != ITEM_NONE) {
                     if (((Item_CheckObtainability(giEntry->itemId) == ITEM_NONE) && (giEntry->field & 0x40)) ||
@@ -5863,22 +5863,22 @@ s32 func_8083E5A8(Player* this, GlobalContext* globalCtx) {
                 func_80836898(globalCtx, this, func_8083A434);
                 this->stateFlags1 |= 0x20000C00;
                 func_8083AE40(this, giEntry->objectId);
-                this->actor.world.pos.x =
-                    chest->dyna.actor.world.pos.x - (Math_SinS(chest->dyna.actor.shape.rot.y) * 29.434299469f);
-                this->actor.world.pos.z =
-                    chest->dyna.actor.world.pos.z - (Math_CosS(chest->dyna.actor.shape.rot.y) * 29.434299469f);
-                this->currentYaw = this->actor.shape.rot.y = chest->dyna.actor.shape.rot.y;
+                //this->actor.world.pos.x =
+                //    chest->dyna.actor.world.pos.x - (Math_SinS(chest->dyna.actor.shape.rot.y) * 29.434299469f);
+                //this->actor.world.pos.z =
+                //    chest->dyna.actor.world.pos.z - (Math_CosS(chest->dyna.actor.shape.rot.y) * 29.434299469f);
+                //this->currentYaw = this->actor.shape.rot.y = chest->dyna.actor.shape.rot.y;
                 func_80832224(this);
 
                 if ((giEntry->itemId != ITEM_NONE) && (giEntry->gi >= 0) &&
                     (Item_CheckObtainability(giEntry->itemId) == ITEM_NONE)) {
                     func_808322D0(globalCtx, this, this->ageProperties->unk_98);
                     func_80832F54(globalCtx, this, 0x28F);
-                    chest->unk_1F4 = 1;
+                  //  chest->unk_1F4 = 1;
                     Camera_ChangeSetting(Gameplay_GetCamera(globalCtx, 0), CAM_SET_ITEM0);
                 } else {
                     func_80832264(globalCtx, this, &gPlayer352Anim);
-                    chest->unk_1F4 = -1;
+                 //   chest->unk_1F4 = -1;
                 }
 
                 return 1;

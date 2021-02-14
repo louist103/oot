@@ -44,7 +44,7 @@ DMA_TABLE_ENTRY ovl_file_choose
 DMA_TABLE_ENTRY ovl_kaleido_scope
 DMA_TABLE_ENTRY ovl_player_actor
 DMA_TABLE_ENTRY ovl_map_mark_data
-DMA_TABLE_ENTRY ovl_En_Test
+
 DMA_TABLE_ENTRY ovl_Arms_Hook
 DMA_TABLE_ENTRY ovl_Arrow_Fire
 DMA_TABLE_ENTRY ovl_Arrow_Ice
@@ -58,7 +58,7 @@ DMA_TABLE_ENTRY ovl_Bg_Breakwall
 DMA_TABLE_ENTRY ovl_Bg_Ddan_Jd
 DMA_TABLE_ENTRY ovl_Bg_Ddan_Kd
 DMA_TABLE_ENTRY ovl_Bg_Dodoago
-DMA_TABLE_ENTRY ovl_Bg_Dy_Yoseizo
+
 
 DMA_TABLE_ENTRY ovl_Bg_Gate_Shutter
 DMA_TABLE_ENTRY ovl_Bg_Gjyo_Bridge
@@ -78,7 +78,7 @@ DMA_TABLE_ENTRY ovl_Bg_Haka_Zou
 DMA_TABLE_ENTRY ovl_Bg_Heavy_Block
 DMA_TABLE_ENTRY ovl_Bg_Hidan_Curtain
 DMA_TABLE_ENTRY ovl_Bg_Hidan_Dalm
-DMA_TABLE_ENTRY ovl_Bg_Hidan_Firewall
+
 DMA_TABLE_ENTRY ovl_Bg_Hidan_Fslift
 DMA_TABLE_ENTRY ovl_Bg_Hidan_Fwbig
 DMA_TABLE_ENTRY ovl_Bg_Hidan_Hamstep
@@ -167,7 +167,7 @@ DMA_TABLE_ENTRY ovl_Bg_Umajump
 DMA_TABLE_ENTRY ovl_Bg_Vb_Sima
 DMA_TABLE_ENTRY ovl_Bg_Ydan_Hasi
 DMA_TABLE_ENTRY ovl_Bg_Ydan_Maruta
-DMA_TABLE_ENTRY ovl_Bg_Ydan_Sp
+
 DMA_TABLE_ENTRY ovl_Bg_Zg
 DMA_TABLE_ENTRY ovl_Boss_Dodongo
 DMA_TABLE_ENTRY ovl_Boss_Fd
@@ -193,7 +193,7 @@ DMA_TABLE_ENTRY ovl_Demo_Kankyo
 
 DMA_TABLE_ENTRY ovl_Demo_Sa
 DMA_TABLE_ENTRY ovl_Demo_Shd
-DMA_TABLE_ENTRY ovl_Demo_Tre_Lgt
+
 DMA_TABLE_ENTRY ovl_Door_Ana
 DMA_TABLE_ENTRY ovl_Door_Gerudo
 DMA_TABLE_ENTRY ovl_Door_Killer
@@ -251,7 +251,7 @@ DMA_TABLE_ENTRY ovl_En_Attack_Niw
 DMA_TABLE_ENTRY ovl_En_Ba
 DMA_TABLE_ENTRY ovl_En_Bb
 DMA_TABLE_ENTRY ovl_En_Bdfire
-DMA_TABLE_ENTRY ovl_En_Bigokuta
+
 DMA_TABLE_ENTRY ovl_En_Bili
 DMA_TABLE_ENTRY ovl_En_Bird
 DMA_TABLE_ENTRY ovl_En_Blkobj
@@ -261,16 +261,16 @@ DMA_TABLE_ENTRY ovl_En_Bom_Bowl_Pit
 DMA_TABLE_ENTRY ovl_En_Bom_Chu
 DMA_TABLE_ENTRY ovl_En_Bombf
 DMA_TABLE_ENTRY ovl_En_Boom
-DMA_TABLE_ENTRY ovl_En_Box
+
 DMA_TABLE_ENTRY ovl_En_Brob
 DMA_TABLE_ENTRY ovl_En_Bubble
 DMA_TABLE_ENTRY ovl_En_Butte
 DMA_TABLE_ENTRY ovl_En_Bw
 DMA_TABLE_ENTRY ovl_En_Bx
-DMA_TABLE_ENTRY ovl_En_Changer
+
 DMA_TABLE_ENTRY ovl_En_Clear_Tag
 DMA_TABLE_ENTRY ovl_En_Cow
-DMA_TABLE_ENTRY ovl_En_Crow
+
 DMA_TABLE_ENTRY ovl_En_Cs
 DMA_TABLE_ENTRY ovl_En_Daiku
 DMA_TABLE_ENTRY ovl_En_Daiku_Kakariko
@@ -284,7 +284,7 @@ DMA_TABLE_ENTRY ovl_En_Dnt_Demo
 DMA_TABLE_ENTRY ovl_En_Dnt_Jiji
 DMA_TABLE_ENTRY ovl_En_Dnt_Nomal
 DMA_TABLE_ENTRY ovl_En_Dodojr
-DMA_TABLE_ENTRY ovl_En_Dodongo
+
 DMA_TABLE_ENTRY ovl_En_Dog
 DMA_TABLE_ENTRY ovl_En_Door
 DMA_TABLE_ENTRY ovl_En_Ds
@@ -301,7 +301,7 @@ DMA_TABLE_ENTRY ovl_En_Fd
 DMA_TABLE_ENTRY ovl_En_Fd_Fire
 DMA_TABLE_ENTRY ovl_En_Fhg_Fire
 DMA_TABLE_ENTRY ovl_En_Fire_Rock
-DMA_TABLE_ENTRY ovl_En_Firefly
+
 DMA_TABLE_ENTRY ovl_En_Fish
 DMA_TABLE_ENTRY ovl_En_Floormas
 DMA_TABLE_ENTRY ovl_En_Fr
@@ -316,7 +316,7 @@ DMA_TABLE_ENTRY ovl_En_Ge1
 DMA_TABLE_ENTRY ovl_En_Ge2
 DMA_TABLE_ENTRY ovl_En_Ge3
 DMA_TABLE_ENTRY ovl_En_GeldB
-DMA_TABLE_ENTRY ovl_En_GirlA
+
 DMA_TABLE_ENTRY ovl_En_Gm
 DMA_TABLE_ENTRY ovl_En_Go
 DMA_TABLE_ENTRY ovl_En_Go2
@@ -380,10 +380,10 @@ DMA_TABLE_ENTRY ovl_En_Niw_Lady
 DMA_TABLE_ENTRY ovl_En_Nutsball
 DMA_TABLE_ENTRY ovl_En_Nwc
 DMA_TABLE_ENTRY ovl_En_Ny
-DMA_TABLE_ENTRY ovl_En_OE2
+
 DMA_TABLE_ENTRY ovl_En_Okarina_Effect
 DMA_TABLE_ENTRY ovl_En_Okarina_Tag
-DMA_TABLE_ENTRY ovl_En_Okuta
+
 DMA_TABLE_ENTRY ovl_En_Ossan
 DMA_TABLE_ENTRY ovl_En_Owl
 DMA_TABLE_ENTRY ovl_En_Part
@@ -392,10 +392,10 @@ DMA_TABLE_ENTRY ovl_En_Po_Desert
 DMA_TABLE_ENTRY ovl_En_Po_Field
 DMA_TABLE_ENTRY ovl_En_Po_Relay
 DMA_TABLE_ENTRY ovl_En_Po_Sisters
-DMA_TABLE_ENTRY ovl_En_Poh
+
 DMA_TABLE_ENTRY ovl_En_Pu_box
 DMA_TABLE_ENTRY ovl_En_Rd
-DMA_TABLE_ENTRY ovl_En_Reeba
+
 DMA_TABLE_ENTRY ovl_En_River_Sound
 DMA_TABLE_ENTRY ovl_En_Rl
 DMA_TABLE_ENTRY ovl_En_Rr
@@ -438,7 +438,7 @@ DMA_TABLE_ENTRY ovl_En_Vb_Ball
 DMA_TABLE_ENTRY ovl_En_Viewer
 DMA_TABLE_ENTRY ovl_En_Vm
 DMA_TABLE_ENTRY ovl_En_Wall_Tubo
-DMA_TABLE_ENTRY ovl_En_Wallmas
+
 DMA_TABLE_ENTRY ovl_En_Weather_Tag
 DMA_TABLE_ENTRY ovl_En_Weiyer
 DMA_TABLE_ENTRY ovl_En_Wf
@@ -457,7 +457,7 @@ DMA_TABLE_ENTRY ovl_En_Zl4
 DMA_TABLE_ENTRY ovl_En_Zo
 DMA_TABLE_ENTRY ovl_En_fHG
 DMA_TABLE_ENTRY ovl_End_Title
-DMA_TABLE_ENTRY ovl_Fishing
+
 DMA_TABLE_ENTRY ovl_Item_B_Heart
 DMA_TABLE_ENTRY ovl_Item_Etcetera
 DMA_TABLE_ENTRY ovl_Item_Inbox
@@ -508,17 +508,14 @@ DMA_TABLE_ENTRY gameplay_object_exchange_static
 DMA_TABLE_ENTRY object_link_boy
 DMA_TABLE_ENTRY object_link_child
 DMA_TABLE_ENTRY object_box
-DMA_TABLE_ENTRY object_human
-DMA_TABLE_ENTRY object_okuta
-DMA_TABLE_ENTRY object_poh
-DMA_TABLE_ENTRY object_wallmaster
-DMA_TABLE_ENTRY object_dy_obj
+
+
 DMA_TABLE_ENTRY object_firefly
-DMA_TABLE_ENTRY object_dodongo
+
 DMA_TABLE_ENTRY object_fire
 DMA_TABLE_ENTRY object_niw
 DMA_TABLE_ENTRY object_tite
-DMA_TABLE_ENTRY object_reeba
+
 DMA_TABLE_ENTRY object_peehat
 DMA_TABLE_ENTRY object_kingdodongo
 DMA_TABLE_ENTRY object_horse
@@ -546,10 +543,10 @@ DMA_TABLE_ENTRY object_oA2
 DMA_TABLE_ENTRY object_spot00_objects
 DMA_TABLE_ENTRY object_mb
 DMA_TABLE_ENTRY object_bombf
-DMA_TABLE_ENTRY object_sk2
+
 DMA_TABLE_ENTRY object_oE1
 DMA_TABLE_ENTRY object_oE_anime
-DMA_TABLE_ENTRY object_oE2
+
 DMA_TABLE_ENTRY object_ydan_objects
 DMA_TABLE_ENTRY object_gnd
 DMA_TABLE_ENTRY object_am
@@ -652,7 +649,7 @@ DMA_TABLE_ENTRY object_fd2
 DMA_TABLE_ENTRY object_dh
 DMA_TABLE_ENTRY object_rl
 DMA_TABLE_ENTRY object_efc_tw
-DMA_TABLE_ENTRY object_demo_tre_lgt
+
 DMA_TABLE_ENTRY object_gi_key
 DMA_TABLE_ENTRY object_mir_ray
 DMA_TABLE_ENTRY object_brob
@@ -829,7 +826,7 @@ DMA_TABLE_ENTRY object_fish
 DMA_TABLE_ENTRY object_gi_sutaru
 DMA_TABLE_ENTRY object_gi_goddess
 DMA_TABLE_ENTRY object_ssh
-DMA_TABLE_ENTRY object_bigokuta
+
 DMA_TABLE_ENTRY object_bg
 DMA_TABLE_ENTRY object_spot05_objects
 DMA_TABLE_ENTRY object_spot12_obj
@@ -875,7 +872,7 @@ DMA_TABLE_ENTRY object_haka_door
 DMA_TABLE_ENTRY object_gs
 DMA_TABLE_ENTRY object_ps
 DMA_TABLE_ENTRY object_bwall
-DMA_TABLE_ENTRY object_crow
+
 DMA_TABLE_ENTRY object_cow
 DMA_TABLE_ENTRY object_cob
 DMA_TABLE_ENTRY object_gi_sword_1
@@ -1052,9 +1049,7 @@ DMA_TABLE_ENTRY spot11_room_0
 DMA_TABLE_ENTRY spot12_scene
 DMA_TABLE_ENTRY spot12_room_0
 DMA_TABLE_ENTRY spot12_room_1
-DMA_TABLE_ENTRY spot13_scene
-DMA_TABLE_ENTRY spot13_room_0
-DMA_TABLE_ENTRY spot13_room_1
+
 DMA_TABLE_ENTRY spot15_scene
 DMA_TABLE_ENTRY spot15_room_0
 DMA_TABLE_ENTRY spot16_scene
@@ -1068,99 +1063,39 @@ DMA_TABLE_ENTRY spot18_room_1
 DMA_TABLE_ENTRY spot18_room_2
 DMA_TABLE_ENTRY spot18_room_3
 
-
-
-DMA_TABLE_ENTRY market_day_scene
-DMA_TABLE_ENTRY market_day_room_0
-DMA_TABLE_ENTRY market_night_scene
-
-DMA_TABLE_ENTRY kenjyanoma_scene
-DMA_TABLE_ENTRY kenjyanoma_room_0
 DMA_TABLE_ENTRY tokinoma_scene
 DMA_TABLE_ENTRY tokinoma_room_0
 DMA_TABLE_ENTRY tokinoma_room_1
 
 DMA_TABLE_ENTRY link_home_scene
 DMA_TABLE_ENTRY link_home_room_0
-DMA_TABLE_ENTRY kokiri_shop_scene
-DMA_TABLE_ENTRY kokiri_shop_room_0
-DMA_TABLE_ENTRY kokiri_home_scene
-DMA_TABLE_ENTRY kokiri_home_room_0
-DMA_TABLE_ENTRY kakusiana_scene
-DMA_TABLE_ENTRY kakusiana_room_0
-DMA_TABLE_ENTRY kakusiana_room_1
-DMA_TABLE_ENTRY kakusiana_room_2
-DMA_TABLE_ENTRY kakusiana_room_3
-DMA_TABLE_ENTRY kakusiana_room_4
-DMA_TABLE_ENTRY kakusiana_room_5
-DMA_TABLE_ENTRY kakusiana_room_6
-DMA_TABLE_ENTRY kakusiana_room_7
-DMA_TABLE_ENTRY kakusiana_room_8
-DMA_TABLE_ENTRY kakusiana_room_9
-DMA_TABLE_ENTRY kakusiana_room_10
-DMA_TABLE_ENTRY kakusiana_room_11
-DMA_TABLE_ENTRY kakusiana_room_12
-DMA_TABLE_ENTRY kakusiana_room_13
+
 
 DMA_TABLE_ENTRY moribossroom_scene
 DMA_TABLE_ENTRY moribossroom_room_0
 DMA_TABLE_ENTRY moribossroom_room_1
-DMA_TABLE_ENTRY syatekijyou_scene
-DMA_TABLE_ENTRY syatekijyou_room_0
-DMA_TABLE_ENTRY shop1_scene
-DMA_TABLE_ENTRY shop1_room_0
+
+
 DMA_TABLE_ENTRY hairal_niwa_scene
 DMA_TABLE_ENTRY hairal_niwa_room_0
 
-DMA_TABLE_ENTRY market_alley_scene
-DMA_TABLE_ENTRY market_alley_room_0
 DMA_TABLE_ENTRY spot20_scene
 DMA_TABLE_ENTRY spot20_room_0
-DMA_TABLE_ENTRY market_ruins_scene
-DMA_TABLE_ENTRY market_ruins_room_0
 
-DMA_TABLE_ENTRY market_alley_n_scene
-DMA_TABLE_ENTRY market_alley_n_room_0
+
 DMA_TABLE_ENTRY hiral_demo_scene
 DMA_TABLE_ENTRY hiral_demo_room_0
-DMA_TABLE_ENTRY kokiri_home3_scene
-DMA_TABLE_ENTRY kokiri_home3_room_0
-DMA_TABLE_ENTRY malon_stable_scene
-DMA_TABLE_ENTRY malon_stable_room_0
-DMA_TABLE_ENTRY kakariko_scene
-DMA_TABLE_ENTRY kakariko_room_0
+
+
 DMA_TABLE_ENTRY bdan_boss_scene
 DMA_TABLE_ENTRY bdan_boss_room_0
 DMA_TABLE_ENTRY bdan_boss_room_1
 DMA_TABLE_ENTRY FIRE_bs_scene
 DMA_TABLE_ENTRY FIRE_bs_room_0
 DMA_TABLE_ENTRY FIRE_bs_room_1
-DMA_TABLE_ENTRY hut_scene
-DMA_TABLE_ENTRY hut_room_0
-DMA_TABLE_ENTRY daiyousei_izumi_scene
-DMA_TABLE_ENTRY daiyousei_izumi_room_0
-DMA_TABLE_ENTRY hakaana_scene
-DMA_TABLE_ENTRY hakaana_room_0
-DMA_TABLE_ENTRY yousei_izumi_tate_scene
-DMA_TABLE_ENTRY yousei_izumi_tate_room_0
-DMA_TABLE_ENTRY yousei_izumi_yoko_scene
-DMA_TABLE_ENTRY yousei_izumi_yoko_room_0
-DMA_TABLE_ENTRY golon_scene
-DMA_TABLE_ENTRY golon_room_0
-DMA_TABLE_ENTRY zoora_scene
-DMA_TABLE_ENTRY zoora_room_0
-DMA_TABLE_ENTRY drag_scene
-DMA_TABLE_ENTRY drag_room_0
-DMA_TABLE_ENTRY alley_shop_scene
-DMA_TABLE_ENTRY alley_shop_room_0
-DMA_TABLE_ENTRY night_shop_scene
-DMA_TABLE_ENTRY night_shop_room_0
-DMA_TABLE_ENTRY impa_scene
-DMA_TABLE_ENTRY impa_room_0
-DMA_TABLE_ENTRY labo_scene
-DMA_TABLE_ENTRY labo_room_0
-DMA_TABLE_ENTRY tent_scene
-DMA_TABLE_ENTRY tent_room_0
+
+
+
 DMA_TABLE_ENTRY nakaniwa_scene
 DMA_TABLE_ENTRY nakaniwa_room_0
 DMA_TABLE_ENTRY ddan_boss_scene
@@ -1181,58 +1116,13 @@ DMA_TABLE_ENTRY jyasinboss_room_0
 DMA_TABLE_ENTRY jyasinboss_room_1
 DMA_TABLE_ENTRY jyasinboss_room_2
 DMA_TABLE_ENTRY jyasinboss_room_3
-DMA_TABLE_ENTRY kokiri_home4_scene
-DMA_TABLE_ENTRY kokiri_home4_room_0
-DMA_TABLE_ENTRY kokiri_home5_scene
-DMA_TABLE_ENTRY kokiri_home5_room_0
 
-DMA_TABLE_ENTRY kakariko3_scene
-DMA_TABLE_ENTRY kakariko3_room_0
+
 DMA_TABLE_ENTRY hairal_niwa2_scene
 DMA_TABLE_ENTRY hairal_niwa2_room_0
-DMA_TABLE_ENTRY hakasitarelay_scene
-DMA_TABLE_ENTRY hakasitarelay_room_0
-DMA_TABLE_ENTRY hakasitarelay_room_1
-DMA_TABLE_ENTRY hakasitarelay_room_2
-DMA_TABLE_ENTRY hakasitarelay_room_3
-DMA_TABLE_ENTRY hakasitarelay_room_4
-DMA_TABLE_ENTRY hakasitarelay_room_5
-DMA_TABLE_ENTRY hakasitarelay_room_6
-DMA_TABLE_ENTRY shrine_scene
-DMA_TABLE_ENTRY shrine_room_0
-DMA_TABLE_ENTRY turibori_scene
-DMA_TABLE_ENTRY turibori_room_0
-DMA_TABLE_ENTRY shrine_n_scene
-DMA_TABLE_ENTRY shrine_n_room_0
-DMA_TABLE_ENTRY shrine_r_scene
-DMA_TABLE_ENTRY shrine_r_room_0
-DMA_TABLE_ENTRY hakaana2_scene
-DMA_TABLE_ENTRY hakaana2_room_0
 
 DMA_TABLE_ENTRY hairal_niwa_n_scene
 DMA_TABLE_ENTRY hairal_niwa_n_room_0
-DMA_TABLE_ENTRY bowling_scene
-DMA_TABLE_ENTRY bowling_room_0
-DMA_TABLE_ENTRY hakaana_ouke_scene
-DMA_TABLE_ENTRY hakaana_ouke_room_0
-DMA_TABLE_ENTRY hakaana_ouke_room_1
-DMA_TABLE_ENTRY hakaana_ouke_room_2
-DMA_TABLE_ENTRY hylia_labo_scene
-DMA_TABLE_ENTRY hylia_labo_room_0
-DMA_TABLE_ENTRY souko_scene
-DMA_TABLE_ENTRY souko_room_0
-DMA_TABLE_ENTRY souko_room_1
-DMA_TABLE_ENTRY souko_room_2
-DMA_TABLE_ENTRY miharigoya_scene
-DMA_TABLE_ENTRY miharigoya_room_0
-DMA_TABLE_ENTRY mahouya_scene
-DMA_TABLE_ENTRY mahouya_room_0
-
-
-DMA_TABLE_ENTRY face_shop_scene
-DMA_TABLE_ENTRY face_shop_room_0
-DMA_TABLE_ENTRY kinsuta_scene
-DMA_TABLE_ENTRY kinsuta_room_0
 
 
 DMA_TABLE_ENTRY bump_texture_static
