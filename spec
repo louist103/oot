@@ -3784,7 +3784,8 @@ endseg
 beginseg
     name "object_ydan_objects"
     romalign 0x1000
-    include "build/baserom/object_ydan_objects.o"
+    include "build/assets/objects/object_ydan_objects/object_ydan_objects.o"
+    number 6
 endseg
 
 beginseg
@@ -4370,7 +4371,8 @@ endseg
 beginseg
     name "object_syokudai"
     romalign 0x1000
-    include "build/baserom/object_syokudai.o"
+    include "build/assets/objects/object_syokudai/object_syokudai.o"
+    number 6
 endseg
 
 beginseg
