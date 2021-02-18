@@ -44,7 +44,7 @@ void Select_LoadGame(SelectContext* this, s32 entranceIndex) {
 }
 
 static SceneSelectEntry sScenes[] = {
-    { " 1:SPOT00", Select_LoadGame, 0x00CD },
+    /*{ " 1:SPOT00", Select_LoadGame, 0x00CD },
     { " 2:SPOT01", Select_LoadGame, 0x00DB },
     { " 3:SPOT02", Select_LoadGame, 0x00E4 },
     { " 4:SPOT03", Select_LoadGame, 0x00EA },
@@ -109,25 +109,25 @@ static SceneSelectEntry sScenes[] = {
     { "63:\x8Dｳﾗﾛｼﾞ ﾖﾙﾉﾐｾ", Select_LoadGame, 0x0390 },
     { "64:\x8Dｵﾒﾝﾔ", Select_LoadGame, 0x0530 },
     { "65:\x8Cｹﾞﾙﾄﾞ\x8Dﾉｼｭｳﾚﾝｼﾞｮｳ", Select_LoadGame, 0x0008 },
-    { "66:\x8Dﾖｳｾｲﾉｷﾉ \x8Cﾀﾞﾝｼﾞｮﾝ", Select_LoadGame, 0x0000 },
-    { "67:\x8Dﾖｳｾｲﾉｷﾉ \x8Cﾀﾞﾝｼﾞｮﾝ ﾎﾞｽ", Select_LoadGame, 0x040F },
-    { "68:\x8Cﾄﾞﾄﾞﾝｺﾞ ﾀﾞﾝｼﾞｮﾝ", Select_LoadGame, 0x0004 },
-    { "69:\x8Cﾄﾞﾄﾞﾝｺﾞ ﾀﾞﾝｼﾞｮﾝ ﾎﾞｽ", Select_LoadGame, 0x040B },
-    { "70:\x8Dｷｮﾀﾞｲｷﾞｮ \x8Cﾀﾞﾝｼﾞｮﾝ", Select_LoadGame, 0x0028 },
-    { "71:\x8Dｷｮﾀﾞｲｷﾞｮ \x8Cﾀﾞﾝｼﾞｮﾝ ﾎﾞｽ", Select_LoadGame, 0x0301 },
-    { "72:\x8Dﾓﾘﾉｼﾝﾃﾞﾝ", Select_LoadGame, 0x0169 },
-    { "73:\x8Dﾓﾘﾉｼﾝﾃﾞﾝ \x8Cﾎﾞｽ", Select_LoadGame, 0x000C },
-    { "74:\x8Dｲﾄﾞｼﾀ \x8Cﾀﾞﾝｼﾞｮﾝ", Select_LoadGame, 0x0098 },
-    { "75:\x8Dﾊｶｼﾀ \x8Cﾀﾞﾝｼﾞｮﾝ", Select_LoadGame, 0x0037 },
-    { "76:\x8Dﾊｶｼﾀ \x8Cﾀﾞﾝｼﾞｮﾝ ﾎﾞｽ", Select_LoadGame, 0x0413 },
-    { "77:\x8Dﾋﾉｼﾝﾃﾞﾝ", Select_LoadGame, 0x0165 },
-    { "78:\x8Dﾋﾉｼﾝﾃﾞﾝ \x8Cﾎﾞｽ", Select_LoadGame, 0x0305 },
-    { "79:\x8Dﾐｽﾞﾉｼﾝﾃﾞﾝ", Select_LoadGame, 0x0010 },
-    { "80:\x8Dﾐｽﾞﾉｼﾝﾃﾞﾝ \x8Cﾎﾞｽ", Select_LoadGame, 0x0417 },
-    { "81:\x8Dｼﾞｬｼﾝｿﾞｳ \x8Cﾀﾞﾝｼﾞｮﾝ", Select_LoadGame, 0x0082 },
-    { "82:\x8Dｼﾞｬｼﾝｿﾞｳ \x8Cﾀﾞﾝｼﾞｮﾝ ｱｲｱﾝﾅｯｸ", Select_LoadGame, 0x008D },
-    { "83:\x8Dｼﾞｬｼﾝｿﾞｳ \x8Cﾀﾞﾝｼﾞｮﾝ ﾎﾞｽ", Select_LoadGame, 0x05EC },
-    { "84:\x8Cｶﾞﾉﾝ\x8Dﾉﾄｳ", Select_LoadGame, 0x041B },
+    { "66:\x8Dﾖｳｾｲﾉｷﾉ \x8Cﾀﾞﾝｼﾞｮﾝ", Select_LoadGame, 0x0000 },*/
+    { "Gohma", Select_LoadGame, 0x040F },
+    //{ "68:\x8Cﾄﾞﾄﾞﾝｺﾞ ﾀﾞﾝｼﾞｮﾝ", Select_LoadGame, 0x0004 },
+    { "King Dodongo", Select_LoadGame, 0x040B },
+    //{ "70:\x8Dｷｮﾀﾞｲｷﾞｮ \x8Cﾀﾞﾝｼﾞｮﾝ", Select_LoadGame, 0x0028 },
+    { "Barinade", Select_LoadGame, 0x0301 },
+    //{ "72:\x8Dﾓﾘﾉｼﾝﾃﾞﾝ", Select_LoadGame, 0x0169 },
+    { "Phantom Ganon", Select_LoadGame, 0x000C },
+    //{ "74:\x8Dｲﾄﾞｼﾀ \x8Cﾀﾞﾝｼﾞｮﾝ", Select_LoadGame, 0x0098 },
+    //{ "75:\x8Dﾊｶｼﾀ \x8Cﾀﾞﾝｼﾞｮﾝ", Select_LoadGame, 0x0037 },
+    { "Bongo Bongo", Select_LoadGame, 0x0413 },
+    //{ "77:\x8Dﾋﾉｼﾝﾃﾞﾝ", Select_LoadGame, 0x0165 },
+    { "Volvagia", Select_LoadGame, 0x0305 },
+    //{ "79:\x8Dﾐｽﾞﾉｼﾝﾃﾞﾝ", Select_LoadGame, 0x0010 },
+    { "Morpha", Select_LoadGame, 0x0417 },
+    //{ "81:\x8Dｼﾞｬｼﾝｿﾞｳ \x8Cﾀﾞﾝｼﾞｮﾝ", Select_LoadGame, 0x0082 },
+    //{ "82:\x8Dｼﾞｬｼﾝｿﾞｳ \x8Cﾀﾞﾝｼﾞｮﾝ ｱｲｱﾝﾅｯｸ", Select_LoadGame, 0x008D },
+    { "Twinrova", Select_LoadGame, 0x05EC },
+    /*{ "84:\x8Cｶﾞﾉﾝ\x8Dﾉﾄｳ", Select_LoadGame, 0x041B },
     { "85:\x8Cｶﾞﾉﾝ\x8Dﾉﾄｳ\x8Cﾎﾞｽ", Select_LoadGame, 0x041F },
     { "86:\x8Dｺｵﾘﾉﾄﾞｳｸﾂ", Select_LoadGame, 0x0088 },
     { "87:\x8Dﾊｶｼﾀ\x8Cﾘﾚｰ", Select_LoadGame, 0x044F },
@@ -169,7 +169,7 @@ static SceneSelectEntry sScenes[] = {
     { "123:jikkenjyou", Select_LoadGame, 0x02EA },
     { "124:depth\x8Cﾃｽﾄ", Select_LoadGame, 0x00B6 },
     { "125:\x8Cﾊｲﾗﾙ\x8Dﾆﾜ\x8Cｹﾞｰﾑ2", Select_LoadGame, 0x0076 },
-    { "title", Select_LoadTitle, 0x0000 },
+    { "title", Select_LoadTitle, 0x0000 }*/
 };
 
 void Select_UpdateMenu(SelectContext* this) {
@@ -260,12 +260,12 @@ void Select_UpdateMenu(SelectContext* this) {
         }
 
         // user can change "opt", but it doesn't do anything
-        if (CHECK_BTN_ALL(controller1->press.button, BTN_CUP)) {
-            this->opt--;
-        }
-        if (CHECK_BTN_ALL(controller1->press.button, BTN_CDOWN)) {
-            this->opt++;
-        }
+        //if (CHECK_BTN_ALL(controller1->press.button, BTN_CUP)) {
+        //    this->opt--;
+        //}
+        //if (CHECK_BTN_ALL(controller1->press.button, BTN_CDOWN)) {
+        //    this->opt++;
+        //}
 
         if (CHECK_BTN_ALL(controller1->press.button, BTN_DUP)) {
             if (this->unk_22C == 1) {
@@ -386,7 +386,7 @@ void Select_PrintMenu(SelectContext* this, GfxPrint* printer) {
     GfxPrint_Printf(printer, "ZELDA MAP SELECT");
     GfxPrint_SetColor(printer, 255, 255, 255, 255);
 
-    for (i = 0; i < 20; i++) {
+    for (i = 0; i < ARRAY_COUNT(sScenes); i++) {
         GfxPrint_SetPos(printer, 9, i + 4);
 
         scene = ((this->unk_20C + i) + this->count) % this->count;
@@ -404,9 +404,9 @@ void Select_PrintMenu(SelectContext* this, GfxPrint* printer) {
         GfxPrint_Printf(printer, "%s", name);
     };
 
-    GfxPrint_SetColor(printer, 155, 55, 150, 255);
-    GfxPrint_SetPos(printer, 20, 26);
-    GfxPrint_Printf(printer, "OPT=%d", this->opt);
+    //GfxPrint_SetColor(printer, 155, 55, 150, 255);
+    //GfxPrint_SetPos(printer, 20, 26);
+    //GfxPrint_Printf(printer, "OPT=%d", this->opt);
 }
 
 static char* sLoadingMessages[] = {
@@ -435,9 +435,9 @@ void Select_PrintLoadingMessage(SelectContext* this, GfxPrint* printer) {
 
 static char* sAgeLabels[] = {
     "\x8D"
-    "17(ﾜｶﾓﾉ)", // "17(young)"
+    "Adult", // "17(young)"
     "\x8D"
-    "5(ﾜｶｽｷﾞ)", // "5(very young)"
+    "Child", // "5(very young)"
 };
 
 void Select_PrintAgeSetting(SelectContext* this, GfxPrint* printer, s32 age) {
@@ -598,7 +598,7 @@ void Select_Init(GameState* thisx) {
     this->unk_1E0[6] = 0x5B;
     this->unk_1DC = 0;
     this->opt = 0;
-    this->count = 126;
+    this->count = ARRAY_COUNT(sScenes);
     View_Init(&this->view, this->state.gfxCtx);
     this->view.flags = 0xA;
     this->unk_21C = 0;
