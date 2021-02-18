@@ -216,15 +216,15 @@ SavePlayerData sDebugSavePlayerData = {
 };
 
 ItemEquips sDebugSaveEquips = {
-    { ITEM_SWORD_MASTER, ITEM_BOW, ITEM_BOMB, ITEM_OCARINA_FAIRY }, // buttonItems
-    { SLOT_BOW, SLOT_BOMB, SLOT_OCARINA },                          // cButtonSlots
-    0x1122,                                                         // equipment
+    { ITEM_SWORD_KOKIRI, ITEM_SLINGSHOT, ITEM_BOMB, ITEM_OCARINA_FAIRY }, // buttonItems
+    { SLOT_SLINGSHOT, SLOT_BOMB, SLOT_OCARINA },                          // cButtonSlots
+    0x1111,                                                         // equipment
 };
 
 Inventory sDebugSaveInventory = {
     {
         ITEM_STICK,     ITEM_NUT,           ITEM_BOMB,         ITEM_BOW,         ITEM_ARROW_FIRE,  ITEM_DINS_FIRE,
-        ITEM_SLINGSHOT, ITEM_OCARINA_FAIRY, ITEM_BOMBCHU,      ITEM_HOOKSHOT,    ITEM_ARROW_ICE,   ITEM_FARORES_WIND,
+        ITEM_SLINGSHOT, ITEM_OCARINA_FAIRY, ITEM_BOMBCHU,      ITEM_LONGSHOT,    ITEM_ARROW_ICE,   ITEM_FARORES_WIND,
         ITEM_BOOMERANG, ITEM_LENS,          ITEM_BEAN,         ITEM_HAMMER,      ITEM_ARROW_LIGHT, ITEM_NAYRUS_LOVE,
         ITEM_BOTTLE,    ITEM_POTION_RED,    ITEM_POTION_GREEN, ITEM_POTION_BLUE, ITEM_POCKET_EGG,  ITEM_WEIRD_EGG,
     },                                                              // items
@@ -235,7 +235,7 @@ Inventory sDebugSaveInventory = {
     { 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, // dungeonItems
     { 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8 },    // dungeonKeys
     0,                                                              // defenseHearts
-    0,                                                              // gsTokens
+    100,                                                              // gsTokens
 };
 
 u16 sDebugSaveChecksum = 0;

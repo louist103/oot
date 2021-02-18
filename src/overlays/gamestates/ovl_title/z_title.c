@@ -23,11 +23,11 @@ void Title_PrintBuildInfo(Gfx** gfxp) {
     GfxPrint_Init(printer);
     GfxPrint_Open(printer, g);
     GfxPrint_SetColor(printer, 255, 155, 255, 255);
-    GfxPrint_SetPos(printer, 9, 21);
-    GfxPrint_Printf(printer, "HACKERMANS VERSION");
+    GfxPrint_SetPos(printer, 11, 21);
+    GfxPrint_Printf(printer, "BOSS RUSH VERSION");
     GfxPrint_SetColor(printer, 255, 255, 255, 255);
-    GfxPrint_SetPos(printer, 5, 23);
-    GfxPrint_Printf(printer, "[Creator:%s]", gBuildTeam);
+    GfxPrint_SetPos(printer, 8, 23);
+    GfxPrint_Printf(printer,  "github.com/louist103/oot");
     GfxPrint_SetPos(printer, 7, 24);
     GfxPrint_Printf(printer, "[Date:%s]", gBuildDate);
     g = GfxPrint_Close(printer);
