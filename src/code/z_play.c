@@ -11,7 +11,7 @@ VisMono D_80161498;
 Color_RGBA8_u32 D_801614B0;
 FaultClient D_801614B8;
 s16 D_801614C8;
-u64 D_801614D0[0xA00];
+//u64 D_801614D0[0xA00];
 
 void func_800BC450(GlobalContext* globalCtx) {
     Camera_ChangeDataIdx(ACTIVE_CAM, globalCtx->unk_1242B - 1);
@@ -413,9 +413,16 @@ void Gameplay_Update(GlobalContext* globalCtx) {
     Input* input;
     u32 i;
     s32 pad2;
-
+    //GfxPrint printer;
+    //GfxPrint_Init(&printer);
+    //GfxPrint_Open(&printer,globalCtx->state.gfxCtx->polyOpa.p);
+    //GfxPrint_SetPos(&printer,0,0);
+    //GfxPrint_Printf(&printer,"ROOM: %u" ,globalCtx->roomCtx.curRoom.num);
+    //globalCtx->state.gfxCtx->polyOpa.p = GfxPrint_Close(&printer);
+    //GfxPrint_Destroy(&printer);
+    
     input = globalCtx->state.input;
-
+    
     if ((SREG(1) < 0) || (DREG(0) != 0)) {
         SREG(1) = 0;
         ZeldaArena_Display();

@@ -84,7 +84,7 @@ glabel D_808CA7D4
  .word 0xC4BB5852, 0x00000000, 0x00000000
 
 .text
-glabel func_808C5578
+glabel BossDodongo_DeathCutscene
 /* 043E8 808C5578 27BDFE60 */  addiu   $sp, $sp, 0xFE60           ## $sp = FFFFFE60
 /* 043EC 808C557C AFB00038 */  sw      $s0, 0x0038($sp)
 /* 043F0 808C5580 AFBF003C */  sw      $ra, 0x003C($sp)
