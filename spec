@@ -4689,7 +4689,8 @@ endseg
 beginseg
     name "object_anubice"
     romalign 0x1000
-    include "build/baserom/object_anubice.o"
+    include "build/assets/objects/object_anubice/object_anubice.o"
+    number 6
 endseg
 
 beginseg
