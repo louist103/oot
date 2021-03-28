@@ -3695,7 +3695,8 @@ endseg
 beginseg
     name "object_horse_normal"
     romalign 0x1000
-    include "build/baserom/object_horse_normal.o"
+    include "build/assets/objects/object_horse_normal/object_horse_normal.o"
+    number 6
 endseg
 
 beginseg
@@ -3732,7 +3733,8 @@ endseg
 beginseg
     name "object_horse_ganon"
     romalign 0x1000
-    include "build/baserom/object_horse_ganon.o"
+    include "build/assets/objects/object_horse_ganon/object_horse_ganon.o"
+    number 6
 endseg
 
 beginseg
@@ -3879,7 +3881,8 @@ endseg
 beginseg
     name "object_horse_zelda"
     romalign 0x1000
-    include "build/baserom/object_horse_zelda.o"
+    include "build/assets/objects/object_horse_zelda/object_horse_zelda.o"
+    number 6
 endseg
 
 beginseg
@@ -4358,7 +4361,8 @@ endseg
 beginseg
     name "object_horse_link_child"
     romalign 0x1000
-    include "build/baserom/object_horse_link_child.o"
+    include "build/assets/objects/object_horse_link_child/object_horse_link_child.o"
+    number 6
 endseg
 
 beginseg
