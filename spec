@@ -1412,8 +1412,7 @@ endseg
 beginseg
     name "ovl_Boss_Ganondrof"
     include "build/src/overlays/actors/ovl_Boss_Ganondrof/z_boss_ganondrof.o"
-    include "build/data/overlays/actors/z_boss_ganondrof.data.o"
-    include "build/data/overlays/actors/z_boss_ganondrof.reloc.o"
+    include "build/src/overlays/actors/ovl_Boss_Ganondrof/ovl_Boss_Ganondrof_reloc.o"
 endseg
 
 beginseg
@@ -2213,8 +2212,7 @@ endseg
 beginseg
     name "ovl_En_Fhg_Fire"
     include "build/src/overlays/actors/ovl_En_Fhg_Fire/z_en_fhg_fire.o"
-    include "build/data/overlays/actors/z_en_fhg_fire.data.o"
-    include "build/data/overlays/actors/z_en_fhg_fire.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Fhg_Fire/ovl_En_Fhg_Fire_reloc.o"
 endseg
 
 beginseg
@@ -3199,8 +3197,7 @@ endseg
 beginseg
     name "ovl_En_fHG"
     include "build/src/overlays/actors/ovl_En_fHG/z_en_fhg.o"
-    include "build/data/overlays/actors/z_en_fhg.data.o"
-    include "build/data/overlays/actors/z_en_fhg.reloc.o"
+    include "build/src/overlays/actors/ovl_En_fHG/ovl_En_fHG_reloc.o"
 endseg
 
 beginseg
@@ -3795,7 +3792,8 @@ endseg
 beginseg
     name "object_gnd"
     romalign 0x1000
-    include "build/baserom/object_gnd.o"
+    include "build/assets/objects/object_gnd/object_gnd.o"
+    number 6
 endseg
 
 beginseg
@@ -4003,7 +4001,8 @@ endseg
 beginseg
     name "object_fhg"
     romalign 0x1000
-    include "build/baserom/object_fhg.o"
+    include "build/assets/objects/object_fhg/object_fhg.o"
+    number 6
 endseg
 
 beginseg
