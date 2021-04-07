@@ -1,5 +1,6 @@
 #include "z_boss_goma.h"
 #include "overlays/actors/ovl_En_Goma/z_en_goma.h"
+#include "textures/parameter_static/parameter_static.h"
 
 #define FLAGS 0x00000035
 
@@ -2119,7 +2120,8 @@ Gfx* BossGoma_NoBackfaceCullingDlist(GraphicsContext* gfxCtx) {
 
     return dList;
 }
-
+Gfx* Gfx_TextureIA8(Gfx* displayListHead, void* texture, s16 textureWidth, s16 textureHeight, s16 rectLeft, s16 rectTop,
+                    s16 rectWidth, s16 rectHeight, u16 dsdx, u16 dtdy);
 void BossGoma_Draw(Actor* thisx, GlobalContext* globalCtx) {
     BossGoma* this = THIS;
 
@@ -2137,6 +2139,34 @@ void BossGoma_Draw(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_DrawOpa(globalCtx, this->skelanime.skeleton, this->skelanime.jointTable, BossGoma_OverrideLimbDraw,
                       BossGoma_PostLimbDraw, this);
 
+    // Health bar
+    gDPPipeSync(OVERLAY_DISP++);
+    gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 136, 136, 136, 255);
+    gDPSetEnvColor(OVERLAY_DISP++, 100, 50, 50, 255);
+
+    // OVERLAY_DISP = Gfx_TextureIA8(OVERLAY_DISP, D_020038C0, 32, 8, 106, 200, 32, 8, 1024, 1024);
+
+    // OVERLAY_DISP = Gfx_TextureIA8(OVERLAY_DISP, D_02003940, 32, 8, 106, 200, 32, 8, 1024, 1024);
+
+    gSPTextureRectangle(OVERLAY_DISP++, (106) << 2, 200 << 2, ((106) + 106) << 2, (200 + 5) << 2, G_TX_RENDERTILE, 256,
+                        0, 1024, 1024);
+
+    gDPPipeSync(OVERLAY_DISP++);
+    gDPSetCombineLERP(OVERLAY_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, 0, 0, 0, PRIMITIVE, PRIMITIVE,
+                      ENVIRONMENT, TEXEL0, ENVIRONMENT, 0, 0, 0, PRIMITIVE);
+
+    gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 0, 0, 255);
+
+    gSPTextureRectangle(OVERLAY_DISP++, 107 << 2, (201) << 2,
+                        (this->actor.colChkInfo.health > 0) ? (s32)((106 + (((f32)this->actor.colChkInfo.health / 10.0f) * 106)) - 2) << 2 : 106, (200 + 4) << 2,
+                        G_TX_RENDERTILE, 0, 0, 1024, 1024);
+
+    //gDPPipeSync(OVERLAY_DISP++);
+    //gDPLoadTextureBlock(OVERLAY_DISP++, gHUDBossMarkerTex, G_IM_FMT_IA, G_IM_SIZ_8b, 8, 8, 0, G_TX_NOMIRROR | G_TX_WRAP,
+    //                    G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+//
+    //gSPTextureRectangle(OVERLAY_DISP++, 95 << 2, 200 << 2, (32 + 95) << 2,
+    //                    (200 + 32) <<2, G_TX_RENDERTILE, 0, 0, 1024, 1024);
     CLOSE_DISPS(globalCtx->state.gfxCtx, "../z_boss_goma.c", 5012);
 }
 
