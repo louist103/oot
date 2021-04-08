@@ -340,53 +340,56 @@ u16 func_80A97610(GlobalContext* globalCtx, Actor* thisx) {
     return func_80A96FD0(globalCtx, thisx);
 }
 //#define NON_EQUIVALENT
-#ifdef NON_EQUIVALENT // Is it actually non-equivalent? I havn't the slight idea
+//#ifdef NON_EQUIVALENT // Is it actually non-equivalent? I havn't the slight idea
 s16 func_80A97738(GlobalContext* globalCtx, Actor* thisx) {
     u16 phi_v1;
 
     // temp_v0 = func_8010BDBC(&globalCtx->msgCtx);
+
     switch (func_8010BDBC(&globalCtx->msgCtx)) {
         case 2:
             // TODO the big one
             switch (thisx->textId) {
                 case 0x1005:
                     gSaveContext.infTable[1] |= 0x4000;
-                default:
-                    return 0;
+                    break;
                 case 0x1008:
                     gSaveContext.infTable[2] |= 0x4;
-                    return 0;
+                    break;
                 case 0x100A:
                     gSaveContext.infTable[2] |= 0x10;
-                    return 0;
+                    break;
                 case 0x100C:
                     gSaveContext.infTable[2] |= 0x40;
-                    return 0;
+                    break;
                 case 0x100E:
                     gSaveContext.infTable[2] |= 0x100;
-                    return 0;
+                    break;
                 case 0x104F:
                     gSaveContext.infTable[5] |= 0x200;
-                    return 0;
+                    break;
                 case 0x1053:
                     gSaveContext.infTable[6] |= 2;
-                    return 0;
+                    break;
                 case 0x1055:
                     gSaveContext.infTable[4] |= 2;
-                    return 0;
+                    break;
                 case 0x1058:
                     gSaveContext.infTable[5] |= 2;
-                    return 0;
+                    break;
                 case 0x105D:
                     gSaveContext.infTable[4] |= 0x80;
-                    return 0;
+                    break;
                 case 0x10BA:
-                    return 0;
+                    break;
                 case 0x10D7:
                     gSaveContext.infTable[11] |= 0x80;
-                    return 0;
+                    break;
+                default:
+                    return 1;
             }
-          
+            return 0;
+
         case 3:
             if ((thisx->textId == 0x10B7) || (thisx->textId == 0x10B8)) {
                 if (THIS->unk_210 == 0) {
@@ -394,36 +397,33 @@ s16 func_80A97738(GlobalContext* globalCtx, Actor* thisx) {
                     THIS->unk_210 = 1;
                 }
             }
-            break;
+            return 1;
+
         case 4:
             if (func_80106BC8(globalCtx)) {
                 switch (thisx->textId) {
                     case 0x1035:
                         thisx->textId = (globalCtx->msgCtx.choiceIndex == 0) ? 0x1036 : 0x1037;
                         func_8010B720(globalCtx, thisx->textId);
-                        break;
+                        return 1;
                     case 0x1038:
-                        //thisx->textId = (globalCtx->msgCtx.choiceIndex != 0)
-                        //                    ? ((globalCtx->msgCtx.choiceIndex == 1) ? 0x0103A : 0x103B)
-                        //                    : 0x1039;
-                        switch(globalCtx->msgCtx.choiceIndex){
+                        switch (globalCtx->msgCtx.choiceIndex) {
                             case 0:
                                 thisx->textId = 0x103A;
-                                break;
+                                return 1;
                             case 1:
                                 thisx->textId = 0x0103B;
-                                break; 
+                                return 1;
                             case 2:
                                 thisx->textId = 0x1039;
                                 return 1;
-                            
                         }
                         func_8010B720(globalCtx, thisx->textId);
-                        break;
+                        return 1;
                     case 0x103E:
                         thisx->textId = (globalCtx->msgCtx.choiceIndex == 0) ? 0x103F : 0x1040;
                         func_8010B720(globalCtx, thisx->textId);
-                        break;
+                        return 1;
                     case 0x10B7:
                         gSaveContext.infTable[11] |= 0x1000;
                     case 0x10B8:
@@ -432,9 +432,9 @@ s16 func_80A97738(GlobalContext* globalCtx, Actor* thisx) {
                         //    return 1;
                         //}
                         // return 2;
-                        return (globalCtx->msgCtx.choiceIndex != 0) ? 2 : 1;
+                        return (globalCtx->msgCtx.choiceIndex == 0) ? 2 : 1;
                 }
-                break;
+                return 1;
             }
         case 6:
             if (func_80106BC8(globalCtx) != 0) {
@@ -443,9 +443,9 @@ s16 func_80A97738(GlobalContext* globalCtx, Actor* thisx) {
     }
     return 1;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/actors/ovl_En_Ko/func_80A97738.s")
-#endif
+//#else
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/actors/ovl_En_Ko/func_80A97738.s")
+//#endif
 
 s32 func_80A97B38(EnKo* this) {
     s32 rv;

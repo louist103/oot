@@ -60,8 +60,9 @@ static ColliderCylinderInit sCylinderInit = {
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
 static struct_D_80AA1678 D_80AA3848[] = {
-    { 0x060007D4, 1.0f, 0x00, 0.0f }, { 0x060007D4, 1.0f, 0x00, -10.0f }, { 0x060093BC, 1.0f, 0x00, 0.0f },
-    { 0x06009EE0, 1.0f, 0x00, 0.0f }, { 0x06009EE0, 1.0f, 0x00, -10.0f },
+    { 0x060007D4, 1.0f, ANIMMODE_LOOP, 0.0f },   { 0x060007D4, 1.0f, ANIMMODE_LOOP, -10.0f },
+    { 0x060093BC, 1.0f, ANIMMODE_LOOP, 0.0f },   { 0x06009EE0, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { 0x06009EE0, 1.0f, ANIMMODE_LOOP, -10.0f },
 };
 
 static Vec3f D_80AA3898 = { 900.0f, 0.0f, 0.0f };
@@ -246,7 +247,7 @@ void func_80AA2F80(EnMa3* this) {
 void func_80AA3004(EnMa3* this, s32 idx) {
     f32 frameCount = Animation_GetLastFrame(D_80AA3848[idx].animation);
 
-    Animation_Change(&this->skelAnime, D_80AA3848[idx].animation, 1.0f, 0.0f, frameCount, D_80AA3848[idx].unk_08,
+    Animation_Change(&this->skelAnime, D_80AA3848[idx].animation, 1.0f, 0.0f, frameCount, D_80AA3848[idx].mode,
                      D_80AA3848[idx].transitionRate);
 }
 
@@ -366,7 +367,7 @@ void EnMa3_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx, "../z_en_ma3.c", 978);
 
-    camera = globalCtx->cameraPtrs[globalCtx->activeCamera];
+    camera = ACTIVE_CAM;
     someFloat = Math_Vec3f_DistXZ(&this->actor.world.pos, &camera->eye);
     func_800F6268(someFloat, 0x2F);
     func_80093D18(globalCtx->state.gfxCtx);

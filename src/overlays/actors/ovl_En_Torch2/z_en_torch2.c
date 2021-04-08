@@ -5,6 +5,7 @@
  */
 
 #include "z_en_torch2.h"
+#include "objects/object_torch2/object_torch2.h"
 
 #define FLAGS 0x00000035
 
@@ -53,8 +54,6 @@ void EnTorch2_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTorch2_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTorch2_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-extern FlexSkeletonHeader D_06004764;
-
 const ActorInit En_Torch2_InitVars = {
     ACTOR_EN_TORCH2,
     ACTORCAT_BOSS,
@@ -67,26 +66,26 @@ const ActorInit En_Torch2_InitVars = {
     (ActorFunc)EnTorch2_Draw,
 };
 
-/* static */ f32 sStickTilt = 0.0f;
-/* static */ s16 sStickAngle = 0;
-/* static */ f32 sSwordJumpHeight = 0.0f;
-/* static */ s32 sHoldShieldTimer = 0;
-/* static */ u8 sZTargetFlag = false;
-/* static */ u8 sDeathFlag = false;
+static f32 sStickTilt = 0.0f;
+static s16 sStickAngle = 0;
+static f32 sSwordJumpHeight = 0.0f;
+static s32 sHoldShieldTimer = 0;
+static u8 sZTargetFlag = false;
+static u8 sDeathFlag = false;
 
-/* static */ Input sInput;
-/* static */ u8 sSwordJumpState;
-/* static */ Vec3f sSpawnPoint;
-/* static */ u8 sJumpslashTimer;
-/* static */ u8 sJumpslashFlag;
-/* static */ u8 sActionState;
-/* static */ u8 sSwordJumpTimer;
-/* static */ u8 sCounterState;
-/* static */ u8 sDodgeRollState;
-/* static */ u8 sStaggerCount;
-/* static */ u8 sStaggerTimer;
-/* static */ s8 sLastSwordAnim;
-/* static */ u8 sAlpha;
+static Input sInput;
+static u8 sSwordJumpState;
+static Vec3f sSpawnPoint;
+static u8 sJumpslashTimer;
+static u8 sJumpslashFlag;
+static u8 sActionState;
+static u8 sSwordJumpTimer;
+static u8 sCounterState;
+static u8 sDodgeRollState;
+static u8 sStaggerCount;
+static u8 sStaggerTimer;
+static s8 sLastSwordAnim;
+static u8 sAlpha;
 
 static DamageTable sDamageTable = {
     /* Deku nut      */ DMG_ENTRY(0, 0x1),
@@ -132,7 +131,7 @@ void EnTorch2_Init(Actor* thisx, GlobalContext* globalCtx2) {
     this->currentShield = PLAYER_SHIELD_HYLIAN;
     this->heldItemActionParam = this->heldItemId = PLAYER_AP_SWORD_MASTER;
     Player_SetModelGroup(this, 2);
-    globalCtx->playerInit(this, globalCtx, &D_06004764);
+    globalCtx->playerInit(this, globalCtx, &gDarkLinkSkel);
     this->actor.naviEnemyId = 0x26;
     this->cylinder.base.acFlags = AC_ON | AC_TYPE_PLAYER;
     this->swordQuads[0].base.atFlags = this->swordQuads[1].base.atFlags = AT_ON | AT_TYPE_ENEMY;
@@ -626,9 +625,9 @@ void EnTorch2_Update(Actor* thisx, GlobalContext* globalCtx2) {
             func_800F5ACC(0x38);
             if (this->actor.colChkInfo.damageEffect == 1) {
                 if (sAlpha == 255) {
-                    func_8003426C(&this->actor, 0, 0xFF, 0, 0x50);
+                    Actor_SetColorFilter(&this->actor, 0, 0xFF, 0, 0x50);
                 } else {
-                    func_8003426C(&this->actor, 0, 0xFF, 0x2000, 0x50);
+                    Actor_SetColorFilter(&this->actor, 0, 0xFF, 0x2000, 0x50);
                 }
             } else {
                 this->actor.flags &= ~1;
@@ -642,9 +641,9 @@ void EnTorch2_Update(Actor* thisx, GlobalContext* globalCtx2) {
                 this->stateFlags3 |= 1;
                 sActionState = ENTORCH2_DAMAGE;
                 if (sAlpha == 255) {
-                    func_8003426C(&this->actor, 0x4000, 0xFF, 0, 0xC);
+                    Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 0xC);
                 } else {
-                    func_8003426C(&this->actor, 0x4000, 0xFF, 0x2000, 0xC);
+                    Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0x2000, 0xC);
                 }
             }
         }
