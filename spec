@@ -4468,7 +4468,8 @@ endseg
 beginseg
     name "object_nb"
     romalign 0x1000
-    include "build/baserom/object_nb.o"
+    include "build/assets/objects/object_nb/object_nb.o"
+    number 6
 endseg
 
 beginseg
@@ -5090,7 +5091,8 @@ endseg
 beginseg
     name "object_ge1"
     romalign 0x1000
-    include "build/baserom/object_ge1.o"
+    include "build/assets/objects/object_ge1/object_ge1.o"
+    number 6
 endseg
 
 beginseg
@@ -5595,7 +5597,8 @@ endseg
 beginseg
     name "object_gla"
     romalign 0x1000
-    include "build/baserom/object_gla.o"
+    include "build/assets/objects/object_gla/object_gla.o"
+    number 6
 endseg
 
 beginseg
