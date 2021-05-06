@@ -57,7 +57,7 @@ void Main(void* arg) {
     SystemHeap_Init(sysHeap, gSystemHeapSize);                                           // initializes the system heap
     if (osMemSize >= 0x800000U) {
         debugHeap = SysCfb_GetFbEnd();
-        debugHeapSize = (s32)(0x80600000 - debugHeap);
+        debugHeapSize = (s32)(0x80800000 - debugHeap);
     } else {
         debugHeapSize = 0x400;
         debugHeap = SystemArena_MallocDebug(debugHeapSize, "../main.c", 0x235);
@@ -66,7 +66,7 @@ void Main(void* arg) {
     DebugArena_Init(debugHeap, debugHeapSize);
     func_800636C0();
 
-    R_ENABLE_ARENA_DBG = 0;
+    R_ENABLE_ARENA_DBG = 1;
 
     osCreateMesgQueue(&sSiIntMsgQ, sSiIntMsgBuf, 1);
     osSetEventMesg(5, &sSiIntMsgQ, 0);

@@ -2660,4 +2660,8 @@ void func_80820434(GlobalContext*, GraphicsContext*);
 void func_80821C10(GlobalContext*);
 void func_80825C14(GlobalContext*);
 void func_808161AC(GlobalContext*);
+
+void SaveState_Save(GlobalContext*);
+void SaveState_ClearState();
+void SaveState_Load();
 #endif
