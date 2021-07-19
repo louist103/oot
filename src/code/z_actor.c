@@ -695,6 +695,8 @@ void TitleCard_InitPlaceName(GlobalContext* globalCtx, TitleCardContext* titleCt
     titleCtx->durationTimer = 80;
     titleCtx->delayTimer = delay;
 }
+
+#define ULX_MAX 190
 s16 sUlx = 300;
 void TitleCard_Update(GlobalContext* globalCtx, TitleCardContext* titleCtx) {
     if (DECR(titleCtx->delayTimer) == 0) {
@@ -704,7 +706,7 @@ void TitleCard_Update(GlobalContext* globalCtx, TitleCardContext* titleCtx) {
         } else if (titleCtx->durationTimer == 1) {
             Interface_ChangeAlpha(50);
         } else {
-            Math_StepToS(&sUlx, 175, 15);
+            Math_StepToS(&sUlx, ULX_MAX, 6);
             Math_StepToS(&titleCtx->alpha, 255, 10);
             Math_StepToS(&titleCtx->intensity, 255, 20);
             Interface_ChangeAlpha(0);
@@ -712,15 +714,15 @@ void TitleCard_Update(GlobalContext* globalCtx, TitleCardContext* titleCtx) {
     }
 }
 
-#define DrawRec(gfx, ulx, uly, lrx, lry)                                                                         \
-    gDPPipeSync(gfx++);                                                                                          \
-    gDPSetOtherMode(gfx++,                                                                                       \
-                    G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_CONV | G_TF_POINT | G_TT_NONE | G_TL_TILE |   \
-                        G_TD_CLAMP | G_TP_NONE | G_CYC_FILL | G_PM_NPRIMITIVE,                                   \
-                    G_AC_NONE | G_ZS_PIXEL | G_RM_NOOP | G_RM_NOOP2);                                            \
-    gDPPipeSync(gfx++);                                                                                          \
-    gDPSetFillColor(gfx++, ((GPACK_RGBA5551(131, 238, 255, 255)) << 16) | (GPACK_RGBA5551(131, 238, 255, 255))); \
-    gDPFillRectangle(gfx++, ulx, uly, lrx, lry);                                                                 \
+#define DrawRec(gfx, ulx, uly, lrx, lry, r, g, b, a)                                                           \
+    gDPPipeSync(gfx++);                                                                                        \
+    gDPSetOtherMode(gfx++,                                                                                     \
+                    G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_CONV | G_TF_POINT | G_TT_NONE | G_TL_TILE | \
+                        G_TD_CLAMP | G_TP_NONE | G_CYC_FILL | G_PM_NPRIMITIVE,                                 \
+                    G_AC_NONE | G_ZS_PIXEL | G_RM_NOOP | G_RM_NOOP2);                                          \
+    gDPPipeSync(gfx++);                                                                                        \
+    gDPSetFillColor(gfx++, ((GPACK_RGBA5551(r, g, b, a)) << 16) | (GPACK_RGBA5551(r, g, b, a)));               \
+    gDPFillRectangle(gfx++, ulx, uly, lrx, lry);                                                               \
     gDPPipeSync(gfx++);
 
 void TitleCard_Draw(GlobalContext* globalCtx, TitleCardContext* titleCtx) {
@@ -732,6 +734,7 @@ void TitleCard_Draw(GlobalContext* globalCtx, TitleCardContext* titleCtx) {
     s32 spB8;
     s32 spB4;
     s32 spB0;
+    u8 i;
 
     if (titleCtx->alpha != 0) {
         spCC = titleCtx->width;
@@ -756,26 +759,19 @@ void TitleCard_Draw(GlobalContext* globalCtx, TitleCardContext* titleCtx) {
 
         gSPTextureRectangle(OVERLAY_DISP++, spC0, spB8, ((sp38 * 2) + spC0) - 4, spB8 + (spC8 * 4) - 1, G_TX_RENDERTILE,
                             0, 0, 1 << 10, 1 << 10);
-
-        DrawRec(OVERLAY_DISP, sUlx, 30, 300, 30);
-        
-        spC8 = titleCtx->height - spC8;
-
-        if (spC8 > 0) {
-            gDPLoadTextureBlock(OVERLAY_DISP++, (s32)titleCtx->texture + spB0 + 0x1000, G_IM_FMT_IA, G_IM_SIZ_8b, spCC,
-                                spC8, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
-                                G_TX_NOLOD, G_TX_NOLOD);
-
-            gSPTextureRectangle(OVERLAY_DISP++, spC0, spB4, ((sp38 * 2) + spC0) - 4, spB4 + (spC8 * 4) - 1,
-                                G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
-
-            DrawRec(OVERLAY_DISP, sUlx, 30, 300, 30);
+        DrawRec(OVERLAY_DISP, sUlx, 30, 300, 30, 131, 238, 255, titleCtx->alpha);
+        if (sUlx != ULX_MAX) {
+            for (i = 0; i < 20; i++) {
+                s16 randX = (Rand_Centered() * 12) + sUlx; //(sUlx, 5);
+                s16 randY = (Rand_Centered() * 5) + 30;   //(30, 5);
+                DrawRec(OVERLAY_DISP, randX, randY, randX, randY, 131, 238, 255, Rand_S16Offset(titleCtx->alpha,55));
+            }
         }
+        
 
         CLOSE_DISPS(globalCtx->state.gfxCtx, "../z_actor.c", 2880);
     }
 }
-
 s32 func_8002D53C(GlobalContext* globalCtx, TitleCardContext* titleCtx) {
     if ((globalCtx->actorCtx.titleCtx.delayTimer != 0) || (globalCtx->actorCtx.titleCtx.alpha != 0)) {
         titleCtx->durationTimer = 0;
