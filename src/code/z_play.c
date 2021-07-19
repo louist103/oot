@@ -975,7 +975,7 @@ void Gameplay_Update(GlobalContext* globalCtx) {
                 LOG_NUM("1", 1, "../z_play.c", 3777);
             }
 
-            ShrinkWindow_Update(R_UPDATE_RATE);
+        //    ShrinkWindow_Update(R_UPDATE_RATE);
 
             if (1 && HREG(63)) {
                 LOG_NUM("1", 1, "../z_play.c", 3783);
