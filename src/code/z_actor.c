@@ -754,18 +754,11 @@ void TitleCard_Draw(GlobalContext* globalCtx, TitleCardContext* titleCtx) {
                             G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                             G_TX_NOLOD);
 
-        gSPTextureRectangle(OVERLAY_DISP++, sUlx, 30, 300, 30, G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
+        gSPTextureRectangle(OVERLAY_DISP++, spC0, spB8, ((sp38 * 2) + spC0) - 4, spB8 + (spC8 * 4) - 1, G_TX_RENDERTILE,
+                            0, 0, 1 << 10, 1 << 10);
 
         DrawRec(OVERLAY_DISP, sUlx, 30, 300, 30);
-
-
-        gDPLoadTextureBlock(OVERLAY_DISP++, SEGMENTED_TO_VIRTUAL(gEffSpark1Tex), G_IM_FMT_IA, G_IM_SIZ_8b, 32, 32, 0,
-                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
-                            G_TX_NOLOD);
-
-        gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 131, 238, 255, 255);
-
-        gSPTextureRectangle(OVERLAY_DISP++, 30, 30, 62, 62, G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
+        
         spC8 = titleCtx->height - spC8;
 
         if (spC8 > 0) {
@@ -773,13 +766,10 @@ void TitleCard_Draw(GlobalContext* globalCtx, TitleCardContext* titleCtx) {
                                 spC8, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                                 G_TX_NOLOD, G_TX_NOLOD);
 
-            DrawRec(OVERLAY_DISP, sUlx, 30, 300, 30);
+            gSPTextureRectangle(OVERLAY_DISP++, spC0, spB4, ((sp38 * 2) + spC0) - 4, spB4 + (spC8 * 4) - 1,
+                                G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
 
-            gDPLoadTextureBlock(OVERLAY_DISP++, SEGMENTED_TO_VIRTUAL(gEffSpark1Tex), G_IM_FMT_IA, G_IM_SIZ_8b, 32, 32,
-                                0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
-                                G_TX_NOLOD, G_TX_NOLOD);
-            gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 131, 238, 255, 255);
-            gSPTextureRectangle(OVERLAY_DISP++, 30,62, 62, 62, G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
+            DrawRec(OVERLAY_DISP, sUlx, 30, 300, 30);
         }
 
         CLOSE_DISPS(globalCtx->state.gfxCtx, "../z_actor.c", 2880);
