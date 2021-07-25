@@ -569,11 +569,11 @@ beginseg
     include "build/src/overlays/actors/ovl_kaleido_scope/z_kaleido_scope_PAL.o"
     include "build/src/overlays/actors/ovl_kaleido_scope/z_lmap_mark.o"
     include "build/src/overlays/actors/ovl_kaleido_scope/z_lmap_mark_data.o"
-#ifdef NON_MATCHING
+//#ifdef NON_MATCHING
     include "build/src/overlays/actors/ovl_kaleido_scope/ovl_kaleido_scope_reloc.o"
-#else
-    include "build/data/overlays/actors/z_kaleido_scope.reloc.o"
-#endif
+//#else
+//    include "build/data/overlays/actors/z_kaleido_scope.reloc.o"
+//#endif
 endseg
 
 beginseg
@@ -1907,9 +1907,9 @@ beginseg
 endseg
 
 beginseg
-    name "ovl_En_Bird"
-    include "build/src/overlays/actors/ovl_En_Bird/z_en_bird.o"
-    include "build/src/overlays/actors/ovl_En_Bird/ovl_En_Bird_reloc.o"
+    name "ovl_En_Box_Game"
+    include "build/src/overlays/actors/ovl_En_Box_Game/z_en_box_game.o"
+    include "build/src/overlays/actors/ovl_En_Box_Game/ovl_En_Box_Game_reloc.o"
 endseg
 
 beginseg

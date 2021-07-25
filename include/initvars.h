@@ -141,7 +141,7 @@ extern ActorInit Bg_Mjin_InitVars;
 extern ActorInit Bg_Hidan_Kousi_InitVars;
 extern ActorInit Door_Toki_InitVars;
 extern ActorInit Bg_Hidan_Hamstep_InitVars;
-extern ActorInit En_Bird_InitVars;
+extern ActorInit En_Box_Game_InitVars;
 extern ActorInit En_Wood02_InitVars;
 extern ActorInit En_Lightbox_InitVars;
 extern ActorInit En_Pu_box_InitVars;

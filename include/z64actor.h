@@ -421,7 +421,7 @@ typedef enum {
     /* 0x006F */ ACTOR_BG_HIDAN_KOUSI,
     /* 0x0070 */ ACTOR_DOOR_TOKI,
     /* 0x0071 */ ACTOR_BG_HIDAN_HAMSTEP,
-    /* 0x0072 */ ACTOR_EN_BIRD,
+    /* 0x0072 */ ACTOR_EN_BOX_GAME,
     /* 0x0073 */ ACTOR_UNSET_73,
     /* 0x0074 */ ACTOR_UNSET_74,
     /* 0x0075 */ ACTOR_UNSET_75,

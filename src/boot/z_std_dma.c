@@ -264,7 +264,7 @@ const char* sDmaMgrFileNames[0x5FC] = {
     "ovl_En_Bdfire",
     "ovl_En_Bigokuta",
     "ovl_En_Bili",
-    "ovl_En_Bird",
+    "ovl_En_Box_Game",
     "ovl_En_Blkobj",
     "ovl_En_Bom",
     "ovl_En_Bom_Bowl_Man",

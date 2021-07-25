@@ -258,7 +258,7 @@ DMA_TABLE_ENTRY ovl_En_Bb
 DMA_TABLE_ENTRY ovl_En_Bdfire
 DMA_TABLE_ENTRY ovl_En_Bigokuta
 DMA_TABLE_ENTRY ovl_En_Bili
-DMA_TABLE_ENTRY ovl_En_Bird
+DMA_TABLE_ENTRY ovl_En_Box_Game
 DMA_TABLE_ENTRY ovl_En_Blkobj
 DMA_TABLE_ENTRY ovl_En_Bom
 DMA_TABLE_ENTRY ovl_En_Bom_Bowl_Man
