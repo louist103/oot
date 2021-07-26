@@ -187,9 +187,6 @@ static s16 D_8094C87A;
 static s16 D_8094C87C;
 static u8 D_8094C87E;
 static BossTwEEffect sTWEffects[150];
-static s32 sRandSeed0;
-static s32 sRandSeed1;
-static s32 sRandSeed2;
 
 extern FlexSkeletonHeader D_060070E0;
 extern AnimationHeader D_06006F28;
@@ -3252,7 +3249,7 @@ void func_80942C70(Actor* thisx, GlobalContext* globalCtx) {
         Matrix_RotateX(this->beamPitch, MTXMODE_APPLY);
         Matrix_RotateZ(this->beamRoll, MTXMODE_APPLY);
         Matrix_Scale(this->beamScale, this->beamScale, (this->beamDist * 0.01f * 98.0f) / 20000.0f, MTXMODE_APPLY);
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx, (char*)"../z_boss_tw.c", 6846),
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx, "../z_boss_tw.c", 6846),
                   G_MTX_LOAD | G_MTX_MODELVIEW | G_MTX_NOPUSH);
         gSPDisplayList(POLY_XLU_DISP++, SEGMENTED_TO_VIRTUAL(D_0601DDF0));
         if (this->beamReflectionDist > 10.0f) {
@@ -4612,6 +4609,10 @@ void BossTw_UpdateEffects(GlobalContext* globalCtx) {
         eff++;
     }
 }
+
+static s32 sRandSeed0;
+static s32 sRandSeed1;
+static s32 sRandSeed2;
 
 void BossTw_InitRand(s32 seed0, s32 seed1, s32 seed2) {
     sRandSeed0 = seed0;
