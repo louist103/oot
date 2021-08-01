@@ -285,7 +285,7 @@ void ArmsHook_Shoot(ArmsHook* this, GlobalContext* globalCtx) {
                                        &D_801333E0, &D_801333E8);
             }
         } else if (CHECK_BTN_ANY(globalCtx->state.input[0].press.button,
-                                  (BTN_A | BTN_B | BTN_R | BTN_CUP | BTN_CLEFT | BTN_CRIGHT | BTN_CDOWN))) {
+                                 (BTN_A | BTN_B | BTN_R | BTN_CUP | BTN_CLEFT | BTN_CRIGHT | BTN_CDOWN))) {
             this->timer = 0;
         }
     }

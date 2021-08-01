@@ -766,9 +766,8 @@ void func_80AEC320(EnRu1* this, GlobalContext* globalCtx) {
         func_80AEB264(this, &gRutoChildWait2Anim, 0, 0, 0);
         this->action = 7;
         EnRu1_SetMouthIndex(this, 1);
-    }
-    else if ((gSaveContext.infTable[20] & 0x80) && !(gSaveContext.infTable[20] & 1) &&
-        !(gSaveContext.infTable[20] & 0x20)) {
+    } else if ((gSaveContext.infTable[20] & 0x80) && !(gSaveContext.infTable[20] & 1) &&
+               !(gSaveContext.infTable[20] & 0x20)) {
         if (!func_80AEB020(this, globalCtx)) {
             func_80AEB264(this, &gRutoChildWait2Anim, 0, 0, 0);
             actorRoom = this->actor.room;
@@ -1172,8 +1171,8 @@ void func_80AED414(EnRu1* this, GlobalContext* globalCtx) {
 void func_80AED44C(EnRu1* this, GlobalContext* globalCtx) {
     s8 actorRoom;
 
-    if ((gSaveContext.infTable[20] & 2) && !(gSaveContext.infTable[20] & 0x20) &&
-        !(gSaveContext.infTable[20] & 1) && !(gSaveContext.infTable[20] & 0x80)) {
+    if ((gSaveContext.infTable[20] & 2) && !(gSaveContext.infTable[20] & 0x20) && !(gSaveContext.infTable[20] & 1) &&
+        !(gSaveContext.infTable[20] & 0x80)) {
         if (!func_80AEB020(this, globalCtx)) {
             func_80AEB264(this, &gRutoChildWait2Anim, 0, 0, 0);
             actorRoom = this->actor.room;
