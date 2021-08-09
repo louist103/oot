@@ -211,7 +211,7 @@ AudioTask* func_800E5000(void) {
     temp_v1_10->data_ptr = gAudioContext.abiCmdBufs[gAudioContext.rspTaskIdx];
     temp_v1_10->yield_data_ptr = NULL;
     temp_v1_10->yield_data_size = 0;
-    temp_v1_10->data_size = abiCmdCnt * sizeof(ACmd);
+    temp_v1_10->data_size = abiCmdCnt * sizeof(Acmd);
 
     if (D_801304E0 < abiCmdCnt) {
         D_801304E0 = abiCmdCnt;
