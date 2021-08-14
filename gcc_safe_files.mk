@@ -374,15 +374,6 @@ SAFE_C_FILES :=    \
     build/src/overlays/actors/ovl_En_Zo/z_en_zo.o    \
     build/src/overlays/actors/ovl_Boss_Fd2/z_boss_fd2_colchk.o    \
     build/src/overlays/actors/ovl_Boss_Fd2/z_boss_fd2.o    \
-    build/src/overlays/actors/ovl_kaleido_scope/z_kaleido_map_PAL.o    \
-    build/src/overlays/actors/ovl_kaleido_scope/z_kaleido_equipment.o    \
-    build/src/overlays/actors/ovl_kaleido_scope/z_kaleido_debug.o    \
-    build/src/overlays/actors/ovl_kaleido_scope/z_kaleido_collect.o    \
-    build/src/overlays/actors/ovl_kaleido_scope/z_kaleido_item.o    \
-    build/src/overlays/actors/ovl_kaleido_scope/z_kaleido_scope_PAL.o    \
-    build/src/overlays/actors/ovl_kaleido_scope/z_lmap_mark.o    \
-    build/src/overlays/actors/ovl_kaleido_scope/z_kaleido_prompt.o    \
-    build/src/overlays/actors/ovl_kaleido_scope/z_lmap_mark_data.o    \
     build/src/overlays/actors/ovl_En_Kakasi3/z_en_kakasi3.o    \
     build/src/overlays/actors/ovl_Mir_Ray/z_mir_ray.o    \
     build/src/overlays/actors/ovl_Obj_Timeblock/z_obj_timeblock.o    \

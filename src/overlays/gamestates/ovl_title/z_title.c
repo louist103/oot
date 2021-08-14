@@ -22,7 +22,7 @@ void Title_PrintBuildInfo(Gfx** gfxp) {
     GfxPrint_Open(printer, g);
     GfxPrint_SetColor(printer, 255, 155, 255, 255);
     GfxPrint_SetPos(printer, 9, 21);
-    GfxPrint_Printf(printer, "NOT MARIO CLUB VERSION");
+    GfxPrint_Printf(printer, "GCC VERSION");
     GfxPrint_SetColor(printer, 255, 255, 255, 255);
     GfxPrint_SetPos(printer, 7, 23);
     GfxPrint_Printf(printer, "[Creator:%s]", gBuildTeam);
@@ -36,7 +36,28 @@ void Title_PrintBuildInfo(Gfx** gfxp) {
 // Note: In other rom versions this function also updates unk_1D4, coverAlpha, addAlpha, visibleDuration to calculate
 // the fade-in/fade-out + the duration of the n64 logo animation
 void Title_Calc(TitleContext* this) {
+#ifdef NORMAL_GAMEPLAY
+    if ((this->coverAlpha == 0) && (this->visibleDuration != 0)) {
+        this->visibleDuration--;
+        this->unk_1D4--;
+        if (this->unk_1D4 == 0) {
+            this->unk_1D4 = 400;
+        }
+    } else {
+        this->coverAlpha += this->addAlpha;
+        if (this->coverAlpha <= 0) {
+            this->coverAlpha = 0;
+            this->addAlpha = 3;
+        } else if (this->coverAlpha >= 0xFF) {
+            this->coverAlpha = 0xFF;
+            this->exit = 1;
+        }
+    }
+    this->uls = this->ult & 0x7F;
+    this->ult++;
+#else
     this->exit = 1;
+#endif
 }
 
 void Title_SetupView(TitleContext* this, f32 x, f32 y, f32 z) {
@@ -130,7 +151,7 @@ void Title_Main(GameState* thisx) {
     Title_Calc(this);
     Title_Draw(this);
 
-    if (D_8012DBC0) {
+    if (1) {
         Gfx* gfx = POLY_OPA_DISP;
         s32 pad;
 

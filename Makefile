@@ -10,6 +10,8 @@ NON_MATCHING ?= 0
 ORIG_COMPILER ?= 0
 # If COMPILER is gcc, compile with gcc instead of IDO.
 COMPILER ?= ido
+# Define normal gameplay. Mostly, restore the title as-is for a GCC build.
+NORMAL_GAMEPLAY ?= 0
 
 # If gcc is used, define the NON_MATCHING and NON_EQUIVALENT flags respectively so the files that
 # are safe to be used can avoid using GLOBAL_ASM which doesn't work with gcc.
@@ -21,8 +23,14 @@ ifeq ($(COMPILER),gcc)
 endif
 
 ifeq ($(NON_MATCHING),1)
-  CFLAGS := -DNON_MATCHING
+  CFLAGS += -DNON_MATCHING
   CPPFLAGS += -DNON_MATCHING
+  COMPARE := 0
+endif
+
+ifeq ($(NORMAL_GAMEPLAY),1)
+  CFLAGS += -DNORMAL_GAMEPLAY
+  CPPFLAGS += -DNORMAL_GAMEPLAY
   COMPARE := 0
 endif
 
@@ -175,7 +183,7 @@ build/assets/%.o: CC := python3 tools/asm_processor/build.py $(CC) -- $(AS) $(AS
 ifeq ($(COMPILER),gcc)
   include gcc_safe_files.mk
   $(SAFE_C_FILES): CC := mips-linux-gnu-gcc
-  $(SAFE_C_FILES): CFLAGS := -c -G 0 -nostdinc -Iinclude -Isrc -Iassets -Ibuild -I. -DNON_MATCHING=1 -DNON_EQUIVALENT=1 -DAVOID_UB=1 -mno-shared -march=vr4300 -mfix4300 -mabi=32 -mhard-float -mdivide-breaks -fno-stack-protector -fno-common -fno-zero-initialized-in-bss -mno-abicalls -fno-strict-aliasing -fno-inline-functions -fno-inline-small-functions -fno-toplevel-reorder -ffreestanding -fwrapv -Wall -Wextra -g -mno-explicit-relocs -mno-split-addresses
+  $(SAFE_C_FILES): CFLAGS := -c -G 0 -nostdinc -Iinclude -Isrc -Iassets -Ibuild -I. -DNON_MATCHING=1 -DNON_EQUIVALENT=1 -DNORMAL_GAMEPLAY=1 -DAVOID_UB=1 -mno-shared -march=vr4300 -mfix4300 -mabi=32 -mhard-float -mdivide-breaks -fno-stack-protector -fno-common -fno-zero-initialized-in-bss -mno-abicalls -fno-strict-aliasing -fno-inline-functions -fno-inline-small-functions -fno-toplevel-reorder -ffreestanding -fwrapv -Wall -Wextra -g -mno-explicit-relocs -mno-split-addresses
   $(SAFE_C_FILES): MIPS_VERSION := -mips3
   $(SAFE_C_FILES): OPTFLAGS := -O2
 endif
