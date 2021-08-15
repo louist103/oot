@@ -471,7 +471,12 @@ static void write_ld_script(void)
     }
 
 
-    fputs("    _RomEnd = _RomSize;\n}\n", fout);
+    fputs("    _RomEnd = _RomSize;\n", fout);
+    fputs("   /* Discard everything not specifically mentioned above. */\n"
+          "   /DISCARD/ :\n"
+          "   {\n"
+          "      *(*);\n"
+          "   }\n}", fout);
 }
 
 static void usage(const char *execname)

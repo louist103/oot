@@ -7383,384 +7383,448 @@ endseg
 
 beginseg
     name "vr_fine0_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_fine0_static.o"
 endseg
 
 beginseg
     name "vr_fine0_pal_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_fine0_pal_static.o"
 endseg
 
 beginseg
     name "vr_fine1_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_fine1_static.o"
 endseg
 
 beginseg
     name "vr_fine1_pal_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_fine1_pal_static.o"
 endseg
 
 beginseg
     name "vr_fine2_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_fine2_static.o"
 endseg
 
 beginseg
     name "vr_fine2_pal_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_fine2_pal_static.o"
 endseg
 
 beginseg
     name "vr_fine3_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_fine3_static.o"
 endseg
 
 beginseg
     name "vr_fine3_pal_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_fine3_pal_static.o"
 endseg
 
 beginseg
     name "vr_cloud0_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_cloud0_static.o"
 endseg
 
 beginseg
     name "vr_cloud0_pal_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_cloud0_pal_static.o"
 endseg
 
 beginseg
     name "vr_cloud1_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_cloud1_static.o"
 endseg
 
 beginseg
     name "vr_cloud1_pal_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_cloud1_pal_static.o"
 endseg
 
 beginseg
     name "vr_cloud2_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_cloud2_static.o"
 endseg
 
 beginseg
     name "vr_cloud2_pal_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_cloud2_pal_static.o"
 endseg
 
 beginseg
     name "vr_cloud3_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_cloud3_static.o"
 endseg
 
 beginseg
     name "vr_cloud3_pal_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_cloud3_pal_static.o"
 endseg
 
 beginseg
     name "vr_holy0_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_holy0_static.o"
 endseg
 
 beginseg
     name "vr_holy0_pal_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_holy0_pal_static.o"
 endseg
 
 beginseg
     name "vr_holy1_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_holy1_static.o"
 endseg
 
 beginseg
     name "vr_holy1_pal_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_holy1_pal_static.o"
 endseg
 
 beginseg
     name "vr_MDVR_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_MDVR_static.o"
 endseg
 
 beginseg
     name "vr_MDVR_pal_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_MDVR_pal_static.o"
 endseg
 
 beginseg
     name "vr_MNVR_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_MNVR_static.o"
 endseg
 
 beginseg
     name "vr_MNVR_pal_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_MNVR_pal_static.o"
 endseg
 
 beginseg
     name "vr_RUVR_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_RUVR_static.o"
 endseg
 
 beginseg
     name "vr_RUVR_pal_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_RUVR_pal_static.o"
 endseg
 
 beginseg
     name "vr_LHVR_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_LHVR_static.o"
 endseg
 
 beginseg
     name "vr_LHVR_pal_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_LHVR_pal_static.o"
 endseg
 
 beginseg
     name "vr_KHVR_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_KHVR_static.o"
 endseg
 
 beginseg
     name "vr_KHVR_pal_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_KHVR_pal_static.o"
 endseg
 
 beginseg
     name "vr_K3VR_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_K3VR_static.o"
 endseg
 
 beginseg
     name "vr_K3VR_pal_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_K3VR_pal_static.o"
 endseg
 
 beginseg
     name "vr_K4VR_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_K4VR_static.o"
 endseg
 
 beginseg
     name "vr_K4VR_pal_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_K4VR_pal_static.o"
 endseg
 
 beginseg
     name "vr_K5VR_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_K5VR_static.o"
 endseg
 
 beginseg
     name "vr_K5VR_pal_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_K5VR_pal_static.o"
 endseg
 
 beginseg
     name "vr_SP1a_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_SP1a_static.o"
 endseg
 
 beginseg
     name "vr_SP1a_pal_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_SP1a_pal_static.o"
 endseg
 
 beginseg
     name "vr_MLVR_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_MLVR_static.o"
 endseg
 
 beginseg
     name "vr_MLVR_pal_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_MLVR_pal_static.o"
 endseg
 
 beginseg
     name "vr_KKRVR_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_KKRVR_static.o"
 endseg
 
 beginseg
     name "vr_KKRVR_pal_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_KKRVR_pal_static.o"
 endseg
 
 beginseg
     name "vr_KR3VR_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_KR3VR_static.o"
 endseg
 
 beginseg
     name "vr_KR3VR_pal_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_KR3VR_pal_static.o"
 endseg
 
 beginseg
     name "vr_IPVR_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_IPVR_static.o"
 endseg
 
 beginseg
     name "vr_IPVR_pal_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_IPVR_pal_static.o"
 endseg
 
 beginseg
     name "vr_KSVR_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_KSVR_static.o"
 endseg
 
 beginseg
     name "vr_KSVR_pal_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_KSVR_pal_static.o"
 endseg
 
 beginseg
     name "vr_GLVR_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_GLVR_static.o"
 endseg
 
 beginseg
     name "vr_GLVR_pal_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_GLVR_pal_static.o"
 endseg
 
 beginseg
     name "vr_ZRVR_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_ZRVR_static.o"
 endseg
 
 beginseg
     name "vr_ZRVR_pal_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_ZRVR_pal_static.o"
 endseg
 
 beginseg
     name "vr_DGVR_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_DGVR_static.o"
 endseg
 
 beginseg
     name "vr_DGVR_pal_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_DGVR_pal_static.o"
 endseg
 
 beginseg
     name "vr_ALVR_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_ALVR_static.o"
 endseg
 
 beginseg
     name "vr_ALVR_pal_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_ALVR_pal_static.o"
 endseg
 
 beginseg
     name "vr_NSVR_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_NSVR_static.o"
 endseg
 
 beginseg
     name "vr_NSVR_pal_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_NSVR_pal_static.o"
 endseg
 
 beginseg
     name "vr_LBVR_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_LBVR_static.o"
 endseg
 
 beginseg
     name "vr_LBVR_pal_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_LBVR_pal_static.o"
 endseg
 
 beginseg
     name "vr_TTVR_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_TTVR_static.o"
 endseg
 
 beginseg
     name "vr_TTVR_pal_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_TTVR_pal_static.o"
 endseg
 
 beginseg
     name "vr_FCVR_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_FCVR_static.o"
 endseg
 
 beginseg
     name "vr_FCVR_pal_static"
+    compress
     romalign 0x1000
     include "build/baserom/vr_FCVR_pal_static.o"
 endseg
