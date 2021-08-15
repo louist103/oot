@@ -4,7 +4,8 @@ PROGRAMS := yaz0 makeromfs elf2rom mkldscript vtxdis
 ZAPD := ZAPD/ZAPD.out
 
 all: $(PROGRAMS)
-	cd ZAPD && $(MAKE)
+	$(MAKE) -C ZAPD
+	$(MAKE) -C z64compress
 
 clean:
 	$(RM) $(PROGRAMS) $(addsuffix .exe,$(PROGRAMS))

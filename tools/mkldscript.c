@@ -27,6 +27,7 @@ enum
     STMT_romalign,
     STMT_stack,
     STMT_increment,
+    STMT_compress,
 };
 
 enum
@@ -51,6 +52,7 @@ struct Segment
     uint32_t number;
     char **includes;
     int includesCount;
+    bool compress;
 };
 
 static struct Segment *g_segments = NULL;
@@ -181,6 +183,7 @@ static const char *const stmtNames[] =
     [STMT_romalign]  = "romalign",
     [STMT_stack]     = "stack",
     [STMT_increment] = "increment",
+    [STMT_compress]  = "compress",
 };
 
 static void parse_rom_spec(char *spec)
@@ -219,6 +222,7 @@ static void parse_rom_spec(char *spec)
                     util_fatal_error("line %i: duplicate '%s' statement", lineNum, stmtName);
 
                 currSeg->fields |= 1 << stmt;
+                currSeg->compress = false;
 
                 // statements valid within a segment definition
                 switch (stmt)
@@ -275,6 +279,9 @@ static void parse_rom_spec(char *spec)
                  case STMT_increment:
                     if (!parse_number(args, &currSeg->increment))
                         util_fatal_error("line %i: expected number after 'increment'", lineNum);
+                    break;
+                 case STMT_compress:
+                    currSeg->compress = true;
                     break;
                 default:
                     fprintf(stderr, "warning: '%s' is not implemented\n", stmtName);
