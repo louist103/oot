@@ -86,7 +86,7 @@ DMADATA_ADDR, DMADATA_COUNT = get_dmadata_start_len()
 
 # Run
 
-cmd = f"./tools/z64compress/bin/linux64/z64compress --in {IN_ROM} --out {OUT_ROM} \
+cmd = f"./tools/z64compress/z64compress --in {IN_ROM} --out {OUT_ROM} \
 --mb 32 --codec yaz{f' --cache {CACHE_DIR}' if CACHE_DIR is not None else ''} --dma 0x{DMADATA_ADDR:X},{DMADATA_COUNT} \
 --compress {COMPRESS_INDICES}{f' --threads {N_THREADS}' if N_THREADS > 0 else ''}"
 
