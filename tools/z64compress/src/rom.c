@@ -1474,7 +1474,7 @@ void rom_dma_repack(
 		
 		/* fatal error */
 		if (errstr)
-			die(errstr);
+			die("%s",errstr);
 		
 		/* repacked archive won't fit in place of original archive */
 		if (Nsz > Osz)
