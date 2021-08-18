@@ -590,7 +590,7 @@ void func_80A7D460(EnInsect* this, GlobalContext* globalCtx) {
         sp40 = 40.0f;
     }
 
-    if (!this->soilActor->actor.params) {}
+  //  if (!this->soilActor->actor.params) {}
 
     D_80A7DEB0 += 0.99999994f / 300.0f;
     if (D_80A7DEB0 > 1.0f) {
@@ -607,7 +607,7 @@ void func_80A7D460(EnInsect* this, GlobalContext* globalCtx) {
         }
     }
 
-    if (this->soilActor != NULL && Rand_ZeroOne() < 0.07f) {
+    if ((this->soilActor != NULL) && (Rand_ZeroOne() < 0.07f)) {
         this->actor.home.pos.x = (Rand_ZeroOne() - 0.5f) * phi_f2 + thisTemp->soilActor->actor.world.pos.x;
         this->actor.home.pos.y = thisTemp->soilActor->actor.world.pos.y;
         this->actor.home.pos.z = (Rand_ZeroOne() - 0.5f) * phi_f2 + thisTemp->soilActor->actor.world.pos.z;
