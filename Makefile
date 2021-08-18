@@ -162,12 +162,12 @@ build/src/code/code_801067F0.o: OPTFLAGS := -g
 
 build/src/libultra_boot_O1/%.o: CC := $(CC_OLD)
 build/src/libultra_boot_O2/%.o: CC := $(CC_OLD)
-build/src/libultra_code_O1/%.o: CC := python3 tools/asm_processor/build.py $(CC_OLD) -- $(AS) $(ASFLAGS) --
-build/src/libultra_code_O2/%.o: CC := python3 tools/asm_processor/build.py $(CC_OLD) -- $(AS) $(ASFLAGS) --
-build/src/libultra_code_O2_g3/%.o: CC := python3 tools/asm_processor/build.py $(CC_OLD) -- $(AS) $(ASFLAGS) --
+build/src/libultra_code_O1/%.o: CC := $(CC_OLD)
+build/src/libultra_code_O2/%.o: CC := $(CC_OLD)
+build/src/libultra_code_O2_g3/%.o: CC := $(CC_OLD)
 
-build/src/code/jpegutils.o: CC := python3 tools/asm_processor/build.py $(CC_OLD) -- $(AS) $(ASFLAGS) --
-build/src/code/jpegdecoder.o: CC := python3 tools/asm_processor/build.py $(CC_OLD) -- $(AS) $(ASFLAGS) --
+build/src/code/jpegutils.o: CC := $(CC_OLD)
+build/src/code/jpegdecoder.o: CC :=$(CC_OLD)
 
 build/src/boot/%.o: CC := python3 tools/asm_processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
 build/src/code/%.o: CC := python3 tools/asm_processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
@@ -175,7 +175,7 @@ build/src/overlays/actors/%.o: CC := python3 tools/asm_processor/build.py $(CC) 
 build/src/overlays/effects/%.o: CC := python3 tools/asm_processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
 build/src/overlays/gamestates/%.o: CC := python3 tools/asm_processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
 
-build/assets/%.o: CC := python3 tools/asm_processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
+build/assets/%.o: CC := $(CC)
 
 #### GCC Override ###
 
@@ -258,25 +258,25 @@ build/assets/%.o: assets/%.c
 
 build/src/overlays/%.o: src/overlays/%.c
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
-	$(CC_CHECK) $<
+#	$(CC_CHECK) $<
 	$(ZAPD) bovl -eh -i $@ -cfg $< --outputpath $(@D)/$(notdir $(@D))_reloc.s
 	-test -f $(@D)/$(notdir $(@D))_reloc.s && $(AS) $(ASFLAGS) $(@D)/$(notdir $(@D))_reloc.s -o $(@D)/$(notdir $(@D))_reloc.o
 	@$(OBJDUMP) -d $@ > $(@:.o=.s)
 
 build/src/%.o: src/%.c
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
-	$(CC_CHECK) $<
+#	$(CC_CHECK) $<
 	@$(OBJDUMP) -d $@ > $(@:.o=.s)
 
 build/src/libultra_boot_O1/ll.o: src/libultra_boot_O1/ll.c
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
-	$(CC_CHECK) $<
+#	$(CC_CHECK) $<
 	python3 tools/set_o32abi_bit.py $@
 	@$(OBJDUMP) -d $@ > $(@:.o=.s)
 
 build/src/libultra_code_O1/llcvt.o: src/libultra_code_O1/llcvt.c
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
-	$(CC_CHECK) $<
+#	$(CC_CHECK) $<
 	python3 tools/set_o32abi_bit.py $@
 	@$(OBJDUMP) -d $@ > $(@:.o=.s)
 
