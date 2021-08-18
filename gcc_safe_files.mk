@@ -53,8 +53,6 @@ SAFE_C_FILES :=    \
     build/src/overlays/actors/ovl_Bg_Jya_1flift/z_bg_jya_1flift.o    \
     build/src/overlays/actors/ovl_En_fHG/z_en_fhg.o    \
     build/src/overlays/actors/ovl_Bg_Spot11_Oasis/z_bg_spot11_oasis.o    \
-    build/src/overlays/actors/ovl_Demo_Sa/z_demo_sa.o    \
-    build/src/overlays/actors/ovl_Demo_Sa/z_demo_sa_cutscene_data.o    \
     build/src/overlays/actors/ovl_Arms_Hook/z_arms_hook.o    \
     build/src/overlays/actors/ovl_Bg_Spot17_Funen/z_bg_spot17_funen.o    \
     build/src/overlays/actors/ovl_En_Okarina_Tag/z_en_okarina_tag_cutscene_data.o    \
@@ -90,8 +88,6 @@ SAFE_C_FILES :=    \
     build/src/overlays/actors/ovl_Bg_Bowl_Wall/z_bg_bowl_wall.o    \
     build/src/overlays/actors/ovl_Bg_Hidan_Rock/z_bg_hidan_rock.o    \
     build/src/overlays/actors/ovl_Demo_Gj/z_demo_gj.o    \
-    build/src/overlays/actors/ovl_Demo_Im/z_demo_im.o    \
-    build/src/overlays/actors/ovl_Demo_Im/z_demo_im_cutscene_data.o    \
     build/src/overlays/actors/ovl_Bg_Menkuri_Kaiten/z_bg_menkuri_kaiten.o    \
     build/src/overlays/actors/ovl_Door_Killer/z_door_killer.o    \
     build/src/overlays/actors/ovl_Bg_Spot09_Obj/z_bg_spot09_obj.o    \
@@ -177,8 +173,6 @@ SAFE_C_FILES :=    \
     build/src/overlays/actors/ovl_En_Heishi2/z_en_heishi2.o    \
     build/src/overlays/actors/ovl_En_Fish/z_en_fish.o    \
     build/src/overlays/actors/ovl_Bg_Gnd_Soulmeiro/z_bg_gnd_soulmeiro.o    \
-    build/src/overlays/actors/ovl_Bg_Treemouth/z_bg_treemouth.o    \
-    build/src/overlays/actors/ovl_Bg_Treemouth/z_bg_treemouth_cutscene_data.o    \
     build/src/overlays/actors/ovl_En_Syateki_Niw/z_en_syateki_niw.o    \
     build/src/overlays/actors/ovl_En_GeldB/z_en_geldb.o    \
     build/src/overlays/actors/ovl_Magic_Wind/z_magic_wind_gfx.o    \
@@ -193,8 +187,6 @@ SAFE_C_FILES :=    \
     build/src/overlays/actors/ovl_En_Lightbox/z_en_lightbox.o    \
     build/src/overlays/actors/ovl_Bg_Jya_Kanaami/z_bg_jya_kanaami.o    \
     build/src/overlays/actors/ovl_En_Tk/z_en_tk.o    \
-    build/src/overlays/actors/ovl_En_Nb/z_en_nb.o    \
-    build/src/overlays/actors/ovl_En_Nb/z_en_nb_cutscene_data.o    \
     build/src/overlays/actors/ovl_Bg_Spot01_Idohashira/z_bg_spot01_idohashira.o    \
     build/src/overlays/actors/ovl_Bg_Pushbox/z_bg_pushbox.o    \
     build/src/overlays/actors/ovl_En_Gs/z_en_gs.o    \
@@ -210,8 +202,6 @@ SAFE_C_FILES :=    \
     build/src/overlays/actors/ovl_Bg_Spot08_Iceblock/z_bg_spot08_iceblock.o    \
     build/src/overlays/actors/ovl_En_Bom/z_en_bom.o    \
     build/src/overlays/actors/ovl_En_Ani/z_en_ani.o    \
-    build/src/overlays/actors/ovl_En_Zl1/z_en_zl1.o    \
-    build/src/overlays/actors/ovl_En_Zl1/z_en_zl1_cutscene_data.o    \
     build/src/overlays/actors/ovl_Item_Inbox/z_item_inbox.o    \
     build/src/overlays/actors/ovl_En_Po_Field/z_en_po_field.o    \
     build/src/overlays/actors/ovl_En_Encount2/z_en_encount2.o    \
@@ -278,8 +268,6 @@ SAFE_C_FILES :=    \
     build/src/overlays/actors/ovl_En_Bb/z_en_bb.o    \
     build/src/overlays/actors/ovl_Bg_Gnd_Nisekabe/z_bg_gnd_nisekabe.o    \
     build/src/overlays/actors/ovl_En_Fd/z_en_fd.o    \
-    build/src/overlays/actors/ovl_Demo_Du/z_demo_du.o    \
-    build/src/overlays/actors/ovl_Demo_Du/z_demo_du_cutscene_data.o    \
     build/src/overlays/actors/ovl_En_Karebaba/z_en_karebaba.o    \
     build/src/overlays/actors/ovl_En_Heishi1/z_en_heishi1.o    \
     build/src/overlays/actors/ovl_Bg_Ganon_Otyuka/z_bg_ganon_otyuka.o    \
@@ -340,8 +328,6 @@ SAFE_C_FILES :=    \
     build/src/overlays/actors/ovl_En_Weiyer/z_en_weiyer.o    \
     build/src/overlays/actors/ovl_Bg_Gate_Shutter/z_bg_gate_shutter.o    \
     build/src/overlays/actors/ovl_Bg_Haka/z_bg_haka.o    \
-    build/src/overlays/actors/ovl_En_Jj/z_en_jj.o    \
-    build/src/overlays/actors/ovl_En_Jj/z_en_jj_cutscene_data.o    \
     build/src/overlays/actors/ovl_En_Bird/z_en_bird.o    \
     build/src/overlays/actors/ovl_En_Du/z_en_du.o    \
     build/src/overlays/actors/ovl_En_Vb_Ball/z_en_vb_ball.o    \
@@ -369,8 +355,6 @@ SAFE_C_FILES :=    \
     build/src/overlays/actors/ovl_En_Mm2/z_en_mm2.o    \
     build/src/overlays/actors/ovl_En_St/z_en_st.o    \
     build/src/overlays/actors/ovl_Obj_Mure3/z_obj_mure3.o    \
-    build/src/overlays/actors/ovl_En_Ru1/z_en_ru1_cutscene_data.o    \
-    build/src/overlays/actors/ovl_En_Ru1/z_en_ru1.o    \
     build/src/overlays/actors/ovl_En_Zo/z_en_zo.o    \
     build/src/overlays/actors/ovl_Boss_Fd2/z_boss_fd2_colchk.o    \
     build/src/overlays/actors/ovl_Boss_Fd2/z_boss_fd2.o    \
@@ -447,8 +431,6 @@ SAFE_C_FILES :=    \
     build/src/overlays/actors/ovl_En_Po_Desert/z_en_po_desert.o    \
     build/src/overlays/actors/ovl_Bg_Dodoago/z_bg_dodoago.o    \
     build/src/overlays/actors/ovl_En_Ny/z_en_ny.o    \
-    build/src/overlays/actors/ovl_En_Ru2/z_en_ru2.o    \
-    build/src/overlays/actors/ovl_En_Ru2/z_en_ru2_cutscene_data.o    \
     build/src/overlays/actors/ovl_En_Sa/z_en_sa.o    \
     build/src/overlays/actors/ovl_En_Heishi3/z_en_heishi3.o    \
     build/src/overlays/actors/ovl_En_Tr/z_en_tr.o    \
