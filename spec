@@ -293,6 +293,7 @@ endseg
 
 beginseg
     name "code"
+    compress
     after "dmadata"
     include "build/src/code/z_en_a_keep.o"
     include "build/src/code/z_en_item00.o"
