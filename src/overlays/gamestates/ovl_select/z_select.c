@@ -387,7 +387,7 @@ void Select_PrintMenu(SelectContext* this, GfxPrint* printer) {
     GfxPrint_SetColor(printer, 255, 255, 255, 255);
 
     for (i = 0; i < 20; i++) {
-        GfxPrint_SetPos(printer, 9, i + 4);
+        GfxPrint_SetPos(printer, 5, i + 4);
 
         scene = ((this->unk_20C + i) + this->count) % this->count;
         if (scene == this->currentScene) {
@@ -410,18 +410,18 @@ void Select_PrintMenu(SelectContext* this, GfxPrint* printer) {
 }
 
 static char* sLoadingMessages[] = {
-    "Please wait a minute"
-     "Hold on a sec"
-     "Wait a moment"
-    "Loading"
-    "Now working"
-     "Now creating"
-    "It's not broken"
-    "Coffee Break"
-    "Please set B side"
-    "Be patient, now"
-    "Please wait just a minute"
-    "Don't worry, don't worry. Take a break, take a break"
+    "Please wait a minute",
+    "Hold on a sec",
+    "Wait a moment",
+    "Loading",
+    "Now working",
+    "Now creating",
+    "It's not broken",
+    "Coffee Break",
+    "Please set B side",
+    "Be patient, now",
+    "Please wait just a minute",
+    "Don't worry, don't worry. Take a break, take a break",
 };
 
 void Select_PrintLoadingMessage(SelectContext* this, GfxPrint* printer) {
