@@ -44,7 +44,6 @@ DMA_TABLE_ENTRY ovl_file_choose
 DMA_TABLE_ENTRY ovl_kaleido_scope
 DMA_TABLE_ENTRY ovl_player_actor
 DMA_TABLE_ENTRY ovl_map_mark_data
-DMA_TABLE_ENTRY ovl_En_Test
 DMA_TABLE_ENTRY ovl_Arms_Hook
 DMA_TABLE_ENTRY ovl_Arrow_Fire
 DMA_TABLE_ENTRY ovl_Arrow_Ice
@@ -81,7 +80,6 @@ DMA_TABLE_ENTRY ovl_Bg_Haka_Zou
 DMA_TABLE_ENTRY ovl_Bg_Heavy_Block
 DMA_TABLE_ENTRY ovl_Bg_Hidan_Curtain
 DMA_TABLE_ENTRY ovl_Bg_Hidan_Dalm
-DMA_TABLE_ENTRY ovl_Bg_Hidan_Firewall
 DMA_TABLE_ENTRY ovl_Bg_Hidan_Fslift
 DMA_TABLE_ENTRY ovl_Bg_Hidan_Fwbig
 DMA_TABLE_ENTRY ovl_Bg_Hidan_Hamstep
@@ -170,7 +168,6 @@ DMA_TABLE_ENTRY ovl_Bg_Umajump
 DMA_TABLE_ENTRY ovl_Bg_Vb_Sima
 DMA_TABLE_ENTRY ovl_Bg_Ydan_Hasi
 DMA_TABLE_ENTRY ovl_Bg_Ydan_Maruta
-DMA_TABLE_ENTRY ovl_Bg_Ydan_Sp
 DMA_TABLE_ENTRY ovl_Bg_Zg
 DMA_TABLE_ENTRY ovl_Boss_Dodongo
 DMA_TABLE_ENTRY ovl_Boss_Fd
@@ -260,16 +257,13 @@ DMA_TABLE_ENTRY ovl_En_Bigokuta
 DMA_TABLE_ENTRY ovl_En_Bili
 DMA_TABLE_ENTRY ovl_En_Bird
 DMA_TABLE_ENTRY ovl_En_Blkobj
-DMA_TABLE_ENTRY ovl_En_Bom
 DMA_TABLE_ENTRY ovl_En_Bom_Bowl_Man
 DMA_TABLE_ENTRY ovl_En_Bom_Bowl_Pit
 DMA_TABLE_ENTRY ovl_En_Bom_Chu
 DMA_TABLE_ENTRY ovl_En_Bombf
 DMA_TABLE_ENTRY ovl_En_Boom
-DMA_TABLE_ENTRY ovl_En_Box
 DMA_TABLE_ENTRY ovl_En_Brob
 DMA_TABLE_ENTRY ovl_En_Bubble
-DMA_TABLE_ENTRY ovl_En_Butte
 DMA_TABLE_ENTRY ovl_En_Bw
 DMA_TABLE_ENTRY ovl_En_Bx
 DMA_TABLE_ENTRY ovl_En_Changer
@@ -289,15 +283,12 @@ DMA_TABLE_ENTRY ovl_En_Dnt_Demo
 DMA_TABLE_ENTRY ovl_En_Dnt_Jiji
 DMA_TABLE_ENTRY ovl_En_Dnt_Nomal
 DMA_TABLE_ENTRY ovl_En_Dodojr
-DMA_TABLE_ENTRY ovl_En_Dodongo
 DMA_TABLE_ENTRY ovl_En_Dog
-DMA_TABLE_ENTRY ovl_En_Door
 DMA_TABLE_ENTRY ovl_En_Ds
 DMA_TABLE_ENTRY ovl_En_Du
 DMA_TABLE_ENTRY ovl_En_Dy_Extra
 DMA_TABLE_ENTRY ovl_En_Eg
 DMA_TABLE_ENTRY ovl_En_Eiyer
-DMA_TABLE_ENTRY ovl_En_Elf
 DMA_TABLE_ENTRY ovl_En_Encount1
 DMA_TABLE_ENTRY ovl_En_Encount2
 DMA_TABLE_ENTRY ovl_En_Ex_Item
@@ -306,7 +297,6 @@ DMA_TABLE_ENTRY ovl_En_Fd
 DMA_TABLE_ENTRY ovl_En_Fd_Fire
 DMA_TABLE_ENTRY ovl_En_Fhg_Fire
 DMA_TABLE_ENTRY ovl_En_Fire_Rock
-DMA_TABLE_ENTRY ovl_En_Firefly
 DMA_TABLE_ENTRY ovl_En_Fish
 DMA_TABLE_ENTRY ovl_En_Floormas
 DMA_TABLE_ENTRY ovl_En_Fr
@@ -321,7 +311,6 @@ DMA_TABLE_ENTRY ovl_En_Ge1
 DMA_TABLE_ENTRY ovl_En_Ge2
 DMA_TABLE_ENTRY ovl_En_Ge3
 DMA_TABLE_ENTRY ovl_En_GeldB
-DMA_TABLE_ENTRY ovl_En_GirlA
 DMA_TABLE_ENTRY ovl_En_Gm
 DMA_TABLE_ENTRY ovl_En_Go
 DMA_TABLE_ENTRY ovl_En_Go2
@@ -337,7 +326,6 @@ DMA_TABLE_ENTRY ovl_En_Heishi4
 DMA_TABLE_ENTRY ovl_En_Hintnuts
 DMA_TABLE_ENTRY ovl_En_Holl
 DMA_TABLE_ENTRY ovl_En_Honotrap
-DMA_TABLE_ENTRY ovl_En_Horse
 DMA_TABLE_ENTRY ovl_En_Horse_Game_Check
 DMA_TABLE_ENTRY ovl_En_Horse_Ganon
 DMA_TABLE_ENTRY ovl_En_Horse_Link_Child
@@ -379,7 +367,6 @@ DMA_TABLE_ENTRY ovl_En_Mm2
 DMA_TABLE_ENTRY ovl_En_Ms
 DMA_TABLE_ENTRY ovl_En_Mu
 DMA_TABLE_ENTRY ovl_En_Nb
-DMA_TABLE_ENTRY ovl_En_Niw
 DMA_TABLE_ENTRY ovl_En_Niw_Girl
 DMA_TABLE_ENTRY ovl_En_Niw_Lady
 DMA_TABLE_ENTRY ovl_En_Nutsball
@@ -388,19 +375,14 @@ DMA_TABLE_ENTRY ovl_En_Ny
 DMA_TABLE_ENTRY ovl_En_OE2
 DMA_TABLE_ENTRY ovl_En_Okarina_Effect
 DMA_TABLE_ENTRY ovl_En_Okarina_Tag
-DMA_TABLE_ENTRY ovl_En_Okuta
 DMA_TABLE_ENTRY ovl_En_Ossan
 DMA_TABLE_ENTRY ovl_En_Owl
-DMA_TABLE_ENTRY ovl_En_Part
-DMA_TABLE_ENTRY ovl_En_Peehat
 DMA_TABLE_ENTRY ovl_En_Po_Desert
 DMA_TABLE_ENTRY ovl_En_Po_Field
 DMA_TABLE_ENTRY ovl_En_Po_Relay
 DMA_TABLE_ENTRY ovl_En_Po_Sisters
-DMA_TABLE_ENTRY ovl_En_Poh
 DMA_TABLE_ENTRY ovl_En_Pu_box
 DMA_TABLE_ENTRY ovl_En_Rd
-DMA_TABLE_ENTRY ovl_En_Reeba
 DMA_TABLE_ENTRY ovl_En_River_Sound
 DMA_TABLE_ENTRY ovl_En_Rl
 DMA_TABLE_ENTRY ovl_En_Rr
@@ -428,7 +410,6 @@ DMA_TABLE_ENTRY ovl_En_Ta
 DMA_TABLE_ENTRY ovl_En_Takara_Man
 DMA_TABLE_ENTRY ovl_En_Tana
 DMA_TABLE_ENTRY ovl_En_Tg
-DMA_TABLE_ENTRY ovl_En_Tite
 DMA_TABLE_ENTRY ovl_En_Tk
 DMA_TABLE_ENTRY ovl_En_Torch
 DMA_TABLE_ENTRY ovl_En_Torch2
@@ -443,7 +424,6 @@ DMA_TABLE_ENTRY ovl_En_Vb_Ball
 DMA_TABLE_ENTRY ovl_En_Viewer
 DMA_TABLE_ENTRY ovl_En_Vm
 DMA_TABLE_ENTRY ovl_En_Wall_Tubo
-DMA_TABLE_ENTRY ovl_En_Wallmas
 DMA_TABLE_ENTRY ovl_En_Weather_Tag
 DMA_TABLE_ENTRY ovl_En_Weiyer
 DMA_TABLE_ENTRY ovl_En_Wf
@@ -523,7 +503,6 @@ DMA_TABLE_ENTRY object_dodongo
 DMA_TABLE_ENTRY object_fire
 DMA_TABLE_ENTRY object_niw
 DMA_TABLE_ENTRY object_tite
-DMA_TABLE_ENTRY object_reeba
 DMA_TABLE_ENTRY object_peehat
 DMA_TABLE_ENTRY object_kingdodongo
 DMA_TABLE_ENTRY object_horse
