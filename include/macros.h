@@ -75,12 +75,37 @@
         osSyncPrintf(exp " = " format "\n", value); \
     } while (0)
 
+#ifndef NDEBUG
+#define LOG(exp, value, format, file, line)         \
+    do {                                            \
+        LogUtils_LogThreadId(file, line);           \
+        osSyncPrintf(exp " = " format "\n", value); \
+    } while (0)
+#else
+#define LOG(exp, value, format, file, line) ((void)0)
+#endif
+
+#ifndef NDEBUG
 #define LOG_STRING(string, file, line) LOG(#string, string, "%s", file, line)
 #define LOG_ADDRESS(exp, value, file, line) LOG(exp, value, "%08x", file, line)
 #define LOG_TIME(exp, value, file, line) LOG(exp, value, "%lld", file, line)
 #define LOG_NUM(exp, value, file, line) LOG(exp, value, "%d", file, line)
 #define LOG_HEX(exp, value, file, line) LOG(exp, value, "%x", file, line)
 #define LOG_FLOAT(exp, value, file, line) LOG(exp, value, "%f", file, line)
+#else
+#define LOG_STRING(string, file, line) ((void)0)
+#define LOG_ADDRESS(exp, value, file, line) ((void)0)
+#define LOG_TIME(exp, value, file, line) ((void)0)
+#define LOG_NUM(exp, value, file, line) ((void)0)
+#define LOG_HEX(exp, value, file, line) ((void)0)
+#define LOG_FLOAT(exp, value, file, line) ((void)0)
+#endif
+
+#ifdef NDEBUG
+#define ASSERT(cond) ((void)0)
+#else
+#define ASSERT(cond) ((cond) ? ((void)0) : __assert(#cond, __FILE__, __LINE__))
+#endif
 
 #define SET_NEXT_GAMESTATE(curState, newInit, newStruct) \
     do {                                                 \

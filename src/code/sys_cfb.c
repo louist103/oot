@@ -10,7 +10,7 @@ void SysCfb_Init(s32 n64dd) {
     if (osMemSize >= 0x800000U) {
         // 8MB or more memory is installed
         osSyncPrintf("８Ｍバイト以上のメモリが搭載されています\n");
-        tmpFbEnd = 0x8044BE80;
+        tmpFbEnd = 0x80800000;
         if (n64dd == 1) {
             // RAM 8M mode (N64DD compatible)
             osSyncPrintf("RAM 8M mode (N64DD対応)\n");
@@ -22,7 +22,7 @@ void SysCfb_Init(s32 n64dd) {
         }
     } else if (osMemSize >= 0x400000U) {
         osSyncPrintf("RAM4M mode\n");
-        sSysCfbEnd = 0x80400000;
+        sSysCfbEnd = 0x80800000;
     } else {
         LogUtils_HungupThread("../sys_cfb.c", 354);
     }
