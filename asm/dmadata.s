@@ -44,7 +44,6 @@ DMA_TABLE_ENTRY ovl_file_choose
 DMA_TABLE_ENTRY ovl_kaleido_scope
 DMA_TABLE_ENTRY ovl_player_actor
 DMA_TABLE_ENTRY ovl_map_mark_data
-DMA_TABLE_ENTRY ovl_Arms_Hook
 DMA_TABLE_ENTRY ovl_Arrow_Fire
 DMA_TABLE_ENTRY ovl_Arrow_Ice
 DMA_TABLE_ENTRY ovl_Arrow_Light
@@ -53,9 +52,6 @@ DMA_TABLE_ENTRY ovl_Bg_Bdan_Switch
 DMA_TABLE_ENTRY ovl_Bg_Bom_Guard
 DMA_TABLE_ENTRY ovl_Bg_Bombwall
 DMA_TABLE_ENTRY ovl_Bg_Bowl_Wall
-DMA_TABLE_ENTRY ovl_Bg_Breakwall
-DMA_TABLE_ENTRY ovl_Bg_Ddan_Jd
-DMA_TABLE_ENTRY ovl_Bg_Ddan_Kd
 DMA_TABLE_ENTRY ovl_Bg_Dy_Yoseizo
 DMA_TABLE_ENTRY ovl_Bg_Ganon_Otyuka
 DMA_TABLE_ENTRY ovl_Bg_Gate_Shutter
@@ -78,8 +74,6 @@ DMA_TABLE_ENTRY ovl_Bg_Haka_Water
 DMA_TABLE_ENTRY ovl_Bg_Haka_Zou
 DMA_TABLE_ENTRY ovl_Bg_Heavy_Block
 DMA_TABLE_ENTRY ovl_Bg_Hidan_Fwbig
-DMA_TABLE_ENTRY ovl_Bg_Hidan_Hamstep
-DMA_TABLE_ENTRY ovl_Bg_Hidan_Kousi
 DMA_TABLE_ENTRY ovl_Bg_Hidan_Kowarerukabe
 DMA_TABLE_ENTRY ovl_Bg_Ice_Objects
 DMA_TABLE_ENTRY ovl_Bg_Ice_Shelter
@@ -100,20 +94,14 @@ DMA_TABLE_ENTRY ovl_Bg_Jya_Kanaami
 DMA_TABLE_ENTRY ovl_Bg_Jya_Lift
 DMA_TABLE_ENTRY ovl_Bg_Jya_Megami
 DMA_TABLE_ENTRY ovl_Bg_Jya_Zurerukabe
-DMA_TABLE_ENTRY ovl_Bg_Menkuri_Eye
-DMA_TABLE_ENTRY ovl_Bg_Menkuri_Kaiten
 DMA_TABLE_ENTRY ovl_Bg_Menkuri_Nisekabe
 DMA_TABLE_ENTRY ovl_Bg_Mizu_Bwall
-DMA_TABLE_ENTRY ovl_Bg_Mizu_Movebg
 DMA_TABLE_ENTRY ovl_Bg_Mizu_Shutter
 DMA_TABLE_ENTRY ovl_Bg_Mizu_Uzu
-DMA_TABLE_ENTRY ovl_Bg_Mizu_Water
-DMA_TABLE_ENTRY ovl_Bg_Mjin
 DMA_TABLE_ENTRY ovl_Bg_Mori_Bigst
 DMA_TABLE_ENTRY ovl_Bg_Mori_Elevator
 DMA_TABLE_ENTRY ovl_Bg_Mori_Hashigo
 DMA_TABLE_ENTRY ovl_Bg_Mori_Hashira4
-DMA_TABLE_ENTRY ovl_Bg_Mori_Hineri
 DMA_TABLE_ENTRY ovl_Bg_Mori_Idomizu
 DMA_TABLE_ENTRY ovl_Bg_Mori_Kaitenkabe
 DMA_TABLE_ENTRY ovl_Bg_Mori_Rakkatenjo
@@ -149,8 +137,6 @@ DMA_TABLE_ENTRY ovl_Bg_Spot18_Futa
 DMA_TABLE_ENTRY ovl_Bg_Spot18_Obj
 DMA_TABLE_ENTRY ovl_Bg_Spot18_Shutter
 DMA_TABLE_ENTRY ovl_Bg_Sst_Floor
-DMA_TABLE_ENTRY ovl_Bg_Toki_Hikari
-DMA_TABLE_ENTRY ovl_Bg_Toki_Swd
 DMA_TABLE_ENTRY ovl_Bg_Umajump
 DMA_TABLE_ENTRY ovl_Bg_Vb_Sima
 DMA_TABLE_ENTRY ovl_Bg_Zg
@@ -181,8 +167,6 @@ DMA_TABLE_ENTRY ovl_Demo_Tre_Lgt
 DMA_TABLE_ENTRY ovl_Door_Ana
 DMA_TABLE_ENTRY ovl_Door_Gerudo
 DMA_TABLE_ENTRY ovl_Door_Killer
-DMA_TABLE_ENTRY ovl_Door_Toki
-DMA_TABLE_ENTRY ovl_Door_Warp1
 DMA_TABLE_ENTRY ovl_Efc_Erupc
 DMA_TABLE_ENTRY ovl_Eff_Dust
 DMA_TABLE_ENTRY ovl_Effect_Ss_Blast
@@ -223,18 +207,14 @@ DMA_TABLE_ENTRY ovl_Effect_Ss_Stick
 DMA_TABLE_ENTRY ovl_Effect_Ss_Stone1
 DMA_TABLE_ENTRY ovl_Elf_Msg
 DMA_TABLE_ENTRY ovl_Elf_Msg2
-DMA_TABLE_ENTRY ovl_En_Am
 DMA_TABLE_ENTRY ovl_En_Ani
 DMA_TABLE_ENTRY ovl_En_Anubice
 DMA_TABLE_ENTRY ovl_En_Anubice_Fire
 DMA_TABLE_ENTRY ovl_En_Anubice_Tag
-DMA_TABLE_ENTRY ovl_En_Arow_Trap
 DMA_TABLE_ENTRY ovl_En_Arrow
 DMA_TABLE_ENTRY ovl_En_Attack_Niw
 DMA_TABLE_ENTRY ovl_En_Ba
-DMA_TABLE_ENTRY ovl_En_Bb
 DMA_TABLE_ENTRY ovl_En_Bigokuta
-DMA_TABLE_ENTRY ovl_En_Bird
 DMA_TABLE_ENTRY ovl_En_Blkobj
 DMA_TABLE_ENTRY ovl_En_Bom_Bowl_Man
 DMA_TABLE_ENTRY ovl_En_Bom_Bowl_Pit
@@ -249,8 +229,6 @@ DMA_TABLE_ENTRY ovl_En_Crow
 DMA_TABLE_ENTRY ovl_En_Cs
 DMA_TABLE_ENTRY ovl_En_Daiku
 DMA_TABLE_ENTRY ovl_En_Daiku_Kakariko
-DMA_TABLE_ENTRY ovl_En_Dekubaba
-DMA_TABLE_ENTRY ovl_En_Dekunuts
 DMA_TABLE_ENTRY ovl_En_Dh
 DMA_TABLE_ENTRY ovl_En_Dha
 DMA_TABLE_ENTRY ovl_En_Diving_Game
@@ -269,7 +247,6 @@ DMA_TABLE_ENTRY ovl_En_Ex_Item
 DMA_TABLE_ENTRY ovl_En_Ex_Ruppy
 DMA_TABLE_ENTRY ovl_En_Fd
 DMA_TABLE_ENTRY ovl_En_Fd_Fire
-DMA_TABLE_ENTRY ovl_En_Fhg_Fire
 DMA_TABLE_ENTRY ovl_En_Fire_Rock
 DMA_TABLE_ENTRY ovl_En_Floormas
 DMA_TABLE_ENTRY ovl_En_Fr
@@ -298,7 +275,6 @@ DMA_TABLE_ENTRY ovl_En_Hintnuts
 DMA_TABLE_ENTRY ovl_En_Honotrap
 DMA_TABLE_ENTRY ovl_En_Horse_Game_Check
 DMA_TABLE_ENTRY ovl_En_Horse_Link_Child
-DMA_TABLE_ENTRY ovl_En_Horse_Zelda
 DMA_TABLE_ENTRY ovl_En_Hs
 DMA_TABLE_ENTRY ovl_En_Hs2
 DMA_TABLE_ENTRY ovl_En_Hy
@@ -307,7 +283,6 @@ DMA_TABLE_ENTRY ovl_En_Ik
 DMA_TABLE_ENTRY ovl_En_In
 DMA_TABLE_ENTRY ovl_En_Ishi
 DMA_TABLE_ENTRY ovl_En_It
-DMA_TABLE_ENTRY ovl_En_Jj
 DMA_TABLE_ENTRY ovl_En_Js
 DMA_TABLE_ENTRY ovl_En_Jsjutan
 DMA_TABLE_ENTRY ovl_En_Kakasi
@@ -319,9 +294,6 @@ DMA_TABLE_ENTRY ovl_En_Ko
 DMA_TABLE_ENTRY ovl_En_Kusa
 DMA_TABLE_ENTRY ovl_En_Kz
 DMA_TABLE_ENTRY ovl_En_Light
-DMA_TABLE_ENTRY ovl_En_Lightbox
-DMA_TABLE_ENTRY ovl_En_M_Fire1
-DMA_TABLE_ENTRY ovl_En_M_Thunder
 DMA_TABLE_ENTRY ovl_En_Ma1
 DMA_TABLE_ENTRY ovl_En_Ma2
 DMA_TABLE_ENTRY ovl_En_Ma3
@@ -345,7 +317,6 @@ DMA_TABLE_ENTRY ovl_En_Po_Desert
 DMA_TABLE_ENTRY ovl_En_Po_Field
 DMA_TABLE_ENTRY ovl_En_Po_Relay
 DMA_TABLE_ENTRY ovl_En_Po_Sisters
-DMA_TABLE_ENTRY ovl_En_Pu_box
 DMA_TABLE_ENTRY ovl_En_Rd
 DMA_TABLE_ENTRY ovl_En_Rl
 DMA_TABLE_ENTRY ovl_En_Rr
@@ -375,10 +346,7 @@ DMA_TABLE_ENTRY ovl_En_Tk
 DMA_TABLE_ENTRY ovl_En_Torch
 DMA_TABLE_ENTRY ovl_En_Toryo
 DMA_TABLE_ENTRY ovl_En_Tr
-DMA_TABLE_ENTRY ovl_En_Trap
 DMA_TABLE_ENTRY ovl_En_Tubo_Trap
-DMA_TABLE_ENTRY ovl_En_Vali
-DMA_TABLE_ENTRY ovl_En_Vase
 DMA_TABLE_ENTRY ovl_En_Vb_Ball
 DMA_TABLE_ENTRY ovl_En_Vm
 DMA_TABLE_ENTRY ovl_En_Wall_Tubo
@@ -388,16 +356,12 @@ DMA_TABLE_ENTRY ovl_En_Wf
 DMA_TABLE_ENTRY ovl_En_Wonder_Item
 DMA_TABLE_ENTRY ovl_En_Wonder_Talk
 DMA_TABLE_ENTRY ovl_En_Wonder_Talk2
-DMA_TABLE_ENTRY ovl_En_Wood02
 DMA_TABLE_ENTRY ovl_En_Yabusame_Mark
-DMA_TABLE_ENTRY ovl_En_Yukabyun
 DMA_TABLE_ENTRY ovl_En_Zl3
 DMA_TABLE_ENTRY ovl_En_Zl4
 DMA_TABLE_ENTRY ovl_En_Zo
-DMA_TABLE_ENTRY ovl_En_fHG
 DMA_TABLE_ENTRY ovl_End_Title
 DMA_TABLE_ENTRY ovl_Fishing
-DMA_TABLE_ENTRY ovl_Item_B_Heart
 DMA_TABLE_ENTRY ovl_Item_Etcetera
 DMA_TABLE_ENTRY ovl_Item_Inbox
 DMA_TABLE_ENTRY ovl_Item_Ocarina
@@ -428,7 +392,6 @@ DMA_TABLE_ENTRY ovl_Obj_Mure3
 DMA_TABLE_ENTRY ovl_Obj_Oshihiki
 DMA_TABLE_ENTRY ovl_Obj_Roomtimer
 DMA_TABLE_ENTRY ovl_Obj_Switch
-DMA_TABLE_ENTRY ovl_Obj_Syokudai
 DMA_TABLE_ENTRY ovl_Obj_Timeblock
 DMA_TABLE_ENTRY ovl_Obj_Tsubo
 DMA_TABLE_ENTRY ovl_Obj_Warp2block
@@ -506,7 +469,6 @@ DMA_TABLE_ENTRY object_horse_zelda
 DMA_TABLE_ENTRY object_opening_demo1
 DMA_TABLE_ENTRY object_warp1
 DMA_TABLE_ENTRY object_b_heart
-DMA_TABLE_ENTRY object_dekunuts
 DMA_TABLE_ENTRY object_oE3
 DMA_TABLE_ENTRY object_oE4
 DMA_TABLE_ENTRY object_menkuri_objects
@@ -528,7 +490,6 @@ DMA_TABLE_ENTRY object_Bb
 DMA_TABLE_ENTRY object_toki_objects
 DMA_TABLE_ENTRY object_yukabyun
 DMA_TABLE_ENTRY object_zl2
-DMA_TABLE_ENTRY object_mjin
 DMA_TABLE_ENTRY object_mjin_flash
 DMA_TABLE_ENTRY object_mjin_dark
 DMA_TABLE_ENTRY object_mjin_flame
@@ -549,7 +510,6 @@ DMA_TABLE_ENTRY object_spot08_obj
 DMA_TABLE_ENTRY object_warp2
 DMA_TABLE_ENTRY object_hata
 DMA_TABLE_ENTRY object_bird
-DMA_TABLE_ENTRY object_wood02
 DMA_TABLE_ENTRY object_lightbox
 DMA_TABLE_ENTRY object_pu_box
 DMA_TABLE_ENTRY object_trap
