@@ -7811,8 +7811,8 @@ s32 Camera_ChangeDataIdx(Camera* camera, s32 camDataIdx) {
 
 Vec3s* Camera_GetInputDir(Vec3s* dst, Camera* camera) {
     if (gDbgCamEnabled) {
-        *dst = D_8015BD80.unk_10C6;
-        return dst;
+        //*dst = D_8015BD80.unk_10C6;
+        //return dst;
     } else {
         *dst = camera->inputDir;
         return dst;
@@ -7835,8 +7835,8 @@ s16 Camera_GetInputDirYaw(Camera* camera) {
 
 Vec3s* Camera_GetCamDir(Vec3s* dst, Camera* camera) {
     if (gDbgCamEnabled) {
-        *dst = D_8015BD80.unk_10C6;
-        return dst;
+        //*dst = D_8015BD80.unk_10C6;
+        //return dst;
     } else {
         *dst = camera->camDir;
         return dst;

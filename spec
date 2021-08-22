@@ -529,14 +529,62 @@ beginseg
     include "build/src/overlays/actors/ovl_En_Dodongo/z_en_dodongo.o"
     include "build/src/overlays/actors/ovl_En_Firefly/z_en_firefly.o"
     include "build/src/overlays/actors/ovl_En_Horse/z_en_horse.o"
-    
     include "build/src/overlays/actors/ovl_En_Elf/z_en_elf.o"
     include "build/src/overlays/actors/ovl_En_Niw/z_en_niw.o"
     include "build/src/overlays/actors/ovl_En_Tite/z_en_tite.o"
     include "build/src/overlays/actors/ovl_En_Reeba/z_en_reeba.o"
     include "build/src/overlays/actors/ovl_En_Peehat/z_en_peehat.o"
     include "build/src/overlays/actors/ovl_En_Butte/z_en_butte.o"
-
+    include "build/src/overlays/actors/ovl_En_Insect/z_en_insect.o"
+    include "build/src/overlays/actors/ovl_En_Fish/z_en_fish.o"
+    include "build/src/overlays/actors/ovl_En_Holl/z_en_holl.o"
+    include "build/src/overlays/actors/ovl_En_Scene_Change/z_en_scene_change.o"
+    include "build/src/overlays/actors/ovl_En_Zf/z_en_zf.o"
+    include "build/data/overlays/actors/z_en_zf.data.o"
+    include "build/data/overlays/actors/z_en_zf.bss.o"
+    include "build/src/overlays/actors/ovl_En_Hata/z_en_hata.o"
+    include "build/src/overlays/actors/ovl_Boss_Dodongo/z_boss_dodongo.o"
+    include "build/src/overlays/actors/ovl_Boss_Goma/z_boss_goma.o"
+    include "build/src/overlays/actors/ovl_En_Zl1/z_en_zl1.o"
+    include "build/src/overlays/actors/ovl_En_Viewer/z_en_viewer.o"
+    include "build/src/overlays/actors/ovl_En_Goma/z_en_goma.o"
+    include "build/src/overlays/actors/ovl_Door_Shutter/z_door_shutter.o"
+    include "build/src/overlays/actors/ovl_En_Dodojr/z_en_dodojr.o"
+    include "build/src/overlays/actors/ovl_En_Bdfire/z_en_bdfire.o"
+    include "build/src/overlays/actors/ovl_En_Boom/z_en_boom.o"
+    include "build/src/overlays/actors/ovl_En_Torch2/z_en_torch2.o"
+    include "build/src/overlays/actors/ovl_En_Bili/z_en_bili.o"
+    include "build/src/overlays/actors/ovl_En_Tp/z_en_tp.o"
+    include "build/src/overlays/actors/ovl_En_St/z_en_st.o"
+    include "build/src/overlays/actors/ovl_En_Bw/z_en_bw.o"
+    
+    include "build/src/overlays/actors/ovl_En_Eiyer/z_en_eiyer.o"
+    include "build/src/overlays/actors/ovl_En_River_Sound/z_en_river_sound.o"
+    include "build/src/overlays/actors/ovl_En_Horse_Normal/z_en_horse_normal.o"
+    include "build/src/overlays/actors/ovl_En_Ossan/z_en_ossan.o"
+    include "build/src/overlays/actors/ovl_Bg_Treemouth/z_bg_treemouth.o"
+    include "build/src/overlays/actors/ovl_Bg_Dodoago/z_bg_dodoago.o"
+    include "build/src/overlays/actors/ovl_Bg_Hidan_Dalm/z_bg_hidan_dalm.o"
+    include "build/src/overlays/actors/ovl_Bg_Hidan_Hrock/z_bg_hidan_hrock.o"
+    include "build/src/overlays/actors/ovl_En_Horse_Ganon/z_en_horse_ganon.o"
+    include "build/src/overlays/actors/ovl_Bg_Hidan_Rock/z_bg_hidan_rock.o"
+    include "build/src/overlays/actors/ovl_Bg_Hidan_Rsekizou/z_bg_hidan_rsekizou.o"
+    include "build/src/overlays/actors/ovl_Bg_Hidan_Sekizou/z_bg_hidan_sekizou.o"
+    include "build/data/overlays/actors/z_bg_hidan_sekizou.data.o"
+    include "build/src/overlays/actors/ovl_Bg_Hidan_Sima/z_bg_hidan_sima.o"
+    include "build/src/overlays/actors/ovl_Bg_Hidan_Syoku/z_bg_hidan_syoku.o"
+    include "build/src/overlays/actors/ovl_En_Xc/z_en_xc.o"
+    include "build/src/overlays/actors/ovl_Bg_Hidan_Curtain/z_bg_hidan_curtain.o"
+    include "build/src/overlays/actors/ovl_Bg_Spot00_Hanebasi/z_bg_spot00_hanebasi.o"
+    include "build/src/overlays/actors/ovl_En_Mb/z_en_mb.o"
+    include "build/src/overlays/actors/ovl_En_Bombf/z_en_bombf.o"
+    include "build/src/overlays/actors/ovl_En_Zl2/z_en_zl2.o"
+    include "build/src/overlays/actors/ovl_Bg_Hidan_Fslift/z_bg_hidan_fslift.o"
+    include "build/src/overlays/actors/ovl_En_OE2/z_en_oe2.o"
+    include "build/src/overlays/actors/ovl_Bg_Ydan_Hasi/z_bg_ydan_hasi.o"
+    include "build/src/overlays/actors/ovl_Bg_Ydan_Maruta/z_bg_ydan_maruta.o"
+    include "build/src/overlays/actors/ovl_Boss_Ganondrof/z_boss_ganondrof.o"
+    
 endseg
 
 beginseg
@@ -680,12 +728,6 @@ beginseg
 endseg
 
 beginseg
-    name "ovl_Bg_Dodoago"
-    include "build/src/overlays/actors/ovl_Bg_Dodoago/z_bg_dodoago.o"
-    include "build/src/overlays/actors/ovl_Bg_Dodoago/ovl_Bg_Dodoago_reloc.o"
-endseg
-
-beginseg
     name "ovl_Bg_Dy_Yoseizo"
     include "build/src/overlays/actors/ovl_Bg_Dy_Yoseizo/z_bg_dy_yoseizo.o"
     include "build/src/overlays/actors/ovl_Bg_Dy_Yoseizo/ovl_Bg_Dy_Yoseizo_reloc.o"
@@ -812,24 +854,6 @@ beginseg
 endseg
 
 beginseg
-    name "ovl_Bg_Hidan_Curtain"
-    include "build/src/overlays/actors/ovl_Bg_Hidan_Curtain/z_bg_hidan_curtain.o"
-    include "build/src/overlays/actors/ovl_Bg_Hidan_Curtain/ovl_Bg_Hidan_Curtain_reloc.o"
-endseg
-
-beginseg
-    name "ovl_Bg_Hidan_Dalm"
-    include "build/src/overlays/actors/ovl_Bg_Hidan_Dalm/z_bg_hidan_dalm.o"
-    include "build/src/overlays/actors/ovl_Bg_Hidan_Dalm/ovl_Bg_Hidan_Dalm_reloc.o"
-endseg
-
-beginseg
-    name "ovl_Bg_Hidan_Fslift"
-    include "build/src/overlays/actors/ovl_Bg_Hidan_Fslift/z_bg_hidan_fslift.o"
-    include "build/src/overlays/actors/ovl_Bg_Hidan_Fslift/ovl_Bg_Hidan_Fslift_reloc.o"
-endseg
-
-beginseg
     name "ovl_Bg_Hidan_Fwbig"
     include "build/src/overlays/actors/ovl_Bg_Hidan_Fwbig/z_bg_hidan_fwbig.o"
     include "build/src/overlays/actors/ovl_Bg_Hidan_Fwbig/ovl_Bg_Hidan_Fwbig_reloc.o"
@@ -842,12 +866,6 @@ beginseg
 endseg
 
 beginseg
-    name "ovl_Bg_Hidan_Hrock"
-    include "build/src/overlays/actors/ovl_Bg_Hidan_Hrock/z_bg_hidan_hrock.o"
-    include "build/src/overlays/actors/ovl_Bg_Hidan_Hrock/ovl_Bg_Hidan_Hrock_reloc.o"
-endseg
-
-beginseg
     name "ovl_Bg_Hidan_Kousi"
     include "build/src/overlays/actors/ovl_Bg_Hidan_Kousi/z_bg_hidan_kousi.o"
     include "build/src/overlays/actors/ovl_Bg_Hidan_Kousi/ovl_Bg_Hidan_Kousi_reloc.o"
@@ -857,37 +875,6 @@ beginseg
     name "ovl_Bg_Hidan_Kowarerukabe"
     include "build/src/overlays/actors/ovl_Bg_Hidan_Kowarerukabe/z_bg_hidan_kowarerukabe.o"
     include "build/src/overlays/actors/ovl_Bg_Hidan_Kowarerukabe/ovl_Bg_Hidan_Kowarerukabe_reloc.o"
-endseg
-
-beginseg
-    name "ovl_Bg_Hidan_Rock"
-    include "build/src/overlays/actors/ovl_Bg_Hidan_Rock/z_bg_hidan_rock.o"
-    include "build/src/overlays/actors/ovl_Bg_Hidan_Rock/ovl_Bg_Hidan_Rock_reloc.o"
-endseg
-
-beginseg
-    name "ovl_Bg_Hidan_Rsekizou"
-    include "build/src/overlays/actors/ovl_Bg_Hidan_Rsekizou/z_bg_hidan_rsekizou.o"
-    include "build/src/overlays/actors/ovl_Bg_Hidan_Rsekizou/ovl_Bg_Hidan_Rsekizou_reloc.o"
-endseg
-
-beginseg
-    name "ovl_Bg_Hidan_Sekizou"
-    include "build/src/overlays/actors/ovl_Bg_Hidan_Sekizou/z_bg_hidan_sekizou.o"
-    include "build/data/overlays/actors/z_bg_hidan_sekizou.data.o"
-    include "build/data/overlays/actors/z_bg_hidan_sekizou.reloc.o"
-endseg
-
-beginseg
-    name "ovl_Bg_Hidan_Sima"
-    include "build/src/overlays/actors/ovl_Bg_Hidan_Sima/z_bg_hidan_sima.o"
-    include "build/src/overlays/actors/ovl_Bg_Hidan_Sima/ovl_Bg_Hidan_Sima_reloc.o"
-endseg
-
-beginseg
-    name "ovl_Bg_Hidan_Syoku"
-    include "build/src/overlays/actors/ovl_Bg_Hidan_Syoku/z_bg_hidan_syoku.o"
-    include "build/src/overlays/actors/ovl_Bg_Hidan_Syoku/ovl_Bg_Hidan_Syoku_reloc.o"
 endseg
 
 beginseg
@@ -1145,12 +1132,6 @@ beginseg
 endseg
 
 beginseg
-    name "ovl_Bg_Spot00_Hanebasi"
-    include "build/src/overlays/actors/ovl_Bg_Spot00_Hanebasi/z_bg_spot00_hanebasi.o"
-    include "build/src/overlays/actors/ovl_Bg_Spot00_Hanebasi/ovl_Bg_Spot00_Hanebasi_reloc.o"
-endseg
-
-beginseg
     name "ovl_Bg_Spot01_Fusya"
     include "build/src/overlays/actors/ovl_Bg_Spot01_Fusya/z_bg_spot01_fusya.o"
     include "build/src/overlays/actors/ovl_Bg_Spot01_Fusya/ovl_Bg_Spot01_Fusya_reloc.o"
@@ -1334,12 +1315,6 @@ beginseg
 endseg
 
 beginseg
-    name "ovl_Bg_Treemouth"
-    include "build/src/overlays/actors/ovl_Bg_Treemouth/z_bg_treemouth.o"
-    include "build/src/overlays/actors/ovl_Bg_Treemouth/ovl_Bg_Treemouth_reloc.o"
-endseg
-
-beginseg
     name "ovl_Bg_Umajump"
     include "build/src/overlays/actors/ovl_Bg_Umajump/z_bg_umajump.o"
     include "build/src/overlays/actors/ovl_Bg_Umajump/ovl_Bg_Umajump_reloc.o"
@@ -1352,27 +1327,9 @@ beginseg
 endseg
 
 beginseg
-    name "ovl_Bg_Ydan_Hasi"
-    include "build/src/overlays/actors/ovl_Bg_Ydan_Hasi/z_bg_ydan_hasi.o"
-    include "build/src/overlays/actors/ovl_Bg_Ydan_Hasi/ovl_Bg_Ydan_Hasi_reloc.o"
-endseg
-
-beginseg
-    name "ovl_Bg_Ydan_Maruta"
-    include "build/src/overlays/actors/ovl_Bg_Ydan_Maruta/z_bg_ydan_maruta.o"
-    include "build/src/overlays/actors/ovl_Bg_Ydan_Maruta/ovl_Bg_Ydan_Maruta_reloc.o"
-endseg
-
-beginseg
     name "ovl_Bg_Zg"
     include "build/src/overlays/actors/ovl_Bg_Zg/z_bg_zg.o"
     include "build/src/overlays/actors/ovl_Bg_Zg/ovl_Bg_Zg_reloc.o"
-endseg
-
-beginseg
-    name "ovl_Boss_Dodongo"
-    include "build/src/overlays/actors/ovl_Boss_Dodongo/z_boss_dodongo.o"
-    include "build/src/overlays/actors/ovl_Boss_Dodongo/ovl_Boss_Dodongo_reloc.o"
 endseg
 
 beginseg
@@ -1403,18 +1360,6 @@ beginseg
 #else
     include "build/data/overlays/actors/z_boss_ganon2.reloc.o"
 #endif
-endseg
-
-beginseg
-    name "ovl_Boss_Ganondrof"
-    include "build/src/overlays/actors/ovl_Boss_Ganondrof/z_boss_ganondrof.o"
-    include "build/src/overlays/actors/ovl_Boss_Ganondrof/ovl_Boss_Ganondrof_reloc.o"
-endseg
-
-beginseg
-    name "ovl_Boss_Goma"
-    include "build/src/overlays/actors/ovl_Boss_Goma/z_boss_goma.o"
-    include "build/src/overlays/actors/ovl_Boss_Goma/ovl_Boss_Goma_reloc.o"
 endseg
 
 beginseg
@@ -1565,12 +1510,6 @@ beginseg
     name "ovl_Door_Killer"
     include "build/src/overlays/actors/ovl_Door_Killer/z_door_killer.o"
     include "build/src/overlays/actors/ovl_Door_Killer/ovl_Door_Killer_reloc.o"
-endseg
-
-beginseg
-    name "ovl_Door_Shutter"
-    include "build/src/overlays/actors/ovl_Door_Shutter/z_door_shutter.o"
-    include "build/src/overlays/actors/ovl_Door_Shutter/ovl_Door_Shutter_reloc.o"
 endseg
 
 beginseg
@@ -1888,21 +1827,9 @@ beginseg
 endseg
 
 beginseg
-    name "ovl_En_Bdfire"
-    include "build/src/overlays/actors/ovl_En_Bdfire/z_en_bdfire.o"
-    include "build/src/overlays/actors/ovl_En_Bdfire/ovl_En_Bdfire_reloc.o"
-endseg
-
-beginseg
     name "ovl_En_Bigokuta"
     include "build/src/overlays/actors/ovl_En_Bigokuta/z_en_bigokuta.o"
     include "build/src/overlays/actors/ovl_En_Bigokuta/ovl_En_Bigokuta_reloc.o"
-endseg
-
-beginseg
-    name "ovl_En_Bili"
-    include "build/src/overlays/actors/ovl_En_Bili/z_en_bili.o"
-    include "build/src/overlays/actors/ovl_En_Bili/ovl_En_Bili_reloc.o"
 endseg
 
 beginseg
@@ -1936,18 +1863,6 @@ beginseg
 endseg
 
 beginseg
-    name "ovl_En_Bombf"
-    include "build/src/overlays/actors/ovl_En_Bombf/z_en_bombf.o"
-    include "build/src/overlays/actors/ovl_En_Bombf/ovl_En_Bombf_reloc.o"
-endseg
-
-beginseg
-    name "ovl_En_Boom"
-    include "build/src/overlays/actors/ovl_En_Boom/z_en_boom.o"
-    include "build/src/overlays/actors/ovl_En_Boom/ovl_En_Boom_reloc.o"
-endseg
-
-beginseg
     name "ovl_En_Brob"
     include "build/src/overlays/actors/ovl_En_Brob/z_en_brob.o"
     include "build/src/overlays/actors/ovl_En_Brob/ovl_En_Brob_reloc.o"
@@ -1957,12 +1872,6 @@ beginseg
     name "ovl_En_Bubble"
     include "build/src/overlays/actors/ovl_En_Bubble/z_en_bubble.o"
     include "build/src/overlays/actors/ovl_En_Bubble/ovl_En_Bubble_reloc.o"
-endseg
-
-beginseg
-    name "ovl_En_Bw"
-    include "build/src/overlays/actors/ovl_En_Bw/z_en_bw.o"
-    include "build/src/overlays/actors/ovl_En_Bw/ovl_En_Bw_reloc.o"
 endseg
 
 beginseg
@@ -2068,12 +1977,6 @@ beginseg
 endseg
 
 beginseg
-    name "ovl_En_Dodojr"
-    include "build/src/overlays/actors/ovl_En_Dodojr/z_en_dodojr.o"
-    include "build/src/overlays/actors/ovl_En_Dodojr/ovl_En_Dodojr_reloc.o"
-endseg
-
-beginseg
     name "ovl_En_Dog"
     include "build/src/overlays/actors/ovl_En_Dog/z_en_dog.o"
     include "build/src/overlays/actors/ovl_En_Dog/ovl_En_Dog_reloc.o"
@@ -2101,12 +2004,6 @@ beginseg
     name "ovl_En_Eg"
     include "build/src/overlays/actors/ovl_En_Eg/z_en_eg.o"
     include "build/src/overlays/actors/ovl_En_Eg/ovl_En_Eg_reloc.o"
-endseg
-
-beginseg
-    name "ovl_En_Eiyer"
-    include "build/src/overlays/actors/ovl_En_Eiyer/z_en_eiyer.o"
-    include "build/src/overlays/actors/ovl_En_Eiyer/ovl_En_Eiyer_reloc.o"
 endseg
 
 beginseg
@@ -2155,12 +2052,6 @@ beginseg
     name "ovl_En_Fire_Rock"
     include "build/src/overlays/actors/ovl_En_Fire_Rock/z_en_fire_rock.o"
     include "build/src/overlays/actors/ovl_En_Fire_Rock/ovl_En_Fire_Rock_reloc.o"
-endseg
-
-beginseg
-    name "ovl_En_Fish"
-    include "build/src/overlays/actors/ovl_En_Fish/z_en_fish.o"
-    include "build/src/overlays/actors/ovl_En_Fish/ovl_En_Fish_reloc.o"
 endseg
 
 beginseg
@@ -2262,12 +2153,6 @@ beginseg
 endseg
 
 beginseg
-    name "ovl_En_Goma"
-    include "build/src/overlays/actors/ovl_En_Goma/z_en_goma.o"
-    include "build/src/overlays/actors/ovl_En_Goma/ovl_En_Goma_reloc.o"
-endseg
-
-beginseg
     name "ovl_En_Goroiwa"
     include "build/src/overlays/actors/ovl_En_Goroiwa/z_en_goroiwa.o"
     include "build/src/overlays/actors/ovl_En_Goroiwa/ovl_En_Goroiwa_reloc.o"
@@ -2283,12 +2168,6 @@ beginseg
     name "ovl_En_Guest"
     include "build/src/overlays/actors/ovl_En_Guest/z_en_guest.o"
     include "build/src/overlays/actors/ovl_En_Guest/ovl_En_Guest_reloc.o"
-endseg
-
-beginseg
-    name "ovl_En_Hata"
-    include "build/src/overlays/actors/ovl_En_Hata/z_en_hata.o"
-    include "build/src/overlays/actors/ovl_En_Hata/ovl_En_Hata_reloc.o"
 endseg
 
 beginseg
@@ -2322,12 +2201,6 @@ beginseg
 endseg
 
 beginseg
-    name "ovl_En_Holl"
-    include "build/src/overlays/actors/ovl_En_Holl/z_en_holl.o"
-    include "build/src/overlays/actors/ovl_En_Holl/ovl_En_Holl_reloc.o"
-endseg
-
-beginseg
     name "ovl_En_Honotrap"
     include "build/src/overlays/actors/ovl_En_Honotrap/z_en_honotrap.o"
     include "build/src/overlays/actors/ovl_En_Honotrap/ovl_En_Honotrap_reloc.o"
@@ -2340,21 +2213,9 @@ beginseg
 endseg
 
 beginseg
-    name "ovl_En_Horse_Ganon"
-    include "build/src/overlays/actors/ovl_En_Horse_Ganon/z_en_horse_ganon.o"
-    include "build/src/overlays/actors/ovl_En_Horse_Ganon/ovl_En_Horse_Ganon_reloc.o"
-endseg
-
-beginseg
     name "ovl_En_Horse_Link_Child"
     include "build/src/overlays/actors/ovl_En_Horse_Link_Child/z_en_horse_link_child.o"
     include "build/src/overlays/actors/ovl_En_Horse_Link_Child/ovl_En_Horse_Link_Child_reloc.o"
-endseg
-
-beginseg
-    name "ovl_En_Horse_Normal"
-    include "build/src/overlays/actors/ovl_En_Horse_Normal/z_en_horse_normal.o"
-    include "build/src/overlays/actors/ovl_En_Horse_Normal/ovl_En_Horse_Normal_reloc.o"
 endseg
 
 beginseg
@@ -2397,12 +2258,6 @@ beginseg
     name "ovl_En_In"
     include "build/src/overlays/actors/ovl_En_In/z_en_in.o"
     include "build/src/overlays/actors/ovl_En_In/ovl_En_In_reloc.o"
-endseg
-
-beginseg
-    name "ovl_En_Insect"
-    include "build/src/overlays/actors/ovl_En_Insect/z_en_insect.o"
-    include "build/src/overlays/actors/ovl_En_Insect/ovl_En_Insect_reloc.o"
 endseg
 
 beginseg
@@ -2536,12 +2391,6 @@ beginseg
 endseg
 
 beginseg
-    name "ovl_En_Mb"
-    include "build/src/overlays/actors/ovl_En_Mb/z_en_mb.o"
-	include "build/src/overlays/actors/ovl_En_Mb/ovl_En_Mb_reloc.o"
-endseg
-
-beginseg
     name "ovl_En_Md"
     include "build/src/overlays/actors/ovl_En_Md/z_en_md.o"
     include "build/src/overlays/actors/ovl_En_Md/ovl_En_Md_reloc.o"
@@ -2614,12 +2463,6 @@ beginseg
 endseg
 
 beginseg
-    name "ovl_En_OE2"
-    include "build/src/overlays/actors/ovl_En_OE2/z_en_oe2.o"
-    include "build/src/overlays/actors/ovl_En_OE2/ovl_En_OE2_reloc.o"
-endseg
-
-beginseg
     name "ovl_En_Okarina_Effect"
     include "build/src/overlays/actors/ovl_En_Okarina_Effect/z_en_okarina_effect.o"
     include "build/src/overlays/actors/ovl_En_Okarina_Effect/ovl_En_Okarina_Effect_reloc.o"
@@ -2630,12 +2473,6 @@ beginseg
     include "build/src/overlays/actors/ovl_En_Okarina_Tag/z_en_okarina_tag_cutscene_data.o"
     include "build/src/overlays/actors/ovl_En_Okarina_Tag/z_en_okarina_tag.o"
     include "build/src/overlays/actors/ovl_En_Okarina_Tag/ovl_En_Okarina_Tag_reloc.o"
-endseg
-
-beginseg
-    name "ovl_En_Ossan"
-    include "build/src/overlays/actors/ovl_En_Ossan/z_en_ossan.o"
-    include "build/src/overlays/actors/ovl_En_Ossan/ovl_En_Ossan_reloc.o"
 endseg
 
 beginseg
@@ -2681,12 +2518,6 @@ beginseg
 endseg
 
 beginseg
-    name "ovl_En_River_Sound"
-    include "build/src/overlays/actors/ovl_En_River_Sound/z_en_river_sound.o"
-    include "build/src/overlays/actors/ovl_En_River_Sound/ovl_En_River_Sound_reloc.o"
-endseg
-
-beginseg
     name "ovl_En_Rl"
     include "build/src/overlays/actors/ovl_En_Rl/z_en_rl.o"
     include "build/src/overlays/actors/ovl_En_Rl/ovl_En_Rl_reloc.o"
@@ -2720,12 +2551,6 @@ beginseg
     name "ovl_En_Sb"
     include "build/src/overlays/actors/ovl_En_Sb/z_en_sb.o"
     include "build/src/overlays/actors/ovl_En_Sb/ovl_En_Sb_reloc.o"
-endseg
-
-beginseg
-    name "ovl_En_Scene_Change"
-    include "build/src/overlays/actors/ovl_En_Scene_Change/z_en_scene_change.o"
-    include "build/src/overlays/actors/ovl_En_Scene_Change/ovl_En_Scene_Change_reloc.o"
 endseg
 
 beginseg
@@ -2774,12 +2599,6 @@ beginseg
     name "ovl_En_Ssh"
     include "build/src/overlays/actors/ovl_En_Ssh/z_en_ssh.o"
     include "build/src/overlays/actors/ovl_En_Ssh/ovl_En_Ssh_reloc.o"
-endseg
-
-beginseg
-    name "ovl_En_St"
-    include "build/src/overlays/actors/ovl_En_St/z_en_st.o"
-    include "build/src/overlays/actors/ovl_En_St/ovl_En_St_reloc.o"
 endseg
 
 beginseg
@@ -2855,29 +2674,9 @@ beginseg
 endseg
 
 beginseg
-    name "ovl_En_Torch2"
-    include "build/src/overlays/actors/ovl_En_Torch2/z_en_torch2.o"
-#ifdef NON_MATCHING
-    include "build/src/overlays/actors/ovl_En_Torch2/ovl_En_Torch2_reloc.o"
-#else
-    include "build/data/overlays/actors/z_en_torch2.reloc.o"
-#endif
-endseg
-
-beginseg
     name "ovl_En_Toryo"
     include "build/src/overlays/actors/ovl_En_Toryo/z_en_toryo.o"
     include "build/src/overlays/actors/ovl_En_Toryo/ovl_En_Toryo_reloc.o"
-endseg
-
-beginseg
-    name "ovl_En_Tp"
-    include "build/src/overlays/actors/ovl_En_Tp/z_en_tp.o"
-#ifdef NON_MATCHING
-    include "build/src/overlays/actors/ovl_En_Tp/ovl_En_Tp_reloc.o"
-#else
-    include "build/data/overlays/actors/z_en_tp.reloc.o"
-#endif
 endseg
 
 beginseg
@@ -2914,12 +2713,6 @@ beginseg
     name "ovl_En_Vb_Ball"
     include "build/src/overlays/actors/ovl_En_Vb_Ball/z_en_vb_ball.o"
     include "build/src/overlays/actors/ovl_En_Vb_Ball/ovl_En_Vb_Ball_reloc.o"
-endseg
-
-beginseg
-    name "ovl_En_Viewer"
-    include "build/src/overlays/actors/ovl_En_Viewer/z_en_viewer.o"
-    include "build/src/overlays/actors/ovl_En_Viewer/ovl_En_Viewer_reloc.o"
 endseg
 
 beginseg
@@ -2978,12 +2771,6 @@ beginseg
 endseg
 
 beginseg
-    name "ovl_En_Xc"
-    include "build/src/overlays/actors/ovl_En_Xc/z_en_xc.o"
-    include "build/src/overlays/actors/ovl_En_Xc/ovl_En_Xc_reloc.o"
-endseg
-
-beginseg
     name "ovl_En_Yabusame_Mark"
     include "build/src/overlays/actors/ovl_En_Yabusame_Mark/z_en_yabusame_mark.o"
 #ifdef NON_MATCHING
@@ -2997,26 +2784,6 @@ beginseg
     name "ovl_En_Yukabyun"
     include "build/src/overlays/actors/ovl_En_Yukabyun/z_en_yukabyun.o"
     include "build/src/overlays/actors/ovl_En_Yukabyun/ovl_En_Yukabyun_reloc.o"
-endseg
-
-beginseg
-    name "ovl_En_Zf"
-    include "build/src/overlays/actors/ovl_En_Zf/z_en_zf.o"
-    include "build/data/overlays/actors/z_en_zf.data.o"
-    include "build/data/overlays/actors/z_en_zf.bss.o"
-    include "build/data/overlays/actors/z_en_zf.reloc.o"
-endseg
-
-beginseg
-    name "ovl_En_Zl1"
-    include "build/src/overlays/actors/ovl_En_Zl1/z_en_zl1.o"
-    include "build/src/overlays/actors/ovl_En_Zl1/ovl_En_Zl1_reloc.o"
-endseg
-
-beginseg
-    name "ovl_En_Zl2"
-    include "build/src/overlays/actors/ovl_En_Zl2/z_en_zl2.o"
-    include "build/src/overlays/actors/ovl_En_Zl2/ovl_En_Zl2_reloc.o"
 endseg
 
 beginseg

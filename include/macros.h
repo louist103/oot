@@ -68,13 +68,6 @@
 #define CHECK_BTN_ALL(state, combo) (~((state) | ~(combo)) == 0)
 #define CHECK_BTN_ANY(state, combo) (((state) & (combo)) != 0)
 
-
-#define LOG(exp, value, format, file, line)         \
-    do {                                            \
-        LogUtils_LogThreadId(file, line);           \
-        osSyncPrintf(exp " = " format "\n", value); \
-    } while (0)
-
 #ifndef NDEBUG
 #define LOG(exp, value, format, file, line)         \
     do {                                            \
@@ -101,11 +94,6 @@
 #define LOG_FLOAT(exp, value, file, line) ((void)0)
 #endif
 
-#ifdef NDEBUG
-#define ASSERT(cond) ((void)0)
-#else
-#define ASSERT(cond) ((cond) ? ((void)0) : __assert(#cond, __FILE__, __LINE__))
-#endif
 
 #define SET_NEXT_GAMESTATE(curState, newInit, newStruct) \
     do {                                                 \
