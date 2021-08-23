@@ -627,8 +627,6 @@ beginseg
     include "build/src/overlays/actors/ovl_En_Trap/z_en_trap.o"
     include "build/src/overlays/actors/ovl_En_Arow_Trap/z_en_arow_trap.o"
     include "build/src/overlays/actors/ovl_En_Vase/z_en_vase.o"
-
-    include "build/src/overlays/ovl_map_mark_data/z_map_mark_data.o"
     
 
     include "build/src/overlays/actors/ovl_Arrow_Fire/z_arrow_fire.o"
@@ -1754,8 +1752,6 @@ beginseg
     include "build/src/buffers/heaps.o"
 endseg
 
-
-
 beginseg
     name "ovl_kaleido_scope"
     include "build/src/overlays/actors/ovl_kaleido_scope/z_kaleido_collect.o"
@@ -1778,6 +1774,12 @@ beginseg
     name "ovl_player_actor"
     include "build/src/overlays/actors/ovl_player_actor/z_player.o"
     include "build/src/overlays/actors/ovl_player_actor/ovl_player_actor_reloc.o"
+endseg
+
+beginseg
+    name "ovl_map_mark_data"
+    include "build/src/overlays/ovl_map_mark_data/z_map_mark_data.o"
+    include "build/src/overlays/ovl_map_mark_data/ovl_map_mark_data_reloc.o"
 endseg
 
 

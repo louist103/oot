@@ -39,6 +39,7 @@ DMA_TABLE_ENTRY map_48x85_static
 DMA_TABLE_ENTRY code
 DMA_TABLE_ENTRY ovl_kaleido_scope
 DMA_TABLE_ENTRY ovl_player_actor
+DMA_TABLE_ENTRY ovl_map_mark_data
 DMA_TABLE_ENTRY gameplay_keep
 DMA_TABLE_ENTRY gameplay_field_keep
 DMA_TABLE_ENTRY gameplay_dangeon_keep

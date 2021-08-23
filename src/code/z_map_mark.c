@@ -44,10 +44,10 @@ static MapMarkInfo sMapMarkInfoTable[] = {
 
 static MapMarkDataOverlay sMapMarkDataOvl = {
     NULL,
-    (u32)0,
-    (u32)0,
-    0,
-    0,
+    (u32)_ovl_map_mark_dataSegmentRomStart,
+    (u32)_ovl_map_mark_dataSegmentRomEnd,
+    _ovl_map_mark_dataSegmentStart,
+    _ovl_map_mark_dataSegmentEnd,
     gMapMarkDataTable,
 };
 

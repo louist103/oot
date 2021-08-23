@@ -7,6 +7,12 @@
             _ovl_##name##SegmentEnd, 0, #name,                                                               \
     }
 
+#define KALEIDO_OVERLAY_INTERNAL(name)                                                                                \
+    {                                                                                                        \
+        NULL,0, 0, 0, \
+            0, 0, #name,                                                               \
+    }
+
 KaleidoMgrOverlay gKaleidoMgrOverlayTable[] = {
     KALEIDO_OVERLAY(kaleido_scope),
     KALEIDO_OVERLAY(player_actor),

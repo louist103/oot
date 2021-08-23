@@ -45,6 +45,7 @@ const char* sDmaMgrFileNames[] = {
     "code",
     "ovl_kaleido_scope",
     "ovl_player_actor",
+    "ovl_map_mark_data",
     "gameplay_keep",
     "gameplay_field_keep",
     "gameplay_dangeon_keep",
