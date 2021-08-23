@@ -270,8 +270,12 @@ void Fault_Sleep(u32 duration) {
 }
 
 void Fault_PadCallback(Input* input) {
-    //! @bug This function is not called correctly and thus will crash from reading a bad pointer at 0x800C7E4C
+    #ifdef MODDING
     PadMgr_RequestPadData(&gPadMgr,input, 0);
+    #else
+    //! @bug This function is not called correctly and thus will crash from reading a bad pointer at 0x800C7E4C
+    PadMgr_RequestPadData(input, 0);
+    #endif
 }
 
 void Fault_UpdatePadImpl() {
@@ -986,7 +990,9 @@ void Fault_ThreadEntry(void* arg) {
             Fault_Wait5Seconds();
         } else {
             Fault_DrawCornerRec(0xF801);
+            #ifndef MODDING
             Fault_WaitForButtonCombo();
+            #endif
         }
 
         sFaultStructPtr->faultActive = true;
