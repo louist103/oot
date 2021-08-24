@@ -191,7 +191,13 @@ endif
 
 #### Main Targets ###
 
-all: compressed
+
+
+all: version compressed
+
+version:
+	./tools/genBuildInfo
+	$(shell touch src/boot/build.c)
 
 uncompressed: $(ROM)
 ifeq ($(COMPARE),1)
@@ -213,6 +219,7 @@ $(ELF): $(TEXTURE_FILES_OUT) $(ASSET_FILES_OUT) $(O_FILES) build/ldscript.txt bu
 build/ldscript.txt: $(SPEC)
 	$(CPP) $(CPPFLAGS) $< > build/spec
 	$(MKLDSCRIPT) build/spec $@
+
 
 build/undefined_syms.txt: undefined_syms.txt
 	$(CPP) $(CPPFLAGS) $< > build/undefined_syms.txt

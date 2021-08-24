@@ -1,6 +1,6 @@
 CC := gcc
-CFLAGS := -Wall -Wextra -pedantic -std=c99 -g -O2
-PROGRAMS := yaz0 makeromfs elf2rom mkldscript vtxdis
+CFLAGS := -Wall -Wextra -pedantic -std=gnu99 -g -O2
+PROGRAMS := yaz0 makeromfs elf2rom mkldscript vtxdis genBuildInfo
 ZAPD := ZAPD/ZAPD.out
 
 all: $(PROGRAMS)
@@ -21,6 +21,7 @@ elf2rom_SOURCES    := elf2rom.c elf32.c n64chksum.c util.c
 yaz0_SOURCES       := yaz0tool.c yaz0.c util.c
 makeromfs_SOURCES  := makeromfs.c n64chksum.c util.c
 vtxdis_SOURCES	   := vtxdis.c
+genBuildInfo_SOURCES := genBuildInfo.c
 
 define COMPILE =
 $(1): $($1_SOURCES)
