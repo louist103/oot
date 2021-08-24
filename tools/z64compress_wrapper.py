@@ -18,6 +18,7 @@ parser.add_argument("elf", help="path to the uncompressed rom elf file")
 parser.add_argument("spec", help="path to processed spec file")
 parser.add_argument("--cache", help="cache directory")
 parser.add_argument("--threads", help="number of threads to run compression on, 0 disables multithreading")
+parser.add_argument("--mb", help="Size of the target ROM", default="32")
 
 args = parser.parse_args()
 
@@ -28,6 +29,7 @@ elf_path = args.elf
 
 CACHE_DIR = args.cache
 N_THREADS = int(args.threads or 0)
+TARGET_SIZE = int(args.mb)
 
 # Get segments to compress
 
@@ -87,7 +89,7 @@ DMADATA_ADDR, DMADATA_COUNT = get_dmadata_start_len()
 # Run
 
 cmd = f"./tools/z64compress/z64compress --in {IN_ROM} --out {OUT_ROM} \
---mb 32 --codec yaz{f' --cache {CACHE_DIR}' if CACHE_DIR is not None else ''} --dma 0x{DMADATA_ADDR:X},{DMADATA_COUNT} \
+--mb {TARGET_SIZE} --codec yaz{f' --cache {CACHE_DIR}' if CACHE_DIR is not None else ''} --dma 0x{DMADATA_ADDR:X},{DMADATA_COUNT} \
 --compress {COMPRESS_INDICES}{f' --threads {N_THREADS}' if N_THREADS > 0 else ''}"
 
 print(cmd)
