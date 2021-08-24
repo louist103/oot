@@ -9,9 +9,9 @@ NON_MATCHING ?= 0
 # If ORIG_COMPILER is 1, compile with QEMU_IRIX and the original compiler
 ORIG_COMPILER ?= 0
 # If COMPILER is gcc, compile with gcc instead of IDO.
-COMPILER ?= ido
+COMPILER ?= gcc
 # Define normal gameplay. Mostly, restore the title as-is for a GCC build.
-NORMAL_GAMEPLAY ?= 0
+NORMAL_GAMEPLAY ?= 1
 
 # If gcc is used, define the NON_MATCHING and NON_EQUIVALENT flags respectively so the files that
 # are safe to be used can avoid using GLOBAL_ASM which doesn't work with gcc.
@@ -184,7 +184,7 @@ build/assets/%.o: CC := $(CC)
 ifeq ($(COMPILER),gcc)
   include gcc_safe_files.mk
   $(SAFE_C_FILES): CC := mips-linux-gnu-gcc
-  $(SAFE_C_FILES): CFLAGS := -c -G 0 -nostdinc -Iinclude -Isrc -Iassets -Ibuild -I. -DNON_MATCHING=1 -DNON_EQUIVALENT=1 -DNORMAL_GAMEPLAY=1 -DAVOID_UB=1 -mno-shared -march=vr4300 -mfix4300 -mabi=32 -mhard-float -mdivide-breaks -fno-stack-protector -fno-common -fno-zero-initialized-in-bss -mno-abicalls -fno-strict-aliasing -fno-inline-functions -fno-inline-small-functions -fno-toplevel-reorder -ffreestanding -fwrapv -Wall -Wextra -g -mno-explicit-relocs -mno-split-addresses
+  $(SAFE_C_FILES): CFLAGS := -c -G 0 -nostdinc -Iinclude -Isrc -Iassets -Ibuild -I. -DNON_MATCHING=1 -DNON_EQUIVALENT=1  -DMODDING -DNORMAL_GAMEPLAY=1 -DAVOID_UB=1 -mno-shared -march=vr4300 -mfix4300 -mabi=32 -mhard-float -mdivide-breaks -fno-stack-protector -fno-common -fno-zero-initialized-in-bss -mno-abicalls -fno-strict-aliasing -fno-inline-functions -fno-inline-small-functions -fno-toplevel-reorder -ffreestanding -fwrapv -Wall -Wextra -g -mno-explicit-relocs -mno-split-addresses
   $(SAFE_C_FILES): MIPS_VERSION := -mips3
   $(SAFE_C_FILES): OPTFLAGS := -O2
 endif
@@ -202,7 +202,7 @@ endif
 compressed: $(ROMC)
 
 $(ROMC): $(ROM)
-	python3 tools/z64compress_wrapper.py --cache cache --threads $(shell nproc) $< $@ $(ELF) build/$(SPEC)
+	python3 tools/z64compress_wrapper.py --cache cache --threads $(shell nproc) $< $@ $(ELF) build/$(SPEC) --mb 34
 
 $(ROM): $(ELF)
 	$(ELF2ROM) -cic 6105 $< $@
@@ -259,7 +259,7 @@ build/assets/%.o: assets/%.c
 build/src/overlays/%.o: src/overlays/%.c
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 #	$(CC_CHECK) $<
-	$(ZAPD) bovl -eh -i $@ -cfg $< --outputpath $(@D)/$(notdir $(@D))_reloc.s
+	$(ZAPD) bovl -eh -i $@ -cfg $< --outputpath $(@D)/$(notdir $(@D))_reloc.s --gcc-compat
 	-test -f $(@D)/$(notdir $(@D))_reloc.s && $(AS) $(ASFLAGS) $(@D)/$(notdir $(@D))_reloc.s -o $(@D)/$(notdir $(@D))_reloc.o
 	@$(OBJDUMP) -d $@ > $(@:.o=.s)
 
