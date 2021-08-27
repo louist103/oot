@@ -11,7 +11,7 @@ ORIG_COMPILER ?= 0
 # If COMPILER is gcc, compile with gcc instead of IDO.
 COMPILER ?= gcc
 # Define normal gameplay. Mostly, restore the title as-is for a GCC build.
-NORMAL_GAMEPLAY ?= 0
+NORMAL_GAMEPLAY ?= 1
 
 # If gcc is used, define the NON_MATCHING and NON_EQUIVALENT flags respectively so the files that
 # are safe to be used can avoid using GLOBAL_ASM which doesn't work with gcc.
@@ -191,8 +191,6 @@ endif
 
 #### Main Targets ###
 
-
-
 all: version compressed
 
 version:
@@ -208,7 +206,7 @@ endif
 compressed: $(ROMC)
 
 $(ROMC): $(ROM)
-	python3 tools/z64compress_wrapper.py --cache cache --threads $(shell nproc) $< $@ $(ELF) build/$(SPEC)
+	python3 tools/z64compress_wrapper.py --cache cache --threads $(shell nproc) $< $@ $(ELF) build/$(SPEC) --mb 34
 
 $(ROM): $(ELF)
 	$(ELF2ROM) -cic 6105 $< $@
@@ -266,7 +264,7 @@ build/assets/%.o: assets/%.c
 build/src/overlays/%.o: src/overlays/%.c
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 #	$(CC_CHECK) $<
-	$(ZAPD) bovl -eh -i $@ -cfg $< --outputpath $(@D)/$(notdir $(@D))_reloc.s
+	$(ZAPD) bovl -eh -i $@ -cfg $< --outputpath $(@D)/$(notdir $(@D))_reloc.s --gcc-compat
 	-test -f $(@D)/$(notdir $(@D))_reloc.s && $(AS) $(ASFLAGS) $(@D)/$(notdir $(@D))_reloc.s -o $(@D)/$(notdir $(@D))_reloc.o
 	@$(OBJDUMP) -d $@ > $(@:.o=.s)
 
