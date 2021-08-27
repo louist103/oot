@@ -206,7 +206,7 @@ endif
 compressed: $(ROMC)
 
 $(ROMC): $(ROM)
-	python3 tools/z64compress_wrapper.py --cache cache --threads $(shell nproc) $< $@ $(ELF) build/$(SPEC) --mb 34
+	python3 tools/z64compress_wrapper.py --cache cache --threads $(shell nproc) $< $@ $(ELF) build/$(SPEC) --mb 32
 
 $(ROM): $(ELF)
 	$(ELF2ROM) -cic 6105 $< $@
