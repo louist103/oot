@@ -9,7 +9,7 @@ f32 fabsf(f32 f);
 #define fabsf __builtin_fabsf
 f32 __floatundisf(u32 c);
 f64 __floatundidf(u32 c);
-unsigned long __udivdi3 (unsigned long a , unsigned long b );
+unsigned long __udivdi3(unsigned long a, unsigned long b);
 #else
 #pragma intrinsic(fabsf)
 #endif
@@ -491,8 +491,8 @@ void BodyBreak_Alloc(BodyBreak* bodyBreak, s32 count, GlobalContext* globalCtx);
 void BodyBreak_SetInfo(BodyBreak* bodyBreak, s32 limbIndex, s32 minLimbIndex, s32 maxLimbIndex, u32 count, Gfx** dList,
                        s16 objectId);
 s32 BodyBreak_SpawnParts(Actor* actor, BodyBreak* bodyBreak, GlobalContext* globalCtx, s16 type);
-void Actor_SpawnFloorDustRing(GlobalContext* globalCtx, Actor* actor, Vec3f* posXZ, f32 radius, s32 amountMinusOne, f32 randAccelWeight,
-                              s16 scale, s16 scaleStep, u8 useLighting);
+void Actor_SpawnFloorDustRing(GlobalContext* globalCtx, Actor* actor, Vec3f* posXZ, f32 radius, s32 amountMinusOne,
+                              f32 randAccelWeight, s16 scale, s16 scaleStep, u8 useLighting);
 void func_80033480(GlobalContext* globalCtx, Vec3f* arg1, f32 arg2, s32 arg3, s16 arg4, s16 arg5, u8 arg6);
 Actor* Actor_GetCollidedExplosive(GlobalContext* globalCtx, Collider* collider);
 Actor* func_80033684(GlobalContext* globalCtx, Actor* explosiveActor);
@@ -1655,7 +1655,9 @@ void PadMgr_HandleRetraceMsg(PadMgr* padmgr);
 void PadMgr_HandlePreNMI(PadMgr* padmgr);
 // This function must remain commented out, because it is called incorrectly in
 // fault.c (actual bug in game), and the compiler notices and won't compile it
- void PadMgr_RequestPadData(PadMgr* padmgr, Input* inputs, s32 mode);
+#ifdef MODDING
+void PadMgr_RequestPadData(PadMgr* padmgr, Input* inputs, s32 mode);
+#endif
 void PadMgr_Init(PadMgr* padmgr, OSMesgQueue* siIntMsgQ, IrqMgr* irqMgr, OSId id, OSPri priority, void* stack);
 void Sched_SwapFrameBuffer(CfbInfo* cfbInfo);
 void func_800C84E4(SchedContext* sc, CfbInfo* cfbInfo);
