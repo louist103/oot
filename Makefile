@@ -96,7 +96,7 @@ ASFLAGS := -march=vr4300 -32 -Iinclude
 MIPS_VERSION := -mips2
 
 # we support Microsoft extensions such as anonymous structs, which the compiler does support but warns for their usage. Surpress the warnings with -woff.
-CFLAGS += -G 0 -non_shared -Xfullwarn -Xcpluscomm -Iinclude -Isrc -Iassets -Ibuild -Wab,-r4300_mul -woff 649,838,712
+CFLAGS += -G 0 -non_shared -Xfullwarn -Xcpluscomm -Iinclude -Isrc -Iassets -Ibuild -Wab,-r4300_mul -woff 649,838,712 -DMODDING
 
 ifeq ($(shell getconf LONG_BIT), 32)
   # Work around memory allocation bug in QEMU
@@ -181,12 +181,16 @@ build/assets/%.o: CC := $(CC)
 
 # TODO: Generate gcc_safe_files automatically with a more robust python script.
 
+# HAAACCCCKKKKKKKSSSSS
+PIPEIN = $<
+
 ifeq ($(COMPILER),gcc)
   include gcc_safe_files.mk
-  $(SAFE_C_FILES): CC := mips-linux-gnu-gcc
-  $(SAFE_C_FILES): CFLAGS := -c -G 0 -nostdinc -Iinclude -Isrc -Iassets -Ibuild -I. -DNON_MATCHING=1 -DNON_EQUIVALENT=1 -DMODDING=1 -DNORMAL_GAMEPLAY=1 -DAVOID_UB=1 -mno-shared -fcall-used-gp -march=vr4300 -mfix4300 -mabi=32 -mhard-float -mdivide-breaks -fno-stack-protector -fno-common -fno-zero-initialized-in-bss -mno-abicalls -fno-strict-aliasing -fno-inline-functions -fno-inline-small-functions -fno-toplevel-reorder -ffreestanding -fwrapv -Wall -Wextra -g -mno-explicit-relocs -mno-split-addresses
+  $(SAFE_C_FILES): CC = iconv -f UTF-8 -t EUC-JP $< | mips-linux-gnu-gcc
+  $(SAFE_C_FILES): CFLAGS := -x c - -c -G 0 -nostdinc -Iinclude -Isrc -Iassets -Ibuild -I. -DNON_MATCHING=1 -DNON_EQUIVALENT=1 -DMODDING=1 -DNORMAL_GAMEPLAY=1 -DAVOID_UB=1 -mno-shared -fcall-used-gp -march=vr4300 -mfix4300 -mabi=32 -mhard-float -mdivide-breaks -fno-stack-protector -fno-common -fno-zero-initialized-in-bss -mno-abicalls -fno-strict-aliasing -fno-inline-functions -fno-inline-small-functions -fno-toplevel-reorder -ffreestanding -fwrapv -Wall -Wextra -g -mno-explicit-relocs -mno-split-addresses
   $(SAFE_C_FILES): MIPS_VERSION := -mips3
   $(SAFE_C_FILES): OPTFLAGS := -O2
+  $(SAFE_C_FILES): PIPEIN := 
 endif
 
 #### Main Targets ###
@@ -258,29 +262,29 @@ build/data/%.o: data/%.s
 	iconv --from UTF-8 --to EUC-JP $< | $(AS) $(ASFLAGS) -o $@
 
 build/assets/%.o: assets/%.c
-	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
+	$(CC) -c $(CFLAGS) -I $(<D) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $(PIPEIN)
 	$(OBJCOPY) -O binary $@ $@.bin
 
 build/src/overlays/%.o: src/overlays/%.c
-	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
+	$(CC) -c $(CFLAGS) -I $(<D) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $(PIPEIN)
 #	$(CC_CHECK) $<
 	$(ZAPD) bovl -eh -i $@ -cfg $< --outputpath $(@D)/$(notdir $(@D))_reloc.s --gcc-compat
 	-test -f $(@D)/$(notdir $(@D))_reloc.s && $(AS) $(ASFLAGS) $(@D)/$(notdir $(@D))_reloc.s -o $(@D)/$(notdir $(@D))_reloc.o
 	@$(OBJDUMP) -d $@ > $(@:.o=.s)
 
 build/src/%.o: src/%.c
-	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
+	$(CC) -c $(CFLAGS) -I $(<D) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $(PIPEIN)
 #	$(CC_CHECK) $<
 	@$(OBJDUMP) -d $@ > $(@:.o=.s)
 
 build/src/libultra_boot_O1/ll.o: src/libultra_boot_O1/ll.c
-	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
+	$(CC) -c $(CFLAGS) -I $(<D) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $(PIPEIN)
 #	$(CC_CHECK) $<
 	python3 tools/set_o32abi_bit.py $@
 	@$(OBJDUMP) -d $@ > $(@:.o=.s)
 
 build/src/libultra_code_O1/llcvt.o: src/libultra_code_O1/llcvt.c
-	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
+	$(CC) -c $(CFLAGS) -I $(<D) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $(PIPEIN)
 #	$(CC_CHECK) $<
 	python3 tools/set_o32abi_bit.py $@
 	@$(OBJDUMP) -d $@ > $(@:.o=.s)
