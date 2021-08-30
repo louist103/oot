@@ -506,6 +506,7 @@ SAFE_C_FILES :=    \
     build/src/overlays/actors/ovl_En_Fd_Fire/z_en_fd_fire.o    \
     build/src/overlays/actors/ovl_En_Diving_Game/z_en_diving_game.o    \
     build/src/overlays/actors/ovl_En_GirlA/z_en_girla.o    \
+    build/src/overlays/actors/ovl_En_Ganon_Mant/z_en_ganon_mant.o    \
     build/src/libultra_code_O1/osStopTimer.o    \
     build/src/libultra_code_O1/osSetTimer.o    \
     build/src/libultra_boot_O1/osStopThread.o    \
