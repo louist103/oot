@@ -11,6 +11,4 @@ typedef struct EnDha {
     /* 0x014C */ char unk_14C[0x214];
 } EnDha; // size = 0x0360
 
-extern const ActorInit En_Dha_InitVars;
-
 #endif
