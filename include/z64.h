@@ -3,6 +3,19 @@
 
 #include "ultra64.h"
 #include "ultra64/gs2dex.h"
+
+// meh idk where else to put this
+
+// Certain functions are marked as having return values, but do not
+// actually return a value. This causes undefined behavior, which we'd rather
+// avoid on modern GCC. This only impacts -O2 and can matter for both the function
+// itself and functions that call it.
+#ifdef AVOID_UB
+    #define BAD_RETURN(cmd) void
+#else
+    #define BAD_RETURN(cmd) cmd
+#endif
+
 #include "z64save.h"
 #include "z64light.h"
 #include "z64bgcheck.h"

@@ -567,6 +567,9 @@ s32 EnSt_DecrStunTimer(EnSt* this) {
         return 0;
     }
     this->stunTimer--; //! @bug ? no return but v0 ends up being stunTimer before decrement
+#ifdef AVOID_UB
+    return this->stunTimer + 1; // to match IDO behavior
+#endif
 }
 
 /**

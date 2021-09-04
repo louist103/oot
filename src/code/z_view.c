@@ -184,7 +184,7 @@ void func_800AA78C(View* view, f32 x, f32 y, f32 z) {
     view->unk_F4.z = z;
 }
 
-s32 func_800AA7AC(View* view, f32 arg1) {
+BAD_RETURN(s32) func_800AA7AC(View* view, f32 arg1) {
     view->unk_100 = arg1;
 }
 

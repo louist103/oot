@@ -2125,6 +2125,9 @@ s32 Camera_Parallel1(Camera* camera) {
     camera->fov = Camera_LERPCeilF(para1->fovTarget, camera->fov, camera->fovUpdateRate, 1.0f);
     camera->roll = Camera_LERPCeilS(0, camera->roll, 0.5, 0xA);
     camera->atLERPStepScale = Camera_ClampLERPScale(camera, sp6A ? para1->unk_1C : para1->unk_14);
+#ifdef AVOID_UB
+    return true;
+#endif
 }
 
 s32 Camera_Parallel2(Camera* camera) {
@@ -2144,6 +2147,9 @@ s32 Camera_Parallel3(Camera* camera) {
         camera->unk_14C |= 0x10;
     }
     //! @bug doesn't return
+#ifdef AVOID_UB
+    return true;
+#endif
 }
 
 s32 Camera_Parallel4(Camera* camera) {
@@ -2922,6 +2928,9 @@ s32 Camera_Battle1(Camera* camera) {
     camera->fov = Camera_LERPCeilF((player->swordState != 0 ? 0.8f : gSaveContext.health <= 0x10 ? 0.8f : 1.0f) *
                                        (fov - ((fov * 0.05f) * distRatio)),
                                    camera->fov, camera->fovUpdateRate, 1.0f);
+#ifdef AVOID_UB
+    return true;
+#endif
 }
 
 s32 Camera_Battle2(Camera* camera) {
@@ -2929,7 +2938,7 @@ s32 Camera_Battle2(Camera* camera) {
 }
 
 s32 Camera_Battle3(Camera* camera) {
-    Camera_Noop(camera);
+    return Camera_Noop(camera);
 }
 
 /**
@@ -3730,6 +3739,9 @@ s32 Camera_KeepOn4(Camera* camera) {
     Camera_BGCheck(camera, at, eye);
     camera->fov = Camera_LERPCeilF(keep4->unk_18, camera->fov, camera->fovUpdateRate, 1.0f);
     camera->roll = Camera_LERPCeilS(0, camera->roll, 0.5f, 0xA);
+#ifdef AVOID_UB
+    return true;
+#endif
 }
 
 /**
@@ -6105,6 +6117,9 @@ s32 Camera_Demo7(Camera* camera) {
         camera->animState++;
     }
     //! @bug doesn't return
+#ifdef AVOID_UB
+    return true;
+#endif
 }
 
 s32 Camera_Demo8(Camera* camera) {
@@ -7152,6 +7167,9 @@ s32 Camera_CheckWater(Camera* camera) {
         func_800F6828(0);
     }
     //! @bug: doesn't always return a value, but sometimes does.
+#ifdef AVOID_UB
+    return 1;
+#endif
 }
 
 /**
@@ -7804,6 +7822,9 @@ s32 Camera_ChangeDataIdx(Camera* camera, s32 camDataIdx) {
         }
         return 0x80000000 | camDataIdx;
     }
+#ifdef AVOID_UB
+    return true;
+#endif
 }
 
 Vec3s* Camera_GetInputDir(Vec3s* dst, Camera* camera) {

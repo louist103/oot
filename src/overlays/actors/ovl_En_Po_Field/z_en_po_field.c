@@ -393,6 +393,9 @@ f32 EnPoField_SetFleeSpeed(EnPoField* this, GlobalContext* globalCtx) {
         this->actor.speedXZ = 12.0f;
     }
     this->actor.speedXZ = CLAMP_MIN(this->actor.speedXZ, 12.0f);
+#ifdef AVOID_UB
+    return 0.0f; // to silence warning, unused everywhere it seems
+#endif
 }
 
 void EnPoField_WaitForSpawn(EnPoField* this, GlobalContext* globalCtx) {

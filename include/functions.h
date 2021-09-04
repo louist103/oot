@@ -36,7 +36,7 @@ void DmaMgr_ThreadEntry(void* arg0);
 s32 DmaMgr_SendRequestImpl(DmaRequest* req, u32 ram, u32 vrom, u32 size, u32 unk, OSMesgQueue* queue, OSMesg msg);
 s32 DmaMgr_SendRequest0(u32 ram, u32 vrom, u32 size);
 void DmaMgr_Init(void);
-s32 DmaMgr_SendRequest2(DmaRequest* req, u32 ram, u32 vrom, u32 size, u32 unk5, OSMesgQueue* queue, OSMesg msg,
+BAD_RETURN(s32) DmaMgr_SendRequest2(DmaRequest* req, u32 ram, u32 vrom, u32 size, u32 unk5, OSMesgQueue* queue, OSMesg msg,
                         const char* file, s32 line);
 s32 DmaMgr_SendRequest1(void* ram0, u32 vrom, u32 size, const char* file, s32 line);
 void* Yaz0_FirstDMA(void);
@@ -389,7 +389,7 @@ void Actor_Kill(Actor* actor);
 void Actor_SetFocus(Actor* actor, f32 offset);
 void Actor_SetScale(Actor* actor, f32 scale);
 void Actor_SetObjectDependency(GlobalContext* globalCtx, Actor* actor);
-s16 func_8002D7EC(Actor* actor);
+BAD_RETURN(s16) func_8002D7EC(Actor* actor);
 void func_8002D868(Actor* actor);
 void Actor_MoveForward(Actor* actor);
 void func_8002D908(Actor* actor);
@@ -1267,11 +1267,11 @@ void LinkAnimation_BlendToMorph(GlobalContext* globalCtx, SkelAnime* skelAnime, 
                                 f32 frame1, LinkAnimationHeader* animation2, f32 frame2, f32 weight, Vec3s* blendTable);
 void LinkAnimation_EndLoop(SkelAnime* skelAnime);
 s32 LinkAnimation_OnFrame(SkelAnime* skelAnime, f32 frame);
-s32 SkelAnime_Init(GlobalContext* globalCtx, SkelAnime* skelAnime, SkeletonHeader* skeletonHeaderSeg,
+BAD_RETURN(s32) SkelAnime_Init(GlobalContext* globalCtx, SkelAnime* skelAnime, SkeletonHeader* skeletonHeaderSeg,
                    AnimationHeader* animation, Vec3s* jointTable, Vec3s* morphTable, s32 limbCount);
-s32 SkelAnime_InitFlex(GlobalContext* globalCtx, SkelAnime* skelAnime, FlexSkeletonHeader* skeletonHeaderSeg,
+BAD_RETURN(s32) SkelAnime_InitFlex(GlobalContext* globalCtx, SkelAnime* skelAnime, FlexSkeletonHeader* skeletonHeaderSeg,
                        AnimationHeader* animation, Vec3s* jointTable, Vec3s* morphTable, s32 limbCount);
-s32 SkelAnime_InitSkin(GlobalContext* globalCtx, SkelAnime* skelAnime, SkeletonHeader* skeletonHeaderSeg,
+BAD_RETURN(s32) SkelAnime_InitSkin(GlobalContext* globalCtx, SkelAnime* skelAnime, SkeletonHeader* skeletonHeaderSeg,
                        AnimationHeader* animation);
 s32 SkelAnime_Update(SkelAnime* skelAnime);
 void Animation_ChangeImpl(SkelAnime* skelAnime, AnimationHeader* animation, f32 playSpeed, f32 startFrame, f32 endFrame,
@@ -1364,7 +1364,7 @@ void View_SetViewport(View* view, Viewport* viewport);
 void View_GetViewport(View* view, Viewport* viewport);
 void func_800AA76C(View* view, f32 arg1, f32 arg2, f32 arg3);
 void func_800AA78C(View* view, f32 arg1, f32 arg2, f32 arg3);
-s32 func_800AA7AC(View* view, f32 arg1);
+BAD_RETURN(s32) func_800AA7AC(View* view, f32 arg1);
 void func_800AA7B8(View* view);
 void func_800AA814(View* view);
 void func_800AA840(View* view, Vec3f vec1, Vec3f vec2, f32 arg3);
@@ -1518,7 +1518,7 @@ void Gameplay_SpawnScene(GlobalContext* globalCtx, s32 sceneNum, s32 spawn);
 void func_800C016C(GlobalContext* globalCtx, Vec3f* src, Vec3f* dest);
 s16 Gameplay_CreateSubCamera(GlobalContext* globalCtx);
 s16 Gameplay_GetActiveCamId(GlobalContext* globalCtx);
-s16 Gameplay_ChangeCameraStatus(GlobalContext* globalCtx, s16 camId, s16 status);
+BAD_RETURN(s16) Gameplay_ChangeCameraStatus(GlobalContext* globalCtx, s16 camId, s16 status);
 void Gameplay_ClearCamera(GlobalContext* globalCtx, s16 camId);
 void Gameplay_ClearAllSubCameras(GlobalContext* globalCtx);
 Camera* Gameplay_GetCamera(GlobalContext* globalCtx, s16 camId);
@@ -1622,7 +1622,7 @@ void GameAlloc_Init(GameAlloc* this);
 void Graph_FaultClient();
 void Graph_DisassembleUCode(Gfx* workBuf);
 void Graph_UCodeFaultClient(Gfx* workBuf);
-void* Graph_InitTHGA(GraphicsContext* gfxCtx);
+void Graph_InitTHGA(GraphicsContext* gfxCtx);
 GameStateOverlay* Graph_GetNextGameState(GameState* gameState);
 void Graph_Init(GraphicsContext* gfxCtx);
 void Graph_Destroy(GraphicsContext* gfxCtx);

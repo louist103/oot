@@ -772,6 +772,9 @@ s32 EnKo_ChildStart(EnKo* this, GlobalContext* globalCtx) {
         case ENKO_TYPE_CHILD_FADO:
             return func_80A97E18(this, globalCtx);
     }
+#ifdef AVOID_UB
+    return 0;
+#endif
 }
 
 s32 EnKo_ChildStone(EnKo* this, GlobalContext* globalCtx) {
@@ -803,6 +806,9 @@ s32 EnKo_ChildStone(EnKo* this, GlobalContext* globalCtx) {
         case ENKO_TYPE_CHILD_FADO:
             return func_80A97E18(this, globalCtx);
     }
+#ifdef AVOID_UB
+    return 0;
+#endif
 }
 
 s32 EnKo_ChildSaria(EnKo* this, GlobalContext* globalCtx) {
@@ -834,6 +840,9 @@ s32 EnKo_ChildSaria(EnKo* this, GlobalContext* globalCtx) {
         case ENKO_TYPE_CHILD_FADO:
             return func_80A97E18(this, globalCtx);
     }
+#ifdef AVOID_UB
+    return 0;
+#endif
 }
 
 s32 EnKo_AdultEnemy(EnKo* this, GlobalContext* globalCtx) {
@@ -865,6 +874,9 @@ s32 EnKo_AdultEnemy(EnKo* this, GlobalContext* globalCtx) {
         case ENKO_TYPE_CHILD_FADO:
             return func_80A97E18(this, globalCtx);
     }
+#ifdef AVOID_UB
+    return 0;
+#endif
 }
 
 s32 EnKo_AdultSaved(EnKo* this, GlobalContext* globalCtx) {
@@ -896,6 +908,9 @@ s32 EnKo_AdultSaved(EnKo* this, GlobalContext* globalCtx) {
         case ENKO_TYPE_CHILD_FADO:
             return func_80A97E18(this, globalCtx);
     }
+#ifdef AVOID_UB
+    return 0;
+#endif
 }
 void func_80A9877C(EnKo* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
@@ -1069,6 +1084,9 @@ s32 func_80A98ECC(EnKo* this, GlobalContext* globalCtx) {
         case ENKO_FQS_ADULT_SAVED:
             return EnKo_AdultSaved(this, globalCtx);
     }
+#ifdef AVOID_UB
+    return 0;
+#endif
 }
 
 void EnKo_Init(Actor* thisx, GlobalContext* globalCtx) {

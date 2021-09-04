@@ -233,6 +233,9 @@ s32 DemoGj_FindGanon(DemoGj* this, GlobalContext* globalCtx) {
         return false;
     }
     //! @bug: Missing return value when `this->ganon` is already set.
+#ifdef AVOID_UB
+    return false;
+#endif
 }
 
 static InitChainEntry sInitChain[] = {

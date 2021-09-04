@@ -1522,7 +1522,7 @@ s16 Gameplay_GetActiveCamId(GlobalContext* globalCtx) {
     return globalCtx->activeCamera;
 }
 
-s16 Gameplay_ChangeCameraStatus(GlobalContext* globalCtx, s16 camId, s16 status) {
+BAD_RETURN(s16) Gameplay_ChangeCameraStatus(GlobalContext* globalCtx, s16 camId, s16 status) {
     s16 camIdx = (camId == SUBCAM_ACTIVE) ? globalCtx->activeCamera : camId;
 
     if (status == CAM_STAT_ACTIVE) {

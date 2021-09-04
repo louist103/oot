@@ -107,6 +107,9 @@ s32 func_80B0BE20(EnSw* this, CollisionPoly* poly) {
     this->unk_3D8.ww = 1.0f;
     Matrix_MtxFToYXZRotS(&this->unk_3D8, &this->actor.world.rot, 0);
     //! @bug: Does not return.
+#ifdef AVOID_UB
+    return 0; // not used, silence warning
+#endif
 }
 
 CollisionPoly* func_80B0C020(GlobalContext* globalCtx, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, s32* arg4) {

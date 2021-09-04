@@ -168,6 +168,9 @@ void* BgYdanSp_UpdateFloorWebCollision(BgYdanSp* this) {
     colHeader->vtxList[5].y = newY;
     colHeader->vtxList[1].y = newY;
     colHeader->vtxList[0].y = newY;
+#ifdef AVOID_UB
+    return colHeader; // not used, surpress warning
+#endif
 }
 
 void BgYdanSp_BurnWeb(BgYdanSp* this, GlobalContext* globalCtx) {

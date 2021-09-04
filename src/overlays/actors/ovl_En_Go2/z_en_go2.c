@@ -748,6 +748,9 @@ u16 EnGo2_GetTextId(GlobalContext* globalCtx, Actor* thisx) {
                 return EnGo2_GetTextIdGoronMarketBazaar(globalCtx, this);
         }
     }
+#ifdef AVOID_UB
+    return 0; // surpress warning
+#endif
 }
 
 s16 EnGo2_GetState(GlobalContext* globalCtx, Actor* thisx) {
@@ -782,6 +785,9 @@ s16 EnGo2_GetState(GlobalContext* globalCtx, Actor* thisx) {
         case GORON_MARKET_BAZAAR:
             return EnGo2_GetStateGoronMarketBazaar(globalCtx, this);
     }
+#ifdef AVOID_UB
+    return 0; // surpress warning
+#endif
 }
 
 s32 func_80A44790(EnGo2* this, GlobalContext* globalCtx) {
