@@ -507,6 +507,15 @@ SAFE_C_FILES :=    \
     build/src/overlays/actors/ovl_En_Diving_Game/z_en_diving_game.o    \
     build/src/overlays/actors/ovl_En_GirlA/z_en_girla.o    \
     build/src/overlays/actors/ovl_En_Ganon_Mant/z_en_ganon_mant.o    \
+    build/src/overlays/actors/ovl_kaleido_scope/z_kaleido_map_PAL.o    \
+    build/src/overlays/actors/ovl_kaleido_scope/z_kaleido_equipment.o    \
+    build/src/overlays/actors/ovl_kaleido_scope/z_kaleido_debug.o    \
+    build/src/overlays/actors/ovl_kaleido_scope/z_kaleido_collect.o    \
+    build/src/overlays/actors/ovl_kaleido_scope/z_kaleido_item.o    \
+    build/src/overlays/actors/ovl_kaleido_scope/z_kaleido_scope_PAL.o    \
+    build/src/overlays/actors/ovl_kaleido_scope/z_lmap_mark.o    \
+    build/src/overlays/actors/ovl_kaleido_scope/z_kaleido_prompt.o    \
+    build/src/overlays/actors/ovl_kaleido_scope/z_lmap_mark_data.o    \
     build/src/libultra_code_O1/osStopTimer.o    \
     build/src/libultra_code_O1/osSetTimer.o    \
     build/src/libultra_boot_O1/osStopThread.o    \
