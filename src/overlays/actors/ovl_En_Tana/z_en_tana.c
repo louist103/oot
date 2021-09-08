@@ -32,6 +32,9 @@ const ActorInit En_Tana_InitVars = {
 static char* sShelfTypes[] = {
     "木の棚", // "Wooden Shelves"
     "石の棚", // "Stone Shelves"
+#ifdef AVOID_UB
+    "", // Fix a crash with params being 2 w/ Zora Shop invoking a string that doesn't exist
+#endif
 };
 
 static const ActorFunc sDrawFuncs[] = {
