@@ -2540,8 +2540,7 @@ beginseg
     name "ovl_En_Ganon_Organ"
     compress
     include "build/src/overlays/actors/ovl_En_Ganon_Organ/z_en_ganon_organ.o"
-    include "build/data/overlays/actors/z_en_ganon_organ.data.o"
-    include "build/data/overlays/actors/z_en_ganon_organ.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Ganon_Organ/ovl_En_Ganon_Organ_reloc.o"
 endseg
 
 beginseg
