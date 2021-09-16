@@ -546,13 +546,8 @@ endseg
 
 beginseg
     name "ovl_file_choose"
-    include "build/src/overlays/gamestates/ovl_file_choose/z_file_nameset_PAL.o"
-    include "build/data/overlays/gamestates/z_file_nameset_PAL.data.o"
-    include "build/data/overlays/gamestates/z_file_nameset_PAL.rodata.o"
-    include "build/data/overlays/gamestates/z_file_nameset_PAL.bss.o"
     include "build/src/overlays/gamestates/ovl_file_choose/z_file_choose.o"
-    include "build/data/overlays/gamestates/z_file_choose.rodata.o"
-    include "build/data/overlays/gamestates/z_file_choose.reloc.o"
+    include "build/src/overlays/gamestates/ovl_file_choose/ovl_file_choose_reloc.o"
 endseg
 
 beginseg

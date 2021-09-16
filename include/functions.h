@@ -1647,7 +1647,7 @@ void PadMgr_HandleRetraceMsg(PadMgr* padmgr);
 void PadMgr_HandlePreNMI(PadMgr* padmgr);
 // This function must remain commented out, because it is called incorrectly in
 // fault.c (actual bug in game), and the compiler notices and won't compile it
-// void PadMgr_RequestPadData(PadMgr* padmgr, Input* inputs, s32 mode);
+ void PadMgr_RequestPadData(PadMgr* padmgr, Input* inputs, s32 mode);
 void PadMgr_Init(PadMgr* padmgr, OSMesgQueue* siIntMsgQ, IrqMgr* irqMgr, OSId id, OSPri priority, void* stack);
 void Sched_SwapFrameBuffer(CfbInfo* cfbInfo);
 void func_800C84E4(SchedContext* sc, CfbInfo* cfbInfo);
@@ -2443,7 +2443,7 @@ void Select_Init(GameState* thisx);
 void Select_Destroy(GameState* thisx);
 void Opening_Init(GameState* thisx);
 void Opening_Destroy(GameState* thisx);
-void func_80811A20(GameState* thisx); // FileChoose_Init
-void func_80811A18(GameState* thisx); // FileChoose_Destroy
+void FileChoose_Init(GameState* thisx); // FileChoose_Init
+void FileChoose_Destroy(GameState* thisx); // FileChoose_Destroy
 
 #endif
