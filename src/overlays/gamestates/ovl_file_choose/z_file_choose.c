@@ -4,7 +4,7 @@
 GfxPrint gPrinter;
 
 #define THIS ((FileChooseContext*)thisx)
-#define INPUT this->state.input[0].press
+#define INPUT this->state.input[0].cur
 typedef enum {
     FILE_CHOOSE_MAIN,
     FILE_CHOOSE_COPY,
@@ -25,31 +25,41 @@ typedef enum {
     FILE_CHOOSE_AUDIO_HEADPHONE
 } AudioOption;
 
+u8 inputLatched;
+
 void FileChoose_Destroy(GameState* thisx) {
-    GfxPrint_Destroy(&gPrinter);
+    (void)thisx;
+    /* GfxPrint_Destroy(&gPrinter); This function does nothing */
 }
 
 void FileChoose_UpdateMenu(FileChooseContext* this) {
     switch (this->pageIndex) {
         case FILE_CHOOSE_MAIN:
-            if ((s8)INPUT.stick_y < -0x30) { /*Pressed down*/
-                if (this->cursorPos[FILE_CHOOSE_MAIN] == 0) {
-                    this->cursorPos[FILE_CHOOSE_MAIN] = 6; /* Options button */
-                } else {
-                    this->cursorPos[FILE_CHOOSE_MAIN]--;
+            if ((s8)INPUT.stick_y >= (s8)0x30) { /*Pressed up*/
+                if (!inputLatched) {
+                    inputLatched = true;
+                    if (this->cursorPos[FILE_CHOOSE_MAIN] == 0) {
+                        this->cursorPos[FILE_CHOOSE_MAIN] = 6; /* Options button */
+                    } else {
+                        this->cursorPos[FILE_CHOOSE_MAIN]--;
+                    }
                 }
-            } else if ((s8)INPUT.stick_y > 0x30) {
-                if (this->cursorPos[FILE_CHOOSE_MAIN] == 6) {
-                    this->cursorPos[FILE_CHOOSE_MAIN] = 0; /* File 1 */
-                } else {
-                    this->cursorPos[FILE_CHOOSE_MAIN]++;
+            } else if ((s8)INPUT.stick_y < (s8)-0x30) {
+                if (!inputLatched) {
+                    inputLatched = true;
+                    if (this->cursorPos[FILE_CHOOSE_MAIN] == 6) {
+                        this->cursorPos[FILE_CHOOSE_MAIN] = 0; /* File 1 */
+                    } else {
+                        this->cursorPos[FILE_CHOOSE_MAIN]++;
+                    }
                 }
+            } else {
+                inputLatched = false;
             }
     }
-    osSyncPrintf("this->cursorPos%d", this->cursorPos[FILE_CHOOSE_MAIN]);
 }
 
-__inline void FileChoose_DrawMenu(FileChooseContext* this) {
+void FileChoose_DrawMenu(FileChooseContext* this) {
     u8 i;
     u8 j;
     OPEN_DISPS(this->state.gfxCtx, __FILE__, __LINE__);
@@ -61,20 +71,21 @@ __inline void FileChoose_DrawMenu(FileChooseContext* this) {
     func_80094140(this->state.gfxCtx);
     GfxPrint_Open(&gPrinter, OVERLAY_DISP);
     GfxPrint_SetColor(&gPrinter, 255, 255, 255, 255);
+    //GfxPrint_Printf(&gPrinter, "STICK Y%d:\nCURSOR POS %d\n", (s8)INPUT.stick_y, this->cursorPos[FILE_CHOOSE_MAIN]);
     GfxPrint_SetPos(&gPrinter, 7, 2);
     // GfxPrint_Printf(&gPrinter, "Ctx:%X\n", this);
-    // GfxPrint_Printf(&gPrinter, "OFFSET OF FILENAMES:%X\n", this->fileNames);
+    GfxPrint_Printf(&gPrinter, "OFFSET OF FILENAMES:%X\n", this->cursorPos);
     switch (this->pageIndex) {
         case FILE_CHOOSE_MAIN:
             GfxPrint_Printf(&gPrinter, "Choose a file to load:");
             for (i = 0; i < 3; i++) {
                 GfxPrint_SetPos(&gPrinter, 4, i + 5);
                 GfxPrint_Printf(&gPrinter, "File %d   ", i);
-                // if (this->cursorPos[FILE_CHOOSE_MAIN] == i) {
-                //    GfxPrint_SetColor(&gPrinter, 0, 0, 255, 255);
-                //} else {
+               // if (this->cursorPos[FILE_CHOOSE_MAIN] == i) {
+                    GfxPrint_SetColor(&gPrinter, 0, 0, 255, 255);
+                //} /*else {
                 //    GfxPrint_SetColor(&gPrinter, 255, 255, 255, 255);
-                //}
+                //}*/
                 for (j = 0; j < 8; j++) {
                     if (this->fileNames[i][j] <= 0xF) {
                         GfxPrint_Printf(&gPrinter, "%X ", (this->fileNames[i][j]));
@@ -88,7 +99,7 @@ __inline void FileChoose_DrawMenu(FileChooseContext* this) {
                 }
                 // GfxPrint_PrintChar(&gPrinter, '\n');
             }
-
+            
             GfxPrint_SetPos(&gPrinter, 4, 10);
             GfxPrint_Printf(&gPrinter, "Copy");
             GfxPrint_SetPos(&gPrinter, 4, 11);
@@ -107,6 +118,14 @@ __inline void FileChoose_DrawMenu(FileChooseContext* this) {
             GfxPrint_Printf(&gPrinter, "\tMono");
             GfxPrint_Printf(&gPrinter, "\tSurround");
             GfxPrint_Printf(&gPrinter, "\tHeadphones");
+
+            GfxPrint_SetPos(&gPrinter, 5, 12);
+            GfxPrint_Printf(&gPrinter, "Target Mode:");
+            GfxPrint_SetPos(&gPrinter, 6, 13);
+
+            GfxPrint_Printf(&gPrinter, "Switch");
+            GfxPrint_Printf(&gPrinter, "\t Hold");
+
             break;
     }
     OVERLAY_DISP = GfxPrint_Close(&gPrinter);
@@ -123,18 +142,17 @@ void FileChoose_Main(GameState* thisx) {
 
 void FileChoose_Init(GameState* thisx) {
     FileChooseContext* this = (FileChooseContext*)thisx;
-    
+
     this->state.destroy = FileChoose_Destroy;
     this->state.main = FileChoose_Main;
     this->pageIndex = FILE_CHOOSE_MAIN;
-    this->cursorPos[FILE_CHOOSE_MAIN] = 0;
-    this->cursorPos[FILE_CHOOSE_COPY] = 0;
-    this->cursorPos[FILE_CHOOSE_ERASE] = 0;
-    this->cursorPos[FILE_CHOOSE_OPTIONS] = 0;
+    // this->cursorPos[FILE_CHOOSE_MAIN] = 0;
+    // this->cursorPos[FILE_CHOOSE_COPY] = 0;
+    // this->cursorPos[FILE_CHOOSE_ERASE] = 0;
+    // this->cursorPos[FILE_CHOOSE_OPTIONS] = 0;
     View_Init(&this->view, this->state.gfxCtx);
     Sram_Alloc(&this->state, &this->sramCtx);
     Sram_VerifyAndLoadAllSaves(this, &this->sramCtx);
-
 
     GfxPrint_Init(&gPrinter);
 
