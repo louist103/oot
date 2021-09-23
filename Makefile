@@ -189,7 +189,7 @@ PIPEIN = $<
 ifeq ($(COMPILER),gcc)
   include gcc_safe_files.mk
 ifeq ($(CONV_TEXT),1)
-  $(SAFE_C_FILES): CC = iconv -f UTF-8 -t EUC-JP $< | mips-linux-gnu-gcc - -x -c
+  $(SAFE_C_FILES): CC = iconv -f UTF-8 -t EUC-JP $< | mips-linux-gnu-gcc -x c -
 else
 $(SAFE_C_FILES): CC = mips-linux-gnu-gcc $<
 endif
