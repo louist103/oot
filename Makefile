@@ -13,7 +13,7 @@ COMPILER ?= gcc
 # Define normal gameplay. Mostly, restore the title as-is for a GCC build.
 NORMAL_GAMEPLAY ?= 1
 # Convert text to EUC-JP before compilation
-CONV_TEXT ?= 0
+CONV_TEXT ?= 1
 
 # If gcc is used, define the NON_MATCHING and NON_EQUIVALENT flags respectively so the files that
 # are safe to be used can avoid using GLOBAL_ASM which doesn't work with gcc.
