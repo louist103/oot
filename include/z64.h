@@ -346,53 +346,271 @@ typedef struct {
 } SkyboxContext; // size = 0x160
 
 typedef enum {
+/*  0 */ OCARINA_SONG_MINUET,
+/*  1 */ OCARINA_SONG_BOLERO,
+/*  2 */ OCARINA_SONG_SERENADE,
+/*  3 */ OCARINA_SONG_REQUIEM,
+/*  4 */ OCARINA_SONG_NOCTURNE,
+/*  5 */ OCARINA_SONG_PRELUDE,
+/*  6 */ OCARINA_SONG_SARIAS,
+/*  7 */ OCARINA_SONG_EPONAS,
+/*  8 */ OCARINA_SONG_LULLABY,
+/*  9 */ OCARINA_SONG_SUNS,
+/* 10 */ OCARINA_SONG_TIME,
+/* 11 */ OCARINA_SONG_STORMS,
+/* 12 */ OCARINA_SONG_SCARECROW,
+/* 13 */ OCARINA_SONG_MEMORY_GAME
+} OcarinaSongId;
+
+typedef enum {
+    /* 0x00 */ OCARINA_ACTION_UNK_0,
+
+    /* 0x01 */ OCARINA_ACTION_FREE_PLAY,
+
+    /* 0x02 */ OCARINA_ACTION_MINUET,
+    /* 0x03 */ OCARINA_ACTION_BOLERO,
+    /* 0x04 */ OCARINA_ACTION_SERENADE,
+    /* 0x05 */ OCARINA_ACTION_REQUIEM,
+    /* 0x06 */ OCARINA_ACTION_NOCTURNE,
+    /* 0x07 */ OCARINA_ACTION_PRELUDE,
+    /* 0x08 */ OCARINA_ACTION_SARIA,
+    /* 0x09 */ OCARINA_ACTION_EPONA,
+    /* 0x0A */ OCARINA_ACTION_LULLABY,
+    /* 0x0B */ OCARINA_ACTION_SUNS,
+    /* 0x0C */ OCARINA_ACTION_TIME,
+    /* 0x0D */ OCARINA_ACTION_STORMS,
+
+    /* 0x0E */ OCARINA_ACTION_UNK_E,
+
+    /* 0x0F */ OCARINA_ACTION_PLAYBACK_MINUET,
+    /* 0x10 */ OCARINA_ACTION_PLAYBACK_BOLERO,
+    /* 0x11 */ OCARINA_ACTION_PLAYBACK_SERENADE,
+    /* 0x12 */ OCARINA_ACTION_PLAYBACK_REQUIEM,
+    /* 0013 */ OCARINA_ACTION_PLAYBACK_NOCTURNE,
+    /* 0x14 */ OCARINA_ACTION_PLAYBACK_PRELUDE,
+    /* 0x15 */ OCARINA_ACTION_PLAYBACK_SARIA,
+    /* 0x16 */ OCARINA_ACTION_PLAYBACK_EPONA,
+    /* 0x17 */ OCARINA_ACTION_PLAYBACK_LULLABY,
+    /* 0x18 */ OCARINA_ACTION_PLAYBACK_SUNS,
+    /* 0x19 */ OCARINA_ACTION_PLAYBACK_TIME,
+    /* 0x1A */ OCARINA_ACTION_PLAYBACK_STORMS
+} OcarinaSongActionIDs;
+
+typedef enum {
     MESSAGE_ICON_TRIANGLE,
     MESSAGE_ICON_SQUARE,
     MESSAGE_ICON_ARROW
 } MessageBoxIcon;
 
+#define LANGUAGE_ENG 0
+#define LANGUAGE_GER 1
+#define LANGUAGE_FRA 2
+#define LANGUAGE_MAX LANGUAGE_FRA
+
+// TODO get these properties from the textures themselves
+#define FONT_CHAR_TEX_WIDTH  16
+#define FONT_CHAR_TEX_HEIGHT 16
 #define FONT_CHAR_TEX_SIZE ((16 * 16) / 2) // 16x16 I4 texture
 
+// TODO get these properties from the textures themselves
+#define MESSAGE_STATIC_TEX_SIZE 0x1000
+
+typedef enum {
+    /* 0x00 */ MSGMODE_UNK_00, // idle / do nothing
+    /* 0x01 */ MSGMODE_UNK_01,
+    /* 0x02 */ MSGMODE_UNK_02,
+    /* 0x03 */ MSGMODE_UNK_03,
+    /* 0x04 */ MSGMODE_UNK_04,
+    /* 0x05 */ MSGMODE_UNK_05,
+    /* 0x06 */ MSGMODE_TEXT_DISPLAYING, // textbox in progress
+    /* 0x07 */ MSGMODE_UNK_07,
+    /* 0x08 */ MSGMODE_UNK_08,
+    /* 0x09 */ MSGMODE_UNK_09,
+    /* 0x0A */ MSGMODE_UNK_0A,
+    /* 0x0B */ MSGMODE_UNK_0B,
+    /* 0x0C */ MSGMODE_UNK_0C,
+    /* 0x0D */ MSGMODE_UNK_0D,
+    /* 0x0E */ MSGMODE_UNK_0E,
+    /* 0x0F */ MSGMODE_UNK_0F,
+    /* 0x10 */ MSGMODE_UNK_10,
+    /* 0x11 */ MSGMODE_UNK_11,
+    /* 0x12 */ MSGMODE_UNK_12,
+    /* 0x13 */ MSGMODE_UNK_13,
+    /* 0x14 */ MSGMODE_UNK_14,
+    /* 0x15 */ MSGMODE_UNK_15,
+    /* 0x16 */ MSGMODE_UNK_16,
+    /* 0x17 */ MSGMODE_UNK_17,
+    /* 0x18 */ MSGMODE_UNK_18,
+    /* 0x19 */ MSGMODE_UNK_19,
+    /* 0x1A */ MSGMODE_UNK_1A,
+    /* 0x1B */ MSGMODE_UNK_1B,
+    /* 0x1C */ MSGMODE_UNK_1C,
+    /* 0x1D */ MSGMODE_UNK_1D,
+    /* 0x1E */ MSGMODE_UNK_1E,
+    /* 0x1F */ MSGMODE_UNK_1F,
+    /* 0x20 */ MSGMODE_UNK_20,
+    /* 0x21 */ MSGMODE_UNK_21,
+    /* 0x22 */ MSGMODE_UNK_22,
+    /* 0x23 */ MSGMODE_UNK_23,
+    /* 0x24 */ MSGMODE_UNK_24,
+    /* 0x25 */ MSGMODE_UNK_25,
+    /* 0x26 */ MSGMODE_UNK_26,
+    /* 0x27 */ MSGMODE_UNK_27,
+    /* 0x28 */ MSGMODE_UNK_28,
+    /* 0x29 */ MSGMODE_UNK_29,
+    /* 0x2A */ MSGMODE_UNK_2A, // lost woods ocarina minigame related
+    /* 0x2B */ MSGMODE_UNK_2B, // lost woods ocarina minigame related
+    /* 0x2C */ MSGMODE_UNK_2C, // lost woods ocarina minigame related
+    /* 0x2D */ MSGMODE_UNK_2D, // lost woods ocarina minigame related
+    /* 0x2E */ MSGMODE_UNK_2E, // lost woods ocarina minigame related
+    /* 0x2F */ MSGMODE_UNK_2F, // lost woods ocarina minigame related
+    /* 0x30 */ MSGMODE_UNK_30, // lost woods ocarina minigame related
+    /* 0x31 */ MSGMODE_UNK_31, // frogs
+    /* 0x32 */ MSGMODE_UNK_32, // frogs
+    /* 0x33 */ MSGMODE_UNK_33, // frog jumping game?
+    /* 0x34 */ MSGMODE_UNK_34, // next textbox
+    /* 0x35 */ MSGMODE_TEXT_DONE, // textbox done
+    /* 0x36 */ MSGMODE_TEXT_CLOSING, // textbox closing
+    /* 0x37 */ MSGMODE_UNK_37 // frogs
+} MessageMode;
+
+typedef enum {
+    OCARINA_MODE_00
+} OcarinaMode;
+
+typedef enum {
+    /*  0 */ TEXT_STATE_NONE, // None
+    /*  1 */ TEXT_STATE_1, // 
+    /*  2 */ TEXT_STATE_2, // 
+    /*  3 */ TEXT_STATE_3, // 
+    /*  4 */ TEXT_STATE_CHOICE, // Choice
+    /*  5 */ TEXT_STATE_EVENT, // Event
+    /*  6 */ TEXT_STATE_DONE, // Textbox done but not closed
+    /*  7 */ TEXT_STATE_7, // 
+    /*  8 */ TEXT_STATE_8, // 
+    /*  9 */ TEXT_STATE_9, // 
+    /* 10 */ TEXT_STATE_10 // 
+} TextState;
+
 typedef struct {
-    /* 0x0000 */ u32   msgOffset;
-    /* 0x0004 */ u32   msgLength;
-    /* 0x0008 */ char  unk_8[0x3C00];
-    /* 0x3C08 */ u8    iconBuf[FONT_CHAR_TEX_SIZE];
-    /* 0x3C88 */ u8    fontBuf[FONT_CHAR_TEX_SIZE * 320]; // size possibly unconfirmed
-    /* 0xDC88 */ char  msgBuf[1064]; // size unconfirmed
-    /* 0xE0B0 */ char  unk_E0B0[0xD8];
+    /* 0x0000 */ u32    msgOffset;
+    /* 0x0004 */ u32    msgLength;
+    union {
+    /* 0x0008 */ u8     msgProperties;
+    /* 0x0008 */ u8     charTexBuf[FONT_CHAR_TEX_SIZE * 120];
+    };
+    /* 0x3C08 */ u8     iconBuf[FONT_CHAR_TEX_SIZE];
+    /* 0x3C88 */ u8     fontBuf[FONT_CHAR_TEX_SIZE * 320]; // size possibly unconfirmed
+    union {
+    /* 0xDC88 */ char   msgBuf[1064]; // size unconfirmed
+    /* 0xDC88 */ u16    msgBufWide[532]; // size unconfirmed
+    };
+    /* 0xE0B0 */ s32    unk_E0B0;
+    /* 0xE0B4 */ u8     unk_E0B4;
+    /* 0xE0B5 */ char   unk_E0B5[0xC9];
+    /* 0xE17E */ u16    unk_E17E;
+    /* 0xE180 */ u16    unk_E180;
+    /* 0xE182 */ u16    unk_E182;
+    /* 0xE184 */ char   unk_E184[0x04];
 } Font; // size = 0xE188
 
 typedef struct {
     /* 0x0000 */ View   view;
     /* 0x0128 */ Font   font;
-    /* 0xE2B0 */ u8*    textboxSegment; // "fukidashiSegment"
-    /* 0xE2B4 */ char   unk_E2B4[0x44];
-    /* 0xE2FA */ u16    unk_E2F8;
+    /* 0xE2B0 */ void*  textboxSegment; // "fukidashiSegment"
+    /* 0xE2B4 */ char   unk_E2B4[0x4];
+    /* 0xE2B8 */ OcarinaStaff* ocarinaStaff; // original name : info
+    /* 0xE2BC */ u8     unk_E2BC;
+    /* 0xE2BD */ char   unk_E2BD[0x2];
+    /* 0xE2BF */ u8     unk_E2BF;
+    /* 0xE2C0 */ u8     unk_E2C0;
+    /* 0xE2C2 */ char   unk_E2C2[0x4];
+    /* 0xE2C6 */ u16    unk_E2C6;
+    /* 0xE2C8 */ u16    unk_E2C8;
+    /* 0xE2CA */ char   unk_E2CA[0x12];
+    /* 0xE2DC */ s16    unk_E2DC;
+    /* 0xE2DE */ s16    unk_E2DE;
+    /* 0xE2E0 */ s32    unk_E2E0;
+    /* 0xE2E4 */ char   unk_E2E4[0x14];
+    /* 0xE2F8 */ u16    textId;
     /* 0xE2FA */ u16    unk_E2FA;
-    /* 0xE2FC */ char   unk_E2FC[0x04];
-    /* 0xE300 */ s32    unk_E300;
+    /* 0xE2FC */ u8     textBoxProperties; // original name : msg_disp_type
+    /* 0xE2FD */ u8     textBoxType; // "text box type"
+    /* 0xE2FE */ u8     textBoxPos; // text box position
+    /* 0xE2FF */ char   unk_E2FF[0x1];
+    /* 0xE300 */ s32    msgLength; // original name : msg_data
     /* 0xE304 */ u8     msgMode;
-    /* 0xE305 */ char   unk_E305[0xD1];
-    /* 0xE3D6 */ u16    unk_E3D6;
-    /* 0xE3D8 */ char   unk_E3D8[0x0A];
-    /* 0xE3E2 */ u16    unk_E3E2;
-    /* 0xE3E4 */ u8     unk_E3E4;
+    /* 0xE305 */ char   unk_E305[0x1];
+    /* 0xE306 */ u8     msgBufDecoded[200]; // decoded message buffer, TODO size
+    /* 0xE3CE */ u16    msgBufPos; // original name : rdp
+    /* 0xE3D0 */ u16    unk_E3D0;
+    /* 0xE3D2 */ u16    unk_E3D2; // decoded buffer length?
+    /* 0xE3D4 */ u16    unk_E3D4; // or is this one the decoded buffer length?
+    /* 0xE3D6 */ u16    textUnskippable;
+    /* 0xE3D8 */ s16    textPosX;
+    /* 0xE3DA */ s16    textPosY;
+    /* 0xE3DC */ Color_RGBA_s16 textColor;
+    /* 0xE3E4 */ u8     unk_E3E4; // original name : select
     /* 0xE3E5 */ u8     choiceIndex;
-    /* 0xE3E6 */ char   unk_E3E6[0x01];
-    /* 0xE3E7 */ u8     unk_E3E7;
-    /* 0xE3E8 */ char   unk_E3E8[0x04];
-    /* 0xE3EC */ u16    unk_E3EC;
-    /* 0xE3EE */ u16    unk_E3EE;
-    /* 0xE3F0 */ u16    unk_E3F0;
-    /* 0xE3F2 */ u16    unk_E3F2;
+    /* 0xE3E6 */ u8     unk_E3E6;
+    /* 0xE3E7 */ u8     stateTimer;
+    /* 0xE3E8 */ u16    unk_E3E8;
+    /* 0xE3EA */ u16    unk_E3EA;
+    /* 0xE3EA */ u16    unk_E3EC; // "Ocarina_Flog" , "Ocarina_Free" , last played ocarina song, uses OcarinaSongId
+    /* 0xE3EE */ u16    unk_E3EE; // original name : ocarina_mode
+    /* 0xE3F0 */ u16    unk_E3F0; // original name : ocarina_no
+    /* 0xE3F2 */ u16    unk_E3F2; // original name : chk_ocarina_no
     /* 0xE3F4 */ u16    unk_E3F4;
-    /* 0xE3F6 */ char   unk_E3F6[0x16];
-    /* 0xE40C */ u16    unk_E40C;
+    /* 0xE3F6 */ u16    unk_E3F6;
+    /* 0xE3F8 */ u8     unk_E3F8;
+    /* 0xE3F8 */ u8     unk_E3F9;
+    /* 0xE3F8 */ u8     unk_E3FA;
+    /* 0xE3F8 */ u8     unk_E3FB;
+    /* 0xE3FC */ char   unk_E3FC[0x02];
+    /* 0xE3FE */ s16    textboxColorRed;
+    /* 0xE400 */ s16    textboxColorGreen;
+    /* 0xE402 */ s16    textboxColorBlue;
+    /* 0xE404 */ s16    textboxColorAlphaTarget;
+    /* 0xE406 */ s16    textboxColorAlphaCurrent;
+    /* 0xE408 */ Actor* talkActor;
+    /* 0xE40C */ s16    disableWarpSongs; // warp song flag set by scene commands
     /* 0xE40E */ s16    unk_E40E;
     /* 0xE410 */ u8     unk_E410;
     /* 0xE411 */ char   unk_E411[0x07];
 } MessageContext; // size = 0xE418
+
+typedef enum {
+    /* 0x00 */ DO_ACTION_ATTACK,
+    /* 0x01 */ DO_ACTION_CHECK,
+    /* 0x02 */ DO_ACTION_ENTER,
+    /* 0x03 */ DO_ACTION_RETURN,
+    /* 0x04 */ DO_ACTION_OPEN,
+    /* 0x05 */ DO_ACTION_JUMP,
+    /* 0x06 */ DO_ACTION_DECIDE,
+    /* 0x07 */ DO_ACTION_DIVE,
+    /* 0x08 */ DO_ACTION_FASTER,
+    /* 0x09 */ DO_ACTION_THROW,
+    /* 0x0A */ DO_ACTION_NONE, // in do_action_static, the texture at this position is NAVI, however this value is in practice the "No Action" value
+    /* 0x0B */ DO_ACTION_CLIMB,
+    /* 0x0C */ DO_ACTION_DROP,
+    /* 0x0D */ DO_ACTION_DOWN,
+    /* 0x0E */ DO_ACTION_SAVE,
+    /* 0x0F */ DO_ACTION_SPEAK,
+    /* 0x10 */ DO_ACTION_NEXT,
+    /* 0x11 */ DO_ACTION_GRAB,
+    /* 0x12 */ DO_ACTION_STOP,
+    /* 0x13 */ DO_ACTION_PUTAWAY,
+    /* 0x14 */ DO_ACTION_REEL,
+    /* 0x15 */ DO_ACTION_1,
+    /* 0x16 */ DO_ACTION_2,
+    /* 0x17 */ DO_ACTION_3,
+    /* 0x18 */ DO_ACTION_4,
+    /* 0x19 */ DO_ACTION_5,
+    /* 0x1A */ DO_ACTION_6,
+    /* 0x1B */ DO_ACTION_7,
+    /* 0x1C */ DO_ACTION_8,
+    /* 0x1D */ DO_ACTION_MAX
+} DoAction;
 
 typedef struct {
     /* 0x0000 */ View   view;
@@ -469,12 +687,6 @@ typedef struct {
         /* 0x026D */ u8    all;        // "another"; enables all item restrictions
     }                   restrictions;
 } InterfaceContext; // size = 0x270
-
-typedef struct {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 unk_01;
-    /* 0x02 */ u8 unk_02;
-} UnkAudioStruct;
 
 typedef struct {
     /* 0x00 */ void* loadedRamAddr;

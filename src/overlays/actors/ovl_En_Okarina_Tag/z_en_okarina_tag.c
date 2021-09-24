@@ -153,7 +153,7 @@ void func_80ABF0CC(EnOkarinaTag* this, GlobalContext* globalCtx) {
                 Flags_SetSwitch(globalCtx, this->switchFlag);
             }
             if (globalCtx->sceneNum == SCENE_MIZUSIN) {
-                globalCtx->msgCtx.msgMode = 0x37;
+                globalCtx->msgCtx.msgMode = MSGMODE_UNK_37;
             }
             if ((globalCtx->sceneNum != SCENE_DAIYOUSEI_IZUMI) && (globalCtx->sceneNum != SCENE_YOUSEI_IZUMI_YOKO)) {
                 globalCtx->msgCtx.unk_E3EE = 4;
@@ -282,7 +282,7 @@ void func_80ABF708(EnOkarinaTag* this, GlobalContext* globalCtx) {
     s16 yawDiff;
     s16 yawDiffNew;
 
-    if (func_8002F194(&this->actor, globalCtx) != 0) {
+    if (Actor_TalkRequested(&this->actor, globalCtx) != 0) {
         this->actionFunc = func_80ABF7CC;
     } else {
         yawDiff = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
@@ -303,10 +303,10 @@ void func_80ABF708(EnOkarinaTag* this, GlobalContext* globalCtx) {
 
 void func_80ABF7CC(EnOkarinaTag* this, GlobalContext* globalCtx) {
     // "Open sesame sesame!"
-    osSyncPrintf(VT_FGCOL(PURPLE) "☆☆☆☆☆ 開けゴマゴマゴマ！ ☆☆☆☆☆ %d\n" VT_RST, func_8010BDBC(&globalCtx->msgCtx));
+    osSyncPrintf(VT_FGCOL(PURPLE) "☆☆☆☆☆ 開けゴマゴマゴマ！ ☆☆☆☆☆ %d\n" VT_RST, Message_GetState(&globalCtx->msgCtx));
 
-    if ((func_8010BDBC(&globalCtx->msgCtx) == 5) && (func_80106BC8(globalCtx) != 0)) {
-        func_80106CCC(globalCtx);
+    if ((Message_GetState(&globalCtx->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(globalCtx)) {
+        Message_CloseTextbox(globalCtx);
         if (!CHECK_QUEST_ITEM(QUEST_SONG_SUN)) {
             globalCtx->csCtx.segment = SEGMENTED_TO_VIRTUAL(&gSunSongTeachCs);
             gSaveContext.cutsceneTrigger = 1;

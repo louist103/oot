@@ -105,8 +105,8 @@ void EnFu_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 s32 func_80A1D94C(EnFu* this, GlobalContext* globalCtx, u16 textID, EnFuActionFunc actionFunc) {
     s16 yawDiff;
 
-    // func_8002F194 returns 1 if actor flags & 0x100 is set and unsets it
-    if (func_8002F194(&this->actor, globalCtx)) {
+    // Actor_TalkRequested returns 1 if actor flags & 0x100 is set and unsets it
+    if (Actor_TalkRequested(&this->actor, globalCtx)) {
         this->actionFunc = actionFunc;
         return true;
     }
@@ -196,8 +196,8 @@ void EnFu_WaitForPlayback(EnFu* this, GlobalContext* globalCtx) {
 
     player->stateFlags2 |= 0x800000;
     // if dialog state is 7, player has played back the song
-    if (func_8010BDBC(&globalCtx->msgCtx) == 7) {
-        func_8010BD58(globalCtx, 0x1A);
+    if (Message_GetState(&globalCtx->msgCtx) == TEXT_STATE_7) {
+        func_8010BD58(globalCtx, OCARINA_ACTION_PLAYBACK_STORMS);
         this->actionFunc = func_80A1DBD4;
     }
 }
@@ -207,10 +207,10 @@ void EnFu_TeachSong(EnFu* this, GlobalContext* globalCtx) {
 
     player->stateFlags2 |= 0x800000;
     // if dialog state is 2, start song demonstration
-    if (func_8010BDBC(&globalCtx->msgCtx) == 2) {
+    if (Message_GetState(&globalCtx->msgCtx) == TEXT_STATE_2) {
         this->behaviorFlags &= ~FU_WAIT;
-        func_800ED858(4);              // seems to be related to setting instrument type
-        func_8010BD58(globalCtx, 0xD); // play song demonstration, song 0xD = SoS
+        func_800ED858(4); // seems to be related to setting instrument type
+        func_8010BD58(globalCtx, OCARINA_ACTION_STORMS);
         this->actionFunc = EnFu_WaitForPlayback;
     }
 }
@@ -224,10 +224,10 @@ void EnFu_WaitAdult(EnFu* this, GlobalContext* globalCtx) {
         func_80A1D94C(this, globalCtx, 0x508E, func_80A1DBA0);
     } else if (player->stateFlags2 & 0x1000000) {
         this->actor.textId = 0x5035;
-        func_8010B680(globalCtx, this->actor.textId, NULL);
+        Message_StartTextbox(globalCtx, this->actor.textId, NULL);
         this->actionFunc = EnFu_TeachSong;
         this->behaviorFlags |= FU_WAIT;
-    } else if (func_8002F194(&this->actor, globalCtx)) {
+    } else if (Actor_TalkRequested(&this->actor, globalCtx)) {
         this->actionFunc = func_80A1DBA0;
     } else if (ABS(yawDiff) < 0x2301) {
         if (this->actor.xzDistToPlayer < 100.0f) {

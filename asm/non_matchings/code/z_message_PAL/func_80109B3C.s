@@ -96,7 +96,7 @@ glabel jtbl_80154BCC
     .word L8010A850
 
 .text
-glabel func_80109B3C
+glabel Message_Decode
 /* B80CDC 80109B3C 27BDFF68 */  addiu $sp, $sp, -0x98
 /* B80CE0 80109B40 3C010001 */  lui   $at, 1
 /* B80CE4 80109B44 AFBF0044 */  sw    $ra, 0x44($sp)
@@ -248,9 +248,9 @@ glabel func_80109B3C
 /* B80F14 80109D74 A1CC6306 */  sb    $t4, 0x6306($t6)
 /* B80F18 80109D78 93196306 */  lbu   $t9, 0x6306($t8)
 /* B80F1C 80109D7C 00125200 */  sll   $t2, $s2, 8
-/* B80F20 80109D80 3C018015 */  lui   $at, %hi(D_8014B304) # $at, 0x8015
+/* B80F20 80109D80 3C018015 */  lui   $at, %hi(sNextTextId) # $at, 0x8015
 /* B80F24 80109D84 032A5825 */  or    $t3, $t9, $t2
-/* B80F28 80109D88 A42BB304 */  sh    $t3, %lo(D_8014B304)($at)
+/* B80F28 80109D88 A42BB304 */  sh    $t3, %lo(sNextTextId)($at)
 .L80109D8C:
 /* B80F2C 80109D8C 2401000C */  li    $at, 12
 /* B80F30 80109D90 16210012 */  bne   $s1, $at, .L80109DDC
@@ -275,8 +275,8 @@ glabel func_80109B3C
 .L80109DDC:
 /* B80F7C 80109DDC 26E17FFF */  addiu $at, $s7, 0x7fff
 /* B80F80 80109DE0 A43663D5 */  sh    $s6, 0x63d5($at)
-/* B80F84 80109DE4 3C0B8015 */  lui   $t3, %hi(D_8014B300) # $t3, 0x8015
-/* B80F88 80109DE8 916BB300 */  lbu   $t3, %lo(D_8014B300)($t3)
+/* B80F84 80109DE4 3C0B8015 */  lui   $t3, %hi(sTextboxSkipped) # $t3, 0x8015
+/* B80F88 80109DE8 916BB300 */  lbu   $t3, %lo(sTextboxSkipped)($t3)
 /* B80F8C 80109DEC 8FAD0054 */  lw    $t5, 0x54($sp)
 /* B80F90 80109DF0 516004A8 */  beql  $t3, $zero, .L8010B094
 /* B80F94 80109DF4 8FBF0044 */   lw    $ra, 0x44($sp)
@@ -1274,7 +1274,7 @@ glabel L8010A850
 /* B81DB0 8010AC10 25257FFF */  addiu $a1, $t1, 0x7fff
 /* B81DB4 8010AC14 00063400 */  sll   $a2, $a2, 0x10
 /* B81DB8 8010AC18 00063403 */  sra   $a2, $a2, 0x10
-/* B81DBC 8010AC1C 0C04265A */  jal   func_80109968
+/* B81DBC 8010AC1C 0C04265A */  jal   Message_LoadItemIcon
 /* B81DC0 8010AC20 90A55C8A */   lbu   $a1, 0x5c8a($a1)
 /* B81DC4 8010AC24 10000112 */  b     .L8010B070
 /* B81DC8 8010AC28 8FB90054 */   lw    $t9, 0x54($sp)

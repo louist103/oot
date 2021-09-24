@@ -120,9 +120,9 @@ void EnGs_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 s32 func_80A4E3EC(EnGs* this, GlobalContext* globalCtx) {
     s32 ret = 2;
-    switch (func_8010BDBC(&globalCtx->msgCtx)) {
-        case 6:
-            if (func_80106BC8(globalCtx)) {
+    switch (Message_GetState(&globalCtx->msgCtx)) {
+        case TEXT_STATE_DONE:
+            if (Message_ShouldAdvance(globalCtx)) {
                 switch (this->actor.textId) {
                     case 0x2054:
                         this->actor.textId = (this->actor.params & 0xFF) + 0x400;
@@ -147,7 +147,7 @@ void func_80A4E470(EnGs* this, GlobalContext* globalCtx) {
         if (this->unk_19D == 0) {
             player->stateFlags2 |= 0x800000;
             if (player->stateFlags2 & 0x1000000) {
-                func_8010BD58(globalCtx, 1);
+                func_8010BD58(globalCtx, OCARINA_ACTION_FREE_PLAY);
                 this->unk_19D |= 1;
             }
 
@@ -178,14 +178,14 @@ void func_80A4E648(EnGs* this, GlobalContext* globalCtx) {
     s16 sp24;
 
     if (this->unk_19C == 1) {
-        func_8010B720(globalCtx, this->actor.textId);
+        Message_ContinueTextbox(globalCtx, this->actor.textId);
         this->unk_19C = 2;
     } else if (this->unk_19C == 2) {
         this->unk_19C = func_80A4E3EC(this, globalCtx);
-    } else if (func_8002F194(&this->actor, globalCtx)) {
+    } else if (Actor_TalkRequested(&this->actor, globalCtx)) {
         this->unk_19C = 2;
     } else {
-        func_8002F374(globalCtx, &this->actor, &sp26, &sp24);
+        Actor_GetScreenPos(globalCtx, &this->actor, &sp26, &sp24);
         if ((sp26 >= 0) && (sp26 <= SCREEN_WIDTH) && (sp24 >= 0) && (sp24 <= SCREEN_HEIGHT) && (this->unk_19C != 3)) {
             if (func_8002F2CC(&this->actor, globalCtx, 40.0f) == 1) {
                 if (Player_GetMask(globalCtx) == PLAYER_MASK_TRUTH) {
@@ -221,7 +221,7 @@ void func_80A4E910(EnGs* this, GlobalContext* globalCtx) {
     } else if ((this->unk_19F == 1) && (func_80A4E754(this, globalCtx, &this->unk_1E8, &this->unk_1EC, &this->unk_200,
                                                       0.8f, 0.007f, 0.001f, 7, 0) == 0.0f)) {
         if (!Gameplay_InCsMode(globalCtx)) {
-            func_8010B680(globalCtx, 0x71B1, NULL);
+            Message_StartTextbox(globalCtx, 0x71B1, NULL);
         }
         this->unk_19C = 0;
         this->actionFunc = func_80A4F734;

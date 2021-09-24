@@ -722,6 +722,7 @@ SAFE_C_FILES :=    \
     build/src/code/z_olib.o    \
     build/src/code/code_800F9280.o    \
     build/src/code/z_debug_display.o    \
+    build/src/code/z_message_PAL.o    \
     build/src/code/z_player_lib.o    \
     build/src/code/z_game_dlftbls.o    \
     build/src/code/z_vimode.o    \
