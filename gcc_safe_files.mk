@@ -119,6 +119,7 @@ SAFE_C_FILES :=    \
     build/src/overlays/actors/ovl_Demo_Kankyo/z_demo_kankyo_cutscene_data8.o    \
     build/src/overlays/actors/ovl_En_Zl2/z_en_zl2.o    \
     build/src/overlays/actors/ovl_En_Hintnuts/z_en_hintnuts.o    \
+    build/src/overlays/actors/ovl_Door_Warp1/z_door_warp1.o    \
     build/src/overlays/actors/ovl_En_Anubice/z_en_anubice.o    \
     build/src/overlays/actors/ovl_En_Heishi4/z_en_heishi4.o    \
     build/src/overlays/actors/ovl_En_Wonder_Talk2/z_en_wonder_talk2.o    \
@@ -350,7 +351,6 @@ SAFE_C_FILES :=    \
     build/src/overlays/actors/ovl_En_Arrow/z_en_arrow.o    \
     build/src/overlays/actors/ovl_Bg_Toki_Hikari/z_bg_toki_hikari.o    \
     build/src/overlays/actors/ovl_En_Goma/z_en_goma.o    \
-    build/src/overlays/actors/ovl_Magic_Dark/z_magic_dark_gfx.o    \
     build/src/overlays/actors/ovl_Magic_Dark/z_magic_dark.o    \
     build/src/overlays/actors/ovl_Bg_Haka_Gate/z_bg_haka_gate.o    \
     build/src/overlays/actors/ovl_En_Ice_Hono/z_en_ice_hono.o    \
@@ -375,6 +375,15 @@ SAFE_C_FILES :=    \
     build/src/overlays/actors/ovl_En_Zo/z_en_zo.o    \
     build/src/overlays/actors/ovl_Boss_Fd2/z_boss_fd2_colchk.o    \
     build/src/overlays/actors/ovl_Boss_Fd2/z_boss_fd2.o    \
+    build/src/overlays/actors/ovl_kaleido_scope/z_kaleido_map_PAL.o    \
+    build/src/overlays/actors/ovl_kaleido_scope/z_kaleido_equipment.o    \
+    build/src/overlays/actors/ovl_kaleido_scope/z_kaleido_debug.o    \
+    build/src/overlays/actors/ovl_kaleido_scope/z_kaleido_collect.o    \
+    build/src/overlays/actors/ovl_kaleido_scope/z_kaleido_item.o    \
+    build/src/overlays/actors/ovl_kaleido_scope/z_kaleido_scope_PAL.o    \
+    build/src/overlays/actors/ovl_kaleido_scope/z_lmap_mark.o    \
+    build/src/overlays/actors/ovl_kaleido_scope/z_kaleido_prompt.o    \
+    build/src/overlays/actors/ovl_kaleido_scope/z_lmap_mark_data.o    \
     build/src/overlays/actors/ovl_En_Kakasi3/z_en_kakasi3.o    \
     build/src/overlays/actors/ovl_Mir_Ray/z_mir_ray.o    \
     build/src/overlays/actors/ovl_Obj_Timeblock/z_obj_timeblock.o    \
@@ -396,9 +405,9 @@ SAFE_C_FILES :=    \
     build/src/overlays/actors/ovl_En_Reeba/z_en_reeba.o    \
     build/src/overlays/actors/ovl_En_Ssh/z_en_ssh.o    \
     build/src/overlays/actors/ovl_En_Ms/z_en_ms.o    \
-    build/src/overlays/actors/ovl_En_Ms/dlists.o    \
     build/src/overlays/actors/ovl_En_Kakasi2/z_en_kakasi2.o    \
     build/src/overlays/actors/ovl_En_Po_Sisters/z_en_po_sisters.o    \
+    build/src/overlays/actors/ovl_En_Ganon_Mant/z_en_ganon_mant.o    \
     build/src/overlays/actors/ovl_En_Horse_Link_Child/z_en_horse_link_child.o    \
     build/src/overlays/actors/ovl_Efc_Erupc/z_efc_erupc.o    \
     build/src/overlays/actors/ovl_Door_Ana/z_door_ana.o    \
@@ -506,16 +515,6 @@ SAFE_C_FILES :=    \
     build/src/overlays/actors/ovl_En_Fd_Fire/z_en_fd_fire.o    \
     build/src/overlays/actors/ovl_En_Diving_Game/z_en_diving_game.o    \
     build/src/overlays/actors/ovl_En_GirlA/z_en_girla.o    \
-    build/src/overlays/actors/ovl_En_Ganon_Mant/z_en_ganon_mant.o    \
-    build/src/overlays/actors/ovl_kaleido_scope/z_kaleido_map_PAL.o    \
-    build/src/overlays/actors/ovl_kaleido_scope/z_kaleido_equipment.o    \
-    build/src/overlays/actors/ovl_kaleido_scope/z_kaleido_debug.o    \
-    build/src/overlays/actors/ovl_kaleido_scope/z_kaleido_collect.o    \
-    build/src/overlays/actors/ovl_kaleido_scope/z_kaleido_item.o    \
-    build/src/overlays/actors/ovl_kaleido_scope/z_kaleido_scope_PAL.o    \
-    build/src/overlays/actors/ovl_kaleido_scope/z_lmap_mark.o    \
-    build/src/overlays/actors/ovl_kaleido_scope/z_kaleido_prompt.o    \
-    build/src/overlays/actors/ovl_kaleido_scope/z_lmap_mark_data.o    \
     build/src/libultra_code_O1/osStopTimer.o    \
     build/src/libultra_code_O1/osSetTimer.o    \
     build/src/libultra_boot_O1/osStopThread.o    \
@@ -617,12 +616,15 @@ SAFE_C_FILES :=    \
     build/src/boot/z_locale.o    \
     build/src/boot/missing_gcc_functions.o    \
     build/src/code/z_player_call.o    \
+    build/src/code/audio_sound_params.o    \
     build/src/code/z_scene.o    \
     build/src/code/z_prenmi_buff.o    \
     build/src/code/code_800FD970.o    \
     build/src/code/game.o    \
     build/src/code/z_jpeg.o    \
     build/src/code/z_onepointdemo_data.o    \
+    build/src/code/z_kankyo.o    \
+    build/src/code/z_vr_box.o    \
     build/src/code/z_kanfont.o    \
     build/src/code/z_lights.o    \
     build/src/code/z_bgcheck.o    \
@@ -652,6 +654,7 @@ SAFE_C_FILES :=    \
     build/src/code/fault_drawer.o    \
     build/src/code/z_camera_data.o    \
     build/src/code/title_setup.o    \
+    build/src/code/audio_synthesis.o    \
     build/src/code/z_effect_soft_sprite_dlftbls.o    \
     build/src/code/code_800AD920.o    \
     build/src/code/shrink_window.o    \
@@ -717,6 +720,7 @@ SAFE_C_FILES :=    \
     build/src/code/z_frame_advance.o    \
     build/src/code/mtxuty-cvt.o    \
     build/src/code/z_olib.o    \
+    build/src/code/code_800F9280.o    \
     build/src/code/z_debug_display.o    \
     build/src/code/z_player_lib.o    \
     build/src/code/z_game_dlftbls.o    \
@@ -748,6 +752,7 @@ SAFE_C_FILES :=    \
     build/src/code/z_kaleido_setup.o    \
     build/src/code/loadfragment2.o    \
     build/src/code/z_sram.o    \
+    build/src/code/audio_load.o    \
     build/src/code/jpegutils.o    \
     build/src/code/z_prenmi.o    \
     build/src/code/z_rcp.o    \
@@ -760,6 +765,7 @@ SAFE_C_FILES :=    \
     build/src/code/main.o    \
     build/src/code/sys_math.o    \
     build/src/code/z_lib.o    \
+    build/src/code/code_800BB0A0.o    \
     build/src/libultra_boot_O2/__osSiDeviceBusy.o    \
     build/src/libultra_boot_O2/_Litob.o    \
     build/src/libultra_boot_O2/osEPiWriteIo.o    \
