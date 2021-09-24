@@ -275,6 +275,7 @@ SAFE_C_FILES :=    \
     build/src/overlays/actors/ovl_En_Door/z_en_door.o    \
     build/src/overlays/actors/ovl_En_Hata/z_en_hata.o    \
     build/src/overlays/actors/ovl_Eff_Dust/z_eff_dust.o    \
+    build/src/overlays/actors/ovl_Object_Kankyo/z_object_kankyo.o    \
     build/src/overlays/actors/ovl_En_Xc/z_en_xc.o    \
     build/src/overlays/actors/ovl_En_Bb/z_en_bb.o    \
     build/src/overlays/actors/ovl_Bg_Gnd_Nisekabe/z_bg_gnd_nisekabe.o    \
