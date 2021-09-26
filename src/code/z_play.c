@@ -1054,6 +1054,61 @@ void Gameplay_DrawOverlayElements(GlobalContext* globalCtx) {
     }
 }
 
+int Handle_GetRealSkulltulaCount(void) {
+    int i, j;
+    int realSkulltulaCount = 0;
+    // loop over gsFlags.
+    for(i = 0; i < 6; i++) {
+        u32 gsFlagsVal = *(u32 *)&gSaveContext.gsFlags[i]; // gsFlags is s32 instead of u32, we cannot use it as is for safety reasons.
+        // 32 bits to check.
+        for(j = 0; j < 32; j++) {
+            if (gsFlagsVal & (1 << j))
+                realSkulltulaCount++;
+        }
+    }
+    return realSkulltulaCount;
+}
+
+int Handle_GetDispSkulltulaCount(void) {
+    return gSaveContext.inventory.gsTokens;
+}
+
+void Handle_DrawSkulltulaCheck(GlobalContext* globalCtx, Gfx **gfxP)
+{
+    int realSkulltulaCount = Handle_GetRealSkulltulaCount();
+    int displayedSkulltulaCount = Handle_GetDispSkulltulaCount();
+    GfxPrint printer;
+    GfxPrint_Init(&printer);
+    GfxPrint_Open(&printer, *gfxP);
+    
+    // real skulltula count. Number of set bits in gsFlags[]
+    GfxPrint_SetPos(&printer, 3, 7);
+    GfxPrint_SetColor(&printer, 255, 255, 55, 32);
+    GfxPrint_Printf(&printer, "REAL COUNT: ");
+    GfxPrint_SetColor(&printer, 255, 255, 55, 32);
+    GfxPrint_Printf(&printer, "%03u", realSkulltulaCount);
+    
+    // displayed skulltula count. On menu
+    GfxPrint_SetPos(&printer, 3, 8);
+    GfxPrint_SetColor(&printer, 255, 255, 55, 32);
+    GfxPrint_Printf(&printer, "DISP COUNT: ");
+    GfxPrint_SetColor(&printer, 255, 255, 55, 32);
+    GfxPrint_Printf(&printer, "%03u", displayedSkulltulaCount);
+    
+    // Sanity check passes?
+    GfxPrint_SetPos(&printer, 3, 9);
+    if (realSkulltulaCount == displayedSkulltulaCount) {
+        GfxPrint_SetColor(&printer, 0, 255, 55, 32);
+        GfxPrint_Printf(&printer, "OK");
+    } else {
+        GfxPrint_SetColor(&printer, 255, 0, 55, 32);
+        GfxPrint_Printf(&printer, "NOT OK");
+    }
+
+    *gfxP = GfxPrint_Close(&printer);
+    GfxPrint_Destroy(&printer);
+}
+
 void Gameplay_Draw(GlobalContext* globalCtx) {
     GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
     Lights* sp228;
@@ -1311,6 +1366,17 @@ void Gameplay_Draw(GlobalContext* globalCtx) {
     }
 
     Camera_Finish(GET_ACTIVE_CAM(globalCtx));
+
+    // Skulltula sanity check, because fuck this dumb SRAM GCC bug or whatever it is.
+    {
+        Gfx* prevDisplayList = POLY_OPA_DISP;
+        Gfx* gfxP = Graph_GfxPlusOne(POLY_OPA_DISP);
+        gSPDisplayList(OVERLAY_DISP++, gfxP);
+        Handle_DrawSkulltulaCheck(globalCtx, &gfxP);
+        gSPEndDisplayList(gfxP++);
+        Graph_BranchDlist(prevDisplayList, gfxP);
+        POLY_OPA_DISP = gfxP;
+    }
 
     CLOSE_DISPS(gfxCtx, "../z_play.c", 4508);
 }

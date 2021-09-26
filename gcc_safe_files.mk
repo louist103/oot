@@ -97,6 +97,7 @@ SAFE_C_FILES :=    \
     build/src/overlays/actors/ovl_Bg_Spot09_Obj/z_bg_spot09_obj.o    \
     build/src/overlays/actors/ovl_En_Attack_Niw/z_en_attack_niw.o    \
     build/src/overlays/actors/ovl_En_Cow/z_en_cow.o    \
+    build/src/overlays/actors/ovl_En_Wf/z_en_wf.o    \
     build/src/overlays/actors/ovl_Obj_Hsblock/z_obj_hsblock.o    \
     build/src/overlays/actors/ovl_Obj_Elevator/z_obj_elevator.o    \
     build/src/overlays/actors/ovl_En_Holl/z_en_holl.o    \
@@ -275,6 +276,7 @@ SAFE_C_FILES :=    \
     build/src/overlays/actors/ovl_En_Door/z_en_door.o    \
     build/src/overlays/actors/ovl_En_Hata/z_en_hata.o    \
     build/src/overlays/actors/ovl_Eff_Dust/z_eff_dust.o    \
+    build/src/overlays/actors/ovl_Object_Kankyo/z_object_kankyo.o    \
     build/src/overlays/actors/ovl_En_Xc/z_en_xc.o    \
     build/src/overlays/actors/ovl_En_Bb/z_en_bb.o    \
     build/src/overlays/actors/ovl_Bg_Gnd_Nisekabe/z_bg_gnd_nisekabe.o    \
@@ -318,6 +320,7 @@ SAFE_C_FILES :=    \
     build/src/overlays/actors/ovl_En_Shopnuts/z_en_shopnuts.o    \
     build/src/overlays/actors/ovl_En_Nwc/z_en_nwc.o    \
     build/src/overlays/actors/ovl_En_Peehat/z_en_peehat.o    \
+    build/src/overlays/actors/ovl_Bg_Hidan_Sekizou/z_bg_hidan_sekizou.o    \
     build/src/overlays/actors/ovl_En_Syateki_Itm/z_en_syateki_itm.o    \
     build/src/overlays/actors/ovl_En_River_Sound/z_en_river_sound.o    \
     build/src/overlays/actors/ovl_Bg_Spot08_Bakudankabe/z_bg_spot08_bakudankabe.o    \
