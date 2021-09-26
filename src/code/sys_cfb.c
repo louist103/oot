@@ -7,25 +7,25 @@ void SysCfb_Init(s32 n64dd) {
     u32 screenSize;
     u32 tmpFbEnd;
 
-    if (osMemSize >= 0x800000U) {
-        // "8MB or more memory is installed"
-        osSyncPrintf("８Ｍバイト以上のメモリが搭載されています\n");
-        tmpFbEnd = 0x8044BE80;
-        if (n64dd == 1) {
-            osSyncPrintf("RAM 8M mode (N64DD対応)\n"); // "RAM 8M mode (N64DD compatible)"
-            sSysCfbEnd = 0x805FB000;
-        } else {
-            // "The margin for this version is %dK bytes"
-            osSyncPrintf("このバージョンのマージンは %dK バイトです\n", (0x4BC00 / 1024));
-            sSysCfbEnd = tmpFbEnd;
-        }
-    } else if (osMemSize >= 0x400000U) {
-        osSyncPrintf("RAM4M mode\n");
-        sSysCfbEnd = 0x80400000;
-    } else {
-        LogUtils_HungupThread("../sys_cfb.c", 354);
-    }
-
+    // if (osMemSize >= 0x800000U) {
+    //    // "8MB or more memory is installed"
+    //    osSyncPrintf("８Ｍバイト以上のメモリが搭載されています\n");
+    //    tmpFbEnd = 0x80800000 ;
+    //    //if (n64dd == 1) {
+    //    //    osSyncPrintf("RAM 8M mode (N64DD対応)\n"); // "RAM 8M mode (N64DD compatible)"
+    //    //    sSysCfbEnd = 0x805FB000;
+    //    //} else {
+    //    //    // "The margin for this version is %dK bytes"
+    //    //    osSyncPrintf("このバージョンのマージンは %dK バイトです\n", (0x4BC00 / 1024));
+    //    //    sSysCfbEnd = tmpFbEnd;
+    //    //}
+    //} else if (osMemSize >= 0x400000U) {
+    //    osSyncPrintf("RAM4M mode\n");
+    //    sSysCfbEnd = 0x80400000;
+    //} else {
+    //    LogUtils_HungupThread("../sys_cfb.c", 354);
+    //}
+    sSysCfbEnd = 0x80800000;
     screenSize = SCREEN_WIDTH * SCREEN_HEIGHT;
     sSysCfbEnd &= ~0x3f;
     // "The final address used by the system is %08x"

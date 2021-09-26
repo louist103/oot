@@ -6793,12 +6793,12 @@ void Camera_Init(Camera* camera, View* view, CollisionContext* colCtx, GlobalCon
             PREG(i) = sPREGInit[i];
         }
 
-        DbCamera_Reset(camera, &D_8015BD80);
+      //  DbCamera_Reset(camera, &D_8015BD80);
         sInitRegs = false;
         PREG(88) = -1;
     }
     camera->globalCtx = D_8015BD7C = globalCtx;
-    DbCamera_Init(&D_8015BD80, camera);
+    //DbCamera_Init(&D_8015BD80, camera);
     curUID = sNextUID;
     sNextUID++;
     while (curUID != 0) {
@@ -7452,7 +7452,7 @@ Vec3s Camera_Update(Camera* camera) {
     if (CHECK_BTN_ALL(D_8015BD7C->state.input[2].press.button, BTN_START)) {
         gDbgCamEnabled ^= 1;
         if (gDbgCamEnabled) {
-            DbgCamera_Enable(&D_8015BD80, camera);
+      //      DbgCamera_Enable(&D_8015BD80, camera);
         } else if (camera->globalCtx->csCtx.state != CS_STATE_IDLE) {
             func_80064534(camera->globalCtx, &camera->globalCtx->csCtx);
         }
@@ -7460,13 +7460,13 @@ Vec3s Camera_Update(Camera* camera) {
 
     // Debug cam update
     if (gDbgCamEnabled) {
-        camera->globalCtx->view.fovy = D_8015BD80.fov;
-        DbCamera_Update(&D_8015BD80, camera);
-        func_800AA358(&camera->globalCtx->view, &D_8015BD80.eye, &D_8015BD80.at, &D_8015BD80.unk_1C);
-        if (R_DBG_CAM_UPDATE) {
-            osSyncPrintf("camera: debug out\n");
-        }
-        return D_8015BD80.sub.unk_104A;
+      //  camera->globalCtx->view.fovy = D_8015BD80.fov;
+      //  DbCamera_Update(&D_8015BD80, camera);
+      //  func_800AA358(&camera->globalCtx->view, &D_8015BD80.eye, &D_8015BD80.at, &D_8015BD80.unk_1C);
+      //  if (R_DBG_CAM_UPDATE) {
+      //      osSyncPrintf("camera: debug out\n");
+      //  }
+      //  return D_8015BD80.sub.unk_104A;
     }
 
     OREG(0) &= ~8;
@@ -7838,8 +7838,8 @@ s32 Camera_ChangeDataIdx(Camera* camera, s32 camDataIdx) {
 
 Vec3s* Camera_GetInputDir(Vec3s* dst, Camera* camera) {
     if (gDbgCamEnabled) {
-        *dst = D_8015BD80.sub.unk_104A;
-        return dst;
+       // *dst = D_8015BD80.sub.unk_104A;
+       // return dst;
     } else {
         *dst = camera->inputDir;
         return dst;
@@ -7862,8 +7862,8 @@ s16 Camera_GetInputDirYaw(Camera* camera) {
 
 Vec3s* Camera_GetCamDir(Vec3s* dst, Camera* camera) {
     if (gDbgCamEnabled) {
-        *dst = D_8015BD80.sub.unk_104A;
-        return dst;
+       // *dst = D_8015BD80.sub.unk_104A;
+       // return dst;
     } else {
         *dst = camera->camDir;
         return dst;
