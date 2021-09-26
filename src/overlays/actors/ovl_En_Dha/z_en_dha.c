@@ -191,7 +191,7 @@ void EnDha_SetupWait(EnDha* this) {
 }
 
 void EnDha_Wait(EnDha* this, GlobalContext* globalCtx) {
-    Vec3f zeroVec = { 0.0f, 0.0f, 0.0f }; // unused
+   // Vec3f zeroVec = { 0.0f, 0.0f, 0.0f }; // unused
     Vec3f armPosMultiplier1 = { 0.0f, 0.0f, 55.0f };
     Vec3f armPosMultiplier2 = { 0.0f, 0.0f, -54.0f };
     Player* player = GET_PLAYER(globalCtx);

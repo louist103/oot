@@ -23,6 +23,7 @@ void EnSt_Die(EnSt* this, GlobalContext* globalCtx);
 void EnSt_BounceAround(EnSt* this, GlobalContext* globalCtx);
 void EnSt_FinishBouncing(EnSt* this, GlobalContext* globalCtx);
 
+/*
 static Vtx sUnusedVertices[] = {
     VTX(-1, 0, 0, 0, 1024, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(1, 0, 0, 1024, 1024, 0xFF, 0xFF, 0xFF, 0xFF),
@@ -41,7 +42,7 @@ static Gfx sUnusedDList[] = {
     gsSP1Triangle(0, 1, 2, 0),
     gsSP1Triangle(0, 2, 3, 0),
     gsSPEndDisplayList(),
-};
+};*/
 
 const ActorInit En_St_InitVars = {
     ACTOR_EN_ST,

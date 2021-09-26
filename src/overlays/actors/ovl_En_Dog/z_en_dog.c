@@ -296,7 +296,7 @@ void EnDog_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void EnDog_FollowPath(EnDog* this, GlobalContext* globalCtx) {
     s32 behaviors[] = { DOG_SIT, DOG_BOW, DOG_BARK };
-    s32 unused[] = { 40, 80, 20 };
+   // s32 unused[] = { 40, 80, 20 };
     f32 speed;
     s32 frame;
 

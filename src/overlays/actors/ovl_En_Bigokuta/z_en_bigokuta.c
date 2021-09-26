@@ -154,7 +154,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 // possibly color data
-static s32 sUnused[] = { 0xFFFFFFFF, 0x969696FF };
+//static s32 sUnused[] = { 0xFFFFFFFF, 0x969696FF };
 
 void EnBigokuta_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnBigokuta* this = THIS;

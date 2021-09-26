@@ -925,8 +925,8 @@ void EnAm_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-static Vec3f sUnused1 = { 1100.0f, -700.0f, 0.0f };
-static Vec3f sUnused2 = { 0.0f, 0.0f, 0.0f };
+//static Vec3f sUnused1 = { 1100.0f, -700.0f, 0.0f };
+//static Vec3f sUnused2 = { 0.0f, 0.0f, 0.0f };
 
 void EnAm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx) {
     EnAm* this = THIS;

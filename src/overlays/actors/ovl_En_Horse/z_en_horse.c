@@ -3793,7 +3793,7 @@ void EnHorse_SkinCallback1(Actor* thisx, GlobalContext* globalCtx, PSkinAwb* ski
 }
 
 // unused
-static s32 D_80A667DC[] = { 0, 3, 7, 14 };
+//static s32 D_80A667DC[] = { 0, 3, 7, 14 };
 
 s32 EnHorse_SkinCallback2(Actor* thisx, GlobalContext* globalCtx, s32 limbIndex, PSkinAwb* arg3) {
     static void* eyeTextures[] = {

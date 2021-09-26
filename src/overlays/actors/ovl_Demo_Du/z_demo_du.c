@@ -16,7 +16,7 @@ void DemoDu_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DemoDu_Update(Actor* thisx, GlobalContext* globalCtx);
 void DemoDu_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-static s32 sUnused = 0;
+//static s32 sUnused = 0;
 
 #include "z_demo_du_cutscene_data.c" EARLY
 

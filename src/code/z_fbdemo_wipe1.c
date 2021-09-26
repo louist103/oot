@@ -156,10 +156,10 @@ Gfx sWipeDList[] = {
 };
 
 // unused.
-Gfx sWipeSyncDList[] = {
-    gsDPPipeSync(),
-    gsSPEndDisplayList(),
-};
+//Gfx sWipeSyncDList[] = {
+//    gsDPPipeSync(),
+//    gsSPEndDisplayList(),
+//};
 
 #define THIS ((TransitionWipe*)thisx)
 

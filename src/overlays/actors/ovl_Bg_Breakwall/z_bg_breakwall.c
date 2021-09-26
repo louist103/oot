@@ -132,21 +132,20 @@ Actor* BgBreakwall_SpawnFragments(GlobalContext* globalCtx, BgBreakwall* this, V
     s32 i;
     s16 angle1;
     s16 angle2 = 0;
-    Vec3f zeroVec = { 0.0f, 0.0f, 0.0f }; // unused
-    Vec3s actorRotList[] = { { 0, 0, 0 }, { 0, 0, 0x4000 }, { 0, 0, -0x4000 }, { 0, 0, 0 } };
-    Vec3f actorScaleList[] = {
+    //Vec3f zeroVec = { 0.0f, 0.0f, 0.0f }; // unused
+    static Vec3s actorRotList[] = { { 0, 0, 0 }, { 0, 0, 0x4000 }, { 0, 0, -0x4000 }, { 0, 0, 0 } };
+    static Vec3f actorScaleList[] = {
         { 0.004f, 0.004f, 0.004f },
         { 0.004f, 0.004f, 0.004f },
         { 0.004f, 0.004f, 0.004f },
         { 0.004f, 0.004f, 0.004f },
     };
-    Vec3f actorPosList[][4] = {
+    static Vec3f actorPosList[][4] = {
         { { 40.0f, 15.0f, 0.0f }, { 30.0f, 57.0f, 0.0f }, { 50.0f, 57.0f, 0.0f }, { 40.0f, 70.0f, 0.0f } },
         { { 55.0f, -15.0f, 0.0f }, { 30.0f, -32.0f, 0.0f }, { 50.0f, -32.0f, 0.0f }, { 20.0f, -10.0f, 0.0f } },
         { { -40.0f, 14.0f, 0.0f }, { -50.0f, 57.0f, 0.0f }, { -30.0f, 57.0f, 0.0f }, { -40.0f, 70.0f, 0.0f } },
         { { -55.0f, -15.0f, 0.0f }, { -55.0f, -32.0f, 0.0f }, { -30.0f, -32.0f, 0.0f }, { -20.0f, -10.0f, 0.0f } },
     };
-    s32 pad;
 
     for (k = 3; k >= 0; k--) {
         if ((k == 0) || (k == 3)) {

@@ -601,8 +601,8 @@ void BossDodongo_GetUp(BossDodongo* this, GlobalContext* globalCtx) {
 
 void BossDodongo_BlowFire(BossDodongo* this, GlobalContext* globalCtx) {
     s32 pad;
-    Vec3f unusedZeroVec1 = { 0.0f, 0.0f, 0.0f };
-    Vec3f unusedZeroVec2 = { 0.0f, 0.0f, 0.0f };
+    //Vec3f unusedZeroVec2 = { 0.0f, 0.0f, 0.0f };
+    //Vec3f unusedZeroVec1 = { 0.0f, 0.0f, 0.0f };
 
     SkelAnime_Update(&this->skelAnime);
 

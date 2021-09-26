@@ -1,8 +1,8 @@
 #include "global.h"
 #include "vt.h"
 
-void* D_8012D1F0 = NULL;
-UNK_TYPE D_8012D1F4 = 0; // unused
+//void* D_8012D1F0 = NULL;
+//UNK_TYPE D_8012D1F4 = 0; // unused
 Input* D_8012D1F8 = NULL;
 
 TransitionUnk sTrnsnUnk;
@@ -11,7 +11,7 @@ VisMono D_80161498;
 Color_RGBA8_u32 D_801614B0;
 FaultClient D_801614B8;
 s16 D_801614C8;
-u64 D_801614D0[0xA00];
+//u64 D_801614D0[0xA00];
 
 void func_800BC450(GlobalContext* globalCtx) {
     Camera_ChangeDataIdx(GET_ACTIVE_CAM(globalCtx), globalCtx->unk_1242B - 1);
@@ -401,11 +401,11 @@ void Gameplay_Init(GameState* thisx) {
     AnimationContext_Update(globalCtx, &globalCtx->animationCtx);
     gSaveContext.respawnFlag = 0;
 
-    if (dREG(95) != 0) {
-        D_8012D1F0 = D_801614D0;
-        osSyncPrintf("\nkawauso_data=[%x]", D_8012D1F0);
-        DmaMgr_DMARomToRam(0x03FEB000, (u32)D_8012D1F0, sizeof(D_801614D0));
-    }
+    //if (dREG(95) != 0) {
+    //    D_8012D1F0 = D_801614D0;
+    //    osSyncPrintf("\nkawauso_data=[%x]", D_8012D1F0);
+    //    DmaMgr_DMARomToRam(0x03FEB000, (u32)D_8012D1F0, sizeof(D_801614D0));
+    //}
 }
 
 void Gameplay_Update(GlobalContext* globalCtx) {

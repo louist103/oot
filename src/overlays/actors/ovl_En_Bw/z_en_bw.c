@@ -742,7 +742,7 @@ void EnBw_Update(Actor* thisx, GlobalContext* globalCtx2) {
     EnBw* this = THIS;
     Vec3f velocity = { 0.0f, 0.0f, 0.0f };
     Vec3f accel = { 0.0f, 0.0f, 0.0f };
-    s32 pad[3]; // probably an unused Vec3f
+ //   s32 pad[3]; // probably an unused Vec3f
     Color_RGBA8 sp50 = { 255, 200, 0, 255 };
     Color_RGBA8 sp4C = { 255, 80, 0, 255 };
     Color_RGBA8 sp48 = { 0, 0, 0, 255 };

@@ -829,7 +829,7 @@ s32 EnIk_OverrideLimbDraw3(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
 }
 
 // unused
-static Vec3f D_80A78470 = { 300.0f, 0.0f, 0.0f };
+//static Vec3f D_80A78470 = { 300.0f, 0.0f, 0.0f };
 
 static Vec3f D_80A7847C[] = {
     { 800.0f, -200.0f, -5200.0f },

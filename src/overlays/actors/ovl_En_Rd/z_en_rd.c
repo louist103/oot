@@ -107,8 +107,8 @@ static InitChainEntry sInitChain[] = {
 static Vec3f D_80AE4918 = { 0.0f, 0.0f, 0.0f };
 
 // I'm guessing these are primitive and environment colors that go unused
-static Color_RGBA8 D_80AE4924 = { 200, 200, 255, 255 };
-static Color_RGBA8 D_80AE4928 = { 0, 0, 255, 0 };
+//static Color_RGBA8 D_80AE4924 = { 200, 200, 255, 255 };
+//static Color_RGBA8 D_80AE4928 = { 0, 0, 255, 0 };
 
 static Vec3f D_80AE492C = { 0.0f, 0.0f, 0.0f };
 static Color_RGBA8 D_80AE4938 = { 200, 200, 255, 255 };
@@ -306,8 +306,8 @@ void func_80AE2B90(EnRd* this, GlobalContext* globalCtx) {
 
 void func_80AE2C1C(EnRd* this, GlobalContext* globalCtx) {
     Vec3f sp44 = D_80AE4918;
-    Color_RGBA8 sp40 = D_80AE4924;
-    Color_RGBA8 sp3C = D_80AE4928;
+    //Color_RGBA8 sp40 = D_80AE4924;
+    //Color_RGBA8 sp3C = D_80AE4928;
     Player* player = GET_PLAYER(globalCtx);
     s32 pad;
     s16 sp32 = this->actor.yawTowardsPlayer - this->actor.shape.rot.y - this->unk_30E - this->unk_310;

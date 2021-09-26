@@ -1165,10 +1165,10 @@ void BossSst_HeadSetupFinish(BossSst* this) {
 void BossSst_HeadFinish(BossSst* this, GlobalContext* globalCtx) {
     static Color_RGBA8 colorIndigo = { 80, 80, 150, 255 };
     static Color_RGBA8 colorDarkIndigo = { 40, 40, 80, 255 };
-    static Color_RGBA8 colorUnused[2] = {
-        { 0, 0, 0, 255 },
-        { 100, 100, 100, 0 },
-    };
+    //static Color_RGBA8 colorUnused[2] = {
+    //    { 0, 0, 0, 255 },
+    //    { 100, 100, 100, 0 },
+    //};
     Vec3f spawnPos;
     s32 i;
 

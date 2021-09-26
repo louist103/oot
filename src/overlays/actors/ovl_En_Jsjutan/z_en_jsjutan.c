@@ -33,7 +33,7 @@ u8 gJsjutanShadowTex[0x800];
 
 Vec3s D_80A8EE10[0x90];
 
-static s32 sUnused[2] = { 0, 0 };
+//static s32 sUnused[2] = { 0, 0 };
 
 #include "overlays/ovl_En_Jsjutan/ovl_En_Jsjutan.c"
 

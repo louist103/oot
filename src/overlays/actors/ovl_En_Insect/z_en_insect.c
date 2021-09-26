@@ -404,8 +404,8 @@ void func_80A7CBC8(EnInsect* this) {
 
 void func_80A7CC3C(EnInsect* this, GlobalContext* globalCtx) {
     static Vec3f accel = { 0.0f, 0.0f, 0.0f };
-    static Vec3f unused = { 0.0f, 0.0f, 0.0f };
-    s32 pad[2];
+   // static Vec3f unused = { 0.0f, 0.0f, 0.0f };
+    //s32 pad[2];
     Vec3f velocity;
 
     Math_SmoothStepToF(&this->actor.speedXZ, 0.0f, 0.1f, 0.5f, 0.0f);

@@ -44,7 +44,7 @@ static InitChainEntry sInitChain[] = {
 
 static Gfx* sDisplayLists[] = { gMoriHashiraPlatformsDL, gMoriHashiraGateDL };
 
-static s16 sUnkTimer; // seems to be unused
+//static s16 sUnkTimer; // seems to be unused
 
 void BgMoriHashira4_SetupAction(BgMoriHashira4* this, BgMoriHashira4ActionFunc actionFunc) {
     this->actionFunc = actionFunc;
@@ -97,7 +97,7 @@ void BgMoriHashira4_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgMoriHashira4_SetupWaitForMoriTex(this);
     // (4 pillars of the Forest Temple) Bank danger
     osSyncPrintf("(森の神殿 ４本柱)(arg_data 0x%04x)\n", this->dyna.actor.params);
-    sUnkTimer = 0;
+  //  sUnkTimer = 0;
 }
 
 void BgMoriHashira4_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -139,7 +139,7 @@ void BgMoriHashira4_GateWait(BgMoriHashira4* this, GlobalContext* globalCtx) {
             Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_METALDOOR_OPEN);
             BgMoriHashira4_SetupAction(this, BgMoriHashira4_GateOpen);
             OnePointCutscene_Init(globalCtx, 6010, 20, &this->dyna.actor, MAIN_CAM);
-            sUnkTimer++;
+        //    sUnkTimer++;
         }
     }
 }

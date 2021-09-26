@@ -474,7 +474,7 @@ void EnBa_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     s16 i;
     Mtx* mtx = Graph_Alloc(globalCtx->state.gfxCtx, sizeof(Mtx) * 14);
-    Vec3f unused = { 0.0f, 0.0f, 448.0f };
+    //Vec3f unused = { 0.0f, 0.0f, 448.0f };
 
     OPEN_DISPS(globalCtx->state.gfxCtx, "../z_en_ba.c", 933);
     func_80093D18(globalCtx->state.gfxCtx);

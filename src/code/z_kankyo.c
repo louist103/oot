@@ -1583,7 +1583,7 @@ void Environment_DrawRain(GlobalContext* globalCtx, View* view, GraphicsContext*
     f32 z50;
     f32 x280;
     f32 z280;
-    Vec3f unused = { 0.0f, 0.0f, 0.0f };
+    //Vec3f unused = { 0.0f, 0.0f, 0.0f };
     Vec3f windDirection = { 0.0f, 0.0f, 0.0f };
     Player* player = GET_PLAYER(globalCtx);
 
@@ -1857,8 +1857,8 @@ void Environment_DrawLightning(GlobalContext* globalCtx, s32 unused) {
     f32 x;
     f32 z;
     s32 pad[2];
-    Vec3f unused1 = { 0.0f, 0.0f, 0.0f };
-    Vec3f unused2 = { 0.0f, 0.0f, 0.0f };
+    //Vec3f unused1 = { 0.0f, 0.0f, 0.0f };
+    //Vec3f unused2 = { 0.0f, 0.0f, 0.0f };
 
     OPEN_DISPS(globalCtx->state.gfxCtx, "../z_kankyo.c", 3253);
 

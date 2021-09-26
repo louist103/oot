@@ -818,7 +818,7 @@ void EnMb_SpearGuardPrepareAndCharge(EnMb* this, GlobalContext* globalCtx) {
 
 void EnMb_ClubAttack(EnMb* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    s32 pad;
+    //s32 pad;
     Vec3f effSpawnPos;
     Vec3f effWhiteShockwaveDynamics = { 0.0f, 0.0f, 0.0f };
     f32 flamesParams[] = { 18.0f, 18.0f, 0.0f };
@@ -1446,7 +1446,7 @@ void EnMb_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnMb_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx) {
-    static Vec3f unused = { 1100.0f, -700.0f, 0.0f };
+   // static Vec3f unused = { 1100.0f, -700.0f, 0.0f };
     static Vec3f feetPos = { 0.0f, 0.0f, 0.0f };
     static Vec3f effSpawnPosModel = { 0.0f, -8000.0f, 0.0f };
     static Vec3f zeroVec = { 0.0f, 0.0f, 0.0f };

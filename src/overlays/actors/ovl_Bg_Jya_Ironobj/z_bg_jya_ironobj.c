@@ -24,7 +24,7 @@ void func_808992E8(BgJyaIronobj* this, GlobalContext* globalCtx);
 void BgJyaIronobj_SpawnPillarParticles(BgJyaIronobj* this, GlobalContext* globalCtx, EnIk* enIk);
 void BgJyaIronobj_SpawnThoneParticles(BgJyaIronobj* this, GlobalContext* arg1, EnIk* enIk);
 
-static int sUnused = 0;
+//static int sUnused = 0;
 
 const ActorInit Bg_Jya_Ironobj_InitVars = {
     ACTOR_BG_JYA_IRONOBJ,

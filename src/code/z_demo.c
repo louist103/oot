@@ -1876,7 +1876,7 @@ void func_80068C3C(GlobalContext* globalCtx, CutsceneContext* csCtx) {
 
         csCtx->frames++;
         if (dREG(95) != 0) {
-            Cutscene_ProcessCommands(globalCtx, csCtx, D_8012D1F0);
+         //   Cutscene_ProcessCommands(globalCtx, csCtx, D_8012D1F0);
         } else {
             Cutscene_ProcessCommands(globalCtx, csCtx, globalCtx->csCtx.segment);
         }

@@ -60,10 +60,10 @@ static s16 sObjIds[] = {
 };
 
 // unused, presumed to be floats
-static f32 D_8098C314[] = {
-    0.0f,
-    150.0f,
-};
+//static f32 D_8098C314[] = {
+//    0.0f,
+//    150.0f,
+//};
 
 static Color_RGB8 sWarpSparkleEnvColors[] = {
     { 0, 200, 0 },    // minuet
@@ -766,8 +766,8 @@ void DemoKankyo_DrawWarpSparkles(Actor* thisx, GlobalContext* globalCtx) {
     static f32 sWarpRoll;
     static f32 sWarpFoV;
     // the following 2 vars are unused
-    static u32 D_8098CF90;
-    static u32 D_8098CF94;
+   // static u32 D_8098CF90;
+   // static u32 D_8098CF94;
     static Vec3f D_8098CF98;
 
     s16 i;
@@ -902,9 +902,9 @@ void DemoKankyo_DrawSparkles(Actor* thisx, GlobalContext* globalCtx) {
     static f32 sSparklesRoll;
     static f32 sSparklesFoV;
     // the following 3 vars are unused
-    static u32 D_8098CFAC;
-    static u32 D_8098CFB0;
-    static u32 D_8098CFB4;
+    //static u32 D_8098CFAC;
+    //static u32 D_8098CFB0;
+    //static u32 D_8098CFB4;
     static Vec3f D_8098CFB8;
 
     DemoKankyo* this = THIS;

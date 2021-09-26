@@ -822,6 +822,7 @@ Gfx sFillSetupDL[] = {
     gsSPEndDisplayList(),
 };
 
+/*
 // unused?
 Gfx D_80127030[] = {
     gsDPPipeSync(),
@@ -841,7 +842,7 @@ Gfx D_80127060[] = {
     gsDPFillRectangle(0, 0, SCREEN_WIDTH - 1, SCREEN_HEIGHT - 1),
     gsDPPipeSync(),
     gsSPEndDisplayList(),
-};
+};*/
 
 Gfx gEmptyDL[] = {
     gsSPEndDisplayList(),

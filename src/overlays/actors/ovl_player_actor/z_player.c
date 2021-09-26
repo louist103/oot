@@ -5858,9 +5858,9 @@ s32 func_8083E318(GlobalContext* globalCtx, Player* this, CollisionPoly* arg2) {
 }
 
 // unknown data (unused)
-static s32 D_80854598[] = {
-    0xFFDB0871, 0xF8310000, 0x00940470, 0xF3980000, 0xFFB504A9, 0x0C9F0000, 0x08010402,
-};
+//static s32 D_80854598[] = {
+//    0xFFDB0871, 0xF8310000, 0x00940470, 0xF3980000, 0xFFB504A9, 0x0C9F0000, 0x08010402,
+//};
 
 void func_8083E4C4(GlobalContext* globalCtx, Player* this, GetItemEntry* giEntry) {
     s32 sp1C = giEntry->field & 0x1F;
@@ -13495,10 +13495,10 @@ void func_808519C0(GlobalContext* globalCtx, Player* this, CsCmdActorAction* arg
 }
 
 // unused
-static LinkAnimationHeader* D_80855190[] = {
-    &gPlayerAnim_002720,
-    &gPlayerAnim_002360,
-};
+//static LinkAnimationHeader* D_80855190[] = {
+//    &gPlayerAnim_002720,
+//    &gPlayerAnim_002360,
+//};
 
 static Vec3f D_80855198 = { -1.0f, 70.0f, 20.0f };
 

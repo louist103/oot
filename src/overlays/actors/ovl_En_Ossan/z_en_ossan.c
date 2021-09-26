@@ -115,7 +115,7 @@ const ActorInit En_Ossan_InitVars = {
 };
 
 // Unused collider
-static ColliderCylinderInitType1 sCylinderInit = {
+/*static ColliderCylinderInitType1 sCylinderInit = {
     {
         COLTYPE_NONE,
         AT_NONE,
@@ -132,7 +132,7 @@ static ColliderCylinderInitType1 sCylinderInit = {
         OCELEM_ON,
     },
     { 30, 80, 0, { 0, 0, 0 } },
-};
+};*/
 
 // Rupees to pay back to Happy Mask Shop
 static s16 sMaskPaymentPrice[] = { 10, 30, 20, 50 };

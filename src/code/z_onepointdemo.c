@@ -3,7 +3,7 @@
 #include "overlays/actors/ovl_En_Sw/z_en_sw.h"
 
 static s16 sDisableAttention = false;
-static s16 sUnused = -1;
+//static s16 sUnused = -1;
 static s32 sPrevFrameCs1100 = -4096;
 
 #include "z_onepointdemo_data.c"
@@ -1256,7 +1256,7 @@ s32 OnePointCutscene_Attention(GlobalContext* globalCtx, Actor* actor) {
         osSyncPrintf(VT_COL(YELLOW, BLACK) "actor attention demo camera: canceled by other camera\n" VT_RST);
         return SUBCAM_NONE;
     }
-    sUnused = -1;
+ //   sUnused = -1;
 
     parentCam = globalCtx->cameraPtrs[MAIN_CAM];
     if (parentCam->mode == CAM_MODE_BOOMFOLLLOW) {

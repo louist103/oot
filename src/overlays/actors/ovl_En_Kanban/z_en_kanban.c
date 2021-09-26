@@ -779,7 +779,7 @@ static f32 sCutAngles[] = {
     /* CUT_VERT_R */ 0.00f * M_PI,
 };
 
-static s32 sUnused[] = { 0, 0, 0 }; // Unused zero vector?
+//static s32 sUnused[] = { 0, 0, 0 }; // Unused zero vector?
 
 static Vtx sShadowVertices[] = {
     VTX(-2000, 0, 0, 0, 1024, 0xFF, 0xFF, 0xFF, 0xFF),

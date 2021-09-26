@@ -359,7 +359,7 @@ void EnKz_PreMweepWait(EnKz* this, GlobalContext* globalCtx) {
 }
 
 void EnKz_SetupMweep(EnKz* this, GlobalContext* globalCtx) {
-    Vec3f unused = { 0.0f, 0.0f, 0.0f };
+    //Vec3f unused = { 0.0f, 0.0f, 0.0f };
     Vec3f pos;
     Vec3f initPos;
 
@@ -379,7 +379,7 @@ void EnKz_SetupMweep(EnKz* this, GlobalContext* globalCtx) {
 }
 
 void EnKz_Mweep(EnKz* this, GlobalContext* globalCtx) {
-    Vec3f unused = { 0.0f, 0.0f, 0.0f };
+   // Vec3f unused = { 0.0f, 0.0f, 0.0f };
     Vec3f pos;
     Vec3f initPos;
 

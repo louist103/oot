@@ -232,9 +232,9 @@ NaviColor sNaviColorList[] = {
 };
 
 // unused
-Gfx D_80115FF0[] = {
-    gsSPEndDisplayList(),
-};
+//Gfx D_80115FF0[] = {
+//    gsSPEndDisplayList(),
+//};
 
 void func_8002BE64(TargetContext* targetCtx, s32 index, f32 arg2, f32 arg3, f32 arg4) {
     targetCtx->arr_50[index].pos.x = arg2;

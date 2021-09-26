@@ -105,7 +105,7 @@ static void* sMouthTextures[] = {
     gRutoChildMouthOpenTex,
 };
 
-static s32 sUnused = 0;
+//static s32 sUnused = 0;
 
 #include "z_en_ru1_cutscene_data.c" EARLY
 

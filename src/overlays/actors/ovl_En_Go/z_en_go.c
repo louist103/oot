@@ -621,9 +621,9 @@ void func_80A3F908(EnGo* this, GlobalContext* globalCtx) {
 
 void EnGo_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnGo* this = THIS;
-    s32 pad;
-    Vec3f D_80A41B9C = { 0.0f, 0.0f, 0.0f }; // unused
-    Vec3f D_80A41BA8 = { 0.0f, 0.0f, 0.0f }; // unused
+    //s32 pad;
+    //Vec3f D_80A41B9C = { 0.0f, 0.0f, 0.0f }; // unused
+    //Vec3f D_80A41BA8 = { 0.0f, 0.0f, 0.0f }; // unused
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 30.0f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gGoronSkel, NULL, 0, 0, 0);

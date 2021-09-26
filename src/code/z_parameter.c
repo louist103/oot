@@ -2991,14 +2991,14 @@ void Interface_Draw(GlobalContext* globalCtx) {
     static s16 timerDigitLeftPos[] = { 16, 25, 34, 42, 51 };
     static s16 digitWidth[] = { 9, 9, 8, 9, 9 };
     // unused, most likely colors
-    static s16 D_80125B1C[][3] = {
-        { 0, 150, 0 }, { 100, 255, 0 }, { 255, 255, 255 }, { 0, 0, 0 }, { 255, 255, 255 },
-    };
+    //static s16 D_80125B1C[][3] = {
+    //    { 0, 150, 0 }, { 100, 255, 0 }, { 255, 255, 255 }, { 0, 0, 0 }, { 255, 255, 255 },
+    //};
     static s16 rupeeDigitsFirst[] = { 1, 0, 0 };
     static s16 rupeeDigitsCount[] = { 2, 3, 3 };
     static s16 spoilingItemEntrances[] = { 0x01AD, 0x0153, 0x0153 };
-    static f32 D_80125B54[] = { -40.0f, -35.0f }; // unused
-    static s16 D_80125B5C[] = { 91, 91 };         // unused
+    //static f32 D_80125B54[] = { -40.0f, -35.0f }; // unused
+    //static s16 D_80125B5C[] = { 91, 91 };         // unused
     static s16 D_8015FFE0;
     static s16 D_8015FFE2;
     static s16 D_8015FFE4;
