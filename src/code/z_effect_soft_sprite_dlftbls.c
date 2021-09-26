@@ -21,10 +21,10 @@
 // Effect SS Overlay Table definition
 #define DEFINE_EFFECT_SS(name, _1)         \
     {                                      \
-        (u32)_ovl_##name##SegmentRomStart, \
-        (u32)_ovl_##name##SegmentRomEnd,   \
-        _ovl_##name##SegmentStart,         \
-        _ovl_##name##SegmentEnd,           \
+        0, \
+        0,   \
+        NULL,         \
+        NULL,           \
         NULL,                              \
         &name##_InitVars,                  \
         1,                                 \
