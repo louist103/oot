@@ -269,7 +269,12 @@ build/asm/%.o: asm/%.s
 build/data/%.o: data/%.s
 	iconv --from UTF-8 --to EUC-JP $< | $(AS) $(ASFLAGS) -o $@
 
-build/assets/%.o: assets/%.c
+# TODO have ZAPD encode these
+# Note: The Makefile considers the encoded text headers intermediate files and automatically removes them after the build, do we want this?
+build/assets/text/%.enc.h: assets/text/%.h
+	python3 tools/msgenc.py assets/text/charmap.txt $^ $@
+
+build/assets/%.o: assets/%.c build/assets/text/declare_messages.enc.h build/assets/text/declare_messages_staff.enc.h
 	$(CC) -c $(CFLAGS) -I $(<D) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $(PIPEIN)
 	$(OBJCOPY) -O binary $@ $@.bin
 
