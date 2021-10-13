@@ -233,6 +233,9 @@ s32 DemoGj_FindGanon(DemoGj* this, GlobalContext* globalCtx) {
         return false;
     }
     //! @bug: Missing return value when `this->ganon` is already set.
+#ifdef AVOID_UB
+    return false;
+#endif
 }
 
 static InitChainEntry sInitChain[] = {
@@ -547,7 +550,7 @@ void DemoGj_SetupMovement(DemoGj* this, GlobalContext* globalCtx) {
         }
 
         if (xDistance == 0.0f && zDistance == 0.0f) {
-            player = PLAYER;
+            player = GET_PLAYER(globalCtx);
             xDistance = player->actor.world.pos.x - pos->x;
             zDistance = player->actor.world.pos.z - pos->z;
 

@@ -218,6 +218,9 @@ QuakeRequest* Quake_SetValue(s16 idx, s16 valueType, s16 value) {
                 break;
         }
     }
+#ifdef AVOID_UB
+    return NULL;
+#endif
 }
 
 u32 Quake_SetSpeed(s16 idx, s16 value) {

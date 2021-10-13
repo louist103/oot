@@ -29,9 +29,15 @@ const ActorInit En_Tana_InitVars = {
     NULL,
 };
 
-static char* sShelfTypes[] = {
+//! @bug A third entry is missing here. When printing the string indexed by `params` for type 2, the
+//! next data entry will be dereferenced and print garbage, stopping any future printing.
+//! In a non-matching context, this can cause a crash if the next item isn't a valid pointer.
+static const char* sShelfTypes[] = {
     "木の棚", // "Wooden Shelves"
     "石の棚", // "Stone Shelves"
+#ifdef AVOID_UB
+    "", // Fix a crash with params being 2 w/ Zora Shop invoking a string that doesn't exist
+#endif
 };
 
 static const ActorFunc sDrawFuncs[] = {

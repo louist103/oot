@@ -1735,6 +1735,9 @@ const char* DmaMgr_GetFileNameImpl(u32 vrom) {
     }
     //! @bug Since the devs forgot to return in case the file isn't found, the return value will be a pointer to the end
     // of gDmaDataTable
+#ifdef AVOID_UB
+    return *name;
+#endif
 }
 
 const char* DmaMgr_GetFileName(u32 vrom) {
@@ -1949,7 +1952,7 @@ void DmaMgr_Init(void) {
     osStartThread(&sDmaMgrThread);
 }
 
-s32 DmaMgr_SendRequest2(DmaRequest* req, u32 ram, u32 vrom, u32 size, u32 unk5, OSMesgQueue* queue, OSMesg msg,
+BAD_RETURN(s32) DmaMgr_SendRequest2(DmaRequest* req, u32 ram, u32 vrom, u32 size, u32 unk5, OSMesgQueue* queue, OSMesg msg,
                         const char* file, s32 line) {
     req->filename = file;
     req->line = line;

@@ -75,20 +75,20 @@ static Color_RGB8 sWarpSparkleEnvColors[] = {
 };
 
 static CutsceneCameraPoint sWarpOutCameraPoints[] = {
-    { CS_CMD_CONTINUE, 0, 8, 45.0f, { 0x0000, 0x0000, 0xFFE5 } },
-    { CS_CMD_CONTINUE, 0, 8, 45.0f, { 0x0000, 0x0000, 0xFFE5 } },
-    { CS_CMD_CONTINUE, 0, 8, 45.0f, { 0xFFE6, 0x0000, 0x0000 } },
+    { CS_CMD_CONTINUE, 0, 8, 45.0f, { 0x0000, 0x0000,    -27 } },
+    { CS_CMD_CONTINUE, 0, 8, 45.0f, { 0x0000, 0x0000,    -27 } },
+    { CS_CMD_CONTINUE, 0, 8, 45.0f, {    -26, 0x0000, 0x0000 } },
     { CS_CMD_CONTINUE, 0, 8, 45.0f, { 0x0000, 0x0017, 0x0024 } },
-    { CS_CMD_CONTINUE, 0, 8, 45.0f, { 0x001C, 0x0032, 0xFFFF } },
-    { CS_CMD_CONTINUE, 0, 8, 45.0f, { 0x0001, 0x0018, 0xFFD9 } },
-    { CS_CMD_CONTINUE, 0, 8, 45.0f, { 0xFFE6, 0xFFFA, 0x0003 } },
+    { CS_CMD_CONTINUE, 0, 8, 45.0f, { 0x001C, 0x0032,     -1 } },
+    { CS_CMD_CONTINUE, 0, 8, 45.0f, { 0x0001, 0x0018,    -39 } },
+    { CS_CMD_CONTINUE, 0, 8, 45.0f, {    -26,     -6, 0x0003 } },
     { CS_CMD_CONTINUE, 0, 8, 45.0f, { 0x0000, 0x0025, 0x0037 } },
     { CS_CMD_CONTINUE, 0, 8, 45.0f, { 0x004F, 0x0066, 0x0029 } },
     { CS_CMD_CONTINUE, 0, 8, 45.0f, { 0x00A6, 0x00AD, 0x0006 } },
-    { CS_CMD_CONTINUE, 0, 5, 45.0f, { 0x010D, 0x015A, 0xFF4C } },
-    { CS_CMD_CONTINUE, 0, 5, 45.0f, { 0x019F, 0x0245, 0xFE35 } },
-    { CS_CMD_STOP, 0, 5, 45.0f, { 0x01CE, 0x036F, 0xFCC2 } },
-    { CS_CMD_STOP, 0, 5, 45.0f, { 0x01CE, 0x036F, 0xFCC2 } },
+    { CS_CMD_CONTINUE, 0, 5, 45.0f, { 0x010D, 0x015A,   -180 } },
+    { CS_CMD_CONTINUE, 0, 5, 45.0f, { 0x019F, 0x0245,   -459 } },
+    { CS_CMD_STOP, 0, 5, 45.0f, { 0x01CE, 0x036F,  -830 } },
+    { CS_CMD_STOP, 0, 5, 45.0f, { 0x01CE, 0x036F,  -830 } },
 };
 
 static CutsceneCameraPoint sWarpInCameraPoints[] = {
@@ -114,67 +114,65 @@ static Color_RGB8 sSparkleEnvColors[] = {
 };
 
 static CutsceneCameraPoint sSparklesCameraPoints[] = {
-    { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0xFFF7, 0x0000, 0xFFD0 } },
-    { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0xFFF7, 0x0000, 0xFFD0 } },
-    { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0xFFF7, 0x0000, 0xFFD0 } },
-    { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0xFFF7, 0x0000, 0xFFD0 } },
-    { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0xFFD7, 0x0000, 0xFFE9 } },
-    { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0xFFD3, 0x0000, 0x000A } },
-    { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0xFFE8, 0x0001, 0x0027 } },
+    { CS_CMD_CONTINUE, 0, 2, 45.0f, {     -9, 0x0000,    -48 } },
+    { CS_CMD_CONTINUE, 0, 2, 45.0f, {     -9, 0x0000,    -48 } },
+    { CS_CMD_CONTINUE, 0, 2, 45.0f, {     -9, 0x0000,    -48 } },
+    { CS_CMD_CONTINUE, 0, 2, 45.0f, {     -9, 0x0000,    -48 } },
+    { CS_CMD_CONTINUE, 0, 2, 45.0f, {    -41, 0x0000,    -23 } },
+    { CS_CMD_CONTINUE, 0, 2, 45.0f, {    -45, 0x0000, 0x000A } },
+    { CS_CMD_CONTINUE, 0, 2, 45.0f, {    -24, 0x0001, 0x0027 } },
     { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0x0015, 0x0000, 0x002B } },
     { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0x002F, 0x0005, 0x000E } },
-    { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0x0031, 0x0005, 0xFFF5 } },
-    { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0x0020, 0x0005, 0xFFDA } },
-    { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0xFFF5, 0x0005, 0xFFD1 } },
-    { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0xFFD7, 0x0006, 0xFFEA } },
-    { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0xFFD5, 0x0009, 0x000D } },
-    { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0xFFE9, 0x0009, 0x0027 } },
+    { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0x0031, 0x0005,    -11 } },
+    { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0x0020, 0x0005,    -38 } },
+    { CS_CMD_CONTINUE, 0, 2, 45.0f, {    -11, 0x0005,    -47 } },
+    { CS_CMD_CONTINUE, 0, 2, 45.0f, {    -41, 0x0006,    -22 } },
+    { CS_CMD_CONTINUE, 0, 2, 45.0f, {    -43, 0x0009, 0x000D } },
+    { CS_CMD_CONTINUE, 0, 2, 45.0f, {    -23, 0x0009, 0x0027 } },
     { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0x0014, 0x000B, 0x0029 } },
     { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0x002D, 0x000B, 0x000F } },
-    { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0x002E, 0x000B, 0xFFF0 } },
-    { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0x001E, 0x000B, 0xFFDA } },
-    { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0xFFFA, 0x000E, 0xFFD3 } },
-    { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0xFFDA, 0x000E, 0xFFEB } },
-    { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0xFFD7, 0x0010, 0x0008 } },
-    { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0xFFE9, 0x0010, 0x0024 } },
+    { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0x002E, 0x000B,    -16 } },
+    { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0x001E, 0x000B,    -38 } },
+    { CS_CMD_CONTINUE, 0, 2, 45.0f, {     -6, 0x000E,    -45 } },
+    { CS_CMD_CONTINUE, 0, 2, 45.0f, {    -38, 0x000E,    -21 } },
+    { CS_CMD_CONTINUE, 0, 2, 45.0f, {    -41, 0x0010, 0x0008 } },
+    { CS_CMD_CONTINUE, 0, 2, 45.0f, {    -23, 0x0010, 0x0024 } },
     { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0x0011, 0x0010, 0x0028 } },
     { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0x002C, 0x0010, 0x000D } },
-    { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0x002C, 0x0012, 0xFFF5 } },
-    { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0x001F, 0x0011, 0xFFDE } },
-    { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0xFFFB, 0x0014, 0xFFD5 } },
-    { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0xFFDD, 0x0014, 0xFFEC } },
-    { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0xFFDA, 0x0017, 0x0008 } },
-    { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0xFFE8, 0x0014, 0x001F } },
+    { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0x002C, 0x0012,    -11 } },
+    { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0x001F, 0x0011,    -34 } },
+    { CS_CMD_CONTINUE, 0, 2, 45.0f, {     -5, 0x0014,    -43 } },
+    { CS_CMD_CONTINUE, 0, 2, 45.0f, {    -35, 0x0014,    -20 } },
+    { CS_CMD_CONTINUE, 0, 2, 45.0f, {    -38, 0x0017, 0x0008 } },
+    { CS_CMD_CONTINUE, 0, 2, 45.0f, {    -24, 0x0014, 0x001F } },
     { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0x000C, 0x0018, 0x0026 } },
     { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0x0027, 0x0018, 0x000D } },
-    { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0x0027, 0x001B, 0xFFF6 } },
-    { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0x001C, 0x001A, 0xFFE2 } },
-    { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0xFFFA, 0x000E, 0xFFD4 } },
-    { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0xFFD9, 0x001B, 0xFFEF } },
-    { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0xFFD7, 0x001B, 0x000A } },
-    { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0xFFE6, 0x001B, 0x0022 } },
+    { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0x0027, 0x001B,    -10 } },
+    { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0x001C, 0x001A,    -30 } },
+    { CS_CMD_CONTINUE, 0, 2, 45.0f, {     -6, 0x000E,    -44 } },
+    { CS_CMD_CONTINUE, 0, 2, 45.0f, {    -39, 0x001B,    -17 } },
+    { CS_CMD_CONTINUE, 0, 2, 45.0f, {    -41, 0x001B, 0x000A } },
+    { CS_CMD_CONTINUE, 0, 2, 45.0f, {    -26, 0x001B, 0x0022 } },
     { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0x000F, 0x001F, 0x002C } },
     { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0x0032, 0x0020, 0x0009 } },
-    { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0x0030, 0x0021, 0xFFF0 } },
-    { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0x001C, 0x0025, 0xFFD9 } },
-    { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0xFFFA, 0x0028, 0xFFD4 } },
-    { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0xFFD8, 0x002B, 0xFFF5 } },
-    { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0xFFD7, 0x002B, 0x0006 } },
-    { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0xFFDF, 0x002B, 0x0019 } },
+    { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0x0030, 0x0021,    -16 } },
+    { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0x001C, 0x0025,    -39 } },
+    { CS_CMD_CONTINUE, 0, 2, 45.0f, {     -6, 0x0028,    -44 } },
+    { CS_CMD_CONTINUE, 0, 2, 45.0f, {    -40, 0x002B,    -11 } },
+    { CS_CMD_CONTINUE, 0, 2, 45.0f, {    -41, 0x002B, 0x0006 } },
+    { CS_CMD_CONTINUE, 0, 2, 45.0f, {    -33, 0x002B, 0x0019 } },
     { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0x000E, 0x002E, 0x002C } },
     { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0x0032, 0x002E, 0x0003 } },
-    { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0x002A, 0x0030, 0xFFE7 } },
-    { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0xFFF6, 0x002B, 0xFFD4 } },
-    { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0xFFF6, 0x002B, 0xFFD4 } },
-    { CS_CMD_STOP, 0, 2, 45.0f, { 0xFFF6, 0x002B, 0xFFD4 } },
-    { CS_CMD_STOP, 0, 2, 45.0f, { 0xFFF6, 0x002B, 0xFFD4 } },
+    { CS_CMD_CONTINUE, 0, 2, 45.0f, { 0x002A, 0x0030,    -25 } },
+    { CS_CMD_CONTINUE, 0, 2, 45.0f, {    -10, 0x002B,    -44 } },
+    { CS_CMD_CONTINUE, 0, 2, 45.0f, {    -10, 0x002B,    -44 } },
+    { CS_CMD_STOP, 0, 2, 45.0f, {    -10, 0x002B,   -44 } },
+    { CS_CMD_STOP, 0, 2, 45.0f, {    -10, 0x002B,   -44 } },
 };
 
 static s16 D_8098CF80;
 static s16 sRainScale;
 static s16 D_8098CF84;
-
-extern Mtx D_01000000; // perspective mtx
 
 extern Gfx D_06000080[]; // rain DL
 extern Gfx D_06000DE0[]; // rocks DL
@@ -284,10 +282,15 @@ void DemoKankyo_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void DemoKankyo_SetupType(DemoKankyo* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     f32 temp;
+    
+    osSyncPrintf("---------------------------------\n");
+    osSyncPrintf("---------I GET SETUP!!!----------\n");
+    osSyncPrintf("---------------------------------\n");
 
     if (this->actor.objBankIndex == this->objBankIndex) {
+        osSyncPrintf("The value is %d\n", this->actor.params);
         switch (this->actor.params) {
             case DEMOKANKYO_ROCK_1:
             case DEMOKANKYO_ROCK_2:
@@ -305,19 +308,19 @@ void DemoKankyo_SetupType(DemoKankyo* this, GlobalContext* globalCtx) {
                 }
                 break;
             case DEMOKANKYO_WARP_OUT:
-                globalCtx->envCtx.unk_E2[0] = 0xFF;
-                globalCtx->envCtx.unk_E2[1] = 0xFF;
-                globalCtx->envCtx.unk_E2[2] = 0xFF;
-                globalCtx->envCtx.unk_E1 = 0;
+                globalCtx->envCtx.screenFillColor[0] = 0xFF;
+                globalCtx->envCtx.screenFillColor[1] = 0xFF;
+                globalCtx->envCtx.screenFillColor[2] = 0xFF;
+                globalCtx->envCtx.fillScreen = false;
                 if (this->warpTimer < 21 && this->warpTimer >= 15) {
                     temp = (this->warpTimer - 15.0f) / 5.0f;
-                    globalCtx->envCtx.unk_E1 = 1;
-                    globalCtx->envCtx.unk_E2[3] = 255 - 255 * temp;
+                    globalCtx->envCtx.fillScreen = true;
+                    globalCtx->envCtx.screenFillColor[3] = 255 - 255 * temp;
                 }
                 if (this->warpTimer < 15 && this->warpTimer >= 4) {
                     temp = (this->warpTimer - 4.0f) / 10.0f;
-                    globalCtx->envCtx.unk_E1 = 1;
-                    globalCtx->envCtx.unk_E2[3] = 255 * temp;
+                    globalCtx->envCtx.fillScreen = true;
+                    globalCtx->envCtx.screenFillColor[3] = 255 * temp;
                 }
                 if (this->warpTimer == 15) {
                     player->actor.draw = NULL;
@@ -390,7 +393,7 @@ void DemoKankyo_SetRockPos(DemoKankyo* this, GlobalContext* globalCtx, s32 param
     endPos.x = csAction->endPos.x;
     endPos.y = csAction->endPos.y;
     endPos.z = csAction->endPos.z;
-    temp_f0 = func_8006F93C(csAction->endFrame, csAction->startFrame, globalCtx->csCtx.frames);
+    temp_f0 = Environment_LerpWeight(csAction->endFrame, csAction->startFrame, globalCtx->csCtx.frames);
     this->actor.world.pos.x = ((endPos.x - startPos.x) * temp_f0) + startPos.x;
     this->actor.world.pos.y = ((endPos.y - startPos.y) * temp_f0) + startPos.y;
     this->actor.world.pos.z = ((endPos.z - startPos.z) * temp_f0) + startPos.z;
@@ -771,7 +774,7 @@ void DemoKankyo_DrawWarpSparkles(Actor* thisx, GlobalContext* globalCtx) {
     f32 temp_f22;
     DemoKankyo* this = THIS;
     Gfx* disp;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     Vec3f camPos;
     f32 translateX;
     f32 translateY;
@@ -822,7 +825,7 @@ void DemoKankyo_DrawWarpSparkles(Actor* thisx, GlobalContext* globalCtx) {
             case 2:
                 if (this->actor.params == DEMOKANKYO_WARP_OUT) {
                     if (i == 0) {
-                        func_800776E4(globalCtx);
+                        Environment_WarpSongLeave(globalCtx);
                         this->unk_150[i].unk_22++;
                     }
                 } else if (i + 1 == this->sparkleCounter && globalCtx->csCtx.state == CS_STATE_IDLE) {

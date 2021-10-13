@@ -12,6 +12,8 @@ ORIG_COMPILER ?= 0
 COMPILER ?= gcc
 # Define normal gameplay. Mostly, restore the title as-is for a GCC build.
 NORMAL_GAMEPLAY ?= 1
+# Convert text to EUC-JP before compilation
+CONV_TEXT ?= 1
 
 # If gcc is used, define the NON_MATCHING and NON_EQUIVALENT flags respectively so the files that
 # are safe to be used can avoid using GLOBAL_ASM which doesn't work with gcc.
@@ -82,9 +84,11 @@ OBJDUMP    := $(MIPS_BINUTILS_PREFIX)objdump
 EMULATOR = mupen64plus
 EMU_FLAGS = --noosd
 
+INC        := -Iinclude -Isrc -Iassets -Ibuild -I.
+
 # Check code syntax with host compiler
 CHECK_WARNINGS := -Wall -Wextra -Wno-format-security -Wno-unknown-pragmas -Wno-unused-parameter -Wno-unused-variable -Wno-missing-braces -Wno-int-conversion
-CC_CHECK   := gcc -fno-builtin -fsyntax-only -fsigned-char -std=gnu90 -D _LANGUAGE_C -D NON_MATCHING -Iinclude -Isrc -Iassets -Ibuild -include stdarg.h $(CHECK_WARNINGS)
+CC_CHECK   := gcc -fno-builtin -fsyntax-only -fsigned-char -std=gnu90 -D _LANGUAGE_C -D NON_MATCHING $(INC) -include stdarg.h $(CHECK_WARNINGS)
 
 CPP        := cpp
 MKLDSCRIPT := tools/mkldscript
@@ -96,7 +100,7 @@ ASFLAGS := -march=vr4300 -32 -Iinclude
 MIPS_VERSION := -mips2
 
 # we support Microsoft extensions such as anonymous structs, which the compiler does support but warns for their usage. Surpress the warnings with -woff.
-CFLAGS += -G 0 -non_shared -Xfullwarn -Xcpluscomm -Iinclude -Isrc -Iassets -Ibuild -Wab,-r4300_mul -woff 649,838,712
+CFLAGS += -G 0 -non_shared -Xfullwarn -Xcpluscomm $(INC) -Wab,-r4300_mul -woff 649,838,712 -DMODDING
 
 ifeq ($(shell getconf LONG_BIT), 32)
   # Work around memory allocation bug in QEMU
@@ -175,18 +179,26 @@ build/src/overlays/actors/%.o: CC := python3 tools/asm_processor/build.py $(CC) 
 build/src/overlays/effects/%.o: CC := python3 tools/asm_processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
 build/src/overlays/gamestates/%.o: CC := python3 tools/asm_processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
 
-build/assets/%.o: CC := $(CC)
+build/assets/%.o: CC := python3 tools/asm_processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
 
 #### GCC Override ###
 
 # TODO: Generate gcc_safe_files automatically with a more robust python script.
 
+# HAAACCCCKKKKKKKSSSSS
+PIPEIN = $<
+
 ifeq ($(COMPILER),gcc)
   include gcc_safe_files.mk
-  $(SAFE_C_FILES): CC := mips-linux-gnu-gcc
-  $(SAFE_C_FILES): CFLAGS := -c -G 0 -nostdinc -Iinclude -Isrc -Iassets -Ibuild -I. -DNON_MATCHING=1 -DNON_EQUIVALENT=1 -DMODDING=1 -DNORMAL_GAMEPLAY=1 -DAVOID_UB=1 -mno-shared -fcall-used-gp -march=vr4300 -mfix4300 -mabi=32 -mhard-float -mdivide-breaks -fno-stack-protector -fno-common -fno-zero-initialized-in-bss -mno-abicalls -fno-strict-aliasing -fno-inline-functions -fno-inline-small-functions -fno-toplevel-reorder -ffreestanding -fwrapv -Wall -Wextra -g -mno-explicit-relocs -mno-split-addresses
+ifeq ($(CONV_TEXT),1)
+  $(SAFE_C_FILES): CC = iconv -f UTF-8 -t EUC-JP $< | mips-linux-gnu-gcc -x c -
+else
+$(SAFE_C_FILES): CC = mips-linux-gnu-gcc $<
+endif
+  $(SAFE_C_FILES): CFLAGS := -c -G 0 -nostdinc -Iinclude -Isrc -Iassets -Ibuild -I. -DNON_MATCHING=1 -DNON_EQUIVALENT=1 -DMODDING=1 -DNORMAL_GAMEPLAY=1 -DAVOID_UB=1 -mno-shared -march=vr4300 -mfix4300 -mabi=32 -mhard-float -mdivide-breaks -fno-stack-protector -fno-common -fno-zero-initialized-in-bss -mno-abicalls -fno-strict-aliasing -fno-inline-functions -fno-inline-small-functions -fno-toplevel-reorder -ffreestanding -fwrapv $(CHECK_WARNINGS) -g -mno-explicit-relocs -mno-split-addresses -funsigned-char
   $(SAFE_C_FILES): MIPS_VERSION := -mips3
   $(SAFE_C_FILES): OPTFLAGS := -O2
+  $(SAFE_C_FILES): PIPEIN := 
 endif
 
 #### Main Targets ###
@@ -258,36 +270,32 @@ build/data/%.o: data/%.s
 	iconv --from UTF-8 --to EUC-JP $< | $(AS) $(ASFLAGS) -o $@
 
 build/assets/%.o: assets/%.c
-	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
+	$(CC) -c $(CFLAGS) -I $(<D) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $(PIPEIN)
 	$(OBJCOPY) -O binary $@ $@.bin
 
 build/src/overlays/%.o: src/overlays/%.c
-	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
+	$(CC) -c $(CFLAGS) -I $(<D) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $(PIPEIN)
 #	$(CC_CHECK) $<
 	$(ZAPD) bovl -eh -i $@ -cfg $< --outputpath $(@D)/$(notdir $(@D))_reloc.s --gcc-compat
 	-test -f $(@D)/$(notdir $(@D))_reloc.s && $(AS) $(ASFLAGS) $(@D)/$(notdir $(@D))_reloc.s -o $(@D)/$(notdir $(@D))_reloc.o
 	@$(OBJDUMP) -d $@ > $(@:.o=.s)
 
 build/src/%.o: src/%.c
-	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
+	$(CC) -c $(CFLAGS) -I $(<D) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $(PIPEIN)
 #	$(CC_CHECK) $<
 	@$(OBJDUMP) -d $@ > $(@:.o=.s)
 
 build/src/libultra_boot_O1/ll.o: src/libultra_boot_O1/ll.c
-	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
+	$(CC) -c $(CFLAGS) -I $(<D) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $(PIPEIN)
 #	$(CC_CHECK) $<
 	python3 tools/set_o32abi_bit.py $@
 	@$(OBJDUMP) -d $@ > $(@:.o=.s)
 
 build/src/libultra_code_O1/llcvt.o: src/libultra_code_O1/llcvt.c
-	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
+	$(CC) -c $(CFLAGS) -I $(<D) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $(PIPEIN)
 #	$(CC_CHECK) $<
 	python3 tools/set_o32abi_bit.py $@
 	@$(OBJDUMP) -d $@ > $(@:.o=.s)
-
-assets/%.c: assets/%.xml
-	$(ZAPD) bsf -eh -i $< -o $(dir $<)
-	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o build/$(@:.c=.o) $@
 
 build/%.inc.c: %.png
 	$(ZAPD) btex -eh -tt $(subst .,,$(suffix $*)) -i $< -o $@

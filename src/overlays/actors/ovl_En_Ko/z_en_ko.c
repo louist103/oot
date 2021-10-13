@@ -349,7 +349,7 @@ u16 func_80A96FD0(GlobalContext* globalCtx, Actor* thisx) {
 }
 
 u16 func_80A97338(GlobalContext* globalCtx, Actor* thisx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     EnKo* this = THIS;
 
     switch (ENKO_TYPE) {
@@ -772,6 +772,9 @@ s32 EnKo_ChildStart(EnKo* this, GlobalContext* globalCtx) {
         case ENKO_TYPE_CHILD_FADO:
             return func_80A97E18(this, globalCtx);
     }
+#ifdef AVOID_UB
+    return 0;
+#endif
 }
 
 s32 EnKo_ChildStone(EnKo* this, GlobalContext* globalCtx) {
@@ -803,6 +806,9 @@ s32 EnKo_ChildStone(EnKo* this, GlobalContext* globalCtx) {
         case ENKO_TYPE_CHILD_FADO:
             return func_80A97E18(this, globalCtx);
     }
+#ifdef AVOID_UB
+    return 0;
+#endif
 }
 
 s32 EnKo_ChildSaria(EnKo* this, GlobalContext* globalCtx) {
@@ -834,6 +840,9 @@ s32 EnKo_ChildSaria(EnKo* this, GlobalContext* globalCtx) {
         case ENKO_TYPE_CHILD_FADO:
             return func_80A97E18(this, globalCtx);
     }
+#ifdef AVOID_UB
+    return 0;
+#endif
 }
 
 s32 EnKo_AdultEnemy(EnKo* this, GlobalContext* globalCtx) {
@@ -865,6 +874,9 @@ s32 EnKo_AdultEnemy(EnKo* this, GlobalContext* globalCtx) {
         case ENKO_TYPE_CHILD_FADO:
             return func_80A97E18(this, globalCtx);
     }
+#ifdef AVOID_UB
+    return 0;
+#endif
 }
 
 s32 EnKo_AdultSaved(EnKo* this, GlobalContext* globalCtx) {
@@ -896,9 +908,12 @@ s32 EnKo_AdultSaved(EnKo* this, GlobalContext* globalCtx) {
         case ENKO_TYPE_CHILD_FADO:
             return func_80A97E18(this, globalCtx);
     }
+#ifdef AVOID_UB
+    return 0;
+#endif
 }
 void func_80A9877C(EnKo* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if ((globalCtx->csCtx.state != 0) || (gDbgCamEnabled != 0)) {
         this->unk_1E8.unk_18 = globalCtx->view.eye;
@@ -1069,6 +1084,9 @@ s32 func_80A98ECC(EnKo* this, GlobalContext* globalCtx) {
         case ENKO_FQS_ADULT_SAVED:
             return EnKo_AdultSaved(this, globalCtx);
     }
+#ifdef AVOID_UB
+    return 0;
+#endif
 }
 
 void EnKo_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -1180,7 +1198,7 @@ void func_80A99560(EnKo* this, GlobalContext* globalCtx) {
 }
 
 void func_80A995CC(EnKo* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     f32 temp_f2;
     f32 phi_f0;
     s16 homeYawToPlayer = Math_Vec3f_Yaw(&this->actor.home.pos, &player->actor.world.pos);

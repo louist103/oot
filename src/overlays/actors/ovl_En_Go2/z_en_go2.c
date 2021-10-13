@@ -540,7 +540,7 @@ s16 EnGo2_GetStateGoronCityLink(GlobalContext* globalCtx, EnGo2* this) {
 }
 
 u16 EnGo2_GetTextIdGoronDmtBiggoron(GlobalContext* globalCtx, EnGo2* this) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (gSaveContext.bgsFlag) {
         player->exchangeItemId = EXCH_ITEM_CLAIM_CHECK;
@@ -748,6 +748,9 @@ u16 EnGo2_GetTextId(GlobalContext* globalCtx, Actor* thisx) {
                 return EnGo2_GetTextIdGoronMarketBazaar(globalCtx, this);
         }
     }
+#ifdef AVOID_UB
+    return 0; // surpress warning
+#endif
 }
 
 s16 EnGo2_GetState(GlobalContext* globalCtx, Actor* thisx) {
@@ -782,6 +785,9 @@ s16 EnGo2_GetState(GlobalContext* globalCtx, Actor* thisx) {
         case GORON_MARKET_BAZAAR:
             return EnGo2_GetStateGoronMarketBazaar(globalCtx, this);
     }
+#ifdef AVOID_UB
+    return 0; // surpress warning
+#endif
 }
 
 s32 func_80A44790(EnGo2* this, GlobalContext* globalCtx) {
@@ -846,7 +852,7 @@ void EnGo2_SwapInitialFrameAnimFrameCount(EnGo2* this) {
 }
 
 s32 func_80A44AB0(EnGo2* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     f32 arg2;
 
     if ((this->actor.params & 0x1F) == GORON_DMT_BIGGORON) {
@@ -1004,14 +1010,14 @@ void EnGo2_BiggoronSetTextId(EnGo2* this, GlobalContext* globalCtx, Player* play
 
         } else if (!gSaveContext.bgsFlag && (INV_CONTENT(ITEM_TRADE_ADULT) == ITEM_CLAIM_CHECK)) {
             if (func_8002F368(globalCtx) == EXCH_ITEM_CLAIM_CHECK) {
-                if (func_800775CC() >= 3) {
+                if (Environment_GetBgsDayCount() >= 3) {
                     textId = 0x305E;
                 } else {
                     textId = 0x305D;
                 }
                 this->actor.textId = textId;
             } else {
-                if (func_800775CC() >= 3) {
+                if (Environment_GetBgsDayCount() >= 3) {
                     textId = 0x3002;
                 } else {
                     textId = 0x305D;
@@ -1052,7 +1058,7 @@ void EnGo2_BiggoronSetTextId(EnGo2* this, GlobalContext* globalCtx, Player* play
 }
 
 void func_80A45288(EnGo2* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s32 linkAge;
 
     if (this->actionFunc != EnGo2_GoronFireGenericAction) {
@@ -1591,7 +1597,7 @@ void EnGo2_CurledUp(EnGo2* this, GlobalContext* globalCtx) {
 
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         if ((this->actor.params & 0x1F) == GORON_DMT_BIGGORON) {
-            quake = Quake_Add(ACTIVE_CAM, 3);
+            quake = Quake_Add(GET_ACTIVE_CAM(globalCtx), 3);
             Quake_SetSpeed(quake, -0x3CB0);
             Quake_SetQuakeValues(quake, 8, 0, 0, 0);
             Quake_SetCountdown(quake, 16);
@@ -1760,7 +1766,7 @@ void EnGo2_SetGetItem(EnGo2* this, GlobalContext* globalCtx) {
         this->unk_194.unk_00 = 0;
         switch (this->getItemId) {
             case GI_CLAIM_CHECK:
-                func_800775D8();
+                Environment_ClearBgsDayCount();
                 EnGo2_GetItemAnimation(this, globalCtx);
                 return;
             case GI_TUNIC_GORON:
@@ -1797,7 +1803,7 @@ void EnGo2_BiggoronEyedrops(EnGo2* this, GlobalContext* globalCtx) {
         case 1:
             if (DECR(this->animTimer)) {
                 if (this->animTimer == 60 || this->animTimer == 120) {
-                    func_8005B1A4(ACTIVE_CAM);
+                    func_8005B1A4(GET_ACTIVE_CAM(globalCtx));
                     func_800F4524(&D_801333D4, NA_SE_EV_GORON_WATER_DROP, 60);
                 }
             } else {
@@ -1828,7 +1834,7 @@ void EnGo2_BiggoronEyedrops(EnGo2* this, GlobalContext* globalCtx) {
 }
 
 void EnGo2_GoronLinkStopRolling(EnGo2* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     switch (this->goronState) {
         case 0:
@@ -1857,7 +1863,7 @@ void EnGo2_GoronLinkStopRolling(EnGo2* this, GlobalContext* globalCtx) {
 }
 
 void EnGo2_GoronFireGenericAction(EnGo2* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     Vec3s D_80A4854C = { 0x00, 0x00, 0x00 };
 
     switch (this->goronState) {
