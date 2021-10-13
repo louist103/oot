@@ -8,8 +8,9 @@
 #include "objects/object_dy_obj/object_dy_obj.h"
 #include "vt.h"
 #include "overlays/actors/ovl_Demo_Effect/z_demo_effect.h"
-#include "scenes/indoors/yousei_izumi_yoko/yousei_izumi_yoko_scene.h"
-#include "scenes/indoors/daiyousei_izumi/daiyousei_izumi_scene.h"
+//GCC SMALL
+//#include "scenes/indoors/yousei_izumi_yoko/yousei_izumi_yoko_scene.h"
+//#include "scenes/indoors/daiyousei_izumi/daiyousei_izumi_scene.h"
 
 #define FLAGS 0x02000030
 
@@ -256,6 +257,7 @@ void BgDyYoseizo_ChooseType(BgDyYoseizo* this, GlobalContext* globalCtx) {
 
     if (givingReward) {
         if (gSaveContext.sceneSetupIndex < 4) {
+                #if 0
             if (globalCtx->sceneNum != SCENE_DAIYOUSEI_IZUMI) {
                 switch (this->fountainType) {
                     case FAIRY_SPELL_FARORES_WIND:
@@ -287,6 +289,7 @@ void BgDyYoseizo_ChooseType(BgDyYoseizo* this, GlobalContext* globalCtx) {
                         break;
                 }
             }
+            #endif
         }
         this->actionFunc = BgDyYoseizo_SetupSpinGrow_Reward;
         return;

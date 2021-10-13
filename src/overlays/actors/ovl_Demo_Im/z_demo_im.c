@@ -7,7 +7,7 @@
 #include "z_demo_im.h"
 #include "overlays/actors/ovl_En_Arrow/z_en_arrow.h"
 #include "overlays/actors/ovl_Door_Warp1/z_door_warp1.h"
-#include "scenes/indoors/nakaniwa/nakaniwa_scene.h"
+//#include "scenes/indoors/nakaniwa/nakaniwa_scene.h"
 #include "objects/object_im/object_im.h"
 #include "vt.h"
 
@@ -896,7 +896,7 @@ void func_80986BF8(DemoIm* this, GlobalContext* globalCtx) {
 
 void func_80986C30(DemoIm* this, GlobalContext* globalCtx) {
     if (func_80986A5C(this, globalCtx)) {
-        globalCtx->csCtx.segment = SEGMENTED_TO_VIRTUAL(gZeldasCourtyardLullabyCs);
+        //globalCtx->csCtx.segment = SEGMENTED_TO_VIRTUAL(gZeldasCourtyardLullabyCs);
         gSaveContext.cutsceneTrigger = 1;
         gSaveContext.eventChkInf[5] |= 0x200;
         Item_Give(globalCtx, ITEM_SONG_LULLABY);

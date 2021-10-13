@@ -6,7 +6,7 @@
 
 #include "z_en_zl4.h"
 #include "objects/object_zl4/object_zl4.h"
-#include "scenes/indoors/nakaniwa/nakaniwa_scene.h"
+//#include "scenes/indoors/nakaniwa/nakaniwa_scene.h"
 
 #define FLAGS 0x00000019
 
@@ -467,8 +467,8 @@ s32 EnZl4_CsMeetPlayer(EnZl4* this, GlobalContext* globalCtx) {
             break;
         case 2:
             if ((func_8010BDBC(&globalCtx->msgCtx) == 5) && func_80106BC8(globalCtx)) {
-                globalCtx->csCtx.segment = SEGMENTED_TO_VIRTUAL(gZeldasCourtyardMeetCs);
-                gSaveContext.cutsceneTrigger = 1;
+                //globalCtx->csCtx.segment = SEGMENTED_TO_VIRTUAL(gZeldasCourtyardMeetCs);
+                //gSaveContext.cutsceneTrigger = 1;
                 EnZl4_SetCsCameraMove(globalCtx, 0);
                 globalCtx->msgCtx.msgMode = 0x37;
                 this->talkTimer2 = 0;
@@ -891,8 +891,8 @@ s32 EnZl4_CsLookWindow(EnZl4* this, GlobalContext* globalCtx) {
     switch (this->talkState) {
         case 0:
             EnZl4_SetCsCameraMove(globalCtx, 7);
-            globalCtx->csCtx.segment = SEGMENTED_TO_VIRTUAL(gZeldasCourtyardWindowCs);
-            gSaveContext.cutsceneTrigger = 1;
+            //globalCtx->csCtx.segment = SEGMENTED_TO_VIRTUAL(gZeldasCourtyardWindowCs);
+            //gSaveContext.cutsceneTrigger = 1;
             this->talkState++;
             break;
         case 1:
@@ -901,8 +901,8 @@ s32 EnZl4_CsLookWindow(EnZl4* this, GlobalContext* globalCtx) {
                     globalCtx->csCtx.state = CS_STATE_UNSKIPPABLE_INIT;
                 }
             } else {
-                globalCtx->csCtx.segment = SEGMENTED_TO_VIRTUAL(gZeldasCourtyardGanonCs);
-                gSaveContext.cutsceneTrigger = 1;
+                //globalCtx->csCtx.segment = SEGMENTED_TO_VIRTUAL(gZeldasCourtyardGanonCs);
+                //gSaveContext.cutsceneTrigger = 1;
                 this->talkState++;
                 func_8002DF54(globalCtx, &this->actor, 8);
             }

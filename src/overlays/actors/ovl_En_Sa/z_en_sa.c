@@ -1,8 +1,8 @@
 #include "z_en_sa.h"
 #include "overlays/actors/ovl_En_Elf/z_en_elf.h"
 #include "objects/object_sa/object_sa.h"
-#include "scenes/overworld/spot04/spot04_scene.h"
-#include "scenes/overworld/spot05/spot05_scene.h"
+//#include "scenes/overworld/spot04/spot04_scene.h"
+//#include "scenes/overworld/spot05/spot05_scene.h"
 
 #define FLAGS 0x02000019
 
@@ -470,7 +470,7 @@ void EnSa_Init(Actor* thisx, GlobalContext* globalCtx) {
         case 4:
             this->unk_210 = 0;
             this->actor.gravity = -1.0f;
-            globalCtx->csCtx.segment = SEGMENTED_TO_VIRTUAL(gSpot04Cs_10E20);
+            //globalCtx->csCtx.segment = SEGMENTED_TO_VIRTUAL(gSpot04Cs_10E20);
             gSaveContext.cutsceneTrigger = 1;
             EnSa_ChangeAnim(this, 4);
             this->actionFunc = func_80AF68E4;
@@ -590,8 +590,8 @@ void func_80AF683C(EnSa* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if (!(player->actor.world.pos.z >= -2220.0f) && !Gameplay_InCsMode(globalCtx)) {
-        globalCtx->csCtx.segment = SEGMENTED_TO_VIRTUAL(spot05_sceneCutsceneData0x005730);
-        gSaveContext.cutsceneTrigger = 1;
+        //globalCtx->csCtx.segment = SEGMENTED_TO_VIRTUAL(spot05_sceneCutsceneData0x005730);
+        //gSaveContext.cutsceneTrigger = 1;
         this->actionFunc = func_80AF68E4;
     }
 }

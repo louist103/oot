@@ -6,8 +6,8 @@
 
 #include "z_en_owl.h"
 #include "objects/object_owl/object_owl.h"
-#include "scenes/overworld/spot06/spot06_scene.h"
-#include "scenes/overworld/spot16/spot16_scene.h"
+//#include "scenes/overworld/spot06/spot06_scene.h"
+//#include "scenes/overworld/spot16/spot16_scene.h"
 #include "vt.h"
 
 #define FLAGS 0x00000019
@@ -939,12 +939,12 @@ void func_80ACC00C(EnOwl* this, GlobalContext* globalCtx) {
                     osSyncPrintf(VT_FGCOL(CYAN));
                     osSyncPrintf("SPOT 06 の デモがはしった\n"); // "Demo of SPOT 06 has been completed"
                     osSyncPrintf(VT_RST);
-                    globalCtx->csCtx.segment = SEGMENTED_TO_VIRTUAL(gLakeHyliaOwlCs);
+                    //globalCtx->csCtx.segment = SEGMENTED_TO_VIRTUAL(gLakeHyliaOwlCs);
                     this->actor.draw = NULL;
                     break;
                 case 8:
                 case 9:
-                    globalCtx->csCtx.segment = SEGMENTED_TO_VIRTUAL(gDmtOwlCs);
+                    //globalCtx->csCtx.segment = SEGMENTED_TO_VIRTUAL(gDmtOwlCs);
                     this->actor.draw = NULL;
                     break;
                 default:

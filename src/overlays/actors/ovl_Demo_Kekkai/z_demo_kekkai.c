@@ -6,7 +6,7 @@
 
 #include "z_demo_kekkai.h"
 #include "objects/object_demo_kekkai/object_demo_kekkai.h"
-#include "scenes/dungeons/ganontika/ganontika_scene.h"
+//#include "scenes/dungeons/ganontika/ganontika_scene.h"
 
 #define FLAGS 0x00000030
 
@@ -233,12 +233,12 @@ void DemoKekkai_TrialBarrierDispel(Actor* thisx, GlobalContext* globalCtx) {
 
 static CutsceneData* sSageCutscenes[] = {
     NULL,
-    gWaterTrialSageCs,
-    gLightTrialSageCs,
-    gFireTrialSageCs,
-    gShadowTrialSageCs,
-    gSpiritTrialSageCs,
-    gForestTrialSageCs,
+    NULL,//gWaterTrialSageCs,
+    NULL,//gLightTrialSageCs,
+    NULL,//gFireTrialSageCs,
+    NULL,//gShadowTrialSageCs,
+    NULL,//gSpiritTrialSageCs,
+    NULL,//gForestTrialSageCs,
 };
 
 void DemoKekkai_TrialBarrierIdle(Actor* thisx, GlobalContext* globalCtx) {

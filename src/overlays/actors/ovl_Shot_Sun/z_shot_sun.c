@@ -6,7 +6,7 @@
 
 #include "z_shot_sun.h"
 #include "overlays/actors/ovl_En_Elf/z_en_elf.h"
-#include "scenes/overworld/spot06/spot06_scene.h"
+//#include "scenes/overworld/spot06/spot06_scene.h"
 #include "vt.h"
 
 #define FLAGS 0x00000009
@@ -165,9 +165,9 @@ void ShotSun_UpdateHyliaSun(ShotSun* this, GlobalContext* globalCtx) {
         osSyncPrintf(VT_FGCOL(CYAN) "SHOT_SUN HIT!!!!!!!\n" VT_RST);
         if (INV_CONTENT(ITEM_ARROW_FIRE) == ITEM_NONE) {
             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_ITEM_ETCETERA, 700.0f, -800.0f, 7261.0f, 0, 0, 0, 7);
-            globalCtx->csCtx.segment = SEGMENTED_TO_VIRTUAL(gFireArrowsCS);
-            if (1) {}
-            gSaveContext.cutsceneTrigger = 1;
+            //globalCtx->csCtx.segment = SEGMENTED_TO_VIRTUAL(gFireArrowsCS);
+            //if (1) {}
+            //gSaveContext.cutsceneTrigger = 1;
         } else {
             spawnPos.x = 700.0f;
             spawnPos.y = -800.0f;

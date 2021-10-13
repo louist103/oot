@@ -5,7 +5,7 @@
  */
 
 #include "z_item_ocarina.h"
-#include "scenes/overworld/spot00/spot00_scene.h"
+//#include "scenes/overworld/spot00/spot00_scene.h"
 
 #define FLAGS 0x00000010
 
@@ -170,8 +170,8 @@ void ItemOcarina_DoNothing(ItemOcarina* this, GlobalContext* globalCtx) {
 
 void ItemOcarina_StartSoTCutscene(ItemOcarina* this, GlobalContext* globalCtx) {
     if (func_8002F334(&this->actor, globalCtx)) {
-        globalCtx->csCtx.segment = SEGMENTED_TO_VIRTUAL(gZeldaSongOfTimeCs);
-        gSaveContext.cutsceneTrigger = 1;
+        //globalCtx->csCtx.segment = SEGMENTED_TO_VIRTUAL(gZeldaSongOfTimeCs);
+        //gSaveContext.cutsceneTrigger = 1;
     }
 }
 

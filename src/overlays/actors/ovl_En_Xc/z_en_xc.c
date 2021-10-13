@@ -8,10 +8,10 @@
 #include "overlays/actors/ovl_En_Arrow/z_en_arrow.h"
 #include "overlays/actors/ovl_Door_Warp1/z_door_warp1.h"
 #include "objects/object_xc/object_xc.h"
-#include "scenes/overworld/spot05/spot05_scene.h"
-#include "scenes/overworld/spot17/spot17_scene.h"
-#include "scenes/indoors/tokinoma/tokinoma_scene.h"
-#include "scenes/dungeons/ice_doukutu/ice_doukutu_scene.h"
+//#include "scenes/overworld/spot05/spot05_scene.h"
+//#include "scenes/overworld/spot17/spot17_scene.h"
+//#include "scenes/indoors/tokinoma/tokinoma_scene.h"
+//#include "scenes/dungeons/ice_doukutu/ice_doukutu_scene.h"
 #include "vt.h"
 
 #define FLAGS 0x00000010
@@ -290,8 +290,8 @@ s32 EnXc_MinuetCS(EnXc* this, GlobalContext* globalCtx) {
         f32 z = player->actor.world.pos.z;
         if (z < -2225.0f) {
             if (!Gameplay_InCsMode(globalCtx)) {
-                globalCtx->csCtx.segment = SEGMENTED_TO_VIRTUAL(&gMinuetCs);
-                gSaveContext.cutsceneTrigger = 1;
+                //globalCtx->csCtx.segment = SEGMENTED_TO_VIRTUAL(&gMinuetCs);
+                //gSaveContext.cutsceneTrigger = 1;
                 gSaveContext.eventChkInf[5] |= 1;
                 Item_Give(globalCtx, ITEM_SONG_MINUET);
                 return true;
@@ -321,8 +321,8 @@ s32 EnXc_BoleroCS(EnXc* this, GlobalContext* globalCtx) {
         if ((posRot->pos.x > -784.0f) && (posRot->pos.x < -584.0f) && (posRot->pos.y > 447.0f) &&
             (posRot->pos.y < 647.0f) && (posRot->pos.z > -446.0f) && (posRot->pos.z < -246.0f) &&
             !Gameplay_InCsMode(globalCtx)) {
-            globalCtx->csCtx.segment = SEGMENTED_TO_VIRTUAL(&gBoleroCs);
-            gSaveContext.cutsceneTrigger = 1;
+            //globalCtx->csCtx.segment = SEGMENTED_TO_VIRTUAL(&gBoleroCs);
+            //gSaveContext.cutsceneTrigger = 1;
             gSaveContext.eventChkInf[5] |= 2;
             Item_Give(globalCtx, ITEM_SONG_BOLERO);
             return true;
@@ -349,8 +349,8 @@ s32 EnXc_SerenadeCS(EnXc* this, GlobalContext* globalCtx) {
         s32 stateFlags = player->stateFlags1;
         if (CHECK_OWNED_EQUIP(EQUIP_BOOTS, 1) && !(gSaveContext.eventChkInf[5] & 4) && !(stateFlags & 0x20000000) &&
             !Gameplay_InCsMode(globalCtx)) {
-            Cutscene_SetSegment(globalCtx, &gIceCavernSerenadeCs);
-            gSaveContext.cutsceneTrigger = 1;
+            //Cutscene_SetSegment(globalCtx, &gIceCavernSerenadeCs);
+            //gSaveContext.cutsceneTrigger = 1;
             gSaveContext.eventChkInf[5] |= 4; // Learned Serenade of Water Flag
             Item_Give(globalCtx, ITEM_SONG_SERENADE);
             osSyncPrintf("ブーツを取った!!!!!!!!!!!!!!!!!!\n");
@@ -2142,14 +2142,14 @@ void EnXc_InitTempleOfTime(EnXc* this, GlobalContext* globalCtx) {
     if (LINK_IS_ADULT) {
         if (!(gSaveContext.eventChkInf[12] & 0x20)) {
             gSaveContext.eventChkInf[12] |= 0x20;
-            globalCtx->csCtx.segment = SEGMENTED_TO_VIRTUAL(gFirstAdultCs);
-            gSaveContext.cutsceneTrigger = 1;
+            //globalCtx->csCtx.segment = SEGMENTED_TO_VIRTUAL(gFirstAdultCs);
+            //gSaveContext.cutsceneTrigger = 1;
             func_80B3EBF0(this, globalCtx);
         } else if (!(gSaveContext.eventChkInf[5] & 0x20) && (gSaveContext.eventChkInf[4] & 0x100)) {
             gSaveContext.eventChkInf[5] |= 0x20;
             Item_Give(globalCtx, ITEM_SONG_PRELUDE);
-            globalCtx->csCtx.segment = SEGMENTED_TO_VIRTUAL(gPreludeCs);
-            gSaveContext.cutsceneTrigger = 1;
+            //globalCtx->csCtx.segment = SEGMENTED_TO_VIRTUAL(gPreludeCs);
+            //gSaveContext.cutsceneTrigger = 1;
             this->action = SHEIK_ACTION_30;
         } else if (!(gSaveContext.eventChkInf[5] & 0x20)) {
             func_80B3C9EC(this);

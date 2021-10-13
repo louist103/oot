@@ -7807,7 +7807,7 @@ beginseg
     romalign 0x1000
     include "build/baserom/elf_message_ydan.o"
 endseg
-
+/*
 beginseg
     name "ydan_scene"
     compress
@@ -10191,7 +10191,7 @@ beginseg
     include "build/assets/scenes/misc/market_night/market_night_room_0.o"
     number 3
 endseg
-
+*/
 beginseg
     name "testroom_scene"
     compress
@@ -10239,7 +10239,7 @@ beginseg
     include "build/assets/scenes/test_levels/testroom/testroom_room_4.o"
     number 3
 endseg
-
+/*
 beginseg
     name "kenjyanoma_scene"
     compress
@@ -11878,7 +11878,7 @@ beginseg
     romalign 0x1000
     include "build/assets/scenes/dungeons/ganontikasonogo/ganontikasonogo_room_1.o"
     number 3
-endseg
+endseg*/
 
 beginseg
     name "test01_scene"

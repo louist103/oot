@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_In/z_en_in.h"
 #include "objects/object_horse/object_horse.h"
 #include "objects/object_hni/object_hni.h"
-#include "scenes/overworld/spot09/spot09_scene.h"
+//#include "scenes/overworld/spot09/spot09_scene.h"
 
 #define FLAGS 0x00000010
 
@@ -2753,11 +2753,11 @@ void EnHorse_BridgeJumpInit(EnHorse* this, GlobalContext* globalCtx) {
 void EnHorse_StartBridgeJump(EnHorse* this, GlobalContext* globalCtx) {
     this->postDrawFunc = EnHorse_BridgeJumpInit;
     if (this->bridgeJumpIdx == 0) {
-        globalCtx->csCtx.segment = SEGMENTED_TO_VIRTUAL(gGerudoValleyBridgeJumpFieldFortressCs);
-        gSaveContext.cutsceneTrigger = 1;
+        //globalCtx->csCtx.segment = SEGMENTED_TO_VIRTUAL(gGerudoValleyBridgeJumpFieldFortressCs);
+        //gSaveContext.cutsceneTrigger = 1;
     } else {
-        globalCtx->csCtx.segment = SEGMENTED_TO_VIRTUAL(gGerudoValleyBridgeJumpFortressToFieldCs);
-        gSaveContext.cutsceneTrigger = 1;
+        //globalCtx->csCtx.segment = SEGMENTED_TO_VIRTUAL(gGerudoValleyBridgeJumpFortressToFieldCs);
+        //gSaveContext.cutsceneTrigger = 1;
     }
 }
 

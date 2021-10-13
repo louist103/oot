@@ -5,8 +5,8 @@
  */
 
 #include "z_en_okarina_tag.h"
-#include "scenes/misc/hakaana_ouke/hakaana_ouke_scene.h"
-#include "scenes/overworld/spot02/spot02_scene.h"
+//#include "scenes/misc/hakaana_ouke/hakaana_ouke_scene.h"
+//#include "scenes/overworld/spot02/spot02_scene.h"
 #include "vt.h"
 
 #define FLAGS 0x02000010
@@ -251,8 +251,8 @@ void func_80ABF4C8(EnOkarinaTag* this, GlobalContext* globalCtx) {
                 gSaveContext.cutsceneTrigger = 1;
                 break;
             case 6:
-                globalCtx->csCtx.segment = LINK_IS_ADULT ? SEGMENTED_TO_VIRTUAL(&spot02_sceneCutsceneData0x003C80)
-                                                         : SEGMENTED_TO_VIRTUAL(&spot02_scene_Cs_005020);
+                //globalCtx->csCtx.segment = LINK_IS_ADULT ? SEGMENTED_TO_VIRTUAL(&spot02_sceneCutsceneData0x003C80)
+                //                                         : SEGMENTED_TO_VIRTUAL(&spot02_scene_Cs_005020);
                 gSaveContext.cutsceneTrigger = 1;
                 gSaveContext.eventChkInf[1] |= 0x2000;
                 func_80078884(NA_SE_SY_CORRECT_CHIME);
@@ -305,7 +305,7 @@ void func_80ABF7CC(EnOkarinaTag* this, GlobalContext* globalCtx) {
     if ((func_8010BDBC(&globalCtx->msgCtx) == 5) && (func_80106BC8(globalCtx) != 0)) {
         func_80106CCC(globalCtx);
         if (!CHECK_QUEST_ITEM(QUEST_SONG_SUN)) {
-            globalCtx->csCtx.segment = SEGMENTED_TO_VIRTUAL(&gSunSongTeachCs);
+            //globalCtx->csCtx.segment = SEGMENTED_TO_VIRTUAL(&gSunSongTeachCs);
             gSaveContext.cutsceneTrigger = 1;
         }
         this->actionFunc = func_80ABF708;

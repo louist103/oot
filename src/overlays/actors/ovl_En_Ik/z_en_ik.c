@@ -5,7 +5,7 @@
  */
 
 #include "z_en_ik.h"
-#include "scenes/dungeons/jyasinboss/jyasinboss_scene.h"
+//#include "scenes/dungeons/jyasinboss/jyasinboss_scene.h"
 #include "objects/object_ik/object_ik.h"
 #include "vt.h"
 
@@ -1426,8 +1426,8 @@ void func_80A781CC(Actor* thisx, GlobalContext* globalCtx) {
     if (!Gameplay_InCsMode(globalCtx)) {
         this->actor.update = EnIk_Update;
         this->actor.draw = EnIk_Draw;
-        Cutscene_SetSegment(globalCtx, gNabooruKnuckleDefeatCs);
-        gSaveContext.cutsceneTrigger = 1;
+        //Cutscene_SetSegment(globalCtx, gNabooruKnuckleDefeatCs);
+        //gSaveContext.cutsceneTrigger = 1;
         Actor_SetScale(&this->actor, 0.01f);
         gSaveContext.eventChkInf[3] |= 0x1000;
         func_80A7735C(this, globalCtx);
