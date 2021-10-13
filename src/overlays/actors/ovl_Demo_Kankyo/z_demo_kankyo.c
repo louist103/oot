@@ -280,13 +280,8 @@ void DemoKankyo_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 void DemoKankyo_SetupType(DemoKankyo* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     f32 temp;
-    
-    osSyncPrintf("---------------------------------\n");
-    osSyncPrintf("---------I GET SETUP!!!----------\n");
-    osSyncPrintf("---------------------------------\n");
 
     if (this->actor.objBankIndex == this->objBankIndex) {
-        osSyncPrintf("The value is %d\n", this->actor.params);
         switch (this->actor.params) {
             case DEMOKANKYO_ROCK_1:
             case DEMOKANKYO_ROCK_2:

@@ -9,9 +9,9 @@ NON_MATCHING ?= 0
 # If ORIG_COMPILER is 1, compile with QEMU_IRIX and the original compiler
 ORIG_COMPILER ?= 0
 # If COMPILER is gcc, compile with gcc instead of IDO.
-COMPILER ?= gcc
+COMPILER ?= ido
 # Define normal gameplay. Mostly, restore the title as-is for a GCC build.
-NORMAL_GAMEPLAY ?= 1
+NORMAL_GAMEPLAY ?= 0
 # Convert text to EUC-JP before compilation
 CONV_TEXT ?= 1
 
@@ -100,7 +100,7 @@ ASFLAGS := -march=vr4300 -32 -Iinclude
 MIPS_VERSION := -mips2
 
 # we support Microsoft extensions such as anonymous structs, which the compiler does support but warns for their usage. Surpress the warnings with -woff.
-CFLAGS += -G 0 -non_shared -Xfullwarn -Xcpluscomm $(INC) -Wab,-r4300_mul -woff 649,838,712 -DMODDING
+CFLAGS += -G 0 -non_shared -Xfullwarn -Xcpluscomm $(INC) -Wab,-r4300_mul -woff 649,838,712
 
 ifeq ($(shell getconf LONG_BIT), 32)
   # Work around memory allocation bug in QEMU
@@ -203,11 +203,11 @@ endif
 
 #### Main Targets ###
 
-all: version compressed
+all: version uncompressed
 
 version:
-	./tools/genBuildInfo
-	$(shell touch src/boot/build.c)
+#	./tools/genBuildInfo
+#	$(shell touch src/boot/build.c)
 
 uncompressed: $(ROM)
 ifeq ($(COMPARE),1)

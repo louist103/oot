@@ -19,7 +19,11 @@ void Title_PrintBuildInfo(Gfx** gfxp) {
     GfxPrint_Open(printer, g);
     GfxPrint_SetColor(printer, 255, 155, 255, 255);
     GfxPrint_SetPos(printer, 9, 21);
+#ifdef __sgi
+    GfxPrint_Printf(printer, "NOT MARIO CLUB VERSION");
+#else
     GfxPrint_Printf(printer, "GCC VERSION");
+#endif
     GfxPrint_SetColor(printer, 255, 255, 255, 255);
     GfxPrint_SetPos(printer, 7, 23);
     GfxPrint_Printf(printer, "[Creator:%s]", gBuildTeam);
@@ -148,7 +152,7 @@ void Title_Main(GameState* thisx) {
     Title_Calc(this);
     Title_Draw(this);
 
-    if (1) {
+    if (D_8012DBC0) {
         Gfx* gfx = POLY_OPA_DISP;
         s32 pad;
 

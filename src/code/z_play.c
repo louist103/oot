@@ -1054,6 +1054,8 @@ void Gameplay_DrawOverlayElements(GlobalContext* globalCtx) {
     }
 }
 
+#ifdef GCC_DEBUG
+
 int Handle_GetRealSkulltulaCount(void) {
     int i, j;
     int realSkulltulaCount = 0;
@@ -1072,7 +1074,6 @@ int Handle_GetRealSkulltulaCount(void) {
 int Handle_GetDispSkulltulaCount(void) {
     return gSaveContext.inventory.gsTokens;
 }
-
 void Handle_DrawSkulltulaCheck(GlobalContext* globalCtx, Gfx **gfxP)
 {
     int realSkulltulaCount = Handle_GetRealSkulltulaCount();
@@ -1108,6 +1109,9 @@ void Handle_DrawSkulltulaCheck(GlobalContext* globalCtx, Gfx **gfxP)
     *gfxP = GfxPrint_Close(&printer);
     GfxPrint_Destroy(&printer);
 }
+
+#endif 
+
 
 void Gameplay_Draw(GlobalContext* globalCtx) {
     GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
@@ -1367,6 +1371,7 @@ void Gameplay_Draw(GlobalContext* globalCtx) {
 
     Camera_Finish(GET_ACTIVE_CAM(globalCtx));
 
+#ifdef GCC_DEBBUG
     // Skulltula sanity check, because fuck this dumb SRAM GCC bug or whatever it is.
     {
         Gfx* prevDisplayList = POLY_OPA_DISP;
@@ -1377,7 +1382,7 @@ void Gameplay_Draw(GlobalContext* globalCtx) {
         Graph_BranchDlist(prevDisplayList, gfxP);
         POLY_OPA_DISP = gfxP;
     }
-
+#endif
     CLOSE_DISPS(gfxCtx, "../z_play.c", 4508);
 }
 

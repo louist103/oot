@@ -551,7 +551,7 @@ void PreRender_Calc(PreRender* this) {
                 a >>= 5;
                 a++;
                 if (a != 8) {
-                    //func_800C2500(this, x, y);
+                    func_800C2500(this, x, y);
                 }
             }
         }
