@@ -9,7 +9,7 @@ NON_MATCHING ?= 0
 # If ORIG_COMPILER is 1, compile with QEMU_IRIX and the original compiler
 ORIG_COMPILER ?= 0
 # If COMPILER is gcc, compile with gcc instead of IDO.
-COMPILER ?= ido
+COMPILER ?= gcc
 # Define normal gameplay. Mostly, restore the title as-is for a GCC build.
 NORMAL_GAMEPLAY ?= 0
 # Convert text to EUC-JP before compilation

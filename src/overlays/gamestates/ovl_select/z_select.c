@@ -44,134 +44,6 @@ void Select_LoadGame(SelectContext* this, s32 entranceIndex) {
 }
 
 static SceneSelectEntry sScenes[] = {
-#ifdef ENHANCEMENTS
-    { " 1:Hyrule Field", Select_LoadGame, 0x00CD },
-    { " 2:Kakariko Village", Select_LoadGame, 0x00DB },
-    { " 3:Graveyard", Select_LoadGame, 0x00E4 },
-    { " 4:Zora's River", Select_LoadGame, 0x00EA },
-    { " 5:Kokiri Forest", Select_LoadGame, 0x00EE },
-    { " 6:Sacred Forest Meadow", Select_LoadGame, 0x00FC },
-    { " 7:Lake Hylia", Select_LoadGame, 0x0102 },
-    { " 8:Zora's Domain", Select_LoadGame, 0x0108 },
-    { " 9:Zora's Fountain", Select_LoadGame, 0x010E },
-    { "10:Gerudo Valley", Select_LoadGame, 0x0117 },
-    { "11:Lost Woods", Select_LoadGame, 0x011E },
-    { "12:Desert Colossus", Select_LoadGame, 0x0123 },
-    { "13:Gerudo's Fortress", Select_LoadGame, 0x0129 },
-    { "14:Haunted Wasteland", Select_LoadGame, 0x0130 },
-    { "15:Hyrule Castle", Select_LoadGame, 0x0138 },
-    { "16:Death Mountain Trail", Select_LoadGame, 0x013D },
-    { "17:Death Mountain Crater", Select_LoadGame, 0x0147 },
-    { "18:Goron City", Select_LoadGame, 0x014D },
-    { "19:Lon Lon Ranch", Select_LoadGame, 0x0157 },
-    { "20:Temple Of Time", Select_LoadGame, 0x0053 },
-    { "21:Chamber of Sages", Select_LoadGame, 0x006B },
-    { "22:Shooting Gallery", Select_LoadGame, 0x003B },
-    { "23:Castle Courtyard Game", Select_LoadGame, 0x007A },
-    { "24:Grave 1", Select_LoadGame, 0x031C },
-    { "25:Grave 2", Select_LoadGame, 0x004B },
-    { "26:Royal Family's Tomb", Select_LoadGame, 0x002D },
-    { "27:Great Fairy's Fountain (Din)", Select_LoadGame, 0x0315 },
-    { "28:Great Fairy's Fountain (Farore)", Select_LoadGame, 0x036D },
-    { "29:Great Fairy's Fountain (Nayru)", Select_LoadGame, 0x0371 },
-    { "30:Ganon's Tower - Collapsing", Select_LoadGame, 0x043F },
-    { "31:Castle Courtyard", Select_LoadGame, 0x0400 },
-    { "32:Fishing Pond", Select_LoadGame, 0x045F },
-    { "33:Bombchu Bowling Alley", Select_LoadGame, 0x0507 },
-    { "34:Lon Lon Ranch House", Select_LoadGame, 0x004F },
-    { "35:Lon Lon Ranch Silo", Select_LoadGame, 0x05D0 },
-    { "36:Guard House", Select_LoadGame, 0x007E },
-    { "37:Potion Shop", Select_LoadGame, 0x0072 },
-    { "38:Treasure Chest Game", Select_LoadGame, 0x0063 },
-    { "39:House Of Skulltula", Select_LoadGame, 0x0550 },
-    { "40:Entrance to Market", Select_LoadGame, 0x0033 },
-    { "41:Market", Select_LoadGame, 0x00B1 },
-    { "42:Back Alley", Select_LoadGame, 0x00AD },
-    { "43:Temple of Time Exterior", Select_LoadGame, 0x0171 },
-    { "44:Link's House", Select_LoadGame, 0x00BB },
-    { "45:Kakariko House 1", Select_LoadGame, 0x02FD },
-    { "46:Back Alley House 1", Select_LoadGame, 0x043B },
-    { "47:House of the Know-it-All Brothers", Select_LoadGame, 0x00C9 },
-    { "48:House of Twins", Select_LoadGame, 0x009C },
-    { "49:Mido's House", Select_LoadGame, 0x0433 },
-    { "50:Saria's House", Select_LoadGame, 0x0437 },
-    { "51:Stable", Select_LoadGame, 0x02F9 },
-    { "52:Grave Keeper's Hut", Select_LoadGame, 0x030D },
-    { "53:Dog Lady's House", Select_LoadGame, 0x0398 },
-    { "54:Impa's House", Select_LoadGame, 0x039C },
-    { "55:Lakeside Laboratory", Select_LoadGame, 0x0043 },
-    { "56:Running Man's Tent", Select_LoadGame, 0x03A0 },
-    { "57:Bazaar", Select_LoadGame, 0x00B7 },
-    { "58:Kokiri Shop", Select_LoadGame, 0x00C1 },
-    { "59:Goron Shop", Select_LoadGame, 0x037C },
-    { "60:Zora Shop", Select_LoadGame, 0x0380 },
-    { "61:Closed Shop", Select_LoadGame, 0x0384 },
-    { "62:Potion Shop", Select_LoadGame, 0x0388 },
-    { "63:Bombchu Shop ", Select_LoadGame, 0x0390 },
-    { "64:Happy Mask Shop", Select_LoadGame, 0x0530 },
-    { "65:Gerudo Training Ground", Select_LoadGame, 0x0008 },
-    { "66:Inside the Deku Tree", Select_LoadGame, 0x0000 },
-    { "67:Gohma's Lair", Select_LoadGame, 0x040F },
-    { "68:Dodongo's Cavern", Select_LoadGame, 0x0004 },
-    { "69:King Dodongo's Lair", Select_LoadGame, 0x040B },
-    { "70:Inside Jabu-Jabu's Belly", Select_LoadGame, 0x0028 },
-    { "71:Barinade's Lair", Select_LoadGame, 0x0301 },
-    { "72:Forest Temple", Select_LoadGame, 0x0169 },
-    { "73:Phantom Ganon's Lair", Select_LoadGame, 0x000C },
-    { "74:Bottom of the Well", Select_LoadGame, 0x0098 },
-    { "75:Shadow Temple", Select_LoadGame, 0x0037 },
-    { "76:Bongo Bongo's Lair", Select_LoadGame, 0x0413 },
-    { "77:Fire Temple", Select_LoadGame, 0x0165 },
-    { "78:Volvagia's Lair", Select_LoadGame, 0x0305 },
-    { "79:Water Temple", Select_LoadGame, 0x0010 },
-    { "80:Morpha's Lair", Select_LoadGame, 0x0417 },
-    { "81:Spirit Temple", Select_LoadGame, 0x0082 },
-    { "82:Iron Knuckle's Lair", Select_LoadGame, 0x008D },
-    { "83:Twinrova's Lair", Select_LoadGame, 0x05EC },
-    { "84:Stairs to Ganondorf's Lair", Select_LoadGame, 0x041B },
-    { "85:Ganondorf's Lair", Select_LoadGame, 0x041F },
-    { "86:Ice Cavern", Select_LoadGame, 0x0088 },
-    { "87:Dampé Grave Relay Game", Select_LoadGame, 0x044F },
-    { "88:Inside Ganon's Castle", Select_LoadGame, 0x0467 },
-    { "89:Ganon's Lair", Select_LoadGame, 0x0517 },
-    { "90:Escaping Ganon's Castle 1", Select_LoadGame, 0x0179 },
-    { "91:Escaping Ganon's Castle 2", Select_LoadGame, 0x01B5 },
-    { "92:Escaping Ganon's Castle 3", Select_LoadGame, 0x03DC },
-    { "93:Escaping Ganon's Castle 4", Select_LoadGame, 0x03E4 },
-    { "94:Escaping Ganon's Castle 5", Select_LoadGame, 0x056C },
-    { "95:Thieves' Hideout 1-2", Select_LoadGame, 0x0486 },
-    { "96:Thieves' Hideout 3-4 9-10", Select_LoadGame, 0x048E },
-    { "97:Thieves' Hideout 5-6", Select_LoadGame, 0x0496 },
-    { "98:Thieves' Hideout 7-8", Select_LoadGame, 0x049E },
-    { "99:Thieves' Hideout 11-12", Select_LoadGame, 0x04AE },
-    { "100:Thieves' Hideout 13", Select_LoadGame, 0x0570 },
-    { "101:Grotto 0", Select_LoadGame, 0x003F },
-    { "102:Grotto 1", Select_LoadGame, 0x0598 },
-    { "103:Grotto 2", Select_LoadGame, 0x059C },
-    { "104:Grotto 3", Select_LoadGame, 0x05A0 },
-    { "105:Grotto 4", Select_LoadGame, 0x05A4 },
-    { "106:Grotto 5", Select_LoadGame, 0x05A8 },
-    { "107:Grotto 6", Select_LoadGame, 0x05AC },
-    { "108:Grotto 7", Select_LoadGame, 0x05B0 },
-    { "109:Grotto 8", Select_LoadGame, 0x05B4 },
-    { "110:Grotto 9", Select_LoadGame, 0x05B8 },
-    { "111:Grotto 10", Select_LoadGame, 0x05BC },
-    { "112:Grotto 11", Select_LoadGame, 0x05C0 },
-    { "113:Grotto 12", Select_LoadGame, 0x05C4 },
-    { "114:Grotto 13", Select_LoadGame, 0x05FC },
-    { "115:Goddess Cutscene Environment", Select_LoadGame, 0x00A0 },
-    { "116:Test Room", Select_LoadGame, 0x0520 },
-    { "117:SRD Map", Select_LoadGame, 0x0018 },
-    { "118:Test Map", Select_LoadGame, 0x0094 },
-    { "119:Treasure Chest Warp", Select_LoadGame, 0x0024 },
-    { "120:Stalfos Miniboss Room", Select_LoadGame, 0x001C },
-    { "121:Stalfos Boss Room", Select_LoadGame, 0x0020 },
-    { "122:Dark Link Room", Select_LoadGame, 0x0047 },
-    { "123:Shooting Gallery Duplicate", Select_LoadGame, 0x02EA },
-    { "124:depth test", Select_LoadGame, 0x00B6 },
-    { "125:Hyrule Garden Game (Broken)", Select_LoadGame, 0x0076 },
-    { "title", Select_LoadTitle, 0x0000 },
-#else
 { " 1:SPOT00", Select_LoadGame, 0x00CD },
     { " 2:SPOT01", Select_LoadGame, 0x00DB },
     { " 3:SPOT02", Select_LoadGame, 0x00E4 },
@@ -298,7 +170,6 @@ static SceneSelectEntry sScenes[] = {
     { "124:depth\x8Cﾃｽﾄ", Select_LoadGame, 0x00B6 },
     { "125:\x8Cﾊｲﾗﾙ\x8Dﾆﾜ\x8Cｹﾞｰﾑ2", Select_LoadGame, 0x0076 },
     { "title", Select_LoadTitle, 0x0000 },
-    #endif
 };
 
 void Select_UpdateMenu(SelectContext* this) {
@@ -538,21 +409,7 @@ void Select_PrintMenu(SelectContext* this, GfxPrint* printer) {
     GfxPrint_Printf(printer, "OPT=%d", this->opt);
 }
 
-static char* sLoadingMessages[] = {
-#ifdef ENHANCEMENTS
-    "Please wait a minute",
-    "Hold on a sec",
-    "Wait a moment",
-    "Loading",
-    "Now working",
-    "Now creating",
-    "It's not broken",
-    "Coffee Break",
-    "Please set B side",
-    "Be patient, now",
-    "Please wait just a minute",
-    "Don't worry, don't worry. Take a break, take a break",
-#else
+static const char* sLoadingMessages[] = {
     "\x8Dｼﾊﾞﾗｸｵﾏﾁｸﾀﾞｻｲ", // "Please wait a minute"
     "\x8Dﾁｮｯﾄ ﾏｯﾃﾈ",     // "Hold on a sec"
     "\x8Cｳｪｲﾄ ｱ ﾓｰﾒﾝﾄ",  // "Wait a moment"
@@ -566,7 +423,6 @@ static char* sLoadingMessages[] = {
     "\x8Dｼﾞｯﾄ\x8Cｶﾞﾏﾝ\x8Dﾉ\x8Cｺ\x8Dﾃﾞｱｯﾀ", // "Be patient, now"
     "\x8Dｲﾏｼﾊﾞﾗｸｵﾏﾁｸﾀﾞｻｲ",                 // "Please wait just a minute"
     "\x8Dｱﾜﾃﾅｲｱﾜﾃﾅｲ｡ﾋﾄﾔｽﾐﾋﾄﾔｽﾐ｡",          // "Don't worry, don't worry. Take a break, take a break"
-#endif
 };
 
 void Select_PrintLoadingMessage(SelectContext* this, GfxPrint* printer) {
@@ -578,16 +434,11 @@ void Select_PrintLoadingMessage(SelectContext* this, GfxPrint* printer) {
     GfxPrint_Printf(printer, "%s", sLoadingMessages[randomMsg]);
 }
 
-static char* sAgeLabels[] = {
-#ifdef ENHANCEMENETS
-    "Adult",
-    "Child",
-#else
+static const char* sAgeLabels[] = {
     "\x8D"
     "17(ﾜｶﾓﾉ)", // "17(young)"
     "\x8D"
     "5(ﾜｶｽｷﾞ)", // "5(very young)"
-#endif
 };
 
 void Select_PrintAgeSetting(SelectContext* this, GfxPrint* printer, s32 age) {
