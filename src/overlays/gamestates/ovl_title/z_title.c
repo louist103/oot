@@ -159,9 +159,9 @@ void Title_Main(GameState* thisx) {
     if (this->exit) {
         gSaveContext.seqIndex = 0xFF;
         gSaveContext.nightSeqIndex = 0xFF;
-        gSaveContext.gameMode = 1;
+        gSaveContext.gameMode = 0;
         this->state.running = false;
-        SET_NEXT_GAMESTATE(&this->state, Opening_Init, OpeningContext);
+        SET_NEXT_GAMESTATE(&this->state, Select_Init, SelectContext);
     }
 
     CLOSE_DISPS(this->state.gfxCtx, "../z_title.c", 541);

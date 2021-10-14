@@ -7,13 +7,19 @@
 #include "global.h"
 
 void Opening_SetupTitleScreen(OpeningContext* this) {
-    gSaveContext.gameMode = 1;
+
     this->state.running = false;
-    gSaveContext.linkAge = 0;
-    Sram_InitDebugSave();
-    gSaveContext.cutsceneIndex = 0xFFF3;
-    gSaveContext.sceneSetupIndex = 7;
-    SET_NEXT_GAMESTATE(&this->state, Gameplay_Init, GlobalContext);
+    //gSaveContext.entranceIndex = 0x0024;
+    //gSaveContext.cutsceneIndex = 0xFFF0;
+    //gSaveContext.sceneSetupIndex = 1;
+    SET_NEXT_GAMESTATE(&this->state, Select_Init, SelectContext);
+    //gSaveContext.gameMode = 1;
+    //this->state.running = false;
+    //gSaveContext.linkAge = 0;
+    //Sram_InitDebugSave();
+    //gSaveContext.cutsceneIndex = 0xFFF3;
+    //gSaveContext.sceneSetupIndex = 7;
+    //SET_NEXT_GAMESTATE(&this->state, Gameplay_Init, GlobalContext);
 }
 
 void func_80803C5C(OpeningContext* this) {
@@ -32,7 +38,7 @@ void Opening_Destroy(GameState* thisx) {
 
 void Opening_Init(GameState* thisx) {
     OpeningContext* this = (OpeningContext*)thisx;
-
+    
     R_UPDATE_RATE = 1;
     Matrix_Init(&this->state);
     View_Init(&this->view, this->state.gfxCtx);
