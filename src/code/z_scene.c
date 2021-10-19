@@ -1,7 +1,7 @@
 #include "global.h"
 #include "vt.h"
 
-RomFile sNaviMsgFiles[];
+extern RomFile sNaviMsgFiles[];
 
 s32 Object_Spawn(ObjectContext* objectCtx, s16 objectId) {
     u32 size;
@@ -497,7 +497,7 @@ void (*gSceneCmdHandlers[])(GlobalContext*, SceneCmd*) = {
     func_80099140, func_8009918C, func_8009934C, func_800991A0, func_800993C0,
 };
 
-RomFile sNaviMsgFiles[] = {
+RomFile sNaviMsgFiles[3] = {
     ROM_FILE(elf_message_field),
     ROM_FILE(elf_message_ydan),
     ROM_FILE_UNSET,

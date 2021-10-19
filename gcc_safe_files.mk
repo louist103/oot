@@ -619,7 +619,6 @@ SAFE_C_FILES :=    \
     build/src/boot/z_locale.o    \
     build/src/boot/missing_gcc_functions.o    \
     build/src/code/z_player_call.o    \
-    build/src/code/audio_sound_params.o    \
     build/src/code/z_scene.o    \
     build/src/code/z_prenmi_buff.o    \
     build/src/code/code_800FD970.o    \
@@ -653,11 +652,9 @@ SAFE_C_FILES :=    \
     build/src/code/code_800FC620.o    \
     build/src/code/code_800F7260.o    \
     build/src/code/z_face_reaction.o    \
-    build/src/code/audio_rodata.o    \
     build/src/code/fault_drawer.o    \
     build/src/code/z_camera_data.o    \
     build/src/code/title_setup.o    \
-    build/src/code/audio_synthesis.o    \
     build/src/code/z_effect_soft_sprite_dlftbls.o    \
     build/src/code/code_800AD920.o    \
     build/src/code/shrink_window.o    \
@@ -667,7 +664,6 @@ SAFE_C_FILES :=    \
     build/src/code/code_800E4FE0.o    \
     build/src/code/z_actor_dlftbls.o    \
     build/src/code/sys_math3d.o    \
-    build/src/code/audioMgr.o    \
     build/src/code/z_DLF.o    \
     build/src/code/z_eff_ss_dead.o    \
     build/src/code/z_map_data.o    \
@@ -696,7 +692,6 @@ SAFE_C_FILES :=    \
     build/src/code/z_fbdemo_circle.o    \
     build/src/code/z_fbdemo_fade.o    \
     build/src/code/z_debug.o    \
-    build/src/code/audio_playback.o    \
     build/src/code/z_map_mark.o    \
     build/src/code/z_en_item00.o    \
     build/src/code/code_80043480.o    \
@@ -717,7 +712,6 @@ SAFE_C_FILES :=    \
     build/src/code/z_view.o    \
     build/src/code/z_lifemeter.o    \
     build/src/code/z_vismono.o    \
-    build/src/code/audio_effects.o    \
     build/src/code/listalloc.o    \
     build/src/code/printutils.o    \
     build/src/code/z_frame_advance.o    \
@@ -738,13 +732,11 @@ SAFE_C_FILES :=    \
     build/src/code/z_sample.o    \
     build/src/code/code_800A9F30.o    \
     build/src/code/code_800430A0.o    \
-    build/src/code/audio_heap.o    \
     build/src/code/z_moji.o    \
     build/src/code/z_onepointdemo.o    \
     build/src/code/db_camera.o    \
     build/src/code/padutils.o    \
     build/src/code/z_effect.o    \
-    build/src/code/audio_seqplayer.o    \
     build/src/code/debug_malloc.o    \
     build/src/code/mempak.o    \
     build/src/code/code_800C3C20.o    \
@@ -755,7 +747,6 @@ SAFE_C_FILES :=    \
     build/src/code/z_kaleido_setup.o    \
     build/src/code/loadfragment2.o    \
     build/src/code/z_sram.o    \
-    build/src/code/audio_load.o    \
     build/src/code/jpegutils.o    \
     build/src/code/z_prenmi.o    \
     build/src/code/z_rcp.o    \
