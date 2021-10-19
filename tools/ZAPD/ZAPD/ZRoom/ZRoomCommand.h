@@ -57,7 +57,7 @@ public:
 	uint32_t cmdIndex;
 	uint32_t commandSet;
 	RoomCommand cmdID;
-	uint32_t segmentOffset;
+	offset_t segmentOffset;
 
 	ZRoomCommand(ZFile* nParent);
 	virtual ~ZRoomCommand() = default;
@@ -66,16 +66,12 @@ public:
 
 	void ParseRawData() override;
 
-	virtual void ParseRawDataLate();
-	virtual void DeclareReferencesLate(const std::string& prefix);
-
-	virtual std::string GetBodySourceCode() const = 0;
-
+	std::string GetSourceTypeName() const override;
 	ZResourceType GetResourceType() const override;
 
 	// Getters/Setters
 	virtual RoomCommand GetRoomCommand() const = 0;
-	size_t GetRawDataSize() const override;
+	size_t GetRawDataSize() const final override;
 	virtual std::string GetCommandCName() const;
 
 	virtual std::string GetCommandHex() const;

@@ -7,12 +7,10 @@
 #include <string>
 #include <vector>
 
-#ifndef __PRETTY_FUNCTION__
 #ifdef _MSC_VER
 #define __PRETTY_FUNCTION__ __FUNCSIG__
-#else
+#elif not defined(__GNUC__)
 #define __PRETTY_FUNCTION__ __func__
-#endif
 #endif
 
 class StringHelper
@@ -83,7 +81,7 @@ public:
 	{
 		char buffer[32768];
 		// char buffer[2048];
-		std::string output = "";
+		std::string output;
 		va_list va;
 
 		va_start(va, format);
