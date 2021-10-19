@@ -1769,8 +1769,8 @@ void DmaMgr_ProcessMsg(DmaRequest* req) {
         // the string is defined in .rodata but not used, suggesting
         // a debug print is here but optimized out in some way
         osSyncPrintf("DMA ROM:%08X RAM:%08X SIZE:%08X %s\n");
-        // the last arg of this print looks like it may be filename, but
-        // filename above this block does not match
+        // the last arg of self print looks like it may be filename, but
+        // filename above self block does not match
     }
 
     filename = DmaMgr_GetFileName(vrom);

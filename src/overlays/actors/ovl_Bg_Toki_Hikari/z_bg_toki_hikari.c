@@ -16,12 +16,12 @@ void BgTokiHikari_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgTokiHikari_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgTokiHikari_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void BgTokiHikari_DoNothing(BgTokiHikari* this, GlobalContext* globalCtx);
-void func_808BA018(BgTokiHikari* this, GlobalContext* globalCtx);
-void func_808BA204(BgTokiHikari* this, GlobalContext* globalCtx);
-void func_808BA22C(BgTokiHikari* this, GlobalContext* globalCtx);
-void func_808BA274(BgTokiHikari* this, GlobalContext* globalCtx);
-void func_808BA2CC(BgTokiHikari* this, GlobalContext* globalCtx);
+void BgTokiHikari_DoNothing(BgTokiHikari* self, GlobalContext* globalCtx);
+void func_808BA018(BgTokiHikari* self, GlobalContext* globalCtx);
+void func_808BA204(BgTokiHikari* self, GlobalContext* globalCtx);
+void func_808BA22C(BgTokiHikari* self, GlobalContext* globalCtx);
+void func_808BA274(BgTokiHikari* self, GlobalContext* globalCtx);
+void func_808BA2CC(BgTokiHikari* self, GlobalContext* globalCtx);
 
 const ActorInit Bg_Toki_Hikari_InitVars = {
     ACTOR_BG_TOKI_HIKARI,
@@ -40,19 +40,19 @@ static InitChainEntry sInitChain[] = {
 };
 
 void BgTokiHikari_Init(Actor* thisx, GlobalContext* globalCtx) {
-    BgTokiHikari* this = THIS;
+    BgTokiHikari* self = THIS;
 
-    switch (this->actor.params) {
+    switch (self->actor.params) {
         case 0:
-            Actor_ProcessInitChain(&this->actor, sInitChain);
-            this->actionFunc = BgTokiHikari_DoNothing;
+            Actor_ProcessInitChain(&self->actor, sInitChain);
+            self->actionFunc = BgTokiHikari_DoNothing;
             break;
         case 1:
             if (!(gSaveContext.eventChkInf[4] & 0x800)) {
-                this->actionFunc = func_808BA204;
-                this->unk_14C = 0.0f;
+                self->actionFunc = func_808BA204;
+                self->unk_14C = 0.0f;
             } else {
-                Actor_Kill(&this->actor);
+                Actor_Kill(&self->actor);
             }
             break;
     }
@@ -61,28 +61,28 @@ void BgTokiHikari_Init(Actor* thisx, GlobalContext* globalCtx) {
 void BgTokiHikari_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
-void BgTokiHikari_DoNothing(BgTokiHikari* this, GlobalContext* globalCtx) {
+void BgTokiHikari_DoNothing(BgTokiHikari* self, GlobalContext* globalCtx) {
 }
 
 void BgTokiHikari_Update(Actor* thisx, GlobalContext* globalCtx) {
-    BgTokiHikari* this = THIS;
-    this->actionFunc(this, globalCtx);
+    BgTokiHikari* self = THIS;
+    self->actionFunc(self, globalCtx);
 }
 
 void BgTokiHikari_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    BgTokiHikari* this = THIS;
+    BgTokiHikari* self = THIS;
 
-    switch (this->actor.params) {
+    switch (self->actor.params) {
         case 0:
-            func_808BA018(this, globalCtx);
+            func_808BA018(self, globalCtx);
             break;
         case 1:
-            func_808BA2CC(this, globalCtx);
+            func_808BA2CC(self, globalCtx);
             break;
     }
 }
 
-void func_808BA018(BgTokiHikari* this, GlobalContext* globalCtx) {
+void func_808BA018(BgTokiHikari* self, GlobalContext* globalCtx) {
     s32 pad;
 
     OPEN_DISPS(globalCtx->state.gfxCtx, "../z_bg_toki_hikari.c", 246);
@@ -109,44 +109,44 @@ void func_808BA018(BgTokiHikari* this, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx, "../z_bg_toki_hikari.c", 284);
 }
 
-void func_808BA204(BgTokiHikari* this, GlobalContext* globalCtx) {
+void func_808BA204(BgTokiHikari* self, GlobalContext* globalCtx) {
     if (globalCtx->roomCtx.unk_74[1] != 0) {
-        this->actionFunc = func_808BA22C;
+        self->actionFunc = func_808BA22C;
     }
 }
 
-void func_808BA22C(BgTokiHikari* this, GlobalContext* globalCtx) {
-    if (this->unk_14C < 1.0f) {
-        this->unk_14C += 0.05f;
+void func_808BA22C(BgTokiHikari* self, GlobalContext* globalCtx) {
+    if (self->unk_14C < 1.0f) {
+        self->unk_14C += 0.05f;
     } else {
-        this->unk_14C = 1.0f;
-        this->actionFunc = func_808BA274;
+        self->unk_14C = 1.0f;
+        self->actionFunc = func_808BA274;
     }
 }
 
-void func_808BA274(BgTokiHikari* this, GlobalContext* globalCtx) {
-    if (this->unk_14C > 0.2f) {
-        this->unk_14C -= 0.025f;
+void func_808BA274(BgTokiHikari* self, GlobalContext* globalCtx) {
+    if (self->unk_14C > 0.2f) {
+        self->unk_14C -= 0.025f;
     } else {
-        this->unk_14C = 0.0f;
-        Actor_Kill(&this->actor);
+        self->unk_14C = 0.0f;
+        Actor_Kill(&self->actor);
     }
 }
 
-void func_808BA2CC(BgTokiHikari* this, GlobalContext* globalCtx) {
+void func_808BA2CC(BgTokiHikari* self, GlobalContext* globalCtx) {
     s32 pad[2];
 
     OPEN_DISPS(globalCtx->state.gfxCtx, "../z_bg_toki_hikari.c", 350);
     Matrix_Translate(0.0f, 276.0f, 1122.0f, MTXMODE_NEW);
-    Matrix_Scale(0.32f, 0.32f, this->unk_14C * 7.0f, MTXMODE_APPLY);
+    Matrix_Scale(0.32f, 0.32f, self->unk_14C * 7.0f, MTXMODE_APPLY);
     Matrix_RotateZ(M_PI, MTXMODE_APPLY);
     func_80093D18(globalCtx->state.gfxCtx);
     Matrix_Push();
     gDPPipeSync(POLY_XLU_DISP++);
-    gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, this->unk_14C * 255.0f, (u8)(155.0f * this->unk_14C) + 100,
-                    this->unk_14C * 255.0f, this->unk_14C * 255.0f);
+    gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, self->unk_14C * 255.0f, (u8)(155.0f * self->unk_14C) + 100,
+                    self->unk_14C * 255.0f, self->unk_14C * 255.0f);
 
-    gDPSetEnvColor(POLY_XLU_DISP++, (u8)(this->unk_14C * 155.0f) + 100, (u8)(255.0f * this->unk_14C), 0, 128);
+    gDPSetEnvColor(POLY_XLU_DISP++, (u8)(self->unk_14C * 155.0f) + 100, (u8)(255.0f * self->unk_14C), 0, 128);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx, "../z_bg_toki_hikari.c", 382),
               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -159,10 +159,10 @@ void func_808BA2CC(BgTokiHikari* this, GlobalContext* globalCtx) {
     Matrix_Pop();
     Matrix_Push();
     gDPPipeSync(POLY_XLU_DISP++);
-    gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (u8)(this->unk_14C * 200.0f));
+    gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (u8)(self->unk_14C * 200.0f));
 
-    gDPSetEnvColor(POLY_XLU_DISP++, (u8)(this->unk_14C * 255.0f), (u8)(this->unk_14C * 255.0f),
-                   (u8)(this->unk_14C * 255.0f), (u8)(200.0f * this->unk_14C));
+    gDPSetEnvColor(POLY_XLU_DISP++, (u8)(self->unk_14C * 255.0f), (u8)(self->unk_14C * 255.0f),
+                   (u8)(self->unk_14C * 255.0f), (u8)(200.0f * self->unk_14C));
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx, "../z_bg_toki_hikari.c", 415),
               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -171,10 +171,10 @@ void func_808BA2CC(BgTokiHikari* this, GlobalContext* globalCtx) {
     Matrix_Pop();
     Matrix_Push();
     gDPPipeSync(POLY_XLU_DISP++);
-    gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (u8)(this->unk_14C * 200.0f));
+    gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (u8)(self->unk_14C * 200.0f));
 
-    gDPSetEnvColor(POLY_XLU_DISP++, (u8)(this->unk_14C * 255.0f), (u8)(this->unk_14C * 255.0f),
-                   (u8)(this->unk_14C * 255.0f), (u8)(200.0f * this->unk_14C));
+    gDPSetEnvColor(POLY_XLU_DISP++, (u8)(self->unk_14C * 255.0f), (u8)(self->unk_14C * 255.0f),
+                   (u8)(self->unk_14C * 255.0f), (u8)(200.0f * self->unk_14C));
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx, "../z_bg_toki_hikari.c", 437),
               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

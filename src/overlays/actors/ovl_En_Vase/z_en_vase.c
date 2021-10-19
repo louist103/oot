@@ -28,11 +28,11 @@ const ActorInit En_Vase_InitVars = {
 };
 
 void EnVase_Init(Actor* thisx, GlobalContext* globalCtx) {
-    EnVase* this = THIS;
+    EnVase* self = THIS;
 
-    Actor_SetScale(&this->actor, 0.01f);
-    this->actor.focus.pos = this->actor.world.pos;
-    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 6.0f);
+    Actor_SetScale(&self->actor, 0.01f);
+    self->actor.focus.pos = self->actor.world.pos;
+    ActorShape_Init(&self->actor.shape, 0.0f, ActorShadow_DrawCircle, 6.0f);
 }
 
 void EnVase_Destroy(Actor* thisx, GlobalContext* globalCtx) {

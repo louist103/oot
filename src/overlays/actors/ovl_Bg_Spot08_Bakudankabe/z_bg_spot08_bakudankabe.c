@@ -18,8 +18,8 @@ void BgSpot08Bakudankabe_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgSpot08Bakudankabe_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgSpot08Bakudankabe_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_808B02D0(BgSpot08Bakudankabe* this, GlobalContext* globalCtx);
-void func_808B0324(BgSpot08Bakudankabe* this, GlobalContext* globalCtx);
+void func_808B02D0(BgSpot08Bakudankabe* self, GlobalContext* globalCtx);
+void func_808B0324(BgSpot08Bakudankabe* self, GlobalContext* globalCtx);
 
 const ActorInit Bg_Spot08_Bakudankabe_InitVars = {
     ACTOR_BG_SPOT08_BAKUDANKABE,
@@ -95,14 +95,14 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 1000, ICHAIN_STOP),
 };
 
-void func_808B02D0(BgSpot08Bakudankabe* this, GlobalContext* globalCtx) {
+void func_808B02D0(BgSpot08Bakudankabe* self, GlobalContext* globalCtx) {
     s32 pad;
 
-    Collider_InitJntSph(globalCtx, &this->collider);
-    Collider_SetJntSph(globalCtx, &this->collider, &this->dyna.actor, &sJntSphInit, this->colliderItems);
+    Collider_InitJntSph(globalCtx, &self->collider);
+    Collider_SetJntSph(globalCtx, &self->collider, &self->dyna.actor, &sJntSphInit, self->colliderItems);
 }
 
-void func_808B0324(BgSpot08Bakudankabe* this, GlobalContext* globalCtx) {
+void func_808B0324(BgSpot08Bakudankabe* self, GlobalContext* globalCtx) {
     s32 pad[2];
     s32 i;
     Vec3f burstDepthY;
@@ -110,8 +110,8 @@ void func_808B0324(BgSpot08Bakudankabe* this, GlobalContext* globalCtx) {
     f32 sinY;
     f32 cosY;
 
-    sinY = Math_SinS(this->dyna.actor.shape.rot.y);
-    cosY = Math_CosS(this->dyna.actor.shape.rot.y);
+    sinY = Math_SinS(self->dyna.actor.shape.rot.y);
+    cosY = Math_CosS(self->dyna.actor.shape.rot.y);
 
     burstDepthX.z = 0.0f;
     burstDepthX.x = 0.0f;
@@ -125,9 +125,9 @@ void func_808B0324(BgSpot08Bakudankabe* this, GlobalContext* globalCtx) {
 
         temp1 = (Rand_ZeroOne() - 0.5f) * 440.0f;
         temp2 = (Rand_ZeroOne() - 0.5f) * 20.0f;
-        burstDepthY.x = this->dyna.actor.world.pos.x + temp2 * sinY + (temp1 * cosY);
-        burstDepthY.y = (this->dyna.actor.world.pos.y + 20.0f) + (i * (65.0f / 12.0f));
-        burstDepthY.z = this->dyna.actor.world.pos.z + temp2 * cosY - (temp1 * sinY);
+        burstDepthY.x = self->dyna.actor.world.pos.x + temp2 * sinY + (temp1 * cosY);
+        burstDepthY.y = (self->dyna.actor.world.pos.y + 20.0f) + (i * (65.0f / 12.0f));
+        burstDepthY.z = self->dyna.actor.world.pos.z + temp2 * cosY - (temp1 * sinY);
 
         burstDepthX.y = (Rand_ZeroOne() - 0.2f) * 12.0f;
         scale = Rand_ZeroOne() * 75.0f + 10.0f;
@@ -151,55 +151,55 @@ void func_808B0324(BgSpot08Bakudankabe* this, GlobalContext* globalCtx) {
     }
 
     for (i = 0; i < ARRAY_COUNT(D_808B08AC); i++) {
-        burstDepthY.x = this->dyna.actor.world.pos.x + D_808B08AC[i].z * sinY + D_808B08AC[i].x * cosY;
-        burstDepthY.y = this->dyna.actor.world.pos.y + D_808B08AC[i].y;
-        burstDepthY.z = this->dyna.actor.world.pos.z + D_808B08AC[i].z * cosY - (D_808B08AC[i].x * sinY);
+        burstDepthY.x = self->dyna.actor.world.pos.x + D_808B08AC[i].z * sinY + D_808B08AC[i].x * cosY;
+        burstDepthY.y = self->dyna.actor.world.pos.y + D_808B08AC[i].y;
+        burstDepthY.z = self->dyna.actor.world.pos.z + D_808B08AC[i].z * cosY - (D_808B08AC[i].x * sinY);
         func_80033480(globalCtx, &burstDepthY, 120.0f, 4, 0x78, 0xA0, 1);
     }
 }
 
 void BgSpot08Bakudankabe_Init(Actor* thisx, GlobalContext* globalCtx) {
-    BgSpot08Bakudankabe* this = THIS;
+    BgSpot08Bakudankabe* self = THIS;
     s32 pad;
     CollisionHeader* colHeader = NULL;
 
-    DynaPolyActor_Init(&this->dyna, DPM_UNK);
-    if (Flags_GetSwitch(globalCtx, (this->dyna.actor.params & 0x3F))) {
-        Actor_Kill(&this->dyna.actor);
+    DynaPolyActor_Init(&self->dyna, DPM_UNK);
+    if (Flags_GetSwitch(globalCtx, (self->dyna.actor.params & 0x3F))) {
+        Actor_Kill(&self->dyna.actor);
         return;
     }
-    func_808B02D0(this, globalCtx);
+    func_808B02D0(self, globalCtx);
     CollisionHeader_GetVirtual(&gZorasFountainBombableWallCol, &colHeader);
-    this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
-    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
+    self->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &self->dyna.actor, colHeader);
+    Actor_ProcessInitChain(&self->dyna.actor, sInitChain);
 }
 
 void BgSpot08Bakudankabe_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    BgSpot08Bakudankabe* this = THIS;
+    BgSpot08Bakudankabe* self = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
-    Collider_DestroyJntSph(globalCtx, &this->collider);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, self->dyna.bgId);
+    Collider_DestroyJntSph(globalCtx, &self->collider);
 }
 
 void BgSpot08Bakudankabe_Update(Actor* thisx, GlobalContext* globalCtx) {
-    BgSpot08Bakudankabe* this = THIS;
+    BgSpot08Bakudankabe* self = THIS;
 
-    if (this->collider.base.acFlags & AC_HIT) {
-        func_808B0324(this, globalCtx);
-        Flags_SetSwitch(globalCtx, (this->dyna.actor.params & 0x3F));
-        Audio_PlaySoundAtPosition(globalCtx, &this->dyna.actor.world.pos, 40, NA_SE_EV_WALL_BROKEN);
+    if (self->collider.base.acFlags & AC_HIT) {
+        func_808B0324(self, globalCtx);
+        Flags_SetSwitch(globalCtx, (self->dyna.actor.params & 0x3F));
+        Audio_PlaySoundAtPosition(globalCtx, &self->dyna.actor.world.pos, 40, NA_SE_EV_WALL_BROKEN);
         func_80078884(NA_SE_SY_CORRECT_CHIME);
-        Actor_Kill(&this->dyna.actor);
-    } else if (this->dyna.actor.xzDistToPlayer < 800.0f) {
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        Actor_Kill(&self->dyna.actor);
+    } else if (self->dyna.actor.xzDistToPlayer < 800.0f) {
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
     }
 }
 
 void BgSpot08Bakudankabe_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    BgSpot08Bakudankabe* this = THIS;
+    BgSpot08Bakudankabe* self = THIS;
 
-    Collider_UpdateSpheres(0, &this->collider);
-    Collider_UpdateSpheres(1, &this->collider);
-    Collider_UpdateSpheres(2, &this->collider);
+    Collider_UpdateSpheres(0, &self->collider);
+    Collider_UpdateSpheres(1, &self->collider);
+    Collider_UpdateSpheres(2, &self->collider);
     Gfx_DrawDListOpa(globalCtx, gZorasFountainBombableWallDL);
 }

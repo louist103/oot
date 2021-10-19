@@ -23,8 +23,8 @@ void BgMjin_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgMjin_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgMjin_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_808A0850(BgMjin* this, GlobalContext* globalCtx);
-void BgMjin_DoNothing(BgMjin* this, GlobalContext* globalCtx);
+void func_808A0850(BgMjin* self, GlobalContext* globalCtx);
+void BgMjin_DoNothing(BgMjin* self, GlobalContext* globalCtx);
 
 const ActorInit Bg_Mjin_InitVars = {
     ACTOR_BG_MJIN,
@@ -50,59 +50,59 @@ static InitChainEntry sInitChain[] = {
 static s16 sObjectIDs[] = { OBJECT_MJIN_FLASH, OBJECT_MJIN_DARK, OBJECT_MJIN_FLAME,
                             OBJECT_MJIN_ICE,   OBJECT_MJIN_SOUL, OBJECT_MJIN_WIND };
 
-void BgMjin_SetupAction(BgMjin* this, BgMjinActionFunc actionFunc) {
-    this->actionFunc = actionFunc;
+void BgMjin_SetupAction(BgMjin* self, BgMjinActionFunc actionFunc) {
+    self->actionFunc = actionFunc;
 }
 
 void BgMjin_Init(Actor* thisx, GlobalContext* globalCtx) {
-    BgMjin* this = THIS;
+    BgMjin* self = THIS;
     s8 objBankIndex;
 
     Actor_ProcessInitChain(thisx, sInitChain);
     objBankIndex = Object_GetIndex(&globalCtx->objectCtx, (thisx->params != 0 ? OBJECT_MJIN : OBJECT_MJIN_OKA));
-    this->objBankIndex = objBankIndex;
+    self->objBankIndex = objBankIndex;
     if (objBankIndex < 0) {
         Actor_Kill(thisx);
     } else {
-        BgMjin_SetupAction(this, func_808A0850);
+        BgMjin_SetupAction(self, func_808A0850);
     }
 }
 
 void BgMjin_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    BgMjin* this = THIS;
+    BgMjin* self = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, self->dyna.bgId);
 }
 
-void func_808A0850(BgMjin* this, GlobalContext* globalCtx) {
+void func_808A0850(BgMjin* self, GlobalContext* globalCtx) {
     CollisionHeader* colHeader;
     CollisionHeader* collision;
 
-    if (Object_IsLoaded(&globalCtx->objectCtx, this->objBankIndex)) {
+    if (Object_IsLoaded(&globalCtx->objectCtx, self->objBankIndex)) {
         colHeader = NULL;
-        this->dyna.actor.flags &= ~0x10;
-        this->dyna.actor.objBankIndex = this->objBankIndex;
-        Actor_SetObjectDependency(globalCtx, &this->dyna.actor);
-        DynaPolyActor_Init(&this->dyna, 0);
-        collision = this->dyna.actor.params != 0 ? &gWarpPadCol : &gOcarinaWarpPadCol;
+        self->dyna.actor.flags &= ~0x10;
+        self->dyna.actor.objBankIndex = self->objBankIndex;
+        Actor_SetObjectDependency(globalCtx, &self->dyna.actor);
+        DynaPolyActor_Init(&self->dyna, 0);
+        collision = self->dyna.actor.params != 0 ? &gWarpPadCol : &gOcarinaWarpPadCol;
         CollisionHeader_GetVirtual(collision, &colHeader);
-        this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
-        BgMjin_SetupAction(this, BgMjin_DoNothing);
-        this->dyna.actor.draw = BgMjin_Draw;
+        self->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &self->dyna.actor, colHeader);
+        BgMjin_SetupAction(self, BgMjin_DoNothing);
+        self->dyna.actor.draw = BgMjin_Draw;
     }
 }
 
-void BgMjin_DoNothing(BgMjin* this, GlobalContext* globalCtx) {
+void BgMjin_DoNothing(BgMjin* self, GlobalContext* globalCtx) {
 }
 
 void BgMjin_Update(Actor* thisx, GlobalContext* globalCtx) {
-    BgMjin* this = THIS;
+    BgMjin* self = THIS;
 
-    this->actionFunc(this, globalCtx);
+    self->actionFunc(self, globalCtx);
 }
 
 void BgMjin_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    BgMjin* this = THIS;
+    BgMjin* self = THIS;
     u32 dlist;
 
     OPEN_DISPS(globalCtx->state.gfxCtx, "../z_bg_mjin.c", 250);

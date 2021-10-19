@@ -181,72 +181,72 @@ static u16 sCutFlags[] = {
     /* CUT_DIAG_R */ UPPERRIGHT_HALF, /* CUT_VERT_R */ RIGHT_HALF,
 };
 
-void EnKanban_SetFloorRot(EnKanban* this) {
-    if (this->actor.floorPoly != NULL) {
-        f32 nx = COLPOLY_GET_NORMAL(this->actor.floorPoly->normal.x);
-        f32 ny = COLPOLY_GET_NORMAL(this->actor.floorPoly->normal.y);
-        f32 nz = COLPOLY_GET_NORMAL(this->actor.floorPoly->normal.z);
+void EnKanban_SetFloorRot(EnKanban* self) {
+    if (self->actor.floorPoly != NULL) {
+        f32 nx = COLPOLY_GET_NORMAL(self->actor.floorPoly->normal.x);
+        f32 ny = COLPOLY_GET_NORMAL(self->actor.floorPoly->normal.y);
+        f32 nz = COLPOLY_GET_NORMAL(self->actor.floorPoly->normal.z);
 
-        this->floorRot.x = -Math_FAtan2F(-nz * ny, 1.0f);
-        this->floorRot.z = Math_FAtan2F(-nx * ny, 1.0f);
+        self->floorRot.x = -Math_FAtan2F(-nz * ny, 1.0f);
+        self->floorRot.z = Math_FAtan2F(-nx * ny, 1.0f);
     }
 }
 
 void EnKanban_Init(Actor* thisx, GlobalContext* globalCtx) {
-    EnKanban* this = THIS;
+    EnKanban* self = THIS;
 
-    Actor_SetScale(&this->actor, 0.01f);
-    if (this->actor.params != ENKANBAN_PIECE) {
-        this->actor.targetMode = 0;
-        this->actor.flags |= 1;
-        Collider_InitCylinder(globalCtx, &this->collider);
-        Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
-        osSyncPrintf("KANBAN ARG    %x\n", this->actor.params);
-        if (this->actor.params == ENKANBAN_FISHING) {
+    Actor_SetScale(&self->actor, 0.01f);
+    if (self->actor.params != ENKANBAN_PIECE) {
+        self->actor.targetMode = 0;
+        self->actor.flags |= 1;
+        Collider_InitCylinder(globalCtx, &self->collider);
+        Collider_SetCylinder(globalCtx, &self->collider, &self->actor, &sCylinderInit);
+        osSyncPrintf("KANBAN ARG    %x\n", self->actor.params);
+        if (self->actor.params == ENKANBAN_FISHING) {
             if (LINK_IS_CHILD) {
-                this->actor.textId = 0x409D;
+                self->actor.textId = 0x409D;
             } else {
-                this->actor.textId = 0x4090;
+                self->actor.textId = 0x4090;
             }
         } else {
-            this->actor.textId = this->actor.params | 0x300;
+            self->actor.textId = self->actor.params | 0x300;
         }
-        this->bounceX = 1;
-        this->partFlags = 0xFFFF;
-        Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 10.0f, 10.0f, 50.0f, 4);
-        EnKanban_SetFloorRot(this);
+        self->bounceX = 1;
+        self->partFlags = 0xFFFF;
+        Actor_UpdateBgCheckInfo(globalCtx, &self->actor, 10.0f, 10.0f, 50.0f, 4);
+        EnKanban_SetFloorRot(self);
         if (LINK_IS_CHILD) {
-            this->actor.world.pos.y -= 15.0f;
+            self->actor.world.pos.y -= 15.0f;
         }
     }
 }
 
 void EnKanban_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
-    EnKanban* this = THIS;
+    EnKanban* self = THIS;
 
-    if (this->actionState == ENKANBAN_SIGN) {
-        Collider_DestroyCylinder(globalCtx, &this->collider);
+    if (self->actionState == ENKANBAN_SIGN) {
+        Collider_DestroyCylinder(globalCtx, &self->collider);
     }
 }
 
-void EnKanban_Message(EnKanban* this, GlobalContext* globalCtx) {
-    if (!this->msgFlag) {
-        if (this->msgTimer == 0) {
-            if (ABS((s16)(this->actor.yawTowardsPlayer - this->actor.shape.rot.y)) < 0x2800) {
-                if (func_8002F194(&this->actor, globalCtx)) {
-                    this->msgFlag = true;
+void EnKanban_Message(EnKanban* self, GlobalContext* globalCtx) {
+    if (!self->msgFlag) {
+        if (self->msgTimer == 0) {
+            if (ABS((s16)(self->actor.yawTowardsPlayer - self->actor.shape.rot.y)) < 0x2800) {
+                if (func_8002F194(&self->actor, globalCtx)) {
+                    self->msgFlag = true;
                 } else {
-                    func_8002F2CC(&this->actor, globalCtx, 68.0f);
+                    func_8002F2CC(&self->actor, globalCtx, 68.0f);
                 }
             }
         } else {
-            this->msgTimer--;
+            self->msgTimer--;
         }
     } else {
-        if (func_8002F334(&this->actor, globalCtx)) {
-            this->msgFlag = false;
-            this->msgTimer = 20;
+        if (func_8002F334(&self->actor, globalCtx)) {
+            self->msgFlag = false;
+            self->msgTimer = 20;
         }
     }
 }
@@ -254,52 +254,52 @@ void EnKanban_Message(EnKanban* this, GlobalContext* globalCtx) {
 void EnKanban_Update(Actor* thisx, GlobalContext* globalCtx2) {
     u8 bounced = false;
     GlobalContext* globalCtx = globalCtx2;
-    EnKanban* this = THIS;
+    EnKanban* self = THIS;
     EnKanban* signpost;
     EnKanban* piece;
     Player* player = GET_PLAYER(globalCtx);
     Vec3f offset;
 
-    this->frameCount++;
-    switch (this->actionState) {
+    self->frameCount++;
+    switch (self->actionState) {
         case ENKANBAN_SIGN:
-            if (this->invincibilityTimer != 0) {
-                this->invincibilityTimer--;
+            if (self->invincibilityTimer != 0) {
+                self->invincibilityTimer--;
             }
-            if (this->zTargetTimer != 0) {
-                this->zTargetTimer--;
+            if (self->zTargetTimer != 0) {
+                self->zTargetTimer--;
             }
-            if (this->zTargetTimer == 1) {
-                this->actor.flags &= ~1;
+            if (self->zTargetTimer == 1) {
+                self->actor.flags &= ~1;
             }
-            if (this->partFlags == 0xFFFF) {
-                EnKanban_Message(this, globalCtx);
+            if (self->partFlags == 0xFFFF) {
+                EnKanban_Message(self, globalCtx);
             }
-            if ((this->invincibilityTimer == 0) && (this->collider.base.acFlags & AC_HIT)) {
-                this->collider.base.acFlags &= ~AC_HIT;
-                this->invincibilityTimer = 6;
-                piece = (EnKanban*)Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_KANBAN,
-                                                      this->actor.world.pos.x, this->actor.world.pos.y,
-                                                      this->actor.world.pos.z, this->actor.shape.rot.x,
-                                                      this->actor.shape.rot.y, this->actor.shape.rot.z, ENKANBAN_PIECE);
+            if ((self->invincibilityTimer == 0) && (self->collider.base.acFlags & AC_HIT)) {
+                self->collider.base.acFlags &= ~AC_HIT;
+                self->invincibilityTimer = 6;
+                piece = (EnKanban*)Actor_SpawnAsChild(&globalCtx->actorCtx, &self->actor, globalCtx, ACTOR_EN_KANBAN,
+                                                      self->actor.world.pos.x, self->actor.world.pos.y,
+                                                      self->actor.world.pos.z, self->actor.shape.rot.x,
+                                                      self->actor.shape.rot.y, self->actor.shape.rot.z, ENKANBAN_PIECE);
                 if (piece != NULL) {
-                    ColliderInfo* hitItem = this->collider.info.acHitInfo;
-                    s16 yawDiff = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
+                    ColliderInfo* hitItem = self->collider.info.acHitInfo;
+                    s16 yawDiff = self->actor.yawTowardsPlayer - self->actor.shape.rot.y;
                     u8 i;
 
                     if (hitItem->toucher.dmgFlags & 0x700) {
-                        this->cutType = sCutTypes[player->swordAnimation];
+                        self->cutType = sCutTypes[player->swordAnimation];
                     } else {
-                        this->cutType = CUT_POST;
+                        self->cutType = CUT_POST;
                     }
                     if (ABS(yawDiff) > 0x4000) {
-                        if (this->cutType == CUT_DIAG_R) {
-                            this->cutType = CUT_DIAG_L;
-                        } else if (this->cutType == CUT_VERT_L) {
-                            this->cutType = CUT_VERT_R;
+                        if (self->cutType == CUT_DIAG_R) {
+                            self->cutType = CUT_DIAG_L;
+                        } else if (self->cutType == CUT_VERT_L) {
+                            self->cutType = CUT_VERT_R;
                         }
                     }
-                    piece->partFlags = sCutFlags[this->cutType] & this->partFlags;
+                    piece->partFlags = sCutFlags[self->cutType] & self->partFlags;
                     if (piece->partFlags == 0) {
                         Actor_Kill(&piece->actor);
                         return;
@@ -310,9 +310,9 @@ void EnKanban_Update(Actor* thisx, GlobalContext* globalCtx2) {
                             piece->partCount++;
                         }
                     }
-                    this->partFlags &= ~sCutFlags[this->cutType];
-                    if (!(this->partFlags & ALL_PARTS)) {
-                        this->zTargetTimer = 10;
+                    self->partFlags &= ~sCutFlags[self->cutType];
+                    if (!(self->partFlags & ALL_PARTS)) {
+                        self->zTargetTimer = 10;
                     }
                     if ((piece->partFlags & PART_UPPER_LEFT) && (piece->partFlags & PART_LOWER_RIGHT)) {
                         piece->pieceType = PIECE_WHOLE_SIGN;
@@ -359,19 +359,19 @@ void EnKanban_Update(Actor* thisx, GlobalContext* globalCtx2) {
                         piece->pieceType = PIECE_WHOLE_SIGN;
                     }
 
-                    Matrix_RotateY((this->actor.shape.rot.y / (f32)0x8000) * M_PI, MTXMODE_NEW);
+                    Matrix_RotateY((self->actor.shape.rot.y / (f32)0x8000) * M_PI, MTXMODE_NEW);
                     Matrix_MultVec3f(&sPieceOffsets[piece->pieceType], &offset);
                     piece->actor.world.pos.x += offset.x;
                     piece->actor.world.pos.y += offset.y;
                     piece->actor.world.pos.z += offset.z;
-                    piece->offset.x = -sPieceOffsets[piece->pieceType].x / this->actor.scale.x;
-                    piece->offset.y = -sPieceOffsets[piece->pieceType].y / this->actor.scale.x;
-                    piece->offset.z = -sPieceOffsets[piece->pieceType].z / this->actor.scale.x;
+                    piece->offset.x = -sPieceOffsets[piece->pieceType].x / self->actor.scale.x;
+                    piece->offset.y = -sPieceOffsets[piece->pieceType].y / self->actor.scale.x;
+                    piece->offset.z = -sPieceOffsets[piece->pieceType].z / self->actor.scale.x;
                     piece->pieceWidth = sPieceSizes[piece->pieceType].x;
                     piece->pieceHeight = sPieceSizes[piece->pieceType].y;
                     piece->actor.gravity = -1.0f;
                     piece->actionState = ENKANBAN_AIR;
-                    piece->actor.world.rot.y = (s16)Rand_CenteredFloat(0x3000) + this->actor.yawTowardsPlayer + 0x8000;
+                    piece->actor.world.rot.y = (s16)Rand_CenteredFloat(0x3000) + self->actor.yawTowardsPlayer + 0x8000;
                     piece->actor.velocity.y = Rand_ZeroFloat(2.0f) + 3.0f;
                     piece->actor.speedXZ = Rand_ZeroFloat(2.0f) + 3.0f;
                     if (piece->partCount >= 4) {
@@ -390,32 +390,32 @@ void EnKanban_Update(Actor* thisx, GlobalContext* globalCtx2) {
                     piece->airTimer = 100;
                     piece->actor.flags &= ~1;
                     piece->actor.flags |= 0x02000000;
-                    this->cutMarkTimer = 5;
-                    Audio_PlayActorSound2(&this->actor, NA_SE_IT_SWORD_STRIKE);
+                    self->cutMarkTimer = 5;
+                    Audio_PlayActorSound2(&self->actor, NA_SE_IT_SWORD_STRIKE);
                 }
             }
-            this->actor.focus.pos = this->actor.world.pos;
-            this->actor.focus.pos.y += 44.0f;
-            Collider_UpdateCylinder(&this->actor, &this->collider);
-            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-            CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-            if (this->actor.xzDistToPlayer > 500.0f) {
-                this->actor.flags |= 1;
-                this->partFlags = 0xFFFF;
+            self->actor.focus.pos = self->actor.world.pos;
+            self->actor.focus.pos.y += 44.0f;
+            Collider_UpdateCylinder(&self->actor, &self->collider);
+            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
+            CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
+            if (self->actor.xzDistToPlayer > 500.0f) {
+                self->actor.flags |= 1;
+                self->partFlags = 0xFFFF;
             }
-            if (this->cutMarkTimer != 0) {
-                if (this->cutMarkTimer >= 5) {
-                    this->cutMarkAlpha += 255;
-                    if (this->cutMarkAlpha > 255) {
-                        this->cutMarkAlpha = 255;
+            if (self->cutMarkTimer != 0) {
+                if (self->cutMarkTimer >= 5) {
+                    self->cutMarkAlpha += 255;
+                    if (self->cutMarkAlpha > 255) {
+                        self->cutMarkAlpha = 255;
                     }
                 } else {
-                    this->cutMarkAlpha -= 65;
-                    if (this->cutMarkAlpha < 0) {
-                        this->cutMarkAlpha = 0;
+                    self->cutMarkAlpha -= 65;
+                    if (self->cutMarkAlpha < 0) {
+                        self->cutMarkAlpha = 0;
                     }
                 }
-                this->cutMarkTimer--;
+                self->cutMarkTimer--;
             }
             break;
         case ENKANBAN_AIR:
@@ -427,126 +427,126 @@ void EnKanban_Update(Actor* thisx, GlobalContext* globalCtx2) {
             f32 tempYDistToWater;
             u8 onGround;
 
-            Actor_MoveForward(&this->actor);
-            Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 30.0f, 50.0f, 5);
+            Actor_MoveForward(&self->actor);
+            Actor_UpdateBgCheckInfo(globalCtx, &self->actor, 30.0f, 30.0f, 50.0f, 5);
 
-            tempX = this->actor.world.pos.x;
-            tempY = this->actor.world.pos.y;
-            tempZ = this->actor.world.pos.z;
-            tempBgFlags = this->actor.bgCheckFlags;
-            tempYDistToWater = this->actor.yDistToWater;
+            tempX = self->actor.world.pos.x;
+            tempY = self->actor.world.pos.y;
+            tempZ = self->actor.world.pos.z;
+            tempBgFlags = self->actor.bgCheckFlags;
+            tempYDistToWater = self->actor.yDistToWater;
 
-            this->actor.world.pos.z += ((this->actor.world.pos.y - this->actor.floorHeight) * -50.0f) / 100.0f;
-            Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 10.0f, 10.0f, 50.0f, 4);
-            EnKanban_SetFloorRot(this);
+            self->actor.world.pos.z += ((self->actor.world.pos.y - self->actor.floorHeight) * -50.0f) / 100.0f;
+            Actor_UpdateBgCheckInfo(globalCtx, &self->actor, 10.0f, 10.0f, 50.0f, 4);
+            EnKanban_SetFloorRot(self);
 
-            this->actor.world.pos.x = tempX;
-            this->actor.world.pos.y = tempY;
-            this->actor.world.pos.z = tempZ;
-            this->actor.bgCheckFlags = tempBgFlags;
-            this->actor.yDistToWater = tempYDistToWater;
+            self->actor.world.pos.x = tempX;
+            self->actor.world.pos.y = tempY;
+            self->actor.world.pos.z = tempZ;
+            self->actor.bgCheckFlags = tempBgFlags;
+            self->actor.yDistToWater = tempYDistToWater;
 
             osSyncPrintf(VT_RST);
-            onGround = (this->actor.bgCheckFlags & 1);
-            if (this->spinXFlag) {
-                this->spinRot.x += this->spinVel.x;
-                this->spinVel.x -= 0x800;
-                if ((this->spinRot.x <= 0) && onGround) {
-                    this->spinRot.x = 0;
-                    this->spinVel.x = 0;
+            onGround = (self->actor.bgCheckFlags & 1);
+            if (self->spinXFlag) {
+                self->spinRot.x += self->spinVel.x;
+                self->spinVel.x -= 0x800;
+                if ((self->spinRot.x <= 0) && onGround) {
+                    self->spinRot.x = 0;
+                    self->spinVel.x = 0;
                 }
             } else {
-                this->spinRot.x -= this->spinVel.x;
-                this->spinVel.x -= 0x800;
-                if ((this->spinRot.x >= 0) && onGround) {
-                    this->spinRot.x = 0;
-                    this->spinVel.x = 0;
+                self->spinRot.x -= self->spinVel.x;
+                self->spinVel.x -= 0x800;
+                if ((self->spinRot.x >= 0) && onGround) {
+                    self->spinRot.x = 0;
+                    self->spinVel.x = 0;
                 }
             }
-            if (this->spinVel.x < -0xC00) {
-                this->spinVel.x = -0xC00;
+            if (self->spinVel.x < -0xC00) {
+                self->spinVel.x = -0xC00;
             }
-            if (this->spinZFlag) {
-                this->spinRot.z += this->spinVel.z;
-                this->spinVel.z -= 0x800;
-                if ((this->spinRot.z <= 0) && onGround) {
-                    this->spinRot.z = 0;
-                    this->spinVel.z = 0;
+            if (self->spinZFlag) {
+                self->spinRot.z += self->spinVel.z;
+                self->spinVel.z -= 0x800;
+                if ((self->spinRot.z <= 0) && onGround) {
+                    self->spinRot.z = 0;
+                    self->spinVel.z = 0;
                 }
             } else {
-                this->spinRot.z -= this->spinVel.z;
-                this->spinVel.z -= 0x800;
-                if ((this->spinRot.z >= 0) && onGround) {
-                    this->spinRot.z = 0;
-                    this->spinVel.z = 0;
+                self->spinRot.z -= self->spinVel.z;
+                self->spinVel.z -= 0x800;
+                if ((self->spinRot.z >= 0) && onGround) {
+                    self->spinRot.z = 0;
+                    self->spinVel.z = 0;
                 }
             }
-            if (this->spinVel.z < -0xC00) {
-                this->spinVel.z = -0xC00;
+            if (self->spinVel.z < -0xC00) {
+                self->spinVel.z = -0xC00;
             }
-            if (this->actor.bgCheckFlags & 8) {
-                this->actor.speedXZ *= -0.5f;
-                Audio_PlayActorSound2(&this->actor, NA_SE_EV_WOODPLATE_BOUND);
+            if (self->actor.bgCheckFlags & 8) {
+                self->actor.speedXZ *= -0.5f;
+                Audio_PlayActorSound2(&self->actor, NA_SE_EV_WOODPLATE_BOUND);
             }
-            if (this->actor.bgCheckFlags & 0x40) {
-                this->actionState = ENKANBAN_WATER;
-                Audio_PlayActorSound2(&this->actor, NA_SE_EV_BOMB_DROP_WATER);
-                this->bounceX = this->bounceZ = 0;
-                this->actor.world.pos.y += this->actor.yDistToWater;
-                EffectSsGSplash_Spawn(globalCtx, &this->actor.world.pos, NULL, NULL, 0, (this->partCount * 20) + 300);
-                EffectSsGRipple_Spawn(globalCtx, &this->actor.world.pos, 150, 650, 0);
-                EffectSsGRipple_Spawn(globalCtx, &this->actor.world.pos, 300, 800, 5);
-                this->actor.velocity.y = 0.0f;
-                this->actor.gravity = 0.0f;
-                osSyncPrintf(" WAT  Y  = %f\n", this->actor.yDistToWater);
-                osSyncPrintf(" POS  Y  = %f\n", this->actor.world.pos.y);
-                osSyncPrintf(" GROUND Y  = %f\n", this->actor.floorHeight);
+            if (self->actor.bgCheckFlags & 0x40) {
+                self->actionState = ENKANBAN_WATER;
+                Audio_PlayActorSound2(&self->actor, NA_SE_EV_BOMB_DROP_WATER);
+                self->bounceX = self->bounceZ = 0;
+                self->actor.world.pos.y += self->actor.yDistToWater;
+                EffectSsGSplash_Spawn(globalCtx, &self->actor.world.pos, NULL, NULL, 0, (self->partCount * 20) + 300);
+                EffectSsGRipple_Spawn(globalCtx, &self->actor.world.pos, 150, 650, 0);
+                EffectSsGRipple_Spawn(globalCtx, &self->actor.world.pos, 300, 800, 5);
+                self->actor.velocity.y = 0.0f;
+                self->actor.gravity = 0.0f;
+                osSyncPrintf(" WAT  Y  = %f\n", self->actor.yDistToWater);
+                osSyncPrintf(" POS  Y  = %f\n", self->actor.world.pos.y);
+                osSyncPrintf(" GROUND Y  = %f\n", self->actor.floorHeight);
                 break;
             }
 
             if (onGround) {
-                if (this->bounceCount <= 0) {
-                    this->bounceCount++;
-                    this->actor.velocity.y *= -0.3f;
-                    this->actor.world.rot.y += (s16)Rand_CenteredFloat(16384.0f);
+                if (self->bounceCount <= 0) {
+                    self->bounceCount++;
+                    self->actor.velocity.y *= -0.3f;
+                    self->actor.world.rot.y += (s16)Rand_CenteredFloat(16384.0f);
                 } else {
-                    this->actor.velocity.y = 0.0f;
+                    self->actor.velocity.y = 0.0f;
                 }
-                this->actor.speedXZ *= 0.7f;
-                if ((this->spinRot.x == 0) && (this->bounceX != 0)) {
-                    this->spinVel.x = this->bounceX * 0x200;
-                    if (this->bounceX != 0) {
-                        this->bounceX -= 5;
-                        if (this->bounceX <= 0) {
-                            this->bounceX = 0;
+                self->actor.speedXZ *= 0.7f;
+                if ((self->spinRot.x == 0) && (self->bounceX != 0)) {
+                    self->spinVel.x = self->bounceX * 0x200;
+                    if (self->bounceX != 0) {
+                        self->bounceX -= 5;
+                        if (self->bounceX <= 0) {
+                            self->bounceX = 0;
                         }
                     }
                     if (Rand_ZeroOne() < 0.5f) {
-                        this->spinXFlag = true;
+                        self->spinXFlag = true;
                     } else {
-                        this->spinXFlag = false;
+                        self->spinXFlag = false;
                     }
                     bounced = true;
                 }
-                if ((this->spinRot.z == 0) && (this->bounceZ != 0)) {
-                    this->spinVel.z = this->bounceZ * 0x200;
-                    if (this->bounceZ != 0) {
-                        this->bounceZ -= 5;
-                        if (this->bounceZ <= 0) {
-                            this->bounceZ = 0;
+                if ((self->spinRot.z == 0) && (self->bounceZ != 0)) {
+                    self->spinVel.z = self->bounceZ * 0x200;
+                    if (self->bounceZ != 0) {
+                        self->bounceZ -= 5;
+                        if (self->bounceZ <= 0) {
+                            self->bounceZ = 0;
                         }
                     }
                     if (Rand_ZeroOne() < 0.5f) {
-                        this->spinZFlag = true;
+                        self->spinZFlag = true;
                     } else {
-                        this->spinZFlag = false;
+                        self->spinZFlag = false;
                     }
                     bounced = true;
                 }
-                Math_ApproachS(&this->actor.shape.rot.x, this->direction * 0x4000, 1, 0x2000);
+                Math_ApproachS(&self->actor.shape.rot.x, self->direction * 0x4000, 1, 0x2000);
             } else {
-                this->actor.shape.rot.y += this->spinVel.y;
-                this->actor.shape.rot.x += this->direction * 0x7D0;
+                self->actor.shape.rot.y += self->spinVel.y;
+                self->actor.shape.rot.x += self->direction * 0x7D0;
             }
             if (bounced) {
                 s16 dustCount;
@@ -555,113 +555,113 @@ void EnKanban_Update(Actor* thisx, GlobalContext* globalCtx2) {
                 Vec3f accel;
                 Vec3f pos;
 
-                Audio_PlayActorSound2(&this->actor, NA_SE_EV_WOODPLATE_BOUND);
+                Audio_PlayActorSound2(&self->actor, NA_SE_EV_WOODPLATE_BOUND);
                 accel.x = 0.0f;
                 accel.y = 0.1f;
                 accel.z = 0.0f;
-                pos.y = this->actor.floorHeight + 3.0f;
-                dustCount = this->partCount * 0.5f;
+                pos.y = self->actor.floorHeight + 3.0f;
+                dustCount = self->partCount * 0.5f;
                 for (j = 0; j < dustCount + 3; j++) {
-                    pos.x = this->actor.world.pos.x + Rand_CenteredFloat((this->partCount * 0.5f) + 20.0f);
-                    pos.z = this->actor.world.pos.z + Rand_CenteredFloat((this->partCount * 0.5f) + 20.0f);
+                    pos.x = self->actor.world.pos.x + Rand_CenteredFloat((self->partCount * 0.5f) + 20.0f);
+                    pos.z = self->actor.world.pos.z + Rand_CenteredFloat((self->partCount * 0.5f) + 20.0f);
                     func_800286CC(globalCtx, &pos, &velocity, &accel, 100, 5);
                 }
             }
-            if (DECR(this->airTimer) == 0) {
-                this->actionState = ENKANBAN_GROUND;
+            if (DECR(self->airTimer) == 0) {
+                self->actionState = ENKANBAN_GROUND;
             }
         }
         case ENKANBAN_GROUND:
         case ENKANBAN_WATER:
-            signpost = (EnKanban*)this->actor.parent;
+            signpost = (EnKanban*)self->actor.parent;
 
             if (signpost->partFlags == 0xFFFF) {
-                Actor_Kill(&this->actor);
+                Actor_Kill(&self->actor);
             }
-            Math_ApproachF(&this->actor.shape.yOffset, 100.0f, 1.0f, 5.0f);
-            if (this->actionState == ENKANBAN_WATER) {
+            Math_ApproachF(&self->actor.shape.yOffset, 100.0f, 1.0f, 5.0f);
+            if (self->actionState == ENKANBAN_WATER) {
                 s32 rippleDelay;
                 s32 rippleScale;
 
-                if ((player->actor.speedXZ > 0.0f) && (player->actor.world.pos.y < this->actor.world.pos.y) &&
-                    (this->actor.xyzDistToPlayerSq < 2500.0f)) {
-                    Math_ApproachF(&this->actor.speedXZ, player->actor.speedXZ, 1.0f, 0.2f);
-                    if (this->actor.speedXZ > 1.0f) {
-                        this->actor.speedXZ = 1.0f;
+                if ((player->actor.speedXZ > 0.0f) && (player->actor.world.pos.y < self->actor.world.pos.y) &&
+                    (self->actor.xyzDistToPlayerSq < 2500.0f)) {
+                    Math_ApproachF(&self->actor.speedXZ, player->actor.speedXZ, 1.0f, 0.2f);
+                    if (self->actor.speedXZ > 1.0f) {
+                        self->actor.speedXZ = 1.0f;
                     }
-                    if (Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer + 0x8000, 1, 0x1000,
+                    if (Math_SmoothStepToS(&self->actor.world.rot.y, self->actor.yawTowardsPlayer + 0x8000, 1, 0x1000,
                                            0) > 0) {
-                        this->spinVel.y = this->actor.speedXZ * 1000.0f;
+                        self->spinVel.y = self->actor.speedXZ * 1000.0f;
                     } else {
-                        this->spinVel.y = this->actor.speedXZ * -1000.0f;
+                        self->spinVel.y = self->actor.speedXZ * -1000.0f;
                     }
                 }
-                if (this->actor.bgCheckFlags & 1) {
-                    this->actor.speedXZ = 0.0f;
+                if (self->actor.bgCheckFlags & 1) {
+                    self->actor.speedXZ = 0.0f;
                 }
-                Actor_MoveForward(&this->actor);
-                if (this->actor.speedXZ != 0.0f) {
-                    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 10.0f, 10.0f, 50.0f, 5);
-                    if (this->actor.bgCheckFlags & 8) {
-                        this->actor.speedXZ *= -0.5f;
-                        if (this->spinVel.y > 0) {
-                            this->spinVel.y = -0x7D0;
+                Actor_MoveForward(&self->actor);
+                if (self->actor.speedXZ != 0.0f) {
+                    Actor_UpdateBgCheckInfo(globalCtx, &self->actor, 10.0f, 10.0f, 50.0f, 5);
+                    if (self->actor.bgCheckFlags & 8) {
+                        self->actor.speedXZ *= -0.5f;
+                        if (self->spinVel.y > 0) {
+                            self->spinVel.y = -0x7D0;
                         } else {
-                            this->spinVel.y = 0x7D0;
+                            self->spinVel.y = 0x7D0;
                         }
                     }
-                    Math_ApproachZeroF(&this->actor.speedXZ, 1.0f, 0.15f);
+                    Math_ApproachZeroF(&self->actor.speedXZ, 1.0f, 0.15f);
                 }
-                this->actor.shape.rot.y += this->spinVel.y;
-                Math_ApproachS(&this->spinVel.y, 0, 1, 0x3A);
-                Math_ApproachS(&this->actor.shape.rot.x, this->direction * 0x4000, 2, 0x1000);
-                Math_ApproachS(&this->spinRot.x, Math_SinS(2500 * this->frameCount) * 500.0f, 2, 0x1000);
-                Math_ApproachS(&this->spinRot.z, Math_CosS(3000 * this->frameCount) * 500.0f, 2, 0x1000);
-                Math_ApproachZeroF(&this->floorRot.x, 0.5f, 0.2f);
-                Math_ApproachZeroF(&this->floorRot.z, 0.5f, 0.2f);
-                if (fabsf(this->actor.speedXZ) > 1.0f) {
+                self->actor.shape.rot.y += self->spinVel.y;
+                Math_ApproachS(&self->spinVel.y, 0, 1, 0x3A);
+                Math_ApproachS(&self->actor.shape.rot.x, self->direction * 0x4000, 2, 0x1000);
+                Math_ApproachS(&self->spinRot.x, Math_SinS(2500 * self->frameCount) * 500.0f, 2, 0x1000);
+                Math_ApproachS(&self->spinRot.z, Math_CosS(3000 * self->frameCount) * 500.0f, 2, 0x1000);
+                Math_ApproachZeroF(&self->floorRot.x, 0.5f, 0.2f);
+                Math_ApproachZeroF(&self->floorRot.z, 0.5f, 0.2f);
+                if (fabsf(self->actor.speedXZ) > 1.0f) {
                     rippleDelay = 0;
-                } else if (fabsf(this->actor.speedXZ) > 0.5f) {
+                } else if (fabsf(self->actor.speedXZ) > 0.5f) {
                     rippleDelay = 3;
                 } else {
                     rippleDelay = 7;
                 }
-                if (!(this->frameCount & rippleDelay)) {
-                    if (this->partCount < 3) {
+                if (!(self->frameCount & rippleDelay)) {
+                    if (self->partCount < 3) {
                         rippleScale = 0;
-                    } else if (this->partCount < 6) {
+                    } else if (self->partCount < 6) {
                         rippleScale = 100;
                     } else {
                         rippleScale = 200;
                     }
-                    EffectSsGRipple_Spawn(globalCtx, &this->actor.world.pos, rippleScale, rippleScale + 500, 0);
+                    EffectSsGRipple_Spawn(globalCtx, &self->actor.world.pos, rippleScale, rippleScale + 500, 0);
                 }
-            } else if ((globalCtx->actorCtx.unk_02 != 0) && (this->actor.xyzDistToPlayerSq < SQ(100.0f))) {
-                f32 hammerStrength = (100.0f - sqrtf(this->actor.xyzDistToPlayerSq)) * 0.05f;
+            } else if ((globalCtx->actorCtx.unk_02 != 0) && (self->actor.xyzDistToPlayerSq < SQ(100.0f))) {
+                f32 hammerStrength = (100.0f - sqrtf(self->actor.xyzDistToPlayerSq)) * 0.05f;
 
-                this->actionState = ENKANBAN_AIR;
-                this->actor.gravity = -1.0f;
-                this->actor.world.rot.y = Rand_CenteredFloat(0x10000);
-                if (this->partCount >= 4) {
-                    this->bounceX = (s16)Rand_ZeroFloat(10.0f) + 6;
-                    this->bounceZ = (s16)Rand_ZeroFloat(10.0f) + 6;
-                    this->actor.velocity.y = 2.0f + hammerStrength;
-                    this->actor.speedXZ = Rand_ZeroFloat(1.0f);
+                self->actionState = ENKANBAN_AIR;
+                self->actor.gravity = -1.0f;
+                self->actor.world.rot.y = Rand_CenteredFloat(0x10000);
+                if (self->partCount >= 4) {
+                    self->bounceX = (s16)Rand_ZeroFloat(10.0f) + 6;
+                    self->bounceZ = (s16)Rand_ZeroFloat(10.0f) + 6;
+                    self->actor.velocity.y = 2.0f + hammerStrength;
+                    self->actor.speedXZ = Rand_ZeroFloat(1.0f);
                 } else {
-                    this->bounceX = (s16)Rand_ZeroFloat(7.0f) + 3;
-                    this->bounceZ = (s16)Rand_ZeroFloat(7.0f) + 3;
-                    this->actor.velocity.y = 3.0f + hammerStrength;
-                    this->actor.speedXZ = Rand_ZeroFloat(1.5f);
+                    self->bounceX = (s16)Rand_ZeroFloat(7.0f) + 3;
+                    self->bounceZ = (s16)Rand_ZeroFloat(7.0f) + 3;
+                    self->actor.velocity.y = 3.0f + hammerStrength;
+                    self->actor.speedXZ = Rand_ZeroFloat(1.5f);
                 }
-                this->spinVel.y = Rand_CenteredFloat(0x1800);
+                self->spinVel.y = Rand_CenteredFloat(0x1800);
                 if (Rand_ZeroOne() < 0.5f) {
-                    this->direction = 1;
+                    self->direction = 1;
                 } else {
-                    this->direction = -1;
+                    self->direction = -1;
                 }
-                this->airTimer = 70;
+                self->airTimer = 70;
             }
-            if (this->bounceX == 0) {
+            if (self->bounceX == 0) {
                 Actor* bomb = globalCtx->actorCtx.actorLists[ACTORCAT_EXPLOSIVE].head;
                 f32 dx;
                 f32 dy;
@@ -672,33 +672,33 @@ void EnKanban_Update(Actor* thisx, GlobalContext* globalCtx2) {
                         bomb = bomb->next;
                         continue;
                     }
-                    dx = this->actor.world.pos.x - bomb->world.pos.x;
-                    dy = this->actor.world.pos.y - bomb->world.pos.y;
-                    dz = this->actor.world.pos.z - bomb->world.pos.z;
+                    dx = self->actor.world.pos.x - bomb->world.pos.x;
+                    dy = self->actor.world.pos.y - bomb->world.pos.y;
+                    dz = self->actor.world.pos.z - bomb->world.pos.z;
                     if (sqrtf(SQ(dx) + SQ(dy) + SQ(dz)) < 100.0f) {
                         f32 bombStrength = (100.0f - sqrtf(SQ(dx) + SQ(dy) + SQ(dz))) * 0.05f;
 
-                        this->actionState = ENKANBAN_AIR;
-                        this->actor.gravity = -1.0f;
-                        this->actor.world.rot.y = Math_FAtan2F(dx, dz) * (0x8000 / M_PI);
-                        if (this->partCount >= 4) {
-                            this->bounceX = (s16)Rand_ZeroFloat(10.0f) + 6;
-                            this->bounceZ = (s16)Rand_ZeroFloat(10.0f) + 6;
-                            this->actor.velocity.y = 2.5f + bombStrength;
-                            this->actor.speedXZ = 3.0f + bombStrength;
+                        self->actionState = ENKANBAN_AIR;
+                        self->actor.gravity = -1.0f;
+                        self->actor.world.rot.y = Math_FAtan2F(dx, dz) * (0x8000 / M_PI);
+                        if (self->partCount >= 4) {
+                            self->bounceX = (s16)Rand_ZeroFloat(10.0f) + 6;
+                            self->bounceZ = (s16)Rand_ZeroFloat(10.0f) + 6;
+                            self->actor.velocity.y = 2.5f + bombStrength;
+                            self->actor.speedXZ = 3.0f + bombStrength;
                         } else {
-                            this->bounceX = (s16)Rand_ZeroFloat(7.0f) + 3;
-                            this->bounceZ = (s16)Rand_ZeroFloat(7.0f) + 3;
-                            this->actor.velocity.y = 5.0f + bombStrength;
-                            this->actor.speedXZ = 4.0f + bombStrength;
+                            self->bounceX = (s16)Rand_ZeroFloat(7.0f) + 3;
+                            self->bounceZ = (s16)Rand_ZeroFloat(7.0f) + 3;
+                            self->actor.velocity.y = 5.0f + bombStrength;
+                            self->actor.speedXZ = 4.0f + bombStrength;
                         }
-                        this->spinVel.y = Rand_CenteredFloat(0x1800);
+                        self->spinVel.y = Rand_CenteredFloat(0x1800);
                         if (Rand_ZeroOne() < 0.5f) {
-                            this->direction = 1;
+                            self->direction = 1;
                         } else {
-                            this->direction = -1;
+                            self->direction = -1;
                         }
-                        this->airTimer = 70;
+                        self->airTimer = 70;
                     }
                     bomb = bomb->next;
                 }
@@ -706,16 +706,16 @@ void EnKanban_Update(Actor* thisx, GlobalContext* globalCtx2) {
             osSyncPrintf(VT_FGCOL(GREEN));
             osSyncPrintf("OCARINA_MODE %d\n", globalCtx->msgCtx.unk_E3EE);
             osSyncPrintf(VT_RST);
-            switch (this->ocarinaFlag) {
+            switch (self->ocarinaFlag) {
                 case 0:
                     if (globalCtx->msgCtx.unk_E3EE == 1) {
-                        this->ocarinaFlag = 1;
+                        self->ocarinaFlag = 1;
                     }
                     break;
                 case 1:
                     if ((globalCtx->msgCtx.unk_E3EE == 4) && (globalCtx->msgCtx.unk_E3F2 == 8)) {
-                        this->actionState = ENKANBAN_REPAIR;
-                        this->bounceX = 1;
+                        self->actionState = ENKANBAN_REPAIR;
+                        self->bounceX = 1;
                         Audio_PlaySoundGeneral(NA_SE_SY_TRE_BOX_APPEAR, &D_801333D4, 4, &D_801333E0, &D_801333E0,
                                                &D_801333E8);
                     }
@@ -729,34 +729,34 @@ void EnKanban_Update(Actor* thisx, GlobalContext* globalCtx2) {
             s16 pDiff;
             s16 yDiff;
             s16 rDiff;
-            signpost = (EnKanban*)this->actor.parent;
+            signpost = (EnKanban*)self->actor.parent;
 
             if (signpost->partFlags == 0xFFFF) {
-                Actor_Kill(&this->actor);
+                Actor_Kill(&self->actor);
             }
 
             Matrix_RotateY((signpost->actor.shape.rot.y / (f32)0x8000) * M_PI, MTXMODE_NEW);
-            Matrix_MultVec3f(&sPieceOffsets[this->pieceType], &offset);
+            Matrix_MultVec3f(&sPieceOffsets[self->pieceType], &offset);
             distX =
-                Math_SmoothStepToF(&this->actor.world.pos.x, signpost->actor.world.pos.x + offset.x, 1.0f, 3.0f, 0.0f);
+                Math_SmoothStepToF(&self->actor.world.pos.x, signpost->actor.world.pos.x + offset.x, 1.0f, 3.0f, 0.0f);
             distY =
-                Math_SmoothStepToF(&this->actor.world.pos.y, signpost->actor.world.pos.y + offset.y, 1.0f, 3.0f, 0.0f);
+                Math_SmoothStepToF(&self->actor.world.pos.y, signpost->actor.world.pos.y + offset.y, 1.0f, 3.0f, 0.0f);
             distZ =
-                Math_SmoothStepToF(&this->actor.world.pos.z, signpost->actor.world.pos.z + offset.z, 1.0f, 3.0f, 0.0f);
-            pDiff = Math_SmoothStepToS(&this->actor.shape.rot.x, signpost->actor.shape.rot.x, 1, 0x200, 0);
-            yDiff = Math_SmoothStepToS(&this->actor.shape.rot.y, signpost->actor.shape.rot.y, 1, 0x200, 0);
-            rDiff = Math_SmoothStepToS(&this->actor.shape.rot.z, signpost->actor.shape.rot.z, 1, 0x200, 0);
-            Math_ApproachS(&this->spinRot.x, 0, 1, 0x200);
-            Math_ApproachS(&this->spinRot.z, 0, 1, 0x200);
-            Math_ApproachZeroF(&this->floorRot.x, 1.0f, 0.05f);
-            Math_ApproachZeroF(&this->floorRot.z, 1.0f, 0.05f);
-            Math_ApproachZeroF(&this->actor.shape.yOffset, 1.0f, 2.0f);
+                Math_SmoothStepToF(&self->actor.world.pos.z, signpost->actor.world.pos.z + offset.z, 1.0f, 3.0f, 0.0f);
+            pDiff = Math_SmoothStepToS(&self->actor.shape.rot.x, signpost->actor.shape.rot.x, 1, 0x200, 0);
+            yDiff = Math_SmoothStepToS(&self->actor.shape.rot.y, signpost->actor.shape.rot.y, 1, 0x200, 0);
+            rDiff = Math_SmoothStepToS(&self->actor.shape.rot.z, signpost->actor.shape.rot.z, 1, 0x200, 0);
+            Math_ApproachS(&self->spinRot.x, 0, 1, 0x200);
+            Math_ApproachS(&self->spinRot.z, 0, 1, 0x200);
+            Math_ApproachZeroF(&self->floorRot.x, 1.0f, 0.05f);
+            Math_ApproachZeroF(&self->floorRot.z, 1.0f, 0.05f);
+            Math_ApproachZeroF(&self->actor.shape.yOffset, 1.0f, 2.0f);
             if (((distX + distY + distZ) == 0.0f) &&
-                ((pDiff + yDiff + rDiff + this->spinRot.x + this->spinRot.z) == 0) && (this->floorRot.x == 0.0f) &&
-                (this->floorRot.z == 0.0f)) {
-                signpost->partFlags |= this->partFlags;
+                ((pDiff + yDiff + rDiff + self->spinRot.x + self->spinRot.z) == 0) && (self->floorRot.x == 0.0f) &&
+                (self->floorRot.z == 0.0f)) {
+                signpost->partFlags |= self->partFlags;
                 signpost->actor.flags |= 1;
-                Actor_Kill(&this->actor);
+                Actor_Kill(&self->actor);
             }
         } break;
     }
@@ -803,7 +803,7 @@ static Gfx sShadowDList[] = {
 };
 
 void EnKanban_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    EnKanban* this = THIS;
+    EnKanban* self = THIS;
     f32 zShift;
     f32 zShift2;
     s16 i;
@@ -813,26 +813,26 @@ void EnKanban_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_80093D18(globalCtx->state.gfxCtx);
     func_80093D84(globalCtx->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, object_kanban_DL_000C30);
-    if (this->actionState != ENKANBAN_SIGN) {
-        Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
-        Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        Matrix_RotateX(this->floorRot.x, MTXMODE_APPLY);
-        Matrix_RotateZ(this->floorRot.z, MTXMODE_APPLY);
-        Matrix_Translate(0.0f, this->actor.shape.yOffset, 0.0f, MTXMODE_APPLY);
-        Matrix_RotateY((this->actor.shape.rot.y / (f32)0x8000) * M_PI, MTXMODE_APPLY);
-        Matrix_RotateX((this->actor.shape.rot.x / (f32)0x8000) * M_PI, MTXMODE_APPLY);
-        zShift = fabsf(Math_SinS(this->spinRot.x) * this->pieceHeight);
-        zShift2 = fabsf(Math_SinS(this->spinRot.z) * this->pieceWidth);
+    if (self->actionState != ENKANBAN_SIGN) {
+        Matrix_Translate(self->actor.world.pos.x, self->actor.world.pos.y, self->actor.world.pos.z, MTXMODE_NEW);
+        Matrix_Scale(self->actor.scale.x, self->actor.scale.y, self->actor.scale.z, MTXMODE_APPLY);
+        Matrix_RotateX(self->floorRot.x, MTXMODE_APPLY);
+        Matrix_RotateZ(self->floorRot.z, MTXMODE_APPLY);
+        Matrix_Translate(0.0f, self->actor.shape.yOffset, 0.0f, MTXMODE_APPLY);
+        Matrix_RotateY((self->actor.shape.rot.y / (f32)0x8000) * M_PI, MTXMODE_APPLY);
+        Matrix_RotateX((self->actor.shape.rot.x / (f32)0x8000) * M_PI, MTXMODE_APPLY);
+        zShift = fabsf(Math_SinS(self->spinRot.x) * self->pieceHeight);
+        zShift2 = fabsf(Math_SinS(self->spinRot.z) * self->pieceWidth);
         zShift = MAX(zShift2, zShift);
-        zShift *= -(f32)this->direction;
+        zShift *= -(f32)self->direction;
         Matrix_Translate(0.0f, 0.0f, zShift, MTXMODE_APPLY);
-        Matrix_RotateX((this->spinRot.x / (f32)0x8000) * M_PI, MTXMODE_APPLY);
-        Matrix_RotateY((this->spinRot.z / (f32)0x8000) * M_PI, MTXMODE_APPLY);
-        Matrix_Translate(this->offset.x, this->offset.y, this->offset.z - 100.0f, MTXMODE_APPLY);
+        Matrix_RotateX((self->spinRot.x / (f32)0x8000) * M_PI, MTXMODE_APPLY);
+        Matrix_RotateY((self->spinRot.z / (f32)0x8000) * M_PI, MTXMODE_APPLY);
+        Matrix_Translate(self->offset.x, self->offset.y, self->offset.z - 100.0f, MTXMODE_APPLY);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx, "../z_en_kanban.c", 1715),
                   G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         for (i = 0; i < ARRAY_COUNT(sPartFlags); i++) {
-            if (sPartFlags[i] & this->partFlags) {
+            if (sPartFlags[i] & self->partFlags) {
                 gSPDisplayList(POLY_OPA_DISP++, sDisplayLists[i]);
             }
         }
@@ -840,32 +840,32 @@ void EnKanban_Draw(Actor* thisx, GlobalContext* globalCtx) {
         Matrix_Translate(0.0f, 0.0f, -100.0f, MTXMODE_APPLY);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx, "../z_en_kanban.c", 1725),
                   G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        if (this->partFlags == 0xFFFF) {
+        if (self->partFlags == 0xFFFF) {
             gSPDisplayList(POLY_OPA_DISP++, gSignRectangularDL);
         } else {
             for (i = 0; i < ARRAY_COUNT(sPartFlags); i++) {
-                if (sPartFlags[i] & this->partFlags) {
+                if (sPartFlags[i] & self->partFlags) {
                     gSPDisplayList(POLY_OPA_DISP++, sDisplayLists[i]);
                 }
             }
         }
-        if (this->cutMarkAlpha != 0) {
-            f32 cutOffset = (this->cutType == CUT_POST) ? -1200.0f : 0.0f;
+        if (self->cutMarkAlpha != 0) {
+            f32 cutOffset = (self->cutType == CUT_POST) ? -1200.0f : 0.0f;
 
             Matrix_Translate(0.0f, 4400.0f + cutOffset, 200.0f, MTXMODE_APPLY);
-            Matrix_RotateZ(sCutAngles[this->cutType], MTXMODE_APPLY);
+            Matrix_RotateZ(sCutAngles[self->cutType], MTXMODE_APPLY);
             Matrix_Scale(0.0f, 10.0f, 2.0f, MTXMODE_APPLY);
             gDPPipeSync(POLY_XLU_DISP++);
-            gDPSetPrimColor(POLY_XLU_DISP++, 0x00, 0x00, 255, 255, 255, this->cutMarkAlpha);
+            gDPSetPrimColor(POLY_XLU_DISP++, 0x00, 0x00, 255, 255, 255, self->cutMarkAlpha);
             gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 150, 0);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx, "../z_en_kanban.c", 1773),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, object_kanban_DL_001630);
         }
     }
-    if ((this->actor.projectedPos.z <= 400.0f) && (this->actor.projectedPos.z > 0.0f) &&
-        (this->actor.floorHeight > -3000.0f)) {
-        if ((this->bounceX != 0) || (this->bounceZ != 0)) {
+    if ((self->actor.projectedPos.z <= 400.0f) && (self->actor.projectedPos.z > 0.0f) &&
+        (self->actor.floorHeight > -3000.0f)) {
+        if ((self->bounceX != 0) || (self->bounceZ != 0)) {
             u16 dayTime = gSaveContext.dayTime;
             f32 shadowAlpha;
 
@@ -873,35 +873,35 @@ void EnKanban_Draw(Actor* thisx, GlobalContext* globalCtx) {
                 dayTime = 0xFFFF - dayTime;
             }
             shadowAlpha = (dayTime * 0.00275f) + 10.0f;
-            if (this->actor.projectedPos.z > 300.0f) {
-                shadowAlpha *= ((400.0f - this->actor.projectedPos.z) * 0.01f);
+            if (self->actor.projectedPos.z > 300.0f) {
+                shadowAlpha *= ((400.0f - self->actor.projectedPos.z) * 0.01f);
             }
             gDPSetPrimColor(POLY_XLU_DISP++, 0x00, 0x00, 0, 0, 0, (s8)shadowAlpha);
 
-            if ((this->actionState == ENKANBAN_SIGN) && LINK_IS_CHILD) {
+            if ((self->actionState == ENKANBAN_SIGN) && LINK_IS_CHILD) {
                 zShift = 0.0f;
             } else {
-                zShift = ((this->actor.world.pos.y - this->actor.floorHeight) * -50.0f) / 100.0f;
+                zShift = ((self->actor.world.pos.y - self->actor.floorHeight) * -50.0f) / 100.0f;
             }
 
-            Matrix_Translate(this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z + zShift,
+            Matrix_Translate(self->actor.world.pos.x, self->actor.floorHeight, self->actor.world.pos.z + zShift,
                              MTXMODE_NEW);
-            Matrix_RotateX(this->floorRot.x, MTXMODE_APPLY);
-            Matrix_RotateZ(this->floorRot.z, MTXMODE_APPLY);
-            Matrix_Scale(this->actor.scale.x, 0.0f, this->actor.scale.z, MTXMODE_APPLY);
-            if (this->actionState == ENKANBAN_SIGN) {
+            Matrix_RotateX(self->floorRot.x, MTXMODE_APPLY);
+            Matrix_RotateZ(self->floorRot.z, MTXMODE_APPLY);
+            Matrix_Scale(self->actor.scale.x, 0.0f, self->actor.scale.z, MTXMODE_APPLY);
+            if (self->actionState == ENKANBAN_SIGN) {
                 Matrix_RotateX(-M_PI / 5, MTXMODE_APPLY);
             }
-            Matrix_RotateY((this->actor.shape.rot.y / (f32)0x8000) * M_PI, MTXMODE_APPLY);
-            Matrix_RotateX((this->actor.shape.rot.x / (f32)0x8000) * M_PI, MTXMODE_APPLY);
-            Matrix_RotateX((this->spinRot.x / (f32)0x8000) * M_PI, MTXMODE_APPLY);
-            Matrix_RotateY((this->spinRot.z / (f32)0x8000) * M_PI, MTXMODE_APPLY);
-            Matrix_Translate(this->offset.x, this->offset.y, this->offset.z, MTXMODE_APPLY);
+            Matrix_RotateY((self->actor.shape.rot.y / (f32)0x8000) * M_PI, MTXMODE_APPLY);
+            Matrix_RotateX((self->actor.shape.rot.x / (f32)0x8000) * M_PI, MTXMODE_APPLY);
+            Matrix_RotateX((self->spinRot.x / (f32)0x8000) * M_PI, MTXMODE_APPLY);
+            Matrix_RotateY((self->spinRot.z / (f32)0x8000) * M_PI, MTXMODE_APPLY);
+            Matrix_Translate(self->offset.x, self->offset.y, self->offset.z, MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx, "../z_en_kanban.c", 1833),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
             for (i = 0; i < 0x400; i++) {
-                if (sShadowTexFlags[i] & this->partFlags) {
+                if (sShadowTexFlags[i] & self->partFlags) {
                     shadowTex[i] = 0xFF;
                 } else {
                     shadowTex[i] = 0;

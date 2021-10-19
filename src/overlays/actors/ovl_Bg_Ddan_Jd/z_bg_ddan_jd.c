@@ -16,8 +16,8 @@ void BgDdanJd_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgDdanJd_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgDdanJd_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void BgDdanJd_Idle(BgDdanJd* this, GlobalContext* globalCtx);
-void BgDdanJd_Move(BgDdanJd* this, GlobalContext* globalCtx);
+void BgDdanJd_Idle(BgDdanJd* self, GlobalContext* globalCtx);
+void BgDdanJd_Move(BgDdanJd* self, GlobalContext* globalCtx);
 
 const ActorInit Bg_Ddan_Jd_InitVars = {
     ACTOR_BG_DDAN_JD,
@@ -54,126 +54,126 @@ typedef enum {
 
 void BgDdanJd_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
-    BgDdanJd* this = THIS;
+    BgDdanJd* self = THIS;
     CollisionHeader* colHeader = NULL;
 
-    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPolyActor_Init(&this->dyna, DPM_PLAYER);
+    Actor_ProcessInitChain(&self->dyna.actor, sInitChain);
+    DynaPolyActor_Init(&self->dyna, DPM_PLAYER);
     CollisionHeader_GetVirtual(&gDodongoRisingPlatformCol, &colHeader);
-    this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
-    this->idleTimer = IDLE_FRAMES;
-    this->state = STATE_GO_BOTTOM;
+    self->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &self->dyna.actor, colHeader);
+    self->idleTimer = IDLE_FRAMES;
+    self->state = STATE_GO_BOTTOM;
 
     // Missing check for actor.params < 0x40. This will cause inconsistent behavior if params >= 0x40 and the bound
     // switch state is turned on while in the same room, as the shortcut behavior won't become enabled until the actor
     // is reloaded.
-    if (Flags_GetSwitch(globalCtx, this->dyna.actor.params)) {
-        this->ySpeed = SHORTCUT_Y_SPEED;
+    if (Flags_GetSwitch(globalCtx, self->dyna.actor.params)) {
+        self->ySpeed = SHORTCUT_Y_SPEED;
     } else {
-        this->ySpeed = DEFAULT_Y_SPEED;
+        self->ySpeed = DEFAULT_Y_SPEED;
     }
-    this->actionFunc = BgDdanJd_Idle;
+    self->actionFunc = BgDdanJd_Idle;
 }
 
 void BgDdanJd_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    BgDdanJd* this = THIS;
+    BgDdanJd* self = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, self->dyna.bgId);
 }
 
-void BgDdanJd_Idle(BgDdanJd* this, GlobalContext* globalCtx) {
-    if (this->idleTimer != 0) {
-        this->idleTimer--;
+void BgDdanJd_Idle(BgDdanJd* self, GlobalContext* globalCtx) {
+    if (self->idleTimer != 0) {
+        self->idleTimer--;
     }
 
-    // if this is the platform that rises all the way to the top, and the switch state has just changed to on
-    if (this->ySpeed == DEFAULT_Y_SPEED && this->dyna.actor.params < 0x40 &&
-        Flags_GetSwitch(globalCtx, this->dyna.actor.params)) {
-        this->ySpeed = SHORTCUT_Y_SPEED;
-        this->state = STATE_GO_MIDDLE_FROM_BOTTOM;
-        this->idleTimer = 0;
-        this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + MOVE_HEIGHT_MIDDLE;
-        OnePointCutscene_Init(globalCtx, 3060, -99, &this->dyna.actor, MAIN_CAM);
+    // if self is the platform that rises all the way to the top, and the switch state has just changed to on
+    if (self->ySpeed == DEFAULT_Y_SPEED && self->dyna.actor.params < 0x40 &&
+        Flags_GetSwitch(globalCtx, self->dyna.actor.params)) {
+        self->ySpeed = SHORTCUT_Y_SPEED;
+        self->state = STATE_GO_MIDDLE_FROM_BOTTOM;
+        self->idleTimer = 0;
+        self->dyna.actor.world.pos.y = self->dyna.actor.home.pos.y + MOVE_HEIGHT_MIDDLE;
+        OnePointCutscene_Init(globalCtx, 3060, -99, &self->dyna.actor, MAIN_CAM);
     }
-    if (this->idleTimer == 0) {
-        this->idleTimer = IDLE_FRAMES;
-        if (this->state == STATE_GO_BOTTOM) {
-            this->state = STATE_GO_MIDDLE_FROM_BOTTOM;
-            this->targetY = this->dyna.actor.home.pos.y + MOVE_HEIGHT_MIDDLE;
-        } else if (this->state == STATE_GO_MIDDLE_FROM_BOTTOM) {
+    if (self->idleTimer == 0) {
+        self->idleTimer = IDLE_FRAMES;
+        if (self->state == STATE_GO_BOTTOM) {
+            self->state = STATE_GO_MIDDLE_FROM_BOTTOM;
+            self->targetY = self->dyna.actor.home.pos.y + MOVE_HEIGHT_MIDDLE;
+        } else if (self->state == STATE_GO_MIDDLE_FROM_BOTTOM) {
             // If the platform has been activated as a shortcut
-            if (this->ySpeed != DEFAULT_Y_SPEED) {
-                this->state = STATE_GO_TOP;
-                this->targetY = this->dyna.actor.home.pos.y + MOVE_HEIGHT_TOP;
+            if (self->ySpeed != DEFAULT_Y_SPEED) {
+                self->state = STATE_GO_TOP;
+                self->targetY = self->dyna.actor.home.pos.y + MOVE_HEIGHT_TOP;
             } else {
-                this->state = STATE_GO_BOTTOM;
-                this->targetY = this->dyna.actor.home.pos.y;
+                self->state = STATE_GO_BOTTOM;
+                self->targetY = self->dyna.actor.home.pos.y;
             }
-        } else if (this->state == STATE_GO_MIDDLE_FROM_TOP) {
+        } else if (self->state == STATE_GO_MIDDLE_FROM_TOP) {
             // If the platform has been activated as a shortcut
-            if (this->ySpeed != DEFAULT_Y_SPEED) {
-                this->state = STATE_GO_TOP;
-                this->targetY = this->dyna.actor.home.pos.y + MOVE_HEIGHT_TOP;
+            if (self->ySpeed != DEFAULT_Y_SPEED) {
+                self->state = STATE_GO_TOP;
+                self->targetY = self->dyna.actor.home.pos.y + MOVE_HEIGHT_TOP;
             } else {
-                this->state = STATE_GO_BOTTOM;
-                this->targetY = this->dyna.actor.home.pos.y;
+                self->state = STATE_GO_BOTTOM;
+                self->targetY = self->dyna.actor.home.pos.y;
             }
-        } else if (this->state == STATE_GO_TOP) {
-            this->state = STATE_GO_MIDDLE_FROM_TOP;
-            this->targetY = this->dyna.actor.home.pos.y + MOVE_HEIGHT_MIDDLE;
+        } else if (self->state == STATE_GO_TOP) {
+            self->state = STATE_GO_MIDDLE_FROM_TOP;
+            self->targetY = self->dyna.actor.home.pos.y + MOVE_HEIGHT_MIDDLE;
         }
-        this->actionFunc = BgDdanJd_Move;
+        self->actionFunc = BgDdanJd_Move;
     }
 }
 
 // Handles dust particles and sfx when moving
-void BgDdanJd_MoveEffects(BgDdanJd* this, GlobalContext* globalCtx) {
+void BgDdanJd_MoveEffects(BgDdanJd* self, GlobalContext* globalCtx) {
     Vec3f dustPos;
 
     // Generate random dust particles at the platform's base.
-    dustPos.y = this->dyna.actor.home.pos.y;
+    dustPos.y = self->dyna.actor.home.pos.y;
     if (globalCtx->gameplayFrames & 1) {
-        dustPos.x = this->dyna.actor.world.pos.x + 65.0f;
-        dustPos.z = Rand_CenteredFloat(110.0f) + this->dyna.actor.world.pos.z;
+        dustPos.x = self->dyna.actor.world.pos.x + 65.0f;
+        dustPos.z = Rand_CenteredFloat(110.0f) + self->dyna.actor.world.pos.z;
         func_80033480(globalCtx, &dustPos, 5.0f, 1, 20, 60, 1);
-        dustPos.x = this->dyna.actor.world.pos.x - 65.0f;
-        dustPos.z = Rand_CenteredFloat(110.0f) + this->dyna.actor.world.pos.z;
+        dustPos.x = self->dyna.actor.world.pos.x - 65.0f;
+        dustPos.z = Rand_CenteredFloat(110.0f) + self->dyna.actor.world.pos.z;
         func_80033480(globalCtx, &dustPos, 5.0f, 1, 20, 60, 1);
     } else {
-        dustPos.x = Rand_CenteredFloat(110.0f) + this->dyna.actor.world.pos.x;
-        dustPos.z = this->dyna.actor.world.pos.z + 65.0f;
+        dustPos.x = Rand_CenteredFloat(110.0f) + self->dyna.actor.world.pos.x;
+        dustPos.z = self->dyna.actor.world.pos.z + 65.0f;
         func_80033480(globalCtx, &dustPos, 5.0f, 1, 20, 60, 1);
-        dustPos.x = Rand_CenteredFloat(110.0f) + this->dyna.actor.world.pos.x;
-        dustPos.z = this->dyna.actor.world.pos.z - 65.0f;
+        dustPos.x = Rand_CenteredFloat(110.0f) + self->dyna.actor.world.pos.x;
+        dustPos.z = self->dyna.actor.world.pos.z - 65.0f;
         func_80033480(globalCtx, &dustPos, 5.0f, 1, 20, 60, 1);
     }
-    if (this->ySpeed == SHORTCUT_Y_SPEED) {
-        func_8002F974(&this->dyna.actor, NA_SE_EV_ELEVATOR_MOVE - SFX_FLAG);
+    if (self->ySpeed == SHORTCUT_Y_SPEED) {
+        func_8002F974(&self->dyna.actor, NA_SE_EV_ELEVATOR_MOVE - SFX_FLAG);
     }
 }
 
 // Implements the platform's movement state
-void BgDdanJd_Move(BgDdanJd* this, GlobalContext* globalCtx) {
-    // if this is the platform that rises all the way to the top, and the switch state has just changed to on
-    if (this->ySpeed == DEFAULT_Y_SPEED && this->dyna.actor.params < 0x40 &&
-        Flags_GetSwitch(globalCtx, this->dyna.actor.params)) {
-        this->ySpeed = SHORTCUT_Y_SPEED;
-        this->state = STATE_GO_MIDDLE_FROM_BOTTOM;
-        this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + MOVE_HEIGHT_MIDDLE;
-        this->idleTimer = 0;
-        this->actionFunc = BgDdanJd_Idle;
-        OnePointCutscene_Init(globalCtx, 3060, -99, &this->dyna.actor, MAIN_CAM);
-    } else if (Math_StepToF(&this->dyna.actor.world.pos.y, this->targetY, this->ySpeed)) {
-        Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_PILLAR_MOVE_STOP);
-        this->actionFunc = BgDdanJd_Idle;
+void BgDdanJd_Move(BgDdanJd* self, GlobalContext* globalCtx) {
+    // if self is the platform that rises all the way to the top, and the switch state has just changed to on
+    if (self->ySpeed == DEFAULT_Y_SPEED && self->dyna.actor.params < 0x40 &&
+        Flags_GetSwitch(globalCtx, self->dyna.actor.params)) {
+        self->ySpeed = SHORTCUT_Y_SPEED;
+        self->state = STATE_GO_MIDDLE_FROM_BOTTOM;
+        self->dyna.actor.world.pos.y = self->dyna.actor.home.pos.y + MOVE_HEIGHT_MIDDLE;
+        self->idleTimer = 0;
+        self->actionFunc = BgDdanJd_Idle;
+        OnePointCutscene_Init(globalCtx, 3060, -99, &self->dyna.actor, MAIN_CAM);
+    } else if (Math_StepToF(&self->dyna.actor.world.pos.y, self->targetY, self->ySpeed)) {
+        Audio_PlayActorSound2(&self->dyna.actor, NA_SE_EV_PILLAR_MOVE_STOP);
+        self->actionFunc = BgDdanJd_Idle;
     }
-    BgDdanJd_MoveEffects(this, globalCtx);
+    BgDdanJd_MoveEffects(self, globalCtx);
 }
 
 void BgDdanJd_Update(Actor* thisx, GlobalContext* globalCtx) {
-    BgDdanJd* this = THIS;
+    BgDdanJd* self = THIS;
 
-    this->actionFunc(this, globalCtx);
+    self->actionFunc(self, globalCtx);
 }
 
 void BgDdanJd_Draw(Actor* thisx, GlobalContext* globalCtx) {

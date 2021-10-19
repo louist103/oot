@@ -31,13 +31,13 @@ const ActorInit End_Title_InitVars = {
 #include "z_end_title_gfx.c"
 
 void EndTitle_Init(Actor* thisx, GlobalContext* globalCtx) {
-    EndTitle* this = THIS;
+    EndTitle* self = THIS;
 
-    this->endAlpha = 0;
-    this->tlozAlpha = 0;
-    this->ootAlpha = 0;
-    if (this->actor.params == 1) {
-        this->actor.draw = func_80B65DA8;
+    self->endAlpha = 0;
+    self->tlozAlpha = 0;
+    self->ootAlpha = 0;
+    if (self->actor.params == 1) {
+        self->actor.draw = func_80B65DA8;
     }
 }
 
@@ -49,7 +49,7 @@ void EndTitle_Update(Actor* thisx, GlobalContext* globalCtx) {
 
 void EndTitle_Draw(Actor* thisx, GlobalContext* globalCtx) {
     MtxF* mf;
-    EndTitle* this = THIS;
+    EndTitle* self = THIS;
     s32 frameCount = globalCtx->csCtx.frames;
     Player* player = GET_PLAYER(globalCtx);
 
@@ -73,14 +73,14 @@ void EndTitle_Draw(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx, "../z_end_title.c", 419);
 
     // Draw title cards on the screen
-    if ((frameCount > 890) && (this->endAlpha < 200)) {
-        this->endAlpha += 7;
+    if ((frameCount > 890) && (self->endAlpha < 200)) {
+        self->endAlpha += 7;
     }
-    if ((frameCount > 810) && (this->tlozAlpha < 200)) {
-        this->tlozAlpha += 15;
+    if ((frameCount > 810) && (self->tlozAlpha < 200)) {
+        self->tlozAlpha += 15;
     }
-    if ((frameCount > 850) && (this->ootAlpha < 200)) {
-        this->ootAlpha += 15;
+    if ((frameCount > 850) && (self->ootAlpha < 200)) {
+        self->ootAlpha += 15;
     }
 
     OVERLAY_DISP = func_80093F34(OVERLAY_DISP);
@@ -91,18 +91,18 @@ void EndTitle_Draw(Actor* thisx, GlobalContext* globalCtx) {
                          G_TEXTURE_ENABLE | G_CULL_BACK | G_FOG | G_LIGHTING | G_TEXTURE_GEN | G_TEXTURE_GEN_LINEAR);
     gDPSetCombineLERP(OVERLAY_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0,
                       COMBINED, 0, 0, 0, COMBINED);
-    gDPSetPrimColor(OVERLAY_DISP++, 0x00, 0x80, 0, 0, 0, this->endAlpha);
+    gDPSetPrimColor(OVERLAY_DISP++, 0x00, 0x80, 0, 0, 0, self->endAlpha);
     gDPLoadTextureTile(OVERLAY_DISP++, D_80B670E0, G_IM_FMT_IA, G_IM_SIZ_8b, 80, 24, 0, 0, 80, 24, 0,
                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 0, 0, 0, 0);
     gSPTextureRectangle(OVERLAY_DISP++, 120 << 2, 90 << 2, 200 << 2, 113 << 2, G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
     gDPPipeSync(OVERLAY_DISP++);
-    gDPSetPrimColor(OVERLAY_DISP++, 0x00, 0x80, 0, 0, 0, this->tlozAlpha);
+    gDPSetPrimColor(OVERLAY_DISP++, 0x00, 0x80, 0, 0, 0, self->tlozAlpha);
     gDPLoadTextureTile(OVERLAY_DISP++, D_80B65EA0, G_IM_FMT_IA, G_IM_SIZ_8b, 120, 24, 0, 0, 120, 24, 0,
                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 0, 0, 0, 0);
     gSPTextureRectangle(OVERLAY_DISP++, 100 << 2, 160 << 2, 220 << 2, 183 << 2, G_TX_RENDERTILE, 0, 0, 1 << 10,
                         1 << 10);
     gDPPipeSync(OVERLAY_DISP++);
-    gDPSetPrimColor(OVERLAY_DISP++, 0x00, 0x80, 0, 0, 0, this->ootAlpha);
+    gDPSetPrimColor(OVERLAY_DISP++, 0x00, 0x80, 0, 0, 0, self->ootAlpha);
     gDPLoadTextureTile(OVERLAY_DISP++, D_80B669E0, G_IM_FMT_IA, G_IM_SIZ_8b, 112, 16, 0, 0, 112, 16, 0,
                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 0, 0, 0, 0);
     gSPTextureRectangle(OVERLAY_DISP++, 104 << 2, 177 << 2, 216 << 2, 192 << 2, G_TX_RENDERTILE, 0, 0, 1 << 10,
@@ -116,18 +116,18 @@ void EndTitle_Draw(Actor* thisx, GlobalContext* globalCtx) {
  * Produces the same results as the main draw function, except without the title cards on the end screen
  */
 void func_80B65DA8(Actor* thisx, GlobalContext* globalCtx) {
-    EndTitle* this = THIS;
+    EndTitle* self = THIS;
     s32 pad;
     s32 frames = globalCtx->csCtx.frames;
 
-    if ((frames >= 1101) && (this->endAlpha < 255)) {
-        this->endAlpha += 3;
+    if ((frames >= 1101) && (self->endAlpha < 255)) {
+        self->endAlpha += 3;
     }
 
     OPEN_DISPS(globalCtx->state.gfxCtx, "../z_end_title.c", 594);
 
     OVERLAY_DISP = func_80093F34(OVERLAY_DISP);
-    gDPSetPrimColor(OVERLAY_DISP++, 0, 0x80, 0, 0, 0, this->endAlpha);
+    gDPSetPrimColor(OVERLAY_DISP++, 0, 0x80, 0, 0, 0, self->endAlpha);
     gSPDisplayList(OVERLAY_DISP++, dList_80B69720);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx, "../z_end_title.c", 600);

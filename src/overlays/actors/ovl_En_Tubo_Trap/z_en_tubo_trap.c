@@ -18,9 +18,9 @@ void EnTuboTrap_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTuboTrap_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTuboTrap_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void EnTuboTrap_WaitForProximity(EnTuboTrap* this, GlobalContext* globalCtx);
-void EnTuboTrap_Levitate(EnTuboTrap* this, GlobalContext* globalCtx);
-void EnTuboTrap_Fly(EnTuboTrap* this, GlobalContext* globalCtx);
+void EnTuboTrap_WaitForProximity(EnTuboTrap* self, GlobalContext* globalCtx);
+void EnTuboTrap_Levitate(EnTuboTrap* self, GlobalContext* globalCtx);
+void EnTuboTrap_Fly(EnTuboTrap* self, GlobalContext* globalCtx);
 
 static ColliderCylinderInit sCylinderInit = {
     {
@@ -55,33 +55,33 @@ const ActorInit En_Tubo_Trap_InitVars = {
 };
 
 void EnTuboTrap_Init(Actor* thisx, GlobalContext* globalCtx) {
-    EnTuboTrap* this = THIS;
+    EnTuboTrap* self = THIS;
 
-    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 2.0f);
+    ActorShape_Init(&self->actor.shape, 0.0f, ActorShadow_DrawCircle, 2.0f);
     osSyncPrintf("\n\n");
-    osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ 壷トラップ ☆☆☆☆☆ %x\n" VT_RST, this->actor.params); // "Urn Trap"
-    Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
-    Actor_SetScale(&this->actor, 0.1f);
-    this->actionFunc = EnTuboTrap_WaitForProximity;
+    osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ 壷トラップ ☆☆☆☆☆ %x\n" VT_RST, self->actor.params); // "Urn Trap"
+    Collider_InitCylinder(globalCtx, &self->collider);
+    Collider_SetCylinder(globalCtx, &self->collider, &self->actor, &sCylinderInit);
+    Actor_SetScale(&self->actor, 0.1f);
+    self->actionFunc = EnTuboTrap_WaitForProximity;
 }
 
 void EnTuboTrap_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    EnTuboTrap* this = THIS;
+    EnTuboTrap* self = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    Collider_DestroyCylinder(globalCtx, &self->collider);
 }
 
-void EnTuboTrap_DropCollectible(EnTuboTrap* this, GlobalContext* globalCtx) {
-    s16 params = this->actor.params;
+void EnTuboTrap_DropCollectible(EnTuboTrap* self, GlobalContext* globalCtx) {
+    s16 params = self->actor.params;
     s16 param3FF = (params >> 6) & 0x3FF;
 
     if (param3FF >= 0 && param3FF < 0x1A) {
-        Item_DropCollectible(globalCtx, &this->actor.world.pos, param3FF | ((params & 0x3F) << 8));
+        Item_DropCollectible(globalCtx, &self->actor.world.pos, param3FF | ((params & 0x3F) << 8));
     }
 }
 
-void EnTuboTrap_SpawnEffectsOnLand(EnTuboTrap* this, GlobalContext* globalCtx) {
+void EnTuboTrap_SpawnEffectsOnLand(EnTuboTrap* self, GlobalContext* globalCtx) {
     f32 rand;
     f32 cos;
     f32 sin;
@@ -90,7 +90,7 @@ void EnTuboTrap_SpawnEffectsOnLand(EnTuboTrap* this, GlobalContext* globalCtx) {
     s16 var;
     s32 arg5;
     s32 i;
-    Vec3f* actorPos = &this->actor.world.pos;
+    Vec3f* actorPos = &self->actor.world.pos;
 
     for (i = 0, var = 0; i < 15; i++, var += 20000) {
         sin = Math_SinS(var);
@@ -124,7 +124,7 @@ void EnTuboTrap_SpawnEffectsOnLand(EnTuboTrap* this, GlobalContext* globalCtx) {
     func_80033480(globalCtx, actorPos, 30.0f, 4, 20, 50, 0);
 }
 
-void EnTuboTrap_SpawnEffectsInWater(EnTuboTrap* this, GlobalContext* globalCtx) {
+void EnTuboTrap_SpawnEffectsInWater(EnTuboTrap* self, GlobalContext* globalCtx) {
     f32 rand;
     f32 cos;
     f32 sin;
@@ -133,10 +133,10 @@ void EnTuboTrap_SpawnEffectsInWater(EnTuboTrap* this, GlobalContext* globalCtx) 
     s16 var;
     s32 arg5;
     s32 i;
-    Vec3f* actorPos = &this->actor.world.pos;
+    Vec3f* actorPos = &self->actor.world.pos;
 
     pos = *actorPos;
-    pos.y += this->actor.yDistToWater;
+    pos.y += self->actor.yDistToWater;
 
     EffectSsGSplash_Spawn(globalCtx, &pos, 0, 0, 0, 400);
 
@@ -168,122 +168,122 @@ void EnTuboTrap_SpawnEffectsInWater(EnTuboTrap* this, GlobalContext* globalCtx) 
     }
 }
 
-void EnTuboTrap_HandleImpact(EnTuboTrap* this, GlobalContext* globalCtx) {
+void EnTuboTrap_HandleImpact(EnTuboTrap* self, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     Player* player2 = GET_PLAYER(globalCtx);
 
-    if ((this->actor.bgCheckFlags & 0x20) && (this->actor.yDistToWater > 15.0f)) {
-        EnTuboTrap_SpawnEffectsInWater(this, globalCtx);
-        Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 40, NA_SE_EV_BOMB_DROP_WATER);
-        EnTuboTrap_DropCollectible(this, globalCtx);
-        Actor_Kill(&this->actor);
+    if ((self->actor.bgCheckFlags & 0x20) && (self->actor.yDistToWater > 15.0f)) {
+        EnTuboTrap_SpawnEffectsInWater(self, globalCtx);
+        Audio_PlaySoundAtPosition(globalCtx, &self->actor.world.pos, 40, NA_SE_EV_BOMB_DROP_WATER);
+        EnTuboTrap_DropCollectible(self, globalCtx);
+        Actor_Kill(&self->actor);
         return;
     }
 
-    if (this->collider.base.atFlags & AT_BOUNCED) {
-        this->collider.base.atFlags &= ~AT_BOUNCED;
-        EnTuboTrap_SpawnEffectsOnLand(this, globalCtx);
-        Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 40, NA_SE_IT_SHIELD_REFLECT_SW);
-        Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 40, NA_SE_EV_POT_BROKEN);
-        EnTuboTrap_DropCollectible(this, globalCtx);
-        Actor_Kill(&this->actor);
+    if (self->collider.base.atFlags & AT_BOUNCED) {
+        self->collider.base.atFlags &= ~AT_BOUNCED;
+        EnTuboTrap_SpawnEffectsOnLand(self, globalCtx);
+        Audio_PlaySoundAtPosition(globalCtx, &self->actor.world.pos, 40, NA_SE_IT_SHIELD_REFLECT_SW);
+        Audio_PlaySoundAtPosition(globalCtx, &self->actor.world.pos, 40, NA_SE_EV_POT_BROKEN);
+        EnTuboTrap_DropCollectible(self, globalCtx);
+        Actor_Kill(&self->actor);
         return;
     }
 
-    if (this->collider.base.acFlags & AC_HIT) {
-        this->collider.base.acFlags &= ~AC_HIT;
-        EnTuboTrap_SpawnEffectsOnLand(this, globalCtx);
-        Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 40, NA_SE_EV_EXPLOSION);
-        Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 40, NA_SE_EV_POT_BROKEN);
-        EnTuboTrap_DropCollectible(this, globalCtx);
-        Actor_Kill(&this->actor);
+    if (self->collider.base.acFlags & AC_HIT) {
+        self->collider.base.acFlags &= ~AC_HIT;
+        EnTuboTrap_SpawnEffectsOnLand(self, globalCtx);
+        Audio_PlaySoundAtPosition(globalCtx, &self->actor.world.pos, 40, NA_SE_EV_EXPLOSION);
+        Audio_PlaySoundAtPosition(globalCtx, &self->actor.world.pos, 40, NA_SE_EV_POT_BROKEN);
+        EnTuboTrap_DropCollectible(self, globalCtx);
+        Actor_Kill(&self->actor);
         return;
     }
 
-    if (this->collider.base.atFlags & AT_HIT) {
-        this->collider.base.atFlags &= ~AT_HIT;
-        if (this->collider.base.at == &player->actor) {
-            EnTuboTrap_SpawnEffectsOnLand(this, globalCtx);
-            Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 40, NA_SE_EV_POT_BROKEN);
+    if (self->collider.base.atFlags & AT_HIT) {
+        self->collider.base.atFlags &= ~AT_HIT;
+        if (self->collider.base.at == &player->actor) {
+            EnTuboTrap_SpawnEffectsOnLand(self, globalCtx);
+            Audio_PlaySoundAtPosition(globalCtx, &self->actor.world.pos, 40, NA_SE_EV_POT_BROKEN);
             Audio_PlaySoundAtPosition(globalCtx, &player2->actor.world.pos, 40, NA_SE_PL_BODY_HIT);
-            EnTuboTrap_DropCollectible(this, globalCtx);
-            Actor_Kill(&this->actor);
+            EnTuboTrap_DropCollectible(self, globalCtx);
+            Actor_Kill(&self->actor);
             return;
         }
     }
 
-    if ((this->actor.bgCheckFlags & 8) || (this->actor.bgCheckFlags & 1)) {
-        EnTuboTrap_SpawnEffectsOnLand(this, globalCtx);
-        Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 40, NA_SE_EV_POT_BROKEN);
-        EnTuboTrap_DropCollectible(this, globalCtx);
-        Actor_Kill(&this->actor);
+    if ((self->actor.bgCheckFlags & 8) || (self->actor.bgCheckFlags & 1)) {
+        EnTuboTrap_SpawnEffectsOnLand(self, globalCtx);
+        Audio_PlaySoundAtPosition(globalCtx, &self->actor.world.pos, 40, NA_SE_EV_POT_BROKEN);
+        EnTuboTrap_DropCollectible(self, globalCtx);
+        Actor_Kill(&self->actor);
         return;
     }
 }
 
-void EnTuboTrap_WaitForProximity(EnTuboTrap* this, GlobalContext* globalCtx) {
+void EnTuboTrap_WaitForProximity(EnTuboTrap* self, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     f32 targetHeight;
 
     if (BREG(2) != 0) {
-        osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ わて     ☆☆☆☆☆ %f\n" VT_RST, this->actor.world.pos.y);   // "You"
+        osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ わて     ☆☆☆☆☆ %f\n" VT_RST, self->actor.world.pos.y);   // "You"
         osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ おいどん ☆☆☆☆☆ %f\n" VT_RST, player->actor.world.pos.y); // "Me"
         osSyncPrintf("\n\n");
     }
 
-    if (this->actor.xzDistToPlayer < 200.0f && this->actor.world.pos.y <= player->actor.world.pos.y) {
-        Actor_ChangeCategory(globalCtx, &globalCtx->actorCtx, &this->actor, ACTORCAT_ENEMY);
-        this->actor.flags |= 1;
+    if (self->actor.xzDistToPlayer < 200.0f && self->actor.world.pos.y <= player->actor.world.pos.y) {
+        Actor_ChangeCategory(globalCtx, &globalCtx->actorCtx, &self->actor, ACTORCAT_ENEMY);
+        self->actor.flags |= 1;
         targetHeight = 40.0f + -10.0f * gSaveContext.linkAge;
 
-        this->targetY = player->actor.world.pos.y + targetHeight;
-        if (this->targetY < this->actor.world.pos.y) {
-            this->targetY = this->actor.world.pos.y + targetHeight;
+        self->targetY = player->actor.world.pos.y + targetHeight;
+        if (self->targetY < self->actor.world.pos.y) {
+            self->targetY = self->actor.world.pos.y + targetHeight;
         }
 
-        this->originPos = this->actor.world.pos;
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_POT_MOVE_START);
-        this->actionFunc = EnTuboTrap_Levitate;
+        self->originPos = self->actor.world.pos;
+        Audio_PlayActorSound2(&self->actor, NA_SE_EV_POT_MOVE_START);
+        self->actionFunc = EnTuboTrap_Levitate;
     }
 }
 
-void EnTuboTrap_Levitate(EnTuboTrap* this, GlobalContext* globalCtx) {
-    this->actor.shape.rot.y += 5000;
-    Math_ApproachF(&this->actor.world.pos.y, this->targetY, 0.8f, 3.0f);
+void EnTuboTrap_Levitate(EnTuboTrap* self, GlobalContext* globalCtx) {
+    self->actor.shape.rot.y += 5000;
+    Math_ApproachF(&self->actor.world.pos.y, self->targetY, 0.8f, 3.0f);
 
-    if (fabsf(this->actor.world.pos.y - this->targetY) < 10.0f) {
-        this->actor.speedXZ = 10.0f;
-        this->actor.world.rot.y = this->actor.yawTowardsPlayer;
-        this->actionFunc = EnTuboTrap_Fly;
+    if (fabsf(self->actor.world.pos.y - self->targetY) < 10.0f) {
+        self->actor.speedXZ = 10.0f;
+        self->actor.world.rot.y = self->actor.yawTowardsPlayer;
+        self->actionFunc = EnTuboTrap_Fly;
     }
 }
 
-void EnTuboTrap_Fly(EnTuboTrap* this, GlobalContext* globalCtx) {
-    f32 dx = this->originPos.x - this->actor.world.pos.x;
-    f32 dy = this->originPos.y - this->actor.world.pos.y;
-    f32 dz = this->originPos.z - this->actor.world.pos.z;
+void EnTuboTrap_Fly(EnTuboTrap* self, GlobalContext* globalCtx) {
+    f32 dx = self->originPos.x - self->actor.world.pos.x;
+    f32 dy = self->originPos.y - self->actor.world.pos.y;
+    f32 dz = self->originPos.z - self->actor.world.pos.z;
 
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_TUBOOCK_FLY - SFX_FLAG);
+    Audio_PlayActorSound2(&self->actor, NA_SE_EN_TUBOOCK_FLY - SFX_FLAG);
 
     if (240.0f < sqrtf(SQ(dx) + SQ(dy) + SQ(dz))) {
-        Math_ApproachF(&this->actor.gravity, -3.0f, 0.2f, 0.5f);
+        Math_ApproachF(&self->actor.gravity, -3.0f, 0.2f, 0.5f);
     }
 
-    this->actor.shape.rot.y += 5000;
-    EnTuboTrap_HandleImpact(this, globalCtx);
+    self->actor.shape.rot.y += 5000;
+    EnTuboTrap_HandleImpact(self, globalCtx);
 }
 
 void EnTuboTrap_Update(Actor* thisx, GlobalContext* globalCtx) {
-    EnTuboTrap* this = THIS;
+    EnTuboTrap* self = THIS;
     s32 pad;
 
-    this->actionFunc(this, globalCtx);
-    Actor_MoveForward(&this->actor);
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 10.0f, 10.0f, 20.0f, 0x1D);
-    Actor_SetFocus(&this->actor, 0.0f);
-    Collider_UpdateCylinder(&this->actor, &this->collider);
-    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-    CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    self->actionFunc(self, globalCtx);
+    Actor_MoveForward(&self->actor);
+    Actor_UpdateBgCheckInfo(globalCtx, &self->actor, 10.0f, 10.0f, 20.0f, 0x1D);
+    Actor_SetFocus(&self->actor, 0.0f);
+    Collider_UpdateCylinder(&self->actor, &self->collider);
+    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
+    CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
 }
 
 void EnTuboTrap_Draw(Actor* thisx, GlobalContext* globalCtx) {

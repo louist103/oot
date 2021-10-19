@@ -18,11 +18,11 @@ typedef struct {
     /* 0x0C */ u16 unk_C;
 } Struct_800F8EA0; // size = 0x10
 
-// rodata for Audio_ProcessSoundRequest (this file)
+// rodata for Audio_ProcessSoundRequest (self file)
 // (probably moved to .data due to -use_readwrite_const)
 char D_80133340[] = "SE";
 
-// rodata for func_800F7CEC (this file)
+// rodata for func_800F7CEC (self file)
 char D_80133344[] = VT_COL(RED, WHITE) "<INAGAKI CHECK> dist over! flag:%04X ptr:%08X pos:%f-%f-%f" VT_RST "\n";
 
 // file padding

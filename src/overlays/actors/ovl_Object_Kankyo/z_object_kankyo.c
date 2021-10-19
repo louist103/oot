@@ -18,22 +18,22 @@ void ObjectKankyo_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjectKankyo_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjectKankyo_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void ObjectKankyo_SetupAction(ObjectKankyo* this, ObjectKankyoActionFunc func);
-void ObjectKankyo_Fairies(ObjectKankyo* this, GlobalContext* globalCtx);
-void ObjectKankyo_SunGraveSparkInit(ObjectKankyo* this, GlobalContext* globalCtx);
-void ObjectKankyo_Snow(ObjectKankyo* this, GlobalContext* globalCtx);
-void ObjectKankyo_Lightning(ObjectKankyo* this, GlobalContext* globalCtx);
-void ObjectKankyo_InitBeams(ObjectKankyo* this, GlobalContext* globalCtx);
-void ObjectKankyo_WaitForSunGraveSparkObject(ObjectKankyo* this, GlobalContext* globalCtx);
-void ObjectKankyo_SunGraveSpark(ObjectKankyo* this, GlobalContext* globalCtx);
-void ObjectKankyo_WaitForBeamObject(ObjectKankyo* this, GlobalContext* globalCtx);
-void ObjectKankyo_Beams(ObjectKankyo* this, GlobalContext* globalCtx);
+void ObjectKankyo_SetupAction(ObjectKankyo* self, ObjectKankyoActionFunc func);
+void ObjectKankyo_Fairies(ObjectKankyo* self, GlobalContext* globalCtx);
+void ObjectKankyo_SunGraveSparkInit(ObjectKankyo* self, GlobalContext* globalCtx);
+void ObjectKankyo_Snow(ObjectKankyo* self, GlobalContext* globalCtx);
+void ObjectKankyo_Lightning(ObjectKankyo* self, GlobalContext* globalCtx);
+void ObjectKankyo_InitBeams(ObjectKankyo* self, GlobalContext* globalCtx);
+void ObjectKankyo_WaitForSunGraveSparkObject(ObjectKankyo* self, GlobalContext* globalCtx);
+void ObjectKankyo_SunGraveSpark(ObjectKankyo* self, GlobalContext* globalCtx);
+void ObjectKankyo_WaitForBeamObject(ObjectKankyo* self, GlobalContext* globalCtx);
+void ObjectKankyo_Beams(ObjectKankyo* self, GlobalContext* globalCtx);
 
-void ObjectKankyo_DrawFairies(ObjectKankyo* this, GlobalContext* globalCtx);
-void ObjectKankyo_DrawSnow(ObjectKankyo* this, GlobalContext* globalCtx);
-void ObjectKankyo_DrawLightning(ObjectKankyo* this, GlobalContext* globalCtx);
-void ObjectKankyo_DrawSunGraveSpark(ObjectKankyo* this, GlobalContext* globalCtx);
-void ObjectKankyo_DrawBeams(ObjectKankyo* this, GlobalContext* globalCtx);
+void ObjectKankyo_DrawFairies(ObjectKankyo* self, GlobalContext* globalCtx);
+void ObjectKankyo_DrawSnow(ObjectKankyo* self, GlobalContext* globalCtx);
+void ObjectKankyo_DrawLightning(ObjectKankyo* self, GlobalContext* globalCtx);
+void ObjectKankyo_DrawSunGraveSpark(ObjectKankyo* self, GlobalContext* globalCtx);
+void ObjectKankyo_DrawBeams(ObjectKankyo* self, GlobalContext* globalCtx);
 
 extern Mtx D_01000000;
 
@@ -62,102 +62,102 @@ const ActorInit Object_Kankyo_InitVars = {
 static u8 sIsSpawned = false;
 static s16 sTrailingFairies = 0;
 
-void ObjectKankyo_SetupAction(ObjectKankyo* this, ObjectKankyoActionFunc action) {
-    this->actionFunc = action;
+void ObjectKankyo_SetupAction(ObjectKankyo* self, ObjectKankyoActionFunc action) {
+    self->actionFunc = action;
 }
 
 void ObjectKankyo_Init(Actor* thisx, GlobalContext* globalCtx) {
-    ObjectKankyo* this = THIS;
+    ObjectKankyo* self = THIS;
     s32 pad;
     s16 i;
 
-    for (i = 0; i < ARRAY_COUNT(this->effects); i++) {
-        this->effects[i].state = 0;
+    for (i = 0; i < ARRAY_COUNT(self->effects); i++) {
+        self->effects[i].state = 0;
     }
 
-    this->actor.room = -1;
-    switch (this->actor.params) {
+    self->actor.room = -1;
+    switch (self->actor.params) {
         case 0:
             if (!sIsSpawned) {
-                ObjectKankyo_SetupAction(this, ObjectKankyo_Fairies);
+                ObjectKankyo_SetupAction(self, ObjectKankyo_Fairies);
                 sIsSpawned = true;
             } else {
-                Actor_Kill(&this->actor);
+                Actor_Kill(&self->actor);
             }
             break;
 
         case 3:
             if (!sIsSpawned) {
-                ObjectKankyo_SetupAction(this, ObjectKankyo_Snow);
+                ObjectKankyo_SetupAction(self, ObjectKankyo_Snow);
                 sIsSpawned = true;
             } else {
-                Actor_Kill(&this->actor);
+                Actor_Kill(&self->actor);
             }
             break;
 
         case 2:
-            ObjectKankyo_SetupAction(this, ObjectKankyo_Lightning);
+            ObjectKankyo_SetupAction(self, ObjectKankyo_Lightning);
             break;
 
         case 4:
-            this->effects[0].alpha = 0;
-            this->effects[0].amplitude = 0.0f;
-            Actor_ChangeCategory(globalCtx, &globalCtx->actorCtx, &this->actor, ACTORCAT_ITEMACTION);
-            this->requiredObjectLoaded = false;
-            ObjectKankyo_SetupAction(this, ObjectKankyo_SunGraveSparkInit);
+            self->effects[0].alpha = 0;
+            self->effects[0].amplitude = 0.0f;
+            Actor_ChangeCategory(globalCtx, &globalCtx->actorCtx, &self->actor, ACTORCAT_ITEMACTION);
+            self->requiredObjectLoaded = false;
+            ObjectKankyo_SetupAction(self, ObjectKankyo_SunGraveSparkInit);
             break;
 
         case 5:
-            this->effects[0].alpha = 0;
-            this->effects[0].amplitude = 0.0f;
+            self->effects[0].alpha = 0;
+            self->effects[0].amplitude = 0.0f;
 
             for (i = 0; i < 6; i++) {
-                this->effects[i].size = 0.1f;
+                self->effects[i].size = 0.1f;
             }
 
             // Check which beams are disabled
             if (Flags_GetEventChkInf(0xBB)) {
-                this->effects[0].size = 0.0f;
+                self->effects[0].size = 0.0f;
             }
             if (Flags_GetEventChkInf(0xBC)) {
-                this->effects[1].size = 0.0f;
+                self->effects[1].size = 0.0f;
             }
             if (Flags_GetEventChkInf(0xBD)) {
-                this->effects[2].size = 0.0f;
+                self->effects[2].size = 0.0f;
             }
             if (Flags_GetEventChkInf(0xBE)) {
-                this->effects[3].size = 0.0f;
+                self->effects[3].size = 0.0f;
             }
             if (Flags_GetEventChkInf(0xBF)) {
-                this->effects[4].size = 0.0f;
+                self->effects[4].size = 0.0f;
             }
             if (Flags_GetEventChkInf(0xAD)) {
-                this->effects[5].size = 0.0f;
+                self->effects[5].size = 0.0f;
             }
 
             if (gSaveContext.cutsceneTrigger != 0) {
                 if (gSaveContext.entranceIndex == 0x0538) {
-                    this->effects[0].size = 0.1f;
+                    self->effects[0].size = 0.1f;
                 }
                 if (gSaveContext.entranceIndex == 0x053C) {
-                    this->effects[1].size = 0.1f;
+                    self->effects[1].size = 0.1f;
                 }
                 if (gSaveContext.entranceIndex == 0x0540) {
-                    this->effects[2].size = 0.1f;
+                    self->effects[2].size = 0.1f;
                 }
                 if (gSaveContext.entranceIndex == 0x0544) {
-                    this->effects[3].size = 0.1f;
+                    self->effects[3].size = 0.1f;
                 }
                 if (gSaveContext.entranceIndex == 0x0548) {
-                    this->effects[4].size = 0.1f;
+                    self->effects[4].size = 0.1f;
                 }
                 if (gSaveContext.entranceIndex == 0x054C) {
-                    this->effects[5].size = 0.1f;
+                    self->effects[5].size = 0.1f;
                 }
             }
 
-            this->requiredObjectLoaded = false;
-            ObjectKankyo_SetupAction(this, ObjectKankyo_InitBeams);
+            self->requiredObjectLoaded = false;
+            ObjectKankyo_SetupAction(self, ObjectKankyo_InitBeams);
             break;
     }
 }
@@ -166,10 +166,10 @@ void ObjectKankyo_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Actor_Kill(thisx);
 }
 
-void ObjectKankyo_Snow(ObjectKankyo* this, GlobalContext* globalCtx) {
+void ObjectKankyo_Snow(ObjectKankyo* self, GlobalContext* globalCtx) {
 }
 
-void ObjectKankyo_Fairies(ObjectKankyo* this, GlobalContext* globalCtx) {
+void ObjectKankyo_Fairies(ObjectKankyo* self, GlobalContext* globalCtx) {
     static Vec3f sSoundPos = { 0.0f, 0.0f, 0.0f };
     Player* player;
     f32 dist;
@@ -193,11 +193,11 @@ void ObjectKankyo_Fairies(ObjectKankyo* this, GlobalContext* globalCtx) {
     player = GET_PLAYER(globalCtx);
 
     if (globalCtx->sceneNum == SCENE_SPOT04 && gSaveContext.sceneSetupIndex == 7) {
-        dist = Math3D_Vec3f_DistXYZ(&this->prevEyePos, &globalCtx->view.eye);
+        dist = Math3D_Vec3f_DistXYZ(&self->prevEyePos, &globalCtx->view.eye);
 
-        this->prevEyePos.x = globalCtx->view.eye.x;
-        this->prevEyePos.y = globalCtx->view.eye.y;
-        this->prevEyePos.z = globalCtx->view.eye.z;
+        self->prevEyePos.x = globalCtx->view.eye.x;
+        self->prevEyePos.y = globalCtx->view.eye.y;
+        self->prevEyePos.z = globalCtx->view.eye.z;
 
         dist /= 30.0f;
         if (dist > 1.0f) {
@@ -244,61 +244,61 @@ void ObjectKankyo_Fairies(ObjectKankyo* this, GlobalContext* globalCtx) {
         viewForwardsY = viewForwards.y;
         viewForwardsZ = viewForwards.z;
 
-        switch (this->effects[i].state) {
+        switch (self->effects[i].state) {
             case 0: // init
-                this->effects[i].base.x = globalCtx->view.eye.x + viewForwardsX * 80.0f;
-                this->effects[i].base.y = globalCtx->view.eye.y + viewForwardsY * 80.0f;
-                this->effects[i].base.z = globalCtx->view.eye.z + viewForwardsZ * 80.0f;
+                self->effects[i].base.x = globalCtx->view.eye.x + viewForwardsX * 80.0f;
+                self->effects[i].base.y = globalCtx->view.eye.y + viewForwardsY * 80.0f;
+                self->effects[i].base.z = globalCtx->view.eye.z + viewForwardsZ * 80.0f;
 
-                this->effects[i].pos.x = (Rand_ZeroOne() - 0.5f) * 160.0f;
-                this->effects[i].pos.y = 30.0f;
-                this->effects[i].pos.z = (Rand_ZeroOne() - 0.5f) * 160.0f;
-                this->effects[i].targetSpeed = Rand_ZeroOne() * 1.6f + 0.5f;
-                this->effects[i].alpha = 0;
-                this->effects[i].alphaTimer = Rand_ZeroOne() * 65535.0f;
-                this->effects[i].size = 0.1f;
-                this->effects[i].dirPhase.x = Rand_ZeroOne() * 360.0f;
-                this->effects[i].dirPhase.y = Rand_ZeroOne() * 360.0f;
-                this->effects[i].dirPhase.z = Rand_ZeroOne() * 360.0f;
-                this->effects[i].state++;
-                this->effects[i].timer = 0;
+                self->effects[i].pos.x = (Rand_ZeroOne() - 0.5f) * 160.0f;
+                self->effects[i].pos.y = 30.0f;
+                self->effects[i].pos.z = (Rand_ZeroOne() - 0.5f) * 160.0f;
+                self->effects[i].targetSpeed = Rand_ZeroOne() * 1.6f + 0.5f;
+                self->effects[i].alpha = 0;
+                self->effects[i].alphaTimer = Rand_ZeroOne() * 65535.0f;
+                self->effects[i].size = 0.1f;
+                self->effects[i].dirPhase.x = Rand_ZeroOne() * 360.0f;
+                self->effects[i].dirPhase.y = Rand_ZeroOne() * 360.0f;
+                self->effects[i].dirPhase.z = Rand_ZeroOne() * 360.0f;
+                self->effects[i].state++;
+                self->effects[i].timer = 0;
                 break;
 
             case 1: // blinking fairies / inactive fairy trails
             case 2: // fairy trails
-                this->effects[i].alphaTimer++;
+                self->effects[i].alphaTimer++;
                 baseX = globalCtx->view.eye.x + viewForwards.x * 80.0f;
                 baseY = globalCtx->view.eye.y + viewForwards.y * 80.0f;
                 baseZ = globalCtx->view.eye.z + viewForwards.z * 80.0f;
 
-                this->effects[i].prevPos.x = this->effects[i].pos.x;
-                this->effects[i].prevPos.y = this->effects[i].pos.y;
-                this->effects[i].prevPos.z = this->effects[i].pos.z;
+                self->effects[i].prevPos.x = self->effects[i].pos.x;
+                self->effects[i].prevPos.y = self->effects[i].pos.y;
+                self->effects[i].prevPos.z = self->effects[i].pos.z;
 
                 playerMoved = true;
                 // y velocity is set to -4 when the player is on the ground
                 if (player->actor.velocity.x + player->actor.velocity.y + player->actor.velocity.z == -4.0f) {
                     playerMoved = false;
-                    this->effects[i].timer++;
+                    self->effects[i].timer++;
                 } else {
-                    this->effects[i].timer = 0;
+                    self->effects[i].timer = 0;
                 }
 
-                if (this->effects[i].state == 1) {
+                if (self->effects[i].state == 1) {
                     // the first 32 fairies are invisible until the player stands still
-                    if (i < 32 && !playerMoved && this->effects[i].timer > 256) {
-                        this->effects[i].timer = 0;
+                    if (i < 32 && !playerMoved && self->effects[i].timer > 256) {
+                        self->effects[i].timer = 0;
                         if (Rand_ZeroOne() < 0.5f) {
-                            this->effects[i].angleVel = (s16)(Rand_ZeroOne() * 200.0f) + 200;
+                            self->effects[i].angleVel = (s16)(Rand_ZeroOne() * 200.0f) + 200;
                         } else {
-                            this->effects[i].angleVel = -((s16)(Rand_ZeroOne() * 200.0f) + 200);
+                            self->effects[i].angleVel = -((s16)(Rand_ZeroOne() * 200.0f) + 200);
                         }
 
-                        this->effects[i].flightRadius = (s16)(Rand_ZeroOne() * 50.0f) + 15;
+                        self->effects[i].flightRadius = (s16)(Rand_ZeroOne() * 50.0f) + 15;
 
                         // uniformly scales the length and height of the wave that the lead fairy flies in
                         // lower numbers have a larger amplitude and period
-                        this->effects[i].amplitude = (Rand_ZeroOne() * 10.0f + 10.0f) * 0.01f;
+                        self->effects[i].amplitude = (Rand_ZeroOne() * 10.0f + 10.0f) * 0.01f;
 
                         random = Rand_ZeroOne();
                         if (random < 0.2f) {
@@ -313,178 +313,178 @@ void ObjectKankyo_Fairies(ObjectKankyo* this, GlobalContext* globalCtx) {
                         }
 
                         if ((i & sTrailingFairies) == 0) {
-                            this->effects[i].pos.y = 0.0f;
+                            self->effects[i].pos.y = 0.0f;
                         }
 
-                        this->effects[i].state = 2;
-                        this->effects[i].targetSpeed = 0.0f;
+                        self->effects[i].state = 2;
+                        self->effects[i].targetSpeed = 0.0f;
                     }
 
-                    Math_SmoothStepToF(&this->effects[i].size, 0.1f, 0.10f, 0.001f, 0.00001f);
-                    Math_SmoothStepToF(&this->effects[i].speed, this->effects[i].targetSpeed, 0.5f, 0.2f, 0.02f);
+                    Math_SmoothStepToF(&self->effects[i].size, 0.1f, 0.10f, 0.001f, 0.00001f);
+                    Math_SmoothStepToF(&self->effects[i].speed, self->effects[i].targetSpeed, 0.5f, 0.2f, 0.02f);
 
-                    this->effects[i].pos.x += sinf(this->effects[i].dirPhase.x) * this->effects[i].speed;
-                    this->effects[i].pos.y += sinf(this->effects[i].dirPhase.y) * this->effects[i].speed;
-                    this->effects[i].pos.z += sinf(this->effects[i].dirPhase.z) * this->effects[i].speed;
+                    self->effects[i].pos.x += sinf(self->effects[i].dirPhase.x) * self->effects[i].speed;
+                    self->effects[i].pos.y += sinf(self->effects[i].dirPhase.y) * self->effects[i].speed;
+                    self->effects[i].pos.z += sinf(self->effects[i].dirPhase.z) * self->effects[i].speed;
 
                     switch ((i >> 1) & 3) {
                         case 0:
-                            this->effects[i].dirPhase.x += 0.008f;
-                            this->effects[i].dirPhase.y += 0.05f * Rand_ZeroOne();
-                            this->effects[i].dirPhase.z += 0.015f;
+                            self->effects[i].dirPhase.x += 0.008f;
+                            self->effects[i].dirPhase.y += 0.05f * Rand_ZeroOne();
+                            self->effects[i].dirPhase.z += 0.015f;
                             break;
 
                         case 1:
-                            this->effects[i].dirPhase.x += 0.01f * Rand_ZeroOne();
-                            this->effects[i].dirPhase.y += 0.05f * Rand_ZeroOne();
-                            this->effects[i].dirPhase.z += 0.005f * Rand_ZeroOne();
+                            self->effects[i].dirPhase.x += 0.01f * Rand_ZeroOne();
+                            self->effects[i].dirPhase.y += 0.05f * Rand_ZeroOne();
+                            self->effects[i].dirPhase.z += 0.005f * Rand_ZeroOne();
                             break;
 
                         case 2:
-                            this->effects[i].dirPhase.x += 0.01f * Rand_ZeroOne();
-                            this->effects[i].dirPhase.y += 0.4f * Rand_ZeroOne();
-                            this->effects[i].dirPhase.z += 0.004f * Rand_ZeroOne();
+                            self->effects[i].dirPhase.x += 0.01f * Rand_ZeroOne();
+                            self->effects[i].dirPhase.y += 0.4f * Rand_ZeroOne();
+                            self->effects[i].dirPhase.z += 0.004f * Rand_ZeroOne();
                             break;
 
                         case 3:
-                            this->effects[i].dirPhase.x += 0.01 * Rand_ZeroOne();
-                            this->effects[i].dirPhase.y += 0.08f * Rand_ZeroOne();
-                            this->effects[i].dirPhase.z += 0.05f * Rand_ZeroOne();
+                            self->effects[i].dirPhase.x += 0.01 * Rand_ZeroOne();
+                            self->effects[i].dirPhase.y += 0.08f * Rand_ZeroOne();
+                            self->effects[i].dirPhase.z += 0.05f * Rand_ZeroOne();
                             break;
                     }
-                } else if (this->effects[i].state == 2) {
+                } else if (self->effects[i].state == 2) {
                     // scatter when the player moves or after a long enough time
-                    if (playerMoved || this->effects[i].timer > 1280) {
-                        this->effects[i].timer = 0;
-                        this->effects[i].state = 1;
-                        this->effects[i].speed = 1.5f;
-                        this->effects[i].targetSpeed = Rand_ZeroOne() * 1.6f + 0.5f;
+                    if (playerMoved || self->effects[i].timer > 1280) {
+                        self->effects[i].timer = 0;
+                        self->effects[i].state = 1;
+                        self->effects[i].speed = 1.5f;
+                        self->effects[i].targetSpeed = Rand_ZeroOne() * 1.6f + 0.5f;
                     }
 
                     if ((i & sTrailingFairies) == 0) { // leader fairy
-                        Math_SmoothStepToF(&this->effects[i].size, 0.25f, 0.1f, 0.001f, 0.00001f);
+                        Math_SmoothStepToF(&self->effects[i].size, 0.25f, 0.1f, 0.001f, 0.00001f);
 
                         // move the center of the flight path to player's position
-                        Math_SmoothStepToF(&this->effects[i].base.x, player->actor.world.pos.x, 0.5f, 1.0f, 0.2f);
-                        Math_SmoothStepToF(&this->effects[i].base.y, player->actor.world.pos.y + 50.0f, 0.5f, 1.0f,
+                        Math_SmoothStepToF(&self->effects[i].base.x, player->actor.world.pos.x, 0.5f, 1.0f, 0.2f);
+                        Math_SmoothStepToF(&self->effects[i].base.y, player->actor.world.pos.y + 50.0f, 0.5f, 1.0f,
                                            0.2f);
-                        Math_SmoothStepToF(&this->effects[i].base.z, player->actor.world.pos.z, 0.5f, 1.0f, 0.2f);
+                        Math_SmoothStepToF(&self->effects[i].base.z, player->actor.world.pos.z, 0.5f, 1.0f, 0.2f);
 
                         // results unused
-                        Math_SmoothStepToF(&this->effects[i].pos.x,
-                                           Math_SinS(this->effects[i].angle - 0x8000) * this->effects[i].flightRadius,
+                        Math_SmoothStepToF(&self->effects[i].pos.x,
+                                           Math_SinS(self->effects[i].angle - 0x8000) * self->effects[i].flightRadius,
                                            0.5f, 2.0f, 0.2f);
-                        Math_SmoothStepToF(&this->effects[i].pos.z,
-                                           Math_CosS(this->effects[i].angle - 0x8000) * this->effects[i].flightRadius,
+                        Math_SmoothStepToF(&self->effects[i].pos.z,
+                                           Math_CosS(self->effects[i].angle - 0x8000) * self->effects[i].flightRadius,
                                            0.5f, 2.0f, 0.2f);
 
                         // the lead fairy's y position approximately follows a sine wave with `amplitude` as angular
                         // frequency and `1 / amplitude` as amplitude
-                        this->effects[i].angle += this->effects[i].angleVel;
-                        this->effects[i].pos.y += sinf(this->effects[i].dirPhase.y);
+                        self->effects[i].angle += self->effects[i].angleVel;
+                        self->effects[i].pos.y += sinf(self->effects[i].dirPhase.y);
 
-                        this->effects[i].dirPhase.x += 0.2f * Rand_ZeroOne();
-                        this->effects[i].dirPhase.y += this->effects[i].amplitude;
-                        this->effects[i].dirPhase.z += 0.1f * Rand_ZeroOne();
+                        self->effects[i].dirPhase.x += 0.2f * Rand_ZeroOne();
+                        self->effects[i].dirPhase.y += self->effects[i].amplitude;
+                        self->effects[i].dirPhase.z += 0.1f * Rand_ZeroOne();
 
                         // circle around the player
-                        this->effects[i].pos.x =
-                            Math_SinS(this->effects[i].angle - 0x8000) * this->effects[i].flightRadius;
-                        this->effects[i].pos.z =
-                            Math_CosS(this->effects[i].angle - 0x8000) * this->effects[i].flightRadius;
+                        self->effects[i].pos.x =
+                            Math_SinS(self->effects[i].angle - 0x8000) * self->effects[i].flightRadius;
+                        self->effects[i].pos.z =
+                            Math_CosS(self->effects[i].angle - 0x8000) * self->effects[i].flightRadius;
                     } else { // trailing fairy
-                        Math_SmoothStepToF(&this->effects[i].size, 0.1f, 0.10f, 0.001f, 0.00001f);
-                        Math_SmoothStepToF(&this->effects[i].speed, 1.5f, 0.5f, 0.1f, 0.0002f);
+                        Math_SmoothStepToF(&self->effects[i].size, 0.1f, 0.10f, 0.001f, 0.00001f);
+                        Math_SmoothStepToF(&self->effects[i].speed, 1.5f, 0.5f, 0.1f, 0.0002f);
 
                         // follow previous fairy, translate their position to be relative to our home
-                        this->effects[i].pos.x =
-                            this->effects[i - 1].prevPos.x + (this->effects[i - 1].base.x - this->effects[i].base.x);
-                        this->effects[i].pos.y =
-                            this->effects[i - 1].prevPos.y + (this->effects[i - 1].base.y - this->effects[i].base.y);
-                        this->effects[i].pos.z =
-                            this->effects[i - 1].prevPos.z + (this->effects[i - 1].base.z - this->effects[i].base.z);
+                        self->effects[i].pos.x =
+                            self->effects[i - 1].prevPos.x + (self->effects[i - 1].base.x - self->effects[i].base.x);
+                        self->effects[i].pos.y =
+                            self->effects[i - 1].prevPos.y + (self->effects[i - 1].base.y - self->effects[i].base.y);
+                        self->effects[i].pos.z =
+                            self->effects[i - 1].prevPos.z + (self->effects[i - 1].base.z - self->effects[i].base.z);
                     }
                 }
 
-                if (this->effects[i].state != 2) {
+                if (self->effects[i].state != 2) {
                     maxDist = 130.0f;
-                    if (this->effects[i].base.x + this->effects[i].pos.x - baseX > maxDist ||
-                        this->effects[i].base.x + this->effects[i].pos.x - baseX < -maxDist ||
-                        this->effects[i].base.y + this->effects[i].pos.y - baseY > maxDist ||
-                        this->effects[i].base.y + this->effects[i].pos.y - baseY < -maxDist ||
-                        this->effects[i].base.z + this->effects[i].pos.z - baseZ > maxDist ||
-                        this->effects[i].base.z + this->effects[i].pos.z - baseZ < -maxDist) {
+                    if (self->effects[i].base.x + self->effects[i].pos.x - baseX > maxDist ||
+                        self->effects[i].base.x + self->effects[i].pos.x - baseX < -maxDist ||
+                        self->effects[i].base.y + self->effects[i].pos.y - baseY > maxDist ||
+                        self->effects[i].base.y + self->effects[i].pos.y - baseY < -maxDist ||
+                        self->effects[i].base.z + self->effects[i].pos.z - baseZ > maxDist ||
+                        self->effects[i].base.z + self->effects[i].pos.z - baseZ < -maxDist) {
 
                         // when a fairy moves off screen, wrap around to the other side
-                        if (this->effects[i].base.x + this->effects[i].pos.x - baseX > maxDist) {
-                            this->effects[i].base.x = baseX - maxDist;
-                            this->effects[i].pos.x = 0.0f;
+                        if (self->effects[i].base.x + self->effects[i].pos.x - baseX > maxDist) {
+                            self->effects[i].base.x = baseX - maxDist;
+                            self->effects[i].pos.x = 0.0f;
                         }
-                        if (this->effects[i].base.x + this->effects[i].pos.x - baseX < -maxDist) {
-                            this->effects[i].base.x = baseX + maxDist;
-                            this->effects[i].pos.x = 0.0f;
+                        if (self->effects[i].base.x + self->effects[i].pos.x - baseX < -maxDist) {
+                            self->effects[i].base.x = baseX + maxDist;
+                            self->effects[i].pos.x = 0.0f;
                         }
-                        if (this->effects[i].base.y + this->effects[i].pos.y - baseY > 50.0f) {
-                            this->effects[i].base.y = baseY - 50.0f;
-                            this->effects[i].pos.y = 0.0f;
+                        if (self->effects[i].base.y + self->effects[i].pos.y - baseY > 50.0f) {
+                            self->effects[i].base.y = baseY - 50.0f;
+                            self->effects[i].pos.y = 0.0f;
                         }
-                        if (this->effects[i].base.y + this->effects[i].pos.y - baseY < -50.0f) {
-                            this->effects[i].base.y = baseY + 50.0f;
-                            this->effects[i].pos.y = 0.0f;
+                        if (self->effects[i].base.y + self->effects[i].pos.y - baseY < -50.0f) {
+                            self->effects[i].base.y = baseY + 50.0f;
+                            self->effects[i].pos.y = 0.0f;
                         }
-                        if (this->effects[i].base.z + this->effects[i].pos.z - baseZ > maxDist) {
-                            this->effects[i].base.z = baseZ - maxDist;
-                            this->effects[i].pos.z = 0.0f;
+                        if (self->effects[i].base.z + self->effects[i].pos.z - baseZ > maxDist) {
+                            self->effects[i].base.z = baseZ - maxDist;
+                            self->effects[i].pos.z = 0.0f;
                         }
-                        if (this->effects[i].base.z + this->effects[i].pos.z - baseZ < -maxDist) {
-                            this->effects[i].base.z = baseZ + maxDist;
-                            this->effects[i].pos.z = 0.0f;
+                        if (self->effects[i].base.z + self->effects[i].pos.z - baseZ < -maxDist) {
+                            self->effects[i].base.z = baseZ + maxDist;
+                            self->effects[i].pos.z = 0.0f;
                         }
                     }
                 }
                 break;
 
             case 3: // reset, never reached
-                this->effects[i].state = 0;
+                self->effects[i].state = 0;
                 break;
         }
     }
 }
 
 void ObjectKankyo_Update(Actor* thisx, GlobalContext* globalCtx) {
-    ObjectKankyo* this = THIS;
+    ObjectKankyo* self = THIS;
 
-    this->actionFunc(this, globalCtx);
+    self->actionFunc(self, globalCtx);
 }
 
 void ObjectKankyo_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    ObjectKankyo* this = THIS;
+    ObjectKankyo* self = THIS;
 
-    switch (this->actor.params) {
+    switch (self->actor.params) {
         case 0:
-            ObjectKankyo_DrawFairies(this, globalCtx);
+            ObjectKankyo_DrawFairies(self, globalCtx);
             break;
 
         case 2:
-            ObjectKankyo_DrawLightning(this, globalCtx);
+            ObjectKankyo_DrawLightning(self, globalCtx);
             break;
 
         case 3:
-            ObjectKankyo_DrawSnow(this, globalCtx);
+            ObjectKankyo_DrawSnow(self, globalCtx);
             break;
 
         case 4:
-            ObjectKankyo_DrawSunGraveSpark(this, globalCtx);
+            ObjectKankyo_DrawSunGraveSpark(self, globalCtx);
             break;
 
         case 5:
-            ObjectKankyo_DrawBeams(this, globalCtx);
+            ObjectKankyo_DrawBeams(self, globalCtx);
             break;
     }
 }
 
 void ObjectKankyo_DrawFairies(ObjectKankyo* this2, GlobalContext* globalCtx2) {
-    ObjectKankyo* this = this2;
+    ObjectKankyo* self = this2;
     GlobalContext* globalCtx = globalCtx2;
     f32 alphaScale;
     Vec3f vec1 = { 0.0f, 0.0f, 0.0f };
@@ -498,48 +498,48 @@ void ObjectKankyo_DrawFairies(ObjectKankyo* this2, GlobalContext* globalCtx2) {
         gSPDisplayList(POLY_XLU_DISP++, gKokiriDustMoteTextureLoadDL);
 
         for (i = 0; i < globalCtx->envCtx.unk_EE[3]; i++) {
-            Matrix_Translate(this->effects[i].base.x + this->effects[i].pos.x,
-                             this->effects[i].base.y + this->effects[i].pos.y,
-                             this->effects[i].base.z + this->effects[i].pos.z, MTXMODE_NEW);
+            Matrix_Translate(self->effects[i].base.x + self->effects[i].pos.x,
+                             self->effects[i].base.y + self->effects[i].pos.y,
+                             self->effects[i].base.z + self->effects[i].pos.z, MTXMODE_NEW);
 
             // scale when fading in or out
-            alphaScale = this->effects[i].alpha / 50.0f;
+            alphaScale = self->effects[i].alpha / 50.0f;
             if (alphaScale > 1.0f) {
                 alphaScale = 1.0f;
             }
 
-            Matrix_Scale(this->effects[i].size * alphaScale, this->effects[i].size * alphaScale,
-                         this->effects[i].size * alphaScale, MTXMODE_APPLY);
+            Matrix_Scale(self->effects[i].size * alphaScale, self->effects[i].size * alphaScale,
+                         self->effects[i].size * alphaScale, MTXMODE_APPLY);
             if (i < 32) {
-                if (this->effects[i].state != 2) {
-                    if (this->effects[i].alpha > 0) {
-                        this->effects[i].alpha--;
+                if (self->effects[i].state != 2) {
+                    if (self->effects[i].alpha > 0) {
+                        self->effects[i].alpha--;
                     }
                 } else {
-                    if (this->effects[i].alpha < 100) {
-                        this->effects[i].alpha++;
+                    if (self->effects[i].alpha < 100) {
+                        self->effects[i].alpha++;
                     }
                 }
             } else {
-                if (this->effects[i].state != 2) {
-                    if ((this->effects[i].alphaTimer & 0x1F) < 16) {
-                        if (this->effects[i].alpha < 235) {
-                            this->effects[i].alpha += 20;
+                if (self->effects[i].state != 2) {
+                    if ((self->effects[i].alphaTimer & 0x1F) < 16) {
+                        if (self->effects[i].alpha < 235) {
+                            self->effects[i].alpha += 20;
                         }
                     } else {
-                        if (this->effects[i].alpha > 20) {
-                            this->effects[i].alpha -= 20;
+                        if (self->effects[i].alpha > 20) {
+                            self->effects[i].alpha -= 20;
                         }
                     }
                 } else {
                     // unreachable
-                    if ((this->effects[i].alphaTimer & 0xF) < 8) {
-                        if (this->effects[i].alpha < 255) {
-                            this->effects[i].alpha += 100;
+                    if ((self->effects[i].alphaTimer & 0xF) < 8) {
+                        if (self->effects[i].alpha < 255) {
+                            self->effects[i].alpha += 100;
                         }
                     } else {
-                        if (this->effects[i].alpha > 10) {
-                            this->effects[i].alpha -= 10;
+                        if (self->effects[i].alpha > 10) {
+                            self->effects[i].alpha -= 10;
                         }
                     }
                 }
@@ -549,13 +549,13 @@ void ObjectKankyo_DrawFairies(ObjectKankyo* this2, GlobalContext* globalCtx2) {
 
             switch (i & 1) {
                 case 0:
-                    gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 155, this->effects[i].alpha);
-                    gDPSetEnvColor(POLY_XLU_DISP++, 250, 180, 0, this->effects[i].alpha);
+                    gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 155, self->effects[i].alpha);
+                    gDPSetEnvColor(POLY_XLU_DISP++, 250, 180, 0, self->effects[i].alpha);
                     break;
 
                 case 1:
-                    gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, this->effects[i].alpha);
-                    gDPSetEnvColor(POLY_XLU_DISP++, 0, 100, 255, this->effects[i].alpha);
+                    gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, self->effects[i].alpha);
+                    gDPSetEnvColor(POLY_XLU_DISP++, 0, 100, 255, self->effects[i].alpha);
                     break;
             }
 
@@ -569,7 +569,7 @@ void ObjectKankyo_DrawFairies(ObjectKankyo* this2, GlobalContext* globalCtx2) {
 }
 
 void ObjectKankyo_DrawSnow(ObjectKankyo* this2, GlobalContext* globalCtx2) {
-    ObjectKankyo* this = this2;
+    ObjectKankyo* self = this2;
     GlobalContext* globalCtx = globalCtx2;
     f32 dist;
     f32 dx;
@@ -599,7 +599,7 @@ void ObjectKankyo_DrawSnow(ObjectKankyo* this2, GlobalContext* globalCtx2) {
         }
 
         for (i = 0; i < globalCtx->envCtx.unk_EE[2]; i++) {
-            switch (this->effects[i].state) {
+            switch (self->effects[i].state) {
                 case 0:
                     // spawn in front of the camera
                     dx = globalCtx->view.lookAt.x - globalCtx->view.eye.x;
@@ -609,20 +609,20 @@ void ObjectKankyo_DrawSnow(ObjectKankyo* this2, GlobalContext* globalCtx2) {
 
                     // fake
                     temp = dz / dist;
-                    this->effects[i].base.x = globalCtx->view.eye.x + dx / dist * 80.0f;
-                    this->effects[i].base.y = globalCtx->view.eye.y + dy / dist * 80.0f;
-                    this->effects[i].base.z = globalCtx->view.eye.z + temp * 80.0f;
+                    self->effects[i].base.x = globalCtx->view.eye.x + dx / dist * 80.0f;
+                    self->effects[i].base.y = globalCtx->view.eye.y + dy / dist * 80.0f;
+                    self->effects[i].base.z = globalCtx->view.eye.z + temp * 80.0f;
 
-                    this->effects[i].pos.x = (Rand_ZeroOne() - 0.5f) * 160.0f;
-                    this->effects[i].pos.y = 80.0f;
-                    this->effects[i].pos.z = (Rand_ZeroOne() - 0.5f) * 160.0f;
-                    if (this->effects[i].base.y + this->effects[i].pos.y < 50.0f) {
-                        this->effects[i].base.y = 50.0f;
+                    self->effects[i].pos.x = (Rand_ZeroOne() - 0.5f) * 160.0f;
+                    self->effects[i].pos.y = 80.0f;
+                    self->effects[i].pos.z = (Rand_ZeroOne() - 0.5f) * 160.0f;
+                    if (self->effects[i].base.y + self->effects[i].pos.y < 50.0f) {
+                        self->effects[i].base.y = 50.0f;
                     }
-                    this->effects[i].speed = Rand_ZeroOne() * 5.0f + 0.5f;
-                    this->effects[i].dirPhase.x = Rand_ZeroOne() * 360.0f;
-                    this->effects[i].dirPhase.z = Rand_ZeroOne() * 360.0f;
-                    this->effects[i].state++;
+                    self->effects[i].speed = Rand_ZeroOne() * 5.0f + 0.5f;
+                    self->effects[i].dirPhase.x = Rand_ZeroOne() * 360.0f;
+                    self->effects[i].dirPhase.z = Rand_ZeroOne() * 360.0f;
+                    self->effects[i].state++;
                     break;
 
                 case 1:
@@ -635,55 +635,55 @@ void ObjectKankyo_DrawSnow(ObjectKankyo* this2, GlobalContext* globalCtx2) {
                     baseY = globalCtx->view.eye.y + dy / dist * 80.0f;
                     baseZ = globalCtx->view.eye.z + dz / dist * 80.0f;
 
-                    this->effects[i].dirPhase.x += 0.049999997f * Rand_ZeroOne();
-                    this->effects[i].dirPhase.z += 0.049999997f * Rand_ZeroOne();
-                    this->effects[i].pos.x += sinf(this->effects[i].dirPhase.x * 0.01f);
-                    this->effects[i].pos.z += cosf(this->effects[i].dirPhase.z * 0.01f);
-                    this->effects[i].pos.y += -this->effects[i].speed;
+                    self->effects[i].dirPhase.x += 0.049999997f * Rand_ZeroOne();
+                    self->effects[i].dirPhase.z += 0.049999997f * Rand_ZeroOne();
+                    self->effects[i].pos.x += sinf(self->effects[i].dirPhase.x * 0.01f);
+                    self->effects[i].pos.z += cosf(self->effects[i].dirPhase.z * 0.01f);
+                    self->effects[i].pos.y += -self->effects[i].speed;
 
-                    if (this->effects[i].base.y + this->effects[i].pos.y < this->actor.world.pos.y ||
-                        this->effects[i].base.y + this->effects[i].pos.y < globalCtx->view.eye.y - 150.0f) {
-                        this->effects[i].state++;
+                    if (self->effects[i].base.y + self->effects[i].pos.y < self->actor.world.pos.y ||
+                        self->effects[i].base.y + self->effects[i].pos.y < globalCtx->view.eye.y - 150.0f) {
+                        self->effects[i].state++;
                     }
 
                     maxDist = 80;
-                    if (this->effects[i].base.x + this->effects[i].pos.x - baseX > maxDist ||
-                        this->effects[i].base.x + this->effects[i].pos.x - baseX < -maxDist ||
-                        this->effects[i].base.y + this->effects[i].pos.y - baseY > maxDist ||
-                        this->effects[i].base.y + this->effects[i].pos.y - baseY < -maxDist ||
-                        this->effects[i].base.z + this->effects[i].pos.z - baseZ > maxDist ||
-                        this->effects[i].base.z + this->effects[i].pos.z - baseZ < -maxDist) {
+                    if (self->effects[i].base.x + self->effects[i].pos.x - baseX > maxDist ||
+                        self->effects[i].base.x + self->effects[i].pos.x - baseX < -maxDist ||
+                        self->effects[i].base.y + self->effects[i].pos.y - baseY > maxDist ||
+                        self->effects[i].base.y + self->effects[i].pos.y - baseY < -maxDist ||
+                        self->effects[i].base.z + self->effects[i].pos.z - baseZ > maxDist ||
+                        self->effects[i].base.z + self->effects[i].pos.z - baseZ < -maxDist) {
 
                         // when off screen, wrap around to the other side
-                        if (this->effects[i].base.x + this->effects[i].pos.x - baseX > maxDist) {
-                            this->effects[i].base.x = baseX - maxDist;
-                            this->effects[i].pos.x = 0.0f;
+                        if (self->effects[i].base.x + self->effects[i].pos.x - baseX > maxDist) {
+                            self->effects[i].base.x = baseX - maxDist;
+                            self->effects[i].pos.x = 0.0f;
                         }
-                        if (this->effects[i].base.x + this->effects[i].pos.x - baseX < -maxDist) {
-                            this->effects[i].base.x = baseX + maxDist;
-                            this->effects[i].pos.x = 0.0f;
+                        if (self->effects[i].base.x + self->effects[i].pos.x - baseX < -maxDist) {
+                            self->effects[i].base.x = baseX + maxDist;
+                            self->effects[i].pos.x = 0.0f;
                         }
-                        if (this->effects[i].base.z + this->effects[i].pos.z - baseZ > maxDist) {
-                            this->effects[i].base.z = baseZ - maxDist;
-                            this->effects[i].pos.z = 0.0f;
+                        if (self->effects[i].base.z + self->effects[i].pos.z - baseZ > maxDist) {
+                            self->effects[i].base.z = baseZ - maxDist;
+                            self->effects[i].pos.z = 0.0f;
                         }
-                        if (this->effects[i].base.z + this->effects[i].pos.z - baseZ < -maxDist) {
-                            this->effects[i].base.z = baseZ + maxDist;
-                            this->effects[i].pos.z = 0.0f;
+                        if (self->effects[i].base.z + self->effects[i].pos.z - baseZ < -maxDist) {
+                            self->effects[i].base.z = baseZ + maxDist;
+                            self->effects[i].pos.z = 0.0f;
                         }
                     }
                     break;
 
                 case 2:
-                    this->effects[i].state = 0;
+                    self->effects[i].state = 0;
                     break;
             }
 
             if (1) {}
             if (1) {}
-            Matrix_Translate(this->effects[i].base.x + this->effects[i].pos.x,
-                             this->effects[i].base.y + this->effects[i].pos.y,
-                             this->effects[i].base.z + this->effects[i].pos.z, MTXMODE_NEW);
+            Matrix_Translate(self->effects[i].base.x + self->effects[i].pos.x,
+                             self->effects[i].base.y + self->effects[i].pos.y,
+                             self->effects[i].base.z + self->effects[i].pos.z, MTXMODE_NEW);
             Matrix_Scale(0.05f, 0.05f, 0.05f, MTXMODE_APPLY);
             gDPPipeSync(POLY_XLU_DISP++);
 
@@ -709,38 +709,38 @@ void ObjectKankyo_DrawSnow(ObjectKankyo* this2, GlobalContext* globalCtx2) {
     }
 }
 
-void ObjectKankyo_Lightning(ObjectKankyo* this, GlobalContext* globalCtx) {
+void ObjectKankyo_Lightning(ObjectKankyo* self, GlobalContext* globalCtx) {
     if (globalCtx->csCtx.state != 0 && globalCtx->csCtx.npcActions[0] != NULL) {
-        switch (this->effects[0].state) {
+        switch (self->effects[0].state) {
             case 0:
-                this->effects[0].timer = 0;
+                self->effects[0].timer = 0;
                 if (globalCtx->csCtx.npcActions[0]->action == 2) {
-                    this->effects[0].state++;
+                    self->effects[0].state++;
                 }
                 break;
 
             case 1:
-                if (++this->effects[0].timer >= 7) {
-                    this->effects[0].state++;
+                if (++self->effects[0].timer >= 7) {
+                    self->effects[0].state++;
                 }
                 break;
 
             case 2:
                 if (globalCtx->csCtx.npcActions[0]->action == 1) {
-                    this->effects[0].state = 0;
+                    self->effects[0].state = 0;
                 }
                 break;
         }
     }
 }
 
-void ObjectKankyo_DrawLightning(ObjectKankyo* this, GlobalContext* globalCtx) {
+void ObjectKankyo_DrawLightning(ObjectKankyo* self, GlobalContext* globalCtx) {
     s32 pad;
     s32 pad2;
 
     OPEN_DISPS(globalCtx->state.gfxCtx, "../z_object_kankyo.c", 1182);
 
-    if (this->effects[0].state == 1) {
+    if (self->effects[0].state == 1) {
         Matrix_Translate(globalCtx->csCtx.npcActions[0]->startPos.x, globalCtx->csCtx.npcActions[0]->startPos.y,
                          globalCtx->csCtx.npcActions[0]->startPos.z, MTXMODE_NEW);
         Matrix_RotateX(DEG_TO_RAD(20.0f), MTXMODE_APPLY);
@@ -749,7 +749,7 @@ void ObjectKankyo_DrawLightning(ObjectKankyo* this, GlobalContext* globalCtx) {
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 128);
         gDPSetEnvColor(POLY_XLU_DISP++, 0, 255, 255, 128);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx, "../z_object_kankyo.c", 1213), G_MTX_LOAD);
-        gSPSegment(POLY_XLU_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(sEffLightningTextures[this->effects[0].timer]));
+        gSPSegment(POLY_XLU_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(sEffLightningTextures[self->effects[0].timer]));
         func_80094C50(globalCtx->state.gfxCtx);
         gSPMatrix(POLY_XLU_DISP++, &D_01000000, G_MTX_MODELVIEW | G_MTX_NOPUSH | G_MTX_MUL);
         gDPPipeSync(POLY_XLU_DISP++);
@@ -760,43 +760,43 @@ void ObjectKankyo_DrawLightning(ObjectKankyo* this, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx, "../z_object_kankyo.c", 1233);
 }
 
-void ObjectKankyo_SunGraveSparkInit(ObjectKankyo* this, GlobalContext* globalCtx) {
+void ObjectKankyo_SunGraveSparkInit(ObjectKankyo* self, GlobalContext* globalCtx) {
     s32 objBankIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_SPOT02_OBJECTS);
 
     if (objBankIndex < 0) {
         ASSERT(0, "0", "../z_object_kankyo.c", 1251);
     } else {
-        this->requiredObjBankIndex = objBankIndex;
+        self->requiredObjBankIndex = objBankIndex;
     }
-    ObjectKankyo_SetupAction(this, ObjectKankyo_WaitForSunGraveSparkObject);
+    ObjectKankyo_SetupAction(self, ObjectKankyo_WaitForSunGraveSparkObject);
 }
 
-void ObjectKankyo_WaitForSunGraveSparkObject(ObjectKankyo* this, GlobalContext* globalCtx) {
-    if (Object_IsLoaded(&globalCtx->objectCtx, this->requiredObjBankIndex)) {
-        this->requiredObjectLoaded = true;
-        this->effects[0].alpha = 0;
-        this->actor.objBankIndex = this->requiredObjBankIndex;
-        this->effects[0].size = 7.0f;
-        ObjectKankyo_SetupAction(this, ObjectKankyo_SunGraveSpark);
+void ObjectKankyo_WaitForSunGraveSparkObject(ObjectKankyo* self, GlobalContext* globalCtx) {
+    if (Object_IsLoaded(&globalCtx->objectCtx, self->requiredObjBankIndex)) {
+        self->requiredObjectLoaded = true;
+        self->effects[0].alpha = 0;
+        self->actor.objBankIndex = self->requiredObjBankIndex;
+        self->effects[0].size = 7.0f;
+        ObjectKankyo_SetupAction(self, ObjectKankyo_SunGraveSpark);
     }
 }
 
-void ObjectKankyo_SunGraveSpark(ObjectKankyo* this, GlobalContext* globalCtx) {
+void ObjectKankyo_SunGraveSpark(ObjectKankyo* self, GlobalContext* globalCtx) {
     if (globalCtx->csCtx.state != 0) {
         if (globalCtx->csCtx.npcActions[1] != NULL && globalCtx->csCtx.npcActions[1]->action == 2) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_BIRI_SPARK - SFX_FLAG);
-            if ((s16)this->effects[0].alpha + 20 > 255) {
-                this->effects[0].alpha = 255;
+            Audio_PlayActorSound2(&self->actor, NA_SE_EN_BIRI_SPARK - SFX_FLAG);
+            if ((s16)self->effects[0].alpha + 20 > 255) {
+                self->effects[0].alpha = 255;
             } else {
-                this->effects[0].alpha += 20;
+                self->effects[0].alpha += 20;
             }
-            Math_SmoothStepToF(&this->effects[0].size, 1.8f, 0.5f, 0.28f, 0.01f);
+            Math_SmoothStepToF(&self->effects[0].size, 1.8f, 0.5f, 0.28f, 0.01f);
         }
     }
 }
 
 void ObjectKankyo_DrawSunGraveSpark(ObjectKankyo* this2, GlobalContext* globalCtx2) {
-    ObjectKankyo* this = this2;
+    ObjectKankyo* self = this2;
     GlobalContext* globalCtx = globalCtx2;
     Vec3f start;
     Vec3f end;
@@ -805,24 +805,24 @@ void ObjectKankyo_DrawSunGraveSpark(ObjectKankyo* this2, GlobalContext* globalCt
     OPEN_DISPS(globalCtx->state.gfxCtx, "../z_object_kankyo.c", 1324);
     if (globalCtx->csCtx.state != 0) {
         if (globalCtx->csCtx.npcActions[1] != NULL && globalCtx->csCtx.npcActions[1]->action == 2 &&
-            this->requiredObjectLoaded) {
+            self->requiredObjectLoaded) {
             // apparently, light waves with larger amplitudes look brighter, so the name 'amplitude' kind of works here
-            if (this->effects[0].state == 0) {
-                this->effects[0].amplitude += 1.0f / 7.0f;
-                if (this->effects[0].amplitude >= 1.0f) {
-                    this->effects[0].amplitude = 1.0f;
-                    this->effects[0].state++;
+            if (self->effects[0].state == 0) {
+                self->effects[0].amplitude += 1.0f / 7.0f;
+                if (self->effects[0].amplitude >= 1.0f) {
+                    self->effects[0].amplitude = 1.0f;
+                    self->effects[0].state++;
                 }
             } else {
-                this->effects[0].amplitude -= 1.0f / 7.0f;
-                if (this->effects[0].amplitude <= 0.1f) {
-                    this->effects[0].amplitude = 0.0f;
-                    this->effects[0].state = 0;
+                self->effects[0].amplitude -= 1.0f / 7.0f;
+                if (self->effects[0].amplitude <= 0.1f) {
+                    self->effects[0].amplitude = 0.0f;
+                    self->effects[0].state = 0;
                 }
             }
 
-            if (++this->effects[0].timer > 7) {
-                this->effects[0].timer = 0;
+            if (++self->effects[0].timer > 7) {
+                self->effects[0].timer = 0;
             }
 
             start.x = globalCtx->csCtx.npcActions[1]->startPos.x;
@@ -837,20 +837,20 @@ void ObjectKankyo_DrawSunGraveSpark(ObjectKankyo* this2, GlobalContext* globalCt
                                             globalCtx->csCtx.npcActions[1]->startFrame, globalCtx->csCtx.frames);
             Matrix_Translate((end.x - start.x) * weight + start.x, (end.y - start.y) * weight + start.y,
                              (end.z - start.z) * weight + start.z, MTXMODE_NEW);
-            Matrix_Scale(this->effects[0].size, this->effects[0].size, this->effects[0].size, MTXMODE_APPLY);
+            Matrix_Scale(self->effects[0].size, self->effects[0].size, self->effects[0].size, MTXMODE_APPLY);
             func_80093D84(globalCtx->state.gfxCtx);
             gDPPipeSync(POLY_XLU_DISP++);
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (u8)(105 * this->effects[0].amplitude) + 150, 255,
-                            (u8)(105 * this->effects[0].amplitude) + 150, this->effects[0].alpha);
-            gDPSetEnvColor(POLY_XLU_DISP++, (u8)(155 * this->effects[0].amplitude) + 100,
-                           (u8)(255 * this->effects[0].amplitude), 255 - (u8)(255 * this->effects[0].amplitude),
-                           this->effects[0].alpha);
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (u8)(105 * self->effects[0].amplitude) + 150, 255,
+                            (u8)(105 * self->effects[0].amplitude) + 150, self->effects[0].alpha);
+            gDPSetEnvColor(POLY_XLU_DISP++, (u8)(155 * self->effects[0].amplitude) + 100,
+                           (u8)(255 * self->effects[0].amplitude), 255 - (u8)(255 * self->effects[0].amplitude),
+                           self->effects[0].alpha);
 
             Matrix_Mult(&globalCtx->mf_11DA0, MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx, "../z_object_kankyo.c", 1416),
                       G_MTX_LOAD);
 
-            gSPSegment(POLY_XLU_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(D_80BA5900[this->effects[0].timer]));
+            gSPSegment(POLY_XLU_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(D_80BA5900[self->effects[0].timer]));
             gDPPipeSync(POLY_XLU_DISP++);
 
             gSPDisplayList(POLY_XLU_DISP++, object_spot02_objects_DL_009620);
@@ -861,35 +861,35 @@ void ObjectKankyo_DrawSunGraveSpark(ObjectKankyo* this2, GlobalContext* globalCt
     CLOSE_DISPS(globalCtx->state.gfxCtx, "../z_object_kankyo.c", 1432);
 }
 
-void ObjectKankyo_InitBeams(ObjectKankyo* this, GlobalContext* globalCtx) {
+void ObjectKankyo_InitBeams(ObjectKankyo* self, GlobalContext* globalCtx) {
     s32 objectIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_DEMO_KEKKAI);
 
     if (objectIndex < 0) {
         ASSERT(0, "0", "../z_object_kankyo.c", 1449);
     } else {
-        this->requiredObjBankIndex = objectIndex;
+        self->requiredObjBankIndex = objectIndex;
     }
-    ObjectKankyo_SetupAction(this, ObjectKankyo_WaitForBeamObject);
+    ObjectKankyo_SetupAction(self, ObjectKankyo_WaitForBeamObject);
 }
 
-void ObjectKankyo_WaitForBeamObject(ObjectKankyo* this, GlobalContext* globalCtx) {
-    if (Object_IsLoaded(&globalCtx->objectCtx, this->requiredObjBankIndex)) {
-        this->requiredObjectLoaded = true;
-        this->actor.objBankIndex = this->requiredObjBankIndex;
-        ObjectKankyo_SetupAction(this, ObjectKankyo_Beams);
+void ObjectKankyo_WaitForBeamObject(ObjectKankyo* self, GlobalContext* globalCtx) {
+    if (Object_IsLoaded(&globalCtx->objectCtx, self->requiredObjBankIndex)) {
+        self->requiredObjectLoaded = true;
+        self->actor.objBankIndex = self->requiredObjBankIndex;
+        ObjectKankyo_SetupAction(self, ObjectKankyo_Beams);
     }
 }
 
-void ObjectKankyo_Beams(ObjectKankyo* this, GlobalContext* globalCtx) {
+void ObjectKankyo_Beams(ObjectKankyo* self, GlobalContext* globalCtx) {
     u8 i;
 
     if (globalCtx->csCtx.state != 0) {
         for (i = 0; i < 6; i++) {
             if (globalCtx->csCtx.npcActions[i + 1] != NULL && globalCtx->csCtx.npcActions[i + 1]->action == 2) {
-                if (this->effects[i].size == 0.1f) {
+                if (self->effects[i].size == 0.1f) {
                     func_800F3F3C(11);
                 }
-                Math_ApproachZeroF(&this->effects[i].size, 0.1f, 0.1f);
+                Math_ApproachZeroF(&self->effects[i].size, 0.1f, 0.1f);
             }
         }
     }
@@ -903,7 +903,7 @@ void ObjectKankyo_DrawBeams(ObjectKankyo* this2, GlobalContext* globalCtx2) {
     static Color_RGB8 sBeamEnvColors[] = {
         { 0, 200, 0 }, { 0, 50, 255 }, { 100, 0, 200 }, { 200, 0, 0 }, { 200, 255, 0 }, { 255, 120, 0 },
     };
-    ObjectKankyo* this = this2;
+    ObjectKankyo* self = this2;
     GlobalContext* globalCtx = globalCtx2;
     s16 i;
     f32 beamX[] = { 430.0f, 860.0f, 430.0f, -426.0f, -862.0f, -440.0f };
@@ -914,13 +914,13 @@ void ObjectKankyo_DrawBeams(ObjectKankyo* this2, GlobalContext* globalCtx2) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx, "../z_object_kankyo.c", 1539);
 
-    if (this->requiredObjectLoaded) {
+    if (self->requiredObjectLoaded) {
         for (i = 0; i < 6; i++) {
-            if (this->effects[i].size > 0.001f) {
+            if (self->effects[i].size > 0.001f) {
                 Matrix_Translate(beamX[i], beamY[i], beamZ[i], MTXMODE_NEW);
                 Matrix_RotateY(DEG_TO_RAD(beamYaw[i]), MTXMODE_APPLY);
                 Matrix_RotateX(DEG_TO_RAD(beamPitch[i]), MTXMODE_APPLY);
-                Matrix_Scale(this->effects[i].size, 0.1f, this->effects[i].size, MTXMODE_APPLY);
+                Matrix_Scale(self->effects[i].size, 0.1f, self->effects[i].size, MTXMODE_APPLY);
                 func_80093D84(globalCtx->state.gfxCtx);
                 gDPPipeSync(POLY_XLU_DISP++);
                 gDPSetPrimColor(POLY_XLU_DISP++, 0, 128, sBeamPrimColors[i].r, sBeamPrimColors[i].g,

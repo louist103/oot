@@ -1392,7 +1392,7 @@ BAD_RETURN(s32) SkelAnime_Init(GlobalContext* globalCtx, SkelAnime* skelAnime, S
         skelAnime->morphTable =
             ZeldaArena_MallocDebug(skelAnime->limbCount * sizeof(*skelAnime->morphTable), "../z_skelanime.c", 2969);
     } else {
-        ASSERT(limbCount == skelAnime->limbCount, "joint_buff_num == this->joint_num", "../z_skelanime.c", 2973);
+        ASSERT(limbCount == skelAnime->limbCount, "joint_buff_num == self->joint_num", "../z_skelanime.c", 2973);
         skelAnime->jointTable = jointTable;
         skelAnime->morphTable = morphTable;
     }
@@ -1425,7 +1425,7 @@ BAD_RETURN(s32) SkelAnime_InitFlex(GlobalContext* globalCtx, SkelAnime* skelAnim
         skelAnime->morphTable =
             ZeldaArena_MallocDebug(skelAnime->limbCount * sizeof(*skelAnime->morphTable), "../z_skelanime.c", 3048);
     } else {
-        ASSERT(limbCount == skelAnime->limbCount, "joint_buff_num == this->joint_num", "../z_skelanime.c", 3052);
+        ASSERT(limbCount == skelAnime->limbCount, "joint_buff_num == self->joint_num", "../z_skelanime.c", 3052);
         skelAnime->jointTable = jointTable;
         skelAnime->morphTable = morphTable;
     }

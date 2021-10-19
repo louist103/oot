@@ -21,9 +21,9 @@ void EnHorseGanon_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnHorseGanon_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnHorseGanon_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80A68AC4(EnHorseGanon* this);
-void func_80A68AF0(EnHorseGanon* this, GlobalContext* globalCtx);
-void func_80A68DB0(EnHorseGanon* this, GlobalContext* globalCtx);
+void func_80A68AC4(EnHorseGanon* self);
+void func_80A68AF0(EnHorseGanon* self, GlobalContext* globalCtx);
+void func_80A68DB0(EnHorseGanon* self, GlobalContext* globalCtx);
 
 const ActorInit En_Horse_Ganon_InitVars = {
     ACTOR_EN_HORSE_GANON,
@@ -115,218 +115,218 @@ void func_80A68660(unk_D_80A69248* data, s32 index, Vec3f* vec) {
     vec->z = data[index].unk_0.z;
 }
 
-void func_80A686A8(EnHorseGanon* this, GlobalContext* globalCtx) {
+void func_80A686A8(EnHorseGanon* self, GlobalContext* globalCtx) {
     Vec3f* tempPos;
     Vec3f vec;
     s16 y;
 
-    func_80A68660(D_80A69248, this->unk_1EC, &vec);
-    if (Math3D_Vec3f_DistXYZ(&vec, &this->actor.world.pos) <= 400.0f) {
-        this->unk_1EC += 1;
-        if (this->unk_1EC >= 14) {
-            this->unk_1EC = 0;
+    func_80A68660(D_80A69248, self->unk_1EC, &vec);
+    if (Math3D_Vec3f_DistXYZ(&vec, &self->actor.world.pos) <= 400.0f) {
+        self->unk_1EC += 1;
+        if (self->unk_1EC >= 14) {
+            self->unk_1EC = 0;
             func_80A68660(D_80A69248, 0, &vec);
         }
     }
 
-    tempPos = &this->actor.world.pos;
-    y = Math_Vec3f_Yaw(tempPos, &vec) - this->actor.world.rot.y;
+    tempPos = &self->actor.world.pos;
+    y = Math_Vec3f_Yaw(tempPos, &vec) - self->actor.world.rot.y;
     if (y >= 301) {
-        this->actor.world.rot.y += 300;
+        self->actor.world.rot.y += 300;
     } else if (y < -300) {
-        this->actor.world.rot.y -= 300;
+        self->actor.world.rot.y -= 300;
     } else {
-        this->actor.world.rot.y += y;
+        self->actor.world.rot.y += y;
     }
-    this->actor.shape.rot.y = this->actor.world.rot.y;
+    self->actor.shape.rot.y = self->actor.world.rot.y;
 
-    if (Actor_WorldDistXZToActor(&this->actor, &GET_PLAYER(globalCtx)->actor) <= 300.0f) {
-        if (this->actor.speedXZ < 12.0f) {
-            this->actor.speedXZ += 1.0f;
+    if (Actor_WorldDistXZToActor(&self->actor, &GET_PLAYER(globalCtx)->actor) <= 300.0f) {
+        if (self->actor.speedXZ < 12.0f) {
+            self->actor.speedXZ += 1.0f;
         } else {
-            this->actor.speedXZ -= 1.0f;
+            self->actor.speedXZ -= 1.0f;
         }
-    } else if (this->actor.speedXZ < D_80A69248[this->unk_1EC].unk_6) {
-        this->actor.speedXZ += 0.5f;
+    } else if (self->actor.speedXZ < D_80A69248[self->unk_1EC].unk_6) {
+        self->actor.speedXZ += 0.5f;
     } else {
-        this->actor.speedXZ -= 0.5f;
+        self->actor.speedXZ -= 0.5f;
     }
 }
 
-void func_80A68870(EnHorseGanon* this) {
-    if ((this->skin.skelAnime.curFrame > D_80A692B8[this->soundCount]) &&
-        (this->soundCount != 0 || !(this->skin.skelAnime.curFrame > D_80A692B8[1]))) {
-        Audio_PlaySoundGeneral(NA_SE_EV_HORSE_WALK, &this->actor.projectedPos, 4, &D_801333E0, &D_801333E0,
+void func_80A68870(EnHorseGanon* self) {
+    if ((self->skin.skelAnime.curFrame > D_80A692B8[self->soundCount]) &&
+        (self->soundCount != 0 || !(self->skin.skelAnime.curFrame > D_80A692B8[1]))) {
+        Audio_PlaySoundGeneral(NA_SE_EV_HORSE_WALK, &self->actor.projectedPos, 4, &D_801333E0, &D_801333E0,
                                &D_801333E8);
 
-        this->soundCount++;
-        if (this->soundCount >= 2) {
-            this->soundCount = 0;
+        self->soundCount++;
+        if (self->soundCount >= 2) {
+            self->soundCount = 0;
         }
     }
 }
 
 void EnHorseGanon_Init(Actor* thisx, GlobalContext* globalCtx) {
-    EnHorseGanon* this = THIS;
+    EnHorseGanon* self = THIS;
 
-    Actor_ProcessInitChain(&this->actor, sInitChain);
-    Actor_SetScale(&this->actor, 0.0115f);
+    Actor_ProcessInitChain(&self->actor, sInitChain);
+    Actor_SetScale(&self->actor, 0.0115f);
 
-    this->actor.gravity = -3.5f;
+    self->actor.gravity = -3.5f;
 
-    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawHorse, 20.0f);
-    this->actor.speedXZ = 0.0f;
-    this->actor.focus.pos = this->actor.world.pos;
-    this->action = 0;
-    this->actor.focus.pos.y += 70.0f;
-    func_800A663C(globalCtx, &this->skin, &gHorseGanonSkel, &gHorseGanonIdleAnim);
-    this->currentAnimation = 0;
-    Animation_PlayOnce(&this->skin.skelAnime, sAnimations[0]);
+    ActorShape_Init(&self->actor.shape, 0.0f, ActorShadow_DrawHorse, 20.0f);
+    self->actor.speedXZ = 0.0f;
+    self->actor.focus.pos = self->actor.world.pos;
+    self->action = 0;
+    self->actor.focus.pos.y += 70.0f;
+    func_800A663C(globalCtx, &self->skin, &gHorseGanonSkel, &gHorseGanonIdleAnim);
+    self->currentAnimation = 0;
+    Animation_PlayOnce(&self->skin.skelAnime, sAnimations[0]);
 
-    Collider_InitCylinder(globalCtx, &this->colliderBody);
-    Collider_SetCylinder(globalCtx, &this->colliderBody, &this->actor, &sCylinderInit);
-    Collider_InitJntSph(globalCtx, &this->colliderHead);
-    Collider_SetJntSph(globalCtx, &this->colliderHead, &this->actor, &sJntSphInit, this->headElements);
+    Collider_InitCylinder(globalCtx, &self->colliderBody);
+    Collider_SetCylinder(globalCtx, &self->colliderBody, &self->actor, &sCylinderInit);
+    Collider_InitJntSph(globalCtx, &self->colliderHead);
+    Collider_SetJntSph(globalCtx, &self->colliderHead, &self->actor, &sJntSphInit, self->headElements);
 
-    CollisionCheck_SetInfo(&this->actor.colChkInfo, 0, &sColChkInfoInit);
-    func_80A68AC4(this);
+    CollisionCheck_SetInfo(&self->actor.colChkInfo, 0, &sColChkInfoInit);
+    func_80A68AC4(self);
 }
 
 void EnHorseGanon_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    EnHorseGanon* this = THIS;
+    EnHorseGanon* self = THIS;
 
-    func_800A6888(globalCtx, &this->skin);
-    Collider_DestroyCylinder(globalCtx, &this->colliderBody);
-    Collider_DestroyJntSph(globalCtx, &this->colliderHead);
+    func_800A6888(globalCtx, &self->skin);
+    Collider_DestroyCylinder(globalCtx, &self->colliderBody);
+    Collider_DestroyJntSph(globalCtx, &self->colliderHead);
 }
 
-void func_80A68AC4(EnHorseGanon* this) {
-    this->action = 0;
-    Animation_PlayLoop(&this->skin.skelAnime, sAnimations[4]);
+void func_80A68AC4(EnHorseGanon* self) {
+    self->action = 0;
+    Animation_PlayLoop(&self->skin.skelAnime, sAnimations[4]);
 }
 
-void func_80A68AF0(EnHorseGanon* this, GlobalContext* globalCtx) {
-    this->actor.speedXZ = 0.0f;
-    SkelAnime_Update(&this->skin.skelAnime);
+void func_80A68AF0(EnHorseGanon* self, GlobalContext* globalCtx) {
+    self->actor.speedXZ = 0.0f;
+    SkelAnime_Update(&self->skin.skelAnime);
 }
 
-void func_80A68B20(EnHorseGanon* this) {
+void func_80A68B20(EnHorseGanon* self) {
     s32 animationChanged;
     f32 sp30;
 
     animationChanged = 0;
-    this->action = 1;
-    if (this->actor.speedXZ <= 3.0f) {
-        if (this->currentAnimation != 2) {
+    self->action = 1;
+    if (self->actor.speedXZ <= 3.0f) {
+        if (self->currentAnimation != 2) {
             animationChanged = 1;
         }
-        this->currentAnimation = 2;
-    } else if (this->actor.speedXZ <= 6.0f) {
-        if (this->currentAnimation != 3) {
+        self->currentAnimation = 2;
+    } else if (self->actor.speedXZ <= 6.0f) {
+        if (self->currentAnimation != 3) {
             animationChanged = 1;
         }
-        this->currentAnimation = 3;
+        self->currentAnimation = 3;
     } else {
-        if (this->currentAnimation != 4) {
+        if (self->currentAnimation != 4) {
             animationChanged = 1;
         }
-        this->currentAnimation = 4;
+        self->currentAnimation = 4;
     }
 
-    if (this->currentAnimation == 2) {
-        sp30 = this->actor.speedXZ / 3.0f;
-    } else if (this->currentAnimation == 3) {
-        sp30 = this->actor.speedXZ / 5.0f;
-        Audio_PlaySoundGeneral(NA_SE_EV_HORSE_RUN, &this->actor.projectedPos, 4, &D_801333E0, &D_801333E0, &D_801333E8);
-    } else if (this->currentAnimation == 4) {
-        sp30 = this->actor.speedXZ / 7.0f;
-        Audio_PlaySoundGeneral(NA_SE_EV_HORSE_RUN, &this->actor.projectedPos, 4, &D_801333E0, &D_801333E0, &D_801333E8);
+    if (self->currentAnimation == 2) {
+        sp30 = self->actor.speedXZ / 3.0f;
+    } else if (self->currentAnimation == 3) {
+        sp30 = self->actor.speedXZ / 5.0f;
+        Audio_PlaySoundGeneral(NA_SE_EV_HORSE_RUN, &self->actor.projectedPos, 4, &D_801333E0, &D_801333E0, &D_801333E8);
+    } else if (self->currentAnimation == 4) {
+        sp30 = self->actor.speedXZ / 7.0f;
+        Audio_PlaySoundGeneral(NA_SE_EV_HORSE_RUN, &self->actor.projectedPos, 4, &D_801333E0, &D_801333E0, &D_801333E8);
     } else {
         sp30 = 1.0f;
     }
 
     if (animationChanged == 1) {
-        Animation_Change(&this->skin.skelAnime, sAnimations[this->currentAnimation],
-                         splaySpeeds[this->currentAnimation] * sp30 * 1.5f, 0.0f,
-                         Animation_GetLastFrame(sAnimations[this->currentAnimation]), ANIMMODE_ONCE, -3.0f);
+        Animation_Change(&self->skin.skelAnime, sAnimations[self->currentAnimation],
+                         splaySpeeds[self->currentAnimation] * sp30 * 1.5f, 0.0f,
+                         Animation_GetLastFrame(sAnimations[self->currentAnimation]), ANIMMODE_ONCE, -3.0f);
     } else {
-        Animation_Change(&this->skin.skelAnime, sAnimations[this->currentAnimation],
-                         splaySpeeds[this->currentAnimation] * sp30 * 1.5f, 0.0f,
-                         Animation_GetLastFrame(sAnimations[this->currentAnimation]), ANIMMODE_ONCE, 0.0f);
+        Animation_Change(&self->skin.skelAnime, sAnimations[self->currentAnimation],
+                         splaySpeeds[self->currentAnimation] * sp30 * 1.5f, 0.0f,
+                         Animation_GetLastFrame(sAnimations[self->currentAnimation]), ANIMMODE_ONCE, 0.0f);
     }
 }
 
-void func_80A68DB0(EnHorseGanon* this, GlobalContext* globalCtx) {
-    if (this->currentAnimation == 2) {
-        func_80A68870(this);
+void func_80A68DB0(EnHorseGanon* self, GlobalContext* globalCtx) {
+    if (self->currentAnimation == 2) {
+        func_80A68870(self);
     }
 
-    func_80A686A8(this, globalCtx);
+    func_80A686A8(self, globalCtx);
 
-    if (SkelAnime_Update(&this->skin.skelAnime) != 0) {
-        func_80A68B20(this);
+    if (SkelAnime_Update(&self->skin.skelAnime) != 0) {
+        func_80A68B20(self);
     }
 }
 
-void func_80A68E14(EnHorseGanon* this, GlobalContext* globalCtx) {
+void func_80A68E14(EnHorseGanon* self, GlobalContext* globalCtx) {
     s32 pad;
     CollisionPoly* col;
     f32 temp_ret;
     Vec3f v;
     s32 temp1;
 
-    v.x = Math_SinS(this->actor.shape.rot.y) * 30.0f + this->actor.world.pos.x;
-    v.y = this->actor.world.pos.y + 60.0f;
-    v.z = Math_CosS(this->actor.shape.rot.y) * 30.0f + this->actor.world.pos.z;
+    v.x = Math_SinS(self->actor.shape.rot.y) * 30.0f + self->actor.world.pos.x;
+    v.y = self->actor.world.pos.y + 60.0f;
+    v.z = Math_CosS(self->actor.shape.rot.y) * 30.0f + self->actor.world.pos.z;
 
     temp_ret = BgCheck_EntityRaycastFloor3(&globalCtx->colCtx, &col, &temp1, &v);
 
-    this->unk_1F4 = temp_ret;
-    this->actor.shape.rot.x = (0x8000 / M_PI) * Math_FAtan2F(this->actor.world.pos.y - temp_ret, 30.0f);
+    self->unk_1F4 = temp_ret;
+    self->actor.shape.rot.x = (0x8000 / M_PI) * Math_FAtan2F(self->actor.world.pos.y - temp_ret, 30.0f);
 }
 
 void EnHorseGanon_Update(Actor* thisx, GlobalContext* globalCtx) {
-    EnHorseGanon* this = THIS;
+    EnHorseGanon* self = THIS;
     s32 pad;
 
-    sActionFuncs[this->action](this, globalCtx);
-    Actor_MoveForward(&this->actor);
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 55.0f, 100.0f, 29);
-    this->actor.focus.pos = this->actor.world.pos;
-    this->actor.focus.pos.y += 70.0f;
-    Collider_UpdateCylinder(&this->actor, &this->colliderBody);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->colliderBody.base);
+    sActionFuncs[self->action](self, globalCtx);
+    Actor_MoveForward(&self->actor);
+    Actor_UpdateBgCheckInfo(globalCtx, &self->actor, 20.0f, 55.0f, 100.0f, 29);
+    self->actor.focus.pos = self->actor.world.pos;
+    self->actor.focus.pos.y += 70.0f;
+    Collider_UpdateCylinder(&self->actor, &self->colliderBody);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &self->colliderBody.base);
 }
 
 void func_80A68FA8(Actor* thisx, GlobalContext* globalCtx, PSkinAwb* skin) {
     Vec3f sp4C;
     Vec3f sp40;
-    EnHorseGanon* this = THIS;
+    EnHorseGanon* self = THIS;
     s32 index;
 
-    for (index = 0; index < this->colliderHead.count; index++) {
-        sp4C.x = this->colliderHead.elements[index].dim.modelSphere.center.x;
-        sp4C.y = this->colliderHead.elements[index].dim.modelSphere.center.y;
-        sp4C.z = this->colliderHead.elements[index].dim.modelSphere.center.z;
+    for (index = 0; index < self->colliderHead.count; index++) {
+        sp4C.x = self->colliderHead.elements[index].dim.modelSphere.center.x;
+        sp4C.y = self->colliderHead.elements[index].dim.modelSphere.center.y;
+        sp4C.z = self->colliderHead.elements[index].dim.modelSphere.center.z;
 
-        func_800A6408(skin, this->colliderHead.elements[index].dim.limb, &sp4C, &sp40);
+        func_800A6408(skin, self->colliderHead.elements[index].dim.limb, &sp4C, &sp40);
 
-        this->colliderHead.elements[index].dim.worldSphere.center.x = sp40.x;
-        this->colliderHead.elements[index].dim.worldSphere.center.y = sp40.y;
-        this->colliderHead.elements[index].dim.worldSphere.center.z = sp40.z;
+        self->colliderHead.elements[index].dim.worldSphere.center.x = sp40.x;
+        self->colliderHead.elements[index].dim.worldSphere.center.y = sp40.y;
+        self->colliderHead.elements[index].dim.worldSphere.center.z = sp40.z;
 
-        this->colliderHead.elements[index].dim.worldSphere.radius =
-            this->colliderHead.elements[index].dim.modelSphere.radius * this->colliderHead.elements[index].dim.scale;
+        self->colliderHead.elements[index].dim.worldSphere.radius =
+            self->colliderHead.elements[index].dim.modelSphere.radius * self->colliderHead.elements[index].dim.scale;
     }
 
     //! @bug see relevant comment in `EnHorse_SkinCallback1`
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->colliderHead.base);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &self->colliderHead.base);
 }
 
 void EnHorseGanon_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    EnHorseGanon* this = THIS;
+    EnHorseGanon* self = THIS;
 
-    func_80A68E14(this, globalCtx);
+    func_80A68E14(self, globalCtx);
     func_80093D18(globalCtx->state.gfxCtx);
-    func_800A6330(&this->actor, globalCtx, &this->skin, func_80A68FA8, 1);
+    func_800A6330(&self->actor, globalCtx, &self->skin, func_80A68FA8, 1);
 }

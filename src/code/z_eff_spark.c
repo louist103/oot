@@ -3,69 +3,69 @@
 
 // original name: "spark"
 void EffectSpark_Init(void* thisx, void* initParamsx) {
-    EffectSpark* this = (EffectSpark*)thisx;
+    EffectSpark* self = (EffectSpark*)thisx;
     EffectSparkInit* initParams = (EffectSparkInit*)initParamsx;
     EffectSparkElement* elem;
     f32 velocityNorm;
     s32 i;
 
-    if ((this != NULL) && (initParams != NULL)) {
+    if ((self != NULL) && (initParams != NULL)) {
         if ((initParams->uDiv == 0) || (initParams->vDiv == 0)) {
             osSyncPrintf("spark():u_div,v_div 0では困る。\n"); // "u_div,v_div 0 is not good."
             return;
         }
 
-        this->position = initParams->position;
-        this->speed = initParams->speed;
-        this->gravity = initParams->gravity;
-        this->uDiv = initParams->uDiv;
-        this->vDiv = initParams->vDiv;
-        this->colorStart[0].r = initParams->colorStart[0].r;
-        this->colorStart[0].g = initParams->colorStart[0].g;
-        this->colorStart[0].b = initParams->colorStart[0].b;
-        this->colorStart[0].a = initParams->colorStart[0].a;
-        this->colorStart[1].r = initParams->colorStart[1].r;
-        this->colorStart[1].g = initParams->colorStart[1].g;
-        this->colorStart[1].b = initParams->colorStart[1].b;
-        this->colorStart[1].a = initParams->colorStart[1].a;
-        this->colorStart[2].r = initParams->colorStart[2].r;
-        this->colorStart[2].g = initParams->colorStart[2].g;
-        this->colorStart[2].b = initParams->colorStart[2].b;
-        this->colorStart[2].a = initParams->colorStart[2].a;
-        this->colorStart[3].r = initParams->colorStart[3].r;
-        this->colorStart[3].g = initParams->colorStart[3].g;
-        this->colorStart[3].b = initParams->colorStart[3].b;
-        this->colorStart[3].a = initParams->colorStart[3].a;
-        this->colorEnd[0].r = initParams->colorEnd[0].r;
-        this->colorEnd[0].g = initParams->colorEnd[0].g;
-        this->colorEnd[0].b = initParams->colorEnd[0].b;
-        this->colorEnd[0].a = initParams->colorEnd[0].a;
-        this->colorEnd[1].r = initParams->colorEnd[1].r;
-        this->colorEnd[1].g = initParams->colorEnd[1].g;
-        this->colorEnd[1].b = initParams->colorEnd[1].b;
-        this->colorEnd[1].a = initParams->colorEnd[1].a;
-        this->colorEnd[2].r = initParams->colorEnd[2].r;
-        this->colorEnd[2].g = initParams->colorEnd[2].g;
-        this->colorEnd[2].b = initParams->colorEnd[2].b;
-        this->colorEnd[2].a = initParams->colorEnd[2].a;
-        this->colorEnd[3].r = initParams->colorEnd[3].r;
-        this->colorEnd[3].g = initParams->colorEnd[3].g;
-        this->colorEnd[3].b = initParams->colorEnd[3].b;
-        this->colorEnd[3].a = initParams->colorEnd[3].a;
-        this->duration = initParams->duration;
+        self->position = initParams->position;
+        self->speed = initParams->speed;
+        self->gravity = initParams->gravity;
+        self->uDiv = initParams->uDiv;
+        self->vDiv = initParams->vDiv;
+        self->colorStart[0].r = initParams->colorStart[0].r;
+        self->colorStart[0].g = initParams->colorStart[0].g;
+        self->colorStart[0].b = initParams->colorStart[0].b;
+        self->colorStart[0].a = initParams->colorStart[0].a;
+        self->colorStart[1].r = initParams->colorStart[1].r;
+        self->colorStart[1].g = initParams->colorStart[1].g;
+        self->colorStart[1].b = initParams->colorStart[1].b;
+        self->colorStart[1].a = initParams->colorStart[1].a;
+        self->colorStart[2].r = initParams->colorStart[2].r;
+        self->colorStart[2].g = initParams->colorStart[2].g;
+        self->colorStart[2].b = initParams->colorStart[2].b;
+        self->colorStart[2].a = initParams->colorStart[2].a;
+        self->colorStart[3].r = initParams->colorStart[3].r;
+        self->colorStart[3].g = initParams->colorStart[3].g;
+        self->colorStart[3].b = initParams->colorStart[3].b;
+        self->colorStart[3].a = initParams->colorStart[3].a;
+        self->colorEnd[0].r = initParams->colorEnd[0].r;
+        self->colorEnd[0].g = initParams->colorEnd[0].g;
+        self->colorEnd[0].b = initParams->colorEnd[0].b;
+        self->colorEnd[0].a = initParams->colorEnd[0].a;
+        self->colorEnd[1].r = initParams->colorEnd[1].r;
+        self->colorEnd[1].g = initParams->colorEnd[1].g;
+        self->colorEnd[1].b = initParams->colorEnd[1].b;
+        self->colorEnd[1].a = initParams->colorEnd[1].a;
+        self->colorEnd[2].r = initParams->colorEnd[2].r;
+        self->colorEnd[2].g = initParams->colorEnd[2].g;
+        self->colorEnd[2].b = initParams->colorEnd[2].b;
+        self->colorEnd[2].a = initParams->colorEnd[2].a;
+        self->colorEnd[3].r = initParams->colorEnd[3].r;
+        self->colorEnd[3].g = initParams->colorEnd[3].g;
+        self->colorEnd[3].b = initParams->colorEnd[3].b;
+        self->colorEnd[3].a = initParams->colorEnd[3].a;
+        self->duration = initParams->duration;
 
-        this->numElements = (this->uDiv * this->vDiv) + 2;
-        if (this->numElements > ARRAY_COUNT(this->elements)) {
+        self->numElements = (self->uDiv * self->vDiv) + 2;
+        if (self->numElements > ARRAY_COUNT(self->elements)) {
             osSyncPrintf("table_sizeオーバー\n"); // "over table_size"
             return;
         }
 
-        for (i = 0; i < this->numElements; i++) {
-            elem = &this->elements[i];
+        for (i = 0; i < self->numElements; i++) {
+            elem = &self->elements[i];
 
-            elem->position.x = this->position.x;
-            elem->position.y = this->position.y;
-            elem->position.z = this->position.z;
+            elem->position.x = self->position.x;
+            elem->position.y = self->position.y;
+            elem->position.z = self->position.z;
             elem->velocity.x = Rand_ZeroOne() - 0.5f;
             elem->velocity.y = Rand_ZeroOne() - 0.5f;
             elem->velocity.z = Rand_ZeroOne() - 0.5f;
@@ -73,12 +73,12 @@ void EffectSpark_Init(void* thisx, void* initParamsx) {
             velocityNorm = sqrtf(SQ(elem->velocity.x) + SQ(elem->velocity.y) + SQ(elem->velocity.z));
 
             if (!(fabsf(velocityNorm) < 0.008f)) {
-                elem->velocity.x *= this->speed * (1.0f / velocityNorm);
-                elem->velocity.y *= this->speed * (1.0f / velocityNorm);
-                elem->velocity.z *= this->speed * (1.0f / velocityNorm);
+                elem->velocity.x *= self->speed * (1.0f / velocityNorm);
+                elem->velocity.y *= self->speed * (1.0f / velocityNorm);
+                elem->velocity.z *= self->speed * (1.0f / velocityNorm);
             } else {
                 elem->velocity.x = elem->velocity.z = 0.0f;
-                elem->velocity.y = this->speed;
+                elem->velocity.y = self->speed;
             }
 
             elem->unkVelocity.x = 30000.0f - Rand_ZeroOne() * 15000.0f;
@@ -89,7 +89,7 @@ void EffectSpark_Init(void* thisx, void* initParamsx) {
             elem->unkPosition.z = Rand_ZeroOne() * 65534.0f;
         }
 
-        this->timer = 0;
+        self->timer = 0;
     }
 }
 
@@ -98,29 +98,29 @@ void EffectSpark_Destroy(void* thisx) {
 
 // original name: "EffectSparkInfo_proc"
 s32 EffectSpark_Update(void* thisx) {
-    EffectSpark* this = (EffectSpark*)thisx;
+    EffectSpark* self = (EffectSpark*)thisx;
     EffectSparkElement* elem;
     s32 i;
 
-    if (this == NULL) {
+    if (self == NULL) {
         osSyncPrintf("EffectSparkInfo_proc():Spark Pointer is NULL\n");
     }
 
-    for (i = 0; i < this->numElements; i++) {
-        elem = &this->elements[i];
+    for (i = 0; i < self->numElements; i++) {
+        elem = &self->elements[i];
 
         elem->position.x += elem->velocity.x;
         elem->position.y += elem->velocity.y;
         elem->position.z += elem->velocity.z;
-        elem->velocity.y += this->gravity;
+        elem->velocity.y += self->gravity;
         elem->unkPosition.x += elem->unkVelocity.x;
         elem->unkPosition.y += elem->unkVelocity.y;
         elem->unkPosition.z += elem->unkVelocity.z;
     }
 
-    this->timer++;
+    self->timer++;
 
-    if (this->duration < this->timer) {
+    if (self->duration < self->timer) {
         return 1;
     } else {
         return 0;
@@ -130,7 +130,7 @@ s32 EffectSpark_Update(void* thisx) {
 // original name: "EffectSparkInfo_disp"
 void EffectSpark_Draw(void* thisx, GraphicsContext* gfxCtx) {
     Vtx* vertices;
-    EffectSpark* this = (EffectSpark*)thisx;
+    EffectSpark* self = (EffectSpark*)thisx;
     GlobalContext* globalCtx = Effect_GetGlobalCtx();
     s32 i;
     s32 j;
@@ -154,7 +154,7 @@ void EffectSpark_Draw(void* thisx, GraphicsContext* gfxCtx) {
 
     OPEN_DISPS(gfxCtx, "../z_eff_spark.c", 293);
 
-    if (this != NULL) {
+    if (self != NULL) {
         gSPMatrix(POLY_XLU_DISP++, &gMtxClear, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
         POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0x26);
@@ -171,7 +171,7 @@ void EffectSpark_Draw(void* thisx, GraphicsContext* gfxCtx) {
         gSPSetGeometryMode(POLY_XLU_DISP++, G_ZBUFFER | G_SHADE | G_SHADING_SMOOTH);
         gDPPipeSync(POLY_XLU_DISP++);
 
-        vertices = Graph_Alloc(gfxCtx, this->numElements * sizeof(Vtx[4]));
+        vertices = Graph_Alloc(gfxCtx, self->numElements * sizeof(Vtx[4]));
         if (vertices == NULL) {
             // "Memory Allocation Failure graph_malloc"
             osSyncPrintf("EffectSparkInfo_disp():メモリー確保失敗 graph_malloc\n");
@@ -180,30 +180,30 @@ void EffectSpark_Draw(void* thisx, GraphicsContext* gfxCtx) {
 
         j = 0;
 
-        ratio = (f32)this->timer / (f32)this->duration;
-        sp1D3 = this->colorStart[0].r + ((f32)this->colorEnd[0].r - (f32)this->colorStart[0].r) * ratio;
-        sp1D2 = this->colorStart[0].g + ((f32)this->colorEnd[0].g - (f32)this->colorStart[0].g) * ratio;
-        sp1D1 = this->colorStart[0].b + ((f32)this->colorEnd[0].b - (f32)this->colorStart[0].b) * ratio;
-        sp1D0 = this->colorStart[0].a + ((f32)this->colorEnd[0].a - (f32)this->colorStart[0].a) * ratio;
-        sp1CF = this->colorStart[1].r + ((f32)this->colorEnd[1].r - (f32)this->colorStart[1].r) * ratio;
-        sp1CE = this->colorStart[1].g + ((f32)this->colorEnd[1].g - (f32)this->colorStart[1].g) * ratio;
-        sp1CD = this->colorStart[1].b + ((f32)this->colorEnd[1].b - (f32)this->colorStart[1].b) * ratio;
-        sp1CC = this->colorStart[1].a + ((f32)this->colorEnd[1].a - (f32)this->colorStart[1].a) * ratio;
-        sp1CB = this->colorStart[2].r + ((f32)this->colorEnd[2].r - (f32)this->colorStart[2].r) * ratio;
-        sp1CA = this->colorStart[2].g + ((f32)this->colorEnd[2].g - (f32)this->colorStart[2].g) * ratio;
-        sp1C9 = this->colorStart[2].b + ((f32)this->colorEnd[2].b - (f32)this->colorStart[2].b) * ratio;
-        sp1C8 = this->colorStart[2].a + ((f32)this->colorEnd[2].a - (f32)this->colorStart[2].a) * ratio;
-        sp1C7 = this->colorStart[3].r + ((f32)this->colorEnd[3].r - (f32)this->colorStart[3].r) * ratio;
-        sp1C6 = this->colorStart[3].g + ((f32)this->colorEnd[3].g - (f32)this->colorStart[3].g) * ratio;
-        sp1C5 = this->colorStart[3].b + ((f32)this->colorEnd[3].b - (f32)this->colorStart[3].b) * ratio;
-        sp1C4 = this->colorStart[3].a + ((f32)this->colorEnd[3].a - (f32)this->colorStart[3].a) * ratio;
+        ratio = (f32)self->timer / (f32)self->duration;
+        sp1D3 = self->colorStart[0].r + ((f32)self->colorEnd[0].r - (f32)self->colorStart[0].r) * ratio;
+        sp1D2 = self->colorStart[0].g + ((f32)self->colorEnd[0].g - (f32)self->colorStart[0].g) * ratio;
+        sp1D1 = self->colorStart[0].b + ((f32)self->colorEnd[0].b - (f32)self->colorStart[0].b) * ratio;
+        sp1D0 = self->colorStart[0].a + ((f32)self->colorEnd[0].a - (f32)self->colorStart[0].a) * ratio;
+        sp1CF = self->colorStart[1].r + ((f32)self->colorEnd[1].r - (f32)self->colorStart[1].r) * ratio;
+        sp1CE = self->colorStart[1].g + ((f32)self->colorEnd[1].g - (f32)self->colorStart[1].g) * ratio;
+        sp1CD = self->colorStart[1].b + ((f32)self->colorEnd[1].b - (f32)self->colorStart[1].b) * ratio;
+        sp1CC = self->colorStart[1].a + ((f32)self->colorEnd[1].a - (f32)self->colorStart[1].a) * ratio;
+        sp1CB = self->colorStart[2].r + ((f32)self->colorEnd[2].r - (f32)self->colorStart[2].r) * ratio;
+        sp1CA = self->colorStart[2].g + ((f32)self->colorEnd[2].g - (f32)self->colorStart[2].g) * ratio;
+        sp1C9 = self->colorStart[2].b + ((f32)self->colorEnd[2].b - (f32)self->colorStart[2].b) * ratio;
+        sp1C8 = self->colorStart[2].a + ((f32)self->colorEnd[2].a - (f32)self->colorStart[2].a) * ratio;
+        sp1C7 = self->colorStart[3].r + ((f32)self->colorEnd[3].r - (f32)self->colorStart[3].r) * ratio;
+        sp1C6 = self->colorStart[3].g + ((f32)self->colorEnd[3].g - (f32)self->colorStart[3].g) * ratio;
+        sp1C5 = self->colorStart[3].b + ((f32)self->colorEnd[3].b - (f32)self->colorStart[3].b) * ratio;
+        sp1C4 = self->colorStart[3].a + ((f32)self->colorEnd[3].a - (f32)self->colorStart[3].a) * ratio;
 
-        for (i = 0; i < this->numElements; i++) {
+        for (i = 0; i < self->numElements; i++) {
             MtxF sp12C;
             MtxF spEC;
             MtxF spAC;
             MtxF sp6C;
-            EffectSparkElement* elem = &this->elements[i];
+            EffectSparkElement* elem = &self->elements[i];
             Mtx* mtx;
             f32 temp;
 

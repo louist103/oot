@@ -30,7 +30,7 @@ const ActorInit En_Pu_box_InitVars = {
 
 void EnPubox_Init(Actor* thisx, GlobalContext* globalCtx) {
     CollisionHeader* colHeader = NULL;
-    EnPubox* this = THIS;
+    EnPubox* self = THIS;
 
     switch (thisx->params) {
         case 0:
@@ -47,39 +47,39 @@ void EnPubox_Init(Actor* thisx, GlobalContext* globalCtx) {
         default:
             break;
     }
-    this->unk_164 = 1;
+    self->unk_164 = 1;
     thisx->colChkInfo.cylRadius = 20;
     thisx->colChkInfo.cylHeight = 50;
     thisx->uncullZoneDownward = 1200.0f;
     thisx->uncullZoneScale = 720.0f;
     ActorShape_Init(&thisx->shape, 0.0f, ActorShadow_DrawCircle, 6.0f);
-    this->dyna.unk_160 = 0;
-    this->dyna.unk_15C = DPM_UNK;
+    self->dyna.unk_160 = 0;
+    self->dyna.unk_15C = DPM_UNK;
     thisx->targetMode = 1;
     thisx->gravity = -2.0f;
     CollisionHeader_GetVirtual(&gUnknownUnusedBox2Col, &colHeader);
-    this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, thisx, colHeader);
+    self->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, thisx, colHeader);
 }
 
 void EnPubox_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    EnPubox* this = THIS;
+    EnPubox* self = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, self->dyna.bgId);
 }
 
 void EnPubox_Update(Actor* thisx, GlobalContext* globalCtx) {
-    EnPubox* this = THIS;
+    EnPubox* self = THIS;
 
-    thisx->speedXZ += this->dyna.unk_150;
-    thisx->world.rot.y = this->dyna.unk_158;
+    thisx->speedXZ += self->dyna.unk_150;
+    thisx->world.rot.y = self->dyna.unk_158;
     thisx->speedXZ = (thisx->speedXZ < -2.5f) ? -2.5f : ((thisx->speedXZ > 2.5f) ? 2.5f : thisx->speedXZ);
     Math_SmoothStepToF(&thisx->speedXZ, 0.0f, 1.0f, 1.0f, 0.0f);
     if (thisx->speedXZ != 0.0f) {
         Audio_PlaySoundGeneral(NA_SE_EV_ROCK_SLIDE - SFX_FLAG, &thisx->projectedPos, 4, &D_801333E0, &D_801333E0,
                                &D_801333E8);
     }
-    this->dyna.unk_154 = 0.0f;
-    this->dyna.unk_150 = 0.0f;
+    self->dyna.unk_154 = 0.0f;
+    self->dyna.unk_150 = 0.0f;
     Actor_MoveForward(thisx);
     Actor_UpdateBgCheckInfo(globalCtx, thisx, thisx->colChkInfo.cylHeight, thisx->colChkInfo.cylRadius,
                             thisx->colChkInfo.cylRadius, 0x1D);

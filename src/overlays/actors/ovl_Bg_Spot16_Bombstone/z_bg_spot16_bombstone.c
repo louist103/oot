@@ -13,14 +13,14 @@ void BgSpot16Bombstone_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgSpot16Bombstone_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgSpot16Bombstone_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_808B5A94(BgSpot16Bombstone* this, GlobalContext* globalCtx);
-void func_808B5B04(BgSpot16Bombstone* this, GlobalContext* globalCtx);
-void func_808B5B6C(BgSpot16Bombstone* this, GlobalContext* globalCtx);
-void func_808B5B58(BgSpot16Bombstone* this);
-void func_808B5950(BgSpot16Bombstone* this, GlobalContext* globalCtx);
-void func_808B5934(BgSpot16Bombstone* this);
-void func_808B5AF0(BgSpot16Bombstone* this);
-void func_808B5A78(BgSpot16Bombstone* this);
+void func_808B5A94(BgSpot16Bombstone* self, GlobalContext* globalCtx);
+void func_808B5B04(BgSpot16Bombstone* self, GlobalContext* globalCtx);
+void func_808B5B6C(BgSpot16Bombstone* self, GlobalContext* globalCtx);
+void func_808B5B58(BgSpot16Bombstone* self);
+void func_808B5950(BgSpot16Bombstone* self, GlobalContext* globalCtx);
+void func_808B5934(BgSpot16Bombstone* self);
+void func_808B5AF0(BgSpot16Bombstone* self);
+void func_808B5A78(BgSpot16Bombstone* self);
 
 static EnBombf* sPlayerBomb = NULL;
 
@@ -145,52 +145,52 @@ static f32 D_808B6074[] = { 66.0f, 51.0f, 48.0f, 36.0f, 21.0f };
 
 static s16 D_808B6088[] = { 0, 1, 2, 3, 4 };
 
-void func_808B4C30(BgSpot16Bombstone* this) {
-    this->switchFlag = (this->actor.params >> 8) & 0x3F;
-    this->actor.params = this->actor.params & 0xFF;
+void func_808B4C30(BgSpot16Bombstone* self) {
+    self->switchFlag = (self->actor.params >> 8) & 0x3F;
+    self->actor.params = self->actor.params & 0xFF;
 }
 
-void func_808B4C4C(BgSpot16Bombstone* this, GlobalContext* globalCtx) {
+void func_808B4C4C(BgSpot16Bombstone* self, GlobalContext* globalCtx) {
     s32 pad;
 
-    Collider_InitJntSph(globalCtx, &this->colliderJntSph);
-    Collider_SetJntSph(globalCtx, &this->colliderJntSph, &this->actor, &sJntSphInit, this->colliderElements);
-    this->colliderJntSph.elements[0].dim.worldSphere.center.x = this->actor.world.pos.x;
-    this->colliderJntSph.elements[0].dim.worldSphere.center.y = this->actor.world.pos.y + 50.0f;
-    this->colliderJntSph.elements[0].dim.worldSphere.center.z = this->actor.world.pos.z;
-    this->colliderJntSph.elements[0].dim.worldSphere.radius = 120;
+    Collider_InitJntSph(globalCtx, &self->colliderJntSph);
+    Collider_SetJntSph(globalCtx, &self->colliderJntSph, &self->actor, &sJntSphInit, self->colliderElements);
+    self->colliderJntSph.elements[0].dim.worldSphere.center.x = self->actor.world.pos.x;
+    self->colliderJntSph.elements[0].dim.worldSphere.center.y = self->actor.world.pos.y + 50.0f;
+    self->colliderJntSph.elements[0].dim.worldSphere.center.z = self->actor.world.pos.z;
+    self->colliderJntSph.elements[0].dim.worldSphere.radius = 120;
 }
 
-void func_808B4D04(BgSpot16Bombstone* this, GlobalContext* globalCtx) {
+void func_808B4D04(BgSpot16Bombstone* self, GlobalContext* globalCtx) {
     s32 pad;
 
-    Collider_InitCylinder(globalCtx, &this->colliderCylinder);
-    Collider_SetCylinder(globalCtx, &this->colliderCylinder, &this->actor, &sCylinderInit);
-    this->colliderCylinder.dim.pos.x += (s16)this->actor.world.pos.x;
-    this->colliderCylinder.dim.pos.y += (s16)this->actor.world.pos.y;
-    this->colliderCylinder.dim.pos.z += (s16)this->actor.world.pos.z;
+    Collider_InitCylinder(globalCtx, &self->colliderCylinder);
+    Collider_SetCylinder(globalCtx, &self->colliderCylinder, &self->actor, &sCylinderInit);
+    self->colliderCylinder.dim.pos.x += (s16)self->actor.world.pos.x;
+    self->colliderCylinder.dim.pos.y += (s16)self->actor.world.pos.y;
+    self->colliderCylinder.dim.pos.z += (s16)self->actor.world.pos.z;
 }
 
-s32 func_808B4D9C(BgSpot16Bombstone* this, GlobalContext* globalCtx) {
-    if (Flags_GetSwitch(globalCtx, this->switchFlag)) {
+s32 func_808B4D9C(BgSpot16Bombstone* self, GlobalContext* globalCtx) {
+    if (Flags_GetSwitch(globalCtx, self->switchFlag)) {
         osSyncPrintf("Spot16 obj 爆弾石 破壊済み\n");
         return false;
     }
-    Actor_ProcessInitChain(&this->actor, sInitChainBoulder);
-    Actor_SetScale(&this->actor, 0.4f);
-    this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    func_808B4C4C(this, globalCtx);
-    func_808B4D04(this, globalCtx);
-    this->sinRotation = Math_SinS(this->actor.shape.rot.y);
-    this->cosRotation = Math_CosS(this->actor.shape.rot.y);
-    this->dList = gDodongosCavernRock3DL;
+    Actor_ProcessInitChain(&self->actor, sInitChainBoulder);
+    Actor_SetScale(&self->actor, 0.4f);
+    self->actor.colChkInfo.mass = MASS_IMMOVABLE;
+    func_808B4C4C(self, globalCtx);
+    func_808B4D04(self, globalCtx);
+    self->sinRotation = Math_SinS(self->actor.shape.rot.y);
+    self->cosRotation = Math_CosS(self->actor.shape.rot.y);
+    self->dList = gDodongosCavernRock3DL;
 
-    func_808B5934(this);
+    func_808B5934(self);
     return true;
 }
 
-s32 func_808B4E58(BgSpot16Bombstone* this, GlobalContext* globalctx) {
-    Actor* actor = &this->actor;
+s32 func_808B4E58(BgSpot16Bombstone* self, GlobalContext* globalctx) {
+    Actor* actor = &self->actor;
     f32 scaleFactor = 1.0f / 600.0f;
     f32 sinCosPosFactor = 50.0f;
     f32 sinValue;
@@ -203,13 +203,13 @@ s32 func_808B4E58(BgSpot16Bombstone* this, GlobalContext* globalctx) {
 
     Actor_SetScale(actor, D_808B5DD8[actor->params][2] * scaleFactor);
 
-    this->unk_210 = (f32)D_808B5DD8[actor->params][3];
-    this->unk_212 = (f32)D_808B5DD8[actor->params][4];
+    self->unk_210 = (f32)D_808B5DD8[actor->params][3];
+    self->unk_212 = (f32)D_808B5DD8[actor->params][4];
 
     actor->world.rot.y = D_808B5DD8[actor->params][5];
 
-    sinValue = Math_SinS(this->actor.world.rot.y);
-    cosValue = Math_CosS(this->actor.world.rot.y);
+    sinValue = Math_SinS(self->actor.world.rot.y);
+    cosValue = Math_CosS(self->actor.world.rot.y);
 
     actor->world.pos.x = (sinValue * sinCosPosFactor) + actor->home.pos.x;
     actor->world.pos.y = D_808B5DD8[actor->params][6] + actor->home.pos.y;
@@ -219,29 +219,29 @@ s32 func_808B4E58(BgSpot16Bombstone* this, GlobalContext* globalctx) {
     actor->shape.rot.y = D_808B5DD8[actor->params][8];
     actor->shape.rot.z = D_808B5DD8[actor->params][9];
 
-    this->dList = object_bombiwa_DL_0009E0;
-    this->bombiwaBankIndex = Object_GetIndex(&globalctx->objectCtx, OBJECT_BOMBIWA);
+    self->dList = object_bombiwa_DL_0009E0;
+    self->bombiwaBankIndex = Object_GetIndex(&globalctx->objectCtx, OBJECT_BOMBIWA);
 
-    if (this->bombiwaBankIndex < 0) {
+    if (self->bombiwaBankIndex < 0) {
         osSyncPrintf("Error : バンク危険！(arg_data 0x%04x)(%s %d)\n", actor->params, "../z_bg_spot16_bombstone.c",
                      589);
         return false;
     }
 
-    func_808B5AF0(this);
+    func_808B5AF0(self);
     return true;
 }
 
 void BgSpot16Bombstone_Init(Actor* thisx, GlobalContext* globalCtx) {
-    BgSpot16Bombstone* this = THIS;
+    BgSpot16Bombstone* self = THIS;
     s16 shouldLive;
 
-    func_808B4C30(this);
+    func_808B4C30(self);
 
-    switch (this->actor.params) {
+    switch (self->actor.params) {
         case 0xFF:
             // The boulder is intact
-            shouldLive = func_808B4D9C(this, globalCtx);
+            shouldLive = func_808B4D9C(self, globalCtx);
             break;
         case 0:
         case 1:
@@ -250,84 +250,84 @@ void BgSpot16Bombstone_Init(Actor* thisx, GlobalContext* globalCtx) {
         case 4:
         case 5:
             // The boulder is debris
-            shouldLive = func_808B4E58(this, globalCtx);
+            shouldLive = func_808B4E58(self, globalCtx);
             break;
         default:
             osSyncPrintf("Error : arg_data おかしいな(%s %d)(arg_data 0x%04x)\n", "../z_bg_spot16_bombstone.c", 668,
-                         this->actor.params);
+                         self->actor.params);
             shouldLive = false;
             break;
     }
 
     if (!shouldLive) {
-        Actor_Kill(&this->actor);
+        Actor_Kill(&self->actor);
         return;
     }
-    osSyncPrintf("Spot16 obj 爆弾石 (scaleX %f)(arg_data 0x%04x)\n", this->actor.scale.x, this->actor.params);
+    osSyncPrintf("Spot16 obj 爆弾石 (scaleX %f)(arg_data 0x%04x)\n", self->actor.scale.x, self->actor.params);
 }
 
 void BgSpot16Bombstone_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    BgSpot16Bombstone* this = THIS;
+    BgSpot16Bombstone* self = THIS;
 
-    if (this->actor.params == 0xFF) {
+    if (self->actor.params == 0xFF) {
         // Boulder is intact so remove its collider
-        Collider_DestroyJntSph(globalCtx, &this->colliderJntSph);
-        Collider_DestroyCylinder(globalCtx, &this->colliderCylinder);
+        Collider_DestroyJntSph(globalCtx, &self->colliderJntSph);
+        Collider_DestroyCylinder(globalCtx, &self->colliderCylinder);
     }
 }
 
-void BgSpot16Bombstone_SpawnDust(BgSpot16Bombstone* this, GlobalContext* globalCtx) {
-    f32 scaleX1 = this->actor.scale.x * 150;
-    s16 scaleX2 = this->actor.scale.x * 250;
+void BgSpot16Bombstone_SpawnDust(BgSpot16Bombstone* self, GlobalContext* globalCtx) {
+    f32 scaleX1 = self->actor.scale.x * 150;
+    s16 scaleX2 = self->actor.scale.x * 250;
     Vec3f world;
 
-    world.x = this->actor.world.pos.x;
-    world.y = this->actor.world.pos.y + 50.0f;
-    world.z = this->actor.world.pos.z;
+    world.x = self->actor.world.pos.x;
+    world.y = self->actor.world.pos.y + 50.0f;
+    world.z = self->actor.world.pos.z;
 
     func_80033480(globalCtx, &world, scaleX1, 2, scaleX2, 0xA0, 1);
 }
 
-void func_808B5240(BgSpot16Bombstone* this, GlobalContext* globalCtx) {
+void func_808B5240(BgSpot16Bombstone* self, GlobalContext* globalCtx) {
     f32 tempUnk6;
     f32 tempUnk2;
     s16 index;
     Vec3f position;
-    Vec3f* actorPosition = &this->actor.world.pos;
+    Vec3f* actorPosition = &self->actor.world.pos;
 
     if (1) {}
 
     while (true) {
-        if ((u32)this->unk_158 >= ARRAY_COUNTU(D_808B5EB0) || this->unk_154 < D_808B5EB0[this->unk_158][0]) {
+        if ((u32)self->unk_158 >= ARRAY_COUNTU(D_808B5EB0) || self->unk_154 < D_808B5EB0[self->unk_158][0]) {
             break;
         }
 
-        index = this->unk_158;
+        index = self->unk_158;
 
         tempUnk2 = D_808B5EB0[index][1];
         tempUnk6 = D_808B5EB0[index][3];
 
-        position.x = ((this->sinRotation * tempUnk6) + (tempUnk2 * this->cosRotation)) + actorPosition->x;
+        position.x = ((self->sinRotation * tempUnk6) + (tempUnk2 * self->cosRotation)) + actorPosition->x;
         position.y = D_808B5EB0[index][2] + actorPosition->y;
-        position.z = ((this->cosRotation * tempUnk6) - (tempUnk2 * this->sinRotation)) + actorPosition->z;
+        position.z = ((self->cosRotation * tempUnk6) - (tempUnk2 * self->sinRotation)) + actorPosition->z;
 
         func_800287AC(globalCtx, &position, &sVelocity, &sAcceleration, D_808B5EB0[index][4], D_808B5EB0[index][5],
                       D_808B5EB0[index][6]);
 
-        this->unk_158 += 1;
+        self->unk_158 += 1;
     }
 }
 
-void BgSpot16Bombstone_SpawnFragments(BgSpot16Bombstone* this, GlobalContext* globalCtx) {
+void BgSpot16Bombstone_SpawnFragments(BgSpot16Bombstone* self, GlobalContext* globalCtx) {
     f32 velocityYMultiplier = 1.3f;
     Vec3f pos;
     Vec3f velocity;
     s32 index;
     s16 scale;
 
-    if (this->actor.params == 0) {
-        Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_BG_SPOT16_BOMBSTONE, this->actor.world.pos.x,
-                    this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 5);
+    if (self->actor.params == 0) {
+        Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_BG_SPOT16_BOMBSTONE, self->actor.world.pos.x,
+                    self->actor.world.pos.y, self->actor.world.pos.z, 0, 0, 0, 5);
         index = 3;
     } else {
         index = 0;
@@ -335,28 +335,28 @@ void BgSpot16Bombstone_SpawnFragments(BgSpot16Bombstone* this, GlobalContext* gl
 
     if (index < ARRAY_COUNT(D_808B6074)) {
         do {
-            pos.x = ((Rand_ZeroOne() - 0.5f) * 8.0f) + this->actor.world.pos.x;
-            pos.y = ((Rand_ZeroOne() * 5.0f) + this->actor.world.pos.y) + 8.0f;
-            pos.z = ((Rand_ZeroOne() - 0.5f) * 8.0f) + this->actor.world.pos.z;
+            pos.x = ((Rand_ZeroOne() - 0.5f) * 8.0f) + self->actor.world.pos.x;
+            pos.y = ((Rand_ZeroOne() * 5.0f) + self->actor.world.pos.y) + 8.0f;
+            pos.z = ((Rand_ZeroOne() - 0.5f) * 8.0f) + self->actor.world.pos.z;
 
             velocity.x = (Rand_ZeroOne() - 0.5f) * 16.0f;
-            velocity.y = (Rand_ZeroOne() * 14.0) + (fabsf(this->actor.velocity.y) * velocityYMultiplier);
+            velocity.y = (Rand_ZeroOne() * 14.0) + (fabsf(self->actor.velocity.y) * velocityYMultiplier);
             velocity.z = (Rand_ZeroOne() - 0.5f) * 16.0f;
 
-            scale = D_808B6074[index] * this->actor.scale.x * 3;
+            scale = D_808B6074[index] * self->actor.scale.x * 3;
 
-            EffectSsKakera_Spawn(globalCtx, &pos, &velocity, &this->actor.world.pos, -420, 0x31, 0xF, 0xF, 0, scale, 2,
+            EffectSsKakera_Spawn(globalCtx, &pos, &velocity, &self->actor.world.pos, -420, 0x31, 0xF, 0xF, 0, scale, 2,
                                  0x40, 160, KAKERA_COLOR_NONE, OBJECT_BOMBIWA, object_bombiwa_DL_0009E0);
             index += 1;
         } while (index != ARRAY_COUNT(D_808B6074));
     }
 }
 
-void func_808B561C(BgSpot16Bombstone* this, GlobalContext* globalCtx) {
+void func_808B561C(BgSpot16Bombstone* self, GlobalContext* globalCtx) {
     s32 index;
     PosRot* world;
 
-    world = &this->actor.world;
+    world = &self->actor.world;
     for (index = 0; index < ARRAY_COUNT(D_808B6088); index++) {
         if (Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_BG_SPOT16_BOMBSTONE, world->pos.x, world->pos.y,
                         world->pos.z, 0, 0, 0, D_808B6088[index]) == NULL) {
@@ -365,35 +365,35 @@ void func_808B561C(BgSpot16Bombstone* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_808B56BC(BgSpot16Bombstone* this, GlobalContext* globalCtx) {
+void func_808B56BC(BgSpot16Bombstone* self, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     f32 sinValue;
     s16 adjustedYawDiff;
     s32 yawDiff;
     s32 absYawDiff;
 
-    if (this->actor.xzDistToPlayer < 130.0f && this->actor.yDistToPlayer < 160.0f &&
-        this->actor.yDistToPlayer >= -10.0f) {
-        yawDiff = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
+    if (self->actor.xzDistToPlayer < 130.0f && self->actor.yDistToPlayer < 160.0f &&
+        self->actor.yDistToPlayer >= -10.0f) {
+        yawDiff = self->actor.yawTowardsPlayer - self->actor.shape.rot.y;
         absYawDiff = ABS(yawDiff);
 
         adjustedYawDiff = absYawDiff - 0x3FFF;
 
         if (adjustedYawDiff > 0) {
-            sinValue = Math_SinS(adjustedYawDiff) * this->actor.xzDistToPlayer;
+            sinValue = Math_SinS(adjustedYawDiff) * self->actor.xzDistToPlayer;
 
             if (sinValue >= 0.0f) {
-                player->actor.world.pos.x += sinValue * this->sinRotation;
-                player->actor.world.pos.z += sinValue * this->cosRotation;
+                player->actor.world.pos.x += sinValue * self->sinRotation;
+                player->actor.world.pos.z += sinValue * self->cosRotation;
             } else {
                 osSyncPrintf("Error 補正出来ない(%s %d)(arg_data 0x%04x)(hosei_angY %x)\n",
-                             "../z_bg_spot16_bombstone.c", 935, this->actor.params, adjustedYawDiff);
+                             "../z_bg_spot16_bombstone.c", 935, self->actor.params, adjustedYawDiff);
             }
         }
     }
 }
 
-void func_808B57E0(BgSpot16Bombstone* this, GlobalContext* globalCtx) {
+void func_808B57E0(BgSpot16Bombstone* self, GlobalContext* globalCtx) {
     Actor* playerHeldActor;
     Player* player = GET_PLAYER(globalCtx);
     EnBombf* currentBomb;
@@ -424,96 +424,96 @@ void func_808B57E0(BgSpot16Bombstone* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_808B5934(BgSpot16Bombstone* this) {
-    this->actor.draw = BgSpot16Bombstone_Draw;
-    this->actionFunc = func_808B5950;
+void func_808B5934(BgSpot16Bombstone* self) {
+    self->actor.draw = BgSpot16Bombstone_Draw;
+    self->actionFunc = func_808B5950;
 }
 
-void func_808B5950(BgSpot16Bombstone* this, GlobalContext* globalCtx) {
+void func_808B5950(BgSpot16Bombstone* self, GlobalContext* globalCtx) {
     s32 pad;
 
-    func_808B56BC(this, globalCtx);
-    func_808B57E0(this, globalCtx);
+    func_808B56BC(self, globalCtx);
+    func_808B57E0(self, globalCtx);
 
     if (globalCtx) {}
 
-    if (this->colliderCylinder.base.acFlags & AC_HIT) {
-        this->colliderCylinder.base.acFlags &= ~AC_HIT;
+    if (self->colliderCylinder.base.acFlags & AC_HIT) {
+        self->colliderCylinder.base.acFlags &= ~AC_HIT;
 
-        func_808B561C(this, globalCtx);
+        func_808B561C(self, globalCtx);
 
         OnePointCutscene_Init(globalCtx, 4180, 50, NULL, MAIN_CAM);
 
-        Flags_SetSwitch(globalCtx, this->switchFlag);
+        Flags_SetSwitch(globalCtx, self->switchFlag);
         gSaveContext.eventChkInf[2] |= 8;
 
-        func_808B5A78(this);
+        func_808B5A78(self);
     } else {
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->colliderCylinder.base);
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->colliderJntSph.base);
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->colliderJntSph.base);
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &self->colliderCylinder.base);
+        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &self->colliderJntSph.base);
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &self->colliderJntSph.base);
     }
 
     if (mREG(64) == 1) {
-        func_808B561C(this, globalCtx);
+        func_808B561C(self, globalCtx);
         mREG(64) = -10;
     } else if (mREG(64) < 0) {
         mREG(64)++;
     }
 }
 
-void func_808B5A78(BgSpot16Bombstone* this) {
-    this->unk_154 = 0;
-    this->unk_158 = 0;
-    this->actor.draw = NULL;
-    this->actionFunc = func_808B5A94;
+void func_808B5A78(BgSpot16Bombstone* self) {
+    self->unk_154 = 0;
+    self->unk_158 = 0;
+    self->actor.draw = NULL;
+    self->actionFunc = func_808B5A94;
 }
 
-void func_808B5A94(BgSpot16Bombstone* this, GlobalContext* globalCtx) {
+void func_808B5A94(BgSpot16Bombstone* self, GlobalContext* globalCtx) {
 
-    func_808B5240(this, globalCtx);
+    func_808B5240(self, globalCtx);
 
-    if (this->unk_154 == 56) {
+    if (self->unk_154 == 56) {
         func_80078884(NA_SE_SY_CORRECT_CHIME);
     }
 
-    if (this->unk_154 > 60) {
-        Actor_Kill(&this->actor);
+    if (self->unk_154 > 60) {
+        Actor_Kill(&self->actor);
     }
 }
 
-void func_808B5AF0(BgSpot16Bombstone* this) {
-    this->actionFunc = func_808B5B04;
-    this->actor.draw = NULL;
+void func_808B5AF0(BgSpot16Bombstone* self) {
+    self->actionFunc = func_808B5B04;
+    self->actor.draw = NULL;
 }
 
-void func_808B5B04(BgSpot16Bombstone* this, GlobalContext* globalCtx) {
-    if (Object_IsLoaded(&globalCtx->objectCtx, this->bombiwaBankIndex)) {
-        func_808B5B58(this);
-        this->actor.draw = BgSpot16Bombstone_Draw;
+void func_808B5B04(BgSpot16Bombstone* self, GlobalContext* globalCtx) {
+    if (Object_IsLoaded(&globalCtx->objectCtx, self->bombiwaBankIndex)) {
+        func_808B5B58(self);
+        self->actor.draw = BgSpot16Bombstone_Draw;
     }
 }
 
-void func_808B5B58(BgSpot16Bombstone* this) {
-    this->unk_154 = 0;
-    this->actionFunc = func_808B5B6C;
+void func_808B5B58(BgSpot16Bombstone* self) {
+    self->unk_154 = 0;
+    self->actionFunc = func_808B5B6C;
 }
 
-void func_808B5B6C(BgSpot16Bombstone* this, GlobalContext* globalCtx) {
-    Actor* actor = &this->actor;
+void func_808B5B6C(BgSpot16Bombstone* self, GlobalContext* globalCtx) {
+    Actor* actor = &self->actor;
 
     Actor_MoveForward(actor);
-    actor->shape.rot.x += this->unk_210;
-    actor->shape.rot.z += this->unk_212;
+    actor->shape.rot.x += self->unk_210;
+    actor->shape.rot.z += self->unk_212;
 
-    if (this->unk_154 > 60) {
+    if (self->unk_154 > 60) {
         Actor_Kill(actor);
         return;
     }
 
     if (actor->bgCheckFlags & 8 || (actor->bgCheckFlags & 1 && actor->velocity.y < 0.0f)) {
-        BgSpot16Bombstone_SpawnFragments(this, globalCtx);
-        BgSpot16Bombstone_SpawnDust(this, globalCtx);
+        BgSpot16Bombstone_SpawnFragments(self, globalCtx);
+        BgSpot16Bombstone_SpawnDust(self, globalCtx);
         Audio_PlaySoundAtPosition(globalCtx, &actor->world.pos, 20, NA_SE_EV_ROCK_BROKEN);
         Actor_Kill(actor);
         return;
@@ -523,16 +523,16 @@ void func_808B5B6C(BgSpot16Bombstone* this, GlobalContext* globalCtx) {
 }
 
 void BgSpot16Bombstone_Update(Actor* thisx, GlobalContext* globalCtx) {
-    BgSpot16Bombstone* this = THIS;
+    BgSpot16Bombstone* self = THIS;
 
-    this->unk_154++;
-    if (this->actionFunc != NULL) {
-        this->actionFunc(this, globalCtx);
+    self->unk_154++;
+    if (self->actionFunc != NULL) {
+        self->actionFunc(self, globalCtx);
     }
 }
 
 void BgSpot16Bombstone_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    BgSpot16Bombstone* this = THIS;
+    BgSpot16Bombstone* self = THIS;
     s32 pad;
 
     OPEN_DISPS(globalCtx->state.gfxCtx, "../z_bg_spot16_bombstone.c", 1253);
@@ -542,13 +542,13 @@ void BgSpot16Bombstone_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx, "../z_bg_spot16_bombstone.c", 1257),
               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    if (this->actor.params == 0xFF) {
+    if (self->actor.params == 0xFF) {
         // The boulder is intact
-        gSPDisplayList(POLY_OPA_DISP++, this->dList);
+        gSPDisplayList(POLY_OPA_DISP++, self->dList);
     } else {
         // The boulder is debris
-        gSPSegment(POLY_OPA_DISP++, 0x06, globalCtx->objectCtx.status[this->bombiwaBankIndex].segment);
-        gSPDisplayList(POLY_OPA_DISP++, this->dList);
+        gSPSegment(POLY_OPA_DISP++, 0x06, globalCtx->objectCtx.status[self->bombiwaBankIndex].segment);
+        gSPDisplayList(POLY_OPA_DISP++, self->dList);
     }
 
     CLOSE_DISPS(globalCtx->state.gfxCtx, "../z_bg_spot16_bombstone.c", 1274);

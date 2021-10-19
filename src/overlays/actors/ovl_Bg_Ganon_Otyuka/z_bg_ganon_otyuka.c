@@ -23,8 +23,8 @@ void BgGanonOtyuka_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgGanonOtyuka_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgGanonOtyuka_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void BgGanonOtyuka_WaitToFall(BgGanonOtyuka* this, GlobalContext* globalCtx);
-void BgGanonOtyuka_Fall(BgGanonOtyuka* this, GlobalContext* globalCtx);
+void BgGanonOtyuka_WaitToFall(BgGanonOtyuka* self, GlobalContext* globalCtx);
+void BgGanonOtyuka_Fall(BgGanonOtyuka* self, GlobalContext* globalCtx);
 void BgGanonOtyuka_DoNothing(Actor* thisx, GlobalContext* globalCtx);
 
 const ActorInit Bg_Ganon_Otyuka_InitVars = {
@@ -98,35 +98,35 @@ static CollisionHeader sColHeader = {
 };
 
 void BgGanonOtyuka_Init(Actor* thisx, GlobalContext* globalCtx) {
-    BgGanonOtyuka* this = THIS;
+    BgGanonOtyuka* self = THIS;
     s32 pad;
     CollisionHeader* colHeader = NULL;
 
     Actor_ProcessInitChain(thisx, sInitChain);
-    DynaPolyActor_Init(&this->dyna, DPM_UNK);
+    DynaPolyActor_Init(&self->dyna, DPM_UNK);
     CollisionHeader_GetVirtual(&sColHeader, &colHeader);
-    this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, thisx, colHeader);
+    self->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, thisx, colHeader);
 
     if (thisx->params != 0x23) {
         thisx->draw = NULL;
-        this->actionFunc = BgGanonOtyuka_WaitToFall;
+        self->actionFunc = BgGanonOtyuka_WaitToFall;
     } else {
         thisx->update = BgGanonOtyuka_DoNothing;
     }
 }
 
 void BgGanonOtyuka_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    BgGanonOtyuka* this = THIS;
+    BgGanonOtyuka* self = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, self->dyna.bgId);
 
     osSyncPrintf(VT_FGCOL(GREEN));
     osSyncPrintf("WHY !!!!!!!!!!!!!!!!\n");
     osSyncPrintf(VT_RST);
 }
 
-void BgGanonOtyuka_WaitToFall(BgGanonOtyuka* this, GlobalContext* globalCtx) {
-    Actor* thisx = &this->dyna.actor;
+void BgGanonOtyuka_WaitToFall(BgGanonOtyuka* self, GlobalContext* globalCtx) {
+    Actor* thisx = &self->dyna.actor;
     Actor* prop;
     BgGanonOtyuka* platform;
     f32 dx;
@@ -135,7 +135,7 @@ void BgGanonOtyuka_WaitToFall(BgGanonOtyuka* this, GlobalContext* globalCtx) {
     Vec3f center;
     s16 i;
 
-    if (this->isFalling || ((globalCtx->actorCtx.unk_02 != 0) && (this->dyna.actor.xyzDistToPlayerSq < 4900.0f))) {
+    if (self->isFalling || ((globalCtx->actorCtx.unk_02 != 0) && (self->dyna.actor.xyzDistToPlayerSq < 4900.0f))) {
         osSyncPrintf("OTC O 1\n");
 
         for (i = 0; i < ARRAY_COUNT(D_80876A68); i++) {
@@ -148,9 +148,9 @@ void BgGanonOtyuka_WaitToFall(BgGanonOtyuka* this, GlobalContext* globalCtx) {
 
                 platform = (BgGanonOtyuka*)prop;
 
-                dx = platform->dyna.actor.world.pos.x - this->dyna.actor.world.pos.x + D_80876A68[i].x;
-                dy = platform->dyna.actor.world.pos.y - this->dyna.actor.world.pos.y;
-                dz = platform->dyna.actor.world.pos.z - this->dyna.actor.world.pos.z + D_80876A68[i].z;
+                dx = platform->dyna.actor.world.pos.x - self->dyna.actor.world.pos.x + D_80876A68[i].x;
+                dy = platform->dyna.actor.world.pos.y - self->dyna.actor.world.pos.y;
+                dz = platform->dyna.actor.world.pos.z - self->dyna.actor.world.pos.z + D_80876A68[i].z;
 
                 if ((fabsf(dx) < 10.0f) && (fabsf(dy) < 10.0f) && (fabsf(dz) < 10.0f)) {
                     platform->visibleSides |= sSides[i];
@@ -164,31 +164,31 @@ void BgGanonOtyuka_WaitToFall(BgGanonOtyuka* this, GlobalContext* globalCtx) {
         osSyncPrintf("OTC O 2\n");
 
         for (i = 0; i < ARRAY_COUNT(D_80876A68); i++) {
-            center.x = this->dyna.actor.world.pos.x + D_80876A68[i].x;
-            center.y = this->dyna.actor.world.pos.y;
-            center.z = this->dyna.actor.world.pos.z + D_80876A68[i].z;
+            center.x = self->dyna.actor.world.pos.x + D_80876A68[i].x;
+            center.y = self->dyna.actor.world.pos.y;
+            center.z = self->dyna.actor.world.pos.z + D_80876A68[i].z;
             if (BgCheck_SphVsFirstPoly(&globalCtx->colCtx, &center, 50.0f)) {
-                this->unwalledSides |= sSides[i];
+                self->unwalledSides |= sSides[i];
             }
         }
 
         osSyncPrintf("OTC O 3\n");
 
-        this->actionFunc = BgGanonOtyuka_Fall;
-        this->isFalling = true;
-        this->dropTimer = 20;
-        this->flashState = FLASH_GROW;
-        this->flashTimer = 0;
-        this->flashPrimColorR = 255.0f;
-        this->flashPrimColorG = 255.0f;
-        this->flashPrimColorB = 255.0f;
-        this->flashEnvColorR = 255.0f;
-        this->flashEnvColorG = 255.0f;
-        this->flashEnvColorB = 0.0f;
+        self->actionFunc = BgGanonOtyuka_Fall;
+        self->isFalling = true;
+        self->dropTimer = 20;
+        self->flashState = FLASH_GROW;
+        self->flashTimer = 0;
+        self->flashPrimColorR = 255.0f;
+        self->flashPrimColorG = 255.0f;
+        self->flashPrimColorB = 255.0f;
+        self->flashEnvColorR = 255.0f;
+        self->flashEnvColorG = 255.0f;
+        self->flashEnvColorB = 0.0f;
     }
 }
 
-void BgGanonOtyuka_Fall(BgGanonOtyuka* this, GlobalContext* globalCtx) {
+void BgGanonOtyuka_Fall(BgGanonOtyuka* self, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s16 i;
     Vec3f pos;
@@ -196,67 +196,67 @@ void BgGanonOtyuka_Fall(BgGanonOtyuka* this, GlobalContext* globalCtx) {
     Vec3f accel;
 
     osSyncPrintf("MODE DOWN\n");
-    if (this->flashState == FLASH_GROW) {
-        Math_ApproachF(&this->flashPrimColorB, 170.0f, 1.0f, 8.5f);
-        Math_ApproachF(&this->flashEnvColorR, 120.0f, 1.0f, 13.5f);
-        Math_ApproachF(&this->flashYScale, 2.5f, 1.0f, 0.25f);
-        if (this->flashYScale == 2.5f) {
-            this->flashState = FLASH_SHRINK;
+    if (self->flashState == FLASH_GROW) {
+        Math_ApproachF(&self->flashPrimColorB, 170.0f, 1.0f, 8.5f);
+        Math_ApproachF(&self->flashEnvColorR, 120.0f, 1.0f, 13.5f);
+        Math_ApproachF(&self->flashYScale, 2.5f, 1.0f, 0.25f);
+        if (self->flashYScale == 2.5f) {
+            self->flashState = FLASH_SHRINK;
         }
-    } else if (this->flashState == FLASH_SHRINK) {
-        Math_ApproachF(&this->flashPrimColorG, 0.0f, 1.0f, 25.5f);
-        Math_ApproachF(&this->flashEnvColorR, 0.0f, 1.0f, 12.0f);
-        Math_ApproachF(&this->flashEnvColorG, 0.0f, 1.0f, 25.5f);
-        Math_ApproachZeroF(&this->flashYScale, 1.0f, 0.25f);
-        if (this->flashYScale == 0.0f) {
-            this->flashState = FLASH_NONE;
+    } else if (self->flashState == FLASH_SHRINK) {
+        Math_ApproachF(&self->flashPrimColorG, 0.0f, 1.0f, 25.5f);
+        Math_ApproachF(&self->flashEnvColorR, 0.0f, 1.0f, 12.0f);
+        Math_ApproachF(&self->flashEnvColorG, 0.0f, 1.0f, 25.5f);
+        Math_ApproachZeroF(&self->flashYScale, 1.0f, 0.25f);
+        if (self->flashYScale == 0.0f) {
+            self->flashState = FLASH_NONE;
         }
     }
-    if (this->dropTimer == 0) {
-        this->flashYScale = 0.0f;
-        Math_ApproachF(&this->dyna.actor.world.pos.y, -1000.0f, 1.0f, this->dyna.actor.speedXZ);
-        Math_ApproachF(&this->dyna.actor.speedXZ, 100.0f, 1.0f, 2.0f);
-        if (!(this->unwalledSides & OTYUKA_SIDE_EAST)) {
-            this->dyna.actor.shape.rot.z -= (s16)(this->dyna.actor.speedXZ * 30.0f);
+    if (self->dropTimer == 0) {
+        self->flashYScale = 0.0f;
+        Math_ApproachF(&self->dyna.actor.world.pos.y, -1000.0f, 1.0f, self->dyna.actor.speedXZ);
+        Math_ApproachF(&self->dyna.actor.speedXZ, 100.0f, 1.0f, 2.0f);
+        if (!(self->unwalledSides & OTYUKA_SIDE_EAST)) {
+            self->dyna.actor.shape.rot.z -= (s16)(self->dyna.actor.speedXZ * 30.0f);
         }
-        if (!(this->unwalledSides & OTYUKA_SIDE_WEST)) {
-            this->dyna.actor.shape.rot.z += (s16)(this->dyna.actor.speedXZ * 30.0f);
+        if (!(self->unwalledSides & OTYUKA_SIDE_WEST)) {
+            self->dyna.actor.shape.rot.z += (s16)(self->dyna.actor.speedXZ * 30.0f);
         }
-        if (!(this->unwalledSides & OTYUKA_SIDE_SOUTH)) {
-            this->dyna.actor.shape.rot.x += (s16)(this->dyna.actor.speedXZ * 30.0f);
+        if (!(self->unwalledSides & OTYUKA_SIDE_SOUTH)) {
+            self->dyna.actor.shape.rot.x += (s16)(self->dyna.actor.speedXZ * 30.0f);
         }
-        if (!(this->unwalledSides & OTYUKA_SIDE_NORTH)) {
-            this->dyna.actor.shape.rot.x -= (s16)(this->dyna.actor.speedXZ * 30.0f);
+        if (!(self->unwalledSides & OTYUKA_SIDE_NORTH)) {
+            self->dyna.actor.shape.rot.x -= (s16)(self->dyna.actor.speedXZ * 30.0f);
         }
-        if (this->dyna.actor.world.pos.y < -750.0f) {
+        if (self->dyna.actor.world.pos.y < -750.0f) {
             if (player->actor.world.pos.y < -400.0f) {
                 accel.x = accel.z = 0.0f;
                 accel.y = 0.1f;
                 velocity.x = velocity.y = velocity.z = 0.0f;
 
                 for (i = 0; i < 30; i++) {
-                    pos.x = Rand_CenteredFloat(150.0f) + this->dyna.actor.world.pos.x;
+                    pos.x = Rand_CenteredFloat(150.0f) + self->dyna.actor.world.pos.x;
                     pos.y = Rand_ZeroFloat(60.0f) + -750.0f;
-                    pos.z = Rand_CenteredFloat(150.0f) + this->dyna.actor.world.pos.z;
+                    pos.z = Rand_CenteredFloat(150.0f) + self->dyna.actor.world.pos.z;
                     func_8002836C(globalCtx, &pos, &velocity, &accel, &sDustPrimColor, &sDustEnvColor,
                                   (s16)Rand_ZeroFloat(100.0f) + 250, 5, (s16)Rand_ZeroFloat(5.0f) + 15);
                 }
 
                 func_80033DB8(globalCtx, 10, 15);
-                Audio_PlaySoundAtPosition(globalCtx, &this->dyna.actor.world.pos, 0x28, NA_SE_EV_BOX_BREAK);
+                Audio_PlaySoundAtPosition(globalCtx, &self->dyna.actor.world.pos, 0x28, NA_SE_EV_BOX_BREAK);
             }
-            Actor_Kill(&this->dyna.actor);
+            Actor_Kill(&self->dyna.actor);
         }
     } else {
-        if (this->dropTimer == 1) {
-            Audio_PlaySoundGeneral(NA_SE_EV_STONEDOOR_STOP, &this->dyna.actor.projectedPos, 4, &D_801333E0, &D_801333E0,
+        if (self->dropTimer == 1) {
+            Audio_PlaySoundGeneral(NA_SE_EV_STONEDOOR_STOP, &self->dyna.actor.projectedPos, 4, &D_801333E0, &D_801333E0,
                                    &D_801333E8);
         } else {
-            Audio_PlaySoundGeneral(NA_SE_EV_BLOCKSINK - SFX_FLAG, &this->dyna.actor.projectedPos, 4, &D_801333E0,
+            Audio_PlaySoundGeneral(NA_SE_EV_BLOCKSINK - SFX_FLAG, &self->dyna.actor.projectedPos, 4, &D_801333E0,
                                    &D_801333E0, &D_801333E8);
         }
-        Math_ApproachF(&this->dyna.actor.world.pos.y, -1000.0f, 1.0f, this->dyna.actor.speedXZ);
-        Math_ApproachF(&this->dyna.actor.speedXZ, 100.0f, 1.0f, 0.1f);
+        Math_ApproachF(&self->dyna.actor.world.pos.y, -1000.0f, 1.0f, self->dyna.actor.speedXZ);
+        Math_ApproachF(&self->dyna.actor.speedXZ, 100.0f, 1.0f, 0.1f);
     }
     osSyncPrintf("MODE DOWN END\n");
 }
@@ -265,17 +265,17 @@ void BgGanonOtyuka_DoNothing(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void BgGanonOtyuka_Update(Actor* thisx, GlobalContext* globalCtx) {
-    BgGanonOtyuka* this = THIS;
+    BgGanonOtyuka* self = THIS;
 
-    this->actionFunc(this, globalCtx);
-    this->flashTimer++;
-    if (this->dropTimer != 0) {
-        this->dropTimer--;
+    self->actionFunc(self, globalCtx);
+    self->flashTimer++;
+    if (self->dropTimer != 0) {
+        self->dropTimer--;
     }
 }
 
 void BgGanonOtyuka_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    BgGanonOtyuka* this = THIS;
+    BgGanonOtyuka* self = THIS;
     s16 i;
     Gfx* phi_s2;
     Gfx* phi_s1;

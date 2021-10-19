@@ -1,50 +1,50 @@
 #include "global.h"
 
-void GameAlloc_Log(GameAlloc* this) {
+void GameAlloc_Log(GameAlloc* self) {
     GameAllocEntry* iter;
 
-    osSyncPrintf("this = %08x\n", this);
+    osSyncPrintf("self = %08x\n", self);
 
-    iter = this->base.next;
-    while (iter != &this->base) {
+    iter = self->base.next;
+    while (iter != &self->base) {
         osSyncPrintf("ptr = %08x size = %d\n", iter, iter->size);
         iter = iter->next;
     }
 }
 
-void* GameAlloc_MallocDebug(GameAlloc* this, u32 size, const char* file, s32 line) {
+void* GameAlloc_MallocDebug(GameAlloc* self, u32 size, const char* file, s32 line) {
     GameAllocEntry* ptr = SystemArena_MallocDebug(size + sizeof(GameAllocEntry), file, line);
 
     if (ptr != NULL) {
         ptr->size = size;
-        ptr->prev = this->head;
-        this->head->next = ptr;
-        this->head = ptr;
-        ptr->next = &this->base;
-        this->base.prev = this->head;
+        ptr->prev = self->head;
+        self->head->next = ptr;
+        self->head = ptr;
+        ptr->next = &self->base;
+        self->base.prev = self->head;
         return ptr + 1;
     } else {
         return NULL;
     }
 }
 
-void* GameAlloc_Malloc(GameAlloc* this, u32 size) {
+void* GameAlloc_Malloc(GameAlloc* self, u32 size) {
     GameAllocEntry* ptr = SystemArena_MallocDebug(size + sizeof(GameAllocEntry), "../gamealloc.c", 93);
 
     if (ptr != NULL) {
         ptr->size = size;
-        ptr->prev = this->head;
-        this->head->next = ptr;
-        this->head = ptr;
-        ptr->next = &this->base;
-        this->base.prev = this->head;
+        ptr->prev = self->head;
+        self->head->next = ptr;
+        self->head = ptr;
+        ptr->next = &self->base;
+        self->base.prev = self->head;
         return ptr + 1;
     } else {
         return NULL;
     }
 }
 
-void GameAlloc_Free(GameAlloc* this, void* data) {
+void GameAlloc_Free(GameAlloc* self, void* data) {
     GameAllocEntry* ptr;
 
     if (data != NULL) {
@@ -53,28 +53,28 @@ void GameAlloc_Free(GameAlloc* this, void* data) {
         LogUtils_CheckNullPointer("ptr->next", ptr->next, "../gamealloc.c", 121);
         ptr->prev->next = ptr->next;
         ptr->next->prev = ptr->prev;
-        this->head = this->base.prev;
+        self->head = self->base.prev;
         SystemArena_FreeDebug(ptr, "../gamealloc.c", 125);
     }
 }
 
-void GameAlloc_Cleanup(GameAlloc* this) {
-    GameAllocEntry* next = this->base.next;
+void GameAlloc_Cleanup(GameAlloc* self) {
+    GameAllocEntry* next = self->base.next;
     GameAllocEntry* cur;
 
-    while (&this->base != next) {
+    while (&self->base != next) {
         cur = next;
         next = next->next;
         SystemArena_FreeDebug(cur, "../gamealloc.c", 145);
     }
 
-    this->head = &this->base;
-    this->base.next = &this->base;
-    this->base.prev = &this->base;
+    self->head = &self->base;
+    self->base.next = &self->base;
+    self->base.prev = &self->base;
 }
 
-void GameAlloc_Init(GameAlloc* this) {
-    this->head = &this->base;
-    this->base.next = &this->base;
-    this->base.prev = &this->base;
+void GameAlloc_Init(GameAlloc* self) {
+    self->head = &self->base;
+    self->base.next = &self->base;
+    self->base.prev = &self->base;
 }

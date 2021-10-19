@@ -3,7 +3,7 @@
  *
  * DEFINE_OBJECT should be used for normal objects
  *    - Argument 1: Name of the object segment in spec
- *    - Argument 2: Enum value for this object
+ *    - Argument 2: Enum value for self object
  *
  * DEFINE_OBJECT_UNSET and DEFINE_OBJECT_NULL are needed to define empty entries from the original game
  */

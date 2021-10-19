@@ -17,14 +17,14 @@ void BgTreemouth_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgTreemouth_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgTreemouth_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_808BC65C(BgTreemouth* this, GlobalContext* globalCtx);
-void func_808BC6F8(BgTreemouth* this, GlobalContext* globalCtx);
-void func_808BC80C(BgTreemouth* this, GlobalContext* globalCtx);
-void func_808BC864(BgTreemouth* this, GlobalContext* globalCtx);
-void BgTreemouth_DoNothing(BgTreemouth* this, GlobalContext* globalCtx);
-void func_808BC8B8(BgTreemouth* this, GlobalContext* globalCtx);
-void func_808BC9EC(BgTreemouth* this, GlobalContext* globalCtx);
-void func_808BCAF0(BgTreemouth* this, GlobalContext* globalCtx);
+void func_808BC65C(BgTreemouth* self, GlobalContext* globalCtx);
+void func_808BC6F8(BgTreemouth* self, GlobalContext* globalCtx);
+void func_808BC80C(BgTreemouth* self, GlobalContext* globalCtx);
+void func_808BC864(BgTreemouth* self, GlobalContext* globalCtx);
+void BgTreemouth_DoNothing(BgTreemouth* self, GlobalContext* globalCtx);
+void func_808BC8B8(BgTreemouth* self, GlobalContext* globalCtx);
+void func_808BC9EC(BgTreemouth* self, GlobalContext* globalCtx);
+void func_808BCAF0(BgTreemouth* self, GlobalContext* globalCtx);
 
 extern CutsceneData D_808BCE20[];
 extern CutsceneData D_808BD2A0[];
@@ -56,64 +56,64 @@ static f32 D_808BD9C4[] = {
     -2746.0f, 545.0f, 4694.0f, -2654.0f, 146.0f, 4534.0f,
 };
 
-void BgTreemouth_SetupAction(BgTreemouth* this, BgTreemouthActionFunc actionFunc) {
-    this->actionFunc = actionFunc;
+void BgTreemouth_SetupAction(BgTreemouth* self, BgTreemouthActionFunc actionFunc) {
+    self->actionFunc = actionFunc;
 }
 
 void BgTreemouth_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
-    BgTreemouth* this = THIS;
+    BgTreemouth* self = THIS;
     CollisionHeader* colHeader = NULL;
 
     Actor_ProcessInitChain(thisx, sInitChain);
-    DynaPolyActor_Init(&this->dyna, DPM_UNK);
+    DynaPolyActor_Init(&self->dyna, DPM_UNK);
     CollisionHeader_GetVirtual(&gDekuTreeMouthCol, &colHeader);
-    this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, thisx, colHeader);
+    self->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, thisx, colHeader);
     ActorShape_Init(&thisx->shape, 0.0f, NULL, 0.0f);
     Actor_SetFocus(thisx, 50.0f);
 
     if ((gSaveContext.sceneSetupIndex < 4) && !LINK_IS_ADULT) {
-        BgTreemouth_SetupAction(this, func_808BC8B8);
+        BgTreemouth_SetupAction(self, func_808BC8B8);
     } else if (LINK_IS_ADULT || (gSaveContext.sceneSetupIndex == 7)) {
-        this->unk_168 = 0.0f;
-        BgTreemouth_SetupAction(this, BgTreemouth_DoNothing);
+        self->unk_168 = 0.0f;
+        BgTreemouth_SetupAction(self, BgTreemouth_DoNothing);
     } else {
-        this->unk_168 = 1.0f;
-        BgTreemouth_SetupAction(this, func_808BC6F8);
+        self->unk_168 = 1.0f;
+        BgTreemouth_SetupAction(self, func_808BC6F8);
     }
 
     thisx->textId = 0x905;
 }
 
 void BgTreemouth_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    BgTreemouth* this = THIS;
+    BgTreemouth* self = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, self->dyna.bgId);
 }
 
-void func_808BC65C(BgTreemouth* this, GlobalContext* globalCtx) {
+void func_808BC65C(BgTreemouth* self, GlobalContext* globalCtx) {
     CsCmdActorAction* npcAction;
 
     if ((globalCtx->csCtx.state != CS_STATE_IDLE)) {
         npcAction = globalCtx->csCtx.npcActions[0];
         if (npcAction != NULL) {
             if (npcAction->action == 2) {
-                BgTreemouth_SetupAction(this, func_808BC80C);
+                BgTreemouth_SetupAction(self, func_808BC80C);
             } else if (npcAction->action == 3) {
                 Audio_PlaySoundGeneral(NA_SE_EV_WOODDOOR_OPEN, &D_801333D4, 4, &D_801333E0, &D_801333E0, &D_801333E8);
-                BgTreemouth_SetupAction(this, func_808BC6F8);
+                BgTreemouth_SetupAction(self, func_808BC6F8);
             }
         }
     }
 }
 
-void func_808BC6F8(BgTreemouth* this, GlobalContext* globalCtx) {
+void func_808BC6F8(BgTreemouth* self, GlobalContext* globalCtx) {
     Vec3f sp34;
 
-    if (this->unk_168 < 1.0f) {
-        this->unk_168 += 0.01f;
+    if (self->unk_168 < 1.0f) {
+        self->unk_168 += 0.01f;
     } else {
-        this->unk_168 = 1.0f;
+        self->unk_168 = 1.0f;
     }
 
     if ((gSaveContext.sceneSetupIndex == 6) && (globalCtx->csCtx.frames >= 0x2BD) &&
@@ -125,50 +125,50 @@ void func_808BC6F8(BgTreemouth* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_808BC80C(BgTreemouth* this, GlobalContext* globalCtx) {
-    this->unk_168 += 0.05f;
-    if (this->unk_168 >= 0.8f) {
-        BgTreemouth_SetupAction(this, func_808BC864);
+void func_808BC80C(BgTreemouth* self, GlobalContext* globalCtx) {
+    self->unk_168 += 0.05f;
+    if (self->unk_168 >= 0.8f) {
+        BgTreemouth_SetupAction(self, func_808BC864);
     }
 }
 
-void func_808BC864(BgTreemouth* this, GlobalContext* globalCtx) {
-    this->unk_168 -= 0.03f;
-    if (this->unk_168 <= 0.0f) {
-        BgTreemouth_SetupAction(this, func_808BC65C);
+void func_808BC864(BgTreemouth* self, GlobalContext* globalCtx) {
+    self->unk_168 -= 0.03f;
+    if (self->unk_168 <= 0.0f) {
+        BgTreemouth_SetupAction(self, func_808BC65C);
     }
 }
 
-void func_808BC8B8(BgTreemouth* this, GlobalContext* globalCtx) {
+void func_808BC8B8(BgTreemouth* self, GlobalContext* globalCtx) {
     if ((!(Flags_GetEventChkInf(5))) || LINK_IS_ADULT) {
         if (!LINK_IS_ADULT) {
             if (Flags_GetEventChkInf(0xC)) {
-                if (Actor_IsFacingAndNearPlayer(&this->dyna.actor, 1658.0f, 0x7530)) {
-                    this->dyna.actor.flags |= 1;
-                    if (this->dyna.actor.isTargeted) {
-                        this->dyna.actor.flags &= ~1;
+                if (Actor_IsFacingAndNearPlayer(&self->dyna.actor, 1658.0f, 0x7530)) {
+                    self->dyna.actor.flags |= 1;
+                    if (self->dyna.actor.isTargeted) {
+                        self->dyna.actor.flags &= ~1;
                         globalCtx->csCtx.segment = D_808BD2A0;
                         gSaveContext.cutsceneTrigger = 1;
-                        BgTreemouth_SetupAction(this, func_808BC9EC);
+                        BgTreemouth_SetupAction(self, func_808BC9EC);
                     }
                 }
-            } else if (Actor_IsFacingAndNearPlayer(&this->dyna.actor, 1658.0f, 0x4E20)) {
+            } else if (Actor_IsFacingAndNearPlayer(&self->dyna.actor, 1658.0f, 0x4E20)) {
                 Flags_SetEventChkInf(0xC);
                 globalCtx->csCtx.segment = D_808BCE20;
                 gSaveContext.cutsceneTrigger = 1;
-                BgTreemouth_SetupAction(this, func_808BC9EC);
+                BgTreemouth_SetupAction(self, func_808BC9EC);
             }
         }
     } else {
-        this->unk_168 = 1.0f;
+        self->unk_168 = 1.0f;
     }
 }
 
-void func_808BC9EC(BgTreemouth* this, GlobalContext* globalCtx) {
+void func_808BC9EC(BgTreemouth* self, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if (globalCtx->csCtx.state == CS_STATE_UNSKIPPABLE_INIT) {
-        if (Actor_IsFacingAndNearPlayer(&this->dyna.actor, 350.0f, 0x7530)) {
+        if (Actor_IsFacingAndNearPlayer(&self->dyna.actor, 350.0f, 0x7530)) {
             player->actor.world.pos.x = 3827.0f;
             player->actor.world.pos.y = -161.0f;
             player->actor.world.pos.z = -1142.0f;
@@ -186,40 +186,40 @@ void func_808BC9EC(BgTreemouth* this, GlobalContext* globalCtx) {
         if (globalCtx->msgCtx.choiceIndex == 0) {
             globalCtx->csCtx.segment = D_808BD520;
             Flags_SetEventChkInf(5);
-            BgTreemouth_SetupAction(this, func_808BCAF0);
+            BgTreemouth_SetupAction(self, func_808BCAF0);
         } else {
             globalCtx->csCtx.segment = D_808BD790;
             globalCtx->csCtx.frames = 0;
-            BgTreemouth_SetupAction(this, func_808BC8B8);
+            BgTreemouth_SetupAction(self, func_808BC8B8);
         }
     }
 }
 
-void func_808BCAF0(BgTreemouth* this, GlobalContext* globalCtx) {
+void func_808BCAF0(BgTreemouth* self, GlobalContext* globalCtx) {
     CsCmdActorAction* npcAction;
 
     if (globalCtx->csCtx.state != CS_STATE_IDLE) {
         npcAction = globalCtx->csCtx.npcActions[0];
         if (npcAction != NULL) {
             if (npcAction->action == 2) {
-                BgTreemouth_SetupAction(this, func_808BC80C);
+                BgTreemouth_SetupAction(self, func_808BC80C);
             } else if (npcAction->action == 3) {
                 Audio_PlaySoundGeneral(NA_SE_EV_WOODDOOR_OPEN, &D_801333D4, 4, &D_801333E0, &D_801333E0, &D_801333E8);
-                BgTreemouth_SetupAction(this, func_808BC6F8);
+                BgTreemouth_SetupAction(self, func_808BC6F8);
             }
         }
     }
 }
 
-void BgTreemouth_DoNothing(BgTreemouth* this, GlobalContext* globalCtx) {
+void BgTreemouth_DoNothing(BgTreemouth* self, GlobalContext* globalCtx) {
 }
 
 void BgTreemouth_Update(Actor* thisx, GlobalContext* globalCtx) {
-    BgTreemouth* this = THIS;
+    BgTreemouth* self = THIS;
     f32 unk_168;
 
-    this->actionFunc(this, globalCtx);
-    unk_168 = this->unk_168;
+    self->actionFunc(self, globalCtx);
+    unk_168 = self->unk_168;
     thisx->world.pos.x = (unk_168 * -160.0f) + 4029.0f;
     thisx->world.pos.y = (unk_168 * -399.0f) + 136.0f;
     thisx->world.pos.z = (unk_168 * 92.0f) + -1255.0f;

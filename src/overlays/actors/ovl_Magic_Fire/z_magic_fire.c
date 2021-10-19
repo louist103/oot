@@ -319,20 +319,20 @@ static u8 sVertexIndices[] = {
 };
 
 void MagicFire_Init(Actor* thisx, GlobalContext* globalCtx) {
-    MagicFire* this = THIS;
+    MagicFire* self = THIS;
 
-    Actor_ProcessInitChain(&this->actor, sInitChain);
-    this->action = 0;
-    this->screenTintBehaviour = 0;
-    this->actionTimer = 0;
-    this->alphaMultiplier = -3.0f;
-    Actor_SetScale(&this->actor, 0.0f);
-    Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
-    Collider_UpdateCylinder(&this->actor, &this->collider);
-    this->actor.update = MagicFire_UpdateBeforeCast;
-    this->actionTimer = 20;
-    this->actor.room = -1;
+    Actor_ProcessInitChain(&self->actor, sInitChain);
+    self->action = 0;
+    self->screenTintBehaviour = 0;
+    self->actionTimer = 0;
+    self->alphaMultiplier = -3.0f;
+    Actor_SetScale(&self->actor, 0.0f);
+    Collider_InitCylinder(globalCtx, &self->collider);
+    Collider_SetCylinder(globalCtx, &self->collider, &self->actor, &sCylinderInit);
+    Collider_UpdateCylinder(&self->actor, &self->collider);
+    self->actor.update = MagicFire_UpdateBeforeCast;
+    self->actionTimer = 20;
+    self->actor.room = -1;
 }
 
 void MagicFire_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -340,137 +340,137 @@ void MagicFire_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void MagicFire_UpdateBeforeCast(Actor* thisx, GlobalContext* globalCtx) {
-    MagicFire* this = THIS;
+    MagicFire* self = THIS;
     Player* player = GET_PLAYER(globalCtx);
 
     if ((globalCtx->msgCtx.msgMode == 0xD) || (globalCtx->msgCtx.msgMode == 0x11)) {
-        Actor_Kill(&this->actor);
+        Actor_Kill(&self->actor);
         return;
     }
-    if (this->actionTimer > 0) {
-        this->actionTimer--;
+    if (self->actionTimer > 0) {
+        self->actionTimer--;
     } else {
-        this->actor.update = MagicFire_Update;
+        self->actor.update = MagicFire_Update;
         func_8002F7DC(&player->actor, NA_SE_PL_MAGIC_FIRE);
     }
-    this->actor.world.pos = player->actor.world.pos;
+    self->actor.world.pos = player->actor.world.pos;
 }
 
 void MagicFire_Update(Actor* thisx, GlobalContext* globalCtx) {
-    MagicFire* this = THIS;
+    MagicFire* self = THIS;
     Player* player = GET_PLAYER(globalCtx);
     s32 pad;
 
     if (1) {}
-    this->actor.world.pos = player->actor.world.pos;
+    self->actor.world.pos = player->actor.world.pos;
     if ((globalCtx->msgCtx.msgMode == 0xD) || (globalCtx->msgCtx.msgMode == 0x11)) {
-        Actor_Kill(&this->actor);
+        Actor_Kill(&self->actor);
         return;
     }
-    if (this->action == DF_ACTION_EXPAND_SLOWLY) {
-        this->collider.info.toucher.damage = this->actionTimer + 25;
-    } else if (this->action == DF_ACTION_STOP_EXPANDING) {
-        this->collider.info.toucher.damage = this->actionTimer;
+    if (self->action == DF_ACTION_EXPAND_SLOWLY) {
+        self->collider.info.toucher.damage = self->actionTimer + 25;
+    } else if (self->action == DF_ACTION_STOP_EXPANDING) {
+        self->collider.info.toucher.damage = self->actionTimer;
     }
-    Collider_UpdateCylinder(&this->actor, &this->collider);
-    this->collider.dim.radius = (this->actor.scale.x * 325.0f);
-    this->collider.dim.height = (this->actor.scale.y * 450.0f);
-    this->collider.dim.yShift = (this->actor.scale.y * -225.0f);
-    CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    Collider_UpdateCylinder(&self->actor, &self->collider);
+    self->collider.dim.radius = (self->actor.scale.x * 325.0f);
+    self->collider.dim.height = (self->actor.scale.y * 450.0f);
+    self->collider.dim.yShift = (self->actor.scale.y * -225.0f);
+    CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
 
-    switch (this->action) {
+    switch (self->action) {
         case DF_ACTION_INITIALIZE:
-            this->actionTimer = 30;
-            this->actor.scale.x = this->actor.scale.y = this->actor.scale.z = 0.0f;
-            this->actor.world.rot.x = this->actor.world.rot.y = this->actor.world.rot.z = 0;
-            this->actor.shape.rot.x = this->actor.shape.rot.y = this->actor.shape.rot.z = 0;
-            this->alphaMultiplier = 0.0f;
-            this->scalingSpeed = 0.08f;
-            this->action++;
+            self->actionTimer = 30;
+            self->actor.scale.x = self->actor.scale.y = self->actor.scale.z = 0.0f;
+            self->actor.world.rot.x = self->actor.world.rot.y = self->actor.world.rot.z = 0;
+            self->actor.shape.rot.x = self->actor.shape.rot.y = self->actor.shape.rot.z = 0;
+            self->alphaMultiplier = 0.0f;
+            self->scalingSpeed = 0.08f;
+            self->action++;
             break;
         case DF_ACTION_EXPAND_SLOWLY: // Fire sphere slowly expands out of player for 30 frames
-            Math_StepToF(&this->alphaMultiplier, 1.0f, 1.0f / 30.0f);
-            if (this->actionTimer > 0) {
-                Math_SmoothStepToF(&this->actor.scale.x, 0.4f, this->scalingSpeed, 0.1f, 0.001f);
-                this->actor.scale.y = this->actor.scale.z = this->actor.scale.x;
+            Math_StepToF(&self->alphaMultiplier, 1.0f, 1.0f / 30.0f);
+            if (self->actionTimer > 0) {
+                Math_SmoothStepToF(&self->actor.scale.x, 0.4f, self->scalingSpeed, 0.1f, 0.001f);
+                self->actor.scale.y = self->actor.scale.z = self->actor.scale.x;
             } else {
-                this->actionTimer = 25;
-                this->action++;
+                self->actionTimer = 25;
+                self->action++;
             }
             break;
         case DF_ACTION_STOP_EXPANDING: // Sphere stops expanding and maintains size for 25 frames
-            if (this->actionTimer <= 0) {
-                this->actionTimer = 15;
-                this->action++;
-                this->scalingSpeed = 0.05f;
+            if (self->actionTimer <= 0) {
+                self->actionTimer = 15;
+                self->action++;
+                self->scalingSpeed = 0.05f;
             }
             break;
         case DF_ACTION_EXPAND_QUICKLY: // Sphere beings to grow again and quickly expands out until killed
-            this->alphaMultiplier -= 8.0f / 119.000008f;
-            this->actor.scale.x += this->scalingSpeed;
-            this->actor.scale.y += this->scalingSpeed;
-            this->actor.scale.z += this->scalingSpeed;
-            if (this->alphaMultiplier <= 0.0f) {
-                this->action = 0;
-                Actor_Kill(&this->actor);
+            self->alphaMultiplier -= 8.0f / 119.000008f;
+            self->actor.scale.x += self->scalingSpeed;
+            self->actor.scale.y += self->scalingSpeed;
+            self->actor.scale.z += self->scalingSpeed;
+            if (self->alphaMultiplier <= 0.0f) {
+                self->action = 0;
+                Actor_Kill(&self->actor);
             }
             break;
     }
-    switch (this->screenTintBehaviour) {
+    switch (self->screenTintBehaviour) {
         case DF_SCREEN_TINT_NONE:
-            if (this->screenTintBehaviourTimer <= 0) {
-                this->screenTintBehaviourTimer = 20;
-                this->screenTintBehaviour = DF_SCREEN_TINT_FADE_IN;
+            if (self->screenTintBehaviourTimer <= 0) {
+                self->screenTintBehaviourTimer = 20;
+                self->screenTintBehaviour = DF_SCREEN_TINT_FADE_IN;
             }
             break;
         case DF_SCREEN_TINT_FADE_IN:
-            this->screenTintIntensity = 1.0f - (this->screenTintBehaviourTimer / 20.0f);
-            if (this->screenTintBehaviourTimer <= 0) {
-                this->screenTintBehaviourTimer = 45;
-                this->screenTintBehaviour = DF_SCREEN_TINT_MAINTAIN;
+            self->screenTintIntensity = 1.0f - (self->screenTintBehaviourTimer / 20.0f);
+            if (self->screenTintBehaviourTimer <= 0) {
+                self->screenTintBehaviourTimer = 45;
+                self->screenTintBehaviour = DF_SCREEN_TINT_MAINTAIN;
             }
             break;
         case DF_SCREEN_TINT_MAINTAIN:
-            if (this->screenTintBehaviourTimer <= 0) {
-                this->screenTintBehaviourTimer = 5;
-                this->screenTintBehaviour = DF_SCREEN_TINT_FADE_OUT;
+            if (self->screenTintBehaviourTimer <= 0) {
+                self->screenTintBehaviourTimer = 5;
+                self->screenTintBehaviour = DF_SCREEN_TINT_FADE_OUT;
             }
             break;
         case DF_SCREEN_TINT_FADE_OUT:
-            this->screenTintIntensity = (this->screenTintBehaviourTimer / 5.0f);
-            if (this->screenTintBehaviourTimer <= 0) {
-                this->screenTintBehaviour = DF_SCREEN_TINT_FINISHED;
+            self->screenTintIntensity = (self->screenTintBehaviourTimer / 5.0f);
+            if (self->screenTintBehaviourTimer <= 0) {
+                self->screenTintBehaviour = DF_SCREEN_TINT_FINISHED;
             }
             break;
     }
-    if (this->actionTimer > 0) {
-        this->actionTimer--;
+    if (self->actionTimer > 0) {
+        self->actionTimer--;
     }
-    if (this->screenTintBehaviourTimer > 0) {
-        this->screenTintBehaviourTimer--;
+    if (self->screenTintBehaviourTimer > 0) {
+        self->screenTintBehaviourTimer--;
     }
 }
 
 void MagicFire_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    MagicFire* this = THIS;
+    MagicFire* self = THIS;
     s32 pad1;
     u32 gameplayFrames = globalCtx->gameplayFrames;
     s32 pad2;
     s32 i;
     u8 alpha;
 
-    if (this->action > 0) {
+    if (self->action > 0) {
         OPEN_DISPS(globalCtx->state.gfxCtx, "../z_magic_fire.c", 682);
         POLY_XLU_DISP = func_800937C0(POLY_XLU_DISP);
-        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (u8)(s32)(60 * this->screenTintIntensity),
-                        (u8)(s32)(20 * this->screenTintIntensity), (u8)(s32)(0 * this->screenTintIntensity),
-                        (u8)(s32)(120 * this->screenTintIntensity));
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (u8)(s32)(60 * self->screenTintIntensity),
+                        (u8)(s32)(20 * self->screenTintIntensity), (u8)(s32)(0 * self->screenTintIntensity),
+                        (u8)(s32)(120 * self->screenTintIntensity));
         gDPSetAlphaDither(POLY_XLU_DISP++, G_AD_DISABLE);
         gDPSetColorDither(POLY_XLU_DISP++, G_CD_DISABLE);
         gDPFillRectangle(POLY_XLU_DISP++, 0, 0, 319, 239);
         func_80093D84(globalCtx->state.gfxCtx);
-        gDPSetPrimColor(POLY_XLU_DISP++, 0, 128, 255, 200, 0, (u8)(this->alphaMultiplier * 255));
-        gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, (u8)(this->alphaMultiplier * 255));
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 128, 255, 200, 0, (u8)(self->alphaMultiplier * 255));
+        gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, (u8)(self->alphaMultiplier * 255));
         Matrix_Scale(0.15f, 0.15f, 0.15f, MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx, "../z_magic_fire.c", 715),
                   G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -490,12 +490,12 @@ void MagicFire_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gSPDisplayList(POLY_XLU_DISP++, sVertexDList);
         CLOSE_DISPS(globalCtx->state.gfxCtx, "../z_magic_fire.c", 750);
 
-        alpha = (s32)(this->alphaMultiplier * 255);
+        alpha = (s32)(self->alphaMultiplier * 255);
         for (i = 0; i < 36; i++) {
             sFireSphereVertices[sVertexIndices[i]].n.a = alpha;
         }
 
-        alpha = (s32)(this->alphaMultiplier * 76);
+        alpha = (s32)(self->alphaMultiplier * 76);
         for (i = 36; i < 60; i++) {
             sFireSphereVertices[sVertexIndices[i]].n.a = alpha;
         }

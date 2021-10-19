@@ -16,9 +16,9 @@ void BgSpot09Obj_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgSpot09Obj_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgSpot09Obj_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-s32 func_808B1AE0(BgSpot09Obj* this, GlobalContext* globalCtx);
-s32 func_808B1BA0(BgSpot09Obj* this, GlobalContext* globalCtx);
-s32 func_808B1BEC(BgSpot09Obj* this, GlobalContext* globalCtx);
+s32 func_808B1AE0(BgSpot09Obj* self, GlobalContext* globalCtx);
+s32 func_808B1BA0(BgSpot09Obj* self, GlobalContext* globalCtx);
+s32 func_808B1BEC(BgSpot09Obj* self, GlobalContext* globalCtx);
 
 const ActorInit Bg_Spot09_Obj_InitVars = {
     ACTOR_BG_SPOT09_OBJ,
@@ -36,7 +36,7 @@ static CollisionHeader* D_808B1F90[] = {
     NULL, &gValleyObjects1Col, &gValleyObjects2Col, &gValleyObjects3Col, &gValleyObjects4Col,
 };
 
-static s32 (*D_808B1FA4[])(BgSpot09Obj* this, GlobalContext* globalCtx) = {
+static s32 (*D_808B1FA4[])(BgSpot09Obj* self, GlobalContext* globalCtx) = {
     func_808B1BEC,
     func_808B1AE0,
     func_808B1BA0,
@@ -58,17 +58,17 @@ static Gfx* sDLists[] = {
     gValleyBridgeSidesDL, gValleyBrokenBridgeDL, gValleyBridgeChildDL, gCarpentersTentDL, gValleyRepairedBridgeDL,
 };
 
-s32 func_808B1AE0(BgSpot09Obj* this, GlobalContext* globalCtx) {
+s32 func_808B1AE0(BgSpot09Obj* self, GlobalContext* globalCtx) {
     s32 carpentersRescued;
 
     if (gSaveContext.sceneSetupIndex >= 4) {
-        return this->dyna.actor.params == 0;
+        return self->dyna.actor.params == 0;
     }
 
     carpentersRescued = (gSaveContext.eventChkInf[9] & 0xF) == 0xF;
 
     if (LINK_AGE_IN_YEARS == YEARS_ADULT) {
-        switch (this->dyna.actor.params) {
+        switch (self->dyna.actor.params) {
             case 0:
                 return 0;
             case 1:
@@ -79,87 +79,87 @@ s32 func_808B1AE0(BgSpot09Obj* this, GlobalContext* globalCtx) {
                 return 1;
         }
     } else {
-        return this->dyna.actor.params == 2;
+        return self->dyna.actor.params == 2;
     }
 
     return 0;
 }
 
-s32 func_808B1BA0(BgSpot09Obj* this, GlobalContext* globalCtx) {
-    if (this->dyna.actor.params == 3) {
-        Actor_SetScale(&this->dyna.actor, 0.1f);
+s32 func_808B1BA0(BgSpot09Obj* self, GlobalContext* globalCtx) {
+    if (self->dyna.actor.params == 3) {
+        Actor_SetScale(&self->dyna.actor, 0.1f);
     } else {
-        Actor_SetScale(&this->dyna.actor, 1.0f);
+        Actor_SetScale(&self->dyna.actor, 1.0f);
     }
     return 1;
 }
 
-s32 func_808B1BEC(BgSpot09Obj* this, GlobalContext* globalCtx) {
+s32 func_808B1BEC(BgSpot09Obj* self, GlobalContext* globalCtx) {
     s32 pad;
     CollisionHeader* colHeader = NULL;
     s32 pad2[2];
 
-    if (D_808B1F90[this->dyna.actor.params] != NULL) {
-        DynaPolyActor_Init(&this->dyna, DPM_UNK);
-        CollisionHeader_GetVirtual(D_808B1F90[this->dyna.actor.params], &colHeader);
-        this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
+    if (D_808B1F90[self->dyna.actor.params] != NULL) {
+        DynaPolyActor_Init(&self->dyna, DPM_UNK);
+        CollisionHeader_GetVirtual(D_808B1F90[self->dyna.actor.params], &colHeader);
+        self->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &self->dyna.actor, colHeader);
     }
     return true;
 }
 
-s32 func_808B1C70(BgSpot09Obj* this, GlobalContext* globalCtx) {
+s32 func_808B1C70(BgSpot09Obj* self, GlobalContext* globalCtx) {
     s32 i;
 
     for (i = 0; i < ARRAY_COUNT(D_808B1FA4); i++) {
-        if (!D_808B1FA4[i](this, globalCtx)) {
+        if (!D_808B1FA4[i](self, globalCtx)) {
             return false;
         }
     }
     return true;
 }
 
-s32 func_808B1CEC(BgSpot09Obj* this, GlobalContext* globalCtx) {
-    Actor_ProcessInitChain(&this->dyna.actor, sInitChain1);
+s32 func_808B1CEC(BgSpot09Obj* self, GlobalContext* globalCtx) {
+    Actor_ProcessInitChain(&self->dyna.actor, sInitChain1);
     return true;
 }
 
-s32 func_808B1D18(BgSpot09Obj* this, GlobalContext* globalCtx) {
-    Actor_ProcessInitChain(&this->dyna.actor, sInitChain2);
+s32 func_808B1D18(BgSpot09Obj* self, GlobalContext* globalCtx) {
+    Actor_ProcessInitChain(&self->dyna.actor, sInitChain2);
     return true;
 }
 
-s32 func_808B1D44(BgSpot09Obj* this, GlobalContext* globalCtx) {
-    if (this->dyna.actor.params == 3) {
-        return func_808B1D18(this, globalCtx);
+s32 func_808B1D44(BgSpot09Obj* self, GlobalContext* globalCtx) {
+    if (self->dyna.actor.params == 3) {
+        return func_808B1D18(self, globalCtx);
     } else {
-        return func_808B1CEC(this, globalCtx);
+        return func_808B1CEC(self, globalCtx);
     }
 }
 
 void BgSpot09Obj_Init(Actor* thisx, GlobalContext* globalCtx) {
-    BgSpot09Obj* this = THIS;
+    BgSpot09Obj* self = THIS;
 
-    osSyncPrintf("Spot09 Object [arg_data : 0x%04x](大工救出フラグ 0x%x)\n", this->dyna.actor.params,
+    osSyncPrintf("Spot09 Object [arg_data : 0x%04x](大工救出フラグ 0x%x)\n", self->dyna.actor.params,
                  gSaveContext.eventChkInf[9] & 0xF);
-    this->dyna.actor.params &= 0xFF;
-    if ((this->dyna.actor.params < 0) || (this->dyna.actor.params >= 5)) {
+    self->dyna.actor.params &= 0xFF;
+    if ((self->dyna.actor.params < 0) || (self->dyna.actor.params >= 5)) {
         osSyncPrintf("Error : Spot 09 object の arg_data が判別出来ない(%s %d)(arg_data 0x%04x)\n",
-                     "../z_bg_spot09_obj.c", 322, this->dyna.actor.params);
+                     "../z_bg_spot09_obj.c", 322, self->dyna.actor.params);
     }
 
-    if (!func_808B1C70(this, globalCtx)) {
-        Actor_Kill(&this->dyna.actor);
-    } else if (!func_808B1D44(this, globalCtx)) {
-        Actor_Kill(&this->dyna.actor);
+    if (!func_808B1C70(self, globalCtx)) {
+        Actor_Kill(&self->dyna.actor);
+    } else if (!func_808B1D44(self, globalCtx)) {
+        Actor_Kill(&self->dyna.actor);
     }
 }
 
 void BgSpot09Obj_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     DynaCollisionContext* dynaColCtx = &globalCtx->colCtx.dyna;
-    BgSpot09Obj* this = THIS;
+    BgSpot09Obj* self = THIS;
 
-    if (this->dyna.actor.params != 0) {
-        DynaPoly_DeleteBgActor(globalCtx, dynaColCtx, this->dyna.bgId);
+    if (self->dyna.actor.params != 0) {
+        DynaPoly_DeleteBgActor(globalCtx, dynaColCtx, self->dyna.bgId);
     }
 }
 

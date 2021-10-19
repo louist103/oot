@@ -43,41 +43,41 @@ static s16 sScales[] = {
 };
 
 void BgSpot16Doughnut_Init(Actor* thisx, GlobalContext* globalCtx) {
-    BgSpot16Doughnut* this = THIS;
+    BgSpot16Doughnut* self = THIS;
     s32 params;
 
-    Actor_ProcessInitChain(&this->actor, sInitChain);
-    Actor_SetScale(&this->actor, 0.1f);
-    this->fireFlag = 0;
-    this->envColorAlpha = 255;
-    params = this->actor.params;
+    Actor_ProcessInitChain(&self->actor, sInitChain);
+    Actor_SetScale(&self->actor, 0.1f);
+    self->fireFlag = 0;
+    self->envColorAlpha = 255;
+    params = self->actor.params;
     if (params == 1 || params == 2 || params == 3 || params == 4) {
-        Actor_SetScale(&this->actor, sScales[this->actor.params] * 1.0e-4f);
-        this->actor.draw = BgSpot16Doughnut_DrawExpanding;
-        this->actor.update = BgSpot16Doughnut_UpdateExpanding;
+        Actor_SetScale(&self->actor, sScales[self->actor.params] * 1.0e-4f);
+        self->actor.draw = BgSpot16Doughnut_DrawExpanding;
+        self->actor.update = BgSpot16Doughnut_UpdateExpanding;
     } else {
-        // Scales this actor for scenes where it is featured in the background,
+        // Scales self actor for scenes where it is featured in the background,
         // Death Mountain itself falls into the default case.
         switch (globalCtx->sceneNum) {
             case SCENE_SPOT01:
-                Actor_SetScale(&this->actor, 0.04f);
+                Actor_SetScale(&self->actor, 0.04f);
                 break;
             case SCENE_SHRINE:
             case SCENE_SHRINE_N:
             case SCENE_SHRINE_R:
-                Actor_SetScale(&this->actor, 0.018f);
+                Actor_SetScale(&self->actor, 0.018f);
                 break;
             default:
-                Actor_SetScale(&this->actor, 0.1f);
+                Actor_SetScale(&self->actor, 0.1f);
                 break;
         }
-        osSyncPrintf(VT_FGCOL(CYAN) "%f" VT_RST "\n", this->actor.scale.x);
+        osSyncPrintf(VT_FGCOL(CYAN) "%f" VT_RST "\n", self->actor.scale.x);
         if (!LINK_IS_ADULT || gSaveContext.eventChkInf[2] & 0x8000) {
-            this->fireFlag &= ~1;
+            self->fireFlag &= ~1;
         } else {
-            this->fireFlag |= 1;
+            self->fireFlag |= 1;
         }
-        osSyncPrintf("(ｓｐｏｔ１６ ドーナツ雲)(arg_data 0x%04x)\n", this->actor.params);
+        osSyncPrintf("(ｓｐｏｔ１６ ドーナツ雲)(arg_data 0x%04x)\n", self->actor.params);
     }
 }
 
@@ -85,41 +85,41 @@ void BgSpot16Doughnut_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void BgSpot16Doughnut_Update(Actor* thisx, GlobalContext* globalCtx) {
-    BgSpot16Doughnut* this = THIS;
+    BgSpot16Doughnut* self = THIS;
 
-    if (!(this->fireFlag & 1)) {
-        this->actor.shape.rot.y -= 0x20;
-        if (this->envColorAlpha < 255) {
-            this->envColorAlpha += 5;
+    if (!(self->fireFlag & 1)) {
+        self->actor.shape.rot.y -= 0x20;
+        if (self->envColorAlpha < 255) {
+            self->envColorAlpha += 5;
         } else {
-            this->envColorAlpha = 255;
+            self->envColorAlpha = 255;
         }
     } else if (globalCtx->csCtx.state != CS_STATE_IDLE && globalCtx->csCtx.npcActions[2] != NULL &&
                globalCtx->csCtx.npcActions[2]->action == 2) {
-        if (this->envColorAlpha >= 6) {
-            this->envColorAlpha -= 5;
+        if (self->envColorAlpha >= 6) {
+            self->envColorAlpha -= 5;
         } else {
-            this->envColorAlpha = 0;
-            this->fireFlag &= ~1;
+            self->envColorAlpha = 0;
+            self->fireFlag &= ~1;
         }
     }
 }
 
 // Update function for outwardly expanding and dissipating
 void BgSpot16Doughnut_UpdateExpanding(Actor* thisx, GlobalContext* globalCtx) {
-    BgSpot16Doughnut* this = THIS;
+    BgSpot16Doughnut* self = THIS;
 
-    if (this->envColorAlpha >= 6) {
-        this->envColorAlpha -= 5;
+    if (self->envColorAlpha >= 6) {
+        self->envColorAlpha -= 5;
     } else {
-        Actor_Kill(&this->actor);
+        Actor_Kill(&self->actor);
     }
-    this->actor.shape.rot.y -= 0x20;
-    Actor_SetScale(&this->actor, this->actor.scale.x + 0.0019999998f);
+    self->actor.shape.rot.y -= 0x20;
+    Actor_SetScale(&self->actor, self->actor.scale.x + 0.0019999998f);
 }
 
 void BgSpot16Doughnut_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    BgSpot16Doughnut* this = THIS;
+    BgSpot16Doughnut* self = THIS;
     u32 scroll = globalCtx->gameplayFrames & 0xFFFF;
     s32 pad;
 
@@ -131,14 +131,14 @@ void BgSpot16Doughnut_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx, "../z_bg_spot16_doughnut.c", 213),
               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    if (this->fireFlag & 1) {
+    if (self->fireFlag & 1) {
         gSPSegment(
             POLY_XLU_DISP++, 0x08,
             Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, scroll * (-1), 0, 16, 32, 1, scroll, scroll * (-2), 16, 32));
-        gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, this->envColorAlpha);
+        gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, self->envColorAlpha);
         gSPDisplayList(POLY_XLU_DISP++, gDeathMountainCloudCircleFieryDL);
     } else {
-        gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, this->envColorAlpha);
+        gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, self->envColorAlpha);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 255);
         gSPDisplayList(POLY_XLU_DISP++, gDeathMountainCloudCircleNormalDL);
     }
@@ -148,7 +148,7 @@ void BgSpot16Doughnut_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
 // Draw function for outwardly expanding and dissipating
 void BgSpot16Doughnut_DrawExpanding(Actor* thisx, GlobalContext* globalCtx) {
-    BgSpot16Doughnut* this = THIS;
+    BgSpot16Doughnut* self = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx, "../z_bg_spot16_doughnut.c", 245);
 
@@ -156,7 +156,7 @@ void BgSpot16Doughnut_DrawExpanding(Actor* thisx, GlobalContext* globalCtx) {
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx, "../z_bg_spot16_doughnut.c", 248),
               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, this->envColorAlpha);
+    gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, self->envColorAlpha);
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 255);
     gSPDisplayList(POLY_XLU_DISP++, gDeathMountainCloudCircleNormalDL);
 

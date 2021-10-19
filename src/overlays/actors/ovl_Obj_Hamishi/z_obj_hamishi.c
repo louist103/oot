@@ -62,37 +62,37 @@ static InitChainEntry sInitChain[] = {
 };
 
 void ObjHamishi_InitCollision(Actor* thisx, GlobalContext* globalCtx) {
-    ObjHamishi* this = THIS;
+    ObjHamishi* self = THIS;
 
-    Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
-    Collider_UpdateCylinder(&this->actor, &this->collider);
+    Collider_InitCylinder(globalCtx, &self->collider);
+    Collider_SetCylinder(globalCtx, &self->collider, &self->actor, &sCylinderInit);
+    Collider_UpdateCylinder(&self->actor, &self->collider);
 }
 
-void ObjHamishi_Shake(ObjHamishi* this) {
-    if (this->shakeFrames > 0) {
-        this->shakeFrames--;
-        this->shakePosPhase += 5000;
-        this->shakeRotPhase += 0xE10;
+void ObjHamishi_Shake(ObjHamishi* self) {
+    if (self->shakeFrames > 0) {
+        self->shakeFrames--;
+        self->shakePosPhase += 5000;
+        self->shakeRotPhase += 0xE10;
 
-        Math_StepToF(&this->shakePosSize, 0.0f, 0.15f);
-        Math_StepToF(&this->shakeRotSize, 0.0f, 40.0f);
+        Math_StepToF(&self->shakePosSize, 0.0f, 0.15f);
+        Math_StepToF(&self->shakeRotSize, 0.0f, 40.0f);
 
-        this->actor.world.pos.x = this->actor.home.pos.x + (Math_SinS(this->shakePosPhase * 4) * this->shakePosSize);
-        this->actor.world.pos.z = this->actor.home.pos.z + (Math_CosS(this->shakePosPhase * 7) * this->shakePosSize);
-        this->actor.shape.rot.x =
-            this->actor.home.rot.x + (s16)(Math_SinS(this->shakeRotPhase * 4) * this->shakeRotSize);
-        this->actor.shape.rot.z =
-            this->actor.home.rot.z + (s16)(Math_CosS(this->shakeRotPhase * 7) * this->shakeRotSize);
+        self->actor.world.pos.x = self->actor.home.pos.x + (Math_SinS(self->shakePosPhase * 4) * self->shakePosSize);
+        self->actor.world.pos.z = self->actor.home.pos.z + (Math_CosS(self->shakePosPhase * 7) * self->shakePosSize);
+        self->actor.shape.rot.x =
+            self->actor.home.rot.x + (s16)(Math_SinS(self->shakeRotPhase * 4) * self->shakeRotSize);
+        self->actor.shape.rot.z =
+            self->actor.home.rot.z + (s16)(Math_CosS(self->shakeRotPhase * 7) * self->shakeRotSize);
     } else {
-        Math_StepToF(&this->actor.world.pos.x, this->actor.home.pos.x, 1.0f);
-        Math_StepToF(&this->actor.world.pos.z, this->actor.home.pos.z, 1.0f);
-        Math_ScaledStepToS(&this->actor.shape.rot.x, this->actor.home.rot.x, 0xBB8);
-        Math_ScaledStepToS(&this->actor.shape.rot.z, this->actor.home.rot.z, 0xBB8);
+        Math_StepToF(&self->actor.world.pos.x, self->actor.home.pos.x, 1.0f);
+        Math_StepToF(&self->actor.world.pos.z, self->actor.home.pos.z, 1.0f);
+        Math_ScaledStepToS(&self->actor.shape.rot.x, self->actor.home.rot.x, 0xBB8);
+        Math_ScaledStepToS(&self->actor.shape.rot.z, self->actor.home.rot.z, 0xBB8);
     }
 }
 
-void ObjHamishi_Break(ObjHamishi* this, GlobalContext* globalCtx) {
+void ObjHamishi_Break(ObjHamishi* self, GlobalContext* globalCtx) {
     s32 pad;
     Vec3f velocity;
     Vec3f pos;
@@ -107,9 +107,9 @@ void ObjHamishi_Break(ObjHamishi* this, GlobalContext* globalCtx) {
         phi_s0 += 20000;
 
         temp_f20 = Rand_ZeroOne() * 10.0f;
-        pos.x = (Math_SinS(phi_s0) * temp_f20) + this->actor.world.pos.x;
-        pos.y = (Rand_ZeroOne() * 40.0f) + this->actor.world.pos.y + 5.0f;
-        pos.z = (Math_CosS(phi_s0) * temp_f20) + this->actor.world.pos.z;
+        pos.x = (Math_SinS(phi_s0) * temp_f20) + self->actor.world.pos.x;
+        pos.y = (Rand_ZeroOne() * 40.0f) + self->actor.world.pos.y + 5.0f;
+        pos.z = (Math_CosS(phi_s0) * temp_f20) + self->actor.world.pos.z;
 
         temp_f20 = (Rand_ZeroOne() * 10.0f) + 2.0f;
         velocity.x = Math_SinS(phi_s0) * temp_f20;
@@ -128,69 +128,69 @@ void ObjHamishi_Break(ObjHamishi* this, GlobalContext* globalCtx) {
             gravity = -320;
         }
 
-        EffectSsKakera_Spawn(globalCtx, &pos, &velocity, &this->actor.world.pos, gravity, phi_v0, 30, 5, 0,
+        EffectSsKakera_Spawn(globalCtx, &pos, &velocity, &self->actor.world.pos, gravity, phi_v0, 30, 5, 0,
                              sEffectScales[i], 3, 0, 70, 1, OBJECT_GAMEPLAY_FIELD_KEEP, gSilverRockFragmentsDL);
     }
 
-    func_80033480(globalCtx, &this->actor.world.pos, 140.0f, 6, 180, 90, 1);
-    func_80033480(globalCtx, &this->actor.world.pos, 140.0f, 12, 80, 90, 1);
+    func_80033480(globalCtx, &self->actor.world.pos, 140.0f, 6, 180, 90, 1);
+    func_80033480(globalCtx, &self->actor.world.pos, 140.0f, 12, 80, 90, 1);
 }
 
 void ObjHamishi_Init(Actor* thisx, GlobalContext* globalCtx) {
-    ObjHamishi* this = THIS;
+    ObjHamishi* self = THIS;
 
-    Actor_ProcessInitChain(&this->actor, sInitChain);
+    Actor_ProcessInitChain(&self->actor, sInitChain);
 
     if (globalCtx->csCtx.state != CS_STATE_IDLE) {
-        this->actor.uncullZoneForward += 1000.0f;
+        self->actor.uncullZoneForward += 1000.0f;
     }
-    if (this->actor.shape.rot.y == 0) {
-        this->actor.shape.rot.y = this->actor.world.rot.y = this->actor.home.rot.y = Rand_ZeroFloat(65536.0f);
+    if (self->actor.shape.rot.y == 0) {
+        self->actor.shape.rot.y = self->actor.world.rot.y = self->actor.home.rot.y = Rand_ZeroFloat(65536.0f);
     }
 
-    ObjHamishi_InitCollision(&this->actor, globalCtx);
-    CollisionCheck_SetInfo(&this->actor.colChkInfo, NULL, &sColChkInfoInit);
+    ObjHamishi_InitCollision(&self->actor, globalCtx);
+    CollisionCheck_SetInfo(&self->actor.colChkInfo, NULL, &sColChkInfoInit);
 
-    if (Flags_GetSwitch(globalCtx, this->actor.params & 0x3F)) {
-        Actor_Kill(&this->actor);
+    if (Flags_GetSwitch(globalCtx, self->actor.params & 0x3F)) {
+        Actor_Kill(&self->actor);
         return;
     }
 
-    this->actor.shape.yOffset = 80.0f;
+    self->actor.shape.yOffset = 80.0f;
 }
 
 void ObjHamishi_Destroy(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
-    ObjHamishi* this = THIS;
+    ObjHamishi* self = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    Collider_DestroyCylinder(globalCtx, &self->collider);
 }
 
 void ObjHamishi_Update(Actor* thisx, GlobalContext* globalCtx) {
-    ObjHamishi* this = THIS;
+    ObjHamishi* self = THIS;
     CollisionCheckContext* colChkCtx = &globalCtx->colChkCtx;
 
-    ObjHamishi_Shake(this);
+    ObjHamishi_Shake(self);
 
-    if ((this->collider.base.acFlags & AC_HIT) && (this->collider.info.acHitInfo->toucher.dmgFlags & 0x40000040)) {
-        this->collider.base.acFlags &= ~AC_HIT;
-        this->hitCount++;
-        if (this->hitCount < 2) {
-            this->shakeFrames = 15;
-            this->shakePosSize = 2.0f;
-            this->shakeRotSize = 400.0f;
+    if ((self->collider.base.acFlags & AC_HIT) && (self->collider.info.acHitInfo->toucher.dmgFlags & 0x40000040)) {
+        self->collider.base.acFlags &= ~AC_HIT;
+        self->hitCount++;
+        if (self->hitCount < 2) {
+            self->shakeFrames = 15;
+            self->shakePosSize = 2.0f;
+            self->shakeRotSize = 400.0f;
         } else {
-            ObjHamishi_Break(this, globalCtx);
-            Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 40, NA_SE_EV_WALL_BROKEN);
-            Flags_SetSwitch(globalCtx, this->actor.params & 0x3F);
-            Actor_Kill(&this->actor);
+            ObjHamishi_Break(self, globalCtx);
+            Audio_PlaySoundAtPosition(globalCtx, &self->actor.world.pos, 40, NA_SE_EV_WALL_BROKEN);
+            Flags_SetSwitch(globalCtx, self->actor.params & 0x3F);
+            Actor_Kill(&self->actor);
         }
     } else {
-        this->collider.base.acFlags &= ~AC_HIT;
+        self->collider.base.acFlags &= ~AC_HIT;
 
-        if (this->actor.xzDistToPlayer < 600.0f) {
-            CollisionCheck_SetAC(globalCtx, colChkCtx, &this->collider.base);
-            CollisionCheck_SetOC(globalCtx, colChkCtx, &this->collider.base);
+        if (self->actor.xzDistToPlayer < 600.0f) {
+            CollisionCheck_SetAC(globalCtx, colChkCtx, &self->collider.base);
+            CollisionCheck_SetOC(globalCtx, colChkCtx, &self->collider.base);
         }
     }
 }

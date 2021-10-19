@@ -31,7 +31,7 @@ const ActorInit En_Mag_InitVars = {
 static s16 sDelayTimer = 0;
 
 void EnMag_Init(Actor* thisx, GlobalContext* globalCtx) {
-    EnMag* this = THIS;
+    EnMag* self = THIS;
 
     YREG(1) = 63;
     YREG(3) = 80;
@@ -47,57 +47,57 @@ void EnMag_Init(Actor* thisx, GlobalContext* globalCtx) {
     VREG(5) = 6;
     VREG(6) = 2;
 
-    this->copyrightAlphaStep = 6;
-    this->fadeOutAlphaStep = 10;
+    self->copyrightAlphaStep = 6;
+    self->fadeOutAlphaStep = 10;
 
     VREG(19) = 99;
     VREG(21) = 9;
     VREG(23) = 10;
     VREG(24) = 8;
 
-    this->effectScroll = 0;
-    this->unk_E30C = 0;
+    self->effectScroll = 0;
+    self->unk_E30C = 0;
 
-    this->effectPrimColor[0] = 0.0f;
-    this->effectPrimColor[1] = 100.0f;
-    this->effectPrimColor[2] = 170.0f;
-    this->effectEnvColor[0] = 0.0f;
-    this->effectEnvColor[1] = 100.0f;
-    this->effectEnvColor[2] = 0.0f;
+    self->effectPrimColor[0] = 0.0f;
+    self->effectPrimColor[1] = 100.0f;
+    self->effectPrimColor[2] = 170.0f;
+    self->effectEnvColor[0] = 0.0f;
+    self->effectEnvColor[1] = 100.0f;
+    self->effectEnvColor[2] = 0.0f;
 
-    this->effectFadeInTimer = 40;
+    self->effectFadeInTimer = 40;
 
-    this->effectFadeInState = this->effectPrimLodFrac = this->globalState = this->effectAlpha = this->mainAlpha =
-        this->subAlpha = this->copyrightAlpha = 0.0f;
+    self->effectFadeInState = self->effectPrimLodFrac = self->globalState = self->effectAlpha = self->mainAlpha =
+        self->subAlpha = self->copyrightAlpha = 0.0f;
 
     if (gSaveContext.unk_13E7 != 0) {
-        this->mainAlpha = 210;
-        this->subAlpha = 255;
-        this->copyrightAlpha = 255;
+        self->mainAlpha = 210;
+        self->subAlpha = 255;
+        self->copyrightAlpha = 255;
 
-        this->effectPrimLodFrac = 128.0f;
-        this->effectAlpha = 255.0f;
+        self->effectPrimLodFrac = 128.0f;
+        self->effectAlpha = 255.0f;
 
-        this->effectPrimColor[0] = 170;
-        this->effectPrimColor[1] = 255.0f;
-        this->effectPrimColor[2] = 255.0f;
-        this->effectEnvColor[0] = 200.0f;
-        this->effectEnvColor[1] = 255.0f;
-        this->effectEnvColor[2] = 0;
+        self->effectPrimColor[0] = 170;
+        self->effectPrimColor[1] = 255.0f;
+        self->effectPrimColor[2] = 255.0f;
+        self->effectEnvColor[0] = 200.0f;
+        self->effectEnvColor[1] = 255.0f;
+        self->effectEnvColor[2] = 0;
 
         gSaveContext.unk_13E7 = 0;
-        this->globalState = MAG_STATE_DISPLAY;
+        self->globalState = MAG_STATE_DISPLAY;
         sDelayTimer = 20;
         gSaveContext.fadeDuration = 1;
         gSaveContext.unk_1419 = 255;
     }
 
-    Font_LoadOrderedFont(&this->font);
+    Font_LoadOrderedFont(&self->font);
 
-    this->unk_E316 = 0;
-    this->unk_E318 = 0;
-    this->unk_E31C = 0;
-    this->unk_E320 = 0;
+    self->unk_E316 = 0;
+    self->unk_E318 = 0;
+    self->unk_E31C = 0;
+    self->unk_E320 = 0;
 }
 
 void EnMag_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -105,36 +105,36 @@ void EnMag_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void EnMag_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad[2];
-    EnMag* this = THIS;
+    EnMag* self = THIS;
 
     if (gSaveContext.fileNum != 0xFEDC) {
-        if (this->globalState < MAG_STATE_DISPLAY) {
+        if (self->globalState < MAG_STATE_DISPLAY) {
             if (CHECK_BTN_ALL(globalCtx->state.input[0].press.button, BTN_START) ||
                 CHECK_BTN_ALL(globalCtx->state.input[0].press.button, BTN_A) ||
                 CHECK_BTN_ALL(globalCtx->state.input[0].press.button, BTN_B)) {
 
                 Audio_PlaySoundGeneral(NA_SE_SY_PIECE_OF_HEART, &D_801333D4, 4, &D_801333E0, &D_801333E0, &D_801333E8);
 
-                this->mainAlpha = 210;
-                this->subAlpha = 255;
-                this->copyrightAlpha = 255;
+                self->mainAlpha = 210;
+                self->subAlpha = 255;
+                self->copyrightAlpha = 255;
 
-                this->effectPrimLodFrac = 128.0f;
-                this->effectAlpha = 255.0f;
+                self->effectPrimLodFrac = 128.0f;
+                self->effectAlpha = 255.0f;
 
-                this->effectPrimColor[0] = 170;
-                this->effectPrimColor[1] = 255.0f;
-                this->effectPrimColor[2] = 255.0f;
-                this->effectEnvColor[0] = 200.0f;
-                this->effectEnvColor[1] = 255.0f;
-                this->effectEnvColor[2] = 0;
+                self->effectPrimColor[0] = 170;
+                self->effectPrimColor[1] = 255.0f;
+                self->effectPrimColor[2] = 255.0f;
+                self->effectEnvColor[0] = 200.0f;
+                self->effectEnvColor[1] = 255.0f;
+                self->effectEnvColor[2] = 0;
 
-                this->globalState = MAG_STATE_DISPLAY;
+                self->globalState = MAG_STATE_DISPLAY;
                 sDelayTimer = 20;
                 gSaveContext.fadeDuration = 1;
                 gSaveContext.unk_1419 = 255;
             }
-        } else if (this->globalState >= MAG_STATE_DISPLAY) {
+        } else if (self->globalState >= MAG_STATE_DISPLAY) {
             if (sDelayTimer == 0) {
                 if (CHECK_BTN_ALL(globalCtx->state.input[0].press.button, BTN_START) ||
                     CHECK_BTN_ALL(globalCtx->state.input[0].press.button, BTN_A) ||
@@ -151,9 +151,9 @@ void EnMag_Update(Actor* thisx, GlobalContext* globalCtx) {
                         globalCtx->fadeTransition = 2;
                     }
 
-                    this->copyrightAlphaStep = 15;
-                    this->fadeOutAlphaStep = 25;
-                    this->globalState = MAG_STATE_FADE_OUT;
+                    self->copyrightAlphaStep = 15;
+                    self->fadeOutAlphaStep = 25;
+                    self->globalState = MAG_STATE_FADE_OUT;
                 }
             } else {
                 sDelayTimer--;
@@ -161,104 +161,104 @@ void EnMag_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
 
-    if (this->globalState == MAG_STATE_FADE_IN) {
-        if (this->effectFadeInState == 0) {
-            this->effectAlpha += 6.375f;
-            this->effectPrimLodFrac += 0.8f;
+    if (self->globalState == MAG_STATE_FADE_IN) {
+        if (self->effectFadeInState == 0) {
+            self->effectAlpha += 6.375f;
+            self->effectPrimLodFrac += 0.8f;
 
-            this->effectPrimColor[0] += 6.375f;
-            this->effectPrimColor[1] += 3.875f;
-            this->effectPrimColor[2] += 2.125f;
-            this->effectEnvColor[0] += 6.375f;
-            this->effectEnvColor[1] += 3.875f;
+            self->effectPrimColor[0] += 6.375f;
+            self->effectPrimColor[1] += 3.875f;
+            self->effectPrimColor[2] += 2.125f;
+            self->effectEnvColor[0] += 6.375f;
+            self->effectEnvColor[1] += 3.875f;
 
-            this->effectFadeInTimer--;
+            self->effectFadeInTimer--;
 
-            if (this->effectFadeInTimer == 0) {
-                this->effectPrimLodFrac = 32.0f;
-                this->effectAlpha = 255.0f;
+            if (self->effectFadeInTimer == 0) {
+                self->effectPrimLodFrac = 32.0f;
+                self->effectAlpha = 255.0f;
 
-                this->effectPrimColor[0] = 255.0f;
-                this->effectPrimColor[1] = 255.0f;
-                this->effectPrimColor[2] = 255.0f;
-                this->effectEnvColor[0] = 255.0f;
-                this->effectEnvColor[1] = 255.0f;
+                self->effectPrimColor[0] = 255.0f;
+                self->effectPrimColor[1] = 255.0f;
+                self->effectPrimColor[2] = 255.0f;
+                self->effectEnvColor[0] = 255.0f;
+                self->effectEnvColor[1] = 255.0f;
 
-                this->effectFadeInTimer = 40;
-                this->effectFadeInState = 1;
+                self->effectFadeInTimer = 40;
+                self->effectFadeInState = 1;
             }
-        } else if (this->effectFadeInState == 1) {
-            this->effectPrimColor[0] += -2.125f;
-            this->effectEnvColor[0] += -1.375f;
+        } else if (self->effectFadeInState == 1) {
+            self->effectPrimColor[0] += -2.125f;
+            self->effectEnvColor[0] += -1.375f;
 
-            this->effectPrimLodFrac += 2.4f;
+            self->effectPrimLodFrac += 2.4f;
 
-            this->effectFadeInTimer--;
+            self->effectFadeInTimer--;
 
-            if (this->effectFadeInTimer == 0) {
-                this->effectPrimLodFrac = 128.0f;
+            if (self->effectFadeInTimer == 0) {
+                self->effectPrimLodFrac = 128.0f;
 
-                this->effectPrimColor[0] = 170.0f;
-                this->effectEnvColor[0] = 200.0f;
+                self->effectPrimColor[0] = 170.0f;
+                self->effectEnvColor[0] = 200.0f;
 
-                this->effectFadeInTimer = 32;
-                this->effectFadeInState = 2;
+                self->effectFadeInTimer = 32;
+                self->effectFadeInState = 2;
             }
         }
 
-        if (this->effectAlpha > 160) {
-            this->mainAlpha += VREG(5);
-            if (this->mainAlpha >= 210.0f) {
-                this->mainAlpha = 210.0f;
+        if (self->effectAlpha > 160) {
+            self->mainAlpha += VREG(5);
+            if (self->mainAlpha >= 210.0f) {
+                self->mainAlpha = 210.0f;
             }
 
-            if (this->mainAlpha >= 210) {
-                this->subAlpha += VREG(6);
-                if (this->subAlpha >= 255.0f) {
-                    this->subAlpha = 255.0f;
+            if (self->mainAlpha >= 210) {
+                self->subAlpha += VREG(6);
+                if (self->subAlpha >= 255.0f) {
+                    self->subAlpha = 255.0f;
                 }
 
-                if (this->subAlpha >= 200) {
-                    this->copyrightAlpha += this->copyrightAlphaStep;
-                    if (this->copyrightAlpha >= 255.0f) {
-                        this->copyrightAlpha = 255.0f;
-                        this->globalState = MAG_STATE_DISPLAY;
+                if (self->subAlpha >= 200) {
+                    self->copyrightAlpha += self->copyrightAlphaStep;
+                    if (self->copyrightAlpha >= 255.0f) {
+                        self->copyrightAlpha = 255.0f;
+                        self->globalState = MAG_STATE_DISPLAY;
                         sDelayTimer = 20;
                     }
                 }
             }
         }
-    } else if (this->globalState == MAG_STATE_FADE_OUT) {
-        this->effectAlpha -= this->fadeOutAlphaStep;
-        if (this->effectAlpha < 0.0f) {
-            this->effectAlpha = 0.0f;
+    } else if (self->globalState == MAG_STATE_FADE_OUT) {
+        self->effectAlpha -= self->fadeOutAlphaStep;
+        if (self->effectAlpha < 0.0f) {
+            self->effectAlpha = 0.0f;
         }
 
-        this->mainAlpha -= this->fadeOutAlphaStep;
-        if (this->mainAlpha < 0.0f) {
-            this->mainAlpha = 0.0f;
+        self->mainAlpha -= self->fadeOutAlphaStep;
+        if (self->mainAlpha < 0.0f) {
+            self->mainAlpha = 0.0f;
         }
 
-        this->subAlpha -= this->fadeOutAlphaStep;
-        if (this->subAlpha < 0.0f) {
-            this->subAlpha = 0.0f;
+        self->subAlpha -= self->fadeOutAlphaStep;
+        if (self->subAlpha < 0.0f) {
+            self->subAlpha = 0.0f;
         }
 
-        this->copyrightAlpha -= this->copyrightAlphaStep;
-        if (this->copyrightAlpha < 0.0f) {
-            this->copyrightAlpha = 0.0f;
-            this->globalState = MAG_STATE_POST_DISPLAY;
+        self->copyrightAlpha -= self->copyrightAlphaStep;
+        if (self->copyrightAlpha < 0.0f) {
+            self->copyrightAlpha = 0.0f;
+            self->globalState = MAG_STATE_POST_DISPLAY;
         }
     }
 
-    if (this->globalState == MAG_STATE_INITIAL) {
+    if (self->globalState == MAG_STATE_INITIAL) {
         if (Flags_GetEnv(globalCtx, 3)) {
-            this->effectFadeInTimer = 40;
-            this->globalState = MAG_STATE_FADE_IN;
+            self->effectFadeInTimer = 40;
+            self->globalState = MAG_STATE_FADE_IN;
         }
-    } else if (this->globalState == MAG_STATE_DISPLAY) {
+    } else if (self->globalState == MAG_STATE_DISPLAY) {
         if (Flags_GetEnv(globalCtx, 4)) {
-            this->globalState = MAG_STATE_FADE_OUT;
+            self->globalState = MAG_STATE_FADE_OUT;
         }
     }
 }
@@ -278,7 +278,7 @@ void EnMag_DrawTextureI8(Gfx** gfxp, void* texture, s16 texWidth, s16 texHeight,
 
 void EnMag_DrawEffectTextures(Gfx** gfxp, void* maskTex, void* effectTex, s16 maskWidth, s16 maskHeight,
                               s16 effectWidth, s16 effectHeight, s16 rectLeft, s16 rectTop, s16 rectWidth,
-                              s16 rectHeight, u16 dsdx, u16 dtdy, u16 shifts, u16 shiftt, u16 flag, EnMag* this) {
+                              s16 rectHeight, u16 dsdx, u16 dtdy, u16 shifts, u16 shiftt, u16 flag, EnMag* self) {
     Gfx* gfx = *gfxp;
 
     gDPLoadMultiBlock_4b(gfx++, maskTex, 0x0000, 0, G_IM_FMT_I, maskWidth, maskHeight, 0, G_TX_NOMIRROR | G_TX_WRAP,
@@ -288,7 +288,7 @@ void EnMag_DrawEffectTextures(Gfx** gfxp, void* maskTex, void* effectTex, s16 ma
         gDPLoadMultiBlock(gfx++, effectTex, 0x0100, 1, G_IM_FMT_I, G_IM_SIZ_8b, effectWidth, effectHeight, 0,
                           G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, 5, shifts, shiftt);
 
-        gDPSetTileSize(gfx++, 1, 0, this->effectScroll & 0x7F, 0x7C, (this->effectScroll & 0x7F) + 0x7C);
+        gDPSetTileSize(gfx++, 1, 0, self->effectScroll & 0x7F, 0x7C, (self->effectScroll & 0x7F) + 0x7C);
     }
 
     gSPTextureRectangle(gfx++, rectLeft << 2, rectTop << 2, (rectLeft + rectWidth) << 2, (rectTop + rectHeight) << 2,
@@ -386,19 +386,19 @@ void EnMag_DrawInner(Actor* thisx, GlobalContext* globalCtx, Gfx** gfxp) {
         gTitleEffectMask10Tex, gTitleEffectMask11Tex, gTitleEffectMask12Tex,
         gTitleEffectMask20Tex, gTitleEffectMask21Tex, gTitleEffectMask22Tex,
     };
-    EnMag* this = THIS;
-    Font* font = &this->font;
+    EnMag* self = THIS;
+    Font* font = &self->font;
     s32 pad;
     Gfx* gfx = *gfxp;
     u16 i, j, k;
     u16 rectLeft;
     u16 rectTop;
 
-    gSPSegment(gfx++, 0x06, globalCtx->objectCtx.status[this->actor.objBankIndex].segment);
+    gSPSegment(gfx++, 0x06, globalCtx->objectCtx.status[self->actor.objBankIndex].segment);
 
     func_8009457C(&gfx);
 
-    this->effectScroll -= 2;
+    self->effectScroll -= 2;
 
     gDPSetCycleType(gfx++, G_CYC_2CYCLE);
     gDPSetAlphaCompare(gfx++, G_AC_THRESHOLD);
@@ -406,23 +406,23 @@ void EnMag_DrawInner(Actor* thisx, GlobalContext* globalCtx, Gfx** gfxp) {
     gDPSetCombineLERP(gfx++, TEXEL1, PRIMITIVE, PRIM_LOD_FRAC, TEXEL0, TEXEL1, 1, PRIM_LOD_FRAC, TEXEL0, PRIMITIVE,
                       ENVIRONMENT, COMBINED, ENVIRONMENT, COMBINED, 0, PRIMITIVE, 0);
 
-    gDPSetPrimColor(gfx++, 0, (s16)this->effectPrimLodFrac, (s16)this->effectPrimColor[0],
-                    (s16)this->effectPrimColor[1], (s16)this->effectPrimColor[2], (s16)this->effectAlpha);
-    gDPSetEnvColor(gfx++, (s16)this->effectEnvColor[0], (s16)this->effectEnvColor[1], (s16)this->effectEnvColor[2],
+    gDPSetPrimColor(gfx++, 0, (s16)self->effectPrimLodFrac, (s16)self->effectPrimColor[0],
+                    (s16)self->effectPrimColor[1], (s16)self->effectPrimColor[2], (s16)self->effectAlpha);
+    gDPSetEnvColor(gfx++, (s16)self->effectEnvColor[0], (s16)self->effectEnvColor[1], (s16)self->effectEnvColor[2],
                    255);
 
-    if ((s16)this->effectPrimLodFrac != 0) {
+    if ((s16)self->effectPrimLodFrac != 0) {
         for (k = 0, i = 0, rectTop = 0; i < 3; i++, rectTop += 64) {
             for (j = 0, rectLeft = 56; j < 3; j++, k++, rectLeft += 64) {
                 EnMag_DrawEffectTextures(&gfx, effectMaskTextures[k], gTitleFlameEffectTex, 64, 64, 32, 32, rectLeft,
-                                         rectTop, 64, 64, 1024, 1024, 1, 1, k, this);
+                                         rectTop, 64, 64, 1024, 1024, 1, 1, k, self);
             }
         }
     }
 
-    gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, (s16)this->mainAlpha);
+    gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, (s16)self->mainAlpha);
 
-    if ((s16)this->mainAlpha != 0) {
+    if ((s16)self->mainAlpha != 0) {
         EnMag_DrawImageRGBA32(&gfx, 152, 100, (u8*)gTitleZeldaShieldLogoMQTex, 160, 160);
     }
 
@@ -433,28 +433,28 @@ void EnMag_DrawInner(Actor* thisx, GlobalContext* globalCtx, Gfx** gfxp) {
     gDPSetCombineLERP(gfx++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0, PRIMITIVE,
                       ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
 
-    if ((s16)this->mainAlpha < 100) {
+    if ((s16)self->mainAlpha < 100) {
         gDPSetRenderMode(gfx++, G_RM_CLD_SURF, G_RM_CLD_SURF2);
     } else {
         gDPSetRenderMode(gfx++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
     }
 
-    gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, (s16)this->mainAlpha);
+    gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, (s16)self->mainAlpha);
     gDPSetEnvColor(gfx++, 0, 0, 100, 255);
 
-    if ((s16)this->mainAlpha != 0) {
+    if ((s16)self->mainAlpha != 0) {
         EnMag_DrawTextureI8(&gfx, gTitleTheLegendOfTextTex, 72, 8, 146, 73, 72, 8, 1024, 1024);
         EnMag_DrawTextureI8(&gfx, gTitleOcarinaOfTimeTMTextTex, 96, 8, 144, 127, 96, 8, 1024, 1024);
 
         gDPPipeSync(gfx++);
-        gDPSetPrimColor(gfx++, 0, 0, 100, 150, 255, (s16)this->mainAlpha);
+        gDPSetPrimColor(gfx++, 0, 0, 100, 150, 255, (s16)self->mainAlpha);
         gDPSetEnvColor(gfx++, 20, 80, 160, 255);
 
         EnMag_DrawTextureI8(&gfx, gTitleTheLegendOfTextTex, 72, 8, 145, 72, 72, 8, 1024, 1024);
         EnMag_DrawTextureI8(&gfx, gTitleOcarinaOfTimeTMTextTex, 96, 8, 143, 126, 96, 8, 1024, 1024);
 
         gDPPipeSync(gfx++);
-        gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, (s16)this->subAlpha);
+        gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, (s16)self->subAlpha);
 
         EnMag_DrawImageRGBA32(&gfx, 174, 145, (u8*)gTitleMasterQuestSubtitleTex, 128, 32);
     }
@@ -464,10 +464,10 @@ void EnMag_DrawInner(Actor* thisx, GlobalContext* globalCtx, Gfx** gfxp) {
     gDPSetAlphaCompare(gfx++, G_AC_NONE);
     gDPSetCombineMode(gfx++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
 
-    gDPSetPrimColor(gfx++, 0, 0, (s16)this->copyrightAlpha, (s16)this->copyrightAlpha, (s16)this->copyrightAlpha,
-                    (s16)this->copyrightAlpha);
+    gDPSetPrimColor(gfx++, 0, 0, (s16)self->copyrightAlpha, (s16)self->copyrightAlpha, (s16)self->copyrightAlpha,
+                    (s16)self->copyrightAlpha);
 
-    if ((s16)this->copyrightAlpha != 0) {
+    if ((s16)self->copyrightAlpha != 0) {
         gDPLoadTextureBlock(gfx++, gTitleCopyright19982003Tex, G_IM_FMT_IA, G_IM_SIZ_8b, 160, 16, 0,
                             G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK,
                             G_TX_NOLOD, G_TX_NOLOD);
@@ -511,7 +511,7 @@ void EnMag_DrawInner(Actor* thisx, GlobalContext* globalCtx, Gfx** gfxp) {
                 rectLeft += VREG(23);
             }
         }
-    } else if (this->copyrightAlpha >= 200.0f) {
+    } else if (self->copyrightAlpha >= 200.0f) {
         // Draw "PRESS START" Text
         textAlpha = textFadeTimer * 10;
         if (textAlpha >= 255) {

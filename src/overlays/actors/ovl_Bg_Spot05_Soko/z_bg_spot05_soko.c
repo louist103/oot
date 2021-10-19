@@ -15,9 +15,9 @@ void BgSpot05Soko_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgSpot05Soko_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgSpot05Soko_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgSpot05Soko_Draw(Actor* thisx, GlobalContext* globalCtx);
-void func_808AE5A8(BgSpot05Soko* this, GlobalContext* globalCtx);
-void func_808AE5B4(BgSpot05Soko* this, GlobalContext* globalCtx);
-void func_808AE630(BgSpot05Soko* this, GlobalContext* globalCtx);
+void func_808AE5A8(BgSpot05Soko* self, GlobalContext* globalCtx);
+void func_808AE5B4(BgSpot05Soko* self, GlobalContext* globalCtx);
+void func_808AE630(BgSpot05Soko* self, GlobalContext* globalCtx);
 
 const ActorInit Bg_Spot05_Soko_InitVars = {
     ACTOR_BG_SPOT05_SOKO,
@@ -42,64 +42,64 @@ static Gfx* sDLists[] = {
 
 void BgSpot05Soko_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad1;
-    BgSpot05Soko* this = THIS;
+    BgSpot05Soko* self = THIS;
     CollisionHeader* colHeader = NULL;
     s32 pad2;
 
     Actor_ProcessInitChain(thisx, sInitChain);
-    this->switchFlag = (thisx->params >> 8) & 0xFF;
+    self->switchFlag = (thisx->params >> 8) & 0xFF;
     thisx->params &= 0xFF;
-    DynaPolyActor_Init(&this->dyna, DPM_UNK);
+    DynaPolyActor_Init(&self->dyna, DPM_UNK);
     if (thisx->params == 0) {
         CollisionHeader_GetVirtual(&object_spot05_objects_Col_000918, &colHeader);
         if (LINK_IS_ADULT) {
             Actor_Kill(thisx);
         } else {
-            this->actionFunc = func_808AE5A8;
+            self->actionFunc = func_808AE5A8;
         }
     } else {
         CollisionHeader_GetVirtual(&object_spot05_objects_Col_0012C0, &colHeader);
-        if (Flags_GetSwitch(globalCtx, this->switchFlag) != 0) {
+        if (Flags_GetSwitch(globalCtx, self->switchFlag) != 0) {
             Actor_Kill(thisx);
         } else {
-            this->actionFunc = func_808AE5B4;
+            self->actionFunc = func_808AE5B4;
             thisx->flags |= 0x10;
         }
     }
-    this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, thisx, colHeader);
+    self->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, thisx, colHeader);
 }
 
 void BgSpot05Soko_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    BgSpot05Soko* this = THIS;
+    BgSpot05Soko* self = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, self->dyna.bgId);
 }
 
-void func_808AE5A8(BgSpot05Soko* this, GlobalContext* globalCtx) {
+void func_808AE5A8(BgSpot05Soko* self, GlobalContext* globalCtx) {
 }
 
-void func_808AE5B4(BgSpot05Soko* this, GlobalContext* globalCtx) {
-    if (Flags_GetSwitch(globalCtx, this->switchFlag)) {
-        Audio_PlaySoundAtPosition(globalCtx, &this->dyna.actor.world.pos, 30, NA_SE_EV_METALDOOR_CLOSE);
-        Actor_SetFocus(&this->dyna.actor, 50.0f);
-        OnePointCutscene_Attention(globalCtx, &this->dyna.actor);
-        this->actionFunc = func_808AE630;
-        this->dyna.actor.speedXZ = 0.5f;
+void func_808AE5B4(BgSpot05Soko* self, GlobalContext* globalCtx) {
+    if (Flags_GetSwitch(globalCtx, self->switchFlag)) {
+        Audio_PlaySoundAtPosition(globalCtx, &self->dyna.actor.world.pos, 30, NA_SE_EV_METALDOOR_CLOSE);
+        Actor_SetFocus(&self->dyna.actor, 50.0f);
+        OnePointCutscene_Attention(globalCtx, &self->dyna.actor);
+        self->actionFunc = func_808AE630;
+        self->dyna.actor.speedXZ = 0.5f;
     }
 }
 
-void func_808AE630(BgSpot05Soko* this, GlobalContext* globalCtx) {
-    this->dyna.actor.speedXZ *= 1.5f;
-    if (Math_StepToF(&this->dyna.actor.world.pos.y, this->dyna.actor.home.pos.y - 120.0f, this->dyna.actor.speedXZ) !=
+void func_808AE630(BgSpot05Soko* self, GlobalContext* globalCtx) {
+    self->dyna.actor.speedXZ *= 1.5f;
+    if (Math_StepToF(&self->dyna.actor.world.pos.y, self->dyna.actor.home.pos.y - 120.0f, self->dyna.actor.speedXZ) !=
         0) {
-        Actor_Kill(&this->dyna.actor);
+        Actor_Kill(&self->dyna.actor);
     }
 }
 
 void BgSpot05Soko_Update(Actor* thisx, GlobalContext* globalCtx) {
-    BgSpot05Soko* this = THIS;
+    BgSpot05Soko* self = THIS;
 
-    this->actionFunc(this, globalCtx);
+    self->actionFunc(self, globalCtx);
 }
 
 void BgSpot05Soko_Draw(Actor* thisx, GlobalContext* globalCtx) {

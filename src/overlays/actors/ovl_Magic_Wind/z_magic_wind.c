@@ -15,11 +15,11 @@ void MagicWind_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void MagicWind_Update(Actor* thisx, GlobalContext* globalCtx);
 void MagicWind_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void MagicWind_Shrink(MagicWind* this, GlobalContext* globalCtx);
-void MagicWind_WaitForTimer(MagicWind* this, GlobalContext* globalCtx);
-void MagicWind_FadeOut(MagicWind* this, GlobalContext* globalCtx);
-void MagicWind_WaitAtFullSize(MagicWind* this, GlobalContext* globalCtx);
-void MagicWind_Grow(MagicWind* this, GlobalContext* globalCtx);
+void MagicWind_Shrink(MagicWind* self, GlobalContext* globalCtx);
+void MagicWind_WaitForTimer(MagicWind* self, GlobalContext* globalCtx);
+void MagicWind_FadeOut(MagicWind* self, GlobalContext* globalCtx);
+void MagicWind_WaitAtFullSize(MagicWind* self, GlobalContext* globalCtx);
+void MagicWind_Grow(MagicWind* self, GlobalContext* globalCtx);
 
 const ActorInit Magic_Wind_InitVars = {
     ACTOR_MAGIC_WIND,
@@ -122,28 +122,28 @@ static u8 sAlphaUpdVals[] = {
     0x00, 0x03, 0x04, 0x07, 0x09, 0x0A, 0x0D, 0x0F, 0x11, 0x12, 0x15, 0x16, 0x19, 0x1B, 0x1C, 0x1F, 0x21, 0x23,
 };
 
-void MagicWind_SetupAction(MagicWind* this, MagicWindFunc actionFunc) {
-    this->actionFunc = actionFunc;
+void MagicWind_SetupAction(MagicWind* self, MagicWindFunc actionFunc) {
+    self->actionFunc = actionFunc;
 }
 
 void MagicWind_Init(Actor* thisx, GlobalContext* globalCtx) {
-    MagicWind* this = THIS;
+    MagicWind* self = THIS;
     Player* player = GET_PLAYER(globalCtx);
 
-    if (SkelCurve_Init(globalCtx, &this->skelCurve, &sLimbList, &sTransformUpdIdx) == 0) {
+    if (SkelCurve_Init(globalCtx, &self->skelCurve, &sLimbList, &sTransformUpdIdx) == 0) {
         // "Magic_Wind_Actor_ct (): Construct failed"
         osSyncPrintf("Magic_Wind_Actor_ct():コンストラクト失敗\n");
     }
-    this->actor.room = -1;
-    switch (this->actor.params) {
+    self->actor.room = -1;
+    switch (self->actor.params) {
         case 0:
-            SkelCurve_SetAnim(&this->skelCurve, &sTransformUpdIdx, 0.0f, 60.0f, 0.0f, 1.0f);
-            this->timer = 29;
-            MagicWind_SetupAction(this, MagicWind_WaitForTimer);
+            SkelCurve_SetAnim(&self->skelCurve, &sTransformUpdIdx, 0.0f, 60.0f, 0.0f, 1.0f);
+            self->timer = 29;
+            MagicWind_SetupAction(self, MagicWind_WaitForTimer);
             break;
         case 1:
-            SkelCurve_SetAnim(&this->skelCurve, &sTransformUpdIdx, 60.0f, 0.0f, 60.0f, -1.0f);
-            MagicWind_SetupAction(this, MagicWind_Shrink);
+            SkelCurve_SetAnim(&self->skelCurve, &sTransformUpdIdx, 60.0f, 0.0f, 60.0f, -1.0f);
+            MagicWind_SetupAction(self, MagicWind_Shrink);
             // "Means start"
             LOG_STRING("表示開始", "../z_magic_wind.c", 486);
             func_8002F7DC(&player->actor, NA_SE_PL_MAGIC_WIND_WARP);
@@ -152,8 +152,8 @@ void MagicWind_Init(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void MagicWind_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    MagicWind* this = THIS;
-    SkelCurve_Destroy(globalCtx, &this->skelCurve);
+    MagicWind* self = THIS;
+    SkelCurve_Destroy(globalCtx, &self->skelCurve);
     func_800876C8(globalCtx);
     // "wipe out"
     LOG_STRING("消滅", "../z_magic_wind.c", 505);
@@ -166,11 +166,11 @@ void MagicWind_UpdateAlpha(f32 alpha) {
     }
 }
 
-void MagicWind_WaitForTimer(MagicWind* this, GlobalContext* globalCtx) {
+void MagicWind_WaitForTimer(MagicWind* self, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if (this->timer > 0) {
-        this->timer--;
+    if (self->timer > 0) {
+        self->timer--;
         return;
     }
 
@@ -178,53 +178,53 @@ void MagicWind_WaitForTimer(MagicWind* this, GlobalContext* globalCtx) {
     LOG_STRING("表示開始", "../z_magic_wind.c", 539);
     func_8002F7DC(&player->actor, NA_SE_PL_MAGIC_WIND_NORMAL);
     MagicWind_UpdateAlpha(1.0f);
-    MagicWind_SetupAction(this, MagicWind_Grow);
-    SkelCurve_Update(globalCtx, &this->skelCurve);
+    MagicWind_SetupAction(self, MagicWind_Grow);
+    SkelCurve_Update(globalCtx, &self->skelCurve);
 }
 
-void MagicWind_Grow(MagicWind* this, GlobalContext* globalCtx) {
-    if (SkelCurve_Update(globalCtx, &this->skelCurve)) {
-        MagicWind_SetupAction(this, MagicWind_WaitAtFullSize);
-        this->timer = 50;
+void MagicWind_Grow(MagicWind* self, GlobalContext* globalCtx) {
+    if (SkelCurve_Update(globalCtx, &self->skelCurve)) {
+        MagicWind_SetupAction(self, MagicWind_WaitAtFullSize);
+        self->timer = 50;
     }
 }
 
-void MagicWind_WaitAtFullSize(MagicWind* this, GlobalContext* globalCtx) {
-    if (this->timer > 0) {
-        this->timer--;
+void MagicWind_WaitAtFullSize(MagicWind* self, GlobalContext* globalCtx) {
+    if (self->timer > 0) {
+        self->timer--;
     } else {
-        MagicWind_SetupAction(this, MagicWind_FadeOut);
-        this->timer = 30;
+        MagicWind_SetupAction(self, MagicWind_FadeOut);
+        self->timer = 30;
     }
 }
 
-void MagicWind_FadeOut(MagicWind* this, GlobalContext* globalCtx) {
-    if (this->timer > 0) {
-        MagicWind_UpdateAlpha((f32)this->timer * (1.0f / 30.0f));
-        this->timer--;
+void MagicWind_FadeOut(MagicWind* self, GlobalContext* globalCtx) {
+    if (self->timer > 0) {
+        MagicWind_UpdateAlpha((f32)self->timer * (1.0f / 30.0f));
+        self->timer--;
     } else {
-        Actor_Kill(&this->actor);
+        Actor_Kill(&self->actor);
     }
 }
 
-void MagicWind_Shrink(MagicWind* this, GlobalContext* globalCtx) {
-    if (SkelCurve_Update(globalCtx, &this->skelCurve)) {
-        Actor_Kill(&this->actor);
+void MagicWind_Shrink(MagicWind* self, GlobalContext* globalCtx) {
+    if (SkelCurve_Update(globalCtx, &self->skelCurve)) {
+        Actor_Kill(&self->actor);
     }
 }
 
 void MagicWind_Update(Actor* thisx, GlobalContext* globalCtx) {
-    MagicWind* this = THIS;
+    MagicWind* self = THIS;
     if (globalCtx->msgCtx.msgMode == 0xD || globalCtx->msgCtx.msgMode == 0x11) {
         Actor_Kill(thisx);
         return;
     }
 
-    this->actionFunc(this, globalCtx);
+    self->actionFunc(self, globalCtx);
 }
 
 s32 MagicWind_OverrideLimbDraw(GlobalContext* globalCtx, SkelAnimeCurve* skelCurve, s32 limbIndex, void* thisx) {
-    MagicWind* this = THIS;
+    MagicWind* self = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx, "../z_magic_wind.c", 615);
 
@@ -250,13 +250,13 @@ s32 MagicWind_OverrideLimbDraw(GlobalContext* globalCtx, SkelAnimeCurve* skelCur
 
 void MagicWind_Draw(Actor* thisx, GlobalContext* globalCtx) {
     GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
-    MagicWind* this = THIS;
+    MagicWind* self = THIS;
 
     OPEN_DISPS(gfxCtx, "../z_magic_wind.c", 661);
 
-    if (this->actionFunc != MagicWind_WaitForTimer) {
+    if (self->actionFunc != MagicWind_WaitForTimer) {
         POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 25);
-        SkelCurve_Draw(thisx, globalCtx, &this->skelCurve, MagicWind_OverrideLimbDraw, NULL, 1, NULL);
+        SkelCurve_Draw(thisx, globalCtx, &self->skelCurve, MagicWind_OverrideLimbDraw, NULL, 1, NULL);
     }
 
     CLOSE_DISPS(gfxCtx, "../z_magic_wind.c", 673);

@@ -16,11 +16,11 @@ void BgBombwall_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgBombwall_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgBombwall_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_8086ED50(BgBombwall* this, GlobalContext* globalCtx);
-void func_8086ED70(BgBombwall* this, GlobalContext* globalCtx);
-void func_8086EDFC(BgBombwall* this, GlobalContext* globalCtx);
-void func_8086EE40(BgBombwall* this, GlobalContext* globalCtx);
-void func_8086EE94(BgBombwall* this, GlobalContext* globalCtx);
+void func_8086ED50(BgBombwall* self, GlobalContext* globalCtx);
+void func_8086ED70(BgBombwall* self, GlobalContext* globalCtx);
+void func_8086EDFC(BgBombwall* self, GlobalContext* globalCtx);
+void func_8086EE40(BgBombwall* self, GlobalContext* globalCtx);
+void func_8086EE94(BgBombwall* self, GlobalContext* globalCtx);
 
 static ColliderTrisElementInit sTrisElementsInit[3] = {
     {
@@ -83,19 +83,19 @@ const ActorInit Bg_Bombwall_InitVars = {
     (ActorFunc)BgBombwall_Draw,
 };
 
-void BgBombwall_InitDynapoly(BgBombwall* this, GlobalContext* globalCtx) {
+void BgBombwall_InitDynapoly(BgBombwall* self, GlobalContext* globalCtx) {
     s32 pad;
     s32 pad2;
     CollisionHeader* colHeader = NULL;
 
-    DynaPolyActor_Init(&this->dyna, DPM_UNK);
+    DynaPolyActor_Init(&self->dyna, DPM_UNK);
     CollisionHeader_GetVirtual(&gBgBombwallCol, &colHeader);
-    this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
+    self->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &self->dyna.actor, colHeader);
 
-    if (this->dyna.bgId == BG_ACTOR_MAX) {
+    if (self->dyna.bgId == BG_ACTOR_MAX) {
         // "Warning : move BG login failed"
         osSyncPrintf("Warning : move BG 登録失敗(%s %d)(arg_data 0x%04x)\n", "../z_bg_bombwall.c", 243,
-                     this->dyna.actor.params);
+                     self->dyna.actor.params);
     }
 }
 
@@ -117,20 +117,20 @@ void BgBombwall_Init(Actor* thisx, GlobalContext* globalCtx) {
     Vec3f vecs[3];
     Vec3f sp80;
     s32 pad;
-    BgBombwall* this = THIS;
-    f32 sin = Math_SinS(this->dyna.actor.shape.rot.y);
-    f32 cos = Math_CosS(this->dyna.actor.shape.rot.y);
+    BgBombwall* self = THIS;
+    f32 sin = Math_SinS(self->dyna.actor.shape.rot.y);
+    f32 cos = Math_CosS(self->dyna.actor.shape.rot.y);
 
-    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    Actor_SetScale(&this->dyna.actor, 0.1f);
+    Actor_ProcessInitChain(&self->dyna.actor, sInitChain);
+    Actor_SetScale(&self->dyna.actor, 0.1f);
 
-    if (Flags_GetSwitch(globalCtx, this->dyna.actor.params & 0x3F)) {
-        func_8086EE94(this, globalCtx);
+    if (Flags_GetSwitch(globalCtx, self->dyna.actor.params & 0x3F)) {
+        func_8086EE94(self, globalCtx);
     } else {
-        BgBombwall_InitDynapoly(this, globalCtx);
-        this->unk_2A2 |= 2;
-        Collider_InitTris(globalCtx, &this->collider);
-        Collider_SetTris(globalCtx, &this->collider, &this->dyna.actor, &sTrisInit, this->colliderItems);
+        BgBombwall_InitDynapoly(self, globalCtx);
+        self->unk_2A2 |= 2;
+        Collider_InitTris(globalCtx, &self->collider);
+        Collider_SetTris(globalCtx, &self->collider, &self->dyna.actor, &sTrisInit, self->colliderItems);
 
         for (i = 0; i <= 2; i++) {
             for (j = 0; j <= 2; j++) {
@@ -140,51 +140,51 @@ void BgBombwall_Init(Actor* thisx, GlobalContext* globalCtx) {
 
                 BgBombwall_RotateVec(&vecs[j], &sp80, sin, cos);
 
-                vecs[j].x += this->dyna.actor.world.pos.x;
-                vecs[j].y += this->dyna.actor.world.pos.y;
-                vecs[j].z += this->dyna.actor.world.pos.z;
+                vecs[j].x += self->dyna.actor.world.pos.x;
+                vecs[j].y += self->dyna.actor.world.pos.y;
+                vecs[j].z += self->dyna.actor.world.pos.z;
             }
-            Collider_SetTrisVertices(&this->collider, i, &vecs[0], &vecs[1], &vecs[2]);
+            Collider_SetTrisVertices(&self->collider, i, &vecs[0], &vecs[1], &vecs[2]);
         }
 
-        this->unk_2A2 |= 1;
-        func_8086ED50(this, globalCtx);
+        self->unk_2A2 |= 1;
+        func_8086ED50(self, globalCtx);
     }
 
-    osSyncPrintf("(field keep 汎用爆弾壁)(arg_data 0x%04x)(angY %d)\n", this->dyna.actor.params,
-                 this->dyna.actor.shape.rot.y);
+    osSyncPrintf("(field keep 汎用爆弾壁)(arg_data 0x%04x)(angY %d)\n", self->dyna.actor.params,
+                 self->dyna.actor.shape.rot.y);
 }
 
-void BgBombwall_DestroyCollision(BgBombwall* this, GlobalContext* globalCtx) {
-    if (this->unk_2A2 & 2) {
-        DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
-        this->unk_2A2 &= ~2;
+void BgBombwall_DestroyCollision(BgBombwall* self, GlobalContext* globalCtx) {
+    if (self->unk_2A2 & 2) {
+        DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, self->dyna.bgId);
+        self->unk_2A2 &= ~2;
     }
 
-    if (this->unk_2A2 & 1) {
-        Collider_DestroyTris(globalCtx, &this->collider);
-        this->unk_2A2 &= ~1;
+    if (self->unk_2A2 & 1) {
+        Collider_DestroyTris(globalCtx, &self->collider);
+        self->unk_2A2 &= ~1;
     }
 }
 
 void BgBombwall_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    BgBombwall* this = THIS;
+    BgBombwall* self = THIS;
 
-    BgBombwall_DestroyCollision(this, globalCtx);
+    BgBombwall_DestroyCollision(self, globalCtx);
 }
 
 static Vec3s D_8086F010[] = {
     { 40, 85, 21 }, { -43, 107, 14 }, { -1, 142, 14 }, { -27, 44, 27 }, { 28, 24, 20 }, { -39, 54, 21 }, { 49, 50, 20 },
 };
 
-void func_8086EB5C(BgBombwall* this, GlobalContext* globalCtx) {
+void func_8086EB5C(BgBombwall* self, GlobalContext* globalCtx) {
     s16 rand;
     s16 rand2;
     Vec3f sp88;
     s32 i;
-    f32 sin = Math_SinS(this->dyna.actor.shape.rot.y);
-    f32 cos = Math_CosS(this->dyna.actor.shape.rot.y);
-    Vec3f* pos = &this->dyna.actor.world.pos;
+    f32 sin = Math_SinS(self->dyna.actor.shape.rot.y);
+    f32 cos = Math_CosS(self->dyna.actor.shape.rot.y);
+    Vec3f* pos = &self->dyna.actor.world.pos;
     f32 temp;
     f32 new_var;
 
@@ -206,56 +206,56 @@ void func_8086EB5C(BgBombwall* this, GlobalContext* globalCtx) {
     func_80033480(globalCtx, &sp88, 40.0f, 4, 0xA, 0x32, 1);
 }
 
-void func_8086ED50(BgBombwall* this, GlobalContext* globalCtx) {
-    this->dList = gBgBombwallNormalDL;
-    this->actionFunc = func_8086ED70;
+void func_8086ED50(BgBombwall* self, GlobalContext* globalCtx) {
+    self->dList = gBgBombwallNormalDL;
+    self->actionFunc = func_8086ED70;
 }
 
-void func_8086ED70(BgBombwall* this, GlobalContext* globalCtx) {
-    if (this->collider.base.acFlags & AC_HIT) {
-        this->collider.base.acFlags &= ~AC_HIT;
-        func_8086EDFC(this, globalCtx);
-        Flags_SetSwitch(globalCtx, this->dyna.actor.params & 0x3F);
-    } else if (this->dyna.actor.xzDistToPlayer < 600.0f) {
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+void func_8086ED70(BgBombwall* self, GlobalContext* globalCtx) {
+    if (self->collider.base.acFlags & AC_HIT) {
+        self->collider.base.acFlags &= ~AC_HIT;
+        func_8086EDFC(self, globalCtx);
+        Flags_SetSwitch(globalCtx, self->dyna.actor.params & 0x3F);
+    } else if (self->dyna.actor.xzDistToPlayer < 600.0f) {
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
     }
 }
 
-void func_8086EDFC(BgBombwall* this, GlobalContext* globalCtx) {
-    this->dList = gBgBombwallNormalDL;
-    this->unk_2A0 = 1;
-    func_8086EB5C(this, globalCtx);
-    this->actionFunc = func_8086EE40;
+void func_8086EDFC(BgBombwall* self, GlobalContext* globalCtx) {
+    self->dList = gBgBombwallNormalDL;
+    self->unk_2A0 = 1;
+    func_8086EB5C(self, globalCtx);
+    self->actionFunc = func_8086EE40;
 }
 
-void func_8086EE40(BgBombwall* this, GlobalContext* globalCtx) {
-    if (this->unk_2A0 > 0) {
-        this->unk_2A0--;
+void func_8086EE40(BgBombwall* self, GlobalContext* globalCtx) {
+    if (self->unk_2A0 > 0) {
+        self->unk_2A0--;
     } else {
-        func_8086EE94(this, globalCtx);
+        func_8086EE94(self, globalCtx);
 
-        if (((this->dyna.actor.params >> 0xF) & 1) != 0) {
+        if (((self->dyna.actor.params >> 0xF) & 1) != 0) {
             func_80078884(NA_SE_SY_CORRECT_CHIME);
         }
     }
 }
 
-void func_8086EE94(BgBombwall* this, GlobalContext* globalCtx) {
-    this->dList = gBgBombwallBrokenDL;
-    BgBombwall_DestroyCollision(this, globalCtx);
-    this->actionFunc = NULL;
+void func_8086EE94(BgBombwall* self, GlobalContext* globalCtx) {
+    self->dList = gBgBombwallBrokenDL;
+    BgBombwall_DestroyCollision(self, globalCtx);
+    self->actionFunc = NULL;
 }
 
 void BgBombwall_Update(Actor* thisx, GlobalContext* globalCtx) {
-    BgBombwall* this = THIS;
+    BgBombwall* self = THIS;
 
-    if (this->actionFunc != NULL) {
-        this->actionFunc(this, globalCtx);
+    if (self->actionFunc != NULL) {
+        self->actionFunc(self, globalCtx);
     }
 }
 
 void BgBombwall_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    BgBombwall* this = THIS;
+    BgBombwall* self = THIS;
 
-    Gfx_DrawDListOpa(globalCtx, this->dList);
+    Gfx_DrawDListOpa(globalCtx, self->dList);
 }

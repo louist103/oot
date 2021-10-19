@@ -16,7 +16,7 @@ void BgSpot07Taki_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgSpot07Taki_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgSpot07Taki_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void BgSpot07Taki_DoNothing(BgSpot07Taki* this, GlobalContext* globalCtx);
+void BgSpot07Taki_DoNothing(BgSpot07Taki* self, GlobalContext* globalCtx);
 
 const ActorInit Bg_Spot07_Taki_InitVars = {
     ACTOR_BG_SPOT07_TAKI,
@@ -35,40 +35,40 @@ static InitChainEntry sInitChain[] = {
 };
 
 void BgSpot07Taki_Init(Actor* thisx, GlobalContext* globalCtx) {
-    BgSpot07Taki* this = THIS;
+    BgSpot07Taki* self = THIS;
     s32 pad;
     CollisionHeader* colHeader = NULL;
 
-    DynaPolyActor_Init(&this->dyna, DPM_PLAYER);
-    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
+    DynaPolyActor_Init(&self->dyna, DPM_PLAYER);
+    Actor_ProcessInitChain(&self->dyna.actor, sInitChain);
     if (LINK_IS_ADULT) {
-        if (this->dyna.actor.params == 0) {
+        if (self->dyna.actor.params == 0) {
             CollisionHeader_GetVirtual(&object_spot07_object_Col_002590, &colHeader);
         } else {
             CollisionHeader_GetVirtual(&object_spot07_object_Col_0038FC, &colHeader);
         }
-        this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
+        self->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &self->dyna.actor, colHeader);
     }
-    this->actionFunc = BgSpot07Taki_DoNothing;
+    self->actionFunc = BgSpot07Taki_DoNothing;
 }
 
 void BgSpot07Taki_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    BgSpot07Taki* this = THIS;
+    BgSpot07Taki* self = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, self->dyna.bgId);
 }
 
-void BgSpot07Taki_DoNothing(BgSpot07Taki* this, GlobalContext* globalCtx) {
+void BgSpot07Taki_DoNothing(BgSpot07Taki* self, GlobalContext* globalCtx) {
 }
 
 void BgSpot07Taki_Update(Actor* thisx, GlobalContext* globalCtx) {
-    BgSpot07Taki* this = THIS;
+    BgSpot07Taki* self = THIS;
 
-    this->actionFunc(this, globalCtx);
+    self->actionFunc(self, globalCtx);
 }
 
 void BgSpot07Taki_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    BgSpot07Taki* this = THIS;
+    BgSpot07Taki* self = THIS;
     u32 frames;
 
     OPEN_DISPS(globalCtx->state.gfxCtx, "../z_bg_spot07_taki.c", 169);
@@ -77,7 +77,7 @@ void BgSpot07Taki_Draw(Actor* thisx, GlobalContext* globalCtx) {
         func_80093D18(globalCtx->state.gfxCtx);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx, "../z_bg_spot07_taki.c", 177),
                   G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        if (this->dyna.actor.params == 0) {
+        if (self->dyna.actor.params == 0) {
             gSPDisplayList(POLY_OPA_DISP++, object_spot07_object_DL_001CF0);
         } else {
             gSPDisplayList(POLY_OPA_DISP++, object_spot07_object_DL_003210);
@@ -94,7 +94,7 @@ void BgSpot07Taki_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     if (!LINK_IS_ADULT) {
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, 128);
-        if (this->dyna.actor.params == 0) {
+        if (self->dyna.actor.params == 0) {
             gSPSegment(POLY_XLU_DISP++, 0x09,
                        Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, ((frames * -1) & 0x7F), ((frames * -3) & 0xFF), 64,
                                         64, 1, ((frames * 1) & 0x7F), ((frames * -3) & 0xFF), 64, 64));
@@ -111,7 +111,7 @@ void BgSpot07Taki_Draw(Actor* thisx, GlobalContext* globalCtx) {
                                         frames * 0, ((frames * 3) & 0x1FF), 32, 128));
             gSPDisplayList(POLY_XLU_DISP++, object_spot07_object_DL_000BE0);
         }
-    } else if (this->dyna.actor.params == 0) {
+    } else if (self->dyna.actor.params == 0) {
         gSPDisplayList(POLY_XLU_DISP++, object_spot07_object_DL_001F68);
     } else {
         gSPDisplayList(POLY_XLU_DISP++, object_spot07_object_DL_0032D8);

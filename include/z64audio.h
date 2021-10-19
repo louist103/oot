@@ -4,7 +4,7 @@
 #define MK_CMD(b0,b1,b2,b3) ((((b0) & 0xFF) << 0x18) | (((b1) & 0xFF) << 0x10) | (((b2) & 0xFF) << 0x8) | (((b3) & 0xFF) << 0))
 
 /**
- * Structs in this repository have primarily been imported from the SM64 Decompilation.
+ * Structs in self repository have primarily been imported from the SM64 Decompilation.
  * Some struct members may be wrong; the symbol '?' next to an offset means the member is a guess.
  */
 
@@ -397,7 +397,7 @@ typedef struct SequenceChannelLayer {
     /* 0x0E */ u16 portamentoTime;
     /* 0x10 */ s16 transposition; // #semitones added to play commands
                                   // (m64 instruction encoding only allows referring to the limited range
-                                  // 0..0x3F; this makes 0x40..0x7F accessible as well)
+                                  // 0..0x3F; self makes 0x40..0x7F accessible as well)
     /* 0x12 */ s16 shortNoteDefaultPlayPercentage;
     /* 0x14 */ s16 playPercentage;
     /* 0x18 */ AdsrSettings adsr;
@@ -926,7 +926,7 @@ typedef struct {
     /* 0x2A10 */ SoundAllocPool temporaryCommonPool;
     /* 0x2A20 */ SoundMultiPool seqLoadedPool;
     /* 0x2B30 */ SoundMultiPool bankLoadedPool;
-    /* 0x2C40 */ SoundMultiPool unusedLoadedPool; // rename after we figure out what this is
+    /* 0x2C40 */ SoundMultiPool unusedLoadedPool; // rename after we figure out what self is
     /* 0x2D50 */ SoundAllocPool unk_2D50;
     /* 0x2D60 */ SeqOrBankEntry unk_2D60[32];
     /* 0x2EE0 */ UnkPool unk_2EE0;

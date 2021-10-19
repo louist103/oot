@@ -36,28 +36,28 @@ extern Gfx gGTGRotatingRingPlatformDL[];
 extern CollisionHeader gGTGRotatingRingPlatformCol;
 
 void BgMenkuriKaiten_Init(Actor* thisx, GlobalContext* globalCtx) {
-    BgMenkuriKaiten* this = THIS;
+    BgMenkuriKaiten* self = THIS;
     s32 pad;
     CollisionHeader* colHeader = NULL;
 
-    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPolyActor_Init(&this->dyna, DPM_UNK3);
+    Actor_ProcessInitChain(&self->dyna.actor, sInitChain);
+    DynaPolyActor_Init(&self->dyna, DPM_UNK3);
     CollisionHeader_GetVirtual(&gGTGRotatingRingPlatformCol, &colHeader);
-    this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
+    self->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &self->dyna.actor, colHeader);
 }
 
 void BgMenkuriKaiten_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    BgMenkuriKaiten* this = THIS;
+    BgMenkuriKaiten* self = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, self->dyna.bgId);
 }
 
 void BgMenkuriKaiten_Update(Actor* thisx, GlobalContext* globalCtx) {
-    BgMenkuriKaiten* this = THIS;
+    BgMenkuriKaiten* self = THIS;
 
-    if (!Flags_GetSwitch(globalCtx, this->dyna.actor.params) && func_80043590(&this->dyna)) {
-        func_8002F974(&this->dyna.actor, NA_SE_EV_ELEVATOR_MOVE - SFX_FLAG);
-        this->dyna.actor.shape.rot.y += 0x80;
+    if (!Flags_GetSwitch(globalCtx, self->dyna.actor.params) && func_80043590(&self->dyna)) {
+        func_8002F974(&self->dyna.actor, NA_SE_EV_ELEVATOR_MOVE - SFX_FLAG);
+        self->dyna.actor.shape.rot.y += 0x80;
     }
 }
 

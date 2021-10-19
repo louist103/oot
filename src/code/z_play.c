@@ -292,7 +292,7 @@ void Gameplay_Init(GameState* thisx) {
     osSyncPrintf("\nSCENE_NO=%d COUNTER=%d\n", ((void)0, gSaveContext.entranceIndex), gSaveContext.sceneSetupIndex);
 
     // When entering Gerudo Valley in the right setup, trigger the GC emulator to play the ending movie.
-    // The emulator constantly checks whether PC is 0x81000000, so this works even though it's not a valid address.
+    // The emulator constantly checks whether PC is 0x81000000, so self works even though it's not a valid address.
     if ((gEntranceTable[((void)0, gSaveContext.entranceIndex)].scene == SCENE_SPOT09) &&
         gSaveContext.sceneSetupIndex == 6) {
         osSyncPrintf("エンディングはじまるよー\n"); // "The ending starts"
@@ -1367,7 +1367,7 @@ void Gameplay_Draw(GlobalContext* globalCtx) {
 
     Camera_Finish(GET_ACTIVE_CAM(globalCtx));
 
-    // Skulltula sanity check, because fuck this dumb SRAM GCC bug or whatever it is.
+    // Skulltula sanity check, because fuck self dumb SRAM GCC bug or whatever it is.
     {
         Gfx* prevDisplayList = POLY_OPA_DISP;
         Gfx* gfxP = Graph_GfxPlusOne(POLY_OPA_DISP);
@@ -1542,7 +1542,7 @@ void Gameplay_SpawnScene(GlobalContext* globalCtx, s32 sceneNum, s32 spawn) {
 
     globalCtx->sceneSegment = Gameplay_LoadFile(globalCtx, &scene->sceneFile);
     scene->unk_13 = 0;
-    ASSERT(globalCtx->sceneSegment != NULL, "this->sceneSegment != NULL", "../z_play.c", 4960);
+    ASSERT(globalCtx->sceneSegment != NULL, "self->sceneSegment != NULL", "../z_play.c", 4960);
 
     gSegments[2] = VIRTUAL_TO_PHYSICAL(globalCtx->sceneSegment);
 

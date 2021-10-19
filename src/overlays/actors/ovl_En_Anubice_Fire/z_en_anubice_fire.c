@@ -17,9 +17,9 @@ void EnAnubiceFire_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnAnubiceFire_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnAnubiceFire_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_809B26EC(EnAnubiceFire* this, GlobalContext* globalCtx);
-void func_809B27D8(EnAnubiceFire* this, GlobalContext* globalCtx);
-void func_809B2B48(EnAnubiceFire* this, GlobalContext* globalCtx);
+void func_809B26EC(EnAnubiceFire* self, GlobalContext* globalCtx);
+void func_809B27D8(EnAnubiceFire* self, GlobalContext* globalCtx);
+void func_809B2B48(EnAnubiceFire* self, GlobalContext* globalCtx);
 
 const ActorInit En_Anubice_Fire_InitVars = {
     ACTOR_EN_ANUBICE_FIRE,
@@ -54,45 +54,45 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 void EnAnubiceFire_Init(Actor* thisx, GlobalContext* globalCtx) {
-    EnAnubiceFire* this = THIS;
+    EnAnubiceFire* self = THIS;
     s32 i;
 
-    Collider_InitCylinder(globalCtx, &this->cylinder);
-    Collider_SetCylinder(globalCtx, &this->cylinder, &this->actor, &sCylinderInit);
+    Collider_InitCylinder(globalCtx, &self->cylinder);
+    Collider_SetCylinder(globalCtx, &self->cylinder, &self->actor, &sCylinderInit);
 
-    this->unk_15A = 30;
-    this->unk_154 = 2.0f;
-    this->scale = 0.0f;
+    self->unk_15A = 30;
+    self->unk_154 = 2.0f;
+    self->scale = 0.0f;
 
     for (i = 0; i < 6; i++) {
-        this->unk_160[i] = this->actor.world.pos;
+        self->unk_160[i] = self->actor.world.pos;
     }
 
-    this->unk_15E = 0;
-    this->actionFunc = func_809B26EC;
+    self->unk_15E = 0;
+    self->actionFunc = func_809B26EC;
 }
 
 void EnAnubiceFire_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    EnAnubiceFire* this = THIS;
+    EnAnubiceFire* self = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->cylinder);
+    Collider_DestroyCylinder(globalCtx, &self->cylinder);
 }
 
-void func_809B26EC(EnAnubiceFire* this, GlobalContext* globalCtx) {
+void func_809B26EC(EnAnubiceFire* self, GlobalContext* globalCtx) {
     Vec3f velocity = { 0.0f, 0.0f, 0.0f };
 
     Matrix_Push();
-    Matrix_RotateY(BINANG_TO_RAD(this->actor.world.rot.y), MTXMODE_NEW);
-    Matrix_RotateX(BINANG_TO_RAD(this->actor.world.rot.x), MTXMODE_APPLY);
+    Matrix_RotateY(BINANG_TO_RAD(self->actor.world.rot.y), MTXMODE_NEW);
+    Matrix_RotateX(BINANG_TO_RAD(self->actor.world.rot.x), MTXMODE_APPLY);
     velocity.z = 15.0f;
-    Matrix_MultVec3f(&velocity, &this->actor.velocity);
+    Matrix_MultVec3f(&velocity, &self->actor.velocity);
     Matrix_Pop();
 
-    this->actionFunc = func_809B27D8;
-    this->actor.world.rot.x = this->actor.world.rot.y = this->actor.world.rot.z = 0;
+    self->actionFunc = func_809B27D8;
+    self->actor.world.rot.x = self->actor.world.rot.y = self->actor.world.rot.z = 0;
 }
 
-void func_809B27D8(EnAnubiceFire* this, GlobalContext* globalCtx) {
+void func_809B27D8(EnAnubiceFire* self, GlobalContext* globalCtx) {
     s32 pad;
     Vec3f velocity = { 0.0f, 0.0f, 0.0f };
     Vec3f accel = { 0.0f, 0.0f, 0.0f };
@@ -102,48 +102,48 @@ void func_809B27D8(EnAnubiceFire* this, GlobalContext* globalCtx) {
     Vec3f sp84 = { 0.0f, 0.0f, 0.0f };
     Vec3f sp78 = { 0.0f, 0.0f, 0.0f };
 
-    this->actor.world.rot.z += 5000;
-    if (this->unk_15A == 0) {
-        this->unk_154 = 0.0f;
+    self->actor.world.rot.z += 5000;
+    if (self->unk_15A == 0) {
+        self->unk_154 = 0.0f;
     }
 
-    Math_ApproachF(&this->scale, this->unk_154, 0.2f, 0.4f);
-    if ((this->unk_15A == 0) && (this->scale < 0.1f)) {
-        Actor_Kill(&this->actor);
-    } else if ((this->actor.params == 0) && (this->cylinder.base.atFlags & 4)) {
+    Math_ApproachF(&self->scale, self->unk_154, 0.2f, 0.4f);
+    if ((self->unk_15A == 0) && (self->scale < 0.1f)) {
+        Actor_Kill(&self->actor);
+    } else if ((self->actor.params == 0) && (self->cylinder.base.atFlags & 4)) {
         if (Player_HasMirrorShieldEquipped(globalCtx)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_IT_SHIELD_REFLECT_SW);
-            this->cylinder.base.atFlags &= 0xFFE9;
-            this->cylinder.base.atFlags |= 8;
-            this->cylinder.info.toucher.dmgFlags = 2;
-            this->unk_15A = 30;
-            this->actor.params = 1;
-            this->actor.velocity.x *= -1.0f;
-            this->actor.velocity.y *= -0.5f;
-            this->actor.velocity.z *= -1.0f;
+            Audio_PlayActorSound2(&self->actor, NA_SE_IT_SHIELD_REFLECT_SW);
+            self->cylinder.base.atFlags &= 0xFFE9;
+            self->cylinder.base.atFlags |= 8;
+            self->cylinder.info.toucher.dmgFlags = 2;
+            self->unk_15A = 30;
+            self->actor.params = 1;
+            self->actor.velocity.x *= -1.0f;
+            self->actor.velocity.y *= -0.5f;
+            self->actor.velocity.z *= -1.0f;
         } else {
-            this->unk_15A = 0;
-            EffectSsBomb2_SpawnLayered(globalCtx, &this->actor.world.pos, &sp78, &sp84, 10, 5);
-            this->actor.velocity.x = this->actor.velocity.y = this->actor.velocity.z = 0.0f;
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_ANUBIS_FIREBOMB);
-            this->actionFunc = func_809B2B48;
+            self->unk_15A = 0;
+            EffectSsBomb2_SpawnLayered(globalCtx, &self->actor.world.pos, &sp78, &sp84, 10, 5);
+            self->actor.velocity.x = self->actor.velocity.y = self->actor.velocity.z = 0.0f;
+            Audio_PlayActorSound2(&self->actor, NA_SE_EN_ANUBIS_FIREBOMB);
+            self->actionFunc = func_809B2B48;
         }
-    } else if (!(this->scale < .4f)) {
+    } else if (!(self->scale < .4f)) {
         f32 scale = 1000.0f;
         f32 life = 10.0f;
         s32 i;
 
         for (i = 0; i < 10; i++) {
-            pos.x = this->actor.world.pos.x + (Rand_ZeroOne() - 0.5f) * (this->scale * 20.0f);
-            pos.y = this->actor.world.pos.y + (Rand_ZeroOne() - 0.5f) * (this->scale * 20.0f);
-            pos.z = this->actor.world.pos.z;
+            pos.x = self->actor.world.pos.x + (Rand_ZeroOne() - 0.5f) * (self->scale * 20.0f);
+            pos.y = self->actor.world.pos.y + (Rand_ZeroOne() - 0.5f) * (self->scale * 20.0f);
+            pos.z = self->actor.world.pos.z;
             EffectSsKiraKira_SpawnDispersed(globalCtx, &pos, &velocity, &accel, &primColor, &envColor, scale, life);
         }
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_ANUBIS_FIRE - SFX_FLAG);
+        Audio_PlayActorSound2(&self->actor, NA_SE_EN_ANUBIS_FIRE - SFX_FLAG);
     }
 }
 
-void func_809B2B48(EnAnubiceFire* this, GlobalContext* globalCtx) {
+void func_809B2B48(EnAnubiceFire* self, GlobalContext* globalCtx) {
     Vec3f velocity = { 0.0f, 0.0f, 0.0f };
     Vec3f accel = { 0.0f, 0.0f, 0.0f };
     Vec3f pos;
@@ -152,65 +152,65 @@ void func_809B2B48(EnAnubiceFire* this, GlobalContext* globalCtx) {
     s32 pad;
     s32 i;
 
-    if (this->unk_15C == 0) {
+    if (self->unk_15C == 0) {
         for (i = 0; i < 20; i++) {
-            pos.x = this->actor.world.pos.x;
-            pos.y = this->actor.world.pos.y;
-            pos.z = this->actor.world.pos.z;
+            pos.x = self->actor.world.pos.x;
+            pos.y = self->actor.world.pos.y;
+            pos.z = self->actor.world.pos.z;
             accel.x = Rand_CenteredFloat(8.0f);
             accel.y = Rand_CenteredFloat(2.0f);
             accel.z = Rand_CenteredFloat(8.0f);
             EffectSsKiraKira_SpawnDispersed(globalCtx, &pos, &velocity, &accel, &primColor, &envColor, 2000, 10);
         }
 
-        this->unk_15C = 2;
-        this->unk_15E++;
-        if (this->unk_15E >= 6) {
-            Actor_Kill(&this->actor);
+        self->unk_15C = 2;
+        self->unk_15E++;
+        if (self->unk_15E >= 6) {
+            Actor_Kill(&self->actor);
         }
     }
 }
 
 void EnAnubiceFire_Update(Actor* thisx, GlobalContext* globalCtx) {
-    EnAnubiceFire* this = THIS;
+    EnAnubiceFire* self = THIS;
     s32 pad;
     s32 i;
 
-    Actor_SetScale(&this->actor, this->scale);
-    this->actionFunc(this, globalCtx);
-    func_8002D7EC(&this->actor);
-    this->unk_160[0] = this->actor.world.pos;
+    Actor_SetScale(&self->actor, self->scale);
+    self->actionFunc(self, globalCtx);
+    func_8002D7EC(&self->actor);
+    self->unk_160[0] = self->actor.world.pos;
 
     if (1) {}
 
     for (i = 4; i >= 0; i--) {
-        this->unk_160[i + 1] = this->unk_160[i];
+        self->unk_160[i + 1] = self->unk_160[i];
     }
 
-    if (this->unk_15A != 0) {
-        this->unk_15A--;
+    if (self->unk_15A != 0) {
+        self->unk_15A--;
     }
 
-    if (this->unk_15C != 0) {
-        this->unk_15C--;
+    if (self->unk_15C != 0) {
+        self->unk_15C--;
     }
 
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 5.0f, 5.0f, 10.0f, 0x1D);
-    if (!(this->scale < 0.6f || this->actionFunc == func_809B2B48)) {
-        this->cylinder.dim.radius = this->scale * 15.0f + 5.0f;
-        this->cylinder.dim.height = this->scale * 15.0f + 5.0f;
-        this->cylinder.dim.yShift = this->scale * -0.75f + -15.0f;
+    Actor_UpdateBgCheckInfo(globalCtx, &self->actor, 5.0f, 5.0f, 10.0f, 0x1D);
+    if (!(self->scale < 0.6f || self->actionFunc == func_809B2B48)) {
+        self->cylinder.dim.radius = self->scale * 15.0f + 5.0f;
+        self->cylinder.dim.height = self->scale * 15.0f + 5.0f;
+        self->cylinder.dim.yShift = self->scale * -0.75f + -15.0f;
 
-        if (this->unk_15A != 0) {
-            Collider_UpdateCylinder(&this->actor, &this->cylinder);
-            CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->cylinder.base);
-            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->cylinder.base);
+        if (self->unk_15A != 0) {
+            Collider_UpdateCylinder(&self->actor, &self->cylinder);
+            CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &self->cylinder.base);
+            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &self->cylinder.base);
         }
 
-        if (BgCheck_SphVsFirstPoly(&globalCtx->colCtx, &this->actor.world.pos, 30.0f)) {
-            this->actor.velocity.x = this->actor.velocity.y = this->actor.velocity.z = 0.0f;
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_ANUBIS_FIREBOMB);
-            this->actionFunc = func_809B2B48;
+        if (BgCheck_SphVsFirstPoly(&globalCtx->colCtx, &self->actor.world.pos, 30.0f)) {
+            self->actor.velocity.x = self->actor.velocity.y = self->actor.velocity.z = 0.0f;
+            Audio_PlayActorSound2(&self->actor, NA_SE_EN_ANUBIS_FIREBOMB);
+            self->actionFunc = func_809B2B48;
         }
     }
 }
@@ -219,7 +219,7 @@ void EnAnubiceFire_Draw(Actor* thisx, GlobalContext* globalCtx) {
     static void* D_809B3270[] = {
         gDust4Tex, gDust5Tex, gDust6Tex, gDust7Tex, gDust8Tex, gDust7Tex, gDust6Tex, gDust5Tex,
     };
-    EnAnubiceFire* this = THIS;
+    EnAnubiceFire* self = THIS;
     s32 pad[2];
     s32 i;
 
@@ -232,17 +232,17 @@ void EnAnubiceFire_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPSegment(POLY_XLU_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(D_809B3270[0]));
 
     Matrix_Push();
-    for (i = this->unk_15E; i < 6; ++i) {
-        f32 scale = this->actor.scale.x - (i * 0.2f);
+    for (i = self->unk_15E; i < 6; ++i) {
+        f32 scale = self->actor.scale.x - (i * 0.2f);
         if (scale < 0.0f) {
             scale = 0.0f;
         }
 
         if (scale >= 0.1f) {
-            Matrix_Translate(this->unk_160[i].x, this->unk_160[i].y, this->unk_160[i].z, MTXMODE_NEW);
+            Matrix_Translate(self->unk_160[i].x, self->unk_160[i].y, self->unk_160[i].z, MTXMODE_NEW);
             Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
             func_800D1FD4(&globalCtx->mf_11DA0);
-            Matrix_RotateZ(this->actor.world.rot.z + i * 1000.0f, MTXMODE_APPLY);
+            Matrix_RotateZ(self->actor.world.rot.z + i * 1000.0f, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx, "../z_en_anubice_fire.c", 546),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -250,7 +250,7 @@ void EnAnubiceFire_Draw(Actor* thisx, GlobalContext* globalCtx) {
             gSPDisplayList(POLY_XLU_DISP++, gAnubiceFireAttackDL);
         }
 
-        if (this->scale < 0.1f) {
+        if (self->scale < 0.1f) {
             break;
         }
     }

@@ -27,20 +27,20 @@ void EnSyatekiMan_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSyatekiMan_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnSyatekiMan_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void EnSyatekiMan_Start(EnSyatekiMan* this, GlobalContext* globalCtx);
-void EnSyatekiMan_SetupIdle(EnSyatekiMan* this, GlobalContext* globalCtx);
-void EnSyatekiMan_Idle(EnSyatekiMan* this, GlobalContext* globalCtx);
-void EnSyatekiMan_Talk(EnSyatekiMan* this, GlobalContext* globalCtx);
-void EnSyatekiMan_StopTalk(EnSyatekiMan* this, GlobalContext* globalCtx);
-void EnSyatekiMan_StartGame(EnSyatekiMan* this, GlobalContext* globalCtx);
-void EnSyatekiMan_WaitForGame(EnSyatekiMan* this, GlobalContext* globalCtx);
-void EnSyatekiMan_EndGame(EnSyatekiMan* this, GlobalContext* globalCtx);
-void EnSyatekiMan_GivePrize(EnSyatekiMan* this, GlobalContext* globalCtx);
-void EnSyatekiMan_FinishPrize(EnSyatekiMan* this, GlobalContext* globalCtx);
-void EnSyatekiMan_RestartGame(EnSyatekiMan* this, GlobalContext* globalCtx);
+void EnSyatekiMan_Start(EnSyatekiMan* self, GlobalContext* globalCtx);
+void EnSyatekiMan_SetupIdle(EnSyatekiMan* self, GlobalContext* globalCtx);
+void EnSyatekiMan_Idle(EnSyatekiMan* self, GlobalContext* globalCtx);
+void EnSyatekiMan_Talk(EnSyatekiMan* self, GlobalContext* globalCtx);
+void EnSyatekiMan_StopTalk(EnSyatekiMan* self, GlobalContext* globalCtx);
+void EnSyatekiMan_StartGame(EnSyatekiMan* self, GlobalContext* globalCtx);
+void EnSyatekiMan_WaitForGame(EnSyatekiMan* self, GlobalContext* globalCtx);
+void EnSyatekiMan_EndGame(EnSyatekiMan* self, GlobalContext* globalCtx);
+void EnSyatekiMan_GivePrize(EnSyatekiMan* self, GlobalContext* globalCtx);
+void EnSyatekiMan_FinishPrize(EnSyatekiMan* self, GlobalContext* globalCtx);
+void EnSyatekiMan_RestartGame(EnSyatekiMan* self, GlobalContext* globalCtx);
 
-void EnSyatekiMan_BlinkWait(EnSyatekiMan* this);
-void EnSyatekiMan_Blink(EnSyatekiMan* this);
+void EnSyatekiMan_BlinkWait(EnSyatekiMan* self);
+void EnSyatekiMan_Blink(EnSyatekiMan* self);
 
 void EnSyatekiMan_SetBgm(void);
 
@@ -70,200 +70,200 @@ static s16 sTextBoxCount[] = { 4, 5, 5, 5 };
 
 void EnSyatekiMan_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
-    EnSyatekiMan* this = THIS;
+    EnSyatekiMan* self = THIS;
 
     osSyncPrintf("\n\n");
     // "Old man appeared!! Muhohohohohohohon"
     osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ 親父登場！！むほほほほほほほーん ☆☆☆☆☆ \n" VT_RST);
-    this->actor.targetMode = 1;
-    Actor_SetScale(&this->actor, 0.01f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gObjectOssanSkel, &gObjectOssanAnim_000338, this->jointTable,
-                       this->morphTable, 9);
+    self->actor.targetMode = 1;
+    Actor_SetScale(&self->actor, 0.01f);
+    SkelAnime_InitFlex(globalCtx, &self->skelAnime, &gObjectOssanSkel, &gObjectOssanAnim_000338, self->jointTable,
+                       self->morphTable, 9);
     if (!LINK_IS_ADULT) {
-        this->headRot.z = 20;
+        self->headRot.z = 20;
     }
-    this->blinkTimer = 20;
-    this->eyeState = 0;
-    this->blinkFunc = EnSyatekiMan_BlinkWait;
-    this->actor.colChkInfo.cylRadius = 100;
-    this->actionFunc = EnSyatekiMan_Start;
+    self->blinkTimer = 20;
+    self->eyeState = 0;
+    self->blinkFunc = EnSyatekiMan_BlinkWait;
+    self->actor.colChkInfo.cylRadius = 100;
+    self->actionFunc = EnSyatekiMan_Start;
 }
 
 void EnSyatekiMan_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
-void EnSyatekiMan_Start(EnSyatekiMan* this, GlobalContext* globalCtx) {
+void EnSyatekiMan_Start(EnSyatekiMan* self, GlobalContext* globalCtx) {
     f32 lastFrame = Animation_GetLastFrame(&gObjectOssanAnim_000338);
 
-    Animation_Change(&this->skelAnime, &gObjectOssanAnim_000338, 1.0f, 0.0f, (s16)lastFrame, ANIMMODE_LOOP, -10.0f);
-    this->actionFunc = EnSyatekiMan_SetupIdle;
+    Animation_Change(&self->skelAnime, &gObjectOssanAnim_000338, 1.0f, 0.0f, (s16)lastFrame, ANIMMODE_LOOP, -10.0f);
+    self->actionFunc = EnSyatekiMan_SetupIdle;
 }
 
-void EnSyatekiMan_SetupIdle(EnSyatekiMan* this, GlobalContext* globalCtx) {
-    if (this->gameResult == SYATEKI_RESULT_REFUSE) {
-        this->textIdx = SYATEKI_TEXT_REFUSE;
+void EnSyatekiMan_SetupIdle(EnSyatekiMan* self, GlobalContext* globalCtx) {
+    if (self->gameResult == SYATEKI_RESULT_REFUSE) {
+        self->textIdx = SYATEKI_TEXT_REFUSE;
     }
 
-    this->actor.textId = sTextIds[this->textIdx];
-    this->numTextBox = sTextBoxCount[this->textIdx];
-    this->actionFunc = EnSyatekiMan_Idle;
+    self->actor.textId = sTextIds[self->textIdx];
+    self->numTextBox = sTextBoxCount[self->textIdx];
+    self->actionFunc = EnSyatekiMan_Idle;
 }
 
-void EnSyatekiMan_Idle(EnSyatekiMan* this, GlobalContext* globalCtx) {
-    SkelAnime_Update(&this->skelAnime);
-    if (func_8002F194(&this->actor, globalCtx)) {
-        this->actionFunc = EnSyatekiMan_Talk;
+void EnSyatekiMan_Idle(EnSyatekiMan* self, GlobalContext* globalCtx) {
+    SkelAnime_Update(&self->skelAnime);
+    if (func_8002F194(&self->actor, globalCtx)) {
+        self->actionFunc = EnSyatekiMan_Talk;
     } else {
-        func_8002F2CC(&this->actor, globalCtx, 100.0f);
+        func_8002F2CC(&self->actor, globalCtx, 100.0f);
     }
 }
 
-void EnSyatekiMan_Talk(EnSyatekiMan* this, GlobalContext* globalCtx) {
+void EnSyatekiMan_Talk(EnSyatekiMan* self, GlobalContext* globalCtx) {
     s16 nextState = 0;
 
-    SkelAnime_Update(&this->skelAnime);
-    if (this->cameraHold) {
+    SkelAnime_Update(&self->skelAnime);
+    if (self->cameraHold) {
         globalCtx->shootingGalleryStatus = -2;
     }
-    if ((this->numTextBox == func_8010BDBC(&globalCtx->msgCtx)) && func_80106BC8(globalCtx)) {
-        if (this->textIdx == SYATEKI_TEXT_CHOICE) {
+    if ((self->numTextBox == func_8010BDBC(&globalCtx->msgCtx)) && func_80106BC8(globalCtx)) {
+        if (self->textIdx == SYATEKI_TEXT_CHOICE) {
             switch (globalCtx->msgCtx.choiceIndex) {
                 case 0:
                     if (gSaveContext.rupees >= 20) {
                         Rupees_ChangeBy(-20);
-                        this->textIdx = SYATEKI_TEXT_START_GAME;
+                        self->textIdx = SYATEKI_TEXT_START_GAME;
                         nextState = 1;
                     } else {
-                        this->textIdx = SYATEKI_TEXT_NO_RUPEES;
+                        self->textIdx = SYATEKI_TEXT_NO_RUPEES;
                         nextState = 2;
                     }
-                    this->actor.textId = sTextIds[this->textIdx];
-                    this->numTextBox = sTextBoxCount[this->textIdx];
+                    self->actor.textId = sTextIds[self->textIdx];
+                    self->numTextBox = sTextBoxCount[self->textIdx];
                     break;
                 case 1:
-                    this->actor.textId = sTextIds[SYATEKI_TEXT_REFUSE];
-                    this->numTextBox = sTextBoxCount[SYATEKI_TEXT_REFUSE];
+                    self->actor.textId = sTextIds[SYATEKI_TEXT_REFUSE];
+                    self->numTextBox = sTextBoxCount[SYATEKI_TEXT_REFUSE];
                     nextState = 2;
                     break;
             }
-            func_8010B720(globalCtx, this->actor.textId);
+            func_8010B720(globalCtx, self->actor.textId);
         } else {
             func_80106CCC(globalCtx);
         }
         switch (nextState) {
             case 0:
-                this->actionFunc = EnSyatekiMan_SetupIdle;
+                self->actionFunc = EnSyatekiMan_SetupIdle;
                 break;
             case 1:
-                this->actionFunc = EnSyatekiMan_StartGame;
+                self->actionFunc = EnSyatekiMan_StartGame;
                 break;
             case 2:
-                this->actionFunc = EnSyatekiMan_StopTalk;
+                self->actionFunc = EnSyatekiMan_StopTalk;
                 break;
         }
     }
 }
 
-void EnSyatekiMan_StopTalk(EnSyatekiMan* this, GlobalContext* globalCtx) {
-    SkelAnime_Update(&this->skelAnime);
-    if (this->cameraHold) {
+void EnSyatekiMan_StopTalk(EnSyatekiMan* self, GlobalContext* globalCtx) {
+    SkelAnime_Update(&self->skelAnime);
+    if (self->cameraHold) {
         globalCtx->shootingGalleryStatus = -2;
     }
-    if ((this->numTextBox == func_8010BDBC(&globalCtx->msgCtx)) && func_80106BC8(globalCtx)) {
-        if (this->cameraHold) {
-            OnePointCutscene_EndCutscene(globalCtx, this->csCam);
-            this->csCam = SUBCAM_NONE;
-            this->cameraHold = false;
+    if ((self->numTextBox == func_8010BDBC(&globalCtx->msgCtx)) && func_80106BC8(globalCtx)) {
+        if (self->cameraHold) {
+            OnePointCutscene_EndCutscene(globalCtx, self->csCam);
+            self->csCam = SUBCAM_NONE;
+            self->cameraHold = false;
         }
         func_80106CCC(globalCtx);
-        this->actionFunc = EnSyatekiMan_SetupIdle;
+        self->actionFunc = EnSyatekiMan_SetupIdle;
     }
 }
 
-void EnSyatekiMan_StartGame(EnSyatekiMan* this, GlobalContext* globalCtx) {
+void EnSyatekiMan_StartGame(EnSyatekiMan* self, GlobalContext* globalCtx) {
     EnSyatekiItm* gallery;
 
-    SkelAnime_Update(&this->skelAnime);
-    if (this->cameraHold) {
+    SkelAnime_Update(&self->skelAnime);
+    if (self->cameraHold) {
         globalCtx->shootingGalleryStatus = -2;
     }
-    if ((this->numTextBox == func_8010BDBC(&globalCtx->msgCtx)) && func_80106BC8(globalCtx)) {
-        if (this->cameraHold) {
-            OnePointCutscene_EndCutscene(globalCtx, this->csCam);
-            this->csCam = SUBCAM_NONE;
-            this->cameraHold = false;
+    if ((self->numTextBox == func_8010BDBC(&globalCtx->msgCtx)) && func_80106BC8(globalCtx)) {
+        if (self->cameraHold) {
+            OnePointCutscene_EndCutscene(globalCtx, self->csCam);
+            self->csCam = SUBCAM_NONE;
+            self->cameraHold = false;
         }
         func_80106CCC(globalCtx);
-        gallery = ((EnSyatekiItm*)this->actor.parent);
+        gallery = ((EnSyatekiItm*)self->actor.parent);
         if (gallery->actor.update != NULL) {
             gallery->signal = ENSYATEKI_START;
-            this->actionFunc = EnSyatekiMan_WaitForGame;
+            self->actionFunc = EnSyatekiMan_WaitForGame;
         }
     }
 }
 
-void EnSyatekiMan_WaitForGame(EnSyatekiMan* this, GlobalContext* globalCtx) {
+void EnSyatekiMan_WaitForGame(EnSyatekiMan* self, GlobalContext* globalCtx) {
     EnSyatekiItm* gallery;
 
-    SkelAnime_Update(&this->skelAnime);
+    SkelAnime_Update(&self->skelAnime);
     if (1) {}
-    gallery = ((EnSyatekiItm*)this->actor.parent);
+    gallery = ((EnSyatekiItm*)self->actor.parent);
     if ((gallery->actor.update != NULL) && (gallery->signal == ENSYATEKI_END)) {
-        this->csCam = OnePointCutscene_Init(globalCtx, 8002, -99, &this->actor, MAIN_CAM);
+        self->csCam = OnePointCutscene_Init(globalCtx, 8002, -99, &self->actor, MAIN_CAM);
         switch (gallery->hitCount) {
             case 10:
-                this->gameResult = SYATEKI_RESULT_WINNER;
-                this->actor.textId = 0x71AF;
+                self->gameResult = SYATEKI_RESULT_WINNER;
+                self->actor.textId = 0x71AF;
                 break;
             case 8:
             case 9:
-                this->gameResult = SYATEKI_RESULT_ALMOST;
-                this->actor.textId = 0x71AE;
+                self->gameResult = SYATEKI_RESULT_ALMOST;
+                self->actor.textId = 0x71AE;
                 break;
             default:
-                this->gameResult = SYATEKI_RESULT_FAILURE;
-                this->actor.textId = 0x71AD;
+                self->gameResult = SYATEKI_RESULT_FAILURE;
+                self->actor.textId = 0x71AD;
                 if (globalCtx->shootingGalleryStatus == 15 + 1) {
-                    this->gameResult = SYATEKI_RESULT_REFUSE;
-                    this->actor.textId = 0x2D;
+                    self->gameResult = SYATEKI_RESULT_REFUSE;
+                    self->actor.textId = 0x2D;
                 }
                 break;
         }
         globalCtx->shootingGalleryStatus = -2;
-        func_8010B680(globalCtx, this->actor.textId, NULL);
-        this->actionFunc = EnSyatekiMan_EndGame;
+        func_8010B680(globalCtx, self->actor.textId, NULL);
+        self->actionFunc = EnSyatekiMan_EndGame;
     }
 }
 
-void EnSyatekiMan_EndGame(EnSyatekiMan* this, GlobalContext* globalCtx) {
+void EnSyatekiMan_EndGame(EnSyatekiMan* self, GlobalContext* globalCtx) {
     EnSyatekiItm* gallery;
 
-    SkelAnime_Update(&this->skelAnime);
-    if ((this->numTextBox == func_8010BDBC(&globalCtx->msgCtx)) && func_80106BC8(globalCtx)) {
-        if (this->gameResult != SYATEKI_RESULT_FAILURE) {
-            OnePointCutscene_EndCutscene(globalCtx, this->csCam);
-            this->csCam = SUBCAM_NONE;
+    SkelAnime_Update(&self->skelAnime);
+    if ((self->numTextBox == func_8010BDBC(&globalCtx->msgCtx)) && func_80106BC8(globalCtx)) {
+        if (self->gameResult != SYATEKI_RESULT_FAILURE) {
+            OnePointCutscene_EndCutscene(globalCtx, self->csCam);
+            self->csCam = SUBCAM_NONE;
         }
         func_80106CCC(globalCtx);
-        gallery = ((EnSyatekiItm*)this->actor.parent);
+        gallery = ((EnSyatekiItm*)self->actor.parent);
         if (gallery->actor.update != NULL) {
             gallery->signal = ENSYATEKI_RESULTS;
-            this->textIdx = 0;
-            switch (this->gameResult) {
+            self->textIdx = 0;
+            switch (self->gameResult) {
                 case SYATEKI_RESULT_WINNER:
-                    this->tempGallery = this->actor.parent;
-                    this->actor.parent = NULL;
+                    self->tempGallery = self->actor.parent;
+                    self->actor.parent = NULL;
                     if (!LINK_IS_ADULT) {
                         if (!(gSaveContext.itemGetInf[0] & 0x2000)) {
                             osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ Equip_Pachinko ☆☆☆☆☆ %d\n" VT_RST,
                                          CUR_UPG_VALUE(UPG_BULLET_BAG));
                             if (CUR_UPG_VALUE(UPG_BULLET_BAG) == 1) {
-                                this->getItemId = GI_BULLET_BAG_40;
+                                self->getItemId = GI_BULLET_BAG_40;
                             } else {
-                                this->getItemId = GI_BULLET_BAG_50;
+                                self->getItemId = GI_BULLET_BAG_50;
                             }
                         } else {
-                            this->getItemId = GI_RUPEE_PURPLE;
+                            self->getItemId = GI_RUPEE_PURPLE;
                         }
                     } else {
                         if (!(gSaveContext.itemGetInf[0] & 0x4000)) {
@@ -271,36 +271,36 @@ void EnSyatekiMan_EndGame(EnSyatekiMan* this, GlobalContext* globalCtx) {
                                          CUR_UPG_VALUE(UPG_QUIVER));
                             switch (CUR_UPG_VALUE(UPG_QUIVER)) {
                                 case 0:
-                                    this->getItemId = GI_RUPEE_PURPLE;
+                                    self->getItemId = GI_RUPEE_PURPLE;
                                     break;
                                 case 1:
-                                    this->getItemId = GI_QUIVER_40;
+                                    self->getItemId = GI_QUIVER_40;
                                     break;
                                 case 2:
-                                    this->getItemId = GI_QUIVER_50;
+                                    self->getItemId = GI_QUIVER_50;
                                     break;
                             }
                         } else {
-                            this->getItemId = GI_RUPEE_PURPLE;
+                            self->getItemId = GI_RUPEE_PURPLE;
                         }
                     }
-                    func_8002F434(&this->actor, globalCtx, this->getItemId, 2000.0f, 1000.0f);
-                    this->actionFunc = EnSyatekiMan_GivePrize;
+                    func_8002F434(&self->actor, globalCtx, self->getItemId, 2000.0f, 1000.0f);
+                    self->actionFunc = EnSyatekiMan_GivePrize;
                     break;
                 case SYATEKI_RESULT_ALMOST:
-                    this->timer = 20;
+                    self->timer = 20;
                     func_8008EF44(globalCtx, 15);
-                    this->actionFunc = EnSyatekiMan_RestartGame;
+                    self->actionFunc = EnSyatekiMan_RestartGame;
                     break;
                 default:
-                    if (this->gameResult == SYATEKI_RESULT_REFUSE) {
-                        this->actionFunc = EnSyatekiMan_SetupIdle;
+                    if (self->gameResult == SYATEKI_RESULT_REFUSE) {
+                        self->actionFunc = EnSyatekiMan_SetupIdle;
                     } else {
-                        this->cameraHold = true;
-                        this->actor.textId = sTextIds[this->textIdx];
-                        this->numTextBox = sTextBoxCount[this->textIdx];
-                        func_8010B680(globalCtx, this->actor.textId, NULL);
-                        this->actionFunc = EnSyatekiMan_Talk;
+                        self->cameraHold = true;
+                        self->actor.textId = sTextIds[self->textIdx];
+                        self->numTextBox = sTextBoxCount[self->textIdx];
+                        func_8010B680(globalCtx, self->actor.textId, NULL);
+                        self->actionFunc = EnSyatekiMan_Talk;
                     }
                     break;
             }
@@ -308,118 +308,118 @@ void EnSyatekiMan_EndGame(EnSyatekiMan* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnSyatekiMan_GivePrize(EnSyatekiMan* this, GlobalContext* globalCtx) {
-    SkelAnime_Update(&this->skelAnime);
-    if (Actor_HasParent(&this->actor, globalCtx)) {
-        this->actionFunc = EnSyatekiMan_FinishPrize;
+void EnSyatekiMan_GivePrize(EnSyatekiMan* self, GlobalContext* globalCtx) {
+    SkelAnime_Update(&self->skelAnime);
+    if (Actor_HasParent(&self->actor, globalCtx)) {
+        self->actionFunc = EnSyatekiMan_FinishPrize;
     } else {
-        func_8002F434(&this->actor, globalCtx, this->getItemId, 2000.0f, 1000.0f);
+        func_8002F434(&self->actor, globalCtx, self->getItemId, 2000.0f, 1000.0f);
     }
 }
 
-void EnSyatekiMan_FinishPrize(EnSyatekiMan* this, GlobalContext* globalCtx) {
-    SkelAnime_Update(&this->skelAnime);
+void EnSyatekiMan_FinishPrize(EnSyatekiMan* self, GlobalContext* globalCtx) {
+    SkelAnime_Update(&self->skelAnime);
     if ((func_8010BDBC(&globalCtx->msgCtx) == 6) && func_80106BC8(globalCtx)) {
         // "Successful completion"
         osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ 正常終了 ☆☆☆☆☆ \n" VT_RST);
         if (!LINK_IS_ADULT) {
             gSaveContext.itemGetInf[0] |= 0x2000;
-        } else if ((this->getItemId == GI_QUIVER_40) || (this->getItemId == GI_QUIVER_50)) {
+        } else if ((self->getItemId == GI_QUIVER_40) || (self->getItemId == GI_QUIVER_50)) {
             gSaveContext.itemGetInf[0] |= 0x4000;
         }
-        this->gameResult = SYATEKI_RESULT_NONE;
-        this->actor.parent = this->tempGallery;
-        this->actor.flags |= 1;
-        this->actionFunc = EnSyatekiMan_SetupIdle;
+        self->gameResult = SYATEKI_RESULT_NONE;
+        self->actor.parent = self->tempGallery;
+        self->actor.flags |= 1;
+        self->actionFunc = EnSyatekiMan_SetupIdle;
     }
 }
 
-void EnSyatekiMan_RestartGame(EnSyatekiMan* this, GlobalContext* globalCtx) {
-    SkelAnime_Update(&this->skelAnime);
-    if (this->timer == 0) {
-        EnSyatekiItm* gallery = ((EnSyatekiItm*)this->actor.parent);
+void EnSyatekiMan_RestartGame(EnSyatekiMan* self, GlobalContext* globalCtx) {
+    SkelAnime_Update(&self->skelAnime);
+    if (self->timer == 0) {
+        EnSyatekiItm* gallery = ((EnSyatekiItm*)self->actor.parent);
 
         if (gallery->actor.update != NULL) {
             gallery->signal = ENSYATEKI_START;
-            this->gameResult = SYATEKI_RESULT_NONE;
-            this->actionFunc = EnSyatekiMan_WaitForGame;
+            self->gameResult = SYATEKI_RESULT_NONE;
+            self->actionFunc = EnSyatekiMan_WaitForGame;
             // "Let's try again! Baby!"
-            osSyncPrintf(VT_FGCOL(BLUE) "再挑戦だぜ！ベイビー！" VT_RST "\n", this);
+            osSyncPrintf(VT_FGCOL(BLUE) "再挑戦だぜ！ベイビー！" VT_RST "\n", self);
         }
     }
 }
 
-void EnSyatekiMan_BlinkWait(EnSyatekiMan* this) {
-    s16 decrBlinkTimer = this->blinkTimer - 1;
+void EnSyatekiMan_BlinkWait(EnSyatekiMan* self) {
+    s16 decrBlinkTimer = self->blinkTimer - 1;
 
     if (decrBlinkTimer != 0) {
-        this->blinkTimer = decrBlinkTimer;
+        self->blinkTimer = decrBlinkTimer;
     } else {
-        this->blinkFunc = EnSyatekiMan_Blink;
+        self->blinkFunc = EnSyatekiMan_Blink;
     }
 }
 
-void EnSyatekiMan_Blink(EnSyatekiMan* this) {
-    s16 decrBlinkTimer = this->blinkTimer - 1;
+void EnSyatekiMan_Blink(EnSyatekiMan* self) {
+    s16 decrBlinkTimer = self->blinkTimer - 1;
 
     if (decrBlinkTimer != 0) {
-        this->blinkTimer = decrBlinkTimer;
+        self->blinkTimer = decrBlinkTimer;
     } else {
-        s16 nextEyeState = this->eyeState + 1;
+        s16 nextEyeState = self->eyeState + 1;
 
         if (nextEyeState >= 3) {
-            this->eyeState = 0;
-            this->blinkTimer = 20 + (s32)(Rand_ZeroOne() * 60.0f);
-            this->blinkFunc = EnSyatekiMan_BlinkWait;
+            self->eyeState = 0;
+            self->blinkTimer = 20 + (s32)(Rand_ZeroOne() * 60.0f);
+            self->blinkFunc = EnSyatekiMan_BlinkWait;
         } else {
-            this->eyeState = nextEyeState;
-            this->blinkTimer = 1;
+            self->eyeState = nextEyeState;
+            self->blinkTimer = 1;
         }
     }
 }
 
 void EnSyatekiMan_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
-    EnSyatekiMan* this = THIS;
+    EnSyatekiMan* self = THIS;
 
-    if (this->timer != 0) {
-        this->timer--;
+    if (self->timer != 0) {
+        self->timer--;
     }
-    this->actionFunc(this, globalCtx);
+    self->actionFunc(self, globalCtx);
     EnSyatekiMan_SetBgm();
-    this->blinkFunc(this);
-    this->actor.focus.pos.y = 70.0f;
-    Actor_SetFocus(&this->actor, 70.0f);
-    func_80038290(globalCtx, &this->actor, &this->headRot, &this->bodyRot, this->actor.focus.pos);
+    self->blinkFunc(self);
+    self->actor.focus.pos.y = 70.0f;
+    Actor_SetFocus(&self->actor, 70.0f);
+    func_80038290(globalCtx, &self->actor, &self->headRot, &self->bodyRot, self->actor.focus.pos);
 }
 
 s32 EnSyatekiMan_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
                                   void* thisx) {
-    EnSyatekiMan* this = THIS;
+    EnSyatekiMan* self = THIS;
     s32 turnDirection;
 
     if (limbIndex == 1) {
-        rot->x += this->bodyRot.y;
+        rot->x += self->bodyRot.y;
     }
     if (limbIndex == 8) {
         *dList = gObjectOssanEnSyatekiManDL_007E28;
         turnDirection = 1;
-        if (this->gameResult == SYATEKI_RESULT_REFUSE) {
+        if (self->gameResult == SYATEKI_RESULT_REFUSE) {
             turnDirection = -1;
         }
-        rot->x += this->headRot.y * turnDirection;
-        rot->z += this->headRot.z;
+        rot->x += self->headRot.y * turnDirection;
+        rot->z += self->headRot.z;
     }
     return 0;
 }
 
 void EnSyatekiMan_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
-    EnSyatekiMan* this = THIS;
+    EnSyatekiMan* self = THIS;
 
     func_80093D18(globalCtx->state.gfxCtx);
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          EnSyatekiMan_OverrideLimbDraw, NULL, this);
+    SkelAnime_DrawFlexOpa(globalCtx, self->skelAnime.skeleton, self->skelAnime.jointTable, self->skelAnime.dListCount,
+                          EnSyatekiMan_OverrideLimbDraw, NULL, self);
 }
 
 void EnSyatekiMan_SetBgm(void) {

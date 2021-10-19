@@ -16,9 +16,9 @@ void BgHidanHrock_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgHidanHrock_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgHidanHrock_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_8088960C(BgHidanHrock* this, GlobalContext* globalCtx);
-void func_808896B8(BgHidanHrock* this, GlobalContext* globalCtx);
-void func_808894A4(BgHidanHrock* this, GlobalContext* globalCtx);
+void func_8088960C(BgHidanHrock* self, GlobalContext* globalCtx);
+void func_808896B8(BgHidanHrock* self, GlobalContext* globalCtx);
+void func_808894A4(BgHidanHrock* self, GlobalContext* globalCtx);
 
 const ActorInit Bg_Hidan_Hrock_InitVars = {
     ACTOR_BG_HIDAN_HROCK,
@@ -76,7 +76,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void BgHidanHrock_Init(Actor* thisx, GlobalContext* globalCtx) {
-    BgHidanHrock* this = THIS;
+    BgHidanHrock* self = THIS;
     ColliderTrisElementInit* colliderElementInit;
     Vec3f vertices[3];
     f32 cosRotY;
@@ -86,11 +86,11 @@ void BgHidanHrock_Init(Actor* thisx, GlobalContext* globalCtx) {
     CollisionHeader* collisionHeader = NULL;
 
     Actor_ProcessInitChain(thisx, sInitChain);
-    this->unk_16A = thisx->params & 0x3F;
+    self->unk_16A = thisx->params & 0x3F;
     thisx->params = (thisx->params >> 8) & 0xFF;
-    Collider_InitTris(globalCtx, &this->collider);
-    Collider_SetTris(globalCtx, &this->collider, thisx, &sTrisInit, this->colliderItems);
-    DynaPolyActor_Init(&this->dyna, DPM_UNK);
+    Collider_InitTris(globalCtx, &self->collider);
+    Collider_SetTris(globalCtx, &self->collider, thisx, &sTrisInit, self->colliderItems);
+    DynaPolyActor_Init(&self->dyna, DPM_UNK);
 
     sinRotY = Math_SinS(thisx->shape.rot.y);
     cosRotY = Math_CosS(thisx->shape.rot.y);
@@ -112,11 +112,11 @@ void BgHidanHrock_Init(Actor* thisx, GlobalContext* globalCtx) {
                 vertices[j].z = vtx->z * cosRotY + (thisx->home.pos.z - vtx->x * sinRotY);
             }
         }
-        Collider_SetTrisVertices(&this->collider, i, &vertices[0], &vertices[1], &vertices[2]);
+        Collider_SetTrisVertices(&self->collider, i, &vertices[0], &vertices[1], &vertices[2]);
     }
 
-    if (Flags_GetSwitch(globalCtx, this->unk_16A)) {
-        this->actionFunc = func_808894A4;
+    if (Flags_GetSwitch(globalCtx, self->unk_16A)) {
+        self->actionFunc = func_808894A4;
         if (thisx->params == 0) {
             thisx->world.pos.y -= 2800.0f;
             thisx->uncullZoneForward = 3000.0f;
@@ -130,7 +130,7 @@ void BgHidanHrock_Init(Actor* thisx, GlobalContext* globalCtx) {
             thisx->flags |= 0x30;
             thisx->uncullZoneForward = 3000.0f;
         }
-        this->actionFunc = func_808896B8;
+        self->actionFunc = func_808896B8;
     }
 
     if (thisx->params == 0) {
@@ -139,95 +139,95 @@ void BgHidanHrock_Init(Actor* thisx, GlobalContext* globalCtx) {
         CollisionHeader_GetVirtual(&gFireTemplePillarInsertedInGroundCol, &collisionHeader);
     }
 
-    this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, thisx, collisionHeader);
+    self->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, thisx, collisionHeader);
 }
 
 void BgHidanHrock_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    BgHidanHrock* this = THIS;
+    BgHidanHrock* self = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
-    Collider_DestroyTris(globalCtx, &this->collider);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, self->dyna.bgId);
+    Collider_DestroyTris(globalCtx, &self->collider);
 }
 
-void func_808894A4(BgHidanHrock* this, GlobalContext* globalCtx) {
+void func_808894A4(BgHidanHrock* self, GlobalContext* globalCtx) {
 }
 
-void func_808894B0(BgHidanHrock* this, GlobalContext* globalCtx) {
-    if (this->unk_168 != 0) {
-        this->unk_168--;
+void func_808894B0(BgHidanHrock* self, GlobalContext* globalCtx) {
+    if (self->unk_168 != 0) {
+        self->unk_168--;
     }
 
-    this->dyna.actor.world.pos.x =
-        (Math_SinS(this->dyna.actor.world.rot.y + (this->unk_168 << 0xE)) * 5.0f) + this->dyna.actor.home.pos.x;
-    this->dyna.actor.world.pos.z =
-        (Math_CosS(this->dyna.actor.world.rot.y + (this->unk_168 << 0xE)) * 5.0f) + this->dyna.actor.home.pos.z;
+    self->dyna.actor.world.pos.x =
+        (Math_SinS(self->dyna.actor.world.rot.y + (self->unk_168 << 0xE)) * 5.0f) + self->dyna.actor.home.pos.x;
+    self->dyna.actor.world.pos.z =
+        (Math_CosS(self->dyna.actor.world.rot.y + (self->unk_168 << 0xE)) * 5.0f) + self->dyna.actor.home.pos.z;
 
-    if (!(this->unk_168 % 4)) {
-        func_800AA000(this->dyna.actor.xyzDistToPlayerSq, 180, 10, 100);
-        Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_BLOCK_SHAKE);
+    if (!(self->unk_168 % 4)) {
+        func_800AA000(self->dyna.actor.xyzDistToPlayerSq, 180, 10, 100);
+        Audio_PlayActorSound2(&self->dyna.actor, NA_SE_EV_BLOCK_SHAKE);
     }
 
-    if (this->unk_168 == 0) {
-        if (this->dyna.actor.params == 0) {
-            this->dyna.actor.home.pos.y -= 2800.0f;
-        } else if (this->dyna.actor.params == 1) {
-            this->dyna.actor.home.pos.y -= 800.0f;
+    if (self->unk_168 == 0) {
+        if (self->dyna.actor.params == 0) {
+            self->dyna.actor.home.pos.y -= 2800.0f;
+        } else if (self->dyna.actor.params == 1) {
+            self->dyna.actor.home.pos.y -= 800.0f;
         } else {
-            this->dyna.actor.home.pos.y -= 240.0f;
+            self->dyna.actor.home.pos.y -= 240.0f;
         }
 
-        this->actionFunc = func_8088960C;
-        this->dyna.actor.world.pos.x = this->dyna.actor.home.pos.x;
-        this->dyna.actor.world.pos.z = this->dyna.actor.home.pos.z;
+        self->actionFunc = func_8088960C;
+        self->dyna.actor.world.pos.x = self->dyna.actor.home.pos.x;
+        self->dyna.actor.world.pos.z = self->dyna.actor.home.pos.z;
     }
 }
 
-void func_8088960C(BgHidanHrock* this, GlobalContext* globalCtx) {
-    this->dyna.actor.velocity.y++;
+void func_8088960C(BgHidanHrock* self, GlobalContext* globalCtx) {
+    self->dyna.actor.velocity.y++;
 
-    if (Math_StepToF(&this->dyna.actor.world.pos.y, this->dyna.actor.home.pos.y, this->dyna.actor.velocity.y)) {
-        this->dyna.actor.flags &= ~0x30;
-        Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
+    if (Math_StepToF(&self->dyna.actor.world.pos.y, self->dyna.actor.home.pos.y, self->dyna.actor.velocity.y)) {
+        self->dyna.actor.flags &= ~0x30;
+        Audio_PlayActorSound2(&self->dyna.actor, NA_SE_EV_BLOCK_BOUND);
 
-        if (this->dyna.actor.params == 0) {
+        if (self->dyna.actor.params == 0) {
             if (globalCtx->roomCtx.curRoom.num == 10) {
-                this->dyna.actor.room = 10;
+                self->dyna.actor.room = 10;
             } else {
-                Actor_Kill(&this->dyna.actor);
+                Actor_Kill(&self->dyna.actor);
             }
         }
 
-        this->actionFunc = func_808894A4;
+        self->actionFunc = func_808894A4;
     }
 }
 
-void func_808896B8(BgHidanHrock* this, GlobalContext* globalCtx) {
-    if (this->collider.base.acFlags & 2) {
-        this->collider.base.acFlags &= ~2;
-        this->actionFunc = func_808894B0;
-        this->dyna.actor.flags |= 0x10;
+void func_808896B8(BgHidanHrock* self, GlobalContext* globalCtx) {
+    if (self->collider.base.acFlags & 2) {
+        self->collider.base.acFlags &= ~2;
+        self->actionFunc = func_808894B0;
+        self->dyna.actor.flags |= 0x10;
 
-        if (this->dyna.actor.params == 0) {
-            this->dyna.actor.room = -1;
+        if (self->dyna.actor.params == 0) {
+            self->dyna.actor.room = -1;
         }
 
-        this->unk_168 = 20;
-        Flags_SetSwitch(globalCtx, this->unk_16A);
+        self->unk_168 = 20;
+        Flags_SetSwitch(globalCtx, self->unk_16A);
     } else {
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
     }
 
-    if (func_8004356C(&this->dyna)) {
-        Math_StepToF(&this->dyna.actor.world.pos.y, this->dyna.actor.home.pos.y - 5.0f, 1.0f);
+    if (func_8004356C(&self->dyna)) {
+        Math_StepToF(&self->dyna.actor.world.pos.y, self->dyna.actor.home.pos.y - 5.0f, 1.0f);
     } else {
-        Math_StepToF(&this->dyna.actor.world.pos.y, this->dyna.actor.home.pos.y, 1.0f);
+        Math_StepToF(&self->dyna.actor.world.pos.y, self->dyna.actor.home.pos.y, 1.0f);
     }
 }
 
 void BgHidanHrock_Update(Actor* thisx, GlobalContext* globalCtx) {
-    BgHidanHrock* this = THIS;
+    BgHidanHrock* self = THIS;
 
-    this->actionFunc(this, globalCtx);
+    self->actionFunc(self, globalCtx);
 }
 
 void BgHidanHrock_Draw(Actor* thisx, GlobalContext* globalCtx) {

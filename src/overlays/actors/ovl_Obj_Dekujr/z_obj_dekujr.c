@@ -16,7 +16,7 @@ void ObjDekujr_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjDekujr_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjDekujr_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void ObjDekujr_ComeUp(ObjDekujr* this, GlobalContext* globalCtx);
+void ObjDekujr_ComeUp(ObjDekujr* self, GlobalContext* globalCtx);
 
 const ActorInit Obj_Dekujr_InitVars = {
     ACTOR_OBJ_DEKUJR,
@@ -43,7 +43,7 @@ static ColliderCylinderInitToActor sCylinderInit = {
 };
 
 void ObjDekujr_Init(Actor* thisx, GlobalContext* globalCtx) {
-    ObjDekujr* this = THIS;
+    ObjDekujr* self = THIS;
     s32 pad;
 
     if (gSaveContext.cutsceneIndex < 0xFFF0) {
@@ -51,19 +51,19 @@ void ObjDekujr_Init(Actor* thisx, GlobalContext* globalCtx) {
             Actor_Kill(thisx);
             return;
         }
-        this->unk_19C = 2;
-        this->unk_19B = 0;
+        self->unk_19C = 2;
+        self->unk_19B = 0;
     } else {
-        this->unk_19C = 0;
-        this->unk_19B = 1;
+        self->unk_19C = 0;
+        self->unk_19B = 1;
     }
     if (!CHECK_QUEST_ITEM(QUEST_MEDALLION_FOREST)) {
         Actor_Kill(thisx);
     } else {
         ActorShape_Init(&thisx->shape, 0.0f, NULL, 0.0f);
-        Collider_InitCylinder(globalCtx, &this->collider);
+        Collider_InitCylinder(globalCtx, &self->collider);
         sCylinderInit.base.actor = thisx;
-        Collider_SetCylinderToActor(globalCtx, &this->collider, &sCylinderInit);
+        Collider_SetCylinderToActor(globalCtx, &self->collider, &sCylinderInit);
         thisx->colChkInfo.mass = MASS_IMMOVABLE;
         thisx->textId = func_80037C30(globalCtx, 0xF);
         Actor_SetScale(thisx, 0.4f);
@@ -85,7 +85,7 @@ void ObjDekujr_SetFinalPos(CsCmdActorAction* npcAction, Vec3f* finalPos) {
     finalPos->z = npcAction->endPos.z;
 }
 
-void ObjDekujr_ComeUp(ObjDekujr* this, GlobalContext* globalCtx) {
+void ObjDekujr_ComeUp(ObjDekujr* self, GlobalContext* globalCtx) {
     CsCmdActorAction* csCmdNPCAction;
     Vec3f initPos;
     Vec3f finalPos;
@@ -94,57 +94,57 @@ void ObjDekujr_ComeUp(ObjDekujr* this, GlobalContext* globalCtx) {
     f32 gravity;
 
     if (globalCtx->csCtx.state == CS_STATE_IDLE) {
-        this->unk_19C = 2;
-        this->unk_19B = 0;
+        self->unk_19C = 2;
+        self->unk_19B = 0;
     } else {
         if (globalCtx->csCtx.frames == 351) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_COME_UP_DEKU_JR);
+            Audio_PlayActorSound2(&self->actor, NA_SE_EV_COME_UP_DEKU_JR);
         }
         csCmdNPCAction = globalCtx->csCtx.npcActions[1];
         if (csCmdNPCAction != NULL) {
             ObjDekujr_SetInitialPos(csCmdNPCAction, &initPos);
             ObjDekujr_SetFinalPos(csCmdNPCAction, &finalPos);
-            if (this->unk_19C == 0) {
-                this->actor.world.pos = initPos;
-                this->unk_19C = 1;
+            if (self->unk_19C == 0) {
+                self->actor.world.pos = initPos;
+                self->unk_19C = 1;
             }
-            this->actor.shape.rot.x = csCmdNPCAction->urot.x;
-            this->actor.shape.rot.y = csCmdNPCAction->urot.y;
-            this->actor.shape.rot.z = csCmdNPCAction->urot.z;
-            this->actor.velocity = velocity;
+            self->actor.shape.rot.x = csCmdNPCAction->urot.x;
+            self->actor.shape.rot.y = csCmdNPCAction->urot.y;
+            self->actor.shape.rot.z = csCmdNPCAction->urot.z;
+            self->actor.velocity = velocity;
             if (csCmdNPCAction->endFrame >= globalCtx->csCtx.frames) {
                 actionLength = csCmdNPCAction->endFrame - csCmdNPCAction->startFrame;
-                this->actor.velocity.x = (finalPos.x - initPos.x) / actionLength;
-                gravity = this->actor.gravity;
-                this->actor.velocity.y = (finalPos.y - initPos.y) / actionLength;
-                this->actor.velocity.y += gravity;
-                if (this->actor.velocity.y < this->actor.minVelocityY) {
-                    this->actor.velocity.y = this->actor.minVelocityY;
+                self->actor.velocity.x = (finalPos.x - initPos.x) / actionLength;
+                gravity = self->actor.gravity;
+                self->actor.velocity.y = (finalPos.y - initPos.y) / actionLength;
+                self->actor.velocity.y += gravity;
+                if (self->actor.velocity.y < self->actor.minVelocityY) {
+                    self->actor.velocity.y = self->actor.minVelocityY;
                 }
-                this->actor.velocity.z = (finalPos.z - initPos.z) / actionLength;
+                self->actor.velocity.z = (finalPos.z - initPos.z) / actionLength;
             }
         }
     }
 }
 
 void ObjDekujr_Update(Actor* thisx, GlobalContext* globalCtx) {
-    ObjDekujr* this = THIS;
+    ObjDekujr* self = THIS;
     s32 pad;
 
-    Collider_UpdateCylinder(&this->actor, &this->collider);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-    if ((gSaveContext.cutsceneIndex >= 0xFFF0) && (this->unk_19B == 0)) {
-        this->unk_19C = 0;
-        this->unk_19B = 1;
+    Collider_UpdateCylinder(&self->actor, &self->collider);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
+    if ((gSaveContext.cutsceneIndex >= 0xFFF0) && (self->unk_19B == 0)) {
+        self->unk_19C = 0;
+        self->unk_19B = 1;
     }
-    if (this->unk_19B == 1) {
-        ObjDekujr_ComeUp(this, globalCtx);
-        this->actor.world.pos.x += this->actor.velocity.x;
-        this->actor.world.pos.y += this->actor.velocity.y;
-        this->actor.world.pos.z += this->actor.velocity.z;
+    if (self->unk_19B == 1) {
+        ObjDekujr_ComeUp(self, globalCtx);
+        self->actor.world.pos.x += self->actor.velocity.x;
+        self->actor.world.pos.y += self->actor.velocity.y;
+        self->actor.world.pos.z += self->actor.velocity.z;
     } else {
-        func_80037D98(globalCtx, &this->actor, 0xF, &this->unk_1A0);
-        Actor_SetFocus(&this->actor, 40.0f);
+        func_80037D98(globalCtx, &self->actor, 0xF, &self->unk_1A0);
+        Actor_SetFocus(&self->actor, 40.0f);
     }
 }
 

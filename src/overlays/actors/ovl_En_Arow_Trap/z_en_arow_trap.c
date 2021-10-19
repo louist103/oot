@@ -27,28 +27,28 @@ const ActorInit En_Arow_Trap_InitVars = {
 };
 
 void EnArowTrap_Init(Actor* thisx, GlobalContext* globalCtx) {
-    EnArowTrap* this = THIS;
+    EnArowTrap* self = THIS;
 
-    Actor_SetScale(&this->actor, 0.01);
-    this->unk_14C = 0;
-    this->attackTimer = 80;
-    this->actor.focus.pos = this->actor.world.pos;
+    Actor_SetScale(&self->actor, 0.01);
+    self->unk_14C = 0;
+    self->attackTimer = 80;
+    self->actor.focus.pos = self->actor.world.pos;
 }
 
 void EnArowTrap_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnArowTrap_Update(Actor* thisx, GlobalContext* globalCtx) {
-    EnArowTrap* this = THIS;
+    EnArowTrap* self = THIS;
 
-    if (this->actor.xzDistToPlayer <= 400) {
-        this->attackTimer--;
+    if (self->actor.xzDistToPlayer <= 400) {
+        self->attackTimer--;
 
-        if (this->attackTimer == 0) {
-            Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ARROW, this->actor.world.pos.x,
-                        this->actor.world.pos.y, this->actor.world.pos.z, this->actor.shape.rot.x,
-                        this->actor.shape.rot.y, this->actor.shape.rot.z, ARROW_NORMAL_SILENT);
-            this->attackTimer = 80;
+        if (self->attackTimer == 0) {
+            Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ARROW, self->actor.world.pos.x,
+                        self->actor.world.pos.y, self->actor.world.pos.z, self->actor.shape.rot.x,
+                        self->actor.shape.rot.y, self->actor.shape.rot.z, ARROW_NORMAL_SILENT);
+            self->attackTimer = 80;
         }
     }
 }

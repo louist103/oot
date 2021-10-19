@@ -18,37 +18,37 @@
 #define rObjBankIdx regs[10]
 #define rYAccelStep regs[11] // has no effect due to how its implemented
 
-u32 EffectSsDFire_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx);
-void EffectSsDFire_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this);
-void EffectSsDFire_Update(GlobalContext* globalCtx, u32 index, EffectSs* this);
+u32 EffectSsDFire_Init(GlobalContext* globalCtx, u32 index, EffectSs* self, void* initParamsx);
+void EffectSsDFire_Draw(GlobalContext* globalCtx, u32 index, EffectSs* self);
+void EffectSsDFire_Update(GlobalContext* globalCtx, u32 index, EffectSs* self);
 
 EffectSsInit Effect_Ss_D_Fire_InitVars = {
     EFFECT_SS_D_FIRE,
     EffectSsDFire_Init,
 };
 
-u32 EffectSsDFire_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx) {
+u32 EffectSsDFire_Init(GlobalContext* globalCtx, u32 index, EffectSs* self, void* initParamsx) {
     EffectSsDFireInitParams* initParams = (EffectSsDFireInitParams*)initParamsx;
     s32 objBankIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_DODONGO);
 
     if (objBankIndex >= 0) {
-        this->pos = initParams->pos;
-        this->velocity = initParams->velocity;
-        this->accel = initParams->accel;
-        this->gfx = SEGMENTED_TO_VIRTUAL(gDodongoFireDL);
-        this->life = initParams->life;
-        this->rScale = initParams->scale;
-        this->rScaleStep = initParams->scaleStep;
-        this->rYAccelStep = 0;
-        this->rObjBankIdx = objBankIndex;
-        this->draw = EffectSsDFire_Draw;
-        this->update = EffectSsDFire_Update;
-        this->rTexIdx = ((s16)(globalCtx->state.frames % 4) ^ 3);
-        this->rPrimColorR = 255;
-        this->rPrimColorG = 255;
-        this->rPrimColorB = 50;
-        this->rPrimColorA = initParams->alpha;
-        this->rFadeDelay = initParams->fadeDelay;
+        self->pos = initParams->pos;
+        self->velocity = initParams->velocity;
+        self->accel = initParams->accel;
+        self->gfx = SEGMENTED_TO_VIRTUAL(gDodongoFireDL);
+        self->life = initParams->life;
+        self->rScale = initParams->scale;
+        self->rScaleStep = initParams->scaleStep;
+        self->rYAccelStep = 0;
+        self->rObjBankIdx = objBankIndex;
+        self->draw = EffectSsDFire_Draw;
+        self->update = EffectSsDFire_Update;
+        self->rTexIdx = ((s16)(globalCtx->state.frames % 4) ^ 3);
+        self->rPrimColorR = 255;
+        self->rPrimColorG = 255;
+        self->rPrimColorB = 50;
+        self->rPrimColorA = initParams->alpha;
+        self->rFadeDelay = initParams->fadeDelay;
 
         return 1;
     }
@@ -58,7 +58,7 @@ u32 EffectSsDFire_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void
 
 static void* sTextures[] = { gDodongoFire0Tex, gDodongoFire1Tex, gDodongoFire2Tex, gDodongoFire3Tex };
 
-void EffectSsDFire_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
+void EffectSsDFire_Draw(GlobalContext* globalCtx, u32 index, EffectSs* self) {
     GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
     MtxF mfTrans;
     MtxF mfScale;
@@ -69,15 +69,15 @@ void EffectSsDFire_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
     Mtx* mtx;
     f32 scale;
 
-    object = globalCtx->objectCtx.status[this->rObjBankIdx].segment;
+    object = globalCtx->objectCtx.status[self->rObjBankIdx].segment;
 
     OPEN_DISPS(gfxCtx, "../z_eff_ss_d_fire.c", 276);
 
     if (Object_GetIndex(&globalCtx->objectCtx, OBJECT_DODONGO) > -1) {
         gSegments[6] = VIRTUAL_TO_PHYSICAL(object);
         gSPSegment(POLY_XLU_DISP++, 0x06, object);
-        scale = this->rScale / 100.0f;
-        SkinMatrix_SetTranslate(&mfTrans, this->pos.x, this->pos.y, this->pos.z);
+        scale = self->rScale / 100.0f;
+        SkinMatrix_SetTranslate(&mfTrans, self->pos.x, self->pos.y, self->pos.z);
         SkinMatrix_SetScale(&mfScale, scale, scale, 1.0f);
         SkinMatrix_MtxFMtxFMult(&mfTrans, &globalCtx->mf_11DA0, &mfTrans11DA0);
         SkinMatrix_MtxFMtxFMult(&mfTrans11DA0, &mfScale, &mfResult);
@@ -88,39 +88,39 @@ void EffectSsDFire_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
             gSPMatrix(POLY_XLU_DISP++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             func_80094BC4(gfxCtx);
             gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 0);
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, this->rPrimColorR, this->rPrimColorG, this->rPrimColorB,
-                            this->rPrimColorA);
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, self->rPrimColorR, self->rPrimColorG, self->rPrimColorB,
+                            self->rPrimColorA);
             gSegments[6] = VIRTUAL_TO_PHYSICAL(object);
-            gSPSegment(POLY_XLU_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(sTextures[this->rTexIdx]));
-            gSPDisplayList(POLY_XLU_DISP++, this->gfx);
+            gSPSegment(POLY_XLU_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(sTextures[self->rTexIdx]));
+            gSPDisplayList(POLY_XLU_DISP++, self->gfx);
         }
     }
 
     CLOSE_DISPS(gfxCtx, "../z_eff_ss_d_fire.c", 330);
 }
 
-void EffectSsDFire_Update(GlobalContext* globalCtx, u32 index, EffectSs* this) {
-    this->rTexIdx++;
-    this->rTexIdx &= 3;
-    this->rScale += this->rScaleStep;
+void EffectSsDFire_Update(GlobalContext* globalCtx, u32 index, EffectSs* self) {
+    self->rTexIdx++;
+    self->rTexIdx &= 3;
+    self->rScale += self->rScaleStep;
 
-    if (this->rFadeDelay >= this->life) {
-        this->rPrimColorA -= 5;
-        if (this->rPrimColorA < 0) {
-            this->rPrimColorA = 0;
+    if (self->rFadeDelay >= self->life) {
+        self->rPrimColorA -= 5;
+        if (self->rPrimColorA < 0) {
+            self->rPrimColorA = 0;
         }
     } else {
-        this->rPrimColorA += 15;
-        if (this->rPrimColorA > 255) {
-            this->rPrimColorA = 255;
+        self->rPrimColorA += 15;
+        if (self->rPrimColorA > 255) {
+            self->rPrimColorA = 255;
         }
     }
 
-    if (this->accel.y < 0.0f) {
-        this->accel.y += this->rYAccelStep * 0.01f;
+    if (self->accel.y < 0.0f) {
+        self->accel.y += self->rYAccelStep * 0.01f;
     }
 
-    if (this->life <= 0) {
-        this->rYAccelStep += 0;
+    if (self->life <= 0) {
+        self->rYAccelStep += 0;
     }
 }

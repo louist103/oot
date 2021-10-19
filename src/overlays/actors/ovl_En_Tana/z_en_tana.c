@@ -31,7 +31,7 @@ const ActorInit En_Tana_InitVars = {
 
 //! @bug A third entry is missing here. When printing the string indexed by `params` for type 2, the
 //! next data entry will be dereferenced and print garbage, stopping any future printing.
-//! In a non-matching context, this can cause a crash if the next item isn't a valid pointer.
+//! In a non-matching context, self can cause a crash if the next item isn't a valid pointer.
 static const char* sShelfTypes[] = {
     "木の棚", // "Wooden Shelves"
     "石の棚", // "Stone Shelves"
@@ -59,7 +59,7 @@ static void* sStoneTextures[] = {
 };
 
 void EnTana_Init(Actor* thisx, GlobalContext* globalCtx) {
-    EnTana* this = THIS;
+    EnTana* self = THIS;
 
     osSyncPrintf("☆☆☆ %s ☆☆☆\n", sShelfTypes[thisx->params]);
     Actor_SetScale(thisx, 1.0f);
@@ -74,7 +74,7 @@ void EnTana_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnTana_DrawWoodenShelves(Actor* thisx, GlobalContext* globalCtx) {
-    EnTana* this = THIS;
+    EnTana* self = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx, "../z_en_tana.c", 148);
 
@@ -87,7 +87,7 @@ void EnTana_DrawWoodenShelves(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnTana_DrawStoneShelves(Actor* thisx, GlobalContext* globalCtx) {
-    EnTana* this = THIS;
+    EnTana* self = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx, "../z_en_tana.c", 163);
 

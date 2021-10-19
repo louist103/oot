@@ -16,9 +16,9 @@ void BgGndFiremeiro_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgGndFiremeiro_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgGndFiremeiro_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void BgGndFiremeiro_Sink(BgGndFiremeiro* this, GlobalContext* globalCtx);
-void BgGndFiremeiro_Shake(BgGndFiremeiro* this, GlobalContext* globalCtx);
-void BgGndFiremeiro_Rise(BgGndFiremeiro* this, GlobalContext* globalCtx);
+void BgGndFiremeiro_Sink(BgGndFiremeiro* self, GlobalContext* globalCtx);
+void BgGndFiremeiro_Shake(BgGndFiremeiro* self, GlobalContext* globalCtx);
+void BgGndFiremeiro_Rise(BgGndFiremeiro* self, GlobalContext* globalCtx);
 
 const ActorInit Bg_Gnd_Firemeiro_InitVars = {
     ACTOR_BG_GND_FIREMEIRO,
@@ -34,110 +34,110 @@ const ActorInit Bg_Gnd_Firemeiro_InitVars = {
 
 void BgGndFiremeiro_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
-    BgGndFiremeiro* this = THIS;
+    BgGndFiremeiro* self = THIS;
     CollisionHeader* colHeader = NULL;
 
-    ActorShape_Init(&this->dyna.actor.shape, 0.0f, NULL, 0.0f);
-    Actor_SetScale(&this->dyna.actor, 0.1f);
-    this->initPos = this->dyna.actor.world.pos;
+    ActorShape_Init(&self->dyna.actor.shape, 0.0f, NULL, 0.0f);
+    Actor_SetScale(&self->dyna.actor, 0.1f);
+    self->initPos = self->dyna.actor.world.pos;
 
-    if (this->dyna.actor.params == 0) {
-        DynaPolyActor_Init(&this->dyna, DPM_UNK);
+    if (self->dyna.actor.params == 0) {
+        DynaPolyActor_Init(&self->dyna, DPM_UNK);
         CollisionHeader_GetVirtual(&gFireTrialPlatformCol, &colHeader);
-        this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
-        this->actionFunc = BgGndFiremeiro_Rise;
+        self->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &self->dyna.actor, colHeader);
+        self->actionFunc = BgGndFiremeiro_Rise;
     }
 }
 
 void BgGndFiremeiro_Destroy(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
-    BgGndFiremeiro* this = THIS;
+    BgGndFiremeiro* self = THIS;
 
-    if (this->dyna.actor.params == 0) {
+    if (self->dyna.actor.params == 0) {
         if (1) {}
-        DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, self->dyna.bgId);
     }
 }
 
-void BgGndFiremeiro_Sink(BgGndFiremeiro* this, GlobalContext* globalCtx) {
-    f32 sunkHeight = this->initPos.y - 150.0f;
+void BgGndFiremeiro_Sink(BgGndFiremeiro* self, GlobalContext* globalCtx) {
+    f32 sunkHeight = self->initPos.y - 150.0f;
 
-    if (func_8004356C(&this->dyna)) {
-        this->timer = 10;
+    if (func_8004356C(&self->dyna)) {
+        self->timer = 10;
     }
 
-    if (sunkHeight < this->dyna.actor.world.pos.y) {
-        this->dyna.actor.world.pos.y -= 0.5f;
+    if (sunkHeight < self->dyna.actor.world.pos.y) {
+        self->dyna.actor.world.pos.y -= 0.5f;
 
-        if (this->dyna.actor.world.pos.y < sunkHeight) {
-            this->dyna.actor.world.pos.y = sunkHeight;
+        if (self->dyna.actor.world.pos.y < sunkHeight) {
+            self->dyna.actor.world.pos.y = sunkHeight;
         }
 
-        func_8002F948(&this->dyna.actor, NA_SE_EV_ROLL_STAND_2 - SFX_FLAG);
+        func_8002F948(&self->dyna.actor, NA_SE_EV_ROLL_STAND_2 - SFX_FLAG);
     }
 
-    if (this->timer > 0) {
-        this->timer--;
+    if (self->timer > 0) {
+        self->timer--;
     } else {
-        this->actionFunc = BgGndFiremeiro_Rise;
+        self->actionFunc = BgGndFiremeiro_Rise;
     }
 }
 
-void BgGndFiremeiro_Shake(BgGndFiremeiro* this, GlobalContext* globalCtx) {
+void BgGndFiremeiro_Shake(BgGndFiremeiro* self, GlobalContext* globalCtx) {
     s32 pad;
     f32 randSign;
 
-    if (func_8004356C(&this->dyna)) { // Player standing on it
-        if (this->timer > 0) {
-            this->timer--;
+    if (func_8004356C(&self->dyna)) { // Player standing on it
+        if (self->timer > 0) {
+            self->timer--;
 
-            randSign = ((this->timer & 1) ? 2.0f : -2.0f);
+            randSign = ((self->timer & 1) ? 2.0f : -2.0f);
 
-            this->dyna.actor.world.pos = this->initPos;
-            this->dyna.actor.world.pos.x += randSign * Math_SinS(this->timer * 0x2FFF);
-            this->dyna.actor.world.pos.z += randSign * Math_CosS(this->timer * 0x2FFF);
-            this->dyna.actor.world.pos.y += Math_CosS(this->timer * 0x7FFF);
+            self->dyna.actor.world.pos = self->initPos;
+            self->dyna.actor.world.pos.x += randSign * Math_SinS(self->timer * 0x2FFF);
+            self->dyna.actor.world.pos.z += randSign * Math_CosS(self->timer * 0x2FFF);
+            self->dyna.actor.world.pos.y += Math_CosS(self->timer * 0x7FFF);
 
-            if (!(this->timer % 4)) {
-                Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_BLOCK_SHAKE);
+            if (!(self->timer % 4)) {
+                Audio_PlayActorSound2(&self->dyna.actor, NA_SE_EV_BLOCK_SHAKE);
             }
         } else {
-            this->timer = 10;
-            this->dyna.actor.world.pos = this->initPos;
-            this->actionFunc = BgGndFiremeiro_Sink;
+            self->timer = 10;
+            self->dyna.actor.world.pos = self->initPos;
+            self->actionFunc = BgGndFiremeiro_Sink;
         }
     } else {
-        this->dyna.actor.world.pos = this->initPos;
-        this->actionFunc = BgGndFiremeiro_Rise;
+        self->dyna.actor.world.pos = self->initPos;
+        self->actionFunc = BgGndFiremeiro_Rise;
     }
 }
 
-void BgGndFiremeiro_Rise(BgGndFiremeiro* this, GlobalContext* globalCtx) {
+void BgGndFiremeiro_Rise(BgGndFiremeiro* self, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    Actor* thisx = &this->dyna.actor;
+    Actor* thisx = &self->dyna.actor;
 
-    if ((player->currentBoots != PLAYER_BOOTS_HOVER) && func_8004356C(&this->dyna)) { // Player standing on it
-        if (thisx->world.pos.y < this->initPos.y) {
-            this->actionFunc = BgGndFiremeiro_Sink;
-            this->timer = 20;
+    if ((player->currentBoots != PLAYER_BOOTS_HOVER) && func_8004356C(&self->dyna)) { // Player standing on it
+        if (thisx->world.pos.y < self->initPos.y) {
+            self->actionFunc = BgGndFiremeiro_Sink;
+            self->timer = 20;
         } else {
-            this->actionFunc = BgGndFiremeiro_Shake;
-            this->timer = 20;
+            self->actionFunc = BgGndFiremeiro_Shake;
+            self->timer = 20;
         }
     } else {
-        if (thisx->world.pos.y < this->initPos.y) {
+        if (thisx->world.pos.y < self->initPos.y) {
             thisx->world.pos.y += 2.0f;
-            if (this->initPos.y < thisx->world.pos.y) {
-                thisx->world.pos.y = this->initPos.y;
+            if (self->initPos.y < thisx->world.pos.y) {
+                thisx->world.pos.y = self->initPos.y;
             }
         }
     }
 }
 
 void BgGndFiremeiro_Update(Actor* thisx, GlobalContext* globalCtx) {
-    BgGndFiremeiro* this = THIS;
+    BgGndFiremeiro* self = THIS;
 
-    this->actionFunc(this, globalCtx);
+    self->actionFunc(self, globalCtx);
 }
 
 void BgGndFiremeiro_Draw(Actor* thisx, GlobalContext* globalCtx) {

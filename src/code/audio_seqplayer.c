@@ -787,7 +787,7 @@ s32 func_800EA440(SequenceChannelLayer* layer, s32 arg1) {
         layer->delay = (u16)(s32)time + 1;
         if (layer->portamento.mode != 0) {
             // (It's a bit unclear if 'portamento' has actually always been
-            // set when this is reached...)
+            // set when self is reached...)
             if (PORTAMENTO_IS_SPECIAL(*portamento)) {
                 s32 speed2;
                 speed2 = seqPlayer->tempo * 0x8000 / gAudioContext.tempoInternalToExternal;

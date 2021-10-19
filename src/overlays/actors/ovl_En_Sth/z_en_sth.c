@@ -17,10 +17,10 @@ void EnSth_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnSth_Update2(Actor* thisx, GlobalContext* globalCtx);
 void EnSth_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void EnSth_WaitForObjectLoaded(EnSth* this, GlobalContext* globalCtx);
-void EnSth_ParentRewardObtainedWait(EnSth* this, GlobalContext* globalCtx);
-void EnSth_RewardUnobtainedWait(EnSth* this, GlobalContext* globalCtx);
-void EnSth_ChildRewardObtainedWait(EnSth* this, GlobalContext* globalCtx);
+void EnSth_WaitForObjectLoaded(EnSth* self, GlobalContext* globalCtx);
+void EnSth_ParentRewardObtainedWait(EnSth* self, GlobalContext* globalCtx);
+void EnSth_RewardUnobtainedWait(EnSth* self, GlobalContext* globalCtx);
+void EnSth_ChildRewardObtainedWait(EnSth* self, GlobalContext* globalCtx);
 
 const ActorInit En_Sth_InitVars = {
     ACTOR_EN_STH,
@@ -87,27 +87,27 @@ static Color_RGB8 sTunicColors[6] = {
     { 190, 110, 0 }, { 0, 180, 110 }, { 0, 255, 80 }, { 255, 160, 60 }, { 190, 230, 250 }, { 240, 230, 120 },
 };
 
-void EnSth_SetupAction(EnSth* this, EnSthActionFunc actionFunc) {
-    this->actionFunc = actionFunc;
+void EnSth_SetupAction(EnSth* self, EnSthActionFunc actionFunc) {
+    self->actionFunc = actionFunc;
 }
 
 void EnSth_Init(Actor* thisx, GlobalContext* globalCtx) {
-    EnSth* this = THIS;
+    EnSth* self = THIS;
 
     s16 objectId;
-    s32 params = this->actor.params;
+    s32 params = self->actor.params;
     s32 objectBankIdx;
 
     osSyncPrintf(VT_FGCOL(BLUE) "金スタル屋 no = %d\n" VT_RST, params); // "Gold Skulltula Shop"
-    if (this->actor.params == 0) {
+    if (self->actor.params == 0) {
         if (gSaveContext.inventory.gsTokens < 100) {
-            Actor_Kill(&this->actor);
+            Actor_Kill(&self->actor);
             // "Gold Skulltula Shop I still can't be a human"
             osSyncPrintf("金スタル屋 まだ 人間に戻れない \n");
             return;
         }
-    } else if (gSaveContext.inventory.gsTokens < (this->actor.params * 10)) {
-        Actor_Kill(&this->actor);
+    } else if (gSaveContext.inventory.gsTokens < (self->actor.params * 10)) {
+        Actor_Kill(&self->actor);
         // "Gold Skulltula Shop I still can't be a human"
         osSyncPrintf(VT_FGCOL(BLUE) "金スタル屋 まだ 人間に戻れない \n" VT_RST);
         return;
@@ -124,117 +124,117 @@ void EnSth_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (objectBankIdx < 0) {
         ASSERT(0, "0", "../z_en_sth.c", 1564);
     }
-    this->objectBankIdx = objectBankIdx;
-    this->drawFunc = EnSth_Draw;
-    Actor_SetScale(&this->actor, 0.01f);
-    EnSth_SetupAction(this, EnSth_WaitForObjectLoaded);
-    this->actor.draw = NULL;
-    this->unk_2B2 = 0;
-    this->actor.targetMode = 6;
+    self->objectBankIdx = objectBankIdx;
+    self->drawFunc = EnSth_Draw;
+    Actor_SetScale(&self->actor, 0.01f);
+    EnSth_SetupAction(self, EnSth_WaitForObjectLoaded);
+    self->actor.draw = NULL;
+    self->unk_2B2 = 0;
+    self->actor.targetMode = 6;
 }
 
-void EnSth_SetupShapeColliderUpdate2AndDraw(EnSth* this, GlobalContext* globalCtx) {
+void EnSth_SetupShapeColliderUpdate2AndDraw(EnSth* self, GlobalContext* globalCtx) {
     s32 pad;
 
-    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
-    Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
-    this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->actor.update = EnSth_Update2;
-    this->actor.draw = this->drawFunc;
+    ActorShape_Init(&self->actor.shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
+    Collider_InitCylinder(globalCtx, &self->collider);
+    Collider_SetCylinder(globalCtx, &self->collider, &self->actor, &sCylinderInit);
+    self->actor.colChkInfo.mass = MASS_IMMOVABLE;
+    self->actor.update = EnSth_Update2;
+    self->actor.draw = self->drawFunc;
 }
 
-void EnSth_SetupAfterObjectLoaded(EnSth* this, GlobalContext* globalCtx) {
+void EnSth_SetupAfterObjectLoaded(EnSth* self, GlobalContext* globalCtx) {
     s32 pad;
     s16* params;
 
-    EnSth_SetupShapeColliderUpdate2AndDraw(this, globalCtx);
-    gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->objectBankIdx].segment);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, sSkeletons[this->actor.params], NULL, this->jointTable,
-                       this->morphTable, 16);
-    Animation_PlayLoop(&this->skelAnime, sAnimations[this->actor.params]);
+    EnSth_SetupShapeColliderUpdate2AndDraw(self, globalCtx);
+    gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[self->objectBankIdx].segment);
+    SkelAnime_InitFlex(globalCtx, &self->skelAnime, sSkeletons[self->actor.params], NULL, self->jointTable,
+                       self->morphTable, 16);
+    Animation_PlayLoop(&self->skelAnime, sAnimations[self->actor.params]);
 
-    this->eventFlag = sEventFlags[this->actor.params];
-    params = &this->actor.params;
-    if (gSaveContext.eventChkInf[13] & this->eventFlag) {
-        EnSth_SetupAction(this, sRewardObtainedWaitActions[*params]);
+    self->eventFlag = sEventFlags[self->actor.params];
+    params = &self->actor.params;
+    if (gSaveContext.eventChkInf[13] & self->eventFlag) {
+        EnSth_SetupAction(self, sRewardObtainedWaitActions[*params]);
     } else {
-        EnSth_SetupAction(this, EnSth_RewardUnobtainedWait);
+        EnSth_SetupAction(self, EnSth_RewardUnobtainedWait);
     }
 }
 
 void EnSth_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    EnSth* this = THIS;
+    EnSth* self = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    Collider_DestroyCylinder(globalCtx, &self->collider);
 }
 
-void EnSth_WaitForObjectLoaded(EnSth* this, GlobalContext* globalCtx) {
-    if (Object_IsLoaded(&globalCtx->objectCtx, this->objectBankIdx)) {
-        this->actor.objBankIndex = this->objectBankIdx;
-        this->actionFunc = EnSth_SetupAfterObjectLoaded;
+void EnSth_WaitForObjectLoaded(EnSth* self, GlobalContext* globalCtx) {
+    if (Object_IsLoaded(&globalCtx->objectCtx, self->objectBankIdx)) {
+        self->actor.objBankIndex = self->objectBankIdx;
+        self->actionFunc = EnSth_SetupAfterObjectLoaded;
     }
 }
 
-void EnSth_FacePlayer(EnSth* this, GlobalContext* globalCtx) {
+void EnSth_FacePlayer(EnSth* self, GlobalContext* globalCtx) {
     s32 pad;
-    s16 diffRot = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
+    s16 diffRot = self->actor.yawTowardsPlayer - self->actor.shape.rot.y;
 
     if (ABS(diffRot) <= 0x4000) {
-        Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 6, 0xFA0, 0x64);
-        this->actor.world.rot.y = this->actor.shape.rot.y;
-        func_80038290(globalCtx, &this->actor, &this->headRot, &this->unk_2AC, this->actor.focus.pos);
+        Math_SmoothStepToS(&self->actor.shape.rot.y, self->actor.yawTowardsPlayer, 6, 0xFA0, 0x64);
+        self->actor.world.rot.y = self->actor.shape.rot.y;
+        func_80038290(globalCtx, &self->actor, &self->headRot, &self->unk_2AC, self->actor.focus.pos);
     } else {
         if (diffRot < 0) {
-            Math_SmoothStepToS(&this->headRot.y, -0x2000, 6, 0x1838, 0x100);
+            Math_SmoothStepToS(&self->headRot.y, -0x2000, 6, 0x1838, 0x100);
         } else {
-            Math_SmoothStepToS(&this->headRot.y, 0x2000, 6, 0x1838, 0x100);
+            Math_SmoothStepToS(&self->headRot.y, 0x2000, 6, 0x1838, 0x100);
         }
-        Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xC, 0x3E8, 0x64);
-        this->actor.world.rot.y = this->actor.shape.rot.y;
+        Math_SmoothStepToS(&self->actor.shape.rot.y, self->actor.yawTowardsPlayer, 0xC, 0x3E8, 0x64);
+        self->actor.world.rot.y = self->actor.shape.rot.y;
     }
 }
 
-void EnSth_LookAtPlayer(EnSth* this, GlobalContext* globalCtx) {
-    s16 diffRot = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
+void EnSth_LookAtPlayer(EnSth* self, GlobalContext* globalCtx) {
+    s16 diffRot = self->actor.yawTowardsPlayer - self->actor.shape.rot.y;
 
-    if ((ABS(diffRot) <= 0x4300) && (this->actor.xzDistToPlayer < 100.0f)) {
-        func_80038290(globalCtx, &this->actor, &this->headRot, &this->unk_2AC, this->actor.focus.pos);
+    if ((ABS(diffRot) <= 0x4300) && (self->actor.xzDistToPlayer < 100.0f)) {
+        func_80038290(globalCtx, &self->actor, &self->headRot, &self->unk_2AC, self->actor.focus.pos);
     } else {
-        Math_SmoothStepToS(&this->headRot.x, 0, 6, 0x1838, 0x64);
-        Math_SmoothStepToS(&this->headRot.y, 0, 6, 0x1838, 0x64);
-        Math_SmoothStepToS(&this->unk_2AC.x, 0, 6, 0x1838, 0x64);
-        Math_SmoothStepToS(&this->unk_2AC.y, 0, 6, 0x1838, 0x64);
+        Math_SmoothStepToS(&self->headRot.x, 0, 6, 0x1838, 0x64);
+        Math_SmoothStepToS(&self->headRot.y, 0, 6, 0x1838, 0x64);
+        Math_SmoothStepToS(&self->unk_2AC.x, 0, 6, 0x1838, 0x64);
+        Math_SmoothStepToS(&self->unk_2AC.y, 0, 6, 0x1838, 0x64);
     }
 }
 
-void EnSth_RewardObtainedTalk(EnSth* this, GlobalContext* globalCtx) {
-    if (func_8002F334(&this->actor, globalCtx)) {
-        if (this->actor.params == 0) {
-            EnSth_SetupAction(this, EnSth_ParentRewardObtainedWait);
+void EnSth_RewardObtainedTalk(EnSth* self, GlobalContext* globalCtx) {
+    if (func_8002F334(&self->actor, globalCtx)) {
+        if (self->actor.params == 0) {
+            EnSth_SetupAction(self, EnSth_ParentRewardObtainedWait);
         } else {
-            EnSth_SetupAction(this, EnSth_ChildRewardObtainedWait);
+            EnSth_SetupAction(self, EnSth_ChildRewardObtainedWait);
         }
     }
-    EnSth_FacePlayer(this, globalCtx);
+    EnSth_FacePlayer(self, globalCtx);
 }
 
-void EnSth_ParentRewardObtainedWait(EnSth* this, GlobalContext* globalCtx) {
-    if (func_8002F194(&this->actor, globalCtx)) {
-        EnSth_SetupAction(this, EnSth_RewardObtainedTalk);
+void EnSth_ParentRewardObtainedWait(EnSth* self, GlobalContext* globalCtx) {
+    if (func_8002F194(&self->actor, globalCtx)) {
+        EnSth_SetupAction(self, EnSth_RewardObtainedTalk);
     } else {
-        this->actor.textId = 0x23;
-        if (this->actor.xzDistToPlayer < 100.0f) {
-            func_8002F2CC(&this->actor, globalCtx, 100.0f);
+        self->actor.textId = 0x23;
+        if (self->actor.xzDistToPlayer < 100.0f) {
+            func_8002F2CC(&self->actor, globalCtx, 100.0f);
         }
     }
-    EnSth_LookAtPlayer(this, globalCtx);
+    EnSth_LookAtPlayer(self, globalCtx);
 }
 
-void EnSth_GivePlayerItem(EnSth* this, GlobalContext* globalCtx) {
-    u16 getItemId = sGetItemIds[this->actor.params];
+void EnSth_GivePlayerItem(EnSth* self, GlobalContext* globalCtx) {
+    u16 getItemId = sGetItemIds[self->actor.params];
 
-    switch (this->actor.params) {
+    switch (self->actor.params) {
         case 1:
         case 3:
             switch (CUR_UPG_VALUE(UPG_WALLET)) {
@@ -249,102 +249,102 @@ void EnSth_GivePlayerItem(EnSth* this, GlobalContext* globalCtx) {
             break;
     }
 
-    func_8002F434(&this->actor, globalCtx, getItemId, 10000.0f, 50.0f);
+    func_8002F434(&self->actor, globalCtx, getItemId, 10000.0f, 50.0f);
 }
 
-void EnSth_GiveReward(EnSth* this, GlobalContext* globalCtx) {
-    if (Actor_HasParent(&this->actor, globalCtx)) {
-        this->actor.parent = NULL;
-        EnSth_SetupAction(this, EnSth_RewardObtainedTalk);
-        gSaveContext.eventChkInf[13] |= this->eventFlag;
+void EnSth_GiveReward(EnSth* self, GlobalContext* globalCtx) {
+    if (Actor_HasParent(&self->actor, globalCtx)) {
+        self->actor.parent = NULL;
+        EnSth_SetupAction(self, EnSth_RewardObtainedTalk);
+        gSaveContext.eventChkInf[13] |= self->eventFlag;
     } else {
-        EnSth_GivePlayerItem(this, globalCtx);
+        EnSth_GivePlayerItem(self, globalCtx);
     }
-    EnSth_FacePlayer(this, globalCtx);
+    EnSth_FacePlayer(self, globalCtx);
 }
 
-void EnSth_RewardUnobtainedTalk(EnSth* this, GlobalContext* globalCtx) {
+void EnSth_RewardUnobtainedTalk(EnSth* self, GlobalContext* globalCtx) {
     if ((func_8010BDBC(&globalCtx->msgCtx) == 5) && func_80106BC8(globalCtx)) {
         func_80106CCC(globalCtx);
-        EnSth_SetupAction(this, EnSth_GiveReward);
-        EnSth_GivePlayerItem(this, globalCtx);
+        EnSth_SetupAction(self, EnSth_GiveReward);
+        EnSth_GivePlayerItem(self, globalCtx);
     }
-    EnSth_FacePlayer(this, globalCtx);
+    EnSth_FacePlayer(self, globalCtx);
 }
 
-void EnSth_RewardUnobtainedWait(EnSth* this, GlobalContext* globalCtx) {
-    if (func_8002F194(&this->actor, globalCtx)) {
-        EnSth_SetupAction(this, EnSth_RewardUnobtainedTalk);
+void EnSth_RewardUnobtainedWait(EnSth* self, GlobalContext* globalCtx) {
+    if (func_8002F194(&self->actor, globalCtx)) {
+        EnSth_SetupAction(self, EnSth_RewardUnobtainedTalk);
     } else {
-        if (this->actor.params == 0) {
-            this->actor.textId = 0x28;
+        if (self->actor.params == 0) {
+            self->actor.textId = 0x28;
         } else {
-            this->actor.textId = 0x21;
+            self->actor.textId = 0x21;
         }
-        if (this->actor.xzDistToPlayer < 100.0f) {
-            func_8002F2CC(&this->actor, globalCtx, 100.0f);
+        if (self->actor.xzDistToPlayer < 100.0f) {
+            func_8002F2CC(&self->actor, globalCtx, 100.0f);
         }
     }
-    EnSth_LookAtPlayer(this, globalCtx);
+    EnSth_LookAtPlayer(self, globalCtx);
 }
 
-void EnSth_ChildRewardObtainedWait(EnSth* this, GlobalContext* globalCtx) {
-    if (func_8002F194(&this->actor, globalCtx)) {
-        EnSth_SetupAction(this, EnSth_RewardObtainedTalk);
+void EnSth_ChildRewardObtainedWait(EnSth* self, GlobalContext* globalCtx) {
+    if (func_8002F194(&self->actor, globalCtx)) {
+        EnSth_SetupAction(self, EnSth_RewardObtainedTalk);
     } else {
         if (gSaveContext.inventory.gsTokens < 50) {
-            this->actor.textId = 0x20;
+            self->actor.textId = 0x20;
         } else {
-            this->actor.textId = 0x1F;
+            self->actor.textId = 0x1F;
         }
-        if (this->actor.xzDistToPlayer < 100.0f) {
-            func_8002F2CC(&this->actor, globalCtx, 100.0f);
+        if (self->actor.xzDistToPlayer < 100.0f) {
+            func_8002F2CC(&self->actor, globalCtx, 100.0f);
         }
     }
-    EnSth_LookAtPlayer(this, globalCtx);
+    EnSth_LookAtPlayer(self, globalCtx);
 }
 
 void EnSth_Update(Actor* thisx, GlobalContext* globalCtx) {
-    EnSth* this = THIS;
+    EnSth* self = THIS;
 
-    this->actionFunc(this, globalCtx);
+    self->actionFunc(self, globalCtx);
 }
 
 void EnSth_Update2(Actor* thisx, GlobalContext* globalCtx) {
-    EnSth* this = THIS;
+    EnSth* self = THIS;
     s32 pad;
 
-    Collider_UpdateCylinder(&this->actor, &this->collider);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-    Actor_MoveForward(&this->actor);
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
-    if (SkelAnime_Update(&this->skelAnime)) {
-        this->skelAnime.curFrame = 0.0f;
+    Collider_UpdateCylinder(&self->actor, &self->collider);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
+    Actor_MoveForward(&self->actor);
+    Actor_UpdateBgCheckInfo(globalCtx, &self->actor, 0.0f, 0.0f, 0.0f, 4);
+    if (SkelAnime_Update(&self->skelAnime)) {
+        self->skelAnime.curFrame = 0.0f;
     }
-    this->actionFunc(this, globalCtx);
+    self->actionFunc(self, globalCtx);
 
-    if (DECR(this->unk_2B6) == 0) {
-        this->unk_2B6 = Rand_S16Offset(0x3C, 0x3C);
+    if (DECR(self->unk_2B6) == 0) {
+        self->unk_2B6 = Rand_S16Offset(0x3C, 0x3C);
     }
-    this->unk_2B4 = this->unk_2B6;
-    if (this->unk_2B4 >= 3) {
-        this->unk_2B4 = 0;
+    self->unk_2B4 = self->unk_2B6;
+    if (self->unk_2B4 >= 3) {
+        self->unk_2B4 = 0;
     }
 }
 
 s32 EnSth_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* thisx) {
-    EnSth* this = THIS;
+    EnSth* self = THIS;
 
     s32 temp_v1;
 
     if (limbIndex == 15) {
-        rot->x += this->headRot.y;
-        rot->z += this->headRot.x;
+        rot->x += self->headRot.y;
+        rot->z += self->headRot.x;
         *dList = D_80B0A050;
     }
 
-    if (this->unk_2B2 & 2) {
-        this->unk_2B2 &= ~2;
+    if (self->unk_2B2 & 2) {
+        self->unk_2B2 &= ~2;
         return 0;
     }
 
@@ -357,11 +357,11 @@ s32 EnSth_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
 }
 
 void EnSth_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx) {
-    EnSth* this = THIS;
+    EnSth* self = THIS;
 
     if (limbIndex == 15) {
-        Matrix_MultVec3f(&D_80B0B49C, &this->actor.focus.pos);
-        if (this->actor.params != 0) {
+        Matrix_MultVec3f(&D_80B0B49C, &self->actor.focus.pos);
+        if (self->actor.params != 0) {
             OPEN_DISPS(globalCtx->state.gfxCtx, "../z_en_sth.c", 2079);
 
             gSPDisplayList(POLY_OPA_DISP++, D_80B0A3C0);
@@ -382,25 +382,25 @@ Gfx* EnSth_AllocColorDList(GraphicsContext* globalCtx, u8 envR, u8 envG, u8 envB
 }
 
 void EnSth_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    EnSth* this = THIS;
+    EnSth* self = THIS;
     Color_RGB8* envColor1;
 
     OPEN_DISPS(globalCtx->state.gfxCtx, "../z_en_sth.c", 2133);
 
-    gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->objectBankIdx].segment);
+    gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[self->objectBankIdx].segment);
     func_800943C8(globalCtx->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08,
-               EnSth_AllocColorDList(globalCtx->state.gfxCtx, sTunicColors[this->actor.params].r,
-                                     sTunicColors[this->actor.params].g, sTunicColors[this->actor.params].b, 255));
+               EnSth_AllocColorDList(globalCtx->state.gfxCtx, sTunicColors[self->actor.params].r,
+                                     sTunicColors[self->actor.params].g, sTunicColors[self->actor.params].b, 255));
 
-    if (this->actor.params == 0) {
+    if (self->actor.params == 0) {
         gSPSegment(POLY_OPA_DISP++, 0x09, EnSth_AllocColorDList(globalCtx->state.gfxCtx, 190, 110, 0, 255));
     } else {
         gSPSegment(POLY_OPA_DISP++, 0x09, EnSth_AllocColorDList(globalCtx->state.gfxCtx, 90, 110, 130, 255));
     }
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          EnSth_OverrideLimbDraw, EnSth_PostLimbDraw, &this->actor);
+    SkelAnime_DrawFlexOpa(globalCtx, self->skelAnime.skeleton, self->skelAnime.jointTable, self->skelAnime.dListCount,
+                          EnSth_OverrideLimbDraw, EnSth_PostLimbDraw, &self->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx, "../z_en_sth.c", 2176);
 }

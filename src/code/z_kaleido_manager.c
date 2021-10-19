@@ -76,7 +76,7 @@ void KaleidoManager_Destroy() {
     sKaleidoAreaPtr = NULL;
 }
 
-// NOTE: this function looks messed up and probably doesn't work how it was intended to
+// NOTE: self function looks messed up and probably doesn't work how it was intended to
 void* KaleidoManager_GetRamAddr(void* vram) {
     KaleidoMgrOverlay* iter = gKaleidoMgrCurOvl;
     KaleidoMgrOverlay* ovl = iter;

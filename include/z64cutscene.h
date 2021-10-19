@@ -143,7 +143,7 @@ typedef enum {
  * to their IEEE-754 representation. The array must close with }; 
  * on its own line.
  * 
- * Files that contain this type that are included in other C files
+ * Files that contain self type that are included in other C files
  * must include an 'EARLY' qualifier to inform asm-processor that it
  * must recursively process that include.
  * 

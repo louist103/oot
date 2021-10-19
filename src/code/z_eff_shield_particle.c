@@ -11,34 +11,34 @@ static Vtx sVertices[5] = {
 
 // original name: "EffectShieldParticle_ct"
 void EffectShieldParticle_Init(void* thisx, void* initParamsx) {
-    EffectShieldParticle* this = (EffectShieldParticle*)thisx;
+    EffectShieldParticle* self = (EffectShieldParticle*)thisx;
     EffectShieldParticleInit* initParams = (EffectShieldParticleInit*)initParamsx;
     EffectShieldParticleElement* elem;
 
-    if ((this != NULL) && (initParams != NULL)) {
-        this->numElements = initParams->numElements;
-        if (this->numElements > ARRAY_COUNT(this->elements)) {
+    if ((self != NULL) && (initParams != NULL)) {
+        self->numElements = initParams->numElements;
+        if (self->numElements > ARRAY_COUNT(self->elements)) {
             osSyncPrintf(VT_FGCOL(RED));
             osSyncPrintf("EffectShieldParticle_ct():パーティクル数がオーバしてます。\n");
             osSyncPrintf(VT_RST);
             return;
         }
 
-        this->position = initParams->position;
-        this->primColorStart = initParams->primColorStart;
-        this->envColorStart = initParams->envColorStart;
-        this->primColorMid = initParams->primColorMid;
-        this->envColorMid = initParams->envColorMid;
-        this->primColorEnd = initParams->primColorEnd;
-        this->envColorEnd = initParams->envColorEnd;
-        this->deceleration = initParams->deceleration;
-        this->maxInitialSpeed = initParams->maxInitialSpeed;
-        this->lengthCutoff = initParams->lengthCutoff;
-        this->duration = initParams->duration;
-        this->timer = 0;
+        self->position = initParams->position;
+        self->primColorStart = initParams->primColorStart;
+        self->envColorStart = initParams->envColorStart;
+        self->primColorMid = initParams->primColorMid;
+        self->envColorMid = initParams->envColorMid;
+        self->primColorEnd = initParams->primColorEnd;
+        self->envColorEnd = initParams->envColorEnd;
+        self->deceleration = initParams->deceleration;
+        self->maxInitialSpeed = initParams->maxInitialSpeed;
+        self->lengthCutoff = initParams->lengthCutoff;
+        self->duration = initParams->duration;
+        self->timer = 0;
 
-        for (elem = &this->elements[0]; elem < &this->elements[this->numElements]; elem++) {
-            elem->initialSpeed = (Rand_ZeroOne() * (this->maxInitialSpeed * 0.5f)) + (this->maxInitialSpeed * 0.5f);
+        for (elem = &self->elements[0]; elem < &self->elements[self->numElements]; elem++) {
+            elem->initialSpeed = (Rand_ZeroOne() * (self->maxInitialSpeed * 0.5f)) + (self->maxInitialSpeed * 0.5f);
             elem->endX = 0.0f;
             elem->startXChange = 0.0f;
             elem->startX = 0.0f;
@@ -47,45 +47,45 @@ void EffectShieldParticle_Init(void* thisx, void* initParamsx) {
             elem->pitch = Rand_ZeroOne() * 65534.0f;
         }
 
-        this->lightDecay = initParams->lightDecay;
-        if (this->lightDecay == true) {
-            this->lightInfo.type = LIGHT_POINT_NOGLOW;
-            this->lightInfo.params.point = initParams->lightPoint;
-            this->lightNode =
-                LightContext_InsertLight(Effect_GetGlobalCtx(), &Effect_GetGlobalCtx()->lightCtx, &this->lightInfo);
+        self->lightDecay = initParams->lightDecay;
+        if (self->lightDecay == true) {
+            self->lightInfo.type = LIGHT_POINT_NOGLOW;
+            self->lightInfo.params.point = initParams->lightPoint;
+            self->lightNode =
+                LightContext_InsertLight(Effect_GetGlobalCtx(), &Effect_GetGlobalCtx()->lightCtx, &self->lightInfo);
         } else {
-            this->lightNode = NULL;
+            self->lightNode = NULL;
         }
     }
 }
 
 void EffectShieldParticle_Destroy(void* thisx) {
-    EffectShieldParticle* this = (EffectShieldParticle*)thisx;
+    EffectShieldParticle* self = (EffectShieldParticle*)thisx;
 
-    if ((this != NULL) && (this->lightDecay == true)) {
-        if (this->lightNode == Effect_GetGlobalCtx()->lightCtx.listHead) {
-            Effect_GetGlobalCtx()->lightCtx.listHead = this->lightNode->next;
+    if ((self != NULL) && (self->lightDecay == true)) {
+        if (self->lightNode == Effect_GetGlobalCtx()->lightCtx.listHead) {
+            Effect_GetGlobalCtx()->lightCtx.listHead = self->lightNode->next;
         }
-        LightContext_RemoveLight(Effect_GetGlobalCtx(), &Effect_GetGlobalCtx()->lightCtx, this->lightNode);
+        LightContext_RemoveLight(Effect_GetGlobalCtx(), &Effect_GetGlobalCtx()->lightCtx, self->lightNode);
     }
 }
 
 s32 EffectShieldParticle_Update(void* thisx) {
-    EffectShieldParticle* this = (EffectShieldParticle*)thisx;
+    EffectShieldParticle* self = (EffectShieldParticle*)thisx;
     EffectShieldParticleElement* elem;
 
-    if (this == NULL) {
+    if (self == NULL) {
         return 0;
     }
 
-    for (elem = &this->elements[0]; elem < &this->elements[this->numElements]; elem++) {
-        elem->endXChange -= this->deceleration;
+    for (elem = &self->elements[0]; elem < &self->elements[self->numElements]; elem++) {
+        elem->endXChange -= self->deceleration;
         if (elem->endXChange < 0.0f) {
             elem->endXChange = 0.0f;
         }
 
         if (elem->startXChange > 0.0f) {
-            elem->startXChange -= this->deceleration;
+            elem->startXChange -= self->deceleration;
             if (elem->startXChange < 0.0f) {
                 elem->startXChange = 0.0f;
             }
@@ -94,69 +94,69 @@ s32 EffectShieldParticle_Update(void* thisx) {
         elem->endX += elem->endXChange;
         elem->startX += elem->startXChange;
 
-        if ((elem->startXChange == 0.0f) && (this->lengthCutoff < (elem->endX - elem->startX))) {
+        if ((elem->startXChange == 0.0f) && (self->lengthCutoff < (elem->endX - elem->startX))) {
             elem->startXChange = elem->initialSpeed;
         }
     }
 
-    if (this->lightDecay == true) {
-        this->lightInfo.params.point.radius /= 2;
+    if (self->lightDecay == true) {
+        self->lightInfo.params.point.radius /= 2;
     }
 
-    this->timer++;
+    self->timer++;
 
-    if (this->duration < this->timer) {
+    if (self->duration < self->timer) {
         return 1;
     }
 
     return 0;
 }
 
-void EffectShieldParticle_GetColors(EffectShieldParticle* this, Color_RGBA8* primColor, Color_RGBA8* envColor) {
-    s32 halfDuration = this->duration * 0.5f;
+void EffectShieldParticle_GetColors(EffectShieldParticle* self, Color_RGBA8* primColor, Color_RGBA8* envColor) {
+    s32 halfDuration = self->duration * 0.5f;
     f32 ratio;
 
     if (halfDuration == 0) {
-        primColor->r = this->primColorStart.r;
-        primColor->g = this->primColorStart.g;
-        primColor->b = this->primColorStart.b;
-        primColor->a = this->primColorStart.a;
-        envColor->r = this->envColorStart.r;
-        envColor->g = this->envColorStart.g;
-        envColor->b = this->envColorStart.b;
-        envColor->a = this->envColorStart.a;
-    } else if (this->timer < halfDuration) {
-        ratio = this->timer / (f32)halfDuration;
-        primColor->r = this->primColorStart.r + (this->primColorMid.r - this->primColorStart.r) * ratio;
-        primColor->g = this->primColorStart.g + (this->primColorMid.g - this->primColorStart.g) * ratio;
-        primColor->b = this->primColorStart.b + (this->primColorMid.b - this->primColorStart.b) * ratio;
-        primColor->a = this->primColorStart.a + (this->primColorMid.a - this->primColorStart.a) * ratio;
-        envColor->r = this->envColorStart.r + (this->envColorMid.r - this->envColorStart.r) * ratio;
-        envColor->g = this->envColorStart.g + (this->envColorMid.g - this->envColorStart.g) * ratio;
-        envColor->b = this->envColorStart.b + (this->envColorMid.b - this->envColorStart.b) * ratio;
-        envColor->a = this->envColorStart.a + (this->envColorMid.a - this->envColorStart.a) * ratio;
+        primColor->r = self->primColorStart.r;
+        primColor->g = self->primColorStart.g;
+        primColor->b = self->primColorStart.b;
+        primColor->a = self->primColorStart.a;
+        envColor->r = self->envColorStart.r;
+        envColor->g = self->envColorStart.g;
+        envColor->b = self->envColorStart.b;
+        envColor->a = self->envColorStart.a;
+    } else if (self->timer < halfDuration) {
+        ratio = self->timer / (f32)halfDuration;
+        primColor->r = self->primColorStart.r + (self->primColorMid.r - self->primColorStart.r) * ratio;
+        primColor->g = self->primColorStart.g + (self->primColorMid.g - self->primColorStart.g) * ratio;
+        primColor->b = self->primColorStart.b + (self->primColorMid.b - self->primColorStart.b) * ratio;
+        primColor->a = self->primColorStart.a + (self->primColorMid.a - self->primColorStart.a) * ratio;
+        envColor->r = self->envColorStart.r + (self->envColorMid.r - self->envColorStart.r) * ratio;
+        envColor->g = self->envColorStart.g + (self->envColorMid.g - self->envColorStart.g) * ratio;
+        envColor->b = self->envColorStart.b + (self->envColorMid.b - self->envColorStart.b) * ratio;
+        envColor->a = self->envColorStart.a + (self->envColorMid.a - self->envColorStart.a) * ratio;
     } else {
-        ratio = (this->timer - halfDuration) / (f32)halfDuration;
-        primColor->r = this->primColorMid.r + (this->primColorEnd.r - this->primColorMid.r) * ratio;
-        primColor->g = this->primColorMid.g + (this->primColorEnd.g - this->primColorMid.g) * ratio;
-        primColor->b = this->primColorMid.b + (this->primColorEnd.b - this->primColorMid.b) * ratio;
-        primColor->a = this->primColorMid.a + (this->primColorEnd.a - this->primColorMid.a) * ratio;
-        envColor->r = this->envColorMid.r + (this->envColorEnd.r - this->envColorMid.r) * ratio;
-        envColor->g = this->envColorMid.g + (this->envColorEnd.g - this->envColorMid.g) * ratio;
-        envColor->b = this->envColorMid.b + (this->envColorEnd.b - this->envColorMid.b) * ratio;
-        envColor->a = this->envColorMid.a + (this->envColorEnd.a - this->envColorMid.a) * ratio;
+        ratio = (self->timer - halfDuration) / (f32)halfDuration;
+        primColor->r = self->primColorMid.r + (self->primColorEnd.r - self->primColorMid.r) * ratio;
+        primColor->g = self->primColorMid.g + (self->primColorEnd.g - self->primColorMid.g) * ratio;
+        primColor->b = self->primColorMid.b + (self->primColorEnd.b - self->primColorMid.b) * ratio;
+        primColor->a = self->primColorMid.a + (self->primColorEnd.a - self->primColorMid.a) * ratio;
+        envColor->r = self->envColorMid.r + (self->envColorEnd.r - self->envColorMid.r) * ratio;
+        envColor->g = self->envColorMid.g + (self->envColorEnd.g - self->envColorMid.g) * ratio;
+        envColor->b = self->envColorMid.b + (self->envColorEnd.b - self->envColorMid.b) * ratio;
+        envColor->a = self->envColorMid.a + (self->envColorEnd.a - self->envColorMid.a) * ratio;
     }
 }
 
 void EffectShieldParticle_Draw(void* thisx, GraphicsContext* gfxCtx) {
-    EffectShieldParticle* this = (EffectShieldParticle*)thisx;
+    EffectShieldParticle* self = (EffectShieldParticle*)thisx;
     EffectShieldParticleElement* elem;
     Color_RGBA8 primColor;
     Color_RGBA8 envColor;
 
     OPEN_DISPS(gfxCtx, "../z_eff_shield_particle.c", 272);
 
-    if (this != NULL) {
+    if (self != NULL) {
         POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0x26);
 
         gDPSetCycleType(POLY_XLU_DISP++, G_CYC_2CYCLE);
@@ -172,13 +172,13 @@ void EffectShieldParticle_Draw(void* thisx, GraphicsContext* gfxCtx) {
         gSPClearGeometryMode(POLY_XLU_DISP++, G_CULL_BOTH | G_FOG | G_LIGHTING | G_TEXTURE_GEN | G_TEXTURE_GEN_LINEAR);
         gSPSetGeometryMode(POLY_XLU_DISP++, G_ZBUFFER | G_SHADE | G_SHADING_SMOOTH);
 
-        EffectShieldParticle_GetColors(this, &primColor, &envColor);
+        EffectShieldParticle_GetColors(self, &primColor, &envColor);
 
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, primColor.r, primColor.g, primColor.b, primColor.a);
         gDPSetEnvColor(POLY_XLU_DISP++, envColor.r, envColor.g, envColor.b, envColor.a);
         gDPPipeSync(POLY_XLU_DISP++);
 
-        for (elem = &this->elements[0]; elem < &this->elements[this->numElements]; elem++) {
+        for (elem = &self->elements[0]; elem < &self->elements[self->numElements]; elem++) {
             Mtx* mtx;
             MtxF sp104;
             MtxF spC4;
@@ -191,7 +191,7 @@ void EffectShieldParticle_Draw(void* thisx, GraphicsContext* gfxCtx) {
                 temp3 = 1.0f;
             }
 
-            SkinMatrix_SetTranslate(&spC4, this->position.x, this->position.y, this->position.z);
+            SkinMatrix_SetTranslate(&spC4, self->position.x, self->position.y, self->position.z);
             SkinMatrix_SetRotateRPY(&sp104, 0, elem->yaw, 0);
             SkinMatrix_MtxFMtxFMult(&spC4, &sp104, &sp84);
             SkinMatrix_SetRotateRPY(&sp104, 0, 0, elem->pitch);

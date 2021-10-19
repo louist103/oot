@@ -37,31 +37,31 @@ static InitChainEntry sInitChain[] = {
 
 void BgJyaBlock_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
-    BgJyaBlock* this = THIS;
+    BgJyaBlock* self = THIS;
     CollisionHeader* colHeader = NULL;
 
-    DynaPolyActor_Init(&this->dyna, 0);
+    DynaPolyActor_Init(&self->dyna, 0);
     CollisionHeader_GetVirtual(&gPushBlockCol, &colHeader);
-    this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
-    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
+    self->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &self->dyna.actor, colHeader);
+    Actor_ProcessInitChain(&self->dyna.actor, sInitChain);
 
     if ((LINK_AGE_IN_YEARS != YEARS_CHILD) || !Flags_GetSwitch(globalCtx, thisx->params & 0x3F)) {
-        Actor_Kill(&this->dyna.actor);
+        Actor_Kill(&self->dyna.actor);
     }
 }
 
 void BgJyaBlock_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    BgJyaBlock* this = THIS;
+    BgJyaBlock* self = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, self->dyna.bgId);
 }
 
 void BgJyaBlock_Update(Actor* thisx, GlobalContext* globalCtx) {
-    BgJyaBlock* this = THIS;
+    BgJyaBlock* self = THIS;
     Player* player = GET_PLAYER(globalCtx);
 
     player->stateFlags2 &= ~0x10;
-    this->dyna.unk_150 = 0.0f;
+    self->dyna.unk_150 = 0.0f;
 }
 
 void BgJyaBlock_Draw(Actor* thisx, GlobalContext* globalCtx) {

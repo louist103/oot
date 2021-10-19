@@ -16,15 +16,15 @@ void EnIceHono_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnIceHono_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnIceHono_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void EnIceHono_CapturableFlame(EnIceHono* this, GlobalContext* globalCtx);
-void EnIceHono_DropFlame(EnIceHono* this, GlobalContext* globalCtx);
-void EnIceHono_SpreadFlames(EnIceHono* this, GlobalContext* globalCtx);
-void EnIceHono_SmallFlameMove(EnIceHono* this, GlobalContext* globalCtx);
+void EnIceHono_CapturableFlame(EnIceHono* self, GlobalContext* globalCtx);
+void EnIceHono_DropFlame(EnIceHono* self, GlobalContext* globalCtx);
+void EnIceHono_SpreadFlames(EnIceHono* self, GlobalContext* globalCtx);
+void EnIceHono_SmallFlameMove(EnIceHono* self, GlobalContext* globalCtx);
 
-void EnIceHono_SetupActionCapturableFlame(EnIceHono* this);
-void EnIceHono_SetupActionDroppedFlame(EnIceHono* this);
-void EnIceHono_SetupActionSpreadFlames(EnIceHono* this);
-void EnIceHono_SetupActionSmallFlame(EnIceHono* this);
+void EnIceHono_SetupActionCapturableFlame(EnIceHono* self);
+void EnIceHono_SetupActionDroppedFlame(EnIceHono* self);
+void EnIceHono_SetupActionSpreadFlames(EnIceHono* self);
+void EnIceHono_SetupActionSmallFlame(EnIceHono* self);
 
 const ActorInit En_Ice_Hono_InitVars = {
     ACTOR_EN_ICE_HONO,
@@ -103,277 +103,277 @@ f32 EnIceHono_XZDistanceSquared(Vec3f* v1, Vec3f* v2) {
 }
 
 void EnIceHono_InitCapturableFlame(Actor* thisx, GlobalContext* globalCtx) {
-    EnIceHono* this = THIS;
+    EnIceHono* self = THIS;
 
-    Actor_ProcessInitChain(&this->actor, sInitChainCapturableFlame);
-    Actor_SetScale(&this->actor, 0.0074f);
-    this->actor.flags |= 1;
-    Actor_SetFocus(&this->actor, 10.0f);
+    Actor_ProcessInitChain(&self->actor, sInitChainCapturableFlame);
+    Actor_SetScale(&self->actor, 0.0074f);
+    self->actor.flags |= 1;
+    Actor_SetFocus(&self->actor, 10.0f);
 
-    Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInitCapturableFlame);
-    Collider_UpdateCylinder(&this->actor, &this->collider);
+    Collider_InitCylinder(globalCtx, &self->collider);
+    Collider_SetCylinder(globalCtx, &self->collider, &self->actor, &sCylinderInitCapturableFlame);
+    Collider_UpdateCylinder(&self->actor, &self->collider);
 
-    this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    EnIceHono_SetupActionCapturableFlame(this);
+    self->actor.colChkInfo.mass = MASS_IMMOVABLE;
+    EnIceHono_SetupActionCapturableFlame(self);
 }
 
 void EnIceHono_InitDroppedFlame(Actor* thisx, GlobalContext* globalCtx) {
-    EnIceHono* this = THIS;
+    EnIceHono* self = THIS;
 
-    Actor_ProcessInitChain(&this->actor, sInitChainDroppedFlame);
-    this->actor.scale.x = this->actor.scale.z = this->actor.scale.y = 0.00002f;
-    this->actor.gravity = -0.3f;
-    this->actor.minVelocityY = -4.0f;
-    this->actor.shape.yOffset = 0.0f;
-    this->actor.shape.rot.x = this->actor.shape.rot.y = this->actor.shape.rot.z = this->actor.world.rot.x =
-        this->actor.world.rot.y = this->actor.world.rot.z = 0;
+    Actor_ProcessInitChain(&self->actor, sInitChainDroppedFlame);
+    self->actor.scale.x = self->actor.scale.z = self->actor.scale.y = 0.00002f;
+    self->actor.gravity = -0.3f;
+    self->actor.minVelocityY = -4.0f;
+    self->actor.shape.yOffset = 0.0f;
+    self->actor.shape.rot.x = self->actor.shape.rot.y = self->actor.shape.rot.z = self->actor.world.rot.x =
+        self->actor.world.rot.y = self->actor.world.rot.z = 0;
 
-    Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInitDroppedFlame);
-    Collider_UpdateCylinder(&this->actor, &this->collider);
+    Collider_InitCylinder(globalCtx, &self->collider);
+    Collider_SetCylinder(globalCtx, &self->collider, &self->actor, &sCylinderInitDroppedFlame);
+    Collider_UpdateCylinder(&self->actor, &self->collider);
 
-    this->collider.dim.radius = this->actor.scale.x * 4000.4f;
-    this->collider.dim.height = this->actor.scale.y * 8000.2f;
-    this->actor.colChkInfo.mass = 253;
-    EnIceHono_SetupActionDroppedFlame(this);
+    self->collider.dim.radius = self->actor.scale.x * 4000.4f;
+    self->collider.dim.height = self->actor.scale.y * 8000.2f;
+    self->actor.colChkInfo.mass = 253;
+    EnIceHono_SetupActionDroppedFlame(self);
 }
 
 void EnIceHono_InitSmallFlame(Actor* thisx, GlobalContext* globalCtx) {
-    EnIceHono* this = THIS;
+    EnIceHono* self = THIS;
 
-    Actor_ProcessInitChain(&this->actor, sInitChainSmallFlame);
-    this->actor.scale.x = this->actor.scale.z = this->actor.scale.y = 0.0008f;
-    this->actor.gravity = -0.3f;
-    this->actor.minVelocityY = -4.0f;
-    this->actor.shape.yOffset = 0.0f;
+    Actor_ProcessInitChain(&self->actor, sInitChainSmallFlame);
+    self->actor.scale.x = self->actor.scale.z = self->actor.scale.y = 0.0008f;
+    self->actor.gravity = -0.3f;
+    self->actor.minVelocityY = -4.0f;
+    self->actor.shape.yOffset = 0.0f;
 
-    EnIceHono_SetupActionSmallFlame(this);
+    EnIceHono_SetupActionSmallFlame(self);
 }
 
 void EnIceHono_Init(Actor* thisx, GlobalContext* globalCtx) {
-    EnIceHono* this = THIS;
-    s16 params = this->actor.params;
+    EnIceHono* self = THIS;
+    s16 params = self->actor.params;
 
-    switch (this->actor.params) {
+    switch (self->actor.params) {
         case -1:
-            EnIceHono_InitCapturableFlame(&this->actor, globalCtx);
+            EnIceHono_InitCapturableFlame(&self->actor, globalCtx);
             break;
         case 0:
-            EnIceHono_InitDroppedFlame(&this->actor, globalCtx);
+            EnIceHono_InitDroppedFlame(&self->actor, globalCtx);
             break;
         case 1:
         case 2:
-            EnIceHono_InitSmallFlame(&this->actor, globalCtx);
+            EnIceHono_InitSmallFlame(&self->actor, globalCtx);
             break;
     }
 
-    if ((this->actor.params == -1) || (this->actor.params == 0)) {
-        Lights_PointNoGlowSetInfo(&this->lightInfo, this->actor.world.pos.x, (s16)this->actor.world.pos.y + 10,
-                                  this->actor.world.pos.z, 155, 210, 255, 0);
-        this->lightNode = LightContext_InsertLight(globalCtx, &globalCtx->lightCtx, &this->lightInfo);
-        this->unk_154 = Rand_ZeroOne() * (0x1FFFF / 2.0f);
-        this->unk_156 = Rand_ZeroOne() * (0x1FFFF / 2.0f);
-        osSyncPrintf("(ice 炎)(arg_data 0x%04x)\n", this->actor.params); // "(ice flame)"
+    if ((self->actor.params == -1) || (self->actor.params == 0)) {
+        Lights_PointNoGlowSetInfo(&self->lightInfo, self->actor.world.pos.x, (s16)self->actor.world.pos.y + 10,
+                                  self->actor.world.pos.z, 155, 210, 255, 0);
+        self->lightNode = LightContext_InsertLight(globalCtx, &globalCtx->lightCtx, &self->lightInfo);
+        self->unk_154 = Rand_ZeroOne() * (0x1FFFF / 2.0f);
+        self->unk_156 = Rand_ZeroOne() * (0x1FFFF / 2.0f);
+        osSyncPrintf("(ice 炎)(arg_data 0x%04x)\n", self->actor.params); // "(ice flame)"
     }
 }
 
 void EnIceHono_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    EnIceHono* this = THIS;
+    EnIceHono* self = THIS;
 
-    if ((this->actor.params == -1) || (this->actor.params == 0)) {
-        LightContext_RemoveLight(globalCtx, &globalCtx->lightCtx, this->lightNode);
-        Collider_DestroyCylinder(globalCtx, &this->collider);
+    if ((self->actor.params == -1) || (self->actor.params == 0)) {
+        LightContext_RemoveLight(globalCtx, &globalCtx->lightCtx, self->lightNode);
+        Collider_DestroyCylinder(globalCtx, &self->collider);
     }
 }
 
-u32 EnIceHono_InBottleRange(EnIceHono* this, GlobalContext* globalCtx) {
+u32 EnIceHono_InBottleRange(EnIceHono* self, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if (this->actor.xzDistToPlayer < 60.0f) {
+    if (self->actor.xzDistToPlayer < 60.0f) {
         Vec3f tempPos;
-        tempPos.x = Math_SinS(this->actor.yawTowardsPlayer + 0x8000) * 40.0f + player->actor.world.pos.x;
+        tempPos.x = Math_SinS(self->actor.yawTowardsPlayer + 0x8000) * 40.0f + player->actor.world.pos.x;
         tempPos.y = player->actor.world.pos.y;
-        tempPos.z = Math_CosS(this->actor.yawTowardsPlayer + 0x8000) * 40.0f + player->actor.world.pos.z;
+        tempPos.z = Math_CosS(self->actor.yawTowardsPlayer + 0x8000) * 40.0f + player->actor.world.pos.z;
 
-        //! @bug: this check is superfluous: it is automatically satisfied if the coarse check is satisfied. It may have
+        //! @bug: self check is superfluous: it is automatically satisfied if the coarse check is satisfied. It may have
         //! been intended to check the actor is in front of Player, but yawTowardsPlayer does not depend on Player's
         //! world rotation.
-        if (EnIceHono_XZDistanceSquared(&tempPos, &this->actor.world.pos) <= SQ(40.0f)) {
+        if (EnIceHono_XZDistanceSquared(&tempPos, &self->actor.world.pos) <= SQ(40.0f)) {
             return true;
         }
     }
     return false;
 }
 
-void EnIceHono_SetupActionCapturableFlame(EnIceHono* this) {
-    this->actionFunc = EnIceHono_CapturableFlame;
-    this->alpha = 255;
-    this->actor.shape.yOffset = -1000.0f;
+void EnIceHono_SetupActionCapturableFlame(EnIceHono* self) {
+    self->actionFunc = EnIceHono_CapturableFlame;
+    self->alpha = 255;
+    self->actor.shape.yOffset = -1000.0f;
 }
 
-void EnIceHono_CapturableFlame(EnIceHono* this, GlobalContext* globalCtx) {
-    if (Actor_HasParent(&this->actor, globalCtx)) {
-        this->actor.parent = NULL;
-    } else if (EnIceHono_InBottleRange(this, globalCtx)) {
-        // GI_MAX in this case allows the player to catch the actor in a bottle
-        func_8002F434(&this->actor, globalCtx, GI_MAX, 60.0f, 100.0f);
+void EnIceHono_CapturableFlame(EnIceHono* self, GlobalContext* globalCtx) {
+    if (Actor_HasParent(&self->actor, globalCtx)) {
+        self->actor.parent = NULL;
+    } else if (EnIceHono_InBottleRange(self, globalCtx)) {
+        // GI_MAX in self case allows the player to catch the actor in a bottle
+        func_8002F434(&self->actor, globalCtx, GI_MAX, 60.0f, 100.0f);
     }
 
-    if (this->actor.xzDistToPlayer < 200.0f) {
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    if (self->actor.xzDistToPlayer < 200.0f) {
+        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
     }
-    func_8002F8F0(&this->actor, NA_SE_EV_FIRE_PILLAR_S - SFX_FLAG);
+    func_8002F8F0(&self->actor, NA_SE_EV_FIRE_PILLAR_S - SFX_FLAG);
 }
 
-void EnIceHono_SetupActionDroppedFlame(EnIceHono* this) {
-    this->actionFunc = EnIceHono_DropFlame;
-    this->timer = 200;
-    this->alpha = 255;
+void EnIceHono_SetupActionDroppedFlame(EnIceHono* self) {
+    self->actionFunc = EnIceHono_DropFlame;
+    self->timer = 200;
+    self->alpha = 255;
 }
 
-void EnIceHono_DropFlame(EnIceHono* this, GlobalContext* globalCtx) {
-    u32 bgFlag = this->actor.bgCheckFlags & 1;
+void EnIceHono_DropFlame(EnIceHono* self, GlobalContext* globalCtx) {
+    u32 bgFlag = self->actor.bgCheckFlags & 1;
 
-    Math_StepToF(&this->actor.scale.x, 0.0017f, 0.00008f);
-    this->actor.scale.z = this->actor.scale.x;
-    Math_StepToF(&this->actor.scale.y, 0.0017f, 0.00008f);
+    Math_StepToF(&self->actor.scale.x, 0.0017f, 0.00008f);
+    self->actor.scale.z = self->actor.scale.x;
+    Math_StepToF(&self->actor.scale.y, 0.0017f, 0.00008f);
 
     if (bgFlag != 0) {
         s32 i;
         for (i = 0; i < 8; i++) {
-            Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ICE_HONO, this->actor.world.pos.x,
-                        this->actor.world.pos.y, this->actor.world.pos.z, 0,
+            Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ICE_HONO, self->actor.world.pos.x,
+                        self->actor.world.pos.y, self->actor.world.pos.z, 0,
                         ((s32)(Rand_ZeroOne() * 1000.0f) + i * 0x2000) - 0x1F4, 0, 1);
         }
-        EnIceHono_SetupActionSpreadFlames(this);
+        EnIceHono_SetupActionSpreadFlames(self);
     }
-    Actor_MoveForward(&this->actor);
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 10.0f, this->actor.scale.x * 3500.0f, 0.0f, 5);
+    Actor_MoveForward(&self->actor);
+    Actor_UpdateBgCheckInfo(globalCtx, &self->actor, 10.0f, self->actor.scale.x * 3500.0f, 0.0f, 5);
 
-    Collider_UpdateCylinder(&this->actor, &this->collider);
-    this->collider.dim.radius = this->actor.scale.x * 4000.0f;
-    this->collider.dim.height = this->actor.scale.y * 8000.0f;
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    Collider_UpdateCylinder(&self->actor, &self->collider);
+    self->collider.dim.radius = self->actor.scale.x * 4000.0f;
+    self->collider.dim.height = self->actor.scale.y * 8000.0f;
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
 
-    if (this->timer <= 0) {
-        Actor_Kill(&this->actor);
+    if (self->timer <= 0) {
+        Actor_Kill(&self->actor);
     }
 }
 
-void EnIceHono_SetupActionSpreadFlames(EnIceHono* this) {
-    this->actionFunc = EnIceHono_SpreadFlames;
-    this->timer = 60;
-    this->alpha = 255;
+void EnIceHono_SetupActionSpreadFlames(EnIceHono* self) {
+    self->actionFunc = EnIceHono_SpreadFlames;
+    self->timer = 60;
+    self->alpha = 255;
 }
 
-void EnIceHono_SpreadFlames(EnIceHono* this, GlobalContext* globalCtx) {
-    if (this->timer > 20) {
-        Math_StepToF(&this->actor.scale.x, 0.011f, 0.00014f);
-        Math_StepToF(&this->actor.scale.y, 0.006f, 0.00012f);
+void EnIceHono_SpreadFlames(EnIceHono* self, GlobalContext* globalCtx) {
+    if (self->timer > 20) {
+        Math_StepToF(&self->actor.scale.x, 0.011f, 0.00014f);
+        Math_StepToF(&self->actor.scale.y, 0.006f, 0.00012f);
     } else {
-        Math_StepToF(&this->actor.scale.x, 0.0001f, 0.00015f);
-        Math_StepToF(&this->actor.scale.y, 0.0001f, 0.00015f);
+        Math_StepToF(&self->actor.scale.x, 0.0001f, 0.00015f);
+        Math_StepToF(&self->actor.scale.y, 0.0001f, 0.00015f);
     }
-    this->actor.scale.z = this->actor.scale.x;
-    Actor_MoveForward(&this->actor);
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 10.0f, this->actor.scale.x * 3500.0f, 0.0f, 4);
-    if (this->timer < 25) {
-        this->alpha -= 10;
-        this->alpha = CLAMP(this->alpha, 0, 255);
+    self->actor.scale.z = self->actor.scale.x;
+    Actor_MoveForward(&self->actor);
+    Actor_UpdateBgCheckInfo(globalCtx, &self->actor, 10.0f, self->actor.scale.x * 3500.0f, 0.0f, 4);
+    if (self->timer < 25) {
+        self->alpha -= 10;
+        self->alpha = CLAMP(self->alpha, 0, 255);
     }
 
-    if ((this->alpha > 100) && (this->timer < 40)) {
-        Collider_UpdateCylinder(&this->actor, &this->collider);
-        this->collider.dim.radius = this->actor.scale.x * 6000.0f;
-        this->collider.dim.height = this->actor.scale.y * 8000.0f;
-        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    if ((self->alpha > 100) && (self->timer < 40)) {
+        Collider_UpdateCylinder(&self->actor, &self->collider);
+        self->collider.dim.radius = self->actor.scale.x * 6000.0f;
+        self->collider.dim.height = self->actor.scale.y * 8000.0f;
+        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
     }
-    if (this->timer == 46) {
+    if (self->timer == 46) {
         s32 i;
         for (i = 0; i < 10; i++) {
             s32 rot = i * 0x1999;
-            Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ICE_HONO, this->actor.world.pos.x,
-                        this->actor.world.pos.y, this->actor.world.pos.z, 0,
+            Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ICE_HONO, self->actor.world.pos.x,
+                        self->actor.world.pos.y, self->actor.world.pos.z, 0,
                         ((s32)(Rand_ZeroOne() * 1000.0f) + rot) - 0x1F4, 0, 2);
         }
     }
 
-    if (this->timer <= 0) {
-        Actor_Kill(&this->actor);
+    if (self->timer <= 0) {
+        Actor_Kill(&self->actor);
     }
 }
 
-void EnIceHono_SetupActionSmallFlame(EnIceHono* this) {
-    this->actionFunc = EnIceHono_SmallFlameMove;
-    this->timer = 44;
-    this->alpha = 255;
-    if (this->actor.params == 1) {
-        this->smallFlameTargetYScale = (Rand_ZeroOne() * 0.005f) + 0.004f;
-        this->actor.speedXZ = (Rand_ZeroOne() * 1.6f) + 0.5f;
+void EnIceHono_SetupActionSmallFlame(EnIceHono* self) {
+    self->actionFunc = EnIceHono_SmallFlameMove;
+    self->timer = 44;
+    self->alpha = 255;
+    if (self->actor.params == 1) {
+        self->smallFlameTargetYScale = (Rand_ZeroOne() * 0.005f) + 0.004f;
+        self->actor.speedXZ = (Rand_ZeroOne() * 1.6f) + 0.5f;
     } else {
-        this->smallFlameTargetYScale = (Rand_ZeroOne() * 0.005f) + 0.003f;
-        this->actor.speedXZ = (Rand_ZeroOne() * 2.0f) + 0.5f;
+        self->smallFlameTargetYScale = (Rand_ZeroOne() * 0.005f) + 0.003f;
+        self->actor.speedXZ = (Rand_ZeroOne() * 2.0f) + 0.5f;
     }
 }
 
-void EnIceHono_SmallFlameMove(EnIceHono* this, GlobalContext* globalCtx) {
-    if (this->timer > 20) {
-        Math_StepToF(&this->actor.scale.x, 0.006f, 0.00016f);
-        Math_StepToF(&this->actor.scale.y, this->smallFlameTargetYScale * 0.667f, 0.00014f);
+void EnIceHono_SmallFlameMove(EnIceHono* self, GlobalContext* globalCtx) {
+    if (self->timer > 20) {
+        Math_StepToF(&self->actor.scale.x, 0.006f, 0.00016f);
+        Math_StepToF(&self->actor.scale.y, self->smallFlameTargetYScale * 0.667f, 0.00014f);
     } else {
-        Math_StepToF(&this->actor.scale.x, 0.0001f, 0.00015f);
-        Math_StepToF(&this->actor.scale.y, 0.0001f, 0.00015f);
+        Math_StepToF(&self->actor.scale.x, 0.0001f, 0.00015f);
+        Math_StepToF(&self->actor.scale.y, 0.0001f, 0.00015f);
     }
-    this->actor.scale.z = this->actor.scale.x;
-    Math_StepToF(&this->actor.speedXZ, 0, 0.06f);
-    Actor_MoveForward(&this->actor);
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 10.0f, 10.0f, 0.0f, 5);
+    self->actor.scale.z = self->actor.scale.x;
+    Math_StepToF(&self->actor.speedXZ, 0, 0.06f);
+    Actor_MoveForward(&self->actor);
+    Actor_UpdateBgCheckInfo(globalCtx, &self->actor, 10.0f, 10.0f, 0.0f, 5);
 
-    if (this->timer < 25) {
-        this->alpha -= 10;
-        this->alpha = CLAMP(this->alpha, 0, 255);
+    if (self->timer < 25) {
+        self->alpha -= 10;
+        self->alpha = CLAMP(self->alpha, 0, 255);
     }
-    if (this->timer <= 0) {
-        Actor_Kill(&this->actor);
+    if (self->timer <= 0) {
+        Actor_Kill(&self->actor);
     }
 }
 
 void EnIceHono_Update(Actor* thisx, GlobalContext* globalCtx) {
-    EnIceHono* this = THIS;
+    EnIceHono* self = THIS;
     s32 pad1;
     f32 intensity;
     s32 pad2;
     f32 sin154;
     f32 sin156;
 
-    if (this->timer > 0) {
-        this->timer--;
+    if (self->timer > 0) {
+        self->timer--;
     }
-    if (this->actor.params == 0) {
-        func_8002F8F0(&this->actor, NA_SE_IT_FLAME - SFX_FLAG);
+    if (self->actor.params == 0) {
+        func_8002F8F0(&self->actor, NA_SE_IT_FLAME - SFX_FLAG);
     }
-    if ((this->actor.params == -1) || (this->actor.params == 0)) {
-        this->unk_154 += 0x1111;
-        this->unk_156 += 0x4000;
-        sin156 = Math_SinS(this->unk_156);
-        sin154 = Math_SinS(this->unk_154);
+    if ((self->actor.params == -1) || (self->actor.params == 0)) {
+        self->unk_154 += 0x1111;
+        self->unk_156 += 0x4000;
+        sin156 = Math_SinS(self->unk_156);
+        sin154 = Math_SinS(self->unk_154);
         intensity = (Rand_ZeroOne() * 0.05f) + ((sin154 * 0.125f) + (sin156 * 0.1f)) + 0.425f;
         if ((intensity > 0.7f) || (intensity < 0.2f)) {
             osSyncPrintf("ありえない値(ratio = %f)\n", intensity); // "impossible value(ratio = %f)"
         }
-        Lights_PointNoGlowSetInfo(&this->lightInfo, this->actor.world.pos.x, (s16)this->actor.world.pos.y + 10,
-                                  this->actor.world.pos.z, (s32)(155.0f * intensity), (s32)(210.0f * intensity),
+        Lights_PointNoGlowSetInfo(&self->lightInfo, self->actor.world.pos.x, (s16)self->actor.world.pos.y + 10,
+                                  self->actor.world.pos.z, (s32)(155.0f * intensity), (s32)(210.0f * intensity),
                                   (s32)(255.0f * intensity), 1400);
     }
 
-    if (this->actionFunc != NULL) {
-        this->actionFunc(this, globalCtx);
+    if (self->actionFunc != NULL) {
+        self->actionFunc(self, globalCtx);
     }
 }
 
 void EnIceHono_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    EnIceHono* this = THIS;
+    EnIceHono* self = THIS;
     u32 pad;
 
     OPEN_DISPS(globalCtx->state.gfxCtx, "../z_en_ice_hono.c", 695);
@@ -383,11 +383,11 @@ void EnIceHono_Draw(Actor* thisx, GlobalContext* globalCtx) {
                Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 32, 64, 1, 0, (globalCtx->state.frames * -20) % 512,
                                 32, 128));
 
-    gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 170, 255, 255, this->alpha);
+    gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 170, 255, 255, self->alpha);
 
     gDPSetEnvColor(POLY_XLU_DISP++, 0, 150, 255, 0);
 
-    Matrix_RotateY((s16)(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx)) - this->actor.shape.rot.y + 0x8000) *
+    Matrix_RotateY((s16)(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx)) - self->actor.shape.rot.y + 0x8000) *
                        (M_PI / 0x8000),
                    MTXMODE_APPLY);
 

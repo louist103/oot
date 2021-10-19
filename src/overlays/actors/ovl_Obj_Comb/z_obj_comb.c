@@ -17,10 +17,10 @@ void ObjComb_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjComb_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjComb_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void ObjComb_Break(ObjComb* this, GlobalContext* globalCtx);
-void ObjComb_ChooseItemDrop(ObjComb* this, GlobalContext* globalCtx);
-void ObjComb_SetupWait(ObjComb* this);
-void ObjComb_Wait(ObjComb* this, GlobalContext* globalCtx);
+void ObjComb_Break(ObjComb* self, GlobalContext* globalCtx);
+void ObjComb_ChooseItemDrop(ObjComb* self, GlobalContext* globalCtx);
+void ObjComb_SetupWait(ObjComb* self);
+void ObjComb_Wait(ObjComb* self, GlobalContext* globalCtx);
 
 const ActorInit Obj_Comb_InitVars = {
     ACTOR_OBJ_COMB,
@@ -68,7 +68,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 900, ICHAIN_STOP),
 };
 
-void ObjComb_Break(ObjComb* this, GlobalContext* globalCtx) {
+void ObjComb_Break(ObjComb* self, GlobalContext* globalCtx) {
     Vec3f pos1;
     Vec3f pos;
     Vec3f velocity;
@@ -90,7 +90,7 @@ void ObjComb_Break(ObjComb* this, GlobalContext* globalCtx) {
         pos1.y = (i - 15) * 0.7f;
         pos1.z = Math_CosS(angle) * rand1;
 
-        Math_Vec3f_Sum(&pos1, &this->actor.world.pos, &pos);
+        Math_Vec3f_Sum(&pos1, &self->actor.world.pos, &pos);
 
         velocity.x = (Rand_ZeroOne() - 0.5f) + pos1.x * 0.5f;
         velocity.y = (Rand_ZeroOne() - 0.5f) + pos1.y * 0.6f;
@@ -123,107 +123,107 @@ void ObjComb_Break(ObjComb* this, GlobalContext* globalCtx) {
                              KAKERA_COLOR_NONE, OBJECT_GAMEPLAY_FIELD_KEEP, dlist);
     }
 
-    pos.x = this->actor.world.pos.x;
-    pos.y = this->actor.world.pos.y - 10.0f;
-    pos.z = this->actor.world.pos.z;
+    pos.x = self->actor.world.pos.x;
+    pos.y = self->actor.world.pos.y - 10.0f;
+    pos.z = self->actor.world.pos.z;
     func_80033480(globalCtx, &pos, 40.0f, 6, 70, 60, 1);
 }
 
-void ObjComb_ChooseItemDrop(ObjComb* this, GlobalContext* globalCtx) {
-    s16 params = this->actor.params & 0x1F;
+void ObjComb_ChooseItemDrop(ObjComb* self, GlobalContext* globalCtx) {
+    s16 params = self->actor.params & 0x1F;
 
     if ((params > 0) || (params < 0x1A)) {
         if (params == 6) {
-            if (Flags_GetCollectible(globalCtx, (this->actor.params >> 8) & 0x3F)) {
+            if (Flags_GetCollectible(globalCtx, (self->actor.params >> 8) & 0x3F)) {
                 params = -1;
             } else {
-                params = (params | (((this->actor.params >> 8) & 0x3F) << 8));
+                params = (params | (((self->actor.params >> 8) & 0x3F) << 8));
             }
         } else if (Rand_ZeroOne() < 0.5f) {
             params = -1;
         }
         if (params >= 0) {
-            Item_DropCollectible(globalCtx, &this->actor.world.pos, params);
+            Item_DropCollectible(globalCtx, &self->actor.world.pos, params);
         }
     }
 }
 
 void ObjComb_Init(Actor* thisx, GlobalContext* globalCtx) {
-    ObjComb* this = THIS;
+    ObjComb* self = THIS;
 
-    Actor_ProcessInitChain(&this->actor, sInitChain);
-    Collider_InitJntSph(globalCtx, &this->collider);
-    Collider_SetJntSph(globalCtx, &this->collider, &this->actor, &sJntSphInit, this->colliderItems);
-    ObjComb_SetupWait(this);
+    Actor_ProcessInitChain(&self->actor, sInitChain);
+    Collider_InitJntSph(globalCtx, &self->collider);
+    Collider_SetJntSph(globalCtx, &self->collider, &self->actor, &sJntSphInit, self->colliderItems);
+    ObjComb_SetupWait(self);
 }
 
 void ObjComb_Destroy(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
-    ObjComb* this = THIS;
+    ObjComb* self = THIS;
 
-    Collider_DestroyJntSph(globalCtx, &this->collider);
+    Collider_DestroyJntSph(globalCtx, &self->collider);
 }
 
-void ObjComb_SetupWait(ObjComb* this) {
-    this->actionFunc = ObjComb_Wait;
+void ObjComb_SetupWait(ObjComb* self) {
+    self->actionFunc = ObjComb_Wait;
 }
 
-void ObjComb_Wait(ObjComb* this, GlobalContext* globalCtx) {
+void ObjComb_Wait(ObjComb* self, GlobalContext* globalCtx) {
     s32 dmgFlags;
 
-    this->unk_1B0 -= 50;
-    if (this->unk_1B0 < 0) {
-        this->unk_1B0 = 0;
+    self->unk_1B0 -= 50;
+    if (self->unk_1B0 < 0) {
+        self->unk_1B0 = 0;
     }
 
-    if ((this->collider.base.acFlags & AC_HIT) != 0) {
-        this->collider.base.acFlags &= ~AC_HIT;
-        dmgFlags = this->collider.elements[0].info.acHitInfo->toucher.dmgFlags;
+    if ((self->collider.base.acFlags & AC_HIT) != 0) {
+        self->collider.base.acFlags &= ~AC_HIT;
+        dmgFlags = self->collider.elements[0].info.acHitInfo->toucher.dmgFlags;
         if (dmgFlags & 0x4001F866) {
-            this->unk_1B0 = 1500;
+            self->unk_1B0 = 1500;
         } else {
-            ObjComb_Break(this, globalCtx);
-            ObjComb_ChooseItemDrop(this, globalCtx);
-            Actor_Kill(&this->actor);
+            ObjComb_Break(self, globalCtx);
+            ObjComb_ChooseItemDrop(self, globalCtx);
+            Actor_Kill(&self->actor);
         }
     } else {
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
     }
 
-    if (this->actor.update != NULL) {
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    if (self->actor.update != NULL) {
+        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
     }
 }
 
 void ObjComb_Update(Actor* thisx, GlobalContext* globalCtx) {
-    ObjComb* this = THIS;
+    ObjComb* self = THIS;
 
-    this->unk_1B2 += 0x2EE0;
-    this->actionFunc(this, globalCtx);
-    this->actor.shape.rot.x = Math_SinS(this->unk_1B2) * this->unk_1B0 + this->actor.home.rot.x;
+    self->unk_1B2 += 0x2EE0;
+    self->actionFunc(self, globalCtx);
+    self->actor.shape.rot.x = Math_SinS(self->unk_1B2) * self->unk_1B0 + self->actor.home.rot.x;
 }
 
 void ObjComb_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    ObjComb* this = THIS;
+    ObjComb* self = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx, "../z_obj_comb.c", 369);
 
     func_80093D18(globalCtx->state.gfxCtx);
 
-    Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y + (118.0f * this->actor.scale.y),
-                     this->actor.world.pos.z, MTXMODE_NEW);
-    Matrix_RotateY(this->actor.shape.rot.y * (M_PI / 0x8000), MTXMODE_APPLY);
-    Matrix_RotateX(this->actor.shape.rot.x * (M_PI / 0x8000), MTXMODE_APPLY);
-    Matrix_RotateZ(this->actor.shape.rot.z * (M_PI / 0x8000), MTXMODE_APPLY);
-    Matrix_Translate(0, -(this->actor.scale.y * 118.0f), 0, MTXMODE_APPLY);
-    Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
+    Matrix_Translate(self->actor.world.pos.x, self->actor.world.pos.y + (118.0f * self->actor.scale.y),
+                     self->actor.world.pos.z, MTXMODE_NEW);
+    Matrix_RotateY(self->actor.shape.rot.y * (M_PI / 0x8000), MTXMODE_APPLY);
+    Matrix_RotateX(self->actor.shape.rot.x * (M_PI / 0x8000), MTXMODE_APPLY);
+    Matrix_RotateZ(self->actor.shape.rot.z * (M_PI / 0x8000), MTXMODE_APPLY);
+    Matrix_Translate(0, -(self->actor.scale.y * 118.0f), 0, MTXMODE_APPLY);
+    Matrix_Scale(self->actor.scale.x, self->actor.scale.y, self->actor.scale.z, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx, "../z_obj_comb.c", 394),
               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
     gSPDisplayList(POLY_OPA_DISP++, gFieldBeehiveDL);
 
-    Collider_UpdateSpheres(0, &this->collider);
+    Collider_UpdateSpheres(0, &self->collider);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx, "../z_obj_comb.c", 402);
 }

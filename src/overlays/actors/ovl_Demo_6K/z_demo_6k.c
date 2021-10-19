@@ -19,25 +19,25 @@ void Demo6K_Init(Actor* thisx, GlobalContext* globalCtx);
 void Demo6K_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void Demo6K_Update(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80966DB0(Demo6K* this, GlobalContext* globalCtx);
-void func_80966E04(Demo6K* this, GlobalContext* globalCtx);
-void func_80966E98(Demo6K* this, GlobalContext* globalCtx);
-void func_80966F84(Demo6K* this, GlobalContext* globalCtx);
-void func_8096712C(Demo6K* this, GlobalContext* globalCtx);
-void func_80967410(Demo6K* this, GlobalContext* globalCtx);
-void func_809674E0(Demo6K* this, GlobalContext* globalCtx);
-void func_8096784C(Demo6K* this, GlobalContext* globalCtx);
-void func_80967A04(Demo6K* this, s32 i);
-void func_80967AD0(Demo6K* this, GlobalContext* globalCtx);
-void func_80967DBC(Demo6K* this, GlobalContext* globalCtx);
-void func_80967F10(Demo6K* this, GlobalContext* globalCtx);
+void func_80966DB0(Demo6K* self, GlobalContext* globalCtx);
+void func_80966E04(Demo6K* self, GlobalContext* globalCtx);
+void func_80966E98(Demo6K* self, GlobalContext* globalCtx);
+void func_80966F84(Demo6K* self, GlobalContext* globalCtx);
+void func_8096712C(Demo6K* self, GlobalContext* globalCtx);
+void func_80967410(Demo6K* self, GlobalContext* globalCtx);
+void func_809674E0(Demo6K* self, GlobalContext* globalCtx);
+void func_8096784C(Demo6K* self, GlobalContext* globalCtx);
+void func_80967A04(Demo6K* self, s32 i);
+void func_80967AD0(Demo6K* self, GlobalContext* globalCtx);
+void func_80967DBC(Demo6K* self, GlobalContext* globalCtx);
+void func_80967F10(Demo6K* self, GlobalContext* globalCtx);
 void func_80967FFC(Actor* thisx, GlobalContext* globalCtx);
 void func_80968298(Actor* thisx, GlobalContext* globalCtx);
 void func_8096865C(Actor* thisx, GlobalContext* globalCtx);
 void func_809688C4(Actor* thisx, GlobalContext* globalCtx);
 void func_80968B70(Actor* thisx, GlobalContext* globalCtx);
 void func_80968FB0(Actor* thisx, GlobalContext* globalCtx);
-void func_809691BC(Demo6K* this, GlobalContext* globalCtx, s32 params);
+void func_809691BC(Demo6K* self, GlobalContext* globalCtx, s32 params);
 
 const ActorInit Demo_6K_InitVars = {
     ACTOR_DEMO_6K,
@@ -63,14 +63,14 @@ static Color_RGB8 sEnvColors[] = {
 static f32 D_8096930C[] = { 1.0f, 1.04f, 1.0f, 0.96f };
 static f32 D_8096931C[] = { 1.1f, 1.0f, 0.9f, 0.8f };
 
-void Demo6K_SetupAction(Demo6K* this, Demo6KActionFunc actionFunc) {
-    this->actionFunc = actionFunc;
+void Demo6K_SetupAction(Demo6K* self, Demo6KActionFunc actionFunc) {
+    self->actionFunc = actionFunc;
 }
 
 void Demo6K_Init(Actor* thisx, GlobalContext* globalCtx) {
-    Demo6K* this = THIS;
+    Demo6K* self = THIS;
     s32 pad;
-    s32 params = this->actor.params;
+    s32 params = self->actor.params;
     s32 objBankIndex;
     s32 i;
 
@@ -87,40 +87,40 @@ void Demo6K_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (objBankIndex < 0) {
         ASSERT(0, "0", "../z_demo_6k.c", 334);
     } else {
-        this->objBankIndex = objBankIndex;
+        self->objBankIndex = objBankIndex;
     }
 
-    Demo6K_SetupAction(this, func_80966DB0);
-    this->timer1 = 0;
-    this->flags = 0;
-    this->timer2 = 0;
+    Demo6K_SetupAction(self, func_80966DB0);
+    self->timer1 = 0;
+    self->flags = 0;
+    self->timer2 = 0;
 
     switch (params) {
         case 0:
-            this->drawFunc = func_809688C4;
-            this->initActionFunc = func_80967AD0;
-            Actor_SetScale(&this->actor, 1.0f);
+            self->drawFunc = func_809688C4;
+            self->initActionFunc = func_80967AD0;
+            Actor_SetScale(&self->actor, 1.0f);
 
             for (i = 0; i < 16; i++) {
-                func_80967A04(this, i);
-                this->unk_1B4[i] = 0.0f;
+                func_80967A04(self, i);
+                self->unk_1B4[i] = 0.0f;
             }
 
-            this->unk_170 = 0.0f;
+            self->unk_170 = 0.0f;
             break;
         case 1:
-            this->drawFunc = func_80967FFC;
-            this->initActionFunc = func_80966E04;
-            Actor_SetScale(&this->actor, 0.228f);
+            self->drawFunc = func_80967FFC;
+            self->initActionFunc = func_80966E04;
+            Actor_SetScale(&self->actor, 0.228f);
             break;
         case 2:
-            this->drawFunc = func_80968298;
-            this->initActionFunc = func_80966F84;
-            Actor_SetScale(&this->actor, 0.1f);
-            this->unk_164 = 1.0f;
-            this->unk_168 = 1.0f;
-            this->unk_16C = 0.0f;
-            this->unk_170 = 0.0f;
+            self->drawFunc = func_80968298;
+            self->initActionFunc = func_80966F84;
+            Actor_SetScale(&self->actor, 0.1f);
+            self->unk_164 = 1.0f;
+            self->unk_168 = 1.0f;
+            self->unk_16C = 0.0f;
+            self->unk_170 = 0.0f;
             break;
         case 3:
         case 4:
@@ -128,35 +128,35 @@ void Demo6K_Init(Actor* thisx, GlobalContext* globalCtx) {
         case 6:
         case 7:
         case 8:
-            this->drawFunc = func_8096865C;
-            this->initActionFunc = func_8096712C;
-            Actor_SetScale(&this->actor, 0.0f);
-            this->unk_293 = params - 3;
+            self->drawFunc = func_8096865C;
+            self->initActionFunc = func_8096712C;
+            Actor_SetScale(&self->actor, 0.0f);
+            self->unk_293 = params - 3;
             break;
         case 9:
         case 10:
-            this->drawFunc = func_8096865C;
-            Actor_SetScale(&this->actor, 0.0f);
-            this->initActionFunc = func_809674E0;
+            self->drawFunc = func_8096865C;
+            Actor_SetScale(&self->actor, 0.0f);
+            self->initActionFunc = func_809674E0;
             break;
         case 11:
-            this->drawFunc = func_8096865C;
-            Actor_SetScale(&this->actor, 0.0f);
-            this->initActionFunc = func_8096784C;
-            this->actor.velocity.x = this->actor.velocity.y = this->actor.velocity.z = 0.0f;
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_NABALL_VANISH);
+            self->drawFunc = func_8096865C;
+            Actor_SetScale(&self->actor, 0.0f);
+            self->initActionFunc = func_8096784C;
+            self->actor.velocity.x = self->actor.velocity.y = self->actor.velocity.z = 0.0f;
+            Audio_PlayActorSound2(&self->actor, NA_SE_EV_NABALL_VANISH);
             break;
         case 12:
-            Actor_SetScale(&this->actor, 0.0f);
-            this->initActionFunc = func_80967F10;
-            this->drawFunc = func_80968B70;
-            Actor_ChangeCategory(globalCtx, &globalCtx->actorCtx, &this->actor, ACTORCAT_ITEMACTION);
+            Actor_SetScale(&self->actor, 0.0f);
+            self->initActionFunc = func_80967F10;
+            self->drawFunc = func_80968B70;
+            Actor_ChangeCategory(globalCtx, &globalCtx->actorCtx, &self->actor, ACTORCAT_ITEMACTION);
             break;
         case 13:
-            Actor_SetScale(&this->actor, 0.14f);
-            Demo6K_SetupAction(this, func_80967DBC);
-            this->actor.draw = func_80968FB0;
-            this->unk_293 = 0;
+            Actor_SetScale(&self->actor, 0.14f);
+            Demo6K_SetupAction(self, func_80967DBC);
+            self->actor.draw = func_80968FB0;
+            self->unk_293 = 0;
             break;
         case 14:
         case 15:
@@ -164,12 +164,12 @@ void Demo6K_Init(Actor* thisx, GlobalContext* globalCtx) {
         case 17:
         case 18:
         case 19:
-            this->actor.flags |= 0x20;
-            this->drawFunc = func_8096865C;
-            this->initActionFunc = func_80967410;
-            this->flags |= 1;
-            Actor_SetScale(&this->actor, 0.2f);
-            this->unk_293 = params - 14;
+            self->actor.flags |= 0x20;
+            self->drawFunc = func_8096865C;
+            self->initActionFunc = func_80967410;
+            self->flags |= 1;
+            Actor_SetScale(&self->actor, 0.2f);
+            self->unk_293 = params - 14;
             break;
         default:
             ASSERT(0, "0", "../z_demo_6k.c", 435);
@@ -178,135 +178,135 @@ void Demo6K_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     switch (params) {
         case 9:
-            this->unk_293 = 0;
+            self->unk_293 = 0;
             break;
         case 10:
-            this->unk_293 = 5;
+            self->unk_293 = 5;
             break;
         case 11:
-            this->unk_293 = 4;
+            self->unk_293 = 4;
             break;
     }
 
-    Lights_PointNoGlowSetInfo(&this->lightInfo, this->actor.world.pos.x, this->actor.world.pos.y,
-                              this->actor.world.pos.z, 255, 255, 255, 100);
-    this->lightNode = LightContext_InsertLight(globalCtx, &globalCtx->lightCtx, &this->lightInfo);
+    Lights_PointNoGlowSetInfo(&self->lightInfo, self->actor.world.pos.x, self->actor.world.pos.y,
+                              self->actor.world.pos.z, 255, 255, 255, 100);
+    self->lightNode = LightContext_InsertLight(globalCtx, &globalCtx->lightCtx, &self->lightInfo);
 }
 
 void Demo6K_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    Demo6K* this = THIS;
+    Demo6K* self = THIS;
 
-    LightContext_RemoveLight(globalCtx, &globalCtx->lightCtx, this->lightNode);
+    LightContext_RemoveLight(globalCtx, &globalCtx->lightCtx, self->lightNode);
 }
 
-void func_80966DB0(Demo6K* this, GlobalContext* globalCtx) {
-    if (Object_IsLoaded(&globalCtx->objectCtx, this->objBankIndex)) {
-        this->actor.objBankIndex = this->objBankIndex;
-        this->actor.draw = this->drawFunc;
-        this->actionFunc = this->initActionFunc;
+void func_80966DB0(Demo6K* self, GlobalContext* globalCtx) {
+    if (Object_IsLoaded(&globalCtx->objectCtx, self->objBankIndex)) {
+        self->actor.objBankIndex = self->objBankIndex;
+        self->actor.draw = self->drawFunc;
+        self->actionFunc = self->initActionFunc;
     }
 }
 
-void func_80966E04(Demo6K* this, GlobalContext* globalCtx) {
+void func_80966E04(Demo6K* self, GlobalContext* globalCtx) {
     if (globalCtx->csCtx.frames > 214) {
-        func_8002F948(&this->actor, NA_SE_EV_LIGHT_GATHER - SFX_FLAG);
+        func_8002F948(&self->actor, NA_SE_EV_LIGHT_GATHER - SFX_FLAG);
     }
 
     if (globalCtx->csCtx.frames > 264) {
-        func_8002F948(&this->actor, NA_SE_EV_GOD_LIGHTBALL_2 - SFX_FLAG);
+        func_8002F948(&self->actor, NA_SE_EV_GOD_LIGHTBALL_2 - SFX_FLAG);
     }
 
     if ((globalCtx->csCtx.state != CS_STATE_IDLE) && (globalCtx->csCtx.npcActions[6] != NULL) &&
         (globalCtx->csCtx.npcActions[6]->action == 2)) {
-        Demo6K_SetupAction(this, func_80966E98);
+        Demo6K_SetupAction(self, func_80966E98);
     }
 }
 
-void func_80966E98(Demo6K* this, GlobalContext* globalCtx) {
+void func_80966E98(Demo6K* self, GlobalContext* globalCtx) {
     if (globalCtx->csCtx.frames < 353) {
-        func_8002F948(&this->actor, NA_SE_EV_LIGHT_GATHER - SFX_FLAG);
-        func_8002F948(&this->actor, NA_SE_EV_GOD_LIGHTBALL_2 - SFX_FLAG);
+        func_8002F948(&self->actor, NA_SE_EV_LIGHT_GATHER - SFX_FLAG);
+        func_8002F948(&self->actor, NA_SE_EV_GOD_LIGHTBALL_2 - SFX_FLAG);
     }
 
     if (globalCtx->csCtx.frames == 342) {
         func_800F3F3C(2);
     }
 
-    if (this->timer1 == 39) {
+    if (self->timer1 == 39) {
         func_800788CC(NA_SE_EV_CONSENTRATION);
-        Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_DEMO_6K, this->actor.world.pos.x,
-                    this->actor.world.pos.y + 10.0f, this->actor.world.pos.z, 0, 0, 0, 2);
+        Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_DEMO_6K, self->actor.world.pos.x,
+                    self->actor.world.pos.y + 10.0f, self->actor.world.pos.z, 0, 0, 0, 2);
     }
 
-    if (this->timer1 == 64) {
-        Actor_Kill(&this->actor);
+    if (self->timer1 == 64) {
+        Actor_Kill(&self->actor);
     }
 
-    this->timer1++;
+    self->timer1++;
 }
 
-void func_80966F84(Demo6K* this, GlobalContext* globalCtx) {
-    if (this->timer1 < 5) {
-        this->unk_168 = D_8096930C[this->timer1 & 3];
-    } else if (this->timer1 < 15) {
-        this->actor.scale.x += 0.012f;
-        Actor_SetScale(&this->actor, this->actor.scale.x);
-        Math_StepToF(&this->unk_170, 0.6f, 0.05f);
-        this->unk_168 = 1.0f;
+void func_80966F84(Demo6K* self, GlobalContext* globalCtx) {
+    if (self->timer1 < 5) {
+        self->unk_168 = D_8096930C[self->timer1 & 3];
+    } else if (self->timer1 < 15) {
+        self->actor.scale.x += 0.012f;
+        Actor_SetScale(&self->actor, self->actor.scale.x);
+        Math_StepToF(&self->unk_170, 0.6f, 0.05f);
+        self->unk_168 = 1.0f;
     } else {
-        if (this->timer1 == 15) {
-            Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EFF_DUST, this->actor.world.pos.x,
-                               this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, EFF_DUST_TYPE_1);
+        if (self->timer1 == 15) {
+            Actor_SpawnAsChild(&globalCtx->actorCtx, &self->actor, globalCtx, ACTOR_EFF_DUST, self->actor.world.pos.x,
+                               self->actor.world.pos.y, self->actor.world.pos.z, 0, 0, 0, EFF_DUST_TYPE_1);
         }
-        Math_StepToF(&this->unk_16C, 1.0f, 0.02f);
-        this->unk_168 = D_8096930C[this->timer1 & 1];
+        Math_StepToF(&self->unk_16C, 1.0f, 0.02f);
+        self->unk_168 = D_8096930C[self->timer1 & 1];
     }
 
-    this->timer1++;
+    self->timer1++;
 }
 
-void func_809670AC(Demo6K* this, GlobalContext* globalCtx) {
-    this->timer2++;
+void func_809670AC(Demo6K* self, GlobalContext* globalCtx) {
+    self->timer2++;
 
-    if (this->timer1 < 10) {
-        this->timer1++;
-    } else if (this->actor.scale.x > 0.0f) {
-        this->actor.scale.x -= 1.0f / 120.0f;
-        Actor_SetScale(&this->actor, this->actor.scale.x);
+    if (self->timer1 < 10) {
+        self->timer1++;
+    } else if (self->actor.scale.x > 0.0f) {
+        self->actor.scale.x -= 1.0f / 120.0f;
+        Actor_SetScale(&self->actor, self->actor.scale.x);
     } else {
-        Actor_Kill(&this->actor);
+        Actor_Kill(&self->actor);
     }
 }
 
-void func_8096712C(Demo6K* this, GlobalContext* globalCtx) {
+void func_8096712C(Demo6K* self, GlobalContext* globalCtx) {
     static u16 D_8096932C[] = { 275, 275, 275, 275, 275, 275 };
     u32 frames = globalCtx->state.frames;
 
-    if (this->actor.scale.x < 0.1f) {
-        this->actor.scale.x += 0.0017f;
+    if (self->actor.scale.x < 0.1f) {
+        self->actor.scale.x += 0.0017f;
     } else if (frames & 1) {
-        this->actor.scale.x = 0.1f * 1.04f;
+        self->actor.scale.x = 0.1f * 1.04f;
     } else {
-        this->actor.scale.x = 0.1f;
+        self->actor.scale.x = 0.1f;
     }
 
     if ((globalCtx->csCtx.state != CS_STATE_IDLE) && (globalCtx->csCtx.npcActions[6] != NULL) &&
         (globalCtx->csCtx.npcActions[6]->action == 2)) {
-        Demo6K_SetupAction(this, func_809670AC);
-        this->timer1 = 0;
-        this->actor.scale.x = 0.1f;
+        Demo6K_SetupAction(self, func_809670AC);
+        self->timer1 = 0;
+        self->actor.scale.x = 0.1f;
     }
 
-    Actor_SetScale(&this->actor, this->actor.scale.x);
+    Actor_SetScale(&self->actor, self->actor.scale.x);
 
-    this->timer2++;
+    self->timer2++;
 
-    if ((globalCtx->sceneNum == SCENE_GANONTIKA) && (globalCtx->csCtx.frames < D_8096932C[this->actor.params - 3])) {
-        func_8002F974(&this->actor, NA_SE_EV_LIGHT_GATHER - SFX_FLAG);
+    if ((globalCtx->sceneNum == SCENE_GANONTIKA) && (globalCtx->csCtx.frames < D_8096932C[self->actor.params - 3])) {
+        func_8002F974(&self->actor, NA_SE_EV_LIGHT_GATHER - SFX_FLAG);
     }
 }
 
-void func_80967244(Demo6K* this, GlobalContext* globalCtx) {
+void func_80967244(Demo6K* self, GlobalContext* globalCtx) {
     static Vec3f velocity = { 0.0f, 0.0f, 0.0f };
     static Vec3f accel = { 0.0f, 0.0f, 0.0f };
     static Color_RGBA8 primColor = { 255, 255, 255, 0 };
@@ -316,9 +316,9 @@ void func_80967244(Demo6K* this, GlobalContext* globalCtx) {
     s16 rand2;
     s32 scale;
 
-    pos.x = this->actor.world.pos.x;
-    pos.y = this->actor.world.pos.y;
-    pos.z = this->actor.world.pos.z;
+    pos.x = self->actor.world.pos.x;
+    pos.y = self->actor.world.pos.y;
+    pos.z = self->actor.world.pos.z;
 
     rand1 = Rand_ZeroFloat(0xFFFF);
     rand2 = Rand_ZeroFloat(0xFFFF);
@@ -329,9 +329,9 @@ void func_80967244(Demo6K* this, GlobalContext* globalCtx) {
 
     accel.y = 0.0f;
 
-    envColor.r = sEnvColors[this->unk_293].r;
-    envColor.g = sEnvColors[this->unk_293].g;
-    envColor.b = sEnvColors[this->unk_293].b;
+    envColor.r = sEnvColors[self->unk_293].r;
+    envColor.g = sEnvColors[self->unk_293].g;
+    envColor.b = sEnvColors[self->unk_293].b;
 
     if (globalCtx->sceneNum == SCENE_TOKINOMA) {
         scale = 6000;
@@ -344,73 +344,73 @@ void func_80967244(Demo6K* this, GlobalContext* globalCtx) {
     EffectSsKiraKira_SpawnFocused(globalCtx, &pos, &velocity, &accel, &primColor, &envColor, scale, 20);
 }
 
-void func_80967410(Demo6K* this, GlobalContext* globalCtx) {
-    s32 params = this->actor.params - 14;
+void func_80967410(Demo6K* self, GlobalContext* globalCtx) {
+    s32 params = self->actor.params - 14;
 
-    this->timer2++;
+    self->timer2++;
 
-    Actor_SetScale(&this->actor, 0.2f);
+    Actor_SetScale(&self->actor, 0.2f);
 
     if ((globalCtx->csCtx.state != CS_STATE_IDLE) && (globalCtx->csCtx.npcActions[params] != NULL)) {
-        func_809691BC(this, globalCtx, params);
+        func_809691BC(self, globalCtx, params);
 
         if (globalCtx->csCtx.npcActions[params]->action == 3) {
-            this->flags &= ~1;
-            func_80967244(this, globalCtx);
+            self->flags &= ~1;
+            func_80967244(self, globalCtx);
         } else {
-            this->flags |= 1;
+            self->flags |= 1;
         }
     } else {
-        this->flags |= 1;
+        self->flags |= 1;
     }
 }
 
-void func_809674E0(Demo6K* this, GlobalContext* globalCtx) {
+void func_809674E0(Demo6K* self, GlobalContext* globalCtx) {
     u32 frames = globalCtx->state.frames;
 
-    if (this->actor.scale.x < 0.05f) {
-        this->actor.scale.x += 0.005f;
+    if (self->actor.scale.x < 0.05f) {
+        self->actor.scale.x += 0.005f;
     } else if (frames & 1) {
-        this->actor.scale.x = 0.05f * 1.04f;
+        self->actor.scale.x = 0.05f * 1.04f;
     } else {
-        this->actor.scale.x = 0.05f;
+        self->actor.scale.x = 0.05f;
     }
 
-    Actor_SetScale(&this->actor, this->actor.scale.x);
+    Actor_SetScale(&self->actor, self->actor.scale.x);
 
-    this->timer2++;
+    self->timer2++;
 
-    if (this->timer2 > 47) {
-        Actor_Kill(&this->actor);
-    } else if (this->timer2 > 39) {
-        f32 dTimer = this->timer2 - 39;
+    if (self->timer2 > 47) {
+        Actor_Kill(&self->actor);
+    } else if (self->timer2 > 39) {
+        f32 dTimer = self->timer2 - 39;
         f32 temp = 1.0f / (9.0f - dTimer);
 
-        this->actor.world.pos.x += (-1611.0f - this->actor.world.pos.x) * temp;
-        this->actor.world.pos.y += (19.0f - this->actor.world.pos.y) * temp;
-        this->actor.world.pos.z += (1613.0f - this->actor.world.pos.z) * temp;
+        self->actor.world.pos.x += (-1611.0f - self->actor.world.pos.x) * temp;
+        self->actor.world.pos.y += (19.0f - self->actor.world.pos.y) * temp;
+        self->actor.world.pos.z += (1613.0f - self->actor.world.pos.z) * temp;
 
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_FANTOM_FIRE - SFX_FLAG);
+        Audio_PlayActorSound2(&self->actor, NA_SE_EN_FANTOM_FIRE - SFX_FLAG);
     }
 
-    Lights_PointNoGlowSetInfo(&this->lightInfo, this->actor.world.pos.x, this->actor.world.pos.y,
-                              this->actor.world.pos.z, sEnvColors[this->unk_293].r, sEnvColors[this->unk_293].g,
-                              sEnvColors[this->unk_293].b, this->actor.scale.x * 4000.0f);
+    Lights_PointNoGlowSetInfo(&self->lightInfo, self->actor.world.pos.x, self->actor.world.pos.y,
+                              self->actor.world.pos.z, sEnvColors[self->unk_293].r, sEnvColors[self->unk_293].g,
+                              sEnvColors[self->unk_293].b, self->actor.scale.x * 4000.0f);
 }
 
-void func_809676A4(Demo6K* this, GlobalContext* globalCtx) {
+void func_809676A4(Demo6K* self, GlobalContext* globalCtx) {
     static Vec3f velocity = { 0.0f, 0.0f, 0.0f };
     static Vec3f accel = { 0.0f, 0.0f, 0.0f };
     static Color_RGBA8 primColor = { 255, 255, 255, 0 };
     static Color_RGBA8 envColor = { 255, 150, 0, 0 };
     Vec3f pos;
-    f32 temp = this->actor.scale.x * 500.0f;
+    f32 temp = self->actor.scale.x * 500.0f;
     s32 i;
 
     for (i = 0; i < 8; i++) {
-        pos.x = this->actor.world.pos.x + Rand_CenteredFloat(temp);
-        pos.y = this->actor.world.pos.y + Rand_CenteredFloat(temp);
-        pos.z = this->actor.world.pos.z + Rand_CenteredFloat(temp);
+        pos.x = self->actor.world.pos.x + Rand_CenteredFloat(temp);
+        pos.y = self->actor.world.pos.y + Rand_CenteredFloat(temp);
+        pos.z = self->actor.world.pos.z + Rand_CenteredFloat(temp);
 
         velocity.x = Rand_CenteredFloat(2.0f);
         velocity.y = (Rand_ZeroFloat(-10.0f) - 5.0f) * 0.1f;
@@ -422,65 +422,65 @@ void func_809676A4(Demo6K* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_8096784C(Demo6K* this, GlobalContext* globalCtx) {
+void func_8096784C(Demo6K* self, GlobalContext* globalCtx) {
     u32 frames = globalCtx->state.frames;
 
-    this->timer2++;
+    self->timer2++;
 
-    if (this->timer2 > 24) {
-        Actor_Kill(&this->actor);
-    } else if (this->timer2 > 4) {
-        this->actor.velocity.x += Rand_CenteredFloat(0.2f);
-        this->actor.velocity.y += 0.12f;
-        this->actor.velocity.z += Rand_CenteredFloat(0.2f);
+    if (self->timer2 > 24) {
+        Actor_Kill(&self->actor);
+    } else if (self->timer2 > 4) {
+        self->actor.velocity.x += Rand_CenteredFloat(0.2f);
+        self->actor.velocity.y += 0.12f;
+        self->actor.velocity.z += Rand_CenteredFloat(0.2f);
 
-        this->actor.world.pos.x += this->actor.velocity.x;
-        this->actor.world.pos.y += this->actor.velocity.y;
-        this->actor.world.pos.z += this->actor.velocity.z;
+        self->actor.world.pos.x += self->actor.velocity.x;
+        self->actor.world.pos.y += self->actor.velocity.y;
+        self->actor.world.pos.z += self->actor.velocity.z;
 
-        this->actor.scale.x -= 0.0015f;
+        self->actor.scale.x -= 0.0015f;
 
-        func_809676A4(this, globalCtx);
+        func_809676A4(self, globalCtx);
     } else if (frames & 1) {
-        this->actor.scale.x = 0.033f;
+        self->actor.scale.x = 0.033f;
     } else {
-        this->actor.scale.x = 0.03f;
+        self->actor.scale.x = 0.03f;
     }
 
-    Actor_SetScale(&this->actor, this->actor.scale.x);
-    Lights_PointNoGlowSetInfo(&this->lightInfo, this->actor.world.pos.x, this->actor.world.pos.y,
-                              this->actor.world.pos.z, sEnvColors[this->unk_293].r, sEnvColors[this->unk_293].g,
-                              sEnvColors[this->unk_293].b, this->actor.scale.x * 4000.0f);
+    Actor_SetScale(&self->actor, self->actor.scale.x);
+    Lights_PointNoGlowSetInfo(&self->lightInfo, self->actor.world.pos.x, self->actor.world.pos.y,
+                              self->actor.world.pos.z, sEnvColors[self->unk_293].r, sEnvColors[self->unk_293].g,
+                              sEnvColors[self->unk_293].b, self->actor.scale.x * 4000.0f);
 }
 
-void func_80967A04(Demo6K* this, s32 i) {
-    this->unk_174[i] = (i * 10.0f) - 80.0f;
-    this->unk_1B4[i] = Rand_ZeroFloat(100.0f) + 100.0f;
-    this->unk_1F4[i] = -3.0f - Rand_ZeroFloat(6.0f);
-    this->unk_274[i] = (s32)Rand_ZeroFloat(6.0f);
-    this->unk_234[i] = Rand_ZeroFloat(0.02f) + 0.01f;
+void func_80967A04(Demo6K* self, s32 i) {
+    self->unk_174[i] = (i * 10.0f) - 80.0f;
+    self->unk_1B4[i] = Rand_ZeroFloat(100.0f) + 100.0f;
+    self->unk_1F4[i] = -3.0f - Rand_ZeroFloat(6.0f);
+    self->unk_274[i] = (s32)Rand_ZeroFloat(6.0f);
+    self->unk_234[i] = Rand_ZeroFloat(0.02f) + 0.01f;
 }
 
-void func_80967AD0(Demo6K* this, GlobalContext* globalCtx) {
+void func_80967AD0(Demo6K* self, GlobalContext* globalCtx) {
     s32 i;
 
     if ((globalCtx->csCtx.state != CS_STATE_IDLE) && (globalCtx->csCtx.npcActions[1] != NULL)) {
         if (globalCtx->csCtx.npcActions[1]->action == 2) {
-            this->unk_170++;
-            func_8002F948(&this->actor, NA_SE_EV_RAINBOW_SHOWER - SFX_FLAG);
+            self->unk_170++;
+            func_8002F948(&self->actor, NA_SE_EV_RAINBOW_SHOWER - SFX_FLAG);
         }
 
-        func_809691BC(this, globalCtx, 1);
+        func_809691BC(self, globalCtx, 1);
     }
 
-    for (i = 0; (i < (s32)this->unk_170) && (i < 16); i++) {
-        this->unk_1B4[i] += this->unk_1F4[i];
-        if (this->unk_1B4[i] < 0.0f) {
-            func_80967A04(this, i);
+    for (i = 0; (i < (s32)self->unk_170) && (i < 16); i++) {
+        self->unk_1B4[i] += self->unk_1F4[i];
+        if (self->unk_1B4[i] < 0.0f) {
+            func_80967A04(self, i);
         }
     }
 
-    this->timer1++;
+    self->timer1++;
 }
 
 void func_80967BF8(Player* player, GlobalContext* globalCtx) {
@@ -507,61 +507,61 @@ void func_80967BF8(Player* player, GlobalContext* globalCtx) {
     }
 }
 
-void func_80967DBC(Demo6K* this, GlobalContext* globalCtx) {
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_GANON_ATTACK_DEMO - SFX_FLAG);
+void func_80967DBC(Demo6K* self, GlobalContext* globalCtx) {
+    Audio_PlayActorSound2(&self->actor, NA_SE_EN_GANON_ATTACK_DEMO - SFX_FLAG);
 
-    this->timer2++;
+    self->timer2++;
 
-    if (this->timer2 > 44) {
-        if (this->unk_293 < 236) {
-            this->unk_293 += 20;
+    if (self->timer2 > 44) {
+        if (self->unk_293 < 236) {
+            self->unk_293 += 20;
         } else {
-            this->unk_293 = 255;
+            self->unk_293 = 255;
         }
 
-        if (this->timer2 > 104) {
+        if (self->timer2 > 104) {
             func_80967BF8(GET_PLAYER(globalCtx), globalCtx);
-            Actor_Kill(&this->actor);
+            Actor_Kill(&self->actor);
             Audio_PlayActorSound2(&GET_PLAYER(globalCtx)->actor, NA_SE_EN_FANTOM_HIT_THUNDER);
-        } else if (this->timer2 > 94) {
-            Actor_SetScale(&this->actor, this->actor.scale.x + 0.03f);
+        } else if (self->timer2 > 94) {
+            Actor_SetScale(&self->actor, self->actor.scale.x + 0.03f);
 
-            if (this->timer2 == 95) {
+            if (self->timer2 == 95) {
                 osSyncPrintf(VT_FGCOL(CYAN) "  NA_SE_EN_GANON_FIRE_DEMO\n" VT_RST);
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_GANON_FIRE_DEMO);
+                Audio_PlayActorSound2(&self->actor, NA_SE_EN_GANON_FIRE_DEMO);
             }
         }
 
-        Lights_PointNoGlowSetInfo(&this->lightInfo, this->actor.world.pos.x, this->actor.world.pos.y,
-                                  this->actor.world.pos.z, 255, 200, 0, this->unk_293);
+        Lights_PointNoGlowSetInfo(&self->lightInfo, self->actor.world.pos.x, self->actor.world.pos.y,
+                                  self->actor.world.pos.z, 255, 200, 0, self->unk_293);
     }
 }
 
-void func_80967F10(Demo6K* this, GlobalContext* globalCtx) {
-    if (this->timer2 == 0) {
-        Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_DEMO_6K, this->actor.world.pos.x, this->actor.world.pos.y,
-                    this->actor.world.pos.z, 0, 0, 0, 13);
+void func_80967F10(Demo6K* self, GlobalContext* globalCtx) {
+    if (self->timer2 == 0) {
+        Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_DEMO_6K, self->actor.world.pos.x, self->actor.world.pos.y,
+                    self->actor.world.pos.z, 0, 0, 0, 13);
     }
 
-    this->timer2++;
+    self->timer2++;
 
-    if (this->timer2 > 60) {
-        Actor_Kill(&this->actor);
+    if (self->timer2 > 60) {
+        Actor_Kill(&self->actor);
     }
 
-    Actor_SetScale(&this->actor, 0.05f - (this->timer2 * 0.00075f));
+    Actor_SetScale(&self->actor, 0.05f - (self->timer2 * 0.00075f));
 }
 
 void Demo6K_Update(Actor* thisx, GlobalContext* globalCtx) {
-    Demo6K* this = THIS;
+    Demo6K* self = THIS;
 
-    this->actionFunc(this, globalCtx);
+    self->actionFunc(self, globalCtx);
 }
 
 void func_80967FFC(Actor* thisx, GlobalContext* globalCtx) {
-    Demo6K* this = THIS;
+    Demo6K* self = THIS;
     s32 pad;
-    u16 timer1 = this->timer1;
+    u16 timer1 = self->timer1;
 
     OPEN_DISPS(globalCtx->state.gfxCtx, "../z_demo_6k.c", 1070);
 
@@ -601,10 +601,10 @@ void func_80967FFC(Actor* thisx, GlobalContext* globalCtx) {
 
 void func_80968298(Actor* thisx, GlobalContext* globalCtx) {
     static u8 skipIndices[] = { 6, 7, 11, 16, 20, 24, 28, 33, 35, 41, 45, 50, 57, 58, 62, 255 };
-    Demo6K* this = THIS;
+    Demo6K* self = THIS;
     s32 pad;
-    u32 timer1 = this->timer1;
-    f32 scale = this->unk_164 * this->unk_168;
+    u32 timer1 = self->timer1;
+    f32 scale = self->unk_164 * self->unk_168;
     Vtx* vertices = SEGMENTED_TO_VIRTUAL(object_demo_6kVtx_0035E0);
     s32 i;
     s32 i2;
@@ -612,7 +612,7 @@ void func_80968298(Actor* thisx, GlobalContext* globalCtx) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx, "../z_demo_6k.c", 1145);
 
-    alpha = (s32)(this->unk_170 * 255.0f);
+    alpha = (s32)(self->unk_170 * 255.0f);
     POLY_XLU_DISP = func_800937C0(POLY_XLU_DISP);
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 0, 0, 0, alpha);
     gDPSetAlphaDither(POLY_XLU_DISP++, G_AD_DISABLE);
@@ -620,7 +620,7 @@ void func_80968298(Actor* thisx, GlobalContext* globalCtx) {
     gDPFillRectangle(POLY_XLU_DISP++, 0, 0, SCREEN_WIDTH - 1, SCREEN_HEIGHT - 1);
     func_80093D84(globalCtx->state.gfxCtx);
 
-    alpha = (s32)(this->unk_16C * 255.0f);
+    alpha = (s32)(self->unk_16C * 255.0f);
     for (i2 = 0, i = 0; i < 63; i++) {
         if (i == skipIndices[i2]) {
             i2++;
@@ -650,14 +650,14 @@ void func_80968298(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_8096865C(Actor* thisx, GlobalContext* globalCtx) {
-    Demo6K* this = THIS;
+    Demo6K* self = THIS;
     s32 pad;
     Gfx* displayList;
 
     OPEN_DISPS(globalCtx->state.gfxCtx, "../z_demo_6k.c", 1208);
 
-    if (!(this->flags & 1)) {
-        if (this->actor.params > 8) {
+    if (!(self->flags & 1)) {
+        if (self->actor.params > 8) {
             displayList = gEffFlash1DL;
         } else {
             displayList = gEffFlash2DL;
@@ -665,16 +665,16 @@ void func_8096865C(Actor* thisx, GlobalContext* globalCtx) {
 
         func_80093D84(globalCtx->state.gfxCtx);
         gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, 255, 255);
-        gDPSetEnvColor(POLY_XLU_DISP++, sEnvColors[this->unk_293].r, sEnvColors[this->unk_293].g,
-                       sEnvColors[this->unk_293].b, 255);
+        gDPSetEnvColor(POLY_XLU_DISP++, sEnvColors[self->unk_293].r, sEnvColors[self->unk_293].g,
+                       sEnvColors[self->unk_293].b, 255);
         Matrix_Mult(&globalCtx->mf_11DA0, MTXMODE_APPLY);
         Matrix_Push();
-        Matrix_RotateZ((f32)(this->timer2 * 6) * (M_PI / 180.0f), MTXMODE_APPLY);
+        Matrix_RotateZ((f32)(self->timer2 * 6) * (M_PI / 180.0f), MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx, "../z_demo_6k.c", 1230),
                   G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, displayList);
         Matrix_Pop();
-        Matrix_RotateZ(-(f32)(this->timer2 * 6) * (M_PI / 180.0f), MTXMODE_APPLY);
+        Matrix_RotateZ(-(f32)(self->timer2 * 6) * (M_PI / 180.0f), MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx, "../z_demo_6k.c", 1236),
                   G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, displayList);
@@ -684,7 +684,7 @@ void func_8096865C(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_809688C4(Actor* thisx, GlobalContext* globalCtx2) {
-    Demo6K* this = THIS;
+    Demo6K* self = THIS;
     GlobalContext* globalCtx = globalCtx2;
     u32 frames = globalCtx->state.frames;
     s32 i;
@@ -699,13 +699,13 @@ void func_809688C4(Actor* thisx, GlobalContext* globalCtx2) {
 
         for (i = 0; i < 16; i++) {
             gDPPipeSync(POLY_XLU_DISP++);
-            gDPSetEnvColor(POLY_XLU_DISP++, sEnvColors[this->unk_274[i]].r, sEnvColors[this->unk_274[i]].g,
-                           sEnvColors[this->unk_274[i]].b, 255);
+            gDPSetEnvColor(POLY_XLU_DISP++, sEnvColors[self->unk_274[i]].r, sEnvColors[self->unk_274[i]].g,
+                           sEnvColors[self->unk_274[i]].b, 255);
             Matrix_Push();
-            Matrix_Translate(this->unk_174[i], this->unk_1B4[i], 0.0f, MTXMODE_APPLY);
-            Matrix_Scale(this->unk_234[i] * D_8096931C[(frames + i) & 3],
-                         this->unk_234[i] * D_8096931C[(frames + i) & 3],
-                         this->unk_234[i] * D_8096931C[(frames + i) & 3], MTXMODE_APPLY);
+            Matrix_Translate(self->unk_174[i], self->unk_1B4[i], 0.0f, MTXMODE_APPLY);
+            Matrix_Scale(self->unk_234[i] * D_8096931C[(frames + i) & 3],
+                         self->unk_234[i] * D_8096931C[(frames + i) & 3],
+                         self->unk_234[i] * D_8096931C[(frames + i) & 3], MTXMODE_APPLY);
             func_800D1FD4(&globalCtx->mf_11DA0);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx, "../z_demo_6k.c", 1297),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -721,8 +721,8 @@ void func_809688C4(Actor* thisx, GlobalContext* globalCtx2) {
 
 void func_80968B70(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
-    Demo6K* this = THIS;
-    u32 timer2 = this->timer2;
+    Demo6K* self = THIS;
+    u32 timer2 = self->timer2;
     u8 primColor[4];
     u8 envColor[3];
 
@@ -739,21 +739,21 @@ void func_80968B70(Actor* thisx, GlobalContext* globalCtx) {
                Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0xFF - ((timer2 * 2) & 0xFF), 0, 32, 32, 1,
                                 0xFF - ((timer2 * 2) & 0xFF), (timer2 * 15) & 0x3FF, 16, 64));
 
-    if (this->timer2 < 40) {
-        primColor[0] = primColor[2] = 100 - (this->timer2 * 2.5f);
+    if (self->timer2 < 40) {
+        primColor[0] = primColor[2] = 100 - (self->timer2 * 2.5f);
         primColor[1] = envColor[1] = 0;
         envColor[0] = 100 - primColor[2];
-        primColor[3] = this->timer2 * 6.375f;
+        primColor[3] = self->timer2 * 6.375f;
         envColor[2] = envColor[0] * 2;
-    } else if (this->timer2 < 50) {
-        primColor[0] = (this->timer2 * 5) - 200;
+    } else if (self->timer2 < 50) {
+        primColor[0] = (self->timer2 * 5) - 200;
         primColor[1] = primColor[2] = 0;
         primColor[3] = 255;
         envColor[0] = 100 - primColor[0];
         envColor[1] = primColor[0] * 2;
         envColor[2] = 200 - (primColor[0] * 4);
     } else {
-        primColor[2] = (this->timer2 * 5) - 250;
+        primColor[2] = (self->timer2 * 5) - 250;
         envColor[2] = 0;
         primColor[1] = primColor[2] * 3;
         primColor[3] = 255;
@@ -770,7 +770,7 @@ void func_80968B70(Actor* thisx, GlobalContext* globalCtx) {
 
 void func_80968FB0(Actor* thisx, GlobalContext* globalCtx) {
     static u8 D_809693CC[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 7, 6, 5, 4, 3, 2, 1 };
-    Demo6K* this = THIS;
+    Demo6K* self = THIS;
     Gfx* displayList = Graph_Alloc(globalCtx->state.gfxCtx, 4 * sizeof(Gfx));
     u16 frames = globalCtx->gameplayFrames;
     f32 scaleFactor;
@@ -782,13 +782,13 @@ void func_80968FB0(Actor* thisx, GlobalContext* globalCtx) {
 
     func_80093D84(globalCtx->state.gfxCtx);
     scaleFactor = ((s16)D_809693CC[(frames * 4) & 0xF] * 0.01f) + 1.0f;
-    Matrix_Scale(this->actor.scale.x * scaleFactor, this->actor.scale.y * scaleFactor,
-                 this->actor.scale.z * scaleFactor, MTXMODE_APPLY);
+    Matrix_Scale(self->actor.scale.x * scaleFactor, self->actor.scale.y * scaleFactor,
+                 self->actor.scale.z * scaleFactor, MTXMODE_APPLY);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx, "../z_demo_6k.c", 1394),
               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPSegment(POLY_XLU_DISP++, 0x08, displayList);
     gDPPipeSync(displayList++);
-    gDPSetPrimColor(displayList++, 0, 0x80, 255, 255, 255, this->unk_293);
+    gDPSetPrimColor(displayList++, 0, 0x80, 255, 255, 255, self->unk_293);
     gDPSetRenderMode(displayList++, G_RM_PASS, G_RM_ZB_CLD_SURF2);
     gSPEndDisplayList(displayList++);
     gDPSetEnvColor(POLY_XLU_DISP++, 255, 200, 0, 255);
@@ -797,7 +797,7 @@ void func_80968FB0(Actor* thisx, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx, "../z_demo_6k.c", 1411);
 }
 
-void func_809691BC(Demo6K* this, GlobalContext* globalCtx, s32 params) {
+void func_809691BC(Demo6K* self, GlobalContext* globalCtx, s32 params) {
     Vec3f startPos;
     Vec3f endPos;
     f32 temp;
@@ -813,7 +813,7 @@ void func_809691BC(Demo6K* this, GlobalContext* globalCtx, s32 params) {
 
     temp = Environment_LerpWeight(csAction->endFrame, csAction->startFrame, globalCtx->csCtx.frames);
 
-    this->actor.world.pos.x = (((endPos.x - startPos.x) * temp) + startPos.x);
-    this->actor.world.pos.y = (((endPos.y - startPos.y) * temp) + startPos.y);
-    this->actor.world.pos.z = (((endPos.z - startPos.z) * temp) + startPos.z);
+    self->actor.world.pos.x = (((endPos.x - startPos.x) * temp) + startPos.x);
+    self->actor.world.pos.y = (((endPos.y - startPos.y) * temp) + startPos.y);
+    self->actor.world.pos.z = (((endPos.z - startPos.z) * temp) + startPos.z);
 }

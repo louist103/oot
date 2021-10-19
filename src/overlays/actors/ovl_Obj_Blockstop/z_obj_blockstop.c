@@ -28,12 +28,12 @@ const ActorInit Obj_Blockstop_InitVars = {
 };
 
 void ObjBlockstop_Init(Actor* thisx, GlobalContext* globalCtx) {
-    ObjBlockstop* this = THIS;
+    ObjBlockstop* self = THIS;
 
-    if (Flags_GetSwitch(globalCtx, this->actor.params)) {
-        Actor_Kill(&this->actor);
+    if (Flags_GetSwitch(globalCtx, self->actor.params)) {
+        Actor_Kill(&self->actor);
     } else {
-        this->actor.world.pos.y++;
+        self->actor.world.pos.y++;
     }
 }
 
@@ -41,14 +41,14 @@ void ObjBlockstop_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void ObjBlockstop_Update(Actor* thisx, GlobalContext* globalCtx) {
-    ObjBlockstop* this = THIS;
+    ObjBlockstop* self = THIS;
     DynaPolyActor* dynaPolyActor;
     Vec3f sp4C;
     s32 bgId;
     s32 pad;
 
-    if (BgCheck_EntityLineTest2(&globalCtx->colCtx, &this->actor.home.pos, &this->actor.world.pos, &sp4C,
-                                &this->actor.floorPoly, false, false, true, true, &bgId, &this->actor)) {
+    if (BgCheck_EntityLineTest2(&globalCtx->colCtx, &self->actor.home.pos, &self->actor.world.pos, &sp4C,
+                                &self->actor.floorPoly, false, false, true, true, &bgId, &self->actor)) {
         dynaPolyActor = DynaPoly_GetActor(&globalCtx->colCtx, bgId);
 
         if (dynaPolyActor != NULL && dynaPolyActor->actor.id == ACTOR_OBJ_OSHIHIKI) {
@@ -59,8 +59,8 @@ void ObjBlockstop_Update(Actor* thisx, GlobalContext* globalCtx) {
                 func_80078884(NA_SE_SY_TRE_BOX_APPEAR);
             }
 
-            Flags_SetSwitch(globalCtx, this->actor.params);
-            Actor_Kill(&this->actor);
+            Flags_SetSwitch(globalCtx, self->actor.params);
+            Actor_Kill(&self->actor);
         }
     }
 }

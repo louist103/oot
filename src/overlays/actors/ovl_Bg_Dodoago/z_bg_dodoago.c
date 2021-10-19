@@ -17,10 +17,10 @@ void BgDodoago_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgDodoago_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgDodoago_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80871CF4(BgDodoago* this, GlobalContext* globalCtx);
-void func_80871FB8(BgDodoago* this, GlobalContext* globalCtx);
-void BgDodoago_DoNothing(BgDodoago* this, GlobalContext* globalCtx);
-void func_80872288(BgDodoago* this, GlobalContext* globalCtx);
+void func_80871CF4(BgDodoago* self, GlobalContext* globalCtx);
+void func_80871FB8(BgDodoago* self, GlobalContext* globalCtx);
+void BgDodoago_DoNothing(BgDodoago* self, GlobalContext* globalCtx);
+void func_80872288(BgDodoago* self, GlobalContext* globalCtx);
 
 const ActorInit Bg_Dodoago_InitVars = {
     ACTOR_BG_DODOAGO,
@@ -76,8 +76,8 @@ static ColliderCylinderInit sColCylinderInit1 = {
 
 static s16 sHasParent = false;
 
-void BgDodoago_SetupAction(BgDodoago* this, BgDodoagoActionFunc actionFunc) {
-    this->actionFunc = actionFunc;
+void BgDodoago_SetupAction(BgDodoago* self, BgDodoagoActionFunc actionFunc) {
+    self->actionFunc = actionFunc;
 }
 
 void BgDodoago_SpawnSparkles(Vec3f* vec, GlobalContext* globalCtx) {
@@ -108,90 +108,90 @@ static u8 D_808727C0[100];
 static s32 D_80872824;
 
 void BgDodoago_Init(Actor* thisx, GlobalContext* globalCtx) {
-    BgDodoago* this = THIS;
+    BgDodoago* self = THIS;
     s32 pad;
     CollisionHeader* colHeader = NULL;
 
-    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPolyActor_Init(&this->dyna, DPM_UNK);
+    Actor_ProcessInitChain(&self->dyna.actor, sInitChain);
+    DynaPolyActor_Init(&self->dyna, DPM_UNK);
     CollisionHeader_GetVirtual(&gDodongoLowerJawCol, &colHeader);
-    this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
-    ActorShape_Init(&this->dyna.actor.shape, 0.0f, NULL, 0.0f);
+    self->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &self->dyna.actor, colHeader);
+    ActorShape_Init(&self->dyna.actor.shape, 0.0f, NULL, 0.0f);
 
-    if (Flags_GetSwitch(globalCtx, (this->dyna.actor.params & 0x3F))) {
-        BgDodoago_SetupAction(this, BgDodoago_DoNothing);
-        this->dyna.actor.shape.rot.x = 0x1333;
+    if (Flags_GetSwitch(globalCtx, (self->dyna.actor.params & 0x3F))) {
+        BgDodoago_SetupAction(self, BgDodoago_DoNothing);
+        self->dyna.actor.shape.rot.x = 0x1333;
         globalCtx->roomCtx.unk_74[0] = globalCtx->roomCtx.unk_74[1] = 0xFF;
         return;
     }
 
-    Collider_InitCylinder(globalCtx, &this->colliders[0]);
-    Collider_InitCylinder(globalCtx, &this->colliders[1]);
-    Collider_InitCylinder(globalCtx, &this->colliders[2]);
-    Collider_SetCylinder(globalCtx, &this->colliders[0], &this->dyna.actor, &sColCylinderInit0);
-    Collider_SetCylinder(globalCtx, &this->colliders[1], &this->dyna.actor, &sColCylinderInit1);
-    Collider_SetCylinder(globalCtx, &this->colliders[2], &this->dyna.actor, &sColCylinderInit1);
-    BgDodoago_SetupAction(this, func_80871CF4);
+    Collider_InitCylinder(globalCtx, &self->colliders[0]);
+    Collider_InitCylinder(globalCtx, &self->colliders[1]);
+    Collider_InitCylinder(globalCtx, &self->colliders[2]);
+    Collider_SetCylinder(globalCtx, &self->colliders[0], &self->dyna.actor, &sColCylinderInit0);
+    Collider_SetCylinder(globalCtx, &self->colliders[1], &self->dyna.actor, &sColCylinderInit1);
+    Collider_SetCylinder(globalCtx, &self->colliders[2], &self->dyna.actor, &sColCylinderInit1);
+    BgDodoago_SetupAction(self, func_80871CF4);
     D_808727C0[0] = 0;
 }
 
 void BgDodoago_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    BgDodoago* this = THIS;
+    BgDodoago* self = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
-    Collider_DestroyCylinder(globalCtx, &this->colliders[0]);
-    Collider_DestroyCylinder(globalCtx, &this->colliders[1]);
-    Collider_DestroyCylinder(globalCtx, &this->colliders[2]);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, self->dyna.bgId);
+    Collider_DestroyCylinder(globalCtx, &self->colliders[0]);
+    Collider_DestroyCylinder(globalCtx, &self->colliders[1]);
+    Collider_DestroyCylinder(globalCtx, &self->colliders[2]);
 }
 
-void func_80871CF4(BgDodoago* this, GlobalContext* globalCtx) {
-    Actor* explosive = Actor_GetCollidedExplosive(globalCtx, &this->colliders[0].base);
+void func_80871CF4(BgDodoago* self, GlobalContext* globalCtx) {
+    Actor* explosive = Actor_GetCollidedExplosive(globalCtx, &self->colliders[0].base);
 
     if (explosive != NULL) {
-        this->unk_164 =
-            (Math_Vec3f_Yaw(&this->dyna.actor.world.pos, &explosive->world.pos) >= this->dyna.actor.shape.rot.y) ? 1
+        self->unk_164 =
+            (Math_Vec3f_Yaw(&self->dyna.actor.world.pos, &explosive->world.pos) >= self->dyna.actor.shape.rot.y) ? 1
                                                                                                                  : 0;
 
-        if (((globalCtx->roomCtx.unk_74[0] == 0xFF) && (this->unk_164 == 1)) ||
-            ((globalCtx->roomCtx.unk_74[1] == 0xFF) && (this->unk_164 == 0))) {
-            Flags_SetSwitch(globalCtx, (this->dyna.actor.params & 0x3F));
-            this->unk_164 = 0;
+        if (((globalCtx->roomCtx.unk_74[0] == 0xFF) && (self->unk_164 == 1)) ||
+            ((globalCtx->roomCtx.unk_74[1] == 0xFF) && (self->unk_164 == 0))) {
+            Flags_SetSwitch(globalCtx, (self->dyna.actor.params & 0x3F));
+            self->unk_164 = 0;
             Audio_PlaySoundGeneral(NA_SE_SY_CORRECT_CHIME, &D_801333D4, 4, &D_801333E0, &D_801333E0, &D_801333E8);
-            BgDodoago_SetupAction(this, func_80871FB8);
-            OnePointCutscene_Init(globalCtx, 3380, 160, &this->dyna.actor, MAIN_CAM);
-        } else if (globalCtx->roomCtx.unk_74[this->unk_164] == 0) {
-            OnePointCutscene_Init(globalCtx, 3065, 40, &this->dyna.actor, MAIN_CAM);
-            BgDodoago_SetupAction(this, func_80872288);
+            BgDodoago_SetupAction(self, func_80871FB8);
+            OnePointCutscene_Init(globalCtx, 3380, 160, &self->dyna.actor, MAIN_CAM);
+        } else if (globalCtx->roomCtx.unk_74[self->unk_164] == 0) {
+            OnePointCutscene_Init(globalCtx, 3065, 40, &self->dyna.actor, MAIN_CAM);
+            BgDodoago_SetupAction(self, func_80872288);
             Audio_PlaySoundGeneral(NA_SE_SY_CORRECT_CHIME, &D_801333D4, 4, &D_801333E0, &D_801333E0, &D_801333E8);
         } else {
-            OnePointCutscene_Init(globalCtx, 3065, 20, &this->dyna.actor, MAIN_CAM);
+            OnePointCutscene_Init(globalCtx, 3065, 20, &self->dyna.actor, MAIN_CAM);
             Audio_PlaySoundGeneral(NA_SE_SY_ERROR, &D_801333D4, 4, &D_801333E0, &D_801333E0, &D_801333E8);
             D_80872824 += 0x1E;
             return;
         }
 
         if (!sHasParent) {
-            this->dyna.actor.parent = explosive;
+            self->dyna.actor.parent = explosive;
             sHasParent = true;
             D_80872824 = 0x32;
         }
     } else if (Flags_GetEventChkInf(0xB0)) {
-        Collider_UpdateCylinder(&this->dyna.actor, &this->colliders[0]);
-        Collider_UpdateCylinder(&this->dyna.actor, &this->colliders[1]);
-        Collider_UpdateCylinder(&this->dyna.actor, &this->colliders[2]);
-        this->colliders[0].dim.pos.z += 200;
-        this->colliders[1].dim.pos.z += 215;
-        this->colliders[1].dim.pos.x += 90;
-        this->colliders[2].dim.pos.z += 215;
-        this->colliders[2].dim.pos.x -= 90;
+        Collider_UpdateCylinder(&self->dyna.actor, &self->colliders[0]);
+        Collider_UpdateCylinder(&self->dyna.actor, &self->colliders[1]);
+        Collider_UpdateCylinder(&self->dyna.actor, &self->colliders[2]);
+        self->colliders[0].dim.pos.z += 200;
+        self->colliders[1].dim.pos.z += 215;
+        self->colliders[1].dim.pos.x += 90;
+        self->colliders[2].dim.pos.z += 215;
+        self->colliders[2].dim.pos.x -= 90;
 
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->colliders[0].base);
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->colliders[1].base);
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->colliders[2].base);
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &self->colliders[0].base);
+        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &self->colliders[1].base);
+        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &self->colliders[2].base);
     }
 }
 
-void func_80871FB8(BgDodoago* this, GlobalContext* globalCtx) {
+void func_80871FB8(BgDodoago* self, GlobalContext* globalCtx) {
     Vec3f currentPos;
     Vec3f D_808725CC[] = {
         { 0.0f, -200.0f, 430.0f },   { 20.0f, -200.0f, 420.0f }, { -20.0f, -200.0f, 420.0f },
@@ -215,65 +215,65 @@ void func_80871FB8(BgDodoago* this, GlobalContext* globalCtx) {
 
     if (D_80872824 == 0x6C) {
         for (i = 10; i >= 0; i--) {
-            currentPos.x = D_808725CC[i].x + this->dyna.actor.world.pos.x;
-            currentPos.y = D_808725CC[i].y + this->dyna.actor.world.pos.y;
-            currentPos.z = D_808725CC[i].z + this->dyna.actor.world.pos.z;
+            currentPos.x = D_808725CC[i].x + self->dyna.actor.world.pos.x;
+            currentPos.y = D_808725CC[i].y + self->dyna.actor.world.pos.y;
+            currentPos.z = D_808725CC[i].z + self->dyna.actor.world.pos.z;
             func_80033480(globalCtx, &currentPos, 2.0f, 3, 0xC8, 0x4B, 1);
         }
     }
 
-    currentPos.x = this->dyna.actor.world.pos.x + 200.0f;
-    currentPos.y = this->dyna.actor.world.pos.y - 20.0f;
-    currentPos.z = this->dyna.actor.world.pos.z + 100.0f;
+    currentPos.x = self->dyna.actor.world.pos.x + 200.0f;
+    currentPos.y = self->dyna.actor.world.pos.y - 20.0f;
+    currentPos.z = self->dyna.actor.world.pos.z + 100.0f;
 
     BgDodoago_SpawnSparkles(&currentPos, globalCtx);
 
-    currentPos.x = this->dyna.actor.world.pos.x - 200.0f;
-    currentPos.y = this->dyna.actor.world.pos.y - 20.0f;
-    currentPos.z = this->dyna.actor.world.pos.z + 100.0f;
+    currentPos.x = self->dyna.actor.world.pos.x - 200.0f;
+    currentPos.y = self->dyna.actor.world.pos.y - 20.0f;
+    currentPos.z = self->dyna.actor.world.pos.z + 100.0f;
 
     BgDodoago_SpawnSparkles(&currentPos, globalCtx);
-    Math_StepToS(&this->unk_164, 0x64, 3);
+    Math_StepToS(&self->unk_164, 0x64, 3);
     func_800AA000(500.0f, 0x78, 0x14, 0xA);
 
-    if (Math_SmoothStepToS(&this->dyna.actor.shape.rot.x, 0x1333, 0x6E - this->unk_164, 0x3E8, 0x32) == 0) {
-        BgDodoago_SetupAction(this, BgDodoago_DoNothing);
-        Audio_PlaySoundGeneral(NA_SE_EV_STONE_BOUND, &this->dyna.actor.projectedPos, 4, &D_801333E0, &D_801333E0,
+    if (Math_SmoothStepToS(&self->dyna.actor.shape.rot.x, 0x1333, 0x6E - self->unk_164, 0x3E8, 0x32) == 0) {
+        BgDodoago_SetupAction(self, BgDodoago_DoNothing);
+        Audio_PlaySoundGeneral(NA_SE_EV_STONE_BOUND, &self->dyna.actor.projectedPos, 4, &D_801333E0, &D_801333E0,
                                &D_801333E8);
     } else {
-        Audio_PlaySoundGeneral(NA_SE_EV_STONE_STATUE_OPEN - SFX_FLAG, &this->dyna.actor.projectedPos, 4, &D_801333E0,
+        Audio_PlaySoundGeneral(NA_SE_EV_STONE_STATUE_OPEN - SFX_FLAG, &self->dyna.actor.projectedPos, 4, &D_801333E0,
                                &D_801333E0, &D_801333E8);
     }
 }
 
-void BgDodoago_DoNothing(BgDodoago* this, GlobalContext* globalCtx) {
+void BgDodoago_DoNothing(BgDodoago* self, GlobalContext* globalCtx) {
 }
 
-void func_80872288(BgDodoago* this, GlobalContext* globalCtx) {
-    globalCtx->roomCtx.unk_74[this->unk_164] += 5;
+void func_80872288(BgDodoago* self, GlobalContext* globalCtx) {
+    globalCtx->roomCtx.unk_74[self->unk_164] += 5;
 
-    if (globalCtx->roomCtx.unk_74[this->unk_164] == 0xFF) {
-        BgDodoago_SetupAction(this, func_80871CF4);
+    if (globalCtx->roomCtx.unk_74[self->unk_164] == 0xFF) {
+        BgDodoago_SetupAction(self, func_80871CF4);
     }
 }
 
 void BgDodoago_Update(Actor* thisx, GlobalContext* globalCtx) {
-    BgDodoago* this = THIS;
+    BgDodoago* self = THIS;
     EnBom* bomb;
 
-    if (this->dyna.actor.parent == NULL) {
-        if ((s32)(this->colliders[1].base.ocFlags1 & OC1_HIT) || (this->colliders[2].base.ocFlags1 & OC1_HIT)) {
+    if (self->dyna.actor.parent == NULL) {
+        if ((s32)(self->colliders[1].base.ocFlags1 & OC1_HIT) || (self->colliders[2].base.ocFlags1 & OC1_HIT)) {
 
-            if ((s32)(this->colliders[1].base.ocFlags1 & OC1_HIT)) {
-                bomb = (EnBom*)this->colliders[1].base.oc;
+            if ((s32)(self->colliders[1].base.ocFlags1 & OC1_HIT)) {
+                bomb = (EnBom*)self->colliders[1].base.oc;
             } else {
-                bomb = (EnBom*)this->colliders[2].base.oc;
+                bomb = (EnBom*)self->colliders[2].base.oc;
             }
-            this->colliders[1].base.ocFlags1 &= ~OC1_HIT;
-            this->colliders[2].base.ocFlags1 &= ~OC1_HIT;
+            self->colliders[1].base.ocFlags1 &= ~OC1_HIT;
+            self->colliders[2].base.ocFlags1 &= ~OC1_HIT;
             if (bomb->actor.category == ACTORCAT_EXPLOSIVE && bomb->actor.id == ACTOR_EN_BOM &&
                 bomb->actor.params == 0) {
-                this->dyna.actor.parent = &bomb->actor;
+                self->dyna.actor.parent = &bomb->actor;
                 bomb->timer = 50;
                 bomb->actor.speedXZ = 0.0f;
                 D_80872824 = 0;
@@ -281,16 +281,16 @@ void BgDodoago_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
     } else {
         D_80872824++;
-        Flags_GetSwitch(globalCtx, this->dyna.actor.params & 0x3F);
+        Flags_GetSwitch(globalCtx, self->dyna.actor.params & 0x3F);
         if (D_808727C0[0] == 0 && D_80872824 >= 0x8D) {
-            if (Flags_GetSwitch(globalCtx, this->dyna.actor.params & 0x3F)) {
+            if (Flags_GetSwitch(globalCtx, self->dyna.actor.params & 0x3F)) {
                 D_808727C0[0]++;
             } else {
-                this->dyna.actor.parent = NULL;
+                self->dyna.actor.parent = NULL;
             }
         }
     }
-    this->actionFunc(this, globalCtx);
+    self->actionFunc(self, globalCtx);
 }
 
 void BgDodoago_Draw(Actor* thisx, GlobalContext* globalCtx) {

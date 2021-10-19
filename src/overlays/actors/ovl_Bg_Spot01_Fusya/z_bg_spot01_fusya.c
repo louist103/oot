@@ -15,7 +15,7 @@ void BgSpot01Fusya_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgSpot01Fusya_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgSpot01Fusya_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_808AAA50(BgSpot01Fusya* this, GlobalContext* globalCtx);
+void func_808AAA50(BgSpot01Fusya* self, GlobalContext* globalCtx);
 
 const ActorInit Bg_Spot01_Fusya_InitVars = {
     ACTOR_BG_SPOT01_FUSYA,
@@ -36,43 +36,43 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 1300, ICHAIN_STOP),
 };
 
-void BgSpot01Fusya_SetupAction(BgSpot01Fusya* this, BgSpot01FusyaActionFunc actionFunc) {
-    this->actionFunc = actionFunc;
+void BgSpot01Fusya_SetupAction(BgSpot01Fusya* self, BgSpot01FusyaActionFunc actionFunc) {
+    self->actionFunc = actionFunc;
 }
 
 void BgSpot01Fusya_Init(Actor* thisx, GlobalContext* globalCtx) {
-    BgSpot01Fusya* this = THIS;
+    BgSpot01Fusya* self = THIS;
 
-    Actor_ProcessInitChain(&this->actor, sInitChain);
-    this->unk_154 = 100.0f;
-    this->unk_158 = 100.0f;
-    this->unk_15C = 0.5f;
+    Actor_ProcessInitChain(&self->actor, sInitChain);
+    self->unk_154 = 100.0f;
+    self->unk_158 = 100.0f;
+    self->unk_15C = 0.5f;
     if (gSaveContext.sceneSetupIndex < 4) {
         gSaveContext.eventChkInf[6] &= 0xFFDF;
     }
-    BgSpot01Fusya_SetupAction(this, func_808AAA50);
+    BgSpot01Fusya_SetupAction(self, func_808AAA50);
 }
 
 void BgSpot01Fusya_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
-void func_808AAA50(BgSpot01Fusya* this, GlobalContext* globalCtx) {
+void func_808AAA50(BgSpot01Fusya* self, GlobalContext* globalCtx) {
     f32 temp;
-    Actor* thisx = &this->actor;
+    Actor* thisx = &self->actor;
 
     if (gSaveContext.eventChkInf[6] & 0x20) {
-        this->unk_158 = 1800.0f;
+        self->unk_158 = 1800.0f;
     }
-    thisx->shape.rot.z += this->unk_154;
-    temp = ((this->unk_154 - 100.0f) / 1700.0f) + 1.0f;
+    thisx->shape.rot.z += self->unk_154;
+    temp = ((self->unk_154 - 100.0f) / 1700.0f) + 1.0f;
     func_800F436C(&thisx->projectedPos, 0x2085, temp);
-    Math_ApproachF(&this->unk_154, this->unk_158, this->unk_15C, 100.0f);
+    Math_ApproachF(&self->unk_154, self->unk_158, self->unk_15C, 100.0f);
 }
 
 void BgSpot01Fusya_Update(Actor* thisx, GlobalContext* globalCtx) {
-    BgSpot01Fusya* this = THIS;
+    BgSpot01Fusya* self = THIS;
 
-    this->actionFunc(this, globalCtx);
+    self->actionFunc(self, globalCtx);
 }
 
 void BgSpot01Fusya_Draw(Actor* thisx, GlobalContext* globalCtx) {

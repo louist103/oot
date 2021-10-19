@@ -15,11 +15,11 @@ void EnWonderTalk2_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnWonderTalk2_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnWonderTalk2_Update(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80B3A10C(EnWonderTalk2* this, GlobalContext* globalCtx);
-void func_80B3A4F8(EnWonderTalk2* this, GlobalContext* globalCtx);
-void func_80B3A15C(EnWonderTalk2* this, GlobalContext* globalCtx);
-void func_80B3A3D4(EnWonderTalk2* this, GlobalContext* globalCtx);
-void EnWonderTalk2_DoNothing(EnWonderTalk2* this, GlobalContext* globalCtx);
+void func_80B3A10C(EnWonderTalk2* self, GlobalContext* globalCtx);
+void func_80B3A4F8(EnWonderTalk2* self, GlobalContext* globalCtx);
+void func_80B3A15C(EnWonderTalk2* self, GlobalContext* globalCtx);
+void func_80B3A3D4(EnWonderTalk2* self, GlobalContext* globalCtx);
+void EnWonderTalk2_DoNothing(EnWonderTalk2* self, GlobalContext* globalCtx);
 
 const ActorInit En_Wonder_Talk2_InitVars = {
     ACTOR_EN_WONDER_TALK2,
@@ -40,113 +40,113 @@ void EnWonderTalk2_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void EnWonderTalk2_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
-    EnWonderTalk2* this = THIS;
+    EnWonderTalk2* self = THIS;
 
     osSyncPrintf("\n\n");
     // "Transparent message"
-    osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ 透明メッセージ君 ☆☆☆☆☆ %x\n" VT_RST, this->actor.params);
-    this->baseMsgId = (this->actor.params >> 6) & 0xFF;
-    if (this->actor.world.rot.z > 0) {
+    osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ 透明メッセージ君 ☆☆☆☆☆ %x\n" VT_RST, self->actor.params);
+    self->baseMsgId = (self->actor.params >> 6) & 0xFF;
+    if (self->actor.world.rot.z > 0) {
         s32 rangeIndex = 0;
-        s16 rotZmod10 = this->actor.world.rot.z;
+        s16 rotZmod10 = self->actor.world.rot.z;
 
         while (rotZmod10 > 10) {
             rotZmod10 -= 10;
             rangeIndex++;
         }
         // rangeIndex = rot.z/10 here
-        this->triggerRange = rotZmod10 * 40.0f;
+        self->triggerRange = rotZmod10 * 40.0f;
         if (rangeIndex > 6) {
             rangeIndex = 0;
         }
 
-        this->actor.targetMode = D_80B3A8E0[rangeIndex];
+        self->actor.targetMode = D_80B3A8E0[rangeIndex];
 
         osSyncPrintf("\n\n");
         // "originally?"
-        osSyncPrintf(VT_FGCOL(YELLOW) "☆☆☆☆☆ 元は？       ☆☆☆☆☆ %d\n" VT_RST, this->actor.world.rot.z);
+        osSyncPrintf(VT_FGCOL(YELLOW) "☆☆☆☆☆ 元は？       ☆☆☆☆☆ %d\n" VT_RST, self->actor.world.rot.z);
         // "The range is?"
-        osSyncPrintf(VT_FGCOL(PURPLE) "☆☆☆☆☆ レンジは？   ☆☆☆☆☆ %d\n" VT_RST, this->actor.targetMode);
+        osSyncPrintf(VT_FGCOL(PURPLE) "☆☆☆☆☆ レンジは？   ☆☆☆☆☆ %d\n" VT_RST, self->actor.targetMode);
         // "Is the range?"
-        osSyncPrintf(VT_FGCOL(CYAN) "☆☆☆☆☆ は、範囲わ？ ☆☆☆☆☆ %f\n" VT_RST, this->triggerRange);
+        osSyncPrintf(VT_FGCOL(CYAN) "☆☆☆☆☆ は、範囲わ？ ☆☆☆☆☆ %f\n" VT_RST, self->triggerRange);
         osSyncPrintf("\n\n");
         osSyncPrintf("\n\n");
         osSyncPrintf("\n\n");
     }
 
-    this->initPos = this->actor.world.pos;
-    this->switchFlag = (this->actor.params & 0x3F);
-    this->talkMode = ((this->actor.params >> 0xE) & 3);
+    self->initPos = self->actor.world.pos;
+    self->switchFlag = (self->actor.params & 0x3F);
+    self->talkMode = ((self->actor.params >> 0xE) & 3);
 
-    if (this->switchFlag == 0x3F) {
-        this->switchFlag = -1;
+    if (self->switchFlag == 0x3F) {
+        self->switchFlag = -1;
     }
-    if (this->switchFlag >= 0 && Flags_GetSwitch(globalCtx, this->switchFlag)) {
-        osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ Ｙｏｕ ａｒｅ Ｓｈｏｃｋ！  ☆☆☆☆☆ %d\n" VT_RST, this->switchFlag);
-        Actor_Kill(&this->actor);
+    if (self->switchFlag >= 0 && Flags_GetSwitch(globalCtx, self->switchFlag)) {
+        osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ Ｙｏｕ ａｒｅ Ｓｈｏｃｋ！  ☆☆☆☆☆ %d\n" VT_RST, self->switchFlag);
+        Actor_Kill(&self->actor);
         return;
     }
-    if ((this->talkMode == 1) && (globalCtx->sceneNum == SCENE_MEN) && (this->switchFlag != 0x08) &&
-        (this->switchFlag != 0x16) && (this->switchFlag != 0x2F)) {
+    if ((self->talkMode == 1) && (globalCtx->sceneNum == SCENE_MEN) && (self->switchFlag != 0x08) &&
+        (self->switchFlag != 0x16) && (self->switchFlag != 0x2F)) {
 
-        this->unk_15A = false;
-        this->talkMode = 4;
+        self->unk_15A = false;
+        self->talkMode = 4;
     }
-    if (this->talkMode == 3) {
-        this->actor.flags &= ~0x08000000;
-        this->actionFunc = EnWonderTalk2_DoNothing;
+    if (self->talkMode == 3) {
+        self->actor.flags &= ~0x08000000;
+        self->actionFunc = EnWonderTalk2_DoNothing;
     } else {
-        this->actionFunc = func_80B3A10C;
+        self->actionFunc = func_80B3A10C;
     }
 }
 
-void func_80B3A10C(EnWonderTalk2* this, GlobalContext* globalCtx) {
-    this->actor.textId = 0x200;
-    this->actor.textId |= this->baseMsgId;
-    if (this->talkMode == 1 || this->talkMode == 4) {
-        this->actionFunc = func_80B3A4F8;
+void func_80B3A10C(EnWonderTalk2* self, GlobalContext* globalCtx) {
+    self->actor.textId = 0x200;
+    self->actor.textId |= self->baseMsgId;
+    if (self->talkMode == 1 || self->talkMode == 4) {
+        self->actionFunc = func_80B3A4F8;
     } else {
-        this->actionFunc = func_80B3A15C;
+        self->actionFunc = func_80B3A15C;
     }
 }
 
-void func_80B3A15C(EnWonderTalk2* this, GlobalContext* globalCtx) {
+void func_80B3A15C(EnWonderTalk2* self, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    this->unk_158++;
-    if ((this->switchFlag >= 0) && Flags_GetSwitch(globalCtx, this->switchFlag)) {
-        if (!this->unk_15A) {
-            this->actor.flags &= ~1;
-            this->unk_15A = true;
+    self->unk_158++;
+    if ((self->switchFlag >= 0) && Flags_GetSwitch(globalCtx, self->switchFlag)) {
+        if (!self->unk_15A) {
+            self->actor.flags &= ~1;
+            self->unk_15A = true;
         }
-    } else if (func_8002F194(&this->actor, globalCtx)) {
-        if ((this->switchFlag >= 0) && (this->talkMode != 2)) {
-            Flags_SetSwitch(globalCtx, this->switchFlag);
+    } else if (func_8002F194(&self->actor, globalCtx)) {
+        if ((self->switchFlag >= 0) && (self->talkMode != 2)) {
+            Flags_SetSwitch(globalCtx, self->switchFlag);
             // "I saved it! All of it!"
-            osSyncPrintf(VT_FGCOL(PURPLE) "☆☆☆☆☆ セーブしたよ！おもいっきり！ %x\n" VT_RST, this->switchFlag);
+            osSyncPrintf(VT_FGCOL(PURPLE) "☆☆☆☆☆ セーブしたよ！おもいっきり！ %x\n" VT_RST, self->switchFlag);
         }
 
-        this->actionFunc = func_80B3A10C;
+        self->actionFunc = func_80B3A10C;
     } else {
-        s16 yawDiff = ABS((s16)(this->actor.yawTowardsPlayer - this->actor.world.rot.y));
+        s16 yawDiff = ABS((s16)(self->actor.yawTowardsPlayer - self->actor.world.rot.y));
 
-        if (!((this->actor.xzDistToPlayer > 40.0f + this->triggerRange) ||
-              (fabsf(player->actor.world.pos.y - this->actor.world.pos.y) > 100.0f) || (yawDiff >= 0x4000))) {
-            if (this->unk_158 >= 2) {
+        if (!((self->actor.xzDistToPlayer > 40.0f + self->triggerRange) ||
+              (fabsf(player->actor.world.pos.y - self->actor.world.pos.y) > 100.0f) || (yawDiff >= 0x4000))) {
+            if (self->unk_158 >= 2) {
                 osSyncPrintf("\n\n");
                 // "Transparent Message Kimi Set"
-                osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ 透明メッセージ君せっと %x\n" VT_RST, this->actor.params);
+                osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ 透明メッセージ君せっと %x\n" VT_RST, self->actor.params);
                 // "Save Information"
-                osSyncPrintf(VT_FGCOL(YELLOW) "☆☆☆☆☆ セーブ情報 \t           %x\n" VT_RST, this->switchFlag);
+                osSyncPrintf(VT_FGCOL(YELLOW) "☆☆☆☆☆ セーブ情報 \t           %x\n" VT_RST, self->switchFlag);
                 // "Specified message type"
-                osSyncPrintf(VT_FGCOL(PURPLE) "☆☆☆☆☆ 指定メッセージ種類     %x\n" VT_RST, this->baseMsgId);
+                osSyncPrintf(VT_FGCOL(PURPLE) "☆☆☆☆☆ 指定メッセージ種類     %x\n" VT_RST, self->baseMsgId);
                 // "Actual message type"
-                osSyncPrintf(VT_FGCOL(CYAN) "☆☆☆☆☆ 実質メッセージ種類     %x\n" VT_RST, this->actor.textId);
+                osSyncPrintf(VT_FGCOL(CYAN) "☆☆☆☆☆ 実質メッセージ種類     %x\n" VT_RST, self->actor.textId);
                 // "Specified range"
-                osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ 指定範囲               %d\n" VT_RST, this->actor.world.rot.z);
+                osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ 指定範囲               %d\n" VT_RST, self->actor.world.rot.z);
                 // "Processing range"
-                osSyncPrintf(VT_FGCOL(YELLOW) "☆☆☆☆☆ 処理範囲               %f\n" VT_RST, this->triggerRange);
-                switch (this->talkMode) {
+                osSyncPrintf(VT_FGCOL(YELLOW) "☆☆☆☆☆ 処理範囲               %f\n" VT_RST, self->triggerRange);
+                switch (self->talkMode) {
                     case 0:
                         // "Normal"
                         osSyncPrintf(VT_FGCOL(PURPLE) " ☆☆ 通常 ☆☆ \n" VT_RST);
@@ -162,13 +162,13 @@ void func_80B3A15C(EnWonderTalk2* this, GlobalContext* globalCtx) {
                 }
             }
 
-            this->unk_158 = 0;
-            func_8002F1C4(&this->actor, globalCtx, this->triggerRange + 50.0f, 100.0f, EXCH_ITEM_NONE);
+            self->unk_158 = 0;
+            func_8002F1C4(&self->actor, globalCtx, self->triggerRange + 50.0f, 100.0f, EXCH_ITEM_NONE);
         }
     }
 }
 
-void func_80B3A3D4(EnWonderTalk2* this, GlobalContext* globalCtx) {
+void func_80B3A3D4(EnWonderTalk2* self, GlobalContext* globalCtx) {
     if (BREG(2) != 0) {
         // "Oh"
         osSyncPrintf(VT_FGCOL(PURPLE) "☆☆☆☆☆ わー %d\n" VT_RST, func_8010BDBC(&globalCtx->msgCtx));
@@ -185,60 +185,60 @@ void func_80B3A3D4(EnWonderTalk2* this, GlobalContext* globalCtx) {
                 break;
             }
         case 0:
-            if ((this->switchFlag >= 0) && (this->talkMode != 4)) {
-                Flags_SetSwitch(globalCtx, this->switchFlag);
+            if ((self->switchFlag >= 0) && (self->talkMode != 4)) {
+                Flags_SetSwitch(globalCtx, self->switchFlag);
                 // "(Forced) I saved it! All of it!"
-                osSyncPrintf(VT_FGCOL(PURPLE) "☆☆☆☆☆ (強制)セーブしたよ！おもいっきり！ %x\n" VT_RST, this->switchFlag);
+                osSyncPrintf(VT_FGCOL(PURPLE) "☆☆☆☆☆ (強制)セーブしたよ！おもいっきり！ %x\n" VT_RST, self->switchFlag);
             }
 
-            if (this->talkMode == 4) {
-                this->unk_15A = true;
+            if (self->talkMode == 4) {
+                self->unk_15A = true;
             }
-            this->actor.flags &= ~0x11;
+            self->actor.flags &= ~0x11;
             func_8002DF54(globalCtx, NULL, 7);
-            this->unk_156 = true;
-            this->actionFunc = func_80B3A4F8;
+            self->unk_156 = true;
+            self->actionFunc = func_80B3A4F8;
             break;
     }
 }
 
-void func_80B3A4F8(EnWonderTalk2* this, GlobalContext* globalCtx) {
+void func_80B3A4F8(EnWonderTalk2* self, GlobalContext* globalCtx) {
     Player* player;
 
     player = GET_PLAYER(globalCtx);
-    this->unk_158++;
-    if (this->switchFlag >= 0 && Flags_GetSwitch(globalCtx, this->switchFlag)) {
-        if (!this->unk_15A) {
-            this->actor.flags &= ~1;
-            this->unk_15A = true;
+    self->unk_158++;
+    if (self->switchFlag >= 0 && Flags_GetSwitch(globalCtx, self->switchFlag)) {
+        if (!self->unk_15A) {
+            self->actor.flags &= ~1;
+            self->unk_15A = true;
         }
-    } else if ((this->talkMode != 4) || !this->unk_15A) {
+    } else if ((self->talkMode != 4) || !self->unk_15A) {
         if (BREG(2) != 0) {
             // "distance"
-            osSyncPrintf(VT_FGCOL(PURPLE) "☆☆☆☆☆ きょり %f\n" VT_RST, this->actor.xzDistToPlayer);
+            osSyncPrintf(VT_FGCOL(PURPLE) "☆☆☆☆☆ きょり %f\n" VT_RST, self->actor.xzDistToPlayer);
         }
-        if (((this->actor.xzDistToPlayer < (40.0f + this->triggerRange)) &&
-             (fabsf(player->actor.world.pos.y - this->actor.world.pos.y) < 100.0f)) &&
+        if (((self->actor.xzDistToPlayer < (40.0f + self->triggerRange)) &&
+             (fabsf(player->actor.world.pos.y - self->actor.world.pos.y) < 100.0f)) &&
             !Gameplay_InCsMode(globalCtx)) {
-            if (this->unk_158 >= 2) {
+            if (self->unk_158 >= 2) {
                 osSyncPrintf("\n\n");
                 // "Transparent Message Kimi Seto"
-                osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ 透明メッセージ君せっと %x\n" VT_RST, this->actor.params);
+                osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ 透明メッセージ君せっと %x\n" VT_RST, self->actor.params);
                 // "Save Information"
-                osSyncPrintf(VT_FGCOL(YELLOW) "☆☆☆☆☆ セーブ情報 \t           %x\n" VT_RST, this->switchFlag);
+                osSyncPrintf(VT_FGCOL(YELLOW) "☆☆☆☆☆ セーブ情報 \t           %x\n" VT_RST, self->switchFlag);
                 // "Specified message type"
-                osSyncPrintf(VT_FGCOL(PURPLE) "☆☆☆☆☆ 指定メッセージ種類     %x\n" VT_RST, this->baseMsgId);
+                osSyncPrintf(VT_FGCOL(PURPLE) "☆☆☆☆☆ 指定メッセージ種類     %x\n" VT_RST, self->baseMsgId);
                 // "Real message type"
-                osSyncPrintf(VT_FGCOL(CYAN) "☆☆☆☆☆ 実質メッセージ種類     %x\n" VT_RST, this->actor.textId);
+                osSyncPrintf(VT_FGCOL(CYAN) "☆☆☆☆☆ 実質メッセージ種類     %x\n" VT_RST, self->actor.textId);
                 // "Specified range"
-                osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ 指定範囲               %d\n" VT_RST, this->actor.world.rot.z);
+                osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ 指定範囲               %d\n" VT_RST, self->actor.world.rot.z);
                 // "Processing range"
-                osSyncPrintf(VT_FGCOL(YELLOW) "☆☆☆☆☆ 処理範囲               %f\n" VT_RST, this->triggerRange);
+                osSyncPrintf(VT_FGCOL(YELLOW) "☆☆☆☆☆ 処理範囲               %f\n" VT_RST, self->triggerRange);
                 // "What is your range?"
-                osSyncPrintf(VT_FGCOL(PURPLE) "☆☆☆☆☆ レンジは？ \t\t   %d\n" VT_RST, this->actor.targetMode);
+                osSyncPrintf(VT_FGCOL(PURPLE) "☆☆☆☆☆ レンジは？ \t\t   %d\n" VT_RST, self->actor.targetMode);
                 osSyncPrintf("\n\n");
                 osSyncPrintf("\n\n");
-                switch (this->talkMode) {
+                switch (self->talkMode) {
                     case 1:
                         // "Compulsion"
                         osSyncPrintf(VT_FGCOL(PURPLE) " ☆☆ 強制 ☆☆ \n" VT_RST);
@@ -251,42 +251,42 @@ void func_80B3A4F8(EnWonderTalk2* this, GlobalContext* globalCtx) {
 
                 osSyncPrintf("\n\n");
             }
-            this->unk_158 = 0;
-            if (!this->unk_156) {
-                func_8010B680(globalCtx, this->actor.textId, NULL);
+            self->unk_158 = 0;
+            if (!self->unk_156) {
+                func_8010B680(globalCtx, self->actor.textId, NULL);
                 func_8002DF54(globalCtx, NULL, 8);
-                this->actor.flags |= 0x11;
-                this->actionFunc = func_80B3A3D4;
+                self->actor.flags |= 0x11;
+                self->actionFunc = func_80B3A3D4;
             }
 
         } else {
-            this->unk_156 = false;
+            self->unk_156 = false;
         }
     }
 }
 
-void EnWonderTalk2_DoNothing(EnWonderTalk2* this, GlobalContext* globalCtx) {
+void EnWonderTalk2_DoNothing(EnWonderTalk2* self, GlobalContext* globalCtx) {
 }
 
 void EnWonderTalk2_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
-    EnWonderTalk2* this = THIS;
+    EnWonderTalk2* self = THIS;
 
-    this->actionFunc(this, globalCtx);
-    this->actor.world.pos.y = this->initPos.y;
+    self->actionFunc(self, globalCtx);
+    self->actor.world.pos.y = self->initPos.y;
 
-    Actor_SetFocus(&this->actor, this->height);
+    Actor_SetFocus(&self->actor, self->height);
 
     if (BREG(0) != 0) {
-        if (this->unk_158 != 0) {
-            if ((this->unk_158 & 1) == 0) {
-                DebugDisplay_AddObject(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
-                                       this->actor.world.rot.x, this->actor.world.rot.y, this->actor.world.rot.z, 1.0f,
+        if (self->unk_158 != 0) {
+            if ((self->unk_158 & 1) == 0) {
+                DebugDisplay_AddObject(self->actor.world.pos.x, self->actor.world.pos.y, self->actor.world.pos.z,
+                                       self->actor.world.rot.x, self->actor.world.rot.y, self->actor.world.rot.z, 1.0f,
                                        1.0f, 1.0f, 70, 70, 70, 255, 4, globalCtx->state.gfxCtx);
             }
         } else {
-            DebugDisplay_AddObject(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
-                                   this->actor.world.rot.x, this->actor.world.rot.y, this->actor.world.rot.z, 1.0f,
+            DebugDisplay_AddObject(self->actor.world.pos.x, self->actor.world.pos.y, self->actor.world.pos.z,
+                                   self->actor.world.rot.x, self->actor.world.rot.y, self->actor.world.rot.z, 1.0f,
                                    1.0f, 1.0f, 0, 0, 255, 255, 4, globalCtx->state.gfxCtx);
         }
     }

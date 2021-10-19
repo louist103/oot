@@ -15,7 +15,7 @@ void DemoShd_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DemoShd_Update(Actor* thisx, GlobalContext* globalCtx);
 void DemoShd_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80991298(DemoShd* this, GlobalContext* globalCtx);
+void func_80991298(DemoShd* self, GlobalContext* globalCtx);
 
 const ActorInit Demo_Shd_InitVars = {
     ACTOR_DEMO_SHD,
@@ -31,24 +31,24 @@ const ActorInit Demo_Shd_InitVars = {
 
 #include "z_demo_shd_gfxdata.c"
 
-void DemoShd_SetupAction(DemoShd* this, DemoShdActionFunc actionFunc) {
-    this->actionFunc = actionFunc;
+void DemoShd_SetupAction(DemoShd* self, DemoShdActionFunc actionFunc) {
+    self->actionFunc = actionFunc;
 }
 
 void DemoShd_Init(Actor* thisx, GlobalContext* globalCtx) {
-    DemoShd* this = THIS;
+    DemoShd* self = THIS;
 
-    this->unk_14C = 0;
-    DemoShd_SetupAction(this, func_80991298);
-    Actor_SetScale(&this->actor, 0.4f);
-    this->actor.world.pos.y = 0.0f;
-    this->actor.world.pos.x = 0.0f;
+    self->unk_14C = 0;
+    DemoShd_SetupAction(self, func_80991298);
+    Actor_SetScale(&self->actor, 0.4f);
+    self->actor.world.pos.y = 0.0f;
+    self->actor.world.pos.x = 0.0f;
 }
 
 void DemoShd_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
-void func_80991298(DemoShd* this, GlobalContext* globalCtx) {
+void func_80991298(DemoShd* self, GlobalContext* globalCtx) {
     if ((globalCtx->csCtx.state != CS_STATE_IDLE && globalCtx->csCtx.npcActions[0] != NULL) ||
         (globalCtx->csCtx.state != CS_STATE_IDLE && globalCtx->csCtx.npcActions[1] != NULL)) {
         if (globalCtx->csCtx.frames == 800) {
@@ -64,12 +64,12 @@ void func_80991298(DemoShd* this, GlobalContext* globalCtx) {
 
         if (npcAction0 != NULL) {
             if (npcAction0->action == 2) {
-                if (!(this->unk_14C & 1)) {
-                    this->unk_14E = npcAction0->startPos.x;
+                if (!(self->unk_14C & 1)) {
+                    self->unk_14E = npcAction0->startPos.x;
                 }
-                this->unk_14C |= 1;
+                self->unk_14C |= 1;
             } else {
-                this->unk_14C &= ~1;
+                self->unk_14C &= ~1;
             }
         }
     }
@@ -79,29 +79,29 @@ void func_80991298(DemoShd* this, GlobalContext* globalCtx) {
 
         if (npcAction1 != NULL) {
             if (npcAction1->action == 2) {
-                if (!(this->unk_14C & 2)) {
-                    this->unk_14E = npcAction1->startPos.x;
+                if (!(self->unk_14C & 2)) {
+                    self->unk_14E = npcAction1->startPos.x;
                 }
-                this->unk_14C |= 2;
+                self->unk_14C |= 2;
             } else {
-                this->unk_14C &= ~2;
+                self->unk_14C &= ~2;
             }
         }
     }
 
-    this->unk_14E++;
+    self->unk_14E++;
 }
 
 void DemoShd_Update(Actor* thisx, GlobalContext* globalCtx) {
-    DemoShd* this = THIS;
+    DemoShd* self = THIS;
 
-    this->actionFunc(this, globalCtx);
+    self->actionFunc(self, globalCtx);
 }
 
 void DemoShd_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    DemoShd* this = THIS;
+    DemoShd* self = THIS;
     s32 pad;
-    u32 unk_14E = this->unk_14E;
+    u32 unk_14E = self->unk_14E;
 
     if (1) {} // Necessary to match, can be anywhere in the function
 
@@ -113,11 +113,11 @@ void DemoShd_Draw(Actor* thisx, GlobalContext* globalCtx) {
               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, D_809932D0);
 
-    if (this->unk_14C & 1) {
+    if (self->unk_14C & 1) {
         gSPDisplayList(POLY_XLU_DISP++, Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0x3FF - ((unk_14E * 5) & 0x3FF),
                                                          16, 256, 1, 0, 255 - ((unk_14E * 5) & 255), 32, 32));
         gSPDisplayList(POLY_XLU_DISP++, D_80993390);
-    } else if (this->unk_14C & 2) {
+    } else if (self->unk_14C & 2) {
         gSPDisplayList(POLY_XLU_DISP++, Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0x3FF - ((unk_14E * 5) & 0x3FF),
                                                          16, 256, 1, 0, 255 - ((unk_14E * 5) & 255), 32, 32));
         gSPDisplayList(POLY_XLU_DISP++, D_809934B8);

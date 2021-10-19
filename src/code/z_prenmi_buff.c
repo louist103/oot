@@ -3,25 +3,25 @@
 #define COLD_RESET 0
 #define NMI 1
 
-void PreNmiBuff_Init(PreNmiBuff* this) {
-    this->resetting = false;
+void PreNmiBuff_Init(PreNmiBuff* self) {
+    self->resetting = false;
 
     if (osResetType == COLD_RESET) {
-        this->resetCount = 0;
-        this->duration = 0;
+        self->resetCount = 0;
+        self->duration = 0;
     } else {
-        this->resetCount++;
-        this->duration += this->resetTime;
+        self->resetCount++;
+        self->duration += self->resetTime;
     }
 
-    this->resetTime = 0;
+    self->resetTime = 0;
 }
 
-void PreNmiBuff_SetReset(PreNmiBuff* this) {
-    this->resetting = true;
-    this->resetTime = osGetTime();
+void PreNmiBuff_SetReset(PreNmiBuff* self) {
+    self->resetting = true;
+    self->resetTime = osGetTime();
 }
 
-u32 PreNmiBuff_IsResetting(PreNmiBuff* this) {
-    return this->resetting;
+u32 PreNmiBuff_IsResetting(PreNmiBuff* self) {
+    return self->resetting;
 }

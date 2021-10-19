@@ -17,22 +17,22 @@ void EnFish_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnFish_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnFish_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void EnFish_Respawning_SetupSlowDown(EnFish* this);
-void EnFish_Respawning_SlowDown(EnFish* this, GlobalContext* globalCtx);
-void EnFish_Respawning_SetupFollowChild(EnFish* this);
-void EnFish_Respawning_FollowChild(EnFish* this, GlobalContext* globalCtx);
-void EnFish_Respawning_SetupFleePlayer(EnFish* this);
-void EnFish_Respawning_FleePlayer(EnFish* this, GlobalContext* globalCtx);
-void EnFish_Respawning_SetupApproachPlayer(EnFish* this);
-void EnFish_Respawning_ApproachPlayer(EnFish* this, GlobalContext* globalCtx);
-void EnFish_Dropped_SetupFall(EnFish* this);
-void EnFish_Dropped_Fall(EnFish* this, GlobalContext* globalCtx);
-void EnFish_Dropped_SetupFlopOnGround(EnFish* this);
-void EnFish_Dropped_FlopOnGround(EnFish* this, GlobalContext* globalCtx);
-void EnFish_Dropped_SetupSwimAway(EnFish* this);
-void EnFish_Dropped_SwimAway(EnFish* this, GlobalContext* globalCtx);
-void EnFish_Unique_SetupSwimIdle(EnFish* this);
-void EnFish_Unique_SwimIdle(EnFish* this, GlobalContext* globalCtx);
+void EnFish_Respawning_SetupSlowDown(EnFish* self);
+void EnFish_Respawning_SlowDown(EnFish* self, GlobalContext* globalCtx);
+void EnFish_Respawning_SetupFollowChild(EnFish* self);
+void EnFish_Respawning_FollowChild(EnFish* self, GlobalContext* globalCtx);
+void EnFish_Respawning_SetupFleePlayer(EnFish* self);
+void EnFish_Respawning_FleePlayer(EnFish* self, GlobalContext* globalCtx);
+void EnFish_Respawning_SetupApproachPlayer(EnFish* self);
+void EnFish_Respawning_ApproachPlayer(EnFish* self, GlobalContext* globalCtx);
+void EnFish_Dropped_SetupFall(EnFish* self);
+void EnFish_Dropped_Fall(EnFish* self, GlobalContext* globalCtx);
+void EnFish_Dropped_SetupFlopOnGround(EnFish* self);
+void EnFish_Dropped_FlopOnGround(EnFish* self, GlobalContext* globalCtx);
+void EnFish_Dropped_SetupSwimAway(EnFish* self);
+void EnFish_Dropped_SwimAway(EnFish* self, GlobalContext* globalCtx);
+void EnFish_Unique_SetupSwimIdle(EnFish* self);
+void EnFish_Unique_SwimIdle(EnFish* self, GlobalContext* globalCtx);
 
 // Used in the cutscene functions
 static Actor* D_80A17010 = NULL;
@@ -89,24 +89,24 @@ f32 EnFish_XZDistanceSquared(Vec3f* v1, Vec3f* v2) {
     return SQ(v1->x - v2->x) + SQ(v1->z - v2->z);
 }
 
-void EnFish_SetInWaterAnimation(EnFish* this) {
-    Animation_Change(&this->skelAnime, &gFishInWaterAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gFishInWaterAnim),
+void EnFish_SetInWaterAnimation(EnFish* self) {
+    Animation_Change(&self->skelAnime, &gFishInWaterAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gFishInWaterAnim),
                      ANIMMODE_LOOP_INTERP, 2.0f);
 }
 
-void EnFish_SetOutOfWaterAnimation(EnFish* this) {
-    Animation_Change(&this->skelAnime, &gFishOutOfWaterAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gFishOutOfWaterAnim),
+void EnFish_SetOutOfWaterAnimation(EnFish* self) {
+    Animation_Change(&self->skelAnime, &gFishOutOfWaterAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gFishOutOfWaterAnim),
                      ANIMMODE_LOOP_INTERP, 2.0f);
 }
 
-void EnFish_BeginRespawn(EnFish* this) {
-    this->respawnTimer = 400;
-    Actor_SetScale(&this->actor, 0.001f);
-    this->actor.draw = NULL;
+void EnFish_BeginRespawn(EnFish* self) {
+    self->respawnTimer = 400;
+    Actor_SetScale(&self->actor, 0.001f);
+    self->actor.draw = NULL;
 }
 
-void EnFish_SetCutsceneData(EnFish* this) {
-    Actor* thisx = &this->actor;
+void EnFish_SetCutsceneData(EnFish* self) {
+    Actor* thisx = &self->actor;
 
     if (D_80A17010 == NULL) {
         D_80A17010 = thisx;
@@ -119,66 +119,66 @@ void EnFish_SetCutsceneData(EnFish* this) {
         D_80A17014 = 10.0f;
         D_80A17018 = 0.0f;
         thisx->flags |= 0x10;
-        EnFish_SetOutOfWaterAnimation(this);
+        EnFish_SetOutOfWaterAnimation(self);
     }
 }
 
-void EnFish_ClearCutsceneData(EnFish* this) {
+void EnFish_ClearCutsceneData(EnFish* self) {
     D_80A17010 = NULL;
     D_80A17014 = 0.0f;
     D_80A17018 = 0.0f;
 }
 
 void EnFish_Init(Actor* thisx, GlobalContext* globalCtx) {
-    EnFish* this = THIS;
-    s16 params = this->actor.params;
+    EnFish* self = THIS;
+    s16 params = self->actor.params;
 
-    Actor_ProcessInitChain(&this->actor, sInitChain);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gFishSkel, &gFishInWaterAnim, this->jointTable, this->morphTable,
+    Actor_ProcessInitChain(&self->actor, sInitChain);
+    SkelAnime_InitFlex(globalCtx, &self->skelAnime, &gFishSkel, &gFishInWaterAnim, self->jointTable, self->morphTable,
                        7);
-    Collider_InitJntSph(globalCtx, &this->collider);
-    Collider_SetJntSph(globalCtx, &this->collider, &this->actor, &sJntSphInit, this->colliderItems);
-    this->actor.colChkInfo.mass = 50;
-    this->slowPhase = Rand_ZeroOne() * (0xFFFF + 0.5f);
-    this->fastPhase = Rand_ZeroOne() * (0xFFFF + 0.5f);
+    Collider_InitJntSph(globalCtx, &self->collider);
+    Collider_SetJntSph(globalCtx, &self->collider, &self->actor, &sJntSphInit, self->colliderItems);
+    self->actor.colChkInfo.mass = 50;
+    self->slowPhase = Rand_ZeroOne() * (0xFFFF + 0.5f);
+    self->fastPhase = Rand_ZeroOne() * (0xFFFF + 0.5f);
 
     if (params == FISH_DROPPED) {
-        this->actor.flags |= 0x10;
-        ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 8.0f);
-        EnFish_Dropped_SetupFall(this);
+        self->actor.flags |= 0x10;
+        ActorShape_Init(&self->actor.shape, 0.0f, ActorShadow_DrawCircle, 8.0f);
+        EnFish_Dropped_SetupFall(self);
     } else if (params == FISH_SWIMMING_UNIQUE) {
-        EnFish_Unique_SetupSwimIdle(this);
+        EnFish_Unique_SetupSwimIdle(self);
     } else {
-        EnFish_Respawning_SetupSlowDown(this);
+        EnFish_Respawning_SetupSlowDown(self);
     }
 }
 
 void EnFish_Destroy(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
-    EnFish* this = THIS;
+    EnFish* self = THIS;
 
-    Collider_DestroyJntSph(globalCtx, &this->collider);
+    Collider_DestroyJntSph(globalCtx, &self->collider);
 }
 
-void EnFish_SetYOffset(EnFish* this) {
-    this->actor.shape.yOffset += (Math_SinS(this->slowPhase) * 10.0f + Math_SinS(this->fastPhase) * 5.0f);
-    this->actor.shape.yOffset = CLAMP(this->actor.shape.yOffset, -200.0f, 200.0f);
+void EnFish_SetYOffset(EnFish* self) {
+    self->actor.shape.yOffset += (Math_SinS(self->slowPhase) * 10.0f + Math_SinS(self->fastPhase) * 5.0f);
+    self->actor.shape.yOffset = CLAMP(self->actor.shape.yOffset, -200.0f, 200.0f);
 }
 
-s32 EnFish_InBottleRange(EnFish* this, GlobalContext* globalCtx) {
+s32 EnFish_InBottleRange(EnFish* self, GlobalContext* globalCtx) {
     s32 pad;
     Player* player = GET_PLAYER(globalCtx);
     Vec3f sp1C;
 
-    if (this->actor.xzDistToPlayer < 32.0f) {
-        sp1C.x = (Math_SinS(this->actor.yawTowardsPlayer + 0x8000) * 16.0f) + player->actor.world.pos.x;
+    if (self->actor.xzDistToPlayer < 32.0f) {
+        sp1C.x = (Math_SinS(self->actor.yawTowardsPlayer + 0x8000) * 16.0f) + player->actor.world.pos.x;
         sp1C.y = player->actor.world.pos.y;
-        sp1C.z = (Math_CosS(this->actor.yawTowardsPlayer + 0x8000) * 16.0f) + player->actor.world.pos.z;
+        sp1C.z = (Math_CosS(self->actor.yawTowardsPlayer + 0x8000) * 16.0f) + player->actor.world.pos.z;
 
-        //! @bug: this check is superfluous: it is automatically satisfied if the coarse check is satisfied. It may have
+        //! @bug: self check is superfluous: it is automatically satisfied if the coarse check is satisfied. It may have
         //! been intended to check the actor is in front of Player, but yawTowardsPlayer does not depend on Player's
         //! world rotation.
-        if (EnFish_XZDistanceSquared(&sp1C, &this->actor.world.pos) <= SQ(20.0f)) {
+        if (EnFish_XZDistanceSquared(&sp1C, &self->actor.world.pos) <= SQ(20.0f)) {
             return true;
         }
     }
@@ -186,103 +186,103 @@ s32 EnFish_InBottleRange(EnFish* this, GlobalContext* globalCtx) {
     return false;
 }
 
-s32 EnFish_CheckXZDistanceToPlayer(EnFish* this, GlobalContext* globalCtx) {
-    return (this->actor.xzDistToPlayer < 60.0f);
+s32 EnFish_CheckXZDistanceToPlayer(EnFish* self, GlobalContext* globalCtx) {
+    return (self->actor.xzDistToPlayer < 60.0f);
 }
 
 // Respawning type functions
 
-void EnFish_Respawning_SetupSlowDown(EnFish* this) {
-    this->actor.gravity = 0.0f;
-    this->actor.minVelocityY = 0.0f;
-    this->timer = Rand_S16Offset(5, 35);
-    this->unk_250 = 0;
-    EnFish_SetInWaterAnimation(this);
-    this->actionFunc = EnFish_Respawning_SlowDown;
+void EnFish_Respawning_SetupSlowDown(EnFish* self) {
+    self->actor.gravity = 0.0f;
+    self->actor.minVelocityY = 0.0f;
+    self->timer = Rand_S16Offset(5, 35);
+    self->unk_250 = 0;
+    EnFish_SetInWaterAnimation(self);
+    self->actionFunc = EnFish_Respawning_SlowDown;
 }
 
-void EnFish_Respawning_SlowDown(EnFish* this, GlobalContext* globalCtx) {
-    EnFish_SetYOffset(this);
-    Math_SmoothStepToF(&this->actor.speedXZ, 0.0f, 0.05f, 0.3f, 0.0f);
-    this->skelAnime.playSpeed = CLAMP_MAX(this->actor.speedXZ * 1.4f + 0.8f, 2.0f);
-    SkelAnime_Update(&this->skelAnime);
-    this->actor.shape.rot.y = this->actor.world.rot.y;
+void EnFish_Respawning_SlowDown(EnFish* self, GlobalContext* globalCtx) {
+    EnFish_SetYOffset(self);
+    Math_SmoothStepToF(&self->actor.speedXZ, 0.0f, 0.05f, 0.3f, 0.0f);
+    self->skelAnime.playSpeed = CLAMP_MAX(self->actor.speedXZ * 1.4f + 0.8f, 2.0f);
+    SkelAnime_Update(&self->skelAnime);
+    self->actor.shape.rot.y = self->actor.world.rot.y;
 
-    if (this->timer <= 0) {
-        EnFish_Respawning_SetupFollowChild(this);
-    } else if (&this->actor == this->actor.child) {
-        EnFish_Respawning_SetupApproachPlayer(this);
-    } else if (EnFish_CheckXZDistanceToPlayer(this, globalCtx)) {
-        EnFish_Respawning_SetupFleePlayer(this);
+    if (self->timer <= 0) {
+        EnFish_Respawning_SetupFollowChild(self);
+    } else if (&self->actor == self->actor.child) {
+        EnFish_Respawning_SetupApproachPlayer(self);
+    } else if (EnFish_CheckXZDistanceToPlayer(self, globalCtx)) {
+        EnFish_Respawning_SetupFleePlayer(self);
     }
 }
 
 // The three following actionfunctions also turn the yaw to home if the fish is too far from it.
 
-void EnFish_Respawning_SetupFollowChild(EnFish* this) {
-    this->actor.gravity = 0.0f;
-    this->actor.minVelocityY = 0.0f;
-    this->timer = Rand_S16Offset(15, 45);
-    this->unk_250 = 0;
-    EnFish_SetInWaterAnimation(this);
-    this->actionFunc = EnFish_Respawning_FollowChild;
+void EnFish_Respawning_SetupFollowChild(EnFish* self) {
+    self->actor.gravity = 0.0f;
+    self->actor.minVelocityY = 0.0f;
+    self->timer = Rand_S16Offset(15, 45);
+    self->unk_250 = 0;
+    EnFish_SetInWaterAnimation(self);
+    self->actionFunc = EnFish_Respawning_FollowChild;
 }
 
-void EnFish_Respawning_FollowChild(EnFish* this, GlobalContext* globalCtx) {
+void EnFish_Respawning_FollowChild(EnFish* self, GlobalContext* globalCtx) {
     s32 pad;
 
-    EnFish_SetYOffset(this);
-    Math_SmoothStepToF(&this->actor.speedXZ, 1.8f, 0.08f, 0.4f, 0.0f);
+    EnFish_SetYOffset(self);
+    Math_SmoothStepToF(&self->actor.speedXZ, 1.8f, 0.08f, 0.4f, 0.0f);
 
-    if ((EnFish_XZDistanceSquared(&this->actor.world.pos, &this->actor.home.pos) > SQ(80.0f)) || (this->timer < 4)) {
-        Math_StepToAngleS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &this->actor.home.pos),
+    if ((EnFish_XZDistanceSquared(&self->actor.world.pos, &self->actor.home.pos) > SQ(80.0f)) || (self->timer < 4)) {
+        Math_StepToAngleS(&self->actor.world.rot.y, Math_Vec3f_Yaw(&self->actor.world.pos, &self->actor.home.pos),
                           3000);
-    } else if ((this->actor.child != NULL) && (&this->actor != this->actor.child)) {
-        Math_StepToAngleS(&this->actor.world.rot.y,
-                          Math_Vec3f_Yaw(&this->actor.world.pos, &this->actor.child->world.pos), 3000);
+    } else if ((self->actor.child != NULL) && (&self->actor != self->actor.child)) {
+        Math_StepToAngleS(&self->actor.world.rot.y,
+                          Math_Vec3f_Yaw(&self->actor.world.pos, &self->actor.child->world.pos), 3000);
     }
 
-    this->actor.shape.rot.y = this->actor.world.rot.y;
-    this->skelAnime.playSpeed = CLAMP_MAX(this->actor.speedXZ * 1.5f + 0.8f, 4.0f);
-    SkelAnime_Update(&this->skelAnime);
+    self->actor.shape.rot.y = self->actor.world.rot.y;
+    self->skelAnime.playSpeed = CLAMP_MAX(self->actor.speedXZ * 1.5f + 0.8f, 4.0f);
+    SkelAnime_Update(&self->skelAnime);
 
-    if (this->timer <= 0) {
-        EnFish_Respawning_SetupSlowDown(this);
-    } else if (&this->actor == this->actor.child) {
-        EnFish_Respawning_SetupApproachPlayer(this);
-    } else if (EnFish_CheckXZDistanceToPlayer(this, globalCtx)) {
-        EnFish_Respawning_SetupFleePlayer(this);
+    if (self->timer <= 0) {
+        EnFish_Respawning_SetupSlowDown(self);
+    } else if (&self->actor == self->actor.child) {
+        EnFish_Respawning_SetupApproachPlayer(self);
+    } else if (EnFish_CheckXZDistanceToPlayer(self, globalCtx)) {
+        EnFish_Respawning_SetupFleePlayer(self);
     }
 }
 
-void EnFish_Respawning_SetupFleePlayer(EnFish* this) {
-    this->actor.gravity = 0.0f;
-    this->actor.minVelocityY = 0.0f;
-    this->timer = Rand_S16Offset(10, 40);
-    this->unk_250 = 0;
-    EnFish_SetInWaterAnimation(this);
-    this->actionFunc = EnFish_Respawning_FleePlayer;
+void EnFish_Respawning_SetupFleePlayer(EnFish* self) {
+    self->actor.gravity = 0.0f;
+    self->actor.minVelocityY = 0.0f;
+    self->timer = Rand_S16Offset(10, 40);
+    self->unk_250 = 0;
+    EnFish_SetInWaterAnimation(self);
+    self->actionFunc = EnFish_Respawning_FleePlayer;
 }
 
-void EnFish_Respawning_FleePlayer(EnFish* this, GlobalContext* globalCtx) {
+void EnFish_Respawning_FleePlayer(EnFish* self, GlobalContext* globalCtx) {
     s32 pad;
     s16 pad2;
     s16 frames;
     s16 yaw;
     s16 playerClose;
 
-    EnFish_SetYOffset(this);
-    playerClose = EnFish_CheckXZDistanceToPlayer(this, globalCtx);
-    Math_SmoothStepToF(&this->actor.speedXZ, 4.2f, 0.08f, 1.4f, 0.0f);
+    EnFish_SetYOffset(self);
+    playerClose = EnFish_CheckXZDistanceToPlayer(self, globalCtx);
+    Math_SmoothStepToF(&self->actor.speedXZ, 4.2f, 0.08f, 1.4f, 0.0f);
 
-    if (EnFish_XZDistanceSquared(&this->actor.world.pos, &this->actor.home.pos) > SQ(160.0f)) {
-        yaw = Math_Vec3f_Yaw(&this->actor.world.pos, &this->actor.home.pos);
-        Math_StepToAngleS(&this->actor.world.rot.y, yaw, 3000);
-    } else if ((this->actor.child != NULL) && (&this->actor != this->actor.child)) {
-        yaw = Math_Vec3f_Yaw(&this->actor.world.pos, &this->actor.child->world.pos);
-        Math_StepToAngleS(&this->actor.world.rot.y, yaw, 2000);
+    if (EnFish_XZDistanceSquared(&self->actor.world.pos, &self->actor.home.pos) > SQ(160.0f)) {
+        yaw = Math_Vec3f_Yaw(&self->actor.world.pos, &self->actor.home.pos);
+        Math_StepToAngleS(&self->actor.world.rot.y, yaw, 3000);
+    } else if ((self->actor.child != NULL) && (&self->actor != self->actor.child)) {
+        yaw = Math_Vec3f_Yaw(&self->actor.world.pos, &self->actor.child->world.pos);
+        Math_StepToAngleS(&self->actor.world.rot.y, yaw, 2000);
     } else if (playerClose) {
-        yaw = this->actor.yawTowardsPlayer + 0x8000;
+        yaw = self->actor.yawTowardsPlayer + 0x8000;
         frames = globalCtx->state.frames;
 
         if (frames & 0x10) {
@@ -295,31 +295,31 @@ void EnFish_Respawning_FleePlayer(EnFish* this, GlobalContext* globalCtx) {
             }
         }
         if (globalCtx) {}
-        Math_StepToAngleS(&this->actor.world.rot.y, yaw, 2000);
+        Math_StepToAngleS(&self->actor.world.rot.y, yaw, 2000);
     }
 
-    this->actor.shape.rot.y = this->actor.world.rot.y;
-    this->skelAnime.playSpeed = CLAMP_MAX(this->actor.speedXZ * 1.5f + 0.8f, 4.0f);
+    self->actor.shape.rot.y = self->actor.world.rot.y;
+    self->skelAnime.playSpeed = CLAMP_MAX(self->actor.speedXZ * 1.5f + 0.8f, 4.0f);
 
-    SkelAnime_Update(&this->skelAnime);
+    SkelAnime_Update(&self->skelAnime);
 
-    if ((this->timer <= 0) || !playerClose) {
-        EnFish_Respawning_SetupSlowDown(this);
-    } else if (&this->actor == this->actor.child) {
-        EnFish_Respawning_SetupApproachPlayer(this);
+    if ((self->timer <= 0) || !playerClose) {
+        EnFish_Respawning_SetupSlowDown(self);
+    } else if (&self->actor == self->actor.child) {
+        EnFish_Respawning_SetupApproachPlayer(self);
     }
 }
 
-void EnFish_Respawning_SetupApproachPlayer(EnFish* this) {
-    this->actor.gravity = 0.0f;
-    this->actor.minVelocityY = 0.0f;
-    EnFish_SetInWaterAnimation(this);
-    this->timer = Rand_S16Offset(10, 40);
-    this->unk_250 = 0;
-    this->actionFunc = EnFish_Respawning_ApproachPlayer;
+void EnFish_Respawning_SetupApproachPlayer(EnFish* self) {
+    self->actor.gravity = 0.0f;
+    self->actor.minVelocityY = 0.0f;
+    EnFish_SetInWaterAnimation(self);
+    self->timer = Rand_S16Offset(10, 40);
+    self->unk_250 = 0;
+    self->actionFunc = EnFish_Respawning_ApproachPlayer;
 }
 
-void EnFish_Respawning_ApproachPlayer(EnFish* this, GlobalContext* globalCtx) {
+void EnFish_Respawning_ApproachPlayer(EnFish* self, GlobalContext* globalCtx) {
     s32 pad;
     Player* player = GET_PLAYER(globalCtx);
     s32 pad2;
@@ -327,94 +327,94 @@ void EnFish_Respawning_ApproachPlayer(EnFish* this, GlobalContext* globalCtx) {
     s16 yaw;
     s16 temp_a0_2;
 
-    EnFish_SetYOffset(this);
-    Math_SmoothStepToF(&this->actor.speedXZ, 1.8f, 0.1f, 0.5f, 0.0f);
+    EnFish_SetYOffset(self);
+    Math_SmoothStepToF(&self->actor.speedXZ, 1.8f, 0.1f, 0.5f, 0.0f);
 
-    if (EnFish_XZDistanceSquared(&this->actor.world.pos, &this->actor.home.pos) > SQ(80.0f)) {
-        yaw = Math_Vec3f_Yaw(&this->actor.world.pos, &this->actor.home.pos);
-        Math_StepToAngleS(&this->actor.world.rot.y, yaw, 3000);
+    if (EnFish_XZDistanceSquared(&self->actor.world.pos, &self->actor.home.pos) > SQ(80.0f)) {
+        yaw = Math_Vec3f_Yaw(&self->actor.world.pos, &self->actor.home.pos);
+        Math_StepToAngleS(&self->actor.world.rot.y, yaw, 3000);
     } else {
         if ((s16)globalCtx->state.frames & 0x40) {
-            temp_a0_2 = (this->actor.yawTowardsPlayer + 0x9000);
+            temp_a0_2 = (self->actor.yawTowardsPlayer + 0x9000);
         } else {
-            temp_a0_2 = (this->actor.yawTowardsPlayer + 0x7000);
+            temp_a0_2 = (self->actor.yawTowardsPlayer + 0x7000);
         }
 
         sp38.x = player->actor.world.pos.x + (Math_SinS(temp_a0_2) * 20.0f);
         sp38.y = player->actor.world.pos.y;
         sp38.z = player->actor.world.pos.z + (Math_CosS(temp_a0_2) * 20.0f);
 
-        yaw = Math_Vec3f_Yaw(&this->actor.world.pos, &sp38);
-        Math_StepToAngleS(&this->actor.world.rot.y, yaw, 3000);
+        yaw = Math_Vec3f_Yaw(&self->actor.world.pos, &sp38);
+        Math_StepToAngleS(&self->actor.world.rot.y, yaw, 3000);
     }
 
-    this->actor.shape.rot.y = this->actor.world.rot.y;
-    this->skelAnime.playSpeed = CLAMP_MAX((this->actor.speedXZ * 1.5f) + 0.8f, 4.0f);
+    self->actor.shape.rot.y = self->actor.world.rot.y;
+    self->skelAnime.playSpeed = CLAMP_MAX((self->actor.speedXZ * 1.5f) + 0.8f, 4.0f);
 
-    SkelAnime_Update(&this->skelAnime);
+    SkelAnime_Update(&self->skelAnime);
 
-    if (this->timer <= 0) {
-        EnFish_Respawning_SetupSlowDown(this);
+    if (self->timer <= 0) {
+        EnFish_Respawning_SetupSlowDown(self);
     }
 }
 
 // Dropped type functions
 
-void EnFish_Dropped_SetupFall(EnFish* this) {
-    this->actor.gravity = -1.0f;
-    this->actor.minVelocityY = -10.0f;
-    this->actor.shape.yOffset = 0.0f;
-    EnFish_SetOutOfWaterAnimation(this);
-    this->unk_250 = 5;
-    this->actionFunc = EnFish_Dropped_Fall;
-    this->timer = 300;
+void EnFish_Dropped_SetupFall(EnFish* self) {
+    self->actor.gravity = -1.0f;
+    self->actor.minVelocityY = -10.0f;
+    self->actor.shape.yOffset = 0.0f;
+    EnFish_SetOutOfWaterAnimation(self);
+    self->unk_250 = 5;
+    self->actionFunc = EnFish_Dropped_Fall;
+    self->timer = 300;
 }
 
-void EnFish_Dropped_Fall(EnFish* this, GlobalContext* globalCtx) {
-    Math_SmoothStepToF(&this->actor.speedXZ, 0.0f, 0.1f, 0.1f, 0.0f);
-    Math_StepToAngleS(&this->actor.world.rot.x, 0x4000, 100);
-    Math_StepToAngleS(&this->actor.world.rot.z, -0x4000, 100);
-    this->actor.shape.rot.x = this->actor.world.rot.x;
-    this->actor.shape.rot.y = this->actor.world.rot.y;
-    this->actor.shape.rot.z = this->actor.world.rot.z;
-    SkelAnime_Update(&this->skelAnime);
+void EnFish_Dropped_Fall(EnFish* self, GlobalContext* globalCtx) {
+    Math_SmoothStepToF(&self->actor.speedXZ, 0.0f, 0.1f, 0.1f, 0.0f);
+    Math_StepToAngleS(&self->actor.world.rot.x, 0x4000, 100);
+    Math_StepToAngleS(&self->actor.world.rot.z, -0x4000, 100);
+    self->actor.shape.rot.x = self->actor.world.rot.x;
+    self->actor.shape.rot.y = self->actor.world.rot.y;
+    self->actor.shape.rot.z = self->actor.world.rot.z;
+    SkelAnime_Update(&self->skelAnime);
 
-    if (this->actor.bgCheckFlags & 1) { // On floor
-        this->timer = 400;
-        EnFish_Dropped_SetupFlopOnGround(this);
-    } else if (this->actor.bgCheckFlags & 0x20) { // In water
-        EnFish_Dropped_SetupSwimAway(this);
-    } else if ((this->timer <= 0) && (this->actor.params == FISH_DROPPED) &&
-               (this->actor.floorHeight < BGCHECK_Y_MIN + 10.0f)) {
+    if (self->actor.bgCheckFlags & 1) { // On floor
+        self->timer = 400;
+        EnFish_Dropped_SetupFlopOnGround(self);
+    } else if (self->actor.bgCheckFlags & 0x20) { // In water
+        EnFish_Dropped_SetupSwimAway(self);
+    } else if ((self->timer <= 0) && (self->actor.params == FISH_DROPPED) &&
+               (self->actor.floorHeight < BGCHECK_Y_MIN + 10.0f)) {
         osSyncPrintf(VT_COL(YELLOW, BLACK));
         // "BG missing? Running Actor_delete"
         osSyncPrintf("BG 抜け？ Actor_delete します(%s %d)\n", "../z_en_sakana.c", 822);
         osSyncPrintf(VT_RST);
-        Actor_Kill(&this->actor);
+        Actor_Kill(&self->actor);
     }
 }
 
 /**
- * If the fish is on a floor, this function is looped back to by EnFish_Dropped_FlopOnGround to set a new flopping
+ * If the fish is on a floor, self function is looped back to by EnFish_Dropped_FlopOnGround to set a new flopping
  * height and whether the sound should play again.
  */
-void EnFish_Dropped_SetupFlopOnGround(EnFish* this) {
+void EnFish_Dropped_SetupFlopOnGround(EnFish* self) {
     s32 pad;
     f32 randomFloat;
     s32 playSound;
 
-    this->actor.gravity = -1.0f;
-    this->actor.minVelocityY = -10.0f;
+    self->actor.gravity = -1.0f;
+    self->actor.minVelocityY = -10.0f;
     randomFloat = Rand_ZeroOne();
 
     if (randomFloat < 0.1f) {
-        this->actor.velocity.y = (Rand_ZeroOne() * 3.0f) + 2.5f;
+        self->actor.velocity.y = (Rand_ZeroOne() * 3.0f) + 2.5f;
         playSound = true;
     } else if (randomFloat < 0.2f) {
-        this->actor.velocity.y = (Rand_ZeroOne() * 1.2f) + 0.2f;
+        self->actor.velocity.y = (Rand_ZeroOne() * 1.2f) + 0.2f;
         playSound = true;
     } else {
-        this->actor.velocity.y = 0.0f;
+        self->actor.velocity.y = 0.0f;
 
         if (Rand_ZeroOne() < 0.2f) {
             playSound = true;
@@ -423,22 +423,22 @@ void EnFish_Dropped_SetupFlopOnGround(EnFish* this) {
         }
     }
 
-    this->actor.shape.yOffset = 300.0f;
-    EnFish_SetOutOfWaterAnimation(this);
-    this->actionFunc = EnFish_Dropped_FlopOnGround;
-    this->unk_250 = 5;
+    self->actor.shape.yOffset = 300.0f;
+    EnFish_SetOutOfWaterAnimation(self);
+    self->actionFunc = EnFish_Dropped_FlopOnGround;
+    self->unk_250 = 5;
 
-    if (playSound && (this->actor.draw != NULL)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_FISH_LEAP);
+    if (playSound && (self->actor.draw != NULL)) {
+        Audio_PlayActorSound2(&self->actor, NA_SE_EV_FISH_LEAP);
     }
 }
 
-void EnFish_Dropped_FlopOnGround(EnFish* this, GlobalContext* globalCtx) {
+void EnFish_Dropped_FlopOnGround(EnFish* self, GlobalContext* globalCtx) {
     s32 pad;
     s16 frames = globalCtx->state.frames;
     s16 targetXRot;
 
-    Math_SmoothStepToF(&this->actor.speedXZ, Rand_ZeroOne() * 0.2f, 0.1f, 0.1f, 0.0f);
+    Math_SmoothStepToF(&self->actor.speedXZ, Rand_ZeroOne() * 0.2f, 0.1f, 0.1f, 0.0f);
 
     targetXRot = (s16)((((frames >> 5) & 2) | ((frames >> 2) & 1)) << 0xB) * 0.3f;
 
@@ -446,94 +446,94 @@ void EnFish_Dropped_FlopOnGround(EnFish* this, GlobalContext* globalCtx) {
         targetXRot = -targetXRot;
     }
 
-    Math_StepToAngleS(&this->actor.world.rot.x, targetXRot, 4000);
-    Math_StepToAngleS(&this->actor.world.rot.z, 0x4000, 1000);
-    this->actor.world.rot.y +=
-        (s16)(((Math_SinS(this->slowPhase) * 2000.0f) + (Math_SinS(this->fastPhase) * 1000.0f)) * Rand_ZeroOne());
-    this->actor.shape.rot = this->actor.world.rot;
+    Math_StepToAngleS(&self->actor.world.rot.x, targetXRot, 4000);
+    Math_StepToAngleS(&self->actor.world.rot.z, 0x4000, 1000);
+    self->actor.world.rot.y +=
+        (s16)(((Math_SinS(self->slowPhase) * 2000.0f) + (Math_SinS(self->fastPhase) * 1000.0f)) * Rand_ZeroOne());
+    self->actor.shape.rot = self->actor.world.rot;
 
-    SkelAnime_Update(&this->skelAnime);
+    SkelAnime_Update(&self->skelAnime);
 
-    if (this->timer <= 0) {
-        Actor_Kill(&this->actor);
+    if (self->timer <= 0) {
+        Actor_Kill(&self->actor);
         return;
     }
 
-    if (this->timer <= 60) {
+    if (self->timer <= 60) {
         // Blink when about to disappear
         if (frames & 4) {
-            this->actor.draw = EnFish_Draw;
+            self->actor.draw = EnFish_Draw;
         } else {
-            this->actor.draw = NULL;
+            self->actor.draw = NULL;
         }
-    } else if (this->actor.bgCheckFlags & 0x20) { // In water
-        EnFish_Dropped_SetupSwimAway(this);
-    } else if (this->actor.bgCheckFlags & 1) { // On floor
-        EnFish_Dropped_SetupFlopOnGround(this);
+    } else if (self->actor.bgCheckFlags & 0x20) { // In water
+        EnFish_Dropped_SetupSwimAway(self);
+    } else if (self->actor.bgCheckFlags & 1) { // On floor
+        EnFish_Dropped_SetupFlopOnGround(self);
     }
 }
 
-void EnFish_Dropped_SetupSwimAway(EnFish* this) {
-    this->actor.home.pos = this->actor.world.pos;
-    this->actor.flags |= 0x10;
-    this->timer = 200;
-    this->actor.gravity = 0.0f;
-    this->actor.minVelocityY = 0.0f;
-    this->actor.shape.yOffset = 0.0f;
-    EnFish_SetInWaterAnimation(this);
-    this->actionFunc = EnFish_Dropped_SwimAway;
-    this->unk_250 = 5;
+void EnFish_Dropped_SetupSwimAway(EnFish* self) {
+    self->actor.home.pos = self->actor.world.pos;
+    self->actor.flags |= 0x10;
+    self->timer = 200;
+    self->actor.gravity = 0.0f;
+    self->actor.minVelocityY = 0.0f;
+    self->actor.shape.yOffset = 0.0f;
+    EnFish_SetInWaterAnimation(self);
+    self->actionFunc = EnFish_Dropped_SwimAway;
+    self->unk_250 = 5;
 }
 
-void EnFish_Dropped_SwimAway(EnFish* this, GlobalContext* globalCtx) {
+void EnFish_Dropped_SwimAway(EnFish* self, GlobalContext* globalCtx) {
     s32 pad;
 
-    Math_SmoothStepToF(&this->actor.speedXZ, 2.8f, 0.1f, 0.4f, 0.0f);
+    Math_SmoothStepToF(&self->actor.speedXZ, 2.8f, 0.1f, 0.4f, 0.0f);
 
     // If touching wall or not in water, turn back and slow down for one frame.
-    if ((this->actor.bgCheckFlags & 8) || !(this->actor.bgCheckFlags & 0x20)) {
-        this->actor.home.rot.y = Math_Vec3f_Yaw(&this->actor.world.pos, &this->actor.home.pos);
-        this->actor.speedXZ *= 0.5f;
+    if ((self->actor.bgCheckFlags & 8) || !(self->actor.bgCheckFlags & 0x20)) {
+        self->actor.home.rot.y = Math_Vec3f_Yaw(&self->actor.world.pos, &self->actor.home.pos);
+        self->actor.speedXZ *= 0.5f;
     }
 
-    Math_StepToAngleS(&this->actor.world.rot.x, 0, 1500);
-    Math_StepToAngleS(&this->actor.world.rot.y, this->actor.home.rot.y, 3000);
-    Math_StepToAngleS(&this->actor.world.rot.z, 0, 1000);
+    Math_StepToAngleS(&self->actor.world.rot.x, 0, 1500);
+    Math_StepToAngleS(&self->actor.world.rot.y, self->actor.home.rot.y, 3000);
+    Math_StepToAngleS(&self->actor.world.rot.z, 0, 1000);
 
-    this->actor.shape.rot = this->actor.world.rot;
+    self->actor.shape.rot = self->actor.world.rot;
 
     // Raise if on a floor.
-    if (this->actor.bgCheckFlags & 1) {
-        Math_StepToF(&this->actor.world.pos.y, this->actor.home.pos.y - 4.0f, 2.0f);
+    if (self->actor.bgCheckFlags & 1) {
+        Math_StepToF(&self->actor.world.pos.y, self->actor.home.pos.y - 4.0f, 2.0f);
     } else {
-        Math_StepToF(&this->actor.world.pos.y, this->actor.home.pos.y - 10.0f, 2.0f);
+        Math_StepToF(&self->actor.world.pos.y, self->actor.home.pos.y - 10.0f, 2.0f);
     }
 
     // Shrink when close to disappearing.
-    if (this->timer < 100) {
-        Actor_SetScale(&this->actor, this->actor.scale.x * 0.982f);
+    if (self->timer < 100) {
+        Actor_SetScale(&self->actor, self->actor.scale.x * 0.982f);
     }
 
-    this->skelAnime.playSpeed = CLAMP_MAX((this->actor.speedXZ * 1.5f) + 1.0f, 4.0f);
-    SkelAnime_Update(&this->skelAnime);
+    self->skelAnime.playSpeed = CLAMP_MAX((self->actor.speedXZ * 1.5f) + 1.0f, 4.0f);
+    SkelAnime_Update(&self->skelAnime);
 
-    if (this->timer <= 0) {
-        Actor_Kill(&this->actor);
+    if (self->timer <= 0) {
+        Actor_Kill(&self->actor);
     }
 }
 
 // Unique type functions
 
-void EnFish_Unique_SetupSwimIdle(EnFish* this) {
-    this->actor.gravity = 0.0f;
-    this->actor.minVelocityY = 0.0f;
-    this->timer = Rand_S16Offset(5, 35);
-    this->unk_250 = 0;
-    EnFish_SetInWaterAnimation(this);
-    this->actionFunc = EnFish_Unique_SwimIdle;
+void EnFish_Unique_SetupSwimIdle(EnFish* self) {
+    self->actor.gravity = 0.0f;
+    self->actor.minVelocityY = 0.0f;
+    self->timer = Rand_S16Offset(5, 35);
+    self->unk_250 = 0;
+    EnFish_SetInWaterAnimation(self);
+    self->actionFunc = EnFish_Unique_SwimIdle;
 }
 
-void EnFish_Unique_SwimIdle(EnFish* this, GlobalContext* globalCtx) {
+void EnFish_Unique_SwimIdle(EnFish* self, GlobalContext* globalCtx) {
     static f32 speedStopping[] = { 0.0f, 0.04f, 0.09f };
     static f32 speedMoving[] = { 0.5f, 0.1f, 0.15f };
     f32 playSpeed;
@@ -543,49 +543,49 @@ void EnFish_Unique_SwimIdle(EnFish* this, GlobalContext* globalCtx) {
     f32 extraPlaySpeed;
     s32 pad3;
 
-    if (this->actor.xzDistToPlayer < 60.0f) {
-        if (this->timer < 12) {
+    if (self->actor.xzDistToPlayer < 60.0f) {
+        if (self->timer < 12) {
             speed = speedMoving;
         } else {
             speed = speedStopping;
         }
     } else {
-        if (this->timer < 4) {
+        if (self->timer < 4) {
             speed = speedMoving;
         } else {
             speed = speedStopping;
         }
     }
 
-    EnFish_SetYOffset(this);
-    Math_SmoothStepToF(&this->actor.speedXZ, speed[0], speed[1], speed[2], 0.0f);
+    EnFish_SetYOffset(self);
+    Math_SmoothStepToF(&self->actor.speedXZ, speed[0], speed[1], speed[2], 0.0f);
 
     extraPlaySpeed = 0.0f;
 
-    if ((EnFish_XZDistanceSquared(&this->actor.world.pos, &this->actor.home.pos) > SQ(15.0f))) {
-        if (!Math_ScaledStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &this->actor.home.pos),
+    if ((EnFish_XZDistanceSquared(&self->actor.world.pos, &self->actor.home.pos) > SQ(15.0f))) {
+        if (!Math_ScaledStepToS(&self->actor.world.rot.y, Math_Vec3f_Yaw(&self->actor.world.pos, &self->actor.home.pos),
                                 200)) {
             extraPlaySpeed = 0.5f;
         }
-    } else if ((this->timer < 4) && !Math_ScaledStepToS(&this->actor.world.rot.y, frames * 0x80, 100)) {
+    } else if ((self->timer < 4) && !Math_ScaledStepToS(&self->actor.world.rot.y, frames * 0x80, 100)) {
         extraPlaySpeed = 0.5f;
     }
 
-    this->actor.shape.rot.y = this->actor.world.rot.y;
-    playSpeed = (this->actor.speedXZ * 1.2f) + 0.2f + extraPlaySpeed;
-    this->skelAnime.playSpeed = CLAMP(playSpeed, 1.5f, 0.5);
-    SkelAnime_Update(&this->skelAnime);
+    self->actor.shape.rot.y = self->actor.world.rot.y;
+    playSpeed = (self->actor.speedXZ * 1.2f) + 0.2f + extraPlaySpeed;
+    self->skelAnime.playSpeed = CLAMP(playSpeed, 1.5f, 0.5);
+    SkelAnime_Update(&self->skelAnime);
 
-    if (this->timer <= 0) {
-        this->timer = Rand_S16Offset(5, 80);
+    if (self->timer <= 0) {
+        self->timer = Rand_S16Offset(5, 80);
     }
 }
 
 // Cutscene functions
 
-void EnFish_Cutscene_FlopOnGround(EnFish* this, GlobalContext* globalCtx) {
-    f32 sp24 = Math_SinS(this->slowPhase);
-    f32 sp20 = Math_SinS(this->fastPhase);
+void EnFish_Cutscene_FlopOnGround(EnFish* self, GlobalContext* globalCtx) {
+    f32 sp24 = Math_SinS(self->slowPhase);
+    f32 sp20 = Math_SinS(self->fastPhase);
 
     D_80A17014 += D_80A17018;
 
@@ -594,7 +594,7 @@ void EnFish_Cutscene_FlopOnGround(EnFish* this, GlobalContext* globalCtx) {
 
         if (Rand_ZeroOne() < 0.1f) {
             D_80A17018 = (Rand_ZeroOne() * 3.0f) + 2.0f;
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_FISH_LEAP);
+            Audio_PlayActorSound2(&self->actor, NA_SE_EV_FISH_LEAP);
         } else {
             D_80A17018 = 0.0f;
         }
@@ -602,23 +602,23 @@ void EnFish_Cutscene_FlopOnGround(EnFish* this, GlobalContext* globalCtx) {
         D_80A17018 -= 0.4f;
     }
 
-    this->skelAnime.playSpeed = ((sp24 + sp20) * 0.5f) + 2.0f;
-    SkelAnime_Update(&this->skelAnime);
+    self->skelAnime.playSpeed = ((sp24 + sp20) * 0.5f) + 2.0f;
+    SkelAnime_Update(&self->skelAnime);
 }
 
-void EnFish_Cutscene_WiggleFlyingThroughAir(EnFish* this, GlobalContext* globalCtx) {
+void EnFish_Cutscene_WiggleFlyingThroughAir(EnFish* self, GlobalContext* globalCtx) {
     s32 pad;
-    f32 sp28 = Math_SinS(this->slowPhase);
-    f32 sp24 = Math_SinS(this->fastPhase);
+    f32 sp28 = Math_SinS(self->slowPhase);
+    f32 sp24 = Math_SinS(self->fastPhase);
 
-    this->actor.shape.rot.x -= 500;
-    this->actor.shape.rot.z += 100;
+    self->actor.shape.rot.x -= 500;
+    self->actor.shape.rot.z += 100;
     Math_StepToF(&D_80A17014, 0.0f, 1.0f);
-    this->skelAnime.playSpeed = ((sp28 + sp24) * 0.5f) + 2.0f;
-    SkelAnime_Update(&this->skelAnime);
+    self->skelAnime.playSpeed = ((sp28 + sp24) * 0.5f) + 2.0f;
+    SkelAnime_Update(&self->skelAnime);
 }
 
-void EnFish_UpdateCutscene(EnFish* this, GlobalContext* globalCtx) {
+void EnFish_UpdateCutscene(EnFish* self, GlobalContext* globalCtx) {
     s32 pad;
     s32 pad2;
     CsCmdActorAction* csAction = globalCtx->csCtx.npcActions[1];
@@ -630,31 +630,31 @@ void EnFish_UpdateCutscene(EnFish* this, GlobalContext* globalCtx) {
     if (csAction == NULL) {
         // "Warning : DEMO ended without dousa (action) 3 termination being called"
         osSyncPrintf("Warning : dousa 3 消滅 が呼ばれずにデモが終了した(%s %d)(arg_data 0x%04x)\n", "../z_en_sakana.c",
-                     1169, this->actor.params);
-        EnFish_ClearCutsceneData(this);
-        Actor_Kill(&this->actor);
+                     1169, self->actor.params);
+        EnFish_ClearCutsceneData(self);
+        Actor_Kill(&self->actor);
         return;
     }
 
-    this->slowPhase += 0x111;
-    this->fastPhase += 0x500;
+    self->slowPhase += 0x111;
+    self->fastPhase += 0x500;
 
     switch (csAction->action) {
         case 1:
-            EnFish_Cutscene_FlopOnGround(this, globalCtx);
+            EnFish_Cutscene_FlopOnGround(self, globalCtx);
             break;
         case 2:
-            EnFish_Cutscene_WiggleFlyingThroughAir(this, globalCtx);
+            EnFish_Cutscene_WiggleFlyingThroughAir(self, globalCtx);
             break;
         case 3:
             // "DEMO fish termination"
             osSyncPrintf("デモ魚消滅\n");
-            EnFish_ClearCutsceneData(this);
-            Actor_Kill(&this->actor);
+            EnFish_ClearCutsceneData(self);
+            Actor_Kill(&self->actor);
             return;
         default:
             // "Improper DEMO action"
-            osSyncPrintf("不正なデモ動作(%s %d)(arg_data 0x%04x)\n", "../z_en_sakana.c", 1200, this->actor.params);
+            osSyncPrintf("不正なデモ動作(%s %d)(arg_data 0x%04x)\n", "../z_en_sakana.c", 1200, self->actor.params);
             break;
     }
 
@@ -667,103 +667,103 @@ void EnFish_UpdateCutscene(EnFish* this, GlobalContext* globalCtx) {
 
     progress = Environment_LerpWeight(csAction->endFrame, csAction->startFrame, globalCtx->csCtx.frames);
 
-    this->actor.world.pos.x = (endPos.x - startPos.x) * progress + startPos.x;
-    this->actor.world.pos.y = (endPos.y - startPos.y) * progress + startPos.y + D_80A17014;
-    this->actor.world.pos.z = (endPos.z - startPos.z) * progress + startPos.z;
+    self->actor.world.pos.x = (endPos.x - startPos.x) * progress + startPos.x;
+    self->actor.world.pos.y = (endPos.y - startPos.y) * progress + startPos.y + D_80A17014;
+    self->actor.world.pos.z = (endPos.z - startPos.z) * progress + startPos.z;
 
-    this->actor.floorHeight = BgCheck_EntityRaycastFloor4(&globalCtx->colCtx, &this->actor.floorPoly, &bgId,
-                                                          &this->actor, &this->actor.world.pos);
+    self->actor.floorHeight = BgCheck_EntityRaycastFloor4(&globalCtx->colCtx, &self->actor.floorPoly, &bgId,
+                                                          &self->actor, &self->actor.world.pos);
 }
 
 // Update functions and Draw
 
-void EnFish_OrdinaryUpdate(EnFish* this, GlobalContext* globalCtx) {
-    if (this->timer > 0) {
-        this->timer--;
+void EnFish_OrdinaryUpdate(EnFish* self, GlobalContext* globalCtx) {
+    if (self->timer > 0) {
+        self->timer--;
     }
 
-    this->slowPhase += 0x111;
-    this->fastPhase += 0x500;
+    self->slowPhase += 0x111;
+    self->fastPhase += 0x500;
 
-    if ((this->actor.child != NULL) && (this->actor.child->update == NULL) && (&this->actor != this->actor.child)) {
-        this->actor.child = NULL;
+    if ((self->actor.child != NULL) && (self->actor.child->update == NULL) && (&self->actor != self->actor.child)) {
+        self->actor.child = NULL;
     }
 
-    if ((this->actionFunc == NULL) || (this->actionFunc(this, globalCtx), (this->actor.update != NULL))) {
-        Actor_MoveForward(&this->actor);
+    if ((self->actionFunc == NULL) || (self->actionFunc(self, globalCtx), (self->actor.update != NULL))) {
+        Actor_MoveForward(&self->actor);
 
-        if (this->unk_250 != 0) {
-            Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 17.5f, 4.0f, 0.0f, this->unk_250);
+        if (self->unk_250 != 0) {
+            Actor_UpdateBgCheckInfo(globalCtx, &self->actor, 17.5f, 4.0f, 0.0f, self->unk_250);
         }
 
-        if (this->actor.xzDistToPlayer < 70.0f) {
-            CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        if (self->actor.xzDistToPlayer < 70.0f) {
+            CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
         }
 
-        Actor_SetFocus(&this->actor, this->actor.shape.yOffset * 0.01f);
+        Actor_SetFocus(&self->actor, self->actor.shape.yOffset * 0.01f);
 
-        if (Actor_HasParent(&this->actor, globalCtx)) {
-            this->actor.parent = NULL;
+        if (Actor_HasParent(&self->actor, globalCtx)) {
+            self->actor.parent = NULL;
 
-            if (this->actor.params == FISH_DROPPED) {
-                Actor_Kill(&this->actor);
+            if (self->actor.params == FISH_DROPPED) {
+                Actor_Kill(&self->actor);
                 return;
             }
 
-            EnFish_BeginRespawn(this);
-        } else if (EnFish_InBottleRange(this, globalCtx)) {
-            // GI_MAX in this case allows the player to catch the actor in a bottle
-            func_8002F434(&this->actor, globalCtx, GI_MAX, 80.0f, 20.0f);
+            EnFish_BeginRespawn(self);
+        } else if (EnFish_InBottleRange(self, globalCtx)) {
+            // GI_MAX in self case allows the player to catch the actor in a bottle
+            func_8002F434(&self->actor, globalCtx, GI_MAX, 80.0f, 20.0f);
         }
     }
 }
 
-void EnFish_RespawningUpdate(EnFish* this, GlobalContext* globalCtx) {
-    if (this->actor.params == FISH_SWIMMING_UNIQUE) {
-        Actor_Kill(&this->actor);
+void EnFish_RespawningUpdate(EnFish* self, GlobalContext* globalCtx) {
+    if (self->actor.params == FISH_SWIMMING_UNIQUE) {
+        Actor_Kill(&self->actor);
         return;
     }
 
-    if ((this->actor.child != NULL) && (this->actor.child->update == NULL) && (&this->actor != this->actor.child)) {
-        this->actor.child = NULL;
+    if ((self->actor.child != NULL) && (self->actor.child->update == NULL) && (&self->actor != self->actor.child)) {
+        self->actor.child = NULL;
     }
 
-    if ((this->actionFunc == NULL) || (this->actionFunc(this, globalCtx), (this->actor.update != NULL))) {
-        Actor_MoveForward(&this->actor);
+    if ((self->actionFunc == NULL) || (self->actionFunc(self, globalCtx), (self->actor.update != NULL))) {
+        Actor_MoveForward(&self->actor);
 
-        if (this->respawnTimer == 20) {
-            this->actor.draw = EnFish_Draw;
-        } else if (this->respawnTimer == 0) {
-            Actor_SetScale(&this->actor, 0.01f);
-        } else if (this->respawnTimer < 20) {
-            Actor_SetScale(&this->actor, CLAMP_MAX(this->actor.scale.x + 0.001f, 0.01f));
+        if (self->respawnTimer == 20) {
+            self->actor.draw = EnFish_Draw;
+        } else if (self->respawnTimer == 0) {
+            Actor_SetScale(&self->actor, 0.01f);
+        } else if (self->respawnTimer < 20) {
+            Actor_SetScale(&self->actor, CLAMP_MAX(self->actor.scale.x + 0.001f, 0.01f));
         }
     }
 }
 
 void EnFish_Update(Actor* thisx, GlobalContext* globalCtx) {
-    EnFish* this = THIS;
+    EnFish* self = THIS;
 
-    if ((D_80A17010 == NULL) && (this->actor.params == FISH_DROPPED) && (globalCtx->csCtx.state != 0) &&
+    if ((D_80A17010 == NULL) && (self->actor.params == FISH_DROPPED) && (globalCtx->csCtx.state != 0) &&
         (globalCtx->csCtx.npcActions[1] != NULL)) {
-        EnFish_SetCutsceneData(this);
+        EnFish_SetCutsceneData(self);
     }
 
-    if ((D_80A17010 != NULL) && (&this->actor == D_80A17010)) {
-        EnFish_UpdateCutscene(this, globalCtx);
-    } else if (this->respawnTimer > 0) {
-        this->respawnTimer--;
-        EnFish_RespawningUpdate(this, globalCtx);
+    if ((D_80A17010 != NULL) && (&self->actor == D_80A17010)) {
+        EnFish_UpdateCutscene(self, globalCtx);
+    } else if (self->respawnTimer > 0) {
+        self->respawnTimer--;
+        EnFish_RespawningUpdate(self, globalCtx);
     } else {
-        EnFish_OrdinaryUpdate(this, globalCtx);
+        EnFish_OrdinaryUpdate(self, globalCtx);
     }
 }
 
 void EnFish_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    EnFish* this = THIS;
+    EnFish* self = THIS;
 
     func_80093D18(globalCtx->state.gfxCtx);
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+    SkelAnime_DrawFlexOpa(globalCtx, self->skelAnime.skeleton, self->skelAnime.jointTable, self->skelAnime.dListCount,
                           NULL, NULL, NULL);
-    Collider_UpdateSpheres(0, &this->collider);
+    Collider_UpdateSpheres(0, &self->collider);
 }

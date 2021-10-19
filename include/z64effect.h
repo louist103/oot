@@ -222,7 +222,7 @@ typedef struct EffectSs {
     /* 0x3C */ Actor* actor; // interfacing actor, usually the actor that spawned the effect
     /* 0x40 */ s16 regs[13]; // specific per effect
     /* 0x5A */ u16 flags;
-    /* 0x5C */ s16 life; // -1 means this entry is free
+    /* 0x5C */ s16 life; // -1 means self entry is free
     /* 0x5E */ u8 priority; // Lower value means higher priority
     /* 0x5F */ u8 type;
 } EffectSs; // size = 0x60

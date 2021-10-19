@@ -6,36 +6,36 @@
 
 #include "global.h"
 
-void Opening_SetupTitleScreen(OpeningContext* this) {
+void Opening_SetupTitleScreen(OpeningContext* self) {
     gSaveContext.gameMode = 1;
-    this->state.running = false;
+    self->state.running = false;
     gSaveContext.linkAge = 0;
     Sram_InitDebugSave();
     gSaveContext.cutsceneIndex = 0xFFF3;
     gSaveContext.sceneSetupIndex = 7;
-    SET_NEXT_GAMESTATE(&this->state, Gameplay_Init, GlobalContext);
+    SET_NEXT_GAMESTATE(&self->state, Gameplay_Init, GlobalContext);
 }
 
-void func_80803C5C(OpeningContext* this) {
+void func_80803C5C(OpeningContext* self) {
 }
 
 void Opening_Main(GameState* thisx) {
-    OpeningContext* this = (OpeningContext*)thisx;
+    OpeningContext* self = (OpeningContext*)thisx;
 
-    func_80095248(this->state.gfxCtx, 0, 0, 0);
-    Opening_SetupTitleScreen(this);
-    func_80803C5C(this);
+    func_80095248(self->state.gfxCtx, 0, 0, 0);
+    Opening_SetupTitleScreen(self);
+    func_80803C5C(self);
 }
 
 void Opening_Destroy(GameState* thisx) {
 }
 
 void Opening_Init(GameState* thisx) {
-    OpeningContext* this = (OpeningContext*)thisx;
+    OpeningContext* self = (OpeningContext*)thisx;
 
     R_UPDATE_RATE = 1;
-    Matrix_Init(&this->state);
-    View_Init(&this->view, this->state.gfxCtx);
-    this->state.main = Opening_Main;
-    this->state.destroy = Opening_Destroy;
+    Matrix_Init(&self->state);
+    View_Init(&self->view, self->state.gfxCtx);
+    self->state.main = Opening_Main;
+    self->state.destroy = Opening_Destroy;
 }

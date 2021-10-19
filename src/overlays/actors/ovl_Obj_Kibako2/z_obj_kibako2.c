@@ -16,8 +16,8 @@ void ObjKibako2_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjKibako2_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjKibako2_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjKibako2_Draw(Actor* thisx, GlobalContext* globalCtx);
-void ObjKibako2_Idle(ObjKibako2* this, GlobalContext* globalCtx);
-void ObjKibako2_Kill(ObjKibako2* this, GlobalContext* globalCtx);
+void ObjKibako2_Idle(ObjKibako2* self, GlobalContext* globalCtx);
+void ObjKibako2_Kill(ObjKibako2* self, GlobalContext* globalCtx);
 
 const ActorInit Obj_Kibako2_InitVars = {
     ACTOR_OBJ_KIBAKO2,
@@ -59,14 +59,14 @@ static InitChainEntry sInitChain[] = {
 };
 
 void ObjKibako2_InitCollider(Actor* thisx, GlobalContext* globalCtx) {
-    ObjKibako2* this = THIS;
+    ObjKibako2* self = THIS;
 
-    Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinder(globalCtx, &this->collider, &this->dyna.actor, &sCylinderInit);
-    Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
+    Collider_InitCylinder(globalCtx, &self->collider);
+    Collider_SetCylinder(globalCtx, &self->collider, &self->dyna.actor, &sCylinderInit);
+    Collider_UpdateCylinder(&self->dyna.actor, &self->collider);
 }
 
-void ObjKibako2_Break(ObjKibako2* this, GlobalContext* globalCtx) {
+void ObjKibako2_Break(ObjKibako2* self, GlobalContext* globalCtx) {
     s32 pad[2];
     Vec3f* thisPos;
     Vec3f pos;
@@ -74,7 +74,7 @@ void ObjKibako2_Break(ObjKibako2* this, GlobalContext* globalCtx) {
     s16 angle;
     s32 i;
 
-    thisPos = &this->dyna.actor.world.pos;
+    thisPos = &self->dyna.actor.world.pos;
     for (i = 0, angle = 0; i < 0x10; i++, angle += 0x4E20) {
         f32 sn = Math_SinS(angle);
         f32 cs = Math_CosS(angle);
@@ -105,75 +105,75 @@ void ObjKibako2_Break(ObjKibako2* this, GlobalContext* globalCtx) {
     func_80033480(globalCtx, thisPos, 90.0f, 6, 100, 160, 1);
 }
 
-void ObjKibako2_SpawnCollectible(ObjKibako2* this, GlobalContext* globalCtx) {
+void ObjKibako2_SpawnCollectible(ObjKibako2* self, GlobalContext* globalCtx) {
     s16 itemDropped;
     s16 collectibleFlagTemp;
 
-    collectibleFlagTemp = this->collectibleFlag;
-    itemDropped = this->dyna.actor.home.rot.x;
+    collectibleFlagTemp = self->collectibleFlag;
+    itemDropped = self->dyna.actor.home.rot.x;
     if (itemDropped >= 0 && itemDropped < 0x1A) {
-        Item_DropCollectible(globalCtx, &this->dyna.actor.world.pos, itemDropped | (collectibleFlagTemp << 8));
+        Item_DropCollectible(globalCtx, &self->dyna.actor.world.pos, itemDropped | (collectibleFlagTemp << 8));
     }
 }
 
 void ObjKibako2_Init(Actor* thisx, GlobalContext* globalCtx) {
-    ObjKibako2* this = THIS;
+    ObjKibako2* self = THIS;
     s16 pad;
     CollisionHeader* colHeader = NULL;
     u32 bgId;
 
-    DynaPolyActor_Init(&this->dyna, 0);
-    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
+    DynaPolyActor_Init(&self->dyna, 0);
+    Actor_ProcessInitChain(&self->dyna.actor, sInitChain);
     ObjKibako2_InitCollider(thisx, globalCtx);
     CollisionHeader_GetVirtual(&gLargeCrateCol, &colHeader);
-    bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
-    this->collectibleFlag = this->dyna.actor.home.rot.z & 0x3F;
-    this->dyna.bgId = bgId;
-    this->actionFunc = ObjKibako2_Idle;
-    this->dyna.actor.home.rot.z = this->dyna.actor.world.rot.z = this->dyna.actor.shape.rot.z =
-        this->dyna.actor.world.rot.x = this->dyna.actor.shape.rot.x = 0;
+    bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &self->dyna.actor, colHeader);
+    self->collectibleFlag = self->dyna.actor.home.rot.z & 0x3F;
+    self->dyna.bgId = bgId;
+    self->actionFunc = ObjKibako2_Idle;
+    self->dyna.actor.home.rot.z = self->dyna.actor.world.rot.z = self->dyna.actor.shape.rot.z =
+        self->dyna.actor.world.rot.x = self->dyna.actor.shape.rot.x = 0;
     // "Wooden box (stationary)"
-    osSyncPrintf("木箱(据置)(arg %04xH)(item %04xH %d)\n", this->dyna.actor.params, this->collectibleFlag,
-                 this->dyna.actor.home.rot.x);
+    osSyncPrintf("木箱(据置)(arg %04xH)(item %04xH %d)\n", self->dyna.actor.params, self->collectibleFlag,
+                 self->dyna.actor.home.rot.x);
 }
 
 void ObjKibako2_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    ObjKibako2* this = THIS;
+    ObjKibako2* self = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->collider);
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    Collider_DestroyCylinder(globalCtx, &self->collider);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, self->dyna.bgId);
 }
 
-void ObjKibako2_Idle(ObjKibako2* this, GlobalContext* globalCtx) {
-    if ((this->collider.base.acFlags & AC_HIT) || (this->dyna.actor.home.rot.z != 0) ||
-        func_80033684(globalCtx, &this->dyna.actor) != NULL) {
-        ObjKibako2_Break(this, globalCtx);
-        Audio_PlaySoundAtPosition(globalCtx, &this->dyna.actor.world.pos, 20, NA_SE_EV_WOODBOX_BREAK);
-        this->dyna.actor.flags |= 0x10;
-        func_8003EBF8(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
-        this->dyna.actor.draw = NULL;
-        this->actionFunc = ObjKibako2_Kill;
-    } else if (this->dyna.actor.xzDistToPlayer < 600.0f) {
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+void ObjKibako2_Idle(ObjKibako2* self, GlobalContext* globalCtx) {
+    if ((self->collider.base.acFlags & AC_HIT) || (self->dyna.actor.home.rot.z != 0) ||
+        func_80033684(globalCtx, &self->dyna.actor) != NULL) {
+        ObjKibako2_Break(self, globalCtx);
+        Audio_PlaySoundAtPosition(globalCtx, &self->dyna.actor.world.pos, 20, NA_SE_EV_WOODBOX_BREAK);
+        self->dyna.actor.flags |= 0x10;
+        func_8003EBF8(globalCtx, &globalCtx->colCtx.dyna, self->dyna.bgId);
+        self->dyna.actor.draw = NULL;
+        self->actionFunc = ObjKibako2_Kill;
+    } else if (self->dyna.actor.xzDistToPlayer < 600.0f) {
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
     }
 }
 
-void ObjKibako2_Kill(ObjKibako2* this, GlobalContext* globalCtx) {
-    s16 params = this->dyna.actor.params;
+void ObjKibako2_Kill(ObjKibako2* self, GlobalContext* globalCtx) {
+    s16 params = self->dyna.actor.params;
 
     if ((params & 0x8000) == 0) {
-        Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_SW, this->dyna.actor.world.pos.x,
-                    this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, 0, this->dyna.actor.shape.rot.y, 0,
+        Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_SW, self->dyna.actor.world.pos.x,
+                    self->dyna.actor.world.pos.y, self->dyna.actor.world.pos.z, 0, self->dyna.actor.shape.rot.y, 0,
                     params | 0x8000);
     }
-    ObjKibako2_SpawnCollectible(this, globalCtx);
-    Actor_Kill(&this->dyna.actor);
+    ObjKibako2_SpawnCollectible(self, globalCtx);
+    Actor_Kill(&self->dyna.actor);
 }
 
 void ObjKibako2_Update(Actor* thisx, GlobalContext* globalCtx) {
-    ObjKibako2* this = THIS;
+    ObjKibako2* self = THIS;
 
-    this->actionFunc(this, globalCtx);
+    self->actionFunc(self, globalCtx);
 }
 
 void ObjKibako2_Draw(Actor* thisx, GlobalContext* globalCtx) {

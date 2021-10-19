@@ -3,7 +3,7 @@
  *
  * DEFINE_ACTOR should be used for normal actors
  *    - Argument 1: Name of the actor (without the ovl_ part)
- *    - Argument 2: Enum value for this actor
+ *    - Argument 2: Enum value for self actor
  *    - Argument 3: Allocation type (normal, permanent or absolute)
  *
  * DEFINE_ACTOR_INTERNAL should be used for actors that aren't an overlay, with the same arguments as DEFINE_ACTOR

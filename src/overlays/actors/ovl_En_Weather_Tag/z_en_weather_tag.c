@@ -15,21 +15,21 @@ void EnWeatherTag_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnWeatherTag_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnWeatherTag_Update(Actor* thisx, GlobalContext* globalCtx);
 
-void EnWeatherTag_DisabledCloudyHyruleMarket(EnWeatherTag* this, GlobalContext* globalCtx);
-void EnWeatherTag_EnabledCloudyHyruleMarket(EnWeatherTag* this, GlobalContext* globalCtx);
-void EnWeatherTag_DisabledCloudyLonLonRanch(EnWeatherTag* this, GlobalContext* globalCtx);
-void EnWeatherTag_EnabledCloudyLonLonRanch(EnWeatherTag* this, GlobalContext* globalCtx);
-void EnWeatherTag_DisabledCloudySnow(EnWeatherTag* this, GlobalContext* globalCtx);
-void EnWeatherTag_EnabledCloudySnow(EnWeatherTag* this, GlobalContext* globalCtx);
-void EnWeatherTag_DisabledRainLakeHylia(EnWeatherTag* this, GlobalContext* globalCtx);
-void EnWeatherTag_EnabledRainLakeHylia(EnWeatherTag* this, GlobalContext* globalCtx);
-void EnWeatherTag_DisabledCloudyDeathMountain(EnWeatherTag* this, GlobalContext* globalCtx);
-void EnWeatherTag_EnabledCloudyDeathMountain(EnWeatherTag* this, GlobalContext* globalCtx);
-void EnWeatherTag_DisabledCloudyRainThunderKakariko(EnWeatherTag* this, GlobalContext* globalCtx);
-void EnWeatherTag_EnabledCloudyRainThunderKakariko(EnWeatherTag* this, GlobalContext* globalCtx);
-void EnWeatherTag_SetSandstormIntensity(EnWeatherTag* this, GlobalContext* globalCtx);
-void EnWeatherTag_DisabledRainThunder(EnWeatherTag* this, GlobalContext* globalCtx);
-void EnWeatherTag_EnabledRainThunder(EnWeatherTag* this, GlobalContext* globalCtx);
+void EnWeatherTag_DisabledCloudyHyruleMarket(EnWeatherTag* self, GlobalContext* globalCtx);
+void EnWeatherTag_EnabledCloudyHyruleMarket(EnWeatherTag* self, GlobalContext* globalCtx);
+void EnWeatherTag_DisabledCloudyLonLonRanch(EnWeatherTag* self, GlobalContext* globalCtx);
+void EnWeatherTag_EnabledCloudyLonLonRanch(EnWeatherTag* self, GlobalContext* globalCtx);
+void EnWeatherTag_DisabledCloudySnow(EnWeatherTag* self, GlobalContext* globalCtx);
+void EnWeatherTag_EnabledCloudySnow(EnWeatherTag* self, GlobalContext* globalCtx);
+void EnWeatherTag_DisabledRainLakeHylia(EnWeatherTag* self, GlobalContext* globalCtx);
+void EnWeatherTag_EnabledRainLakeHylia(EnWeatherTag* self, GlobalContext* globalCtx);
+void EnWeatherTag_DisabledCloudyDeathMountain(EnWeatherTag* self, GlobalContext* globalCtx);
+void EnWeatherTag_EnabledCloudyDeathMountain(EnWeatherTag* self, GlobalContext* globalCtx);
+void EnWeatherTag_DisabledCloudyRainThunderKakariko(EnWeatherTag* self, GlobalContext* globalCtx);
+void EnWeatherTag_EnabledCloudyRainThunderKakariko(EnWeatherTag* self, GlobalContext* globalCtx);
+void EnWeatherTag_SetSandstormIntensity(EnWeatherTag* self, GlobalContext* globalCtx);
+void EnWeatherTag_DisabledRainThunder(EnWeatherTag* self, GlobalContext* globalCtx);
+void EnWeatherTag_EnabledRainThunder(EnWeatherTag* self, GlobalContext* globalCtx);
 
 #define WEATHER_TAG_RANGE100(x) ((x >> 8) * 100.0f)
 
@@ -45,33 +45,33 @@ const ActorInit En_Weather_Tag_InitVars = {
     NULL,
 };
 
-void EnWeatherTag_SetupAction(EnWeatherTag* this, EnWeatherTagActionFunc actionFunc) {
-    this->actionFunc = actionFunc;
+void EnWeatherTag_SetupAction(EnWeatherTag* self, EnWeatherTagActionFunc actionFunc) {
+    self->actionFunc = actionFunc;
 }
 
 void EnWeatherTag_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnWeatherTag_Init(Actor* thisx, GlobalContext* globalCtx) {
-    EnWeatherTag* this = THIS;
+    EnWeatherTag* self = THIS;
 
-    this->actor.flags &= ~1;
+    self->actor.flags &= ~1;
 
-    switch (this->actor.params & 0xF) {
+    switch (self->actor.params & 0xF) {
         case EN_WEATHER_TAG_TYPE_CLOUDY_MARKET:
             osSyncPrintf("\n\n");
             // "☆☆☆☆☆ (;o;) About ☆☆☆☆☆☆"
             osSyncPrintf(VT_FGCOL(YELLOW) "☆☆☆☆☆ （;o;) くらいよー ☆☆☆☆☆ \n" VT_RST);
-            EnWeatherTag_SetupAction(this, EnWeatherTag_DisabledCloudyHyruleMarket);
+            EnWeatherTag_SetupAction(self, EnWeatherTag_DisabledCloudyHyruleMarket);
             break;
         case EN_WEATHER_TAG_TYPE_CLOUDY_LON_LON_RANCH:
             osSyncPrintf("\n\n");
             // "☆☆☆☆☆ Cloudy (._.) Ah Melancholy ☆☆☆☆☆"
             osSyncPrintf(VT_FGCOL(YELLOW) "☆☆☆☆☆ くもり (._.) あーあ 憂鬱 ☆☆☆☆☆ \n" VT_RST);
             if (Flags_GetEventChkInf(0x18)) {
-                Actor_Kill(&this->actor);
+                Actor_Kill(&self->actor);
             }
-            EnWeatherTag_SetupAction(this, EnWeatherTag_DisabledCloudyLonLonRanch);
+            EnWeatherTag_SetupAction(self, EnWeatherTag_DisabledCloudyLonLonRanch);
             break;
         case EN_WEATHER_TAG_TYPE_SNOW_ZORAS_DOMAIN:
             osSyncPrintf("\n\n");
@@ -79,9 +79,9 @@ void EnWeatherTag_Init(Actor* thisx, GlobalContext* globalCtx) {
             osSyncPrintf(VT_FGCOL(YELLOW) "☆☆☆☆☆ ゆきがふるー あなたはこないー (._.) ☆☆☆☆☆ \n" VT_RST);
 
             if (gSaveContext.eventChkInf[4] & 0x400) {
-                Actor_Kill(&this->actor);
+                Actor_Kill(&self->actor);
             }
-            EnWeatherTag_SetupAction(this, EnWeatherTag_DisabledCloudySnow);
+            EnWeatherTag_SetupAction(self, EnWeatherTag_DisabledCloudySnow);
             break;
         case EN_WEATHER_TAG_TYPE_RAIN_LAKE_HYLIA:
             osSyncPrintf("\n\n");
@@ -89,18 +89,18 @@ void EnWeatherTag_Init(Actor* thisx, GlobalContext* globalCtx) {
             osSyncPrintf(VT_FGCOL(YELLOW) "☆☆☆☆☆ わわわわー なーがーさーきーはー (^o^) ☆☆☆☆☆ \n" VT_RST);
 
             if (gSaveContext.eventChkInf[4] & 0x400) {
-                Actor_Kill(&this->actor);
+                Actor_Kill(&self->actor);
             }
-            EnWeatherTag_SetupAction(this, EnWeatherTag_DisabledRainLakeHylia);
+            EnWeatherTag_SetupAction(self, EnWeatherTag_DisabledRainLakeHylia);
             break;
         case EN_WEATHER_TAG_TYPE_CLOUDY_DEATH_MOUNTAIN:
             osSyncPrintf("\n\n");
             // "☆☆☆☆☆ Cloudy (._.) Ah Melancholy ☆☆☆☆☆"
             osSyncPrintf(VT_FGCOL(YELLOW) "☆☆☆☆☆ くもり (._.) あーあ 憂鬱 ☆☆☆☆☆ \n" VT_RST);
             if (gSaveContext.eventChkInf[4] & 0x200) {
-                Actor_Kill(&this->actor);
+                Actor_Kill(&self->actor);
             }
-            EnWeatherTag_SetupAction(this, EnWeatherTag_DisabledCloudyDeathMountain);
+            EnWeatherTag_SetupAction(self, EnWeatherTag_DisabledCloudyDeathMountain);
             break;
         case EN_WEATHER_TAG_TYPE_THUNDERSTORM_KAKARIKO:
             osSyncPrintf("\n\n");
@@ -109,33 +109,33 @@ void EnWeatherTag_Init(Actor* thisx, GlobalContext* globalCtx) {
 
             if (!(gSaveContext.eventChkInf[4] & 0x100) || !(gSaveContext.eventChkInf[4] & 0x200) ||
                 !(gSaveContext.eventChkInf[4] & 0x400) || CHECK_QUEST_ITEM(QUEST_MEDALLION_SHADOW)) {
-                Actor_Kill(&this->actor);
+                Actor_Kill(&self->actor);
             }
-            EnWeatherTag_SetupAction(this, EnWeatherTag_DisabledCloudyRainThunderKakariko);
+            EnWeatherTag_SetupAction(self, EnWeatherTag_DisabledCloudyRainThunderKakariko);
             break;
         case EN_WEATHER_TAG_TYPE_SANDSTORM_INTENSITY:
             osSyncPrintf("\n\n");
             // "☆☆☆☆☆ The desert becomes thicker ☆☆☆☆☆"
             osSyncPrintf(VT_FGCOL(YELLOW) "☆☆☆☆☆ 砂漠が濃くなります ☆☆☆☆☆ \n" VT_RST);
-            EnWeatherTag_SetupAction(this, EnWeatherTag_SetSandstormIntensity);
+            EnWeatherTag_SetupAction(self, EnWeatherTag_SetSandstormIntensity);
             break;
         case EN_WEATHER_TAG_TYPE_THUNDERSTORM_GRAVEYARD:
             osSyncPrintf("\n\n");
             // "☆☆☆☆☆ Wow wa wa na wa saa ki ha (^o^) ☆☆☆☆☆"
             osSyncPrintf(VT_FGCOL(YELLOW) "☆☆☆☆☆ わわわわー なーがーさーきーはー (^o^) ☆☆☆☆☆ \n" VT_RST);
 
-            EnWeatherTag_SetupAction(this, EnWeatherTag_DisabledRainThunder);
+            EnWeatherTag_SetupAction(self, EnWeatherTag_DisabledRainThunder);
             break;
     }
 }
 
-u8 WeatherTag_CheckEnableWeatherEffect(EnWeatherTag* this, GlobalContext* globalCtx, u8 arg2, u8 arg3, u8 arg4, u8 arg5,
+u8 WeatherTag_CheckEnableWeatherEffect(EnWeatherTag* self, GlobalContext* globalCtx, u8 arg2, u8 arg3, u8 arg4, u8 arg5,
                                        u16 arg6, u8 weatherMode) {
     s32 pad;
     u8 ret = false;
     Player* player = GET_PLAYER(globalCtx);
 
-    if (Actor_WorldDistXZToActor(&player->actor, &this->actor) < WEATHER_TAG_RANGE100(this->actor.params)) {
+    if (Actor_WorldDistXZToActor(&player->actor, &self->actor) < WEATHER_TAG_RANGE100(self->actor.params)) {
         if ((globalCtx->envCtx.indoors != 0) || !gSkyboxBlendingEnabled ||
             (globalCtx->skyboxId != SKYBOX_NORMAL_SKY && globalCtx->envCtx.unk_1F == globalCtx->envCtx.unk_20)) {
             D_8011FB38 = 1;
@@ -169,13 +169,13 @@ u8 WeatherTag_CheckEnableWeatherEffect(EnWeatherTag* this, GlobalContext* global
     return ret;
 }
 
-u8 WeatherTag_CheckRestoreWeather(EnWeatherTag* this, GlobalContext* globalCtx, u8 arg2, u8 arg3, u8 arg4, u8 arg5,
+u8 WeatherTag_CheckRestoreWeather(EnWeatherTag* self, GlobalContext* globalCtx, u8 arg2, u8 arg3, u8 arg4, u8 arg5,
                                   u16 arg6) {
     s32 pad;
     u8 ret = false;
     Player* player = GET_PLAYER(globalCtx);
 
-    if ((WEATHER_TAG_RANGE100(this->actor.params) + 100.0f) < Actor_WorldDistXZToActor(&player->actor, &this->actor)) {
+    if ((WEATHER_TAG_RANGE100(self->actor.params) + 100.0f) < Actor_WorldDistXZToActor(&player->actor, &self->actor)) {
         if (globalCtx->envCtx.indoors != 0 || !gSkyboxBlendingEnabled ||
             (globalCtx->skyboxId != SKYBOX_NORMAL_SKY && globalCtx->envCtx.unk_1F == globalCtx->envCtx.unk_20)) {
             D_8011FB38 = 1;
@@ -203,94 +203,94 @@ u8 WeatherTag_CheckRestoreWeather(EnWeatherTag* this, GlobalContext* globalCtx, 
     return ret;
 }
 
-void EnWeatherTag_DisabledCloudyHyruleMarket(EnWeatherTag* this, GlobalContext* globalCtx) {
-    if (WeatherTag_CheckEnableWeatherEffect(this, globalCtx, 0, 1, 0, 3, 60, 1)) {
-        EnWeatherTag_SetupAction(this, EnWeatherTag_EnabledCloudyHyruleMarket);
+void EnWeatherTag_DisabledCloudyHyruleMarket(EnWeatherTag* self, GlobalContext* globalCtx) {
+    if (WeatherTag_CheckEnableWeatherEffect(self, globalCtx, 0, 1, 0, 3, 60, 1)) {
+        EnWeatherTag_SetupAction(self, EnWeatherTag_EnabledCloudyHyruleMarket);
     }
 }
 
-void EnWeatherTag_EnabledCloudyHyruleMarket(EnWeatherTag* this, GlobalContext* globalCtx) {
-    if (WeatherTag_CheckRestoreWeather(this, globalCtx, 1, 0, 3, 0, 60)) {
-        EnWeatherTag_SetupAction(this, EnWeatherTag_DisabledCloudyHyruleMarket);
+void EnWeatherTag_EnabledCloudyHyruleMarket(EnWeatherTag* self, GlobalContext* globalCtx) {
+    if (WeatherTag_CheckRestoreWeather(self, globalCtx, 1, 0, 3, 0, 60)) {
+        EnWeatherTag_SetupAction(self, EnWeatherTag_DisabledCloudyHyruleMarket);
     }
 }
 
-void EnWeatherTag_DisabledCloudyLonLonRanch(EnWeatherTag* this, GlobalContext* globalCtx) {
-    if (WeatherTag_CheckEnableWeatherEffect(this, globalCtx, 0, 1, 0, 2, 100, 2)) {
-        EnWeatherTag_SetupAction(this, EnWeatherTag_EnabledCloudyLonLonRanch);
+void EnWeatherTag_DisabledCloudyLonLonRanch(EnWeatherTag* self, GlobalContext* globalCtx) {
+    if (WeatherTag_CheckEnableWeatherEffect(self, globalCtx, 0, 1, 0, 2, 100, 2)) {
+        EnWeatherTag_SetupAction(self, EnWeatherTag_EnabledCloudyLonLonRanch);
     }
 }
 
-void EnWeatherTag_EnabledCloudyLonLonRanch(EnWeatherTag* this, GlobalContext* globalCtx) {
-    if (WeatherTag_CheckRestoreWeather(this, globalCtx, 1, 0, 2, 0, 100)) {
-        EnWeatherTag_SetupAction(this, EnWeatherTag_DisabledCloudyLonLonRanch);
+void EnWeatherTag_EnabledCloudyLonLonRanch(EnWeatherTag* self, GlobalContext* globalCtx) {
+    if (WeatherTag_CheckRestoreWeather(self, globalCtx, 1, 0, 2, 0, 100)) {
+        EnWeatherTag_SetupAction(self, EnWeatherTag_DisabledCloudyLonLonRanch);
     }
 }
 
-void EnWeatherTag_DisabledCloudyDeathMountain(EnWeatherTag* this, GlobalContext* globalCtx) {
-    if (WeatherTag_CheckEnableWeatherEffect(this, globalCtx, 0, 1, 0, 2, 60, 2)) {
-        EnWeatherTag_SetupAction(this, EnWeatherTag_EnabledCloudyDeathMountain);
+void EnWeatherTag_DisabledCloudyDeathMountain(EnWeatherTag* self, GlobalContext* globalCtx) {
+    if (WeatherTag_CheckEnableWeatherEffect(self, globalCtx, 0, 1, 0, 2, 60, 2)) {
+        EnWeatherTag_SetupAction(self, EnWeatherTag_EnabledCloudyDeathMountain);
     }
 }
 
-void EnWeatherTag_EnabledCloudyDeathMountain(EnWeatherTag* this, GlobalContext* globalCtx) {
-    if (WeatherTag_CheckRestoreWeather(this, globalCtx, 1, 0, 2, 0, 60)) {
-        EnWeatherTag_SetupAction(this, EnWeatherTag_DisabledCloudyLonLonRanch);
+void EnWeatherTag_EnabledCloudyDeathMountain(EnWeatherTag* self, GlobalContext* globalCtx) {
+    if (WeatherTag_CheckRestoreWeather(self, globalCtx, 1, 0, 2, 0, 60)) {
+        EnWeatherTag_SetupAction(self, EnWeatherTag_DisabledCloudyLonLonRanch);
     }
 }
 
-void EnWeatherTag_DisabledCloudySnow(EnWeatherTag* this, GlobalContext* globalCtx) {
-    if (WeatherTag_CheckEnableWeatherEffect(this, globalCtx, 0, 1, 0, 2, 60, 3)) {
+void EnWeatherTag_DisabledCloudySnow(EnWeatherTag* self, GlobalContext* globalCtx) {
+    if (WeatherTag_CheckEnableWeatherEffect(self, globalCtx, 0, 1, 0, 2, 60, 3)) {
         globalCtx->envCtx.unk_EE[3] = 64;
-        EnWeatherTag_SetupAction(this, EnWeatherTag_EnabledCloudySnow);
+        EnWeatherTag_SetupAction(self, EnWeatherTag_EnabledCloudySnow);
     }
 }
 
-void EnWeatherTag_EnabledCloudySnow(EnWeatherTag* this, GlobalContext* globalCtx) {
-    if (WeatherTag_CheckRestoreWeather(this, globalCtx, 1, 0, 2, 0, 60)) {
+void EnWeatherTag_EnabledCloudySnow(EnWeatherTag* self, GlobalContext* globalCtx) {
+    if (WeatherTag_CheckRestoreWeather(self, globalCtx, 1, 0, 2, 0, 60)) {
         globalCtx->envCtx.unk_EE[3] = 0;
-        EnWeatherTag_SetupAction(this, EnWeatherTag_DisabledCloudySnow);
+        EnWeatherTag_SetupAction(self, EnWeatherTag_DisabledCloudySnow);
     }
 }
 
-void EnWeatherTag_DisabledRainLakeHylia(EnWeatherTag* this, GlobalContext* globalCtx) {
-    if (WeatherTag_CheckEnableWeatherEffect(this, globalCtx, 0, 1, 0, 2, 100, 4)) {
+void EnWeatherTag_DisabledRainLakeHylia(EnWeatherTag* self, GlobalContext* globalCtx) {
+    if (WeatherTag_CheckEnableWeatherEffect(self, globalCtx, 0, 1, 0, 2, 100, 4)) {
         func_80077624(globalCtx);
         globalCtx->envCtx.unk_EE[0] = 25;
-        EnWeatherTag_SetupAction(this, EnWeatherTag_EnabledRainLakeHylia);
+        EnWeatherTag_SetupAction(self, EnWeatherTag_EnabledRainLakeHylia);
     }
 }
 
-void EnWeatherTag_EnabledRainLakeHylia(EnWeatherTag* this, GlobalContext* globalCtx) {
-    if (WeatherTag_CheckRestoreWeather(this, globalCtx, 1, 0, 2, 0, 100)) {
+void EnWeatherTag_EnabledRainLakeHylia(EnWeatherTag* self, GlobalContext* globalCtx) {
+    if (WeatherTag_CheckRestoreWeather(self, globalCtx, 1, 0, 2, 0, 100)) {
         func_80077684(globalCtx);
         globalCtx->envCtx.unk_EE[0] = 0;
-        EnWeatherTag_SetupAction(this, EnWeatherTag_DisabledRainLakeHylia);
+        EnWeatherTag_SetupAction(self, EnWeatherTag_DisabledRainLakeHylia);
     }
 }
 
-void EnWeatherTag_DisabledCloudyRainThunderKakariko(EnWeatherTag* this, GlobalContext* globalCtx) {
-    if (WeatherTag_CheckEnableWeatherEffect(this, globalCtx, 0, 1, 0, 4, 100, 5)) {
+void EnWeatherTag_DisabledCloudyRainThunderKakariko(EnWeatherTag* self, GlobalContext* globalCtx) {
+    if (WeatherTag_CheckEnableWeatherEffect(self, globalCtx, 0, 1, 0, 4, 100, 5)) {
         func_80077624(globalCtx);
         globalCtx->envCtx.lightningMode = LIGHTNING_MODE_ON;
         globalCtx->envCtx.unk_EE[0] = 30;
-        EnWeatherTag_SetupAction(this, EnWeatherTag_EnabledCloudyRainThunderKakariko);
+        EnWeatherTag_SetupAction(self, EnWeatherTag_EnabledCloudyRainThunderKakariko);
     }
 }
 
-void EnWeatherTag_EnabledCloudyRainThunderKakariko(EnWeatherTag* this, GlobalContext* globalCtx) {
-    if (WeatherTag_CheckRestoreWeather(this, globalCtx, 1, 0, 4, 0, 100)) {
+void EnWeatherTag_EnabledCloudyRainThunderKakariko(EnWeatherTag* self, GlobalContext* globalCtx) {
+    if (WeatherTag_CheckRestoreWeather(self, globalCtx, 1, 0, 4, 0, 100)) {
         func_80077684(globalCtx);
         globalCtx->envCtx.lightningMode = LIGHTNING_MODE_LAST;
         globalCtx->envCtx.unk_EE[0] = 0;
-        EnWeatherTag_SetupAction(this, EnWeatherTag_DisabledCloudyRainThunderKakariko);
+        EnWeatherTag_SetupAction(self, EnWeatherTag_DisabledCloudyRainThunderKakariko);
     }
 }
 
-void EnWeatherTag_SetSandstormIntensity(EnWeatherTag* this, GlobalContext* globalCtx) {
+void EnWeatherTag_SetSandstormIntensity(EnWeatherTag* self, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if (Actor_WorldDistXZToActor(&player->actor, &this->actor) < WEATHER_TAG_RANGE100(this->actor.params)) {
+    if (Actor_WorldDistXZToActor(&player->actor, &self->actor) < WEATHER_TAG_RANGE100(self->actor.params)) {
         Math_SmoothStepToS(&globalCtx->envCtx.adjFogNear, -0x50, 1, 2, 1);
         Math_SmoothStepToS(&globalCtx->envCtx.adjFogFar, -0x7D0, 1, 50, 1);
     } else {
@@ -299,36 +299,36 @@ void EnWeatherTag_SetSandstormIntensity(EnWeatherTag* this, GlobalContext* globa
     }
 }
 
-void EnWeatherTag_DisabledRainThunder(EnWeatherTag* this, GlobalContext* globalCtx) {
+void EnWeatherTag_DisabledRainThunder(EnWeatherTag* self, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if (Actor_WorldDistXZToActor(&player->actor, &this->actor) < WEATHER_TAG_RANGE100(this->actor.params)) {
+    if (Actor_WorldDistXZToActor(&player->actor, &self->actor) < WEATHER_TAG_RANGE100(self->actor.params)) {
         func_80077624(globalCtx);
         globalCtx->envCtx.lightningMode = LIGHTNING_MODE_ON;
         globalCtx->envCtx.unk_EE[0] = 25;
-        EnWeatherTag_SetupAction(this, EnWeatherTag_EnabledRainThunder);
+        EnWeatherTag_SetupAction(self, EnWeatherTag_EnabledRainThunder);
     }
 }
 
-void EnWeatherTag_EnabledRainThunder(EnWeatherTag* this, GlobalContext* globalCtx) {
+void EnWeatherTag_EnabledRainThunder(EnWeatherTag* self, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if ((WEATHER_TAG_RANGE100(this->actor.params) + 10.0f) < Actor_WorldDistXZToActor(&player->actor, &this->actor)) {
+    if ((WEATHER_TAG_RANGE100(self->actor.params) + 10.0f) < Actor_WorldDistXZToActor(&player->actor, &self->actor)) {
         func_80077684(globalCtx);
         globalCtx->envCtx.lightningMode = LIGHTNING_MODE_LAST;
         globalCtx->envCtx.unk_EE[0] = 0;
         globalCtx->envCtx.unk_EE[1] = 10;
-        EnWeatherTag_SetupAction(this, EnWeatherTag_DisabledRainThunder);
+        EnWeatherTag_SetupAction(self, EnWeatherTag_DisabledRainThunder);
     }
 }
 
 void EnWeatherTag_Update(Actor* thisx, GlobalContext* globalCtx) {
-    EnWeatherTag* this = THIS;
+    EnWeatherTag* self = THIS;
 
-    this->actionFunc(this, globalCtx);
+    self->actionFunc(self, globalCtx);
     if (BREG(0) != 0) {
-        DebugDisplay_AddObject(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
-                               this->actor.world.rot.x, this->actor.world.rot.y, this->actor.world.rot.z, 1.0f, 1.0f,
+        DebugDisplay_AddObject(self->actor.world.pos.x, self->actor.world.pos.y, self->actor.world.pos.z,
+                               self->actor.world.rot.x, self->actor.world.rot.y, self->actor.world.rot.z, 1.0f, 1.0f,
                                1.0f, 255, 0, 255, 255, 4, globalCtx->state.gfxCtx);
     }
 }

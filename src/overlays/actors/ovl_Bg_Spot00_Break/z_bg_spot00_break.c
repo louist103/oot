@@ -36,39 +36,39 @@ static InitChainEntry sInitChain[] = {
 };
 
 void BgSpot00Break_Init(Actor* thisx, GlobalContext* globalCtx) {
-    BgSpot00Break* this = THIS;
+    BgSpot00Break* self = THIS;
     s32 pad;
     CollisionHeader* colHeader = NULL;
 
-    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPolyActor_Init(&this->dyna, DPM_UNK);
+    Actor_ProcessInitChain(&self->dyna.actor, sInitChain);
+    DynaPolyActor_Init(&self->dyna, DPM_UNK);
 
-    if (this->dyna.actor.params == 1) {
+    if (self->dyna.actor.params == 1) {
         CollisionHeader_GetVirtual(&gBarbedWireFenceCol, &colHeader);
     } else {
         CollisionHeader_GetVirtual(&gBrokenDrawbridgeCol, &colHeader);
     }
 
-    this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
+    self->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &self->dyna.actor, colHeader);
 
     if (!LINK_IS_ADULT) {
-        Actor_Kill(&this->dyna.actor);
+        Actor_Kill(&self->dyna.actor);
     }
 }
 
 void BgSpot00Break_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    BgSpot00Break* this = THIS;
+    BgSpot00Break* self = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, self->dyna.bgId);
 }
 
 void BgSpot00Break_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void BgSpot00Break_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    BgSpot00Break* this = THIS;
+    BgSpot00Break* self = THIS;
 
-    if (this->dyna.actor.params == 1) {
+    if (self->dyna.actor.params == 1) {
         Gfx_DrawDListOpa(globalCtx, gBarbedWireFenceDL);
     } else {
         Gfx_DrawDListOpa(globalCtx, gBrokenDrawbridgeDL);

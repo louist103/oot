@@ -25,7 +25,7 @@ typedef struct {
     /* 0x23 */ u8 ocarinaGameReward;
     /* 0x24 */ ItemEquips childEquips;
     /* 0x2E */ ItemEquips adultEquips;
-    /* 0x38 */ u32 unk_38; // this may be incorrect, currently used for alignement
+    /* 0x38 */ u32 unk_38; // self may be incorrect, currently used for alignement
     /* 0x3C */ char unk_3C[0x0E];
     /* 0x4A */ s16 savedSceneNum;
 } SavePlayerData; // size = 0x4C

@@ -16,11 +16,11 @@ void EnMs_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnMs_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnMs_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void EnMs_SetOfferText(EnMs* this, GlobalContext* globalCtx);
-void EnMs_Wait(EnMs* this, GlobalContext* globalCtx);
-void EnMs_Talk(EnMs* this, GlobalContext* globalCtx);
-void EnMs_Sell(EnMs* this, GlobalContext* globalCtx);
-void EnMs_TalkAfterPurchase(EnMs* this, GlobalContext* globalCtx);
+void EnMs_SetOfferText(EnMs* self, GlobalContext* globalCtx);
+void EnMs_Wait(EnMs* self, GlobalContext* globalCtx);
+void EnMs_Talk(EnMs* self, GlobalContext* globalCtx);
+void EnMs_Sell(EnMs* self, GlobalContext* globalCtx);
+void EnMs_TalkAfterPurchase(EnMs* self, GlobalContext* globalCtx);
 
 const ActorInit En_Ms_InitVars = {
     ACTOR_EN_MS,
@@ -59,69 +59,69 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(targetArrowOffset, 500, ICHAIN_STOP),
 };
 
-void EnMs_SetOfferText(EnMs* this, GlobalContext* globalCtx) {
-    this->actor.textId = Text_GetFaceReaction(globalCtx, 0x1B);
-    if (this->actor.textId == 0) {
+void EnMs_SetOfferText(EnMs* self, GlobalContext* globalCtx) {
+    self->actor.textId = Text_GetFaceReaction(globalCtx, 0x1B);
+    if (self->actor.textId == 0) {
         if (BEANS_BOUGHT >= 10) {
-            this->actor.textId = 0x406B;
+            self->actor.textId = 0x406B;
         } else {
-            this->actor.textId = sOfferTextIDs[BEANS_BOUGHT];
+            self->actor.textId = sOfferTextIDs[BEANS_BOUGHT];
         }
     }
 }
 
 void EnMs_Init(Actor* thisx, GlobalContext* globalCtx) {
-    EnMs* this = THIS;
+    EnMs* self = THIS;
     s32 pad;
 
     if (LINK_AGE_IN_YEARS != YEARS_CHILD) {
-        Actor_Kill(&this->actor);
+        Actor_Kill(&self->actor);
         return;
     }
-    Actor_ProcessInitChain(&this->actor, sInitChain);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gBeanSalesmanSkel, &gBeanSalesmanEatingAnim, this->jointTable,
-                       this->morphTable, 9);
-    Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinderType1(globalCtx, &this->collider, &this->actor, &sCylinderInit);
-    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 35.0f);
-    Actor_SetScale(&this->actor, 0.015f);
+    Actor_ProcessInitChain(&self->actor, sInitChain);
+    SkelAnime_InitFlex(globalCtx, &self->skelAnime, &gBeanSalesmanSkel, &gBeanSalesmanEatingAnim, self->jointTable,
+                       self->morphTable, 9);
+    Collider_InitCylinder(globalCtx, &self->collider);
+    Collider_SetCylinderType1(globalCtx, &self->collider, &self->actor, &sCylinderInit);
+    ActorShape_Init(&self->actor.shape, 0.0f, ActorShadow_DrawCircle, 35.0f);
+    Actor_SetScale(&self->actor, 0.015f);
 
-    this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->actor.speedXZ = 0.0f;
-    this->actor.velocity.y = 0.0f;
-    this->actor.gravity = -1.0f;
+    self->actor.colChkInfo.mass = MASS_IMMOVABLE;
+    self->actor.speedXZ = 0.0f;
+    self->actor.velocity.y = 0.0f;
+    self->actor.gravity = -1.0f;
 
-    EnMs_SetOfferText(this, globalCtx);
+    EnMs_SetOfferText(self, globalCtx);
 
-    this->actionFunc = EnMs_Wait;
+    self->actionFunc = EnMs_Wait;
 }
 
 void EnMs_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    EnMs* this = THIS;
+    EnMs* self = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    Collider_DestroyCylinder(globalCtx, &self->collider);
 }
 
-void EnMs_Wait(EnMs* this, GlobalContext* globalCtx) {
+void EnMs_Wait(EnMs* self, GlobalContext* globalCtx) {
     s16 yawDiff;
 
-    yawDiff = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
-    EnMs_SetOfferText(this, globalCtx);
+    yawDiff = self->actor.yawTowardsPlayer - self->actor.shape.rot.y;
+    EnMs_SetOfferText(self, globalCtx);
 
-    if (func_8002F194(&this->actor, globalCtx)) { // if talk is initiated
-        this->actionFunc = EnMs_Talk;
-    } else if ((this->actor.xzDistToPlayer < 90.0f) && (ABS(yawDiff) < 0x2000)) { // talk range
-        func_8002F2CC(&this->actor, globalCtx, 90.0f);
+    if (func_8002F194(&self->actor, globalCtx)) { // if talk is initiated
+        self->actionFunc = EnMs_Talk;
+    } else if ((self->actor.xzDistToPlayer < 90.0f) && (ABS(yawDiff) < 0x2000)) { // talk range
+        func_8002F2CC(&self->actor, globalCtx, 90.0f);
     }
 }
 
-void EnMs_Talk(EnMs* this, GlobalContext* globalCtx) {
+void EnMs_Talk(EnMs* self, GlobalContext* globalCtx) {
     u8 dialogState;
 
     dialogState = func_8010BDBC(&globalCtx->msgCtx);
     if (dialogState != 4) {
         if ((dialogState == 6) && (func_80106BC8(globalCtx) != 0)) { // advanced final textbox
-            this->actionFunc = EnMs_Wait;
+            self->actionFunc = EnMs_Wait;
         }
     } else if (func_80106BC8(globalCtx) != 0) {
         switch (globalCtx->msgCtx.choiceIndex) {
@@ -130,8 +130,8 @@ void EnMs_Talk(EnMs* this, GlobalContext* globalCtx) {
                     func_8010B720(globalCtx, 0x4069); // not enough rupees text
                     return;
                 }
-                func_8002F434(&this->actor, globalCtx, GI_BEAN, 90.0f, 10.0f);
-                this->actionFunc = EnMs_Sell;
+                func_8002F434(&self->actor, globalCtx, GI_BEAN, 90.0f, 10.0f);
+                self->actionFunc = EnMs_Sell;
                 return;
             case 1: // no
                 func_8010B720(globalCtx, 0x4068);
@@ -141,48 +141,48 @@ void EnMs_Talk(EnMs* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnMs_Sell(EnMs* this, GlobalContext* globalCtx) {
-    if (Actor_HasParent(&this->actor, globalCtx)) {
+void EnMs_Sell(EnMs* self, GlobalContext* globalCtx) {
+    if (Actor_HasParent(&self->actor, globalCtx)) {
         Rupees_ChangeBy(-sPrices[BEANS_BOUGHT]);
-        this->actor.parent = NULL;
-        this->actionFunc = EnMs_TalkAfterPurchase;
+        self->actor.parent = NULL;
+        self->actionFunc = EnMs_TalkAfterPurchase;
     } else {
-        func_8002F434(&this->actor, globalCtx, GI_BEAN, 90.0f, 10.0f);
+        func_8002F434(&self->actor, globalCtx, GI_BEAN, 90.0f, 10.0f);
     }
 }
 
-void EnMs_TalkAfterPurchase(EnMs* this, GlobalContext* globalCtx) {
+void EnMs_TalkAfterPurchase(EnMs* self, GlobalContext* globalCtx) {
     // if dialog state is 6 and player responded to textbox
     if ((func_8010BDBC(&globalCtx->msgCtx)) == 6 && (func_80106BC8(globalCtx) != 0)) {
         func_8010B720(globalCtx, 0x406C);
-        this->actionFunc = EnMs_Talk;
+        self->actionFunc = EnMs_Talk;
     }
 }
 
 void EnMs_Update(Actor* thisx, GlobalContext* globalCtx) {
-    EnMs* this = THIS;
+    EnMs* self = THIS;
     s32 pad;
 
-    this->activeTimer += 1;
-    Actor_SetFocus(&this->actor, 20.0f);
-    this->actor.targetArrowOffset = 500.0f;
-    Actor_SetScale(&this->actor, 0.015f);
-    SkelAnime_Update(&this->skelAnime);
-    this->actionFunc(this, globalCtx);
+    self->activeTimer += 1;
+    Actor_SetFocus(&self->actor, 20.0f);
+    self->actor.targetArrowOffset = 500.0f;
+    Actor_SetScale(&self->actor, 0.015f);
+    SkelAnime_Update(&self->skelAnime);
+    self->actionFunc(self, globalCtx);
 
     if (gSaveContext.entranceIndex == 0x157 && gSaveContext.sceneSetupIndex == 8) { // ride carpet if in credits
-        Actor_MoveForward(&this->actor);
-        osSyncPrintf("OOOHHHHHH %f\n", this->actor.velocity.y);
-        Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+        Actor_MoveForward(&self->actor);
+        osSyncPrintf("OOOHHHHHH %f\n", self->actor.velocity.y);
+        Actor_UpdateBgCheckInfo(globalCtx, &self->actor, 0.0f, 0.0f, 0.0f, 4);
     }
-    Collider_UpdateCylinder(&this->actor, &this->collider);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    Collider_UpdateCylinder(&self->actor, &self->collider);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
 }
 
 void EnMs_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    EnMs* this = THIS;
+    EnMs* self = THIS;
 
     func_80093D18(globalCtx->state.gfxCtx);
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          NULL, NULL, this);
+    SkelAnime_DrawFlexOpa(globalCtx, self->skelAnime.skeleton, self->skelAnime.jointTable, self->skelAnime.dListCount,
+                          NULL, NULL, self);
 }

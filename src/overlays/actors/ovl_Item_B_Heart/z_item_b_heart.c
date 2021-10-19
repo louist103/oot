@@ -16,7 +16,7 @@ void ItemBHeart_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ItemBHeart_Update(Actor* thisx, GlobalContext* globalCtx);
 void ItemBHeart_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80B85264(ItemBHeart* this, GlobalContext* globalCtx);
+void func_80B85264(ItemBHeart* self, GlobalContext* globalCtx);
 
 const ActorInit Item_B_Heart_InitVars = {
     ACTOR_ITEM_B_HEART,
@@ -38,13 +38,13 @@ static InitChainEntry sInitChain[] = {
 };
 
 void ItemBHeart_Init(Actor* thisx, GlobalContext* globalCtx) {
-    ItemBHeart* this = THIS;
+    ItemBHeart* self = THIS;
 
     if (Flags_GetCollectible(globalCtx, 0x1F)) {
-        Actor_Kill(&this->actor);
+        Actor_Kill(&self->actor);
     } else {
-        Actor_ProcessInitChain(&this->actor, sInitChain);
-        ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.8f);
+        Actor_ProcessInitChain(&self->actor, sInitChain);
+        ActorShape_Init(&self->actor.shape, 0.0f, NULL, 0.8f);
     }
 }
 
@@ -52,33 +52,33 @@ void ItemBHeart_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void ItemBHeart_Update(Actor* thisx, GlobalContext* globalCtx) {
-    ItemBHeart* this = THIS;
+    ItemBHeart* self = THIS;
 
-    func_80B85264(this, globalCtx);
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
-    if (Actor_HasParent(&this->actor, globalCtx)) {
+    func_80B85264(self, globalCtx);
+    Actor_UpdateBgCheckInfo(globalCtx, &self->actor, 0.0f, 0.0f, 0.0f, 4);
+    if (Actor_HasParent(&self->actor, globalCtx)) {
         Flags_SetCollectible(globalCtx, 0x1F);
-        Actor_Kill(&this->actor);
+        Actor_Kill(&self->actor);
     } else {
-        func_8002F434(&this->actor, globalCtx, GI_HEART_CONTAINER_2, 30.0f, 40.0f);
+        func_8002F434(&self->actor, globalCtx, GI_HEART_CONTAINER_2, 30.0f, 40.0f);
     }
 }
 
-void func_80B85264(ItemBHeart* this, GlobalContext* globalCtx) {
+void func_80B85264(ItemBHeart* self, GlobalContext* globalCtx) {
     f32 yOffset;
 
-    this->unk_164++;
-    yOffset = (Math_SinS(this->unk_164 * 0x60C) * 5.0f) + 20.0f;
-    Math_ApproachF(&this->actor.world.pos.y, this->actor.home.pos.y + yOffset, 0.1f, this->unk_158);
-    Math_ApproachF(&this->unk_158, 2.0f, 1.0f, 0.1f);
-    this->actor.shape.rot.y += 0x400;
+    self->unk_164++;
+    yOffset = (Math_SinS(self->unk_164 * 0x60C) * 5.0f) + 20.0f;
+    Math_ApproachF(&self->actor.world.pos.y, self->actor.home.pos.y + yOffset, 0.1f, self->unk_158);
+    Math_ApproachF(&self->unk_158, 2.0f, 1.0f, 0.1f);
+    self->actor.shape.rot.y += 0x400;
 
-    Math_ApproachF(&this->actor.scale.x, 0.4f, 0.1f, 0.01f);
-    this->actor.scale.y = this->actor.scale.z = this->actor.scale.x;
+    Math_ApproachF(&self->actor.scale.x, 0.4f, 0.1f, 0.01f);
+    self->actor.scale.y = self->actor.scale.z = self->actor.scale.x;
 }
 
 void ItemBHeart_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    ItemBHeart* this = THIS;
+    ItemBHeart* self = THIS;
     Actor* actorIt;
     u8 flag = false;
 
@@ -87,7 +87,7 @@ void ItemBHeart_Draw(Actor* thisx, GlobalContext* globalCtx) {
     actorIt = globalCtx->actorCtx.actorLists[ACTORCAT_ITEMACTION].head;
 
     while (actorIt != NULL) {
-        if ((actorIt->id == ACTOR_DOOR_WARP1) && (actorIt->projectedPos.z > this->actor.projectedPos.z)) {
+        if ((actorIt->id == ACTOR_DOOR_WARP1) && (actorIt->projectedPos.z > self->actor.projectedPos.z)) {
             flag = true;
             break;
         }

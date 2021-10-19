@@ -36,16 +36,16 @@ static u8 sOceffWipeAlphaIndices[] = {
 };
 
 void OceffWipe_Init(Actor* thisx, GlobalContext* globalCtx) {
-    OceffWipe* this = THIS;
+    OceffWipe* self = THIS;
 
-    Actor_SetScale(&this->actor, 0.1f);
-    this->counter = 0;
-    this->actor.world.pos = GET_ACTIVE_CAM(globalCtx)->eye;
-    osSyncPrintf(VT_FGCOL(CYAN) " WIPE arg_data = %d\n" VT_RST, this->actor.params);
+    Actor_SetScale(&self->actor, 0.1f);
+    self->counter = 0;
+    self->actor.world.pos = GET_ACTIVE_CAM(globalCtx)->eye;
+    osSyncPrintf(VT_FGCOL(CYAN) " WIPE arg_data = %d\n" VT_RST, self->actor.params);
 }
 
 void OceffWipe_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    OceffWipe* this = THIS;
+    OceffWipe* self = THIS;
     Player* player = GET_PLAYER(globalCtx);
 
     func_800876C8(globalCtx);
@@ -55,19 +55,19 @@ void OceffWipe_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void OceffWipe_Update(Actor* thisx, GlobalContext* globalCtx) {
-    OceffWipe* this = THIS;
+    OceffWipe* self = THIS;
 
-    this->actor.world.pos = GET_ACTIVE_CAM(globalCtx)->eye;
-    if (this->counter < 100) {
-        this->counter++;
+    self->actor.world.pos = GET_ACTIVE_CAM(globalCtx)->eye;
+    if (self->counter < 100) {
+        self->counter++;
     } else {
-        Actor_Kill(&this->actor);
+        Actor_Kill(&self->actor);
     }
 }
 
 void OceffWipe_Draw(Actor* thisx, GlobalContext* globalCtx) {
     u32 scroll = globalCtx->state.frames & 0xFF;
-    OceffWipe* this = THIS;
+    OceffWipe* self = THIS;
     f32 z;
     s32 pad;
     u8 alphaTable[3];
@@ -81,16 +81,16 @@ void OceffWipe_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx, "../z_oceff_wipe.c", 346);
 
-    if (this->counter < 32) {
-        z = Math_SinS(this->counter << 9) * 1400;
+    if (self->counter < 32) {
+        z = Math_SinS(self->counter << 9) * 1400;
     } else {
         z = 1400;
     }
 
-    if (this->counter >= 80) {
+    if (self->counter >= 80) {
         alphaTable[0] = 0;
-        alphaTable[1] = (0x64 - this->counter) * 8;
-        alphaTable[2] = (0x64 - this->counter) * 12;
+        alphaTable[1] = (0x64 - self->counter) * 8;
+        alphaTable[2] = (0x64 - self->counter) * 12;
     } else {
         alphaTable[0] = 0;
         alphaTable[1] = 0xA0;
@@ -113,7 +113,7 @@ void OceffWipe_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx, "../z_oceff_wipe.c", 375),
               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    if (this->actor.params != OCEFF_WIPE_ZL) {
+    if (self->actor.params != OCEFF_WIPE_ZL) {
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 170, 255, 255, 255);
         gDPSetEnvColor(POLY_XLU_DISP++, 0, 150, 255, 128);
     } else {

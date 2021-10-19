@@ -10,42 +10,42 @@ void EnFz_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnFz_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnFz_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void EnFz_UpdateTargetPos(EnFz* this, GlobalContext* globalCtx);
+void EnFz_UpdateTargetPos(EnFz* self, GlobalContext* globalCtx);
 
 // Stationary Freezard
-void EnFz_SetupBlowSmokeStationary(EnFz* this);
-void EnFz_BlowSmokeStationary(EnFz* this, GlobalContext* globalCtx);
+void EnFz_SetupBlowSmokeStationary(EnFz* self);
+void EnFz_BlowSmokeStationary(EnFz* self, GlobalContext* globalCtx);
 
 // Moving Freezard that can vanish and reappear
-void EnFz_Wait(EnFz* this, GlobalContext* globalCtx);
-void EnFz_SetupAppear(EnFz* this);
-void EnFz_Appear(EnFz* this, GlobalContext* globalCtx);
-void EnFz_SetupAimForMove(EnFz* this);
-void EnFz_AimForMove(EnFz* this, GlobalContext* globalCtx);
-void EnFz_SetupMoveTowardsPlayer(EnFz* this);
-void EnFz_MoveTowardsPlayer(EnFz* this, GlobalContext* globalCtx);
-void EnFz_SetupAimForFreeze(EnFz* this);
-void EnFz_AimForFreeze(EnFz* this, GlobalContext* globalCtx);
-void EnFz_SetupBlowSmoke(EnFz* this, GlobalContext* globalCtx);
-void EnFz_BlowSmoke(EnFz* this, GlobalContext* globalCtx);
-void EnFz_SetupDisappear(EnFz* this);
-void EnFz_Disappear(EnFz* this, GlobalContext* globalCtx);
-void EnFz_SetupWait(EnFz* this);
+void EnFz_Wait(EnFz* self, GlobalContext* globalCtx);
+void EnFz_SetupAppear(EnFz* self);
+void EnFz_Appear(EnFz* self, GlobalContext* globalCtx);
+void EnFz_SetupAimForMove(EnFz* self);
+void EnFz_AimForMove(EnFz* self, GlobalContext* globalCtx);
+void EnFz_SetupMoveTowardsPlayer(EnFz* self);
+void EnFz_MoveTowardsPlayer(EnFz* self, GlobalContext* globalCtx);
+void EnFz_SetupAimForFreeze(EnFz* self);
+void EnFz_AimForFreeze(EnFz* self, GlobalContext* globalCtx);
+void EnFz_SetupBlowSmoke(EnFz* self, GlobalContext* globalCtx);
+void EnFz_BlowSmoke(EnFz* self, GlobalContext* globalCtx);
+void EnFz_SetupDisappear(EnFz* self);
+void EnFz_Disappear(EnFz* self, GlobalContext* globalCtx);
+void EnFz_SetupWait(EnFz* self);
 
 // Killed with fire source
-void EnFz_SetupMelt(EnFz* this);
-void EnFz_Melt(EnFz* this, GlobalContext* globalCtx);
+void EnFz_SetupMelt(EnFz* self);
+void EnFz_Melt(EnFz* self, GlobalContext* globalCtx);
 
 // Death
-void EnFz_SetupDespawn(EnFz* this, GlobalContext* globalCtx);
-void EnFz_Despawn(EnFz* this, GlobalContext* globalCtx);
+void EnFz_SetupDespawn(EnFz* self, GlobalContext* globalCtx);
+void EnFz_Despawn(EnFz* self, GlobalContext* globalCtx);
 
 // Ice Smoke Effects
-void EnFz_SpawnIceSmokeNoFreeze(EnFz* this, Vec3f* pos, Vec3f* velocity, Vec3f* accel, f32 xyScale);
-void EnFz_SpawnIceSmokeFreeze(EnFz* this, Vec3f* pos, Vec3f* velocity, Vec3f* accel, f32 xyScale, f32 xyScaleTarget,
+void EnFz_SpawnIceSmokeNoFreeze(EnFz* self, Vec3f* pos, Vec3f* velocity, Vec3f* accel, f32 xyScale);
+void EnFz_SpawnIceSmokeFreeze(EnFz* self, Vec3f* pos, Vec3f* velocity, Vec3f* accel, f32 xyScale, f32 xyScaleTarget,
                               s16 primAlpha, u8 isTimerMod8);
-void EnFz_UpdateIceSmoke(EnFz* this, GlobalContext* globalCtx);
-void EnFz_DrawIceSmoke(EnFz* this, GlobalContext* globalCtx);
+void EnFz_UpdateIceSmoke(EnFz* self, GlobalContext* globalCtx);
+void EnFz_DrawIceSmoke(EnFz* self, GlobalContext* globalCtx);
 
 const ActorInit En_Fz_InitVars = {
     ACTOR_EN_FZ,
@@ -158,97 +158,97 @@ static InitChainEntry sInitChain[] = {
 };
 
 void EnFz_Init(Actor* thisx, GlobalContext* globalCtx) {
-    EnFz* this = THIS;
+    EnFz* self = THIS;
 
-    Actor_ProcessInitChain(&this->actor, sInitChain);
-    this->actor.colChkInfo.damageTable = &sDamageTable;
-    this->actor.colChkInfo.health = 6;
+    Actor_ProcessInitChain(&self->actor, sInitChain);
+    self->actor.colChkInfo.damageTable = &sDamageTable;
+    self->actor.colChkInfo.health = 6;
 
-    Collider_InitCylinder(globalCtx, &this->collider1);
-    Collider_SetCylinderType1(globalCtx, &this->collider1, &this->actor, &sCylinderInit1);
+    Collider_InitCylinder(globalCtx, &self->collider1);
+    Collider_SetCylinderType1(globalCtx, &self->collider1, &self->actor, &sCylinderInit1);
 
-    Collider_InitCylinder(globalCtx, &this->collider2);
-    Collider_SetCylinderType1(globalCtx, &this->collider2, &this->actor, &sCylinderInit2);
+    Collider_InitCylinder(globalCtx, &self->collider2);
+    Collider_SetCylinderType1(globalCtx, &self->collider2, &self->actor, &sCylinderInit2);
 
-    Collider_InitCylinder(globalCtx, &this->collider3);
-    Collider_SetCylinderType1(globalCtx, &this->collider3, &this->actor, &sCylinderInit3);
+    Collider_InitCylinder(globalCtx, &self->collider3);
+    Collider_SetCylinderType1(globalCtx, &self->collider3, &self->actor, &sCylinderInit3);
 
-    Actor_SetScale(&this->actor, 0.008f);
-    this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->actor.flags &= ~1;
-    this->unusedTimer1 = 0;
-    this->unusedCounter = 0;
-    this->updateBgInfo = true;
-    this->isMoving = false;
-    this->isFreezing = false;
-    this->isActive = true;
-    this->isDespawning = false;
-    this->actor.speedXZ = 0.0f;
-    this->actor.gravity = 0.0f;
-    this->actor.velocity.y = 0.0f;
-    this->posOrigin.y = this->actor.world.pos.y;
-    this->iceSmokeFreezingSpawnHeight = this->actor.world.pos.y;
-    this->posOrigin.x = this->actor.world.pos.x;
-    this->posOrigin.z = this->actor.world.pos.z;
-    this->unusedFloat = 135.0f;
+    Actor_SetScale(&self->actor, 0.008f);
+    self->actor.colChkInfo.mass = MASS_IMMOVABLE;
+    self->actor.flags &= ~1;
+    self->unusedTimer1 = 0;
+    self->unusedCounter = 0;
+    self->updateBgInfo = true;
+    self->isMoving = false;
+    self->isFreezing = false;
+    self->isActive = true;
+    self->isDespawning = false;
+    self->actor.speedXZ = 0.0f;
+    self->actor.gravity = 0.0f;
+    self->actor.velocity.y = 0.0f;
+    self->posOrigin.y = self->actor.world.pos.y;
+    self->iceSmokeFreezingSpawnHeight = self->actor.world.pos.y;
+    self->posOrigin.x = self->actor.world.pos.x;
+    self->posOrigin.z = self->actor.world.pos.z;
+    self->unusedFloat = 135.0f;
 
-    if (this->actor.params < 0) {
-        this->envAlpha = 0;
-        this->actor.scale.y = 0.0f;
-        EnFz_SetupWait(this);
+    if (self->actor.params < 0) {
+        self->envAlpha = 0;
+        self->actor.scale.y = 0.0f;
+        EnFz_SetupWait(self);
     } else {
-        this->envAlpha = 255;
-        EnFz_SetupBlowSmokeStationary(this);
+        self->envAlpha = 255;
+        EnFz_SetupBlowSmokeStationary(self);
     }
 
-    EnFz_UpdateTargetPos(this, globalCtx);
+    EnFz_UpdateTargetPos(self, globalCtx);
 }
 
 void EnFz_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    EnFz* this = THIS;
+    EnFz* self = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->collider1);
-    Collider_DestroyCylinder(globalCtx, &this->collider2);
-    Collider_DestroyCylinder(globalCtx, &this->collider3);
+    Collider_DestroyCylinder(globalCtx, &self->collider1);
+    Collider_DestroyCylinder(globalCtx, &self->collider2);
+    Collider_DestroyCylinder(globalCtx, &self->collider3);
 }
 
-void EnFz_UpdateTargetPos(EnFz* this, GlobalContext* globalCtx) {
+void EnFz_UpdateTargetPos(EnFz* self, GlobalContext* globalCtx) {
     Vec3f pos;
     Vec3f hitPos;
     Vec3f vec1;
     s32 bgId;
     CollisionPoly* hitPoly;
 
-    pos.x = this->actor.world.pos.x;
-    pos.y = this->actor.world.pos.y + 20.0f;
-    pos.z = this->actor.world.pos.z;
+    pos.x = self->actor.world.pos.x;
+    pos.y = self->actor.world.pos.y + 20.0f;
+    pos.z = self->actor.world.pos.z;
 
     Matrix_Translate(pos.x, pos.y, pos.z, MTXMODE_NEW);
-    Matrix_RotateRPY(this->actor.shape.rot.x, this->actor.shape.rot.y, this->actor.shape.rot.z, MTXMODE_APPLY);
+    Matrix_RotateRPY(self->actor.shape.rot.x, self->actor.shape.rot.y, self->actor.shape.rot.z, MTXMODE_APPLY);
     vec1.x = vec1.y = 0.0f;
     vec1.z = 220.0f;
-    Matrix_MultVec3f(&vec1, &this->wallHitPos);
+    Matrix_MultVec3f(&vec1, &self->wallHitPos);
 
-    if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &pos, &this->wallHitPos, &hitPos, &hitPoly, true, false, false,
+    if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &pos, &self->wallHitPos, &hitPos, &hitPoly, true, false, false,
                                 true, &bgId)) {
-        Math_Vec3f_Copy(&this->wallHitPos, &hitPos);
+        Math_Vec3f_Copy(&self->wallHitPos, &hitPos);
     }
 
-    pos.x = this->actor.world.pos.x - this->wallHitPos.x;
-    pos.z = this->actor.world.pos.z - this->wallHitPos.z;
+    pos.x = self->actor.world.pos.x - self->wallHitPos.x;
+    pos.z = self->actor.world.pos.z - self->wallHitPos.z;
 
-    this->distToTargetSq = SQ(pos.x) + SQ(pos.z);
+    self->distToTargetSq = SQ(pos.x) + SQ(pos.z);
 }
 
-s32 EnFz_ReachedTarget(EnFz* this, Vec3f* vec) {
-    if (this->distToTargetSq <= (SQ(this->actor.world.pos.x - vec->x) + SQ(this->actor.world.pos.z - vec->z))) {
+s32 EnFz_ReachedTarget(EnFz* self, Vec3f* vec) {
+    if (self->distToTargetSq <= (SQ(self->actor.world.pos.x - vec->x) + SQ(self->actor.world.pos.z - vec->z))) {
         return true;
     } else {
         return false;
     }
 }
 
-void EnFz_Damaged(EnFz* this, GlobalContext* globalCtx, Vec3f* vec, s32 numEffects, f32 unkFloat) {
+void EnFz_Damaged(EnFz* self, GlobalContext* globalCtx, Vec3f* vec, s32 numEffects, f32 unkFloat) {
     s32 i;
     Vec3f pos;
     Vec3f vel;
@@ -283,219 +283,219 @@ void EnFz_Damaged(EnFz* this, GlobalContext* globalCtx, Vec3f* vec, s32 numEffec
     CollisionCheck_SpawnShieldParticles(globalCtx, vec);
 }
 
-void EnFz_SpawnIceSmokeHiddenState(EnFz* this) {
+void EnFz_SpawnIceSmokeHiddenState(EnFz* self) {
 }
 
 // Fully grown
-void EnFz_SpawnIceSmokeGrowingState(EnFz* this) {
+void EnFz_SpawnIceSmokeGrowingState(EnFz* self) {
     Vec3f pos;
     Vec3f velocity;
     Vec3f accel;
 
-    if ((this->counter % 16) == 0) {
-        pos.x = Rand_CenteredFloat(40.0f) + this->actor.world.pos.x;
-        pos.y = Rand_CenteredFloat(40.0f) + this->actor.world.pos.y + 30.0f;
-        pos.z = Rand_CenteredFloat(40.0f) + this->actor.world.pos.z;
+    if ((self->counter % 16) == 0) {
+        pos.x = Rand_CenteredFloat(40.0f) + self->actor.world.pos.x;
+        pos.y = Rand_CenteredFloat(40.0f) + self->actor.world.pos.y + 30.0f;
+        pos.z = Rand_CenteredFloat(40.0f) + self->actor.world.pos.z;
         accel.x = accel.z = 0.0f;
         accel.y = 0.1f;
         velocity.x = velocity.y = velocity.z = 0.0f;
-        EnFz_SpawnIceSmokeNoFreeze(this, &pos, &velocity, &accel, Rand_ZeroFloat(7.5f) + 15.0f);
+        EnFz_SpawnIceSmokeNoFreeze(self, &pos, &velocity, &accel, Rand_ZeroFloat(7.5f) + 15.0f);
     }
 }
 
 // (2) Growing or Shrinking to/from hiding or (3) melting from fire
-void EnFz_SpawnIceSmokeActiveState(EnFz* this) {
+void EnFz_SpawnIceSmokeActiveState(EnFz* self) {
     Vec3f pos;
     Vec3f velocity;
     Vec3f accel;
 
-    if ((this->counter % 4) == 0) {
-        pos.x = Rand_CenteredFloat(40.0f) + this->actor.world.pos.x;
-        pos.y = this->iceSmokeFreezingSpawnHeight;
-        pos.z = Rand_CenteredFloat(40.0f) + this->actor.world.pos.z;
+    if ((self->counter % 4) == 0) {
+        pos.x = Rand_CenteredFloat(40.0f) + self->actor.world.pos.x;
+        pos.y = self->iceSmokeFreezingSpawnHeight;
+        pos.z = Rand_CenteredFloat(40.0f) + self->actor.world.pos.z;
         accel.x = accel.z = 0.0f;
         accel.y = 0.1f;
         velocity.x = velocity.y = velocity.z = 0.0f;
-        EnFz_SpawnIceSmokeNoFreeze(this, &pos, &velocity, &accel, Rand_ZeroFloat(7.5f) + 15.0f);
+        EnFz_SpawnIceSmokeNoFreeze(self, &pos, &velocity, &accel, Rand_ZeroFloat(7.5f) + 15.0f);
     }
 }
 
-void EnFz_ApplyDamage(EnFz* this, GlobalContext* globalCtx) {
+void EnFz_ApplyDamage(EnFz* self, GlobalContext* globalCtx) {
     Vec3f vec;
 
-    if (this->isMoving &&
-        ((this->actor.bgCheckFlags & 8) ||
-         (Actor_TestFloorInDirection(&this->actor, globalCtx, 60.0f, this->actor.world.rot.y) == 0))) {
-        this->actor.bgCheckFlags &= ~8;
-        this->isMoving = false;
-        this->speedXZ = 0.0f;
-        this->actor.speedXZ = 0.0f;
+    if (self->isMoving &&
+        ((self->actor.bgCheckFlags & 8) ||
+         (Actor_TestFloorInDirection(&self->actor, globalCtx, 60.0f, self->actor.world.rot.y) == 0))) {
+        self->actor.bgCheckFlags &= ~8;
+        self->isMoving = false;
+        self->speedXZ = 0.0f;
+        self->actor.speedXZ = 0.0f;
     }
 
-    if (this->isFreezing) {
-        if ((this->actor.params < 0) && (this->collider1.base.atFlags & 2)) {
-            this->isMoving = false;
-            this->collider1.base.acFlags &= ~2;
-            this->actor.speedXZ = this->speedXZ = 0.0f;
-            this->timer = 10;
-            EnFz_SetupDisappear(this);
-        } else if (this->collider2.base.acFlags & 0x80) {
-            this->collider2.base.acFlags &= ~0x80;
-            this->collider1.base.acFlags &= ~2;
-        } else if (this->collider1.base.acFlags & 2) {
-            this->collider1.base.acFlags &= ~2;
-            if (this->actor.colChkInfo.damageEffect != 2) {
-                if (this->actor.colChkInfo.damageEffect == 0xF) {
-                    Actor_ApplyDamage(&this->actor);
-                    Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0x2000, 8);
-                    if (this->actor.colChkInfo.health) {
-                        Audio_PlayActorSound2(&this->actor, NA_SE_EN_FREEZAD_DAMAGE);
-                        vec.x = this->actor.world.pos.x;
-                        vec.y = this->actor.world.pos.y;
-                        vec.z = this->actor.world.pos.z;
-                        EnFz_Damaged(this, globalCtx, &vec, 10, 0.0f);
-                        this->unusedCounter++;
+    if (self->isFreezing) {
+        if ((self->actor.params < 0) && (self->collider1.base.atFlags & 2)) {
+            self->isMoving = false;
+            self->collider1.base.acFlags &= ~2;
+            self->actor.speedXZ = self->speedXZ = 0.0f;
+            self->timer = 10;
+            EnFz_SetupDisappear(self);
+        } else if (self->collider2.base.acFlags & 0x80) {
+            self->collider2.base.acFlags &= ~0x80;
+            self->collider1.base.acFlags &= ~2;
+        } else if (self->collider1.base.acFlags & 2) {
+            self->collider1.base.acFlags &= ~2;
+            if (self->actor.colChkInfo.damageEffect != 2) {
+                if (self->actor.colChkInfo.damageEffect == 0xF) {
+                    Actor_ApplyDamage(&self->actor);
+                    Actor_SetColorFilter(&self->actor, 0x4000, 0xFF, 0x2000, 8);
+                    if (self->actor.colChkInfo.health) {
+                        Audio_PlayActorSound2(&self->actor, NA_SE_EN_FREEZAD_DAMAGE);
+                        vec.x = self->actor.world.pos.x;
+                        vec.y = self->actor.world.pos.y;
+                        vec.z = self->actor.world.pos.z;
+                        EnFz_Damaged(self, globalCtx, &vec, 10, 0.0f);
+                        self->unusedCounter++;
                     } else {
-                        Audio_PlayActorSound2(&this->actor, NA_SE_EN_FREEZAD_DEAD);
-                        Audio_PlayActorSound2(&this->actor, NA_SE_EV_ICE_BROKEN);
-                        vec.x = this->actor.world.pos.x;
-                        vec.y = this->actor.world.pos.y;
-                        vec.z = this->actor.world.pos.z;
-                        EnFz_Damaged(this, globalCtx, &vec, 30, 10.0f);
-                        EnFz_SetupDespawn(this, globalCtx);
+                        Audio_PlayActorSound2(&self->actor, NA_SE_EN_FREEZAD_DEAD);
+                        Audio_PlayActorSound2(&self->actor, NA_SE_EV_ICE_BROKEN);
+                        vec.x = self->actor.world.pos.x;
+                        vec.y = self->actor.world.pos.y;
+                        vec.z = self->actor.world.pos.z;
+                        EnFz_Damaged(self, globalCtx, &vec, 30, 10.0f);
+                        EnFz_SetupDespawn(self, globalCtx);
                     }
                 }
             } else {
-                Actor_ApplyDamage(&this->actor);
-                Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0x2000, 8);
-                if (this->actor.colChkInfo.health == 0) {
-                    Audio_PlayActorSound2(&this->actor, NA_SE_EN_FREEZAD_DEAD);
-                    EnFz_SetupMelt(this);
+                Actor_ApplyDamage(&self->actor);
+                Actor_SetColorFilter(&self->actor, 0x4000, 0xFF, 0x2000, 8);
+                if (self->actor.colChkInfo.health == 0) {
+                    Audio_PlayActorSound2(&self->actor, NA_SE_EN_FREEZAD_DEAD);
+                    EnFz_SetupMelt(self);
                 } else {
-                    Audio_PlayActorSound2(&this->actor, NA_SE_EN_FREEZAD_DAMAGE);
+                    Audio_PlayActorSound2(&self->actor, NA_SE_EN_FREEZAD_DAMAGE);
                 }
             }
         }
     }
 }
 
-void EnFz_SetYawTowardsPlayer(EnFz* this) {
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 10, 2000, 0);
-    this->actor.world.rot.y = this->actor.shape.rot.y;
+void EnFz_SetYawTowardsPlayer(EnFz* self) {
+    Math_SmoothStepToS(&self->actor.shape.rot.y, self->actor.yawTowardsPlayer, 10, 2000, 0);
+    self->actor.world.rot.y = self->actor.shape.rot.y;
 }
 
-void EnFz_SetupDisappear(EnFz* this) {
-    this->state = 2;
-    this->isFreezing = false;
-    this->actor.flags &= ~1;
-    this->actionFunc = EnFz_Disappear;
+void EnFz_SetupDisappear(EnFz* self) {
+    self->state = 2;
+    self->isFreezing = false;
+    self->actor.flags &= ~1;
+    self->actionFunc = EnFz_Disappear;
 }
 
-void EnFz_Disappear(EnFz* this, GlobalContext* globalCtx) {
-    this->envAlpha -= 16;
+void EnFz_Disappear(EnFz* self, GlobalContext* globalCtx) {
+    self->envAlpha -= 16;
 
-    if (this->envAlpha > 255) {
-        this->envAlpha = 0;
+    if (self->envAlpha > 255) {
+        self->envAlpha = 0;
     }
 
-    if (Math_SmoothStepToF(&this->actor.scale.y, 0.0f, 1.0f, 0.0005f, 0) == 0.0f) {
-        EnFz_SetupWait(this);
-    }
-}
-
-void EnFz_SetupWait(EnFz* this) {
-    this->state = 0;
-    this->unusedNum2 = 0;
-    this->unusedNum1 = 0;
-    this->timer = 100;
-    this->actionFunc = EnFz_Wait;
-    this->actor.world.pos.x = this->posOrigin.x;
-    this->actor.world.pos.y = this->posOrigin.y;
-    this->actor.world.pos.z = this->posOrigin.z;
-}
-
-void EnFz_Wait(EnFz* this, GlobalContext* globalCtx) {
-    if ((this->timer == 0) && (this->actor.xzDistToPlayer < 400.0f)) {
-        EnFz_SetupAppear(this);
+    if (Math_SmoothStepToF(&self->actor.scale.y, 0.0f, 1.0f, 0.0005f, 0) == 0.0f) {
+        EnFz_SetupWait(self);
     }
 }
 
-void EnFz_SetupAppear(EnFz* this) {
-    this->state = 2;
-    this->timer = 20;
-    this->unusedNum2 = 4000;
-    this->actionFunc = EnFz_Appear;
+void EnFz_SetupWait(EnFz* self) {
+    self->state = 0;
+    self->unusedNum2 = 0;
+    self->unusedNum1 = 0;
+    self->timer = 100;
+    self->actionFunc = EnFz_Wait;
+    self->actor.world.pos.x = self->posOrigin.x;
+    self->actor.world.pos.y = self->posOrigin.y;
+    self->actor.world.pos.z = self->posOrigin.z;
 }
 
-void EnFz_Appear(EnFz* this, GlobalContext* globalCtx) {
-    if (this->timer == 0) {
-        this->envAlpha += 8;
-        if (this->envAlpha > 255) {
-            this->envAlpha = 255;
+void EnFz_Wait(EnFz* self, GlobalContext* globalCtx) {
+    if ((self->timer == 0) && (self->actor.xzDistToPlayer < 400.0f)) {
+        EnFz_SetupAppear(self);
+    }
+}
+
+void EnFz_SetupAppear(EnFz* self) {
+    self->state = 2;
+    self->timer = 20;
+    self->unusedNum2 = 4000;
+    self->actionFunc = EnFz_Appear;
+}
+
+void EnFz_Appear(EnFz* self, GlobalContext* globalCtx) {
+    if (self->timer == 0) {
+        self->envAlpha += 8;
+        if (self->envAlpha > 255) {
+            self->envAlpha = 255;
         }
 
-        if (Math_SmoothStepToF(&this->actor.scale.y, 0.008f, 1.0f, 0.0005f, 0.0f) == 0.0f) {
-            EnFz_SetupAimForMove(this);
+        if (Math_SmoothStepToF(&self->actor.scale.y, 0.008f, 1.0f, 0.0005f, 0.0f) == 0.0f) {
+            EnFz_SetupAimForMove(self);
         }
     }
 }
 
-void EnFz_SetupAimForMove(EnFz* this) {
-    this->state = 1;
-    this->timer = 40;
-    this->updateBgInfo = true;
-    this->isFreezing = true;
-    this->actor.flags |= 1;
-    this->actionFunc = EnFz_AimForMove;
-    this->actor.gravity = -1.0f;
+void EnFz_SetupAimForMove(EnFz* self) {
+    self->state = 1;
+    self->timer = 40;
+    self->updateBgInfo = true;
+    self->isFreezing = true;
+    self->actor.flags |= 1;
+    self->actionFunc = EnFz_AimForMove;
+    self->actor.gravity = -1.0f;
 }
 
-void EnFz_AimForMove(EnFz* this, GlobalContext* globalCtx) {
-    EnFz_SetYawTowardsPlayer(this);
+void EnFz_AimForMove(EnFz* self, GlobalContext* globalCtx) {
+    EnFz_SetYawTowardsPlayer(self);
 
-    if (this->timer == 0) {
-        EnFz_SetupMoveTowardsPlayer(this);
+    if (self->timer == 0) {
+        EnFz_SetupMoveTowardsPlayer(self);
     }
 }
 
-void EnFz_SetupMoveTowardsPlayer(EnFz* this) {
-    this->state = 1;
-    this->isMoving = true;
-    this->timer = 100;
-    this->actionFunc = EnFz_MoveTowardsPlayer;
-    this->speedXZ = 4.0f;
+void EnFz_SetupMoveTowardsPlayer(EnFz* self) {
+    self->state = 1;
+    self->isMoving = true;
+    self->timer = 100;
+    self->actionFunc = EnFz_MoveTowardsPlayer;
+    self->speedXZ = 4.0f;
 }
 
-void EnFz_MoveTowardsPlayer(EnFz* this, GlobalContext* globalCtx) {
-    if ((this->timer == 0) || !this->isMoving) {
-        EnFz_SetupAimForFreeze(this);
+void EnFz_MoveTowardsPlayer(EnFz* self, GlobalContext* globalCtx) {
+    if ((self->timer == 0) || !self->isMoving) {
+        EnFz_SetupAimForFreeze(self);
     }
 }
 
-void EnFz_SetupAimForFreeze(EnFz* this) {
-    this->state = 1;
-    this->timer = 40;
-    this->actionFunc = EnFz_AimForFreeze;
-    this->speedXZ = 0.0f;
-    this->actor.speedXZ = 0.0f;
+void EnFz_SetupAimForFreeze(EnFz* self) {
+    self->state = 1;
+    self->timer = 40;
+    self->actionFunc = EnFz_AimForFreeze;
+    self->speedXZ = 0.0f;
+    self->actor.speedXZ = 0.0f;
 }
 
-void EnFz_AimForFreeze(EnFz* this, GlobalContext* globalCtx) {
-    EnFz_SetYawTowardsPlayer(this);
+void EnFz_AimForFreeze(EnFz* self, GlobalContext* globalCtx) {
+    EnFz_SetYawTowardsPlayer(self);
 
-    if (this->timer == 0) {
-        EnFz_SetupBlowSmoke(this, globalCtx);
+    if (self->timer == 0) {
+        EnFz_SetupBlowSmoke(self, globalCtx);
     }
 }
 
-void EnFz_SetupBlowSmoke(EnFz* this, GlobalContext* globalCtx) {
-    this->state = 1;
-    this->timer = 80;
-    this->actionFunc = EnFz_BlowSmoke;
-    EnFz_UpdateTargetPos(this, globalCtx);
+void EnFz_SetupBlowSmoke(EnFz* self, GlobalContext* globalCtx) {
+    self->state = 1;
+    self->timer = 80;
+    self->actionFunc = EnFz_BlowSmoke;
+    EnFz_UpdateTargetPos(self, globalCtx);
 }
 
-void EnFz_BlowSmoke(EnFz* this, GlobalContext* globalCtx) {
+void EnFz_BlowSmoke(EnFz* self, GlobalContext* globalCtx) {
     Vec3f vec1;
     Vec3f pos;
     Vec3f velocity;
@@ -503,25 +503,25 @@ void EnFz_BlowSmoke(EnFz* this, GlobalContext* globalCtx) {
     u8 isTimerMod8;
     s16 primAlpha;
 
-    if (this->timer == 0) {
-        EnFz_SetupDisappear(this);
-    } else if (this->timer >= 11) {
+    if (self->timer == 0) {
+        EnFz_SetupDisappear(self);
+    } else if (self->timer >= 11) {
         isTimerMod8 = false;
         primAlpha = 150;
-        func_8002F974(&this->actor, NA_SE_EN_FREEZAD_BREATH - SFX_FLAG);
+        func_8002F974(&self->actor, NA_SE_EN_FREEZAD_BREATH - SFX_FLAG);
 
-        if ((this->timer - 10) < 16) { // t < 26
-            primAlpha = (this->timer * 10) - 100;
+        if ((self->timer - 10) < 16) { // t < 26
+            primAlpha = (self->timer * 10) - 100;
         }
 
         accel.x = accel.z = 0.0f;
         accel.y = 0.6f;
 
-        pos.x = this->actor.world.pos.x;
-        pos.y = this->actor.world.pos.y + 20.0f;
-        pos.z = this->actor.world.pos.z;
+        pos.x = self->actor.world.pos.x;
+        pos.y = self->actor.world.pos.y + 20.0f;
+        pos.z = self->actor.world.pos.z;
 
-        Matrix_RotateY((this->actor.shape.rot.y / (f32)0x8000) * M_PI, MTXMODE_NEW);
+        Matrix_RotateY((self->actor.shape.rot.y / (f32)0x8000) * M_PI, MTXMODE_NEW);
 
         vec1.x = 0.0f;
         vec1.y = -2.0f;
@@ -529,84 +529,84 @@ void EnFz_BlowSmoke(EnFz* this, GlobalContext* globalCtx) {
 
         Matrix_MultVec3f(&vec1, &velocity);
 
-        if ((this->timer % 8) == 0) {
+        if ((self->timer % 8) == 0) {
             isTimerMod8 = true;
         }
 
-        EnFz_SpawnIceSmokeFreeze(this, &pos, &velocity, &accel, 2.0f, 25.0f, primAlpha, isTimerMod8);
+        EnFz_SpawnIceSmokeFreeze(self, &pos, &velocity, &accel, 2.0f, 25.0f, primAlpha, isTimerMod8);
 
         pos.x += (velocity.x * 0.5f);
         pos.y += (velocity.y * 0.5f);
         pos.z += (velocity.z * 0.5f);
 
-        EnFz_SpawnIceSmokeFreeze(this, &pos, &velocity, &accel, 2.0f, 25.0f, primAlpha, false);
+        EnFz_SpawnIceSmokeFreeze(self, &pos, &velocity, &accel, 2.0f, 25.0f, primAlpha, false);
     }
 }
 
-void EnFz_SetupDespawn(EnFz* this, GlobalContext* globalCtx) {
-    this->state = 0;
-    this->updateBgInfo = true;
-    this->isFreezing = false;
-    this->isDespawning = true;
-    this->actor.flags &= ~1;
-    this->isActive = false;
-    this->timer = 60;
-    this->speedXZ = 0.0f;
-    this->actor.gravity = 0.0f;
-    this->actor.velocity.y = 0.0f;
-    this->actor.speedXZ = 0.0f;
-    Actor_ChangeCategory(globalCtx, &globalCtx->actorCtx, &this->actor, ACTORCAT_PROP);
-    Item_DropCollectibleRandom(globalCtx, &this->actor, &this->actor.world.pos, 0x60);
-    this->actionFunc = EnFz_Despawn;
+void EnFz_SetupDespawn(EnFz* self, GlobalContext* globalCtx) {
+    self->state = 0;
+    self->updateBgInfo = true;
+    self->isFreezing = false;
+    self->isDespawning = true;
+    self->actor.flags &= ~1;
+    self->isActive = false;
+    self->timer = 60;
+    self->speedXZ = 0.0f;
+    self->actor.gravity = 0.0f;
+    self->actor.velocity.y = 0.0f;
+    self->actor.speedXZ = 0.0f;
+    Actor_ChangeCategory(globalCtx, &globalCtx->actorCtx, &self->actor, ACTORCAT_PROP);
+    Item_DropCollectibleRandom(globalCtx, &self->actor, &self->actor.world.pos, 0x60);
+    self->actionFunc = EnFz_Despawn;
 }
 
-void EnFz_Despawn(EnFz* this, GlobalContext* globalCtx) {
-    if (this->timer == 0) {
-        Actor_Kill(&this->actor);
+void EnFz_Despawn(EnFz* self, GlobalContext* globalCtx) {
+    if (self->timer == 0) {
+        Actor_Kill(&self->actor);
     }
 }
 
-void EnFz_SetupMelt(EnFz* this) {
-    this->state = 3;
-    this->isFreezing = false;
-    this->isDespawning = true;
-    this->actor.flags &= ~1;
-    this->actionFunc = EnFz_Melt;
-    this->actor.speedXZ = 0.0f;
-    this->speedXZ = 0.0f;
+void EnFz_SetupMelt(EnFz* self) {
+    self->state = 3;
+    self->isFreezing = false;
+    self->isDespawning = true;
+    self->actor.flags &= ~1;
+    self->actionFunc = EnFz_Melt;
+    self->actor.speedXZ = 0.0f;
+    self->speedXZ = 0.0f;
 }
 
-void EnFz_Melt(EnFz* this, GlobalContext* globalCtx) {
-    Math_StepToF(&this->actor.scale.y, 0.0006f, 0.0002f);
+void EnFz_Melt(EnFz* self, GlobalContext* globalCtx) {
+    Math_StepToF(&self->actor.scale.y, 0.0006f, 0.0002f);
 
-    if (this->actor.scale.y < 0.006f) {
-        this->actor.scale.x += 0.0004f;
-        this->actor.scale.z += 0.0004f;
+    if (self->actor.scale.y < 0.006f) {
+        self->actor.scale.x += 0.0004f;
+        self->actor.scale.z += 0.0004f;
     }
 
-    if (this->actor.scale.y < 0.004f) {
-        this->envAlpha -= 8;
-        if (this->envAlpha > 255) {
-            this->envAlpha = 0;
+    if (self->actor.scale.y < 0.004f) {
+        self->envAlpha -= 8;
+        if (self->envAlpha > 255) {
+            self->envAlpha = 0;
         }
     }
 
-    if (this->envAlpha == 0) {
-        EnFz_SetupDespawn(this, globalCtx);
+    if (self->envAlpha == 0) {
+        EnFz_SetupDespawn(self, globalCtx);
     }
 }
 
-void EnFz_SetupBlowSmokeStationary(EnFz* this) {
-    this->state = 1;
-    this->timer = 40;
-    this->updateBgInfo = true;
-    this->isFreezing = true;
-    this->actor.flags |= 1;
-    this->actionFunc = EnFz_BlowSmokeStationary;
-    this->actor.gravity = -1.0f;
+void EnFz_SetupBlowSmokeStationary(EnFz* self) {
+    self->state = 1;
+    self->timer = 40;
+    self->updateBgInfo = true;
+    self->isFreezing = true;
+    self->actor.flags |= 1;
+    self->actionFunc = EnFz_BlowSmokeStationary;
+    self->actor.gravity = -1.0f;
 }
 
-void EnFz_BlowSmokeStationary(EnFz* this, GlobalContext* globalCtx) {
+void EnFz_BlowSmokeStationary(EnFz* self, GlobalContext* globalCtx) {
     Vec3f vec1;
     Vec3f pos;
     Vec3f velocity;
@@ -614,26 +614,26 @@ void EnFz_BlowSmokeStationary(EnFz* this, GlobalContext* globalCtx) {
     u8 isTimerMod8;
     s16 primAlpha;
 
-    if (this->counter & 0xC0) {
-        EnFz_SetYawTowardsPlayer(this);
-        EnFz_UpdateTargetPos(this, globalCtx);
+    if (self->counter & 0xC0) {
+        EnFz_SetYawTowardsPlayer(self);
+        EnFz_UpdateTargetPos(self, globalCtx);
     } else {
         isTimerMod8 = false;
         primAlpha = 150;
-        func_8002F974(&this->actor, NA_SE_EN_FREEZAD_BREATH - SFX_FLAG);
+        func_8002F974(&self->actor, NA_SE_EN_FREEZAD_BREATH - SFX_FLAG);
 
-        if ((this->counter & 0x3F) >= 48) {
-            primAlpha = 630 - ((this->counter & 0x3F) * 10);
+        if ((self->counter & 0x3F) >= 48) {
+            primAlpha = 630 - ((self->counter & 0x3F) * 10);
         }
 
         accel.x = accel.z = 0.0f;
         accel.y = 0.6f;
 
-        pos.x = this->actor.world.pos.x;
-        pos.y = this->actor.world.pos.y + 20.0f;
-        pos.z = this->actor.world.pos.z;
+        pos.x = self->actor.world.pos.x;
+        pos.y = self->actor.world.pos.y + 20.0f;
+        pos.z = self->actor.world.pos.z;
 
-        Matrix_RotateY((this->actor.shape.rot.y / (f32)0x8000) * M_PI, MTXMODE_NEW);
+        Matrix_RotateY((self->actor.shape.rot.y / (f32)0x8000) * M_PI, MTXMODE_NEW);
 
         vec1.x = 0.0f;
         vec1.y = -2.0f;
@@ -641,17 +641,17 @@ void EnFz_BlowSmokeStationary(EnFz* this, GlobalContext* globalCtx) {
 
         Matrix_MultVec3f(&vec1, &velocity);
 
-        if ((this->counter % 8) == 0) {
+        if ((self->counter % 8) == 0) {
             isTimerMod8 = true;
         }
 
-        EnFz_SpawnIceSmokeFreeze(this, &pos, &velocity, &accel, 2.0f, 25.0f, primAlpha, isTimerMod8);
+        EnFz_SpawnIceSmokeFreeze(self, &pos, &velocity, &accel, 2.0f, 25.0f, primAlpha, isTimerMod8);
 
         pos.x += (velocity.x * 0.5f);
         pos.y += (velocity.y * 0.5f);
         pos.z += (velocity.z * 0.5f);
 
-        EnFz_SpawnIceSmokeFreeze(this, &pos, &velocity, &accel, 2.0f, 25.0f, primAlpha, false);
+        EnFz_SpawnIceSmokeFreeze(self, &pos, &velocity, &accel, 2.0f, 25.0f, primAlpha, false);
     }
 }
 
@@ -663,47 +663,47 @@ static EnFzSpawnIceSmokeFunc iceSmokeSpawnFuncs[] = {
 };
 
 void EnFz_Update(Actor* thisx, GlobalContext* globalCtx) {
-    EnFz* this = THIS;
+    EnFz* self = THIS;
     s32 pad;
 
-    this->counter++;
+    self->counter++;
 
-    if (this->unusedTimer1 != 0) {
-        this->unusedTimer1--;
+    if (self->unusedTimer1 != 0) {
+        self->unusedTimer1--;
     }
 
-    if (this->timer != 0) {
-        this->timer--;
+    if (self->timer != 0) {
+        self->timer--;
     }
 
-    if (this->unusedTimer2 != 0) {
-        this->unusedTimer2--;
+    if (self->unusedTimer2 != 0) {
+        self->unusedTimer2--;
     }
 
-    Actor_SetFocus(&this->actor, 50.0f);
-    EnFz_ApplyDamage(this, globalCtx);
-    this->actionFunc(this, globalCtx);
-    if (this->isDespawning == false) {
-        Collider_UpdateCylinder(&this->actor, &this->collider1);
-        Collider_UpdateCylinder(&this->actor, &this->collider2);
-        if (this->isFreezing) {
-            if (this->actor.colorFilterTimer == 0) {
-                CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider1.base);
-                CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider2.base);
+    Actor_SetFocus(&self->actor, 50.0f);
+    EnFz_ApplyDamage(self, globalCtx);
+    self->actionFunc(self, globalCtx);
+    if (self->isDespawning == false) {
+        Collider_UpdateCylinder(&self->actor, &self->collider1);
+        Collider_UpdateCylinder(&self->actor, &self->collider2);
+        if (self->isFreezing) {
+            if (self->actor.colorFilterTimer == 0) {
+                CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &self->collider1.base);
+                CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &self->collider2.base);
             }
-            CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider1.base);
+            CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &self->collider1.base);
         }
     }
 
-    Math_StepToF(&this->actor.speedXZ, this->speedXZ, 0.2f);
-    Actor_MoveForward(&this->actor);
+    Math_StepToF(&self->actor.speedXZ, self->speedXZ, 0.2f);
+    Actor_MoveForward(&self->actor);
 
-    if (this->updateBgInfo) {
-        Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 20.0f, 5);
+    if (self->updateBgInfo) {
+        Actor_UpdateBgCheckInfo(globalCtx, &self->actor, 20.0f, 20.0f, 20.0f, 5);
     }
 
-    iceSmokeSpawnFuncs[this->state](this);
-    EnFz_UpdateIceSmoke(this, globalCtx);
+    iceSmokeSpawnFuncs[self->state](self);
+    EnFz_UpdateIceSmoke(self, globalCtx);
 }
 
 void EnFz_Draw(Actor* thisx, GlobalContext* globalCtx) {
@@ -712,22 +712,22 @@ void EnFz_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gFreezardTopRightHornChippedDL, // Top right horn chipped off  (from Freezards perspective)   (3 or 4 health)
         gFreezardHeadChippedDL,         // Entire head chipped off     (1 or 2 health)
     };
-    EnFz* this = THIS;
+    EnFz* self = THIS;
     s32 pad;
     s32 index;
 
-    index = (6 - this->actor.colChkInfo.health) >> 1;
+    index = (6 - self->actor.colChkInfo.health) >> 1;
 
     OPEN_DISPS(globalCtx->state.gfxCtx, "../z_en_fz.c", 1167);
 
     if (1) {}
 
-    if (this->actor.colChkInfo.health == 0) {
+    if (self->actor.colChkInfo.health == 0) {
         index = 2;
     }
 
-    if (this->isActive) {
-        func_8002ED80(&this->actor, globalCtx, 0);
+    if (self->isActive) {
+        func_8002ED80(&self->actor, globalCtx, 0);
         func_80093D84(globalCtx->state.gfxCtx);
         gSPSegment(POLY_XLU_DISP++, 0x08,
                    Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, globalCtx->state.frames & 0x7F, 32, 32, 1, 0,
@@ -737,19 +737,19 @@ void EnFz_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gDPSetCombineLERP(POLY_XLU_DISP++, TEXEL1, PRIMITIVE, PRIM_LOD_FRAC, TEXEL0, TEXEL1, TEXEL0, PRIMITIVE, TEXEL0,
                           PRIMITIVE, ENVIRONMENT, COMBINED, ENVIRONMENT, COMBINED, 0, ENVIRONMENT, 0);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 128, 155, 255, 255, 255);
-        gDPSetEnvColor(POLY_XLU_DISP++, 200, 200, 200, this->envAlpha);
+        gDPSetEnvColor(POLY_XLU_DISP++, 200, 200, 200, self->envAlpha);
         gSPDisplayList(POLY_XLU_DISP++, displayLists[index]);
     }
 
     CLOSE_DISPS(globalCtx->state.gfxCtx, "../z_en_fz.c", 1200);
-    EnFz_DrawIceSmoke(this, globalCtx);
+    EnFz_DrawIceSmoke(self, globalCtx);
 }
 
-void EnFz_SpawnIceSmokeNoFreeze(EnFz* this, Vec3f* pos, Vec3f* velocity, Vec3f* accel, f32 xyScale) {
-    EnFzEffectSsIceSmoke* iceSmoke = this->iceSmoke;
+void EnFz_SpawnIceSmokeNoFreeze(EnFz* self, Vec3f* pos, Vec3f* velocity, Vec3f* accel, f32 xyScale) {
+    EnFzEffectSsIceSmoke* iceSmoke = self->iceSmoke;
     s16 i;
 
-    for (i = 0; i < ARRAY_COUNT(this->iceSmoke); i++) {
+    for (i = 0; i < ARRAY_COUNT(self->iceSmoke); i++) {
         if (iceSmoke->type == 0) {
             iceSmoke->type = 1;
             iceSmoke->pos = *pos;
@@ -766,12 +766,12 @@ void EnFz_SpawnIceSmokeNoFreeze(EnFz* this, Vec3f* pos, Vec3f* velocity, Vec3f* 
     }
 }
 
-void EnFz_SpawnIceSmokeFreeze(EnFz* this, Vec3f* pos, Vec3f* velocity, Vec3f* accel, f32 xyScale, f32 xyScaleTarget,
+void EnFz_SpawnIceSmokeFreeze(EnFz* self, Vec3f* pos, Vec3f* velocity, Vec3f* accel, f32 xyScale, f32 xyScaleTarget,
                               s16 primAlpha, u8 isTimerMod8) {
-    EnFzEffectSsIceSmoke* iceSmoke = this->iceSmoke;
+    EnFzEffectSsIceSmoke* iceSmoke = self->iceSmoke;
     s16 i;
 
-    for (i = 0; i < ARRAY_COUNT(this->iceSmoke); i++) {
+    for (i = 0; i < ARRAY_COUNT(self->iceSmoke); i++) {
         if (iceSmoke->type == 0) {
             iceSmoke->type = 2;
             iceSmoke->pos = *pos;
@@ -790,12 +790,12 @@ void EnFz_SpawnIceSmokeFreeze(EnFz* this, Vec3f* pos, Vec3f* velocity, Vec3f* ac
     }
 }
 
-void EnFz_UpdateIceSmoke(EnFz* this, GlobalContext* globalCtx) {
-    EnFzEffectSsIceSmoke* iceSmoke = this->iceSmoke;
+void EnFz_UpdateIceSmoke(EnFz* self, GlobalContext* globalCtx) {
+    EnFzEffectSsIceSmoke* iceSmoke = self->iceSmoke;
     s16 i;
     Vec3f pos;
 
-    for (i = 0; i < ARRAY_COUNT(this->iceSmoke); i++) {
+    for (i = 0; i < ARRAY_COUNT(self->iceSmoke); i++) {
         if (iceSmoke->type) {
             iceSmoke->pos.x += iceSmoke->velocity.x;
             iceSmoke->pos.y += iceSmoke->velocity.y;
@@ -834,18 +834,18 @@ void EnFz_UpdateIceSmoke(EnFz* this, GlobalContext* globalCtx) {
                     }
                 }
 
-                if ((this->unusedTimer2 == 0) && (iceSmoke->primAlpha >= 101) && iceSmoke->isTimerMod8) {
-                    this->collider3.dim.pos.x = (s16)iceSmoke->pos.x;
-                    this->collider3.dim.pos.y = (s16)iceSmoke->pos.y;
-                    this->collider3.dim.pos.z = (s16)iceSmoke->pos.z;
-                    CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider3.base);
+                if ((self->unusedTimer2 == 0) && (iceSmoke->primAlpha >= 101) && iceSmoke->isTimerMod8) {
+                    self->collider3.dim.pos.x = (s16)iceSmoke->pos.x;
+                    self->collider3.dim.pos.y = (s16)iceSmoke->pos.y;
+                    self->collider3.dim.pos.z = (s16)iceSmoke->pos.z;
+                    CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &self->collider3.base);
                 }
 
                 pos.x = iceSmoke->pos.x;
                 pos.y = iceSmoke->pos.y + 10.0f;
                 pos.z = iceSmoke->pos.z;
 
-                if ((iceSmoke->primAlphaState != 2) && EnFz_ReachedTarget(this, &pos)) {
+                if ((iceSmoke->primAlphaState != 2) && EnFz_ReachedTarget(self, &pos)) {
                     iceSmoke->primAlphaState = 2;
                     iceSmoke->velocity.x = 0.0f;
                     iceSmoke->velocity.z = 0.0f;
@@ -856,8 +856,8 @@ void EnFz_UpdateIceSmoke(EnFz* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnFz_DrawIceSmoke(EnFz* this, GlobalContext* globalCtx) {
-    EnFzEffectSsIceSmoke* iceSmoke = this->iceSmoke;
+void EnFz_DrawIceSmoke(EnFz* self, GlobalContext* globalCtx) {
+    EnFzEffectSsIceSmoke* iceSmoke = self->iceSmoke;
     s16 i;
     GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
     u8 texLoaded = false;
@@ -866,7 +866,7 @@ void EnFz_DrawIceSmoke(EnFz* this, GlobalContext* globalCtx) {
 
     func_80093D84(globalCtx->state.gfxCtx);
 
-    for (i = 0; i < ARRAY_COUNT(this->iceSmoke); i++) {
+    for (i = 0; i < ARRAY_COUNT(self->iceSmoke); i++) {
         if (iceSmoke->type > 0) {
             gDPPipeSync(POLY_XLU_DISP++);
 

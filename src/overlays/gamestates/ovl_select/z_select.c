@@ -9,12 +9,12 @@
 #include "vt.h"
 #include "alloca.h"
 
-void Select_LoadTitle(SelectContext* this) {
-    this->state.running = false;
-    SET_NEXT_GAMESTATE(&this->state, Title_Init, TitleContext);
+void Select_LoadTitle(SelectContext* self) {
+    self->state.running = false;
+    SET_NEXT_GAMESTATE(&self->state, Title_Init, TitleContext);
 }
 
-void Select_LoadGame(SelectContext* this, s32 entranceIndex) {
+void Select_LoadGame(SelectContext* self, s32 entranceIndex) {
     osSyncPrintf(VT_FGCOL(BLUE));
     osSyncPrintf("\n\n\nＦＩＬＥ＿ＮＯ＝%x\n\n\n", gSaveContext.fileNum);
     osSyncPrintf(VT_RST);
@@ -39,8 +39,8 @@ void Select_LoadGame(SelectContext* this, s32 entranceIndex) {
     gSaveContext.nightSeqIndex = 0xFF;
     gSaveContext.showTitleCard = true;
     gWeatherMode = 0;
-    this->state.running = false;
-    SET_NEXT_GAMESTATE(&this->state, Gameplay_Init, GlobalContext);
+    self->state.running = false;
+    SET_NEXT_GAMESTATE(&self->state, Gameplay_Init, GlobalContext);
 }
 
 static SceneSelectEntry sScenes[] = {
@@ -172,19 +172,19 @@ static SceneSelectEntry sScenes[] = {
     { "title", Select_LoadTitle, 0x0000 },
 };
 
-void Select_UpdateMenu(SelectContext* this) {
+void Select_UpdateMenu(SelectContext* self) {
     Input* controller1;
     s32 pad;
     SceneSelectEntry* selectedScene;
 
-    controller1 = &this->state.input[0];
+    controller1 = &self->state.input[0];
 
-    if (this->unk_21C == 0) {
+    if (self->unk_21C == 0) {
 
         if (CHECK_BTN_ALL(controller1->press.button, BTN_A) || CHECK_BTN_ALL(controller1->press.button, BTN_START)) {
-            selectedScene = &this->scenes[this->currentScene];
+            selectedScene = &self->scenes[self->currentScene];
             if (selectedScene->loadFunc != NULL) {
-                selectedScene->loadFunc(this, selectedScene->entranceIndex);
+                selectedScene->loadFunc(self, selectedScene->entranceIndex);
             }
         }
 
@@ -261,122 +261,122 @@ void Select_UpdateMenu(SelectContext* this) {
 
         // user can change "opt", but it doesn't do anything
         if (CHECK_BTN_ALL(controller1->press.button, BTN_CUP)) {
-            this->opt--;
+            self->opt--;
         }
         if (CHECK_BTN_ALL(controller1->press.button, BTN_CDOWN)) {
-            this->opt++;
+            self->opt++;
         }
 
         if (CHECK_BTN_ALL(controller1->press.button, BTN_DUP)) {
-            if (this->unk_22C == 1) {
-                this->unk_224 = 0;
+            if (self->unk_22C == 1) {
+                self->unk_224 = 0;
             }
-            if (this->unk_224 == 0) {
-                this->unk_224 = 0x14;
-                this->unk_22C = 1;
+            if (self->unk_224 == 0) {
+                self->unk_224 = 0x14;
+                self->unk_22C = 1;
                 Audio_PlaySoundGeneral(NA_SE_IT_SWORD_IMPACT, &D_801333D4, 4, &D_801333E0, &D_801333E0, &D_801333E8);
-                this->unk_220 = R_UPDATE_RATE;
+                self->unk_220 = R_UPDATE_RATE;
             }
         }
 
-        if (CHECK_BTN_ALL(controller1->cur.button, BTN_DUP) && this->unk_224 == 0) {
+        if (CHECK_BTN_ALL(controller1->cur.button, BTN_DUP) && self->unk_224 == 0) {
             Audio_PlaySoundGeneral(NA_SE_IT_SWORD_IMPACT, &D_801333D4, 4, &D_801333E0, &D_801333E0, &D_801333E8);
-            this->unk_220 = R_UPDATE_RATE * 3;
+            self->unk_220 = R_UPDATE_RATE * 3;
         }
 
         if (CHECK_BTN_ALL(controller1->press.button, BTN_DDOWN)) {
-            if (this->unk_230 == 1) {
-                this->unk_228 = 0;
+            if (self->unk_230 == 1) {
+                self->unk_228 = 0;
             }
-            if (this->unk_228 == 0) {
-                this->unk_228 = 0x14;
-                this->unk_230 = 1;
+            if (self->unk_228 == 0) {
+                self->unk_228 = 0x14;
+                self->unk_230 = 1;
                 Audio_PlaySoundGeneral(NA_SE_IT_SWORD_IMPACT, &D_801333D4, 4, &D_801333E0, &D_801333E0, &D_801333E8);
-                this->unk_220 = -R_UPDATE_RATE;
+                self->unk_220 = -R_UPDATE_RATE;
             }
         }
 
-        if (CHECK_BTN_ALL(controller1->cur.button, BTN_DDOWN) && (this->unk_228 == 0)) {
+        if (CHECK_BTN_ALL(controller1->cur.button, BTN_DDOWN) && (self->unk_228 == 0)) {
             Audio_PlaySoundGeneral(NA_SE_IT_SWORD_IMPACT, &D_801333D4, 4, &D_801333E0, &D_801333E0, &D_801333E8);
-            this->unk_220 = -R_UPDATE_RATE * 3;
+            self->unk_220 = -R_UPDATE_RATE * 3;
         }
 
         if (CHECK_BTN_ALL(controller1->press.button, BTN_DLEFT) || CHECK_BTN_ALL(controller1->cur.button, BTN_DLEFT)) {
             Audio_PlaySoundGeneral(NA_SE_IT_SWORD_IMPACT, &D_801333D4, 4, &D_801333E0, &D_801333E0, &D_801333E8);
-            this->unk_220 = R_UPDATE_RATE;
+            self->unk_220 = R_UPDATE_RATE;
         }
 
         if (CHECK_BTN_ALL(controller1->press.button, BTN_DRIGHT) ||
             CHECK_BTN_ALL(controller1->cur.button, BTN_DRIGHT)) {
             Audio_PlaySoundGeneral(NA_SE_IT_SWORD_IMPACT, &D_801333D4, 4, &D_801333E0, &D_801333E0, &D_801333E8);
-            this->unk_220 = -R_UPDATE_RATE;
+            self->unk_220 = -R_UPDATE_RATE;
         }
     }
 
     if (CHECK_BTN_ALL(controller1->press.button, BTN_L)) {
-        this->unk_1DC++;
-        this->unk_1DC = (this->unk_1DC + 7) % 7;
-        this->currentScene = this->unk_20C = this->unk_1E0[this->unk_1DC];
+        self->unk_1DC++;
+        self->unk_1DC = (self->unk_1DC + 7) % 7;
+        self->currentScene = self->unk_20C = self->unk_1E0[self->unk_1DC];
     }
 
-    this->unk_21C += this->unk_220;
+    self->unk_21C += self->unk_220;
 
-    if (this->unk_21C < -7) {
-        this->unk_220 = 0;
-        this->unk_21C = 0;
+    if (self->unk_21C < -7) {
+        self->unk_220 = 0;
+        self->unk_21C = 0;
 
-        this->currentScene++;
-        this->currentScene = (this->currentScene + this->count) % this->count;
+        self->currentScene++;
+        self->currentScene = (self->currentScene + self->count) % self->count;
 
-        if (this->currentScene == ((this->unk_20C + this->count + 0x13) % this->count)) {
-            this->unk_20C++;
-            this->unk_20C = (this->unk_20C + this->count) % this->count;
+        if (self->currentScene == ((self->unk_20C + self->count + 0x13) % self->count)) {
+            self->unk_20C++;
+            self->unk_20C = (self->unk_20C + self->count) % self->count;
         }
     }
 
-    if (this->unk_21C >= 8) {
-        this->unk_220 = 0;
-        this->unk_21C = 0;
+    if (self->unk_21C >= 8) {
+        self->unk_220 = 0;
+        self->unk_21C = 0;
 
-        if (this->currentScene == this->unk_20C) {
-            this->unk_20C -= 2;
-            this->unk_20C = (this->unk_20C + this->count) % this->count;
+        if (self->currentScene == self->unk_20C) {
+            self->unk_20C -= 2;
+            self->unk_20C = (self->unk_20C + self->count) % self->count;
         }
 
-        this->currentScene--;
-        this->currentScene = (this->currentScene + this->count) % this->count;
+        self->currentScene--;
+        self->currentScene = (self->currentScene + self->count) % self->count;
 
-        if (this->currentScene == ((this->unk_20C + this->count) % this->count)) {
-            this->unk_20C--;
-            this->unk_20C = (this->unk_20C + this->count) % this->count;
+        if (self->currentScene == ((self->unk_20C + self->count) % self->count)) {
+            self->unk_20C--;
+            self->unk_20C = (self->unk_20C + self->count) % self->count;
         }
     }
 
-    this->currentScene = (this->currentScene + this->count) % this->count;
-    this->unk_20C = (this->unk_20C + this->count) % this->count;
+    self->currentScene = (self->currentScene + self->count) % self->count;
+    self->unk_20C = (self->unk_20C + self->count) % self->count;
 
-    dREG(80) = this->currentScene;
-    dREG(81) = this->unk_20C;
-    dREG(82) = this->unk_1DC;
+    dREG(80) = self->currentScene;
+    dREG(81) = self->unk_20C;
+    dREG(82) = self->unk_1DC;
 
-    if (this->unk_224 != 0) {
-        this->unk_224--;
+    if (self->unk_224 != 0) {
+        self->unk_224--;
     }
 
-    if (this->unk_224 == 0) {
-        this->unk_22C = 0;
+    if (self->unk_224 == 0) {
+        self->unk_22C = 0;
     }
 
-    if (this->unk_228 != 0) {
-        this->unk_228--;
+    if (self->unk_228 != 0) {
+        self->unk_228--;
     }
 
-    if (this->unk_228 == 0) {
-        this->unk_230 = 0;
+    if (self->unk_228 == 0) {
+        self->unk_230 = 0;
     }
 }
 
-void Select_PrintMenu(SelectContext* this, GfxPrint* printer) {
+void Select_PrintMenu(SelectContext* self, GfxPrint* printer) {
     s32 scene;
     s32 i;
     char* name;
@@ -389,14 +389,14 @@ void Select_PrintMenu(SelectContext* this, GfxPrint* printer) {
     for (i = 0; i < 20; i++) {
         GfxPrint_SetPos(printer, 5, i + 4);
 
-        scene = ((this->unk_20C + i) + this->count) % this->count;
-        if (scene == this->currentScene) {
+        scene = ((self->unk_20C + i) + self->count) % self->count;
+        if (scene == self->currentScene) {
             GfxPrint_SetColor(printer, 255, 20, 20, 255);
         } else {
             GfxPrint_SetColor(printer, 200, 200, 55, 255);
         }
 
-        name = this->scenes[scene].name;
+        name = self->scenes[scene].name;
         if (name == NULL) {
             name = "**Null**";
         }
@@ -406,7 +406,7 @@ void Select_PrintMenu(SelectContext* this, GfxPrint* printer) {
 
     GfxPrint_SetColor(printer, 155, 55, 150, 255);
     GfxPrint_SetPos(printer, 20, 26);
-    GfxPrint_Printf(printer, "OPT=%d", this->opt);
+    GfxPrint_Printf(printer, "OPT=%d", self->opt);
 }
 
 static char* sLoadingMessages[] = {
@@ -424,7 +424,7 @@ static char* sLoadingMessages[] = {
     "Don't worry, don't worry. Take a break, take a break",
 };
 
-void Select_PrintLoadingMessage(SelectContext* this, GfxPrint* printer) {
+void Select_PrintLoadingMessage(SelectContext* self, GfxPrint* printer) {
     s32 randomMsg;
 
     GfxPrint_SetPos(printer, 0xA, 0xF);
@@ -438,13 +438,13 @@ static char* sAgeLabels[] = {
     "Child", // "5(very young)"
 };
 
-void Select_PrintAgeSetting(SelectContext* this, GfxPrint* printer, s32 age) {
+void Select_PrintAgeSetting(SelectContext* self, GfxPrint* printer, s32 age) {
     GfxPrint_SetPos(printer, 4, 26);
     GfxPrint_SetColor(printer, 255, 255, 55, 255);
     GfxPrint_Printf(printer, "Age:%s", sAgeLabels[age]);
 }
 
-void Select_PrintCutsceneSetting(SelectContext* this, GfxPrint* printer, u16 csIndex) {
+void Select_PrintCutsceneSetting(SelectContext* self, GfxPrint* printer, u16 csIndex) {
     char* label;
 
     GfxPrint_SetPos(printer, 4, 25);
@@ -501,74 +501,74 @@ void Select_PrintCutsceneSetting(SelectContext* this, GfxPrint* printer, u16 csI
     GfxPrint_Printf(printer, "Stage:\x8C%s", label);
 }
 
-void Select_DrawMenu(SelectContext* this) {
-    GraphicsContext* gfxCtx = this->state.gfxCtx;
+void Select_DrawMenu(SelectContext* self) {
+    GraphicsContext* gfxCtx = self->state.gfxCtx;
     GfxPrint* printer;
 
     OPEN_DISPS(gfxCtx, "../z_select.c", 930);
 
     gSPSegment(POLY_OPA_DISP++, 0x00, NULL);
     func_80095248(gfxCtx, 0, 0, 0);
-    SET_FULLSCREEN_VIEWPORT(&this->view);
-    func_800AAA50(&this->view, 0xF);
+    SET_FULLSCREEN_VIEWPORT(&self->view);
+    func_800AAA50(&self->view, 0xF);
     func_80094140(gfxCtx);
     printer = alloca(sizeof(GfxPrint));
     GfxPrint_Init(printer);
     GfxPrint_Open(printer, POLY_OPA_DISP);
-    Select_PrintMenu(this, printer);
-    Select_PrintAgeSetting(this, printer, ((void)0, gSaveContext.linkAge));
-    Select_PrintCutsceneSetting(this, printer, ((void)0, gSaveContext.cutsceneIndex));
+    Select_PrintMenu(self, printer);
+    Select_PrintAgeSetting(self, printer, ((void)0, gSaveContext.linkAge));
+    Select_PrintCutsceneSetting(self, printer, ((void)0, gSaveContext.cutsceneIndex));
     POLY_OPA_DISP = GfxPrint_Close(printer);
     GfxPrint_Destroy(printer);
 
     CLOSE_DISPS(gfxCtx, "../z_select.c", 966);
 }
 
-void Select_DrawLoadingScreen(SelectContext* this) {
-    GraphicsContext* gfxCtx = this->state.gfxCtx;
+void Select_DrawLoadingScreen(SelectContext* self) {
+    GraphicsContext* gfxCtx = self->state.gfxCtx;
     GfxPrint* printer;
 
     OPEN_DISPS(gfxCtx, "../z_select.c", 977);
 
     gSPSegment(POLY_OPA_DISP++, 0x00, NULL);
     func_80095248(gfxCtx, 0, 0, 0);
-    SET_FULLSCREEN_VIEWPORT(&this->view);
-    func_800AAA50(&this->view, 0xF);
+    SET_FULLSCREEN_VIEWPORT(&self->view);
+    func_800AAA50(&self->view, 0xF);
     func_80094140(gfxCtx);
     printer = alloca(sizeof(GfxPrint));
     GfxPrint_Init(printer);
     GfxPrint_Open(printer, POLY_OPA_DISP);
-    Select_PrintLoadingMessage(this, printer);
+    Select_PrintLoadingMessage(self, printer);
     POLY_OPA_DISP = GfxPrint_Close(printer);
     GfxPrint_Destroy(printer);
 
     CLOSE_DISPS(gfxCtx, "../z_select.c", 1006);
 }
 
-void Select_Draw(SelectContext* this) {
-    GraphicsContext* gfxCtx = this->state.gfxCtx;
+void Select_Draw(SelectContext* self) {
+    GraphicsContext* gfxCtx = self->state.gfxCtx;
 
     OPEN_DISPS(gfxCtx, "../z_select.c", 1013);
 
     gSPSegment(POLY_OPA_DISP++, 0x00, NULL);
     func_80095248(gfxCtx, 0, 0, 0);
-    SET_FULLSCREEN_VIEWPORT(&this->view);
-    func_800AAA50(&this->view, 0xF);
+    SET_FULLSCREEN_VIEWPORT(&self->view);
+    func_800AAA50(&self->view, 0xF);
 
-    if (!this->state.running) {
-        Select_DrawLoadingScreen(this);
+    if (!self->state.running) {
+        Select_DrawLoadingScreen(self);
     } else {
-        Select_DrawMenu(this);
+        Select_DrawMenu(self);
     }
 
     CLOSE_DISPS(gfxCtx, "../z_select.c", 1037);
 }
 
 void Select_Main(GameState* thisx) {
-    SelectContext* this = (SelectContext*)thisx;
+    SelectContext* self = (SelectContext*)thisx;
 
-    Select_UpdateMenu(this);
-    Select_Draw(this);
+    Select_UpdateMenu(self);
+    Select_Draw(self);
 }
 
 void Select_Destroy(GameState* thisx) {
@@ -578,46 +578,46 @@ void Select_Destroy(GameState* thisx) {
 }
 
 void Select_Init(GameState* thisx) {
-    SelectContext* this = (SelectContext*)thisx;
+    SelectContext* self = (SelectContext*)thisx;
     u32 size;
     s32 pad;
 
-    this->state.main = Select_Main;
-    this->state.destroy = Select_Destroy;
-    this->scenes = sScenes;
-    this->unk_20C = 0;
-    this->currentScene = 0;
-    this->unk_1E0[0] = 0;
-    this->unk_1E0[1] = 0x13;
-    this->unk_1E0[2] = 0x25;
-    this->unk_1E0[3] = 0x33;
-    this->unk_1E0[4] = 0x3B;
-    this->unk_1E0[5] = 0x49;
-    this->unk_1E0[6] = 0x5B;
-    this->unk_1DC = 0;
-    this->opt = 0;
-    this->count = 126;
-    View_Init(&this->view, this->state.gfxCtx);
-    this->view.flags = 0xA;
-    this->unk_21C = 0;
-    this->unk_220 = 0;
-    this->unk_224 = 0;
-    this->unk_228 = 0;
-    this->unk_22C = 0;
-    this->unk_230 = 0;
-    this->unk_234 = 0;
+    self->state.main = Select_Main;
+    self->state.destroy = Select_Destroy;
+    self->scenes = sScenes;
+    self->unk_20C = 0;
+    self->currentScene = 0;
+    self->unk_1E0[0] = 0;
+    self->unk_1E0[1] = 0x13;
+    self->unk_1E0[2] = 0x25;
+    self->unk_1E0[3] = 0x33;
+    self->unk_1E0[4] = 0x3B;
+    self->unk_1E0[5] = 0x49;
+    self->unk_1E0[6] = 0x5B;
+    self->unk_1DC = 0;
+    self->opt = 0;
+    self->count = 126;
+    View_Init(&self->view, self->state.gfxCtx);
+    self->view.flags = 0xA;
+    self->unk_21C = 0;
+    self->unk_220 = 0;
+    self->unk_224 = 0;
+    self->unk_228 = 0;
+    self->unk_22C = 0;
+    self->unk_230 = 0;
+    self->unk_234 = 0;
 
     size = (u32)_z_select_staticSegmentRomEnd - (u32)_z_select_staticSegmentRomStart;
 
-    if ((dREG(80) >= 0) && (dREG(80) < this->count)) {
-        this->currentScene = dREG(80);
-        this->unk_20C = dREG(81);
-        this->unk_1DC = dREG(82);
+    if ((dREG(80) >= 0) && (dREG(80) < self->count)) {
+        self->currentScene = dREG(80);
+        self->unk_20C = dREG(81);
+        self->unk_1DC = dREG(82);
     }
     R_UPDATE_RATE = 1;
 
-    this->staticSegment = GameState_Alloc(&this->state, size, "../z_select.c", 1114);
-    DmaMgr_SendRequest1(this->staticSegment, _z_select_staticSegmentRomStart, size, "../z_select.c", 1115);
+    self->staticSegment = GameState_Alloc(&self->state, size, "../z_select.c", 1114);
+    DmaMgr_SendRequest1(self->staticSegment, _z_select_staticSegmentRomStart, size, "../z_select.c", 1115);
     gSaveContext.cutsceneIndex = 0x8000;
     gSaveContext.linkAge = 1;
 }

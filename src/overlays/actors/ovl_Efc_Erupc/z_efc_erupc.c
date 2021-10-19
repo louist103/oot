@@ -10,9 +10,9 @@ void EfcErupc_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EfcErupc_Update(Actor* thisx, GlobalContext* globalCtx);
 void EfcErupc_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void EfcErupc_UpdateAction(EfcErupc* this, GlobalContext* globalCtx);
+void EfcErupc_UpdateAction(EfcErupc* self, GlobalContext* globalCtx);
 void EfcErupc_DrawParticles(EfcErupcParticles* particles, GlobalContext* globalCtx);
-void EfcErupc_UpdateParticles(EfcErupc* this, GlobalContext* globalCtx);
+void EfcErupc_UpdateParticles(EfcErupc* self, GlobalContext* globalCtx);
 void EfcErupc_AddParticle(EfcErupcParticles* particles, Vec3f* pos, Vec3f* vel, Vec3f* accel, f32 scaleFactor);
 void EfcErupc_InitParticles(EfcErupcParticles* particles);
 
@@ -28,25 +28,25 @@ const ActorInit Efc_Erupc_InitVars = {
     (ActorFunc)EfcErupc_Draw,
 };
 
-void EfcErupc_SetupAction(EfcErupc* this, EfcErupcActionFunc actionFunc) {
-    this->actionFunc = actionFunc;
+void EfcErupc_SetupAction(EfcErupc* self, EfcErupcActionFunc actionFunc) {
+    self->actionFunc = actionFunc;
 }
 
 void EfcErupc_Init(Actor* thisx, GlobalContext* globalCtx) {
-    EfcErupc* this = THIS;
+    EfcErupc* self = THIS;
 
-    EfcErupc_SetupAction(this, EfcErupc_UpdateAction);
-    Actor_SetScale(&this->actor, 1.0f);
-    EfcErupc_InitParticles(this->particles);
-    this->unk14C = this->unk14E = this->unk150 = 0;
-    this->unk152 = 5;
-    this->unk154 = -100;
+    EfcErupc_SetupAction(self, EfcErupc_UpdateAction);
+    Actor_SetScale(&self->actor, 1.0f);
+    EfcErupc_InitParticles(self->particles);
+    self->unk14C = self->unk14E = self->unk150 = 0;
+    self->unk152 = 5;
+    self->unk154 = -100;
 }
 
 void EfcErupc_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
-void EfcErupc_UpdateAction(EfcErupc* this, GlobalContext* globalCtx) {
+void EfcErupc_UpdateAction(EfcErupc* self, GlobalContext* globalCtx) {
     Vec3f pos;
     Vec3f vel;
     Vec3f accel;
@@ -55,22 +55,22 @@ void EfcErupc_UpdateAction(EfcErupc* this, GlobalContext* globalCtx) {
     if (globalCtx->csCtx.state != 0) {
         if (globalCtx->csCtx.npcActions[1] != NULL) {
             if (globalCtx->csCtx.npcActions[1]->action == 2) {
-                if (this->unk150 == 30) {
+                if (self->unk150 == 30) {
                     func_800788CC(NA_SE_IT_EARTHQUAKE);
                 }
-                if (this->unk150 <= 64) {
-                    if (this->unk154 < 200) {
-                        this->unk154 += 10;
+                if (self->unk150 <= 64) {
+                    if (self->unk154 < 200) {
+                        self->unk154 += 10;
                     }
                 } else {
-                    if (this->unk154 > -100) {
-                        this->unk154 -= 10;
+                    if (self->unk154 > -100) {
+                        self->unk154 -= 10;
                     }
                 }
-                this->unk150++;
+                self->unk150++;
             } else {
-                if (this->unk154 > -100) {
-                    this->unk154 -= 10;
+                if (self->unk154 > -100) {
+                    self->unk154 -= 10;
                 }
             }
         }
@@ -79,41 +79,41 @@ void EfcErupc_UpdateAction(EfcErupc* this, GlobalContext* globalCtx) {
         if (globalCtx->csCtx.npcActions[2] != NULL) {
             switch (globalCtx->csCtx.npcActions[2]->action) {
                 case 2:
-                    if (this->unk14E == 0) {
+                    if (self->unk14E == 0) {
                         func_800F3F3C(6);
                         gSaveContext.eventChkInf[2] |= 0x8000;
                     }
-                    this->unk14E++;
+                    self->unk14E++;
                     break;
                 case 3:
-                    this->unk14E = 30;
+                    self->unk14E = 30;
             }
-            this->unk14C++;
+            self->unk14C++;
         }
     }
     accel.z = 0.0f;
     accel.x = 0.0f;
-    pos.y = this->actor.world.pos.y + 300.0f;
-    for (i = 0; i < this->unk152; i++) {
-        pos.x = Rand_CenteredFloat(100.0f) + this->actor.world.pos.x;
-        pos.z = Rand_CenteredFloat(100.0f) + this->actor.world.pos.z;
+    pos.y = self->actor.world.pos.y + 300.0f;
+    for (i = 0; i < self->unk152; i++) {
+        pos.x = Rand_CenteredFloat(100.0f) + self->actor.world.pos.x;
+        pos.z = Rand_CenteredFloat(100.0f) + self->actor.world.pos.z;
         vel.x = Rand_CenteredFloat(100.0f);
         vel.y = Rand_ZeroFloat(100.0f);
         vel.z = Rand_CenteredFloat(100.0f);
-        accel.y = this->unk154 * 0.1f;
-        EfcErupc_AddParticle(this->particles, &pos, &vel, &accel, 80.0f);
+        accel.y = self->unk154 * 0.1f;
+        EfcErupc_AddParticle(self->particles, &pos, &vel, &accel, 80.0f);
     }
 }
 
 void EfcErupc_Update(Actor* thisx, GlobalContext* globalCtx) {
-    EfcErupc* this = THIS;
+    EfcErupc* self = THIS;
 
-    this->actionFunc(this, globalCtx);
-    EfcErupc_UpdateParticles(this, globalCtx);
+    self->actionFunc(self, globalCtx);
+    EfcErupc_UpdateParticles(self, globalCtx);
 }
 
 void EfcErupc_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    EfcErupc* this = THIS;
+    EfcErupc* self = THIS;
     u16 csAction;
 
     OPEN_DISPS(globalCtx->state.gfxCtx, "../z_efc_erupc.c", 282);
@@ -121,16 +121,16 @@ void EfcErupc_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_80093D84(globalCtx->state.gfxCtx);
 
     gSPSegment(POLY_XLU_DISP++, 0x08,
-               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, this->unk14C * 1, this->unk14E * -4, 32, 64, 1,
-                                this->unk14C * 4, this->unk14E * -20, 64, 64));
+               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, self->unk14C * 1, self->unk14E * -4, 32, 64, 1,
+                                self->unk14C * 4, self->unk14E * -20, 64, 64));
 
     gSPSegment(
         POLY_XLU_DISP++, 0x09,
-        Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, this->unk150 * -4, 16, 128, 1, 0, this->unk150 * 12, 32, 32));
+        Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, self->unk150 * -4, 16, 128, 1, 0, self->unk150 * 12, 32, 32));
 
     gSPSegment(
         POLY_XLU_DISP++, 0x0A,
-        Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, this->unk150 * -4, 16, 128, 1, 0, this->unk150 * 12, 32, 32));
+        Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, self->unk150 * -4, 16, 128, 1, 0, self->unk150 * 12, 32, 32));
 
     Matrix_Push();
     Matrix_Scale(0.8f, 0.8f, 0.8f, MTXMODE_APPLY);
@@ -158,7 +158,7 @@ void EfcErupc_Draw(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
     CLOSE_DISPS(globalCtx->state.gfxCtx, "../z_efc_erupc.c", 356);
-    EfcErupc_DrawParticles(this->particles, globalCtx);
+    EfcErupc_DrawParticles(self->particles, globalCtx);
 }
 
 void EfcErupc_DrawParticles(EfcErupcParticles* particles, GlobalContext* globalCtx) {
@@ -193,7 +193,7 @@ static Color_RGB8 D_8099D770[] = {
     { 255, 0, 0 },
 };
 
-void EfcErupc_UpdateParticles(EfcErupc* this, GlobalContext* globalCtx) {
+void EfcErupc_UpdateParticles(EfcErupc* self, GlobalContext* globalCtx) {
     s16 i;
     s16 index;
     Color_RGB8 particleColors[] = {
@@ -203,7 +203,7 @@ void EfcErupc_UpdateParticles(EfcErupc* this, GlobalContext* globalCtx) {
         { 100, 0, 0 },
     };
     Color_RGB8* color;
-    EfcErupcParticles* cur = this->particles;
+    EfcErupcParticles* cur = self->particles;
 
     for (i = 0; i < EFC_ERUPC_NUM_PARTICLES; i++, cur++) {
         if (cur->isActive) {

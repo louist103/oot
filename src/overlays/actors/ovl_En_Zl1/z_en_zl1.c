@@ -16,14 +16,14 @@ void EnZl1_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnZl1_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnZl1_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80B4AE18(EnZl1* this);
-void func_80B4AF18(EnZl1* this, GlobalContext* globalCtx);
-void func_80B4B010(EnZl1* this, GlobalContext* globalCtx);
-void func_80B4B240(EnZl1* this, GlobalContext* globalCtx);
-void func_80B4B8B4(EnZl1* this, GlobalContext* globalCtx);
-void func_80B4BBC4(EnZl1* this, GlobalContext* globalCtx);
-void func_80B4BC78(EnZl1* this, GlobalContext* globalCtx);
-void func_80B4BF2C(EnZl1* this, GlobalContext* globalCtx);
+void func_80B4AE18(EnZl1* self);
+void func_80B4AF18(EnZl1* self, GlobalContext* globalCtx);
+void func_80B4B010(EnZl1* self, GlobalContext* globalCtx);
+void func_80B4B240(EnZl1* self, GlobalContext* globalCtx);
+void func_80B4B8B4(EnZl1* self, GlobalContext* globalCtx);
+void func_80B4BBC4(EnZl1* self, GlobalContext* globalCtx);
+void func_80B4BC78(EnZl1* self, GlobalContext* globalCtx);
+void func_80B4BF2C(EnZl1* self, GlobalContext* globalCtx);
 
 extern CutsceneData D_80B4C5D0[];
 
@@ -280,87 +280,87 @@ void func_80B4AB48(void) {
 
 void EnZl1_Init(Actor* thisx, GlobalContext* globalCtx) {
     f32 frameCount;
-    EnZl1* this = THIS;
+    EnZl1* self = THIS;
 
     frameCount = Animation_GetLastFrame(&gChildZelda1Anim_12118);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gChildZelda1Skel, NULL, NULL, NULL, 0);
-    Animation_Change(&this->skelAnime, &gChildZelda1Anim_12118, 1.0f, 0.0f, frameCount, ANIMMODE_LOOP, 0.0f);
+    SkelAnime_InitFlex(globalCtx, &self->skelAnime, &gChildZelda1Skel, NULL, NULL, NULL, 0);
+    Animation_Change(&self->skelAnime, &gChildZelda1Anim_12118, 1.0f, 0.0f, frameCount, ANIMMODE_LOOP, 0.0f);
 
-    Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
-    Actor_SetScale(&this->actor, 0.01f);
-    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
-    this->actor.targetMode = 0;
+    Collider_InitCylinder(globalCtx, &self->collider);
+    Collider_SetCylinder(globalCtx, &self->collider, &self->actor, &sCylinderInit);
+    Actor_SetScale(&self->actor, 0.01f);
+    ActorShape_Init(&self->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
+    self->actor.targetMode = 0;
 
     if (gSaveContext.sceneSetupIndex >= 4) {
         frameCount = Animation_GetLastFrame(&gChildZelda1Anim_00438);
-        Animation_Change(&this->skelAnime, &gChildZelda1Anim_00438, 1.0f, 0.0f, frameCount, ANIMMODE_LOOP, 0.0f);
-        this->unk_1E6 = 0;
-        this->actionFunc = func_80B4BC78;
+        Animation_Change(&self->skelAnime, &gChildZelda1Anim_00438, 1.0f, 0.0f, frameCount, ANIMMODE_LOOP, 0.0f);
+        self->unk_1E6 = 0;
+        self->actionFunc = func_80B4BC78;
     } else if (Flags_GetEventChkInf(9) && Flags_GetEventChkInf(0x25) && Flags_GetEventChkInf(0x37)) {
-        Actor_Kill(&this->actor);
+        Actor_Kill(&self->actor);
     } else if ((Flags_GetEventChkInf(9) && Flags_GetEventChkInf(0x25)) ||
                (Flags_GetEventChkInf(9) && Flags_GetEventChkInf(0x37))) {
         frameCount = Animation_GetLastFrame(&gChildZelda1Anim_00438);
-        Animation_Change(&this->skelAnime, &gChildZelda1Anim_00438, 1.0f, 0.0f, frameCount, ANIMMODE_LOOP, 0.0f);
-        this->actor.textId = 0x703D;
-        this->actionFunc = func_80B4AF18;
+        Animation_Change(&self->skelAnime, &gChildZelda1Anim_00438, 1.0f, 0.0f, frameCount, ANIMMODE_LOOP, 0.0f);
+        self->actor.textId = 0x703D;
+        self->actionFunc = func_80B4AF18;
     } else if (Flags_GetEventChkInf(0x40)) {
         frameCount = Animation_GetLastFrame(&gChildZelda1Anim_00438);
-        Animation_Change(&this->skelAnime, &gChildZelda1Anim_00438, 1.0f, 0.0f, frameCount, ANIMMODE_LOOP, 0.0f);
-        this->actor.textId = 0x703C;
-        this->actionFunc = func_80B4AF18;
+        Animation_Change(&self->skelAnime, &gChildZelda1Anim_00438, 1.0f, 0.0f, frameCount, ANIMMODE_LOOP, 0.0f);
+        self->actor.textId = 0x703C;
+        self->actionFunc = func_80B4AF18;
     } else {
-        this->actor.textId = 0xFFFF;
-        this->actionFunc = func_80B4B010;
+        self->actor.textId = 0xFFFF;
+        self->actionFunc = func_80B4B010;
     }
 }
 
 void EnZl1_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    EnZl1* this = THIS;
+    EnZl1* self = THIS;
 
-    SkelAnime_Free(&this->skelAnime, globalCtx);
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    SkelAnime_Free(&self->skelAnime, globalCtx);
+    Collider_DestroyCylinder(globalCtx, &self->collider);
 }
 
-void func_80B4AE18(EnZl1* this) {
-    if ((this->skelAnime.animation == &gChildZelda1Anim_10B38) && (this->skelAnime.curFrame < 26.0f)) {
-        this->unk_1F4 = &gChildZelda1EyeOpenLookingRightTex;
-        this->unk_1F8 = &gChildZelda1EyeOpenLookingLeftTex;
-        this->unk_1FC = 2;
+void func_80B4AE18(EnZl1* self) {
+    if ((self->skelAnime.animation == &gChildZelda1Anim_10B38) && (self->skelAnime.curFrame < 26.0f)) {
+        self->unk_1F4 = &gChildZelda1EyeOpenLookingRightTex;
+        self->unk_1F8 = &gChildZelda1EyeOpenLookingLeftTex;
+        self->unk_1FC = 2;
     } else {
-        if (DECR(this->unk_1FC) == 0) {
-            this->unk_1FC = Rand_S16Offset(0x1E, 0xA);
+        if (DECR(self->unk_1FC) == 0) {
+            self->unk_1FC = Rand_S16Offset(0x1E, 0xA);
         }
-        this->unk_1FE = (this->unk_1FC < 4) ? this->unk_1FC : 0;
+        self->unk_1FE = (self->unk_1FC < 4) ? self->unk_1FC : 0;
 
-        this->unk_1F4 = D_80B4E61C[this->unk_1FE];
-        this->unk_1F8 = D_80B4E61C[this->unk_1FE];
-        this->unk_1EC = D_80B4E62C[this->unk_1F2];
+        self->unk_1F4 = D_80B4E61C[self->unk_1FE];
+        self->unk_1F8 = D_80B4E61C[self->unk_1FE];
+        self->unk_1EC = D_80B4E62C[self->unk_1F2];
     }
 }
 
-void func_80B4AF18(EnZl1* this, GlobalContext* globalCtx) {
+void func_80B4AF18(EnZl1* self, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s32 pad;
 
-    func_80038290(globalCtx, &this->actor, &this->unk_200, &this->unk_206, this->actor.focus.pos);
+    func_80038290(globalCtx, &self->actor, &self->unk_200, &self->unk_206, self->actor.focus.pos);
 
-    if (this->unk_1E6 != 0) {
-        if (func_8002F334(&this->actor, globalCtx)) {
-            this->unk_1E6 = 0;
+    if (self->unk_1E6 != 0) {
+        if (func_8002F334(&self->actor, globalCtx)) {
+            self->unk_1E6 = 0;
         }
-    } else if (func_8002F194(&this->actor, globalCtx)) {
-        this->unk_1E6 = 1;
-    } else if (this->actor.world.pos.y <= player->actor.world.pos.y) {
-        func_8002F2F4(&this->actor, globalCtx);
+    } else if (func_8002F194(&self->actor, globalCtx)) {
+        self->unk_1E6 = 1;
+    } else if (self->actor.world.pos.y <= player->actor.world.pos.y) {
+        func_8002F2F4(&self->actor, globalCtx);
     }
 
-    Collider_UpdateCylinder(&this->actor, &this->collider);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    Collider_UpdateCylinder(&self->actor, &self->collider);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
 }
 
-void func_80B4B010(EnZl1* this, GlobalContext* globalCtx) {
+void func_80B4B010(EnZl1* self, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s32 pad2;
     s32 pad3;
@@ -370,37 +370,37 @@ void func_80B4B010(EnZl1* this, GlobalContext* globalCtx) {
     Vec3f playerPos = { -398.0f, 84.0f, 0.0f };
     s16 rotDiff;
 
-    if (func_8002F194(&this->actor, globalCtx)) {
-        Animation_Change(&this->skelAnime, &gChildZelda1Anim_10B38, 1.0f, 0.0f,
+    if (func_8002F194(&self->actor, globalCtx)) {
+        Animation_Change(&self->skelAnime, &gChildZelda1Anim_10B38, 1.0f, 0.0f,
                          Animation_GetLastFrame(&gChildZelda1Anim_10B38), ANIMMODE_ONCE_INTERP, -10.0f);
-        this->unk_1E8 = Gameplay_CreateSubCamera(globalCtx);
+        self->unk_1E8 = Gameplay_CreateSubCamera(globalCtx);
         Gameplay_ChangeCameraStatus(globalCtx, MAIN_CAM, CAM_STAT_WAIT);
-        Gameplay_ChangeCameraStatus(globalCtx, this->unk_1E8, CAM_STAT_ACTIVE);
-        func_800C0808(globalCtx, this->unk_1E8, player, CAM_SET_FREE0);
+        Gameplay_ChangeCameraStatus(globalCtx, self->unk_1E8, CAM_STAT_ACTIVE);
+        func_800C0808(globalCtx, self->unk_1E8, player, CAM_SET_FREE0);
         globalCtx->envCtx.screenFillColor[0] = 255;
         globalCtx->envCtx.screenFillColor[1] = 255;
         globalCtx->envCtx.screenFillColor[2] = 255;
         globalCtx->envCtx.screenFillColor[3] = 24;
         globalCtx->envCtx.fillScreen = true;
-        Gameplay_CameraSetAtEye(globalCtx, this->unk_1E8, &vec1, &vec2);
-        Gameplay_CameraSetFov(globalCtx, this->unk_1E8, 30.0f);
+        Gameplay_CameraSetAtEye(globalCtx, self->unk_1E8, &vec1, &vec2);
+        Gameplay_CameraSetFov(globalCtx, self->unk_1E8, 30.0f);
         ShrinkWindow_SetVal(0x20);
         Interface_ChangeAlpha(2);
         player->actor.world.pos = playerPos;
         player->actor.speedXZ = 0.0f;
-        this->unk_1E2 = 0;
-        this->actionFunc = func_80B4B240;
+        self->unk_1E2 = 0;
+        self->actionFunc = func_80B4B240;
         func_800F5C64(0x51);
     } else {
         if (1) {} // necessary to match
-        rotDiff = ABS(this->actor.yawTowardsPlayer - this->actor.shape.rot.y);
-        if ((rotDiff < 0x238E) && !(player->actor.world.pos.y < this->actor.world.pos.y)) {
-            func_8002F2F4(&this->actor, globalCtx);
+        rotDiff = ABS(self->actor.yawTowardsPlayer - self->actor.shape.rot.y);
+        if ((rotDiff < 0x238E) && !(player->actor.world.pos.y < self->actor.world.pos.y)) {
+            func_8002F2F4(&self->actor, globalCtx);
         }
     }
 }
 
-void func_80B4B240(EnZl1* this, GlobalContext* globalCtx) {
+void func_80B4B240(EnZl1* self, GlobalContext* globalCtx) {
     Vec3f sp74 = { -427.0f, 108.0, 26.0 };
     Vec3f sp68 = { -340.0f, 108.0f, 98.0f };
     s32 pad;
@@ -413,35 +413,35 @@ void func_80B4B240(EnZl1* this, GlobalContext* globalCtx) {
     f32 frameCount;
     s32 sp3C = 0;
 
-    switch (this->unk_1E2) {
+    switch (self->unk_1E2) {
         case 0:
-            switch ((s16)this->skelAnime.curFrame) {
+            switch ((s16)self->skelAnime.curFrame) {
                 case 14:
-                    this->unk_1E4 = 0;
+                    self->unk_1E4 = 0;
                     break;
                 case 15:
-                    if (DECR(this->unk_1E4) != 0) {
-                        this->skelAnime.curFrame = 15.0f;
+                    if (DECR(self->unk_1E4) != 0) {
+                        self->skelAnime.curFrame = 15.0f;
                     }
                     break;
                 case 64:
                     animHeaderSeg = &gChildZelda1Anim_11348;
                     sp3C = 1;
-                    this->actor.textId = 0x702E;
-                    func_8010B680(globalCtx, this->actor.textId, NULL);
-                    this->unk_1E2++;
+                    self->actor.textId = 0x702E;
+                    func_8010B680(globalCtx, self->actor.textId, NULL);
+                    self->unk_1E2++;
                     break;
             }
             break;
         case 1:
             if ((func_8010BDBC(msgCtx) == 5) && (func_80106BC8(globalCtx) != 0)) {
                 globalCtx->envCtx.fillScreen = false;
-                Gameplay_CameraSetAtEye(globalCtx, this->unk_1E8, &sp74, &sp68);
-                Gameplay_CameraSetFov(globalCtx, this->unk_1E8, 25.0f);
+                Gameplay_CameraSetAtEye(globalCtx, self->unk_1E8, &sp74, &sp68);
+                Gameplay_CameraSetFov(globalCtx, self->unk_1E8, 25.0f);
                 player->actor.world.pos = sp58;
-                this->actor.textId = 0x702F;
-                func_8010B720(globalCtx, this->actor.textId);
-                this->unk_1E2++;
+                self->actor.textId = 0x702F;
+                func_8010B720(globalCtx, self->actor.textId);
+                self->unk_1E2++;
             }
             break;
         case 2:
@@ -449,22 +449,22 @@ void func_80B4B240(EnZl1* this, GlobalContext* globalCtx) {
                 if (msgCtx->choiceIndex == 0) {
                     animHeaderSeg = &gChildZelda1Anim_13F10;
                     sp3C = 2;
-                    this->unk_1E2++;
+                    self->unk_1E2++;
                 } else {
                     animHeaderSeg = &gChildZelda1Anim_116E4;
                     sp3C = 2;
-                    this->unk_1E2 = 6;
+                    self->unk_1E2 = 6;
                 }
             }
             break;
         case 3:
             frameCount = Animation_GetLastFrame(&gChildZelda1Anim_13F10);
-            if (this->skelAnime.curFrame == frameCount) {
+            if (self->skelAnime.curFrame == frameCount) {
                 animHeaderSeg = &gChildZelda1Anim_143A8;
                 sp3C = 1;
-                this->actor.textId = 0x7032;
-                func_8010B720(globalCtx, this->actor.textId);
-                this->unk_1E2++;
+                self->actor.textId = 0x7032;
+                func_8010B720(globalCtx, self->actor.textId);
+                self->unk_1E2++;
             }
             break;
         case 4:
@@ -472,36 +472,36 @@ void func_80B4B240(EnZl1* this, GlobalContext* globalCtx) {
                 if (msgCtx->choiceIndex == 0) {
                     animHeaderSeg = &gChildZelda1Anim_132D8;
                     sp3C = 2;
-                    this->unk_1E2 = 9;
+                    self->unk_1E2 = 9;
                 } else {
-                    this->actor.textId = 0x7034;
-                    func_8010B720(globalCtx, this->actor.textId);
-                    this->unk_1E2++;
+                    self->actor.textId = 0x7034;
+                    func_8010B720(globalCtx, self->actor.textId);
+                    self->unk_1E2++;
                 }
             }
             break;
         case 5:
             if ((func_8010BDBC(msgCtx) == 5) && (func_80106BC8(globalCtx) != 0)) {
-                this->actor.textId = 0x7033;
-                func_8010B720(globalCtx, this->actor.textId);
-                this->unk_1E2--;
+                self->actor.textId = 0x7033;
+                func_8010B720(globalCtx, self->actor.textId);
+                self->unk_1E2--;
             }
             break;
         case 6:
             frameCount = Animation_GetLastFrame(&gChildZelda1Anim_116E4);
-            if (this->skelAnime.curFrame == frameCount) {
+            if (self->skelAnime.curFrame == frameCount) {
                 animHeaderSeg = &gChildZelda1Anim_12B88;
                 sp3C = 1;
-                this->actor.textId = 0x7031;
-                func_8010B720(globalCtx, this->actor.textId);
-                this->unk_1E2++;
+                self->actor.textId = 0x7031;
+                func_8010B720(globalCtx, self->actor.textId);
+                self->unk_1E2++;
             }
             break;
         case 7:
             if ((func_8010BDBC(msgCtx) == 5) && (func_80106BC8(globalCtx) != 0)) {
-                this->actor.textId = 0x7030;
-                func_8010B720(globalCtx, this->actor.textId);
-                this->unk_1E2++;
+                self->actor.textId = 0x7030;
+                func_8010B720(globalCtx, self->actor.textId);
+                self->unk_1E2++;
             }
             break;
         case 8:
@@ -509,31 +509,31 @@ void func_80B4B240(EnZl1* this, GlobalContext* globalCtx) {
                 if (msgCtx->choiceIndex == 0) {
                     animHeaderSeg = &gChildZelda1Anim_138E0;
                     sp3C = 2;
-                    this->unk_1E2 = 3;
+                    self->unk_1E2 = 3;
                 } else {
-                    this->actor.textId = 0x7031;
-                    func_8010B720(globalCtx, this->actor.textId);
-                    this->unk_1E2--;
+                    self->actor.textId = 0x7031;
+                    func_8010B720(globalCtx, self->actor.textId);
+                    self->unk_1E2--;
                 }
             }
             break;
         case 9:
             frameCount = Animation_GetLastFrame(&gChildZelda1Anim_132D8);
-            if (this->skelAnime.curFrame == frameCount) {
+            if (self->skelAnime.curFrame == frameCount) {
                 animHeaderSeg = &gChildZelda1Anim_00438;
                 sp3C = 1;
                 globalCtx->csCtx.segment = D_80B4C5D0;
                 gSaveContext.cutsceneTrigger = 1;
-                this->actionFunc = func_80B4B8B4;
-                this->unk_1E2++;
+                self->actionFunc = func_80B4B8B4;
+                self->unk_1E2++;
             }
             break;
     }
     if (sp3C != 0) {
         frameCount = Animation_GetLastFrame(animHeaderSeg);
-        Animation_Change(&this->skelAnime, animHeaderSeg, 1.0f, 0.0f, frameCount, sp54[sp3C], -10.0f);
+        Animation_Change(&self->skelAnime, animHeaderSeg, 1.0f, 0.0f, frameCount, sp54[sp3C], -10.0f);
     }
-    func_80038290(globalCtx, &this->actor, &this->unk_200, &this->unk_206, this->actor.focus.pos);
+    func_80038290(globalCtx, &self->actor, &self->unk_200, &self->unk_206, self->actor.focus.pos);
 }
 
 void func_80B4B7F4(CsCmdActorAction* npcAction, Vec3f* pos) {
@@ -548,12 +548,12 @@ void func_80B4B834(CsCmdActorAction* npcAction, Vec3f* pos) {
     pos->z = npcAction->endPos.z;
 }
 
-void func_80B4B874(EnZl1* this, GlobalContext* globalCtx) {
-    this->skelAnime.moveFlags |= 1;
-    AnimationContext_SetMoveActor(globalCtx, &this->actor, &this->skelAnime, 1.0f);
+void func_80B4B874(EnZl1* self, GlobalContext* globalCtx) {
+    self->skelAnime.moveFlags |= 1;
+    AnimationContext_SetMoveActor(globalCtx, &self->actor, &self->skelAnime, 1.0f);
 }
 
-void func_80B4B8B4(EnZl1* this, GlobalContext* globalCtx) {
+void func_80B4B8B4(EnZl1* self, GlobalContext* globalCtx) {
     AnimationHeader* spB0[] = {
         NULL,
         NULL,
@@ -581,10 +581,10 @@ void func_80B4B8B4(EnZl1* this, GlobalContext* globalCtx) {
     f32 frameCount;
     Vec3f sp48;
 
-    SkelAnime_Update(&this->skelAnime);
-    func_80B4B874(this, globalCtx);
+    SkelAnime_Update(&self->skelAnime);
+    func_80B4B874(self, globalCtx);
     if (globalCtx->csCtx.state == CS_STATE_IDLE) {
-        this->actionFunc = func_80B4BBC4;
+        self->actionFunc = func_80B4BBC4;
         return;
     }
 
@@ -592,49 +592,49 @@ void func_80B4B8B4(EnZl1* this, GlobalContext* globalCtx) {
     if (npcAction != NULL) {
         func_80B4B7F4(npcAction, &sp74);
         func_80B4B834(npcAction, &sp68);
-        if (this->unk_1E6 == 0) {
+        if (self->unk_1E6 == 0) {
             sp48 = sp74;
-            this->actor.home.pos = sp48;
-            this->actor.world.pos = sp48;
+            self->actor.home.pos = sp48;
+            self->actor.world.pos = sp48;
         }
-        if (this->unk_1E6 != npcAction->action) {
+        if (self->unk_1E6 != npcAction->action) {
             frameCount = Animation_GetLastFrame(spB0[npcAction->action]);
-            Animation_Change(&this->skelAnime, spB0[npcAction->action], 1.0f, 0.0f, frameCount, spA4[npcAction->action],
+            Animation_Change(&self->skelAnime, spB0[npcAction->action], 1.0f, 0.0f, frameCount, spA4[npcAction->action],
                              -10.0f);
-            this->unk_1E6 = npcAction->action;
+            self->unk_1E6 = npcAction->action;
         }
-        this->actor.velocity = velocity;
+        self->actor.velocity = velocity;
         if (globalCtx->csCtx.frames < npcAction->endFrame) {
             actionLength = npcAction->endFrame - npcAction->startFrame;
-            this->actor.velocity.x = (sp68.x - sp74.x) / actionLength;
-            this->actor.velocity.y = (sp68.y - sp74.y) / actionLength;
-            this->actor.velocity.y += this->actor.gravity;
-            if (this->actor.velocity.y < this->actor.minVelocityY) {
-                this->actor.velocity.y = this->actor.minVelocityY;
+            self->actor.velocity.x = (sp68.x - sp74.x) / actionLength;
+            self->actor.velocity.y = (sp68.y - sp74.y) / actionLength;
+            self->actor.velocity.y += self->actor.gravity;
+            if (self->actor.velocity.y < self->actor.minVelocityY) {
+                self->actor.velocity.y = self->actor.minVelocityY;
             }
-            this->actor.velocity.z = (sp68.z - sp74.z) / actionLength;
+            self->actor.velocity.z = (sp68.z - sp74.z) / actionLength;
         }
-        func_80038290(globalCtx, &this->actor, &this->unk_200, &this->unk_206, this->actor.focus.pos);
-        Gameplay_CameraSetAtEye(globalCtx, this->unk_1E8, &sp98, &sp8C);
-        Gameplay_CameraSetFov(globalCtx, this->unk_1E8, 70.0f);
+        func_80038290(globalCtx, &self->actor, &self->unk_200, &self->unk_206, self->actor.focus.pos);
+        Gameplay_CameraSetAtEye(globalCtx, self->unk_1E8, &sp98, &sp8C);
+        Gameplay_CameraSetFov(globalCtx, self->unk_1E8, 70.0f);
     }
 }
 
-void func_80B4BBC4(EnZl1* this, GlobalContext* globalCtx) {
+void func_80B4BBC4(EnZl1* self, GlobalContext* globalCtx) {
     s32 pad;
     f32 frameCount = Animation_GetLastFrame(&gChildZelda1Anim_00438);
     Player* player = GET_PLAYER(globalCtx);
 
-    Animation_Change(&this->skelAnime, &gChildZelda1Anim_00438, 1.0f, 0.0f, frameCount, ANIMMODE_LOOP, 0.0f);
-    func_8002DF54(globalCtx, &this->actor, 1);
+    Animation_Change(&self->skelAnime, &gChildZelda1Anim_00438, 1.0f, 0.0f, frameCount, ANIMMODE_LOOP, 0.0f);
+    func_8002DF54(globalCtx, &self->actor, 1);
     func_8002F7DC(&player->actor, NA_SE_VO_LI_SURPRISE_KID);
-    this->actor.textId = 0x7039;
-    func_8010B680(globalCtx, this->actor.textId, NULL);
-    this->unk_1E2 = 0;
-    this->actionFunc = func_80B4BF2C;
+    self->actor.textId = 0x7039;
+    func_8010B680(globalCtx, self->actor.textId, NULL);
+    self->unk_1E2 = 0;
+    self->actionFunc = func_80B4BF2C;
 }
 
-void func_80B4BC78(EnZl1* this, GlobalContext* globalCtx) {
+void func_80B4BC78(EnZl1* self, GlobalContext* globalCtx) {
     AnimationHeader* sp90[] = {
         NULL,
         NULL,
@@ -659,137 +659,137 @@ void func_80B4BC78(EnZl1* this, GlobalContext* globalCtx) {
     s32 pad;
     f32 frameCount;
 
-    if (SkelAnime_Update(&this->skelAnime) && (this->skelAnime.animation == &gChildZelda1Anim_10B38)) {
+    if (SkelAnime_Update(&self->skelAnime) && (self->skelAnime.animation == &gChildZelda1Anim_10B38)) {
         frameCount = Animation_GetLastFrame(&gChildZelda1Anim_11348);
-        Animation_Change(&this->skelAnime, &gChildZelda1Anim_11348, 1.0f, 0.0f, frameCount, ANIMMODE_LOOP, -10.0f);
+        Animation_Change(&self->skelAnime, &gChildZelda1Anim_11348, 1.0f, 0.0f, frameCount, ANIMMODE_LOOP, -10.0f);
     }
-    func_80B4B874(this, globalCtx);
+    func_80B4B874(self, globalCtx);
     npcAction = globalCtx->csCtx.npcActions[0];
     if (npcAction != NULL) {
         func_80B4B7F4(npcAction, &sp70);
         func_80B4B834(npcAction, &sp64);
-        if (this->unk_1E6 == 0) {
-            this->actor.world.pos = this->actor.home.pos = sp70;
+        if (self->unk_1E6 == 0) {
+            self->actor.world.pos = self->actor.home.pos = sp70;
         }
 
-        if (this->unk_1E6 != npcAction->action) {
+        if (self->unk_1E6 != npcAction->action) {
             frameCount = Animation_GetLastFrame(sp90[npcAction->action]);
-            Animation_Change(&this->skelAnime, sp90[npcAction->action], 1.0f, 0.0f, frameCount, sp84[npcAction->action],
+            Animation_Change(&self->skelAnime, sp90[npcAction->action], 1.0f, 0.0f, frameCount, sp84[npcAction->action],
                              -10.0f);
-            this->unk_1E6 = npcAction->action;
+            self->unk_1E6 = npcAction->action;
         }
-        this->actor.velocity = velocity;
+        self->actor.velocity = velocity;
         if (globalCtx->csCtx.frames < npcAction->endFrame) {
             actionLength = npcAction->endFrame - npcAction->startFrame;
-            this->actor.velocity.x = (sp64.x - sp70.x) / actionLength;
-            this->actor.velocity.y = (sp64.y - sp70.y) / actionLength;
-            this->actor.velocity.y += this->actor.gravity;
-            if (this->actor.velocity.y < this->actor.minVelocityY) {
-                this->actor.velocity.y = this->actor.minVelocityY;
+            self->actor.velocity.x = (sp64.x - sp70.x) / actionLength;
+            self->actor.velocity.y = (sp64.y - sp70.y) / actionLength;
+            self->actor.velocity.y += self->actor.gravity;
+            if (self->actor.velocity.y < self->actor.minVelocityY) {
+                self->actor.velocity.y = self->actor.minVelocityY;
             }
-            this->actor.velocity.z = (sp64.z - sp70.z) / actionLength;
+            self->actor.velocity.z = (sp64.z - sp70.z) / actionLength;
         }
     }
 }
 
-void func_80B4BF2C(EnZl1* this, GlobalContext* globalCtx) {
+void func_80B4BF2C(EnZl1* self, GlobalContext* globalCtx) {
     s32 pad;
     MessageContext* msgCtx = &globalCtx->msgCtx;
     Player* player = GET_PLAYER(globalCtx);
 
-    switch (this->unk_1E2) {
+    switch (self->unk_1E2) {
         case 0:
             if ((func_8010BDBC(msgCtx) == 4) && (func_80106BC8(globalCtx) != 0)) {
                 if (msgCtx->choiceIndex == 0) {
-                    this->actor.textId = 0x703B;
-                    func_8010B720(globalCtx, this->actor.textId);
-                    this->unk_1E2++;
+                    self->actor.textId = 0x703B;
+                    func_8010B720(globalCtx, self->actor.textId);
+                    self->unk_1E2++;
                 } else {
-                    this->actor.textId = 0x703A;
-                    func_8010B720(globalCtx, this->actor.textId);
-                    this->unk_1E2 = 0;
+                    self->actor.textId = 0x703A;
+                    func_8010B720(globalCtx, self->actor.textId);
+                    self->unk_1E2 = 0;
                 }
             }
             break;
         case 1:
             if ((func_8010BDBC(msgCtx) == 5) && (func_80106BC8(globalCtx) != 0)) {
-                this->actor.textId = 0xFFFF;
-                globalCtx->talkWithPlayer(globalCtx, &this->actor);
-                func_8002F434(&this->actor, globalCtx, GI_LETTER_ZELDA, 120.0f, 10.0f);
+                self->actor.textId = 0xFFFF;
+                globalCtx->talkWithPlayer(globalCtx, &self->actor);
+                func_8002F434(&self->actor, globalCtx, GI_LETTER_ZELDA, 120.0f, 10.0f);
                 globalCtx->msgCtx.msgMode = 0x36;
                 globalCtx->msgCtx.unk_E3E7 = 4;
-                this->unk_1E2++;
+                self->unk_1E2++;
             } else {
                 break;
             }
         case 2:
-            if (Actor_HasParent(&this->actor, globalCtx)) {
-                Gameplay_CopyCamera(globalCtx, MAIN_CAM, this->unk_1E8);
+            if (Actor_HasParent(&self->actor, globalCtx)) {
+                Gameplay_CopyCamera(globalCtx, MAIN_CAM, self->unk_1E8);
                 Gameplay_ChangeCameraStatus(globalCtx, MAIN_CAM, CAM_STAT_ACTIVE);
-                Gameplay_ClearCamera(globalCtx, this->unk_1E8);
-                this->actor.parent = NULL;
-                this->unk_1E2++;
+                Gameplay_ClearCamera(globalCtx, self->unk_1E8);
+                self->actor.parent = NULL;
+                self->unk_1E2++;
             } else {
-                func_8002F434(&this->actor, globalCtx, GI_LETTER_ZELDA, 120.0f, 10.0f);
+                func_8002F434(&self->actor, globalCtx, GI_LETTER_ZELDA, 120.0f, 10.0f);
             }
             break;
         case 3:
             if ((func_8010BDBC(msgCtx) == 6) && (func_80106BC8(globalCtx) != 0)) {
-                this->actor.textId = 0x703C;
-                func_8010B720(globalCtx, this->actor.textId);
+                self->actor.textId = 0x703C;
+                func_8010B720(globalCtx, self->actor.textId);
                 Flags_SetEventChkInf(0x40);
-                this->unk_1E2 = 6;
+                self->unk_1E2 = 6;
             }
             break;
         case 4:
-            if (player->actor.world.pos.y < this->actor.world.pos.y) {
+            if (player->actor.world.pos.y < self->actor.world.pos.y) {
                 break;
             } else {
-                if (func_8002F194(&this->actor, globalCtx)) {
-                    this->unk_1E2++;
+                if (func_8002F194(&self->actor, globalCtx)) {
+                    self->unk_1E2++;
                 } else {
-                    func_8002F2F4(&this->actor, globalCtx);
+                    func_8002F2F4(&self->actor, globalCtx);
                 }
             }
             break;
         case 5:
-            if (func_8002F334(&this->actor, globalCtx)) {
-                this->unk_1E2--;
+            if (func_8002F334(&self->actor, globalCtx)) {
+                self->unk_1E2--;
             }
             break;
         case 6:
-            if (func_8002F334(&this->actor, globalCtx)) {
-                func_8002DF54(globalCtx, &this->actor, 7);
+            if (func_8002F334(&self->actor, globalCtx)) {
+                func_8002DF54(globalCtx, &self->actor, 7);
                 Interface_ChangeAlpha(50);
-                this->actor.flags &= ~0x100;
-                this->unk_1E2 = 4;
+                self->actor.flags &= ~0x100;
+                self->unk_1E2 = 4;
             }
             break;
     }
-    func_80038290(globalCtx, &this->actor, &this->unk_200, &this->unk_206, this->actor.focus.pos);
+    func_80038290(globalCtx, &self->actor, &self->unk_200, &self->unk_206, self->actor.focus.pos);
 }
 
 void EnZl1_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
-    EnZl1* this = THIS;
+    EnZl1* self = THIS;
 
-    if ((this->actionFunc != func_80B4B8B4) && (this->actionFunc != func_80B4BC78)) {
-        SkelAnime_Update(&this->skelAnime);
+    if ((self->actionFunc != func_80B4B8B4) && (self->actionFunc != func_80B4BC78)) {
+        SkelAnime_Update(&self->skelAnime);
     }
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 5);
-    this->actionFunc(this, globalCtx);
-    if (this->actionFunc != func_80B4B8B4) {
-        Collider_UpdateCylinder(&this->actor, &this->collider);
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    Actor_UpdateBgCheckInfo(globalCtx, &self->actor, 0.0f, 0.0f, 0.0f, 5);
+    self->actionFunc(self, globalCtx);
+    if (self->actionFunc != func_80B4B8B4) {
+        Collider_UpdateCylinder(&self->actor, &self->collider);
+        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
     }
-    Math_SmoothStepToS(&this->actor.shape.rot.x, this->actor.world.rot.x, 0xA, 0x3E8, 1);
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.world.rot.y, 0xA, 0x3E8, 1);
-    Math_SmoothStepToS(&this->actor.shape.rot.z, this->actor.world.rot.z, 0xA, 0x3E8, 1);
-    func_80B4AE18(this);
+    Math_SmoothStepToS(&self->actor.shape.rot.x, self->actor.world.rot.x, 0xA, 0x3E8, 1);
+    Math_SmoothStepToS(&self->actor.shape.rot.y, self->actor.world.rot.y, 0xA, 0x3E8, 1);
+    Math_SmoothStepToS(&self->actor.shape.rot.z, self->actor.world.rot.z, 0xA, 0x3E8, 1);
+    func_80B4AE18(self);
 }
 
 s32 EnZl1_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* thisx) {
-    EnZl1* this = THIS;
+    EnZl1* self = THIS;
 
     if ((limbIndex == 4) || (limbIndex == 3) || (limbIndex == 6) || (limbIndex == 5)) {
         *dList = NULL;
@@ -797,39 +797,39 @@ s32 EnZl1_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
 
     if (limbIndex != 10) {
         if (limbIndex == 17) {
-            rot->x += this->unk_200.y;
-            rot->y += this->unk_200.z;
-            rot->z += this->unk_200.x;
+            rot->x += self->unk_200.y;
+            rot->y += self->unk_200.z;
+            rot->z += self->unk_200.x;
         }
     } else {
-        rot->x += this->unk_206.y;
-        rot->y += this->unk_206.x;
-        rot->z += this->unk_206.z;
+        rot->x += self->unk_206.y;
+        rot->y += self->unk_206.x;
+        rot->z += self->unk_206.z;
     }
     return 0;
 }
 
 void EnZl1_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx) {
     Vec3f vec = { 0.0f, 0.0f, 0.0f };
-    EnZl1* this = THIS;
+    EnZl1* self = THIS;
 
     if (limbIndex == 17) {
-        Matrix_MultVec3f(&vec, &this->actor.focus.pos);
+        Matrix_MultVec3f(&vec, &self->actor.focus.pos);
     }
 }
 
 void EnZl1_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    EnZl1* this = THIS;
+    EnZl1* self = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx, "../z_en_girlB.c", 2011);
 
-    gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(this->unk_1F4));
-    gSPSegment(POLY_OPA_DISP++, 0x09, SEGMENTED_TO_VIRTUAL(this->unk_1F8));
-    gSPSegment(POLY_OPA_DISP++, 0x0A, SEGMENTED_TO_VIRTUAL(this->unk_1EC));
+    gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(self->unk_1F4));
+    gSPSegment(POLY_OPA_DISP++, 0x09, SEGMENTED_TO_VIRTUAL(self->unk_1F8));
+    gSPSegment(POLY_OPA_DISP++, 0x0A, SEGMENTED_TO_VIRTUAL(self->unk_1EC));
 
     func_80093D18(globalCtx->state.gfxCtx);
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          EnZl1_OverrideLimbDraw, EnZl1_PostLimbDraw, this);
+    SkelAnime_DrawFlexOpa(globalCtx, self->skelAnime.skeleton, self->skelAnime.jointTable, self->skelAnime.dListCount,
+                          EnZl1_OverrideLimbDraw, EnZl1_PostLimbDraw, self);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx, "../z_en_girlB.c", 2046);
 }

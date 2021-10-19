@@ -25,8 +25,8 @@ void BgHakaSgami_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgHakaSgami_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgHakaSgami_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void BgHakaSgami_SetupSpin(BgHakaSgami* this, GlobalContext* globalCtx);
-void BgHakaSgami_Spin(BgHakaSgami* this, GlobalContext* globalCtx);
+void BgHakaSgami_SetupSpin(BgHakaSgami* self, GlobalContext* globalCtx);
+void BgHakaSgami_Spin(BgHakaSgami* self, GlobalContext* globalCtx);
 
 const ActorInit Bg_Haka_Sgami_InitVars = {
     ACTOR_BG_HAKA_SGAMI,
@@ -133,28 +133,28 @@ void BgHakaSgami_Init(Actor* thisx, GlobalContext* globalCtx) {
     static u8 sP2StartColor[] = { 200, 200, 200, 130 };
     static u8 sP1EndColor[] = { 200, 200, 200, 60 };
     static u8 sP2EndColor[] = { 150, 150, 150, 20 };
-    BgHakaSgami* this = THIS;
+    BgHakaSgami* self = THIS;
     EffectBlureInit1 blureInit;
     s32 i;
-    ColliderTris* colliderScythe = &this->colliderScythe;
+    ColliderTris* colliderScythe = &self->colliderScythe;
 
     Actor_ProcessInitChain(thisx, sInitChain);
 
-    this->unk_151 = thisx->params & 0xFF;
+    self->unk_151 = thisx->params & 0xFF;
     thisx->params = (thisx->params >> 8) & 0xFF;
 
-    if (this->unk_151 != 0) {
+    if (self->unk_151 != 0) {
         thisx->flags |= 0x80;
     }
 
     Collider_InitTris(globalCtx, colliderScythe);
-    Collider_SetTris(globalCtx, colliderScythe, thisx, &sTrisInit, this->colliderScytheItems);
-    Collider_InitCylinder(globalCtx, &this->colliderScytheCenter);
-    Collider_SetCylinder(globalCtx, &this->colliderScytheCenter, thisx, &sCylinderInit);
+    Collider_SetTris(globalCtx, colliderScythe, thisx, &sTrisInit, self->colliderScytheItems);
+    Collider_InitCylinder(globalCtx, &self->colliderScytheCenter);
+    Collider_SetCylinder(globalCtx, &self->colliderScytheCenter, thisx, &sCylinderInit);
 
-    this->colliderScytheCenter.dim.pos.x = thisx->world.pos.x;
-    this->colliderScytheCenter.dim.pos.y = thisx->world.pos.y;
-    this->colliderScytheCenter.dim.pos.z = thisx->world.pos.z;
+    self->colliderScytheCenter.dim.pos.x = thisx->world.pos.x;
+    self->colliderScytheCenter.dim.pos.y = thisx->world.pos.y;
+    self->colliderScytheCenter.dim.pos.z = thisx->world.pos.z;
 
     CollisionCheck_SetInfo(&thisx->colChkInfo, NULL, &sColChkInfoInit);
 
@@ -167,47 +167,47 @@ void BgHakaSgami_Init(Actor* thisx, GlobalContext* globalCtx) {
     blureInit.elemDuration = 10;
     blureInit.unkFlag = false;
     blureInit.calcMode = 2;
-    Effect_Add(globalCtx, &this->blureEffectIndex[0], EFFECT_BLURE1, 0, 0, &blureInit);
-    Effect_Add(globalCtx, &this->blureEffectIndex[1], EFFECT_BLURE1, 0, 0, &blureInit);
+    Effect_Add(globalCtx, &self->blureEffectIndex[0], EFFECT_BLURE1, 0, 0, &blureInit);
+    Effect_Add(globalCtx, &self->blureEffectIndex[1], EFFECT_BLURE1, 0, 0, &blureInit);
 
     if (thisx->params == SCYTHE_TRAP_SHADOW_TEMPLE) {
-        this->requiredObjBankIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_HAKA_OBJECTS);
+        self->requiredObjBankIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_HAKA_OBJECTS);
         thisx->flags &= ~1;
     } else {
-        this->requiredObjBankIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_ICE_OBJECTS);
-        this->colliderScytheCenter.dim.radius = 30;
-        this->colliderScytheCenter.dim.height = 70;
+        self->requiredObjBankIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_ICE_OBJECTS);
+        self->colliderScytheCenter.dim.radius = 30;
+        self->colliderScytheCenter.dim.height = 70;
         Actor_SetFocus(thisx, 40.0f);
     }
 
-    if (this->requiredObjBankIndex < 0) {
+    if (self->requiredObjBankIndex < 0) {
         Actor_Kill(thisx);
         return;
     }
 
-    this->actionFunc = BgHakaSgami_SetupSpin;
+    self->actionFunc = BgHakaSgami_SetupSpin;
 }
 
 void BgHakaSgami_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    BgHakaSgami* this = THIS;
+    BgHakaSgami* self = THIS;
 
-    Effect_Delete(globalCtx, this->blureEffectIndex[0]);
-    Effect_Delete(globalCtx, this->blureEffectIndex[1]);
-    Collider_DestroyTris(globalCtx, &this->colliderScythe);
-    Collider_DestroyCylinder(globalCtx, &this->colliderScytheCenter);
+    Effect_Delete(globalCtx, self->blureEffectIndex[0]);
+    Effect_Delete(globalCtx, self->blureEffectIndex[1]);
+    Collider_DestroyTris(globalCtx, &self->colliderScythe);
+    Collider_DestroyCylinder(globalCtx, &self->colliderScytheCenter);
 }
 
-void BgHakaSgami_SetupSpin(BgHakaSgami* this, GlobalContext* globalCtx) {
-    if (Object_IsLoaded(&globalCtx->objectCtx, this->requiredObjBankIndex)) {
-        this->actor.objBankIndex = this->requiredObjBankIndex;
-        this->actor.draw = BgHakaSgami_Draw;
-        this->timer = SCYTHE_SPIN_TIME;
-        this->actor.flags &= ~0x10;
-        this->actionFunc = BgHakaSgami_Spin;
+void BgHakaSgami_SetupSpin(BgHakaSgami* self, GlobalContext* globalCtx) {
+    if (Object_IsLoaded(&globalCtx->objectCtx, self->requiredObjBankIndex)) {
+        self->actor.objBankIndex = self->requiredObjBankIndex;
+        self->actor.draw = BgHakaSgami_Draw;
+        self->timer = SCYTHE_SPIN_TIME;
+        self->actor.flags &= ~0x10;
+        self->actionFunc = BgHakaSgami_Spin;
     }
 }
 
-void BgHakaSgami_Spin(BgHakaSgami* this, GlobalContext* globalCtx) {
+void BgHakaSgami_Spin(BgHakaSgami* self, GlobalContext* globalCtx) {
     static Vec3f blureEffectVertices2[] = {
         { -20.0f, 50.0f, 130.0f },
         { -50.0f, 33.0f, 20.0f },
@@ -224,84 +224,84 @@ void BgHakaSgami_Spin(BgHakaSgami* this, GlobalContext* globalCtx) {
     s32 iterateCount;
     ColliderTrisElementInit* elementInit;
 
-    if (this->timer != 0) {
-        this->timer--;
+    if (self->timer != 0) {
+        self->timer--;
     }
 
-    this->actor.shape.rot.y += ((s16)(512.0f * sinf(this->timer * (M_PI / 16.0f))) + 0x400) >> 1;
+    self->actor.shape.rot.y += ((s16)(512.0f * sinf(self->timer * (M_PI / 16.0f))) + 0x400) >> 1;
 
-    if (this->timer == 0) {
-        this->timer = SCYTHE_SPIN_TIME;
+    if (self->timer == 0) {
+        self->timer = SCYTHE_SPIN_TIME;
     }
 
-    actorRotYSin = Math_SinS(this->actor.shape.rot.y);
-    actorRotYCos = Math_CosS(this->actor.shape.rot.y);
+    actorRotYSin = Math_SinS(self->actor.shape.rot.y);
+    actorRotYCos = Math_CosS(self->actor.shape.rot.y);
 
-    iterateCount = (this->actor.params != 0) ? 4 : 2;
+    iterateCount = (self->actor.params != 0) ? 4 : 2;
 
     for (i = iterateCount - 2; i < iterateCount; i++) {
         elementInit = &sTrisInit.elements[i];
 
         for (j = 0; j < 3; j++) {
-            scytheVertices[j].x = this->actor.world.pos.x + elementInit->dim.vtx[j].z * actorRotYSin +
+            scytheVertices[j].x = self->actor.world.pos.x + elementInit->dim.vtx[j].z * actorRotYSin +
                                   elementInit->dim.vtx[j].x * actorRotYCos;
-            scytheVertices[j].y = this->actor.world.pos.y + elementInit->dim.vtx[j].y;
-            scytheVertices[j].z = this->actor.world.pos.z + elementInit->dim.vtx[j].z * actorRotYCos -
+            scytheVertices[j].y = self->actor.world.pos.y + elementInit->dim.vtx[j].y;
+            scytheVertices[j].z = self->actor.world.pos.z + elementInit->dim.vtx[j].z * actorRotYCos -
                                   elementInit->dim.vtx[j].x * actorRotYSin;
         }
 
-        Collider_SetTrisVertices(&this->colliderScythe, i, &scytheVertices[0], &scytheVertices[1], &scytheVertices[2]);
+        Collider_SetTrisVertices(&self->colliderScythe, i, &scytheVertices[0], &scytheVertices[1], &scytheVertices[2]);
 
         for (j = 0; j < 3; j++) {
-            scytheVertices[j].x = (2 * this->actor.world.pos.x) - scytheVertices[j].x;
-            scytheVertices[j].z = (2 * this->actor.world.pos.z) - scytheVertices[j].z;
+            scytheVertices[j].x = (2 * self->actor.world.pos.x) - scytheVertices[j].x;
+            scytheVertices[j].z = (2 * self->actor.world.pos.z) - scytheVertices[j].z;
         }
 
-        Collider_SetTrisVertices(&this->colliderScythe, (i + 2) % 4, &scytheVertices[0], &scytheVertices[1],
+        Collider_SetTrisVertices(&self->colliderScythe, (i + 2) % 4, &scytheVertices[0], &scytheVertices[1],
                                  &scytheVertices[2]);
     }
 
-    if ((this->unk_151 == 0) || (globalCtx->actorCtx.unk_03 != 0)) {
-        scytheVertices[0].x = this->actor.world.pos.x + blureEffectVertices1[this->actor.params].z * actorRotYSin +
-                              blureEffectVertices1[this->actor.params].x * actorRotYCos;
-        scytheVertices[0].y = this->actor.world.pos.y + blureEffectVertices1[this->actor.params].y;
-        scytheVertices[0].z = this->actor.world.pos.z + blureEffectVertices1[this->actor.params].z * actorRotYCos -
-                              blureEffectVertices1[this->actor.params].x * actorRotYSin;
-        scytheVertices[1].x = this->actor.world.pos.x + blureEffectVertices2[this->actor.params].z * actorRotYSin +
-                              blureEffectVertices2[this->actor.params].x * actorRotYCos;
-        scytheVertices[1].y = this->actor.world.pos.y + blureEffectVertices2[this->actor.params].y;
-        scytheVertices[1].z = this->actor.world.pos.z + blureEffectVertices2[this->actor.params].z * actorRotYCos -
-                              blureEffectVertices2[this->actor.params].x * actorRotYSin;
-        EffectBlure_AddVertex(Effect_GetByIndex(this->blureEffectIndex[0]), &scytheVertices[0], &scytheVertices[1]);
+    if ((self->unk_151 == 0) || (globalCtx->actorCtx.unk_03 != 0)) {
+        scytheVertices[0].x = self->actor.world.pos.x + blureEffectVertices1[self->actor.params].z * actorRotYSin +
+                              blureEffectVertices1[self->actor.params].x * actorRotYCos;
+        scytheVertices[0].y = self->actor.world.pos.y + blureEffectVertices1[self->actor.params].y;
+        scytheVertices[0].z = self->actor.world.pos.z + blureEffectVertices1[self->actor.params].z * actorRotYCos -
+                              blureEffectVertices1[self->actor.params].x * actorRotYSin;
+        scytheVertices[1].x = self->actor.world.pos.x + blureEffectVertices2[self->actor.params].z * actorRotYSin +
+                              blureEffectVertices2[self->actor.params].x * actorRotYCos;
+        scytheVertices[1].y = self->actor.world.pos.y + blureEffectVertices2[self->actor.params].y;
+        scytheVertices[1].z = self->actor.world.pos.z + blureEffectVertices2[self->actor.params].z * actorRotYCos -
+                              blureEffectVertices2[self->actor.params].x * actorRotYSin;
+        EffectBlure_AddVertex(Effect_GetByIndex(self->blureEffectIndex[0]), &scytheVertices[0], &scytheVertices[1]);
 
         for (j = 0; j < 2; j++) {
-            scytheVertices[j].x = (2 * this->actor.world.pos.x) - scytheVertices[j].x;
-            scytheVertices[j].z = (2 * this->actor.world.pos.z) - scytheVertices[j].z;
+            scytheVertices[j].x = (2 * self->actor.world.pos.x) - scytheVertices[j].x;
+            scytheVertices[j].z = (2 * self->actor.world.pos.z) - scytheVertices[j].z;
         }
 
-        EffectBlure_AddVertex(Effect_GetByIndex(this->blureEffectIndex[1]), &scytheVertices[0], &scytheVertices[1]);
+        EffectBlure_AddVertex(Effect_GetByIndex(self->blureEffectIndex[1]), &scytheVertices[0], &scytheVertices[1]);
     }
 
-    CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->colliderScythe.base);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->colliderScytheCenter.base);
-    func_8002F974(&this->actor, NA_SE_EV_ROLLCUTTER_MOTOR - SFX_FLAG);
+    CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &self->colliderScythe.base);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &self->colliderScytheCenter.base);
+    func_8002F974(&self->actor, NA_SE_EV_ROLLCUTTER_MOTOR - SFX_FLAG);
 }
 
 void BgHakaSgami_Update(Actor* thisx, GlobalContext* globalCtx) {
-    BgHakaSgami* this = THIS;
+    BgHakaSgami* self = THIS;
     Player* player = GET_PLAYER(globalCtx);
 
-    if (!(player->stateFlags1 & 0x300000C0) || (this->actionFunc == BgHakaSgami_SetupSpin)) {
-        this->actionFunc(this, globalCtx);
+    if (!(player->stateFlags1 & 0x300000C0) || (self->actionFunc == BgHakaSgami_SetupSpin)) {
+        self->actionFunc(self, globalCtx);
     }
 }
 
 void BgHakaSgami_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    BgHakaSgami* this = THIS;
+    BgHakaSgami* self = THIS;
 
-    if (this->unk_151 != 0) {
+    if (self->unk_151 != 0) {
         Gfx_DrawDListXlu(globalCtx, object_haka_objects_DL_00BF20);
-    } else if (this->actor.params == SCYTHE_TRAP_SHADOW_TEMPLE) {
+    } else if (self->actor.params == SCYTHE_TRAP_SHADOW_TEMPLE) {
         Gfx_DrawDListOpa(globalCtx, object_haka_objects_DL_00BF20);
     } else {
         Gfx_DrawDListOpa(globalCtx, object_ice_objects_DL_0021F0);

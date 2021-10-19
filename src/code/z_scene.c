@@ -16,7 +16,7 @@ s32 Object_Spawn(ObjectContext* objectCtx, s16 objectId) {
 
     ASSERT(((objectCtx->num < OBJECT_EXCHANGE_BANK_MAX) &&
             (((s32)objectCtx->status[objectCtx->num].segment + size) < (u32)objectCtx->spaceEnd)),
-           "this->num < OBJECT_EXCHANGE_BANK_MAX && (this->status[this->num].Segment + size) < this->endSegment",
+           "self->num < OBJECT_EXCHANGE_BANK_MAX && (self->status[self->num].Segment + size) < self->endSegment",
            "../z_scene.c", 142);
 
     DmaMgr_SendRequest1(objectCtx->status[objectCtx->num].segment, gObjectTable[objectId].vromStart, size,
@@ -150,7 +150,7 @@ void* func_800982FC(ObjectContext* objectCtx, s32 bankIndex, s16 objectId) {
     nextPtr = (void*)ALIGN16((s32)status->segment + size);
     if (1) {} // Necessary to match
 
-    ASSERT(nextPtr < objectCtx->spaceEnd, "nextptr < this->endSegment", "../z_scene.c", 381);
+    ASSERT(nextPtr < objectCtx->spaceEnd, "nextptr < self->endSegment", "../z_scene.c", 381);
 
     // "Object exchange free size=%08x"
     osSyncPrintf("オブジェクト入れ替え空きサイズ=%08x\n", (s32)objectCtx->spaceEnd - (s32)nextPtr);

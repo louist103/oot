@@ -15,7 +15,7 @@ void EnSceneChange_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSceneChange_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnSceneChange_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void EnSceneChange_DoNothing(EnSceneChange* this, GlobalContext* globalCtx);
+void EnSceneChange_DoNothing(EnSceneChange* self, GlobalContext* globalCtx);
 
 const ActorInit En_Scene_Change_InitVars = {
     ACTOR_EN_SCENE_CHANGE,
@@ -29,26 +29,26 @@ const ActorInit En_Scene_Change_InitVars = {
     (ActorFunc)EnSceneChange_Draw,
 };
 
-void EnSceneChange_SetupAction(EnSceneChange* this, EnSceneChangeActionFunc actionFunc) {
-    this->actionFunc = actionFunc;
+void EnSceneChange_SetupAction(EnSceneChange* self, EnSceneChangeActionFunc actionFunc) {
+    self->actionFunc = actionFunc;
 }
 
 void EnSceneChange_Init(Actor* thisx, GlobalContext* globalCtx) {
-    EnSceneChange* this = THIS;
+    EnSceneChange* self = THIS;
 
-    EnSceneChange_SetupAction(this, EnSceneChange_DoNothing);
+    EnSceneChange_SetupAction(self, EnSceneChange_DoNothing);
 }
 
 void EnSceneChange_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
-void EnSceneChange_DoNothing(EnSceneChange* this, GlobalContext* globalCtx) {
+void EnSceneChange_DoNothing(EnSceneChange* self, GlobalContext* globalCtx) {
 }
 
 void EnSceneChange_Update(Actor* thisx, GlobalContext* globalCtx) {
-    EnSceneChange* this = THIS;
+    EnSceneChange* self = THIS;
 
-    this->actionFunc(this, globalCtx);
+    self->actionFunc(self, globalCtx);
 }
 
 void EnSceneChange_Draw(Actor* thisx, GlobalContext* globalCtx) {

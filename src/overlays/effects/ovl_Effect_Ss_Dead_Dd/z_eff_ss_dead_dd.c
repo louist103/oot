@@ -19,67 +19,67 @@
 #define rAlphaStep regs[10]
 #define rAlphaMode regs[11] // if mode is 0 alpha decreases over time, otherwise it increases
 
-u32 EffectSsDeadDd_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx);
-void EffectSsDeadDd_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this);
-void EffectSsDeadDd_Update(GlobalContext* globalCtx, u32 index, EffectSs* this);
+u32 EffectSsDeadDd_Init(GlobalContext* globalCtx, u32 index, EffectSs* self, void* initParamsx);
+void EffectSsDeadDd_Draw(GlobalContext* globalCtx, u32 index, EffectSs* self);
+void EffectSsDeadDd_Update(GlobalContext* globalCtx, u32 index, EffectSs* self);
 
 EffectSsInit Effect_Ss_Dead_Dd_InitVars = {
     EFFECT_SS_DEAD_DD,
     EffectSsDeadDd_Init,
 };
 
-u32 EffectSsDeadDd_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx) {
+u32 EffectSsDeadDd_Init(GlobalContext* globalCtx, u32 index, EffectSs* self, void* initParamsx) {
     s32 i;
     EffectSsDeadDdInitParams* initParams = (EffectSsDeadDdInitParams*)initParamsx;
 
     if (initParams->type == 0) {
-        this->pos = initParams->pos;
-        this->velocity = initParams->velocity;
-        this->accel = initParams->accel;
-        this->life = initParams->life;
-        this->rScaleStep = initParams->scaleStep;
-        this->rAlphaMode = initParams->alphaStep;
+        self->pos = initParams->pos;
+        self->velocity = initParams->velocity;
+        self->accel = initParams->accel;
+        self->life = initParams->life;
+        self->rScaleStep = initParams->scaleStep;
+        self->rAlphaMode = initParams->alphaStep;
 
         if (initParams->alphaStep != 0) {
-            this->rAlphaStep = initParams->alphaStep;
+            self->rAlphaStep = initParams->alphaStep;
         } else {
-            this->rAlphaStep = initParams->alpha / initParams->life;
+            self->rAlphaStep = initParams->alpha / initParams->life;
         }
 
-        this->draw = EffectSsDeadDd_Draw;
-        this->update = EffectSsDeadDd_Update;
-        this->rScale = initParams->scale;
-        this->rPrimColorR = initParams->primColor.r;
-        this->rPrimColorG = initParams->primColor.g;
-        this->rPrimColorB = initParams->primColor.b;
-        this->rAlpha = initParams->alpha;
-        this->rEnvColorR = initParams->envColor.r;
-        this->rEnvColorG = initParams->envColor.g;
-        this->rEnvColorB = initParams->envColor.b;
+        self->draw = EffectSsDeadDd_Draw;
+        self->update = EffectSsDeadDd_Update;
+        self->rScale = initParams->scale;
+        self->rPrimColorR = initParams->primColor.r;
+        self->rPrimColorG = initParams->primColor.g;
+        self->rPrimColorB = initParams->primColor.b;
+        self->rAlpha = initParams->alpha;
+        self->rEnvColorR = initParams->envColor.r;
+        self->rEnvColorG = initParams->envColor.g;
+        self->rEnvColorB = initParams->envColor.b;
 
     } else if (initParams->type == 1) {
-        this->life = initParams->life;
-        this->rScaleStep = initParams->scaleStep;
-        this->rAlphaMode = 0;
-        this->rAlphaStep = 155 / initParams->life;
-        this->rScale = initParams->scale;
-        this->rPrimColorR = 255;
-        this->rPrimColorG = 255;
-        this->rPrimColorB = 155;
-        this->rAlpha = 155;
-        this->rEnvColorR = 250;
-        this->rEnvColorG = 180;
-        this->rEnvColorB = 0;
-        this->draw = EffectSsDeadDd_Draw;
-        this->update = EffectSsDeadDd_Update;
+        self->life = initParams->life;
+        self->rScaleStep = initParams->scaleStep;
+        self->rAlphaMode = 0;
+        self->rAlphaStep = 155 / initParams->life;
+        self->rScale = initParams->scale;
+        self->rPrimColorR = 255;
+        self->rPrimColorG = 255;
+        self->rPrimColorB = 155;
+        self->rAlpha = 155;
+        self->rEnvColorR = 250;
+        self->rEnvColorG = 180;
+        self->rEnvColorB = 0;
+        self->draw = EffectSsDeadDd_Draw;
+        self->update = EffectSsDeadDd_Update;
 
         for (i = initParams->randIter; i > 0; i--) {
-            this->pos.x = ((Rand_ZeroOne() - 0.5f) * initParams->randPosScale) + initParams->pos.x;
-            this->pos.y = ((Rand_ZeroOne() - 0.5f) * initParams->randPosScale) + initParams->pos.y;
-            this->pos.z = ((Rand_ZeroOne() - 0.5f) * initParams->randPosScale) + initParams->pos.z;
-            this->accel.x = this->velocity.x = (Rand_ZeroOne() - 0.5f) * 2.0f;
-            this->accel.y = this->velocity.y = (Rand_ZeroOne() - 0.5f) * 2.0f;
-            this->accel.z = this->velocity.z = (Rand_ZeroOne() - 0.5f) * 2.0f;
+            self->pos.x = ((Rand_ZeroOne() - 0.5f) * initParams->randPosScale) + initParams->pos.x;
+            self->pos.y = ((Rand_ZeroOne() - 0.5f) * initParams->randPosScale) + initParams->pos.y;
+            self->pos.z = ((Rand_ZeroOne() - 0.5f) * initParams->randPosScale) + initParams->pos.z;
+            self->accel.x = self->velocity.x = (Rand_ZeroOne() - 0.5f) * 2.0f;
+            self->accel.y = self->velocity.y = (Rand_ZeroOne() - 0.5f) * 2.0f;
+            self->accel.z = self->velocity.z = (Rand_ZeroOne() - 0.5f) * 2.0f;
         }
     } else {
         osSyncPrintf("Effect_SS_Dd_disp_mode():mode_swが変です。\n");
@@ -89,7 +89,7 @@ u32 EffectSsDeadDd_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, voi
     return 1;
 }
 
-void EffectSsDeadDd_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
+void EffectSsDeadDd_Draw(GlobalContext* globalCtx, u32 index, EffectSs* self) {
     GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
     MtxF mfTrans;
     MtxF mfScale;
@@ -99,8 +99,8 @@ void EffectSsDeadDd_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
 
     OPEN_DISPS(gfxCtx, "../z_eff_ss_dead_dd.c", 214);
 
-    scale = this->rScale * 0.01f;
-    SkinMatrix_SetTranslate(&mfTrans, this->pos.x, this->pos.y, this->pos.z);
+    scale = self->rScale * 0.01f;
+    SkinMatrix_SetTranslate(&mfTrans, self->pos.x, self->pos.y, self->pos.z);
     SkinMatrix_SetScale(&mfScale, scale, scale, scale);
     SkinMatrix_MtxFMtxFMult(&mfTrans, &mfScale, &mfResult);
 
@@ -108,8 +108,8 @@ void EffectSsDeadDd_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
 
     if (mtx != NULL) {
         func_80094BC4(gfxCtx);
-        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, this->rPrimColorR, this->rPrimColorG, this->rPrimColorB, this->rAlpha);
-        gDPSetEnvColor(POLY_XLU_DISP++, this->rEnvColorR, this->rEnvColorG, this->rEnvColorB, this->rAlpha);
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, self->rPrimColorR, self->rPrimColorG, self->rPrimColorB, self->rAlpha);
+        gDPSetEnvColor(POLY_XLU_DISP++, self->rEnvColorR, self->rEnvColorG, self->rEnvColorB, self->rAlpha);
         gSPMatrix(POLY_XLU_DISP++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPMatrix(POLY_XLU_DISP++, &D_01000000, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
         gDPSetCombineLERP(POLY_XLU_DISP++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0,
@@ -120,24 +120,24 @@ void EffectSsDeadDd_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
     CLOSE_DISPS(gfxCtx, "../z_eff_ss_dead_dd.c", 259);
 }
 
-void EffectSsDeadDd_Update(GlobalContext* globalCtx, u32 index, EffectSs* this) {
+void EffectSsDeadDd_Update(GlobalContext* globalCtx, u32 index, EffectSs* self) {
 
-    this->rScale += this->rScaleStep;
+    self->rScale += self->rScaleStep;
 
-    if (this->rScale < 0) {
-        this->rScale = 0;
+    if (self->rScale < 0) {
+        self->rScale = 0;
     }
 
-    if (this->rAlphaMode != 0) {
-        this->rAlpha += this->rAlphaStep;
-        if (this->rAlpha > 255) {
-            this->rAlpha = 255;
+    if (self->rAlphaMode != 0) {
+        self->rAlpha += self->rAlphaStep;
+        if (self->rAlpha > 255) {
+            self->rAlpha = 255;
         }
     } else {
-        if (this->rAlpha < this->rAlphaStep) {
-            this->rAlpha = 0;
+        if (self->rAlpha < self->rAlphaStep) {
+            self->rAlpha = 0;
         } else {
-            this->rAlpha -= this->rAlphaStep;
+            self->rAlpha -= self->rAlphaStep;
         }
     }
 }

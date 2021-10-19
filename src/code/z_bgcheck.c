@@ -158,7 +158,7 @@ s16 CollisionPoly_GetMinY(CollisionPoly* poly, Vec3s* vtxList) {
     s32 c;
     s16 min;
 
-    //! @bug Due to rounding errors, some polys with a slight slope have a y normal of 1.0f/-1.0f. As such, this
+    //! @bug Due to rounding errors, some polys with a slight slope have a y normal of 1.0f/-1.0f. As such, self
     //! optimization returns the wrong minimum y for a subset of these polys.
     if (poly->normal.y == COLPOLY_SNORMAL(1.0f) || poly->normal.y == COLPOLY_SNORMAL(-1.0f)) {
         return vtxList[COLPOLY_VTX_INDEX(poly->flags_vIA)].y;
@@ -1586,7 +1586,7 @@ void BgCheck_Allocate(CollisionContext* colCtx, GlobalContext* globalCtx, Collis
               sizeof(CollisionContext);
     if (customNodeListMax > 0) {
         // tblMax is set without checking if customNodeListMax will result in a memory overflow
-        // this is a non-issue as long as sceneSubdivisionList.nodeListMax is -1
+        // self is a non-issue as long as sceneSubdivisionList.nodeListMax is -1
         tblMax = customNodeListMax;
     } else {
         if (colCtx->memSize < memSize) {
@@ -2397,11 +2397,11 @@ s32 BgCheck_SphVsFirstWall(CollisionContext* colCtx, Vec3f* center, f32 radius) 
 /**
  * Init SSNodeList
  */
-void SSNodeList_Initialize(SSNodeList* this) {
-    this->max = 0;
-    this->count = 0;
-    this->tbl = NULL;
-    this->polyCheckTbl = NULL;
+void SSNodeList_Initialize(SSNodeList* self) {
+    self->max = 0;
+    self->count = 0;
+    self->tbl = NULL;
+    self->polyCheckTbl = NULL;
 }
 
 /**
@@ -2409,28 +2409,28 @@ void SSNodeList_Initialize(SSNodeList* this) {
  * tblMax is the number of SSNode records to allocate
  * numPolys is the number of polygons defined within the CollisionHeader
  */
-void SSNodeList_Alloc(GlobalContext* globalCtx, SSNodeList* this, s32 tblMax, s32 numPolys) {
-    this->max = tblMax;
-    this->count = 0;
-    this->tbl = THA_AllocEndAlign(&globalCtx->state.tha, tblMax * sizeof(SSNode), -2);
+void SSNodeList_Alloc(GlobalContext* globalCtx, SSNodeList* self, s32 tblMax, s32 numPolys) {
+    self->max = tblMax;
+    self->count = 0;
+    self->tbl = THA_AllocEndAlign(&globalCtx->state.tha, tblMax * sizeof(SSNode), -2);
 
-    ASSERT(this->tbl != NULL, "this->short_slist_node_tbl != NULL", "../z_bgcheck.c", 5975);
+    ASSERT(self->tbl != NULL, "self->short_slist_node_tbl != NULL", "../z_bgcheck.c", 5975);
 
-    this->polyCheckTbl = GameState_Alloc(&globalCtx->state, numPolys, "../z_bgcheck.c", 5979);
+    self->polyCheckTbl = GameState_Alloc(&globalCtx->state, numPolys, "../z_bgcheck.c", 5979);
 
-    ASSERT(this->polyCheckTbl != NULL, "this->polygon_check != NULL", "../z_bgcheck.c", 5981);
+    ASSERT(self->polyCheckTbl != NULL, "self->polygon_check != NULL", "../z_bgcheck.c", 5981);
 }
 
 /**
  * Get next SSNodeList SSNode
  */
-SSNode* SSNodeList_GetNextNode(SSNodeList* this) {
-    SSNode* result = &this->tbl[this->count];
+SSNode* SSNodeList_GetNextNode(SSNodeList* self) {
+    SSNode* result = &self->tbl[self->count];
 
-    this->count++;
-    ASSERT(this->count < this->max, "this->short_slist_node_last_index < this->short_slist_node_size", "../z_bgcheck.c",
+    self->count++;
+    ASSERT(self->count < self->max, "self->short_slist_node_last_index < self->short_slist_node_size", "../z_bgcheck.c",
            5998);
-    if (!(this->count < this->max)) {
+    if (!(self->count < self->max)) {
         return NULL;
     }
     return result;
@@ -2439,10 +2439,10 @@ SSNode* SSNodeList_GetNextNode(SSNodeList* this) {
 /**
  * Get next SSNodeList SSNode index
  */
-u16 SSNodeList_GetNextNodeIdx(SSNodeList* this) {
-    u16 new_index = this->count++;
+u16 SSNodeList_GetNextNodeIdx(SSNodeList* self) {
+    u16 new_index = self->count++;
 
-    ASSERT(new_index < this->max, "new_index < this->short_slist_node_size", "../z_bgcheck.c", 6021);
+    ASSERT(new_index < self->max, "new_index < self->short_slist_node_size", "../z_bgcheck.c", 6021);
     return new_index;
 }
 
@@ -2864,7 +2864,7 @@ void DynaPoly_ExpandSRT(GlobalContext* globalCtx, DynaCollisionContext* dyna, s3
             f32 newNormMagnitude;
             *newPoly = pbgdata->polyList[i];
 
-            // Yeah, this is all kinds of fake, but my God, it matches.
+            // Yeah, self is all kinds of fake, but my God, it matches.
             newPoly->flags_vIA =
                 (COLPOLY_VTX_INDEX(newPoly->flags_vIA) + *vtxStartIndex) | ((*newPoly).flags_vIA & 0xE000);
             newPoly->flags_vIB =

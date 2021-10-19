@@ -16,7 +16,7 @@ void EnEg_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnEg_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnEg_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_809FFDC8(EnEg* this, GlobalContext* globalCtx);
+void func_809FFDC8(EnEg* self, GlobalContext* globalCtx);
 
 static s32 voided = false;
 
@@ -44,12 +44,12 @@ void EnEg_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnEg_Init(Actor* thisx, GlobalContext* globalCtx) {
-    EnEg* this = THIS;
+    EnEg* self = THIS;
 
-    this->action = 0;
+    self->action = 0;
 }
 
-void func_809FFDC8(EnEg* this, GlobalContext* globalCtx) {
+void func_809FFDC8(EnEg* self, GlobalContext* globalCtx) {
     if (!voided && (gSaveContext.timer2Value < 1) && Flags_GetSwitch(globalCtx, 0x36) && (kREG(0) == 0)) {
         // Void the player out
         Gameplay_TriggerRespawn(globalCtx);
@@ -62,14 +62,14 @@ void func_809FFDC8(EnEg* this, GlobalContext* globalCtx) {
 }
 
 void EnEg_Update(Actor* thisx, GlobalContext* globalCtx) {
-    EnEg* this = THIS;
-    s32 action = this->action;
+    EnEg* self = THIS;
+    s32 action = self->action;
 
     if (((action < 0) || (0 < action)) || (sActionFuncs[action] == NULL)) {
         // "Main Mode is wrong!!!!!!!!!!!!!!!!!!!!!!!!!"
         osSyncPrintf(VT_FGCOL(RED) "メインモードがおかしい!!!!!!!!!!!!!!!!!!!!!!!!!\n" VT_RST);
     } else {
-        sActionFuncs[action](this, globalCtx);
+        sActionFuncs[action](self, globalCtx);
     }
 }
 

@@ -22,9 +22,9 @@ void EnChanger_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnChanger_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnChanger_Update(Actor* thisx, GlobalContext* globalCtx);
 
-void EnChanger_Wait(EnChanger* this, GlobalContext* globalCtx);
-void EnChanger_OpenChests(EnChanger* this, GlobalContext* globalCtx);
-void EnChanger_SetHeartPieceFlag(EnChanger* this, GlobalContext* globalCtx);
+void EnChanger_Wait(EnChanger* self, GlobalContext* globalCtx);
+void EnChanger_OpenChests(EnChanger* self, GlobalContext* globalCtx);
+void EnChanger_SetHeartPieceFlag(EnChanger* self, GlobalContext* globalCtx);
 
 const ActorInit En_Changer_InitVars = {
     ACTOR_EN_CHANGER,
@@ -67,7 +67,7 @@ void EnChanger_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnChanger_Init(Actor* thisx, GlobalContext* globalCtx2) {
-    EnChanger* this = THIS;
+    EnChanger* self = THIS;
     GlobalContext* globalCtx = globalCtx2;
     s16 leftChestParams;
     s16 rightChestParams;
@@ -86,7 +86,7 @@ void EnChanger_Init(Actor* thisx, GlobalContext* globalCtx2) {
         minigameRoomNum = 0;
     }
     if (Flags_GetTreasure(globalCtx, sTreasureFlags[minigameRoomNum])) {
-        this->roomChestsOpened = true;
+        self->roomChestsOpened = true;
     }
 
     osSyncPrintf("\n\n");
@@ -97,7 +97,7 @@ void EnChanger_Init(Actor* thisx, GlobalContext* globalCtx2) {
     // "How is the Save BIT?"
     osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ セーブＢＩＴは？     %x\n" VT_RST, sTreasureFlags[minigameRoomNum]);
     // "Is it already a zombie?"
-    osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ もう、ゾンビ？\t     %d\n" VT_RST, this->roomChestsOpened);
+    osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ もう、ゾンビ？\t     %d\n" VT_RST, self->roomChestsOpened);
     osSyncPrintf("\n\n");
 
     minigameRoomNum *= 2;
@@ -105,12 +105,12 @@ void EnChanger_Init(Actor* thisx, GlobalContext* globalCtx2) {
     if (globalCtx->roomCtx.curRoom.num >= 6) {
         rewardChestParams = ((gSaveContext.itemGetInf[1] & 0x800) ? (0x4EA0) : (0x4EC0));
         rewardChestParams = sTreasureFlags[5] | rewardChestParams;
-        this->finalChest = (EnBox*)Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_BOX,
+        self->finalChest = (EnBox*)Actor_SpawnAsChild(&globalCtx->actorCtx, &self->actor, globalCtx, ACTOR_EN_BOX,
                                                       20.0f, 20.0f, -2500.0f, 0, 0x7FFF, 0, rewardChestParams);
-        if (this->finalChest != NULL) {
-            if (this->roomChestsOpened) {
+        if (self->finalChest != NULL) {
+            if (self->roomChestsOpened) {
                 Flags_SetTreasure(globalCtx, rewardChestParams & 0x1F);
-                Actor_Kill(&this->actor);
+                Actor_Kill(&self->actor);
                 return;
             } else {
                 rewardParams = ((gSaveContext.itemGetInf[1] & 0x800) ? (ITEM_ETC_RUPEE_PURPLE_CHEST_GAME)
@@ -120,7 +120,7 @@ void EnChanger_Init(Actor* thisx, GlobalContext* globalCtx2) {
                             ((sTreasureFlags[5] & 0x1F) << 8) + rewardParams);
                 // "Central treasure instance/occurrence (GREAT)"
                 osSyncPrintf(VT_FGCOL(YELLOW) "☆☆☆☆☆ 中央宝発生(ＧＲＥＡＴ) ☆☆☆☆☆ %x\n" VT_RST, rewardChestParams);
-                this->actionFunc = EnChanger_SetHeartPieceFlag;
+                self->actionFunc = EnChanger_SetHeartPieceFlag;
                 return;
             }
         }
@@ -130,99 +130,99 @@ void EnChanger_Init(Actor* thisx, GlobalContext* globalCtx2) {
     // Set up items in chests, swap them round with probability 1/2
     leftChestParams = (sLoserGetItemIds[globalCtx->roomCtx.curRoom.num] << 5) | 0x4000;
     new_var = temp_v1_3;
-    this->leftChestNum = new_var;
-    this->leftChestGetItemId = sLoserGetItemIds[globalCtx->roomCtx.curRoom.num];
+    self->leftChestNum = new_var;
+    self->leftChestGetItemId = sLoserGetItemIds[globalCtx->roomCtx.curRoom.num];
     leftChestItem = sItemEtcTypes[globalCtx->roomCtx.curRoom.num];
     leftChestParams |= new_var;
     rightChestParams = new_var | 0x4E21;
-    this->rightChestNum = new_var | 1;
-    this->rightChestGetItemId = GI_DOOR_KEY;
+    self->rightChestNum = new_var | 1;
+    self->rightChestGetItemId = GI_DOOR_KEY;
     rightChestItem = ITEM_ETC_KEY_SMALL_CHEST_GAME;
 
     if (Rand_ZeroFloat(1.99f) < 1.0f) {
         rightChestParams = (sLoserGetItemIds[globalCtx->roomCtx.curRoom.num] << 5) | 0x4000;
-        this->rightChestNum = new_var;
-        this->rightChestGetItemId = sLoserGetItemIds[globalCtx->roomCtx.curRoom.num];
+        self->rightChestNum = new_var;
+        self->rightChestGetItemId = sLoserGetItemIds[globalCtx->roomCtx.curRoom.num];
         rightChestItem = sItemEtcTypes[globalCtx->roomCtx.curRoom.num];
         leftChestParams = new_var | 0x4E21;
         rightChestParams |= new_var;
-        this->leftChestNum = temp_v1_3 | 1;
-        this->leftChestGetItemId = GI_DOOR_KEY;
+        self->leftChestNum = temp_v1_3 | 1;
+        self->leftChestGetItemId = GI_DOOR_KEY;
         leftChestItem = ITEM_ETC_KEY_SMALL_CHEST_GAME;
     }
 
-    this->leftChest = (EnBox*)Actor_SpawnAsChild(
-        &globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_BOX, sLeftChestPos[globalCtx->roomCtx.curRoom.num].x,
+    self->leftChest = (EnBox*)Actor_SpawnAsChild(
+        &globalCtx->actorCtx, &self->actor, globalCtx, ACTOR_EN_BOX, sLeftChestPos[globalCtx->roomCtx.curRoom.num].x,
         sLeftChestPos[globalCtx->roomCtx.curRoom.num].y, sLeftChestPos[globalCtx->roomCtx.curRoom.num].z, 0, -0x3FFF, 0,
         leftChestParams);
 
-    if (this->leftChest != NULL) {
+    if (self->leftChest != NULL) {
         // "Left treasure generation (what does it contain?)"
         osSyncPrintf(VT_FGCOL(PURPLE) "☆☆☆☆☆ 左宝発生(ナニがはいってるの？) ☆☆☆☆☆ %x\n" VT_RST, leftChestParams);
         // "What is the room number?"
         osSyncPrintf(VT_FGCOL(PURPLE) "☆☆☆☆☆ 部屋番号は？  %x\n" VT_RST, globalCtx->roomCtx.curRoom.num);
         // "What is the bit?"
-        osSyncPrintf(VT_FGCOL(PURPLE) "☆☆☆☆☆ ビットはなぁに？  %x\n" VT_RST, this->rightChestNum);
+        osSyncPrintf(VT_FGCOL(PURPLE) "☆☆☆☆☆ ビットはなぁに？  %x\n" VT_RST, self->rightChestNum);
         // "Sukesuke-kun" (something to do with being invisible)
         osSyncPrintf(VT_FGCOL(PURPLE) "☆☆☆☆☆ すけすけ君？ %x\n" VT_RST, rightChestItem);
         osSyncPrintf("\n\n");
-        if (this->roomChestsOpened) {
-            Flags_SetTreasure(globalCtx, this->leftChestNum & 0x1F);
+        if (self->roomChestsOpened) {
+            Flags_SetTreasure(globalCtx, self->leftChestNum & 0x1F);
         } else {
             Actor_Spawn(
                 &globalCtx->actorCtx, globalCtx, ACTOR_ITEM_ETCETERA, sLeftChestPos[globalCtx->roomCtx.curRoom.num].x,
                 sLeftChestPos[globalCtx->roomCtx.curRoom.num].y, sLeftChestPos[globalCtx->roomCtx.curRoom.num].z, 0, 0,
-                0, ((this->leftChestNum & 0x1F) << 8) + (leftChestItem & 0xFF));
+                0, ((self->leftChestNum & 0x1F) << 8) + (leftChestItem & 0xFF));
         }
     }
 
-    this->rightChest = (EnBox*)Actor_SpawnAsChild(
-        &globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_BOX, sRightChestPos[globalCtx->roomCtx.curRoom.num].x,
+    self->rightChest = (EnBox*)Actor_SpawnAsChild(
+        &globalCtx->actorCtx, &self->actor, globalCtx, ACTOR_EN_BOX, sRightChestPos[globalCtx->roomCtx.curRoom.num].x,
         sRightChestPos[globalCtx->roomCtx.curRoom.num].y, sRightChestPos[globalCtx->roomCtx.curRoom.num].z, 0, 0x3FFF,
         0, rightChestParams);
 
-    if (this->rightChest != NULL) {
+    if (self->rightChest != NULL) {
         // "Right treasure generation (what does it contain?)"
         osSyncPrintf(VT_FGCOL(CYAN) "☆☆☆☆☆ 右宝発生(ナニがはいってるの？) ☆☆☆☆☆ %x\n" VT_RST, rightChestParams);
         // "What is the room number?"
         osSyncPrintf(VT_FGCOL(CYAN) "☆☆☆☆☆ 部屋番号は？  %d\n" VT_RST, globalCtx->roomCtx.curRoom.num);
         // "What is the bit?"
-        osSyncPrintf(VT_FGCOL(CYAN) "☆☆☆☆☆ ビットはなぁに？  %x\n" VT_RST, this->leftChestNum);
+        osSyncPrintf(VT_FGCOL(CYAN) "☆☆☆☆☆ ビットはなぁに？  %x\n" VT_RST, self->leftChestNum);
         // "Sukesuke-kun" (something to do with being invisible)
         osSyncPrintf(VT_FGCOL(CYAN) "☆☆☆☆☆ すけすけ君？ %x\n" VT_RST, leftChestItem);
         osSyncPrintf("\n\n");
 
-        if (this->roomChestsOpened) {
-            Flags_SetTreasure(globalCtx, this->rightChestNum & 0x1F);
-            Actor_Kill(&this->actor);
+        if (self->roomChestsOpened) {
+            Flags_SetTreasure(globalCtx, self->rightChestNum & 0x1F);
+            Actor_Kill(&self->actor);
             return;
         }
 
         Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_ITEM_ETCETERA,
                     sRightChestPos[globalCtx->roomCtx.curRoom.num].x, sRightChestPos[globalCtx->roomCtx.curRoom.num].y,
                     sRightChestPos[globalCtx->roomCtx.curRoom.num].z, 0, 0, 0,
-                    ((this->rightChestNum & 0x1F) << 8) + (rightChestItem & 0xFF));
+                    ((self->rightChestNum & 0x1F) << 8) + (rightChestItem & 0xFF));
     }
 
-    this->actor.flags &= ~1;
-    this->actionFunc = EnChanger_Wait;
+    self->actor.flags &= ~1;
+    self->actionFunc = EnChanger_Wait;
 }
 
-void EnChanger_Wait(EnChanger* this, GlobalContext* globalCtx) {
-    if (this->leftChest->unk_1F4 != 0) {
-        this->timer = 80;
-        Flags_SetTreasure(globalCtx, this->rightChestNum & 0x1F);
-        this->actionFunc = EnChanger_OpenChests;
-    } else if (this->rightChest->unk_1F4 != 0) {
-        this->chestOpened = CHEST_RIGHT;
-        this->timer = 80;
-        Flags_SetTreasure(globalCtx, this->leftChestNum & 0x1F);
-        this->actionFunc = EnChanger_OpenChests;
+void EnChanger_Wait(EnChanger* self, GlobalContext* globalCtx) {
+    if (self->leftChest->unk_1F4 != 0) {
+        self->timer = 80;
+        Flags_SetTreasure(globalCtx, self->rightChestNum & 0x1F);
+        self->actionFunc = EnChanger_OpenChests;
+    } else if (self->rightChest->unk_1F4 != 0) {
+        self->chestOpened = CHEST_RIGHT;
+        self->timer = 80;
+        Flags_SetTreasure(globalCtx, self->leftChestNum & 0x1F);
+        self->actionFunc = EnChanger_OpenChests;
     }
 }
 
 // Spawns the EnExItem showing what was in the other chest
-void EnChanger_OpenChests(EnChanger* this, GlobalContext* globalCtx) {
+void EnChanger_OpenChests(EnChanger* self, GlobalContext* globalCtx) {
     f32 zPos;
     f32 yPos;
     f32 xPos;
@@ -231,11 +231,11 @@ void EnChanger_OpenChests(EnChanger* this, GlobalContext* globalCtx) {
     EnBox* left;
     EnBox* right;
 
-    left = this->leftChest;
-    right = this->rightChest;
+    left = self->leftChest;
+    right = self->rightChest;
 
-    if (this->timer == 0) {
-        temp_s0_2 = temp_s0 = this->chestOpened; // Required to use the right registers
+    if (self->timer == 0) {
+        temp_s0_2 = temp_s0 = self->chestOpened; // Required to use the right registers
 
         switch (temp_s0_2) {
             case CHEST_LEFT:
@@ -243,11 +243,11 @@ void EnChanger_OpenChests(EnChanger* this, GlobalContext* globalCtx) {
                 yPos = right->dyna.actor.world.pos.y;
                 zPos = right->dyna.actor.world.pos.z;
 
-                if (this->rightChestGetItemId == GI_DOOR_KEY) {
+                if (self->rightChestGetItemId == GI_DOOR_KEY) {
                     Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_EX_ITEM, xPos, yPos, zPos, 0, 0, 0, 0xF);
                     Flags_SetSwitch(globalCtx, 0x32);
                 } else {
-                    temp_s0_2 = (s16)(this->rightChestGetItemId - GI_RUPEE_GREEN_LOSE) + EXITEM_CHEST;
+                    temp_s0_2 = (s16)(self->rightChestGetItemId - GI_RUPEE_GREEN_LOSE) + EXITEM_CHEST;
                     // "Open right treasure (chest)"
                     osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ 右宝開く ☆☆☆☆☆ %d\n" VT_RST, temp_s0_2);
                     Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_EX_ITEM, xPos, yPos, zPos, 0, 0, 0,
@@ -259,11 +259,11 @@ void EnChanger_OpenChests(EnChanger* this, GlobalContext* globalCtx) {
                 yPos = left->dyna.actor.world.pos.y;
                 zPos = left->dyna.actor.world.pos.z;
 
-                if (this->leftChestGetItemId == GI_DOOR_KEY) {
+                if (self->leftChestGetItemId == GI_DOOR_KEY) {
                     Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_EX_ITEM, xPos, yPos, zPos, 0, 0, 0, 0xF);
                     Flags_SetSwitch(globalCtx, 0x32);
                 } else {
-                    temp_s0_2 = (s16)(this->leftChestGetItemId - 0x72) + 0xA;
+                    temp_s0_2 = (s16)(self->leftChestGetItemId - 0x72) + 0xA;
                     // "Open left treasure (chest)"
                     osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ 左宝開く ☆☆☆☆☆ %d\n" VT_RST, temp_s0_2);
                     Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_EX_ITEM, xPos, yPos, zPos, 0, 0, 0,
@@ -272,31 +272,31 @@ void EnChanger_OpenChests(EnChanger* this, GlobalContext* globalCtx) {
                 break;
         }
 
-        Actor_Kill(&this->actor);
+        Actor_Kill(&self->actor);
     }
 }
 
-void EnChanger_SetHeartPieceFlag(EnChanger* this, GlobalContext* globalCtx) {
-    if (this->finalChest->unk_1F4 != 0) {
+void EnChanger_SetHeartPieceFlag(EnChanger* self, GlobalContext* globalCtx) {
+    if (self->finalChest->unk_1F4 != 0) {
         if (!(gSaveContext.itemGetInf[1] & 0x800)) {
             gSaveContext.itemGetInf[1] |= 0x800;
         }
-        Actor_Kill(&this->actor);
+        Actor_Kill(&self->actor);
     }
 }
 
 void EnChanger_Update(Actor* thisx, GlobalContext* globalCtx) {
-    EnChanger* this = THIS;
+    EnChanger* self = THIS;
 
-    this->actionFunc(this, globalCtx);
+    self->actionFunc(self, globalCtx);
 
-    if (this->timer != 0) {
-        this->timer--;
+    if (self->timer != 0) {
+        self->timer--;
     }
 
     if (BREG(0)) {
-        DebugDisplay_AddObject(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
-                               this->actor.world.rot.x, this->actor.world.rot.y, this->actor.world.rot.z, 1.0f, 1.0f,
+        DebugDisplay_AddObject(self->actor.world.pos.x, self->actor.world.pos.y, self->actor.world.pos.z,
+                               self->actor.world.rot.x, self->actor.world.rot.y, self->actor.world.rot.z, 1.0f, 1.0f,
                                1.0f, 255, 0, 255, 255, 4, globalCtx->state.gfxCtx);
     }
 }

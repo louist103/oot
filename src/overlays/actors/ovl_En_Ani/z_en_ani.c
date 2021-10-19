@@ -16,17 +16,17 @@ void EnAni_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnAni_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnAni_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-s32 EnAni_SetText(EnAni* this, GlobalContext* globalCtx, u16 textId);
-void func_809B04F0(EnAni* this, GlobalContext* globalCtx);
-void func_809B0524(EnAni* this, GlobalContext* globalCtx);
-void func_809B0558(EnAni* this, GlobalContext* globalCtx);
-void func_809B05F0(EnAni* this, GlobalContext* globalCtx);
-void func_809B064C(EnAni* this, GlobalContext* globalCtx);
-void func_809B07F8(EnAni* this, GlobalContext* globalCtx);
-void func_809B0988(EnAni* this, GlobalContext* globalCtx);
-void func_809B0994(EnAni* this, GlobalContext* globalCtx);
-void func_809B0A28(EnAni* this, GlobalContext* globalCtx);
-void func_809B0A6C(EnAni* this, GlobalContext* globalCtx);
+s32 EnAni_SetText(EnAni* self, GlobalContext* globalCtx, u16 textId);
+void func_809B04F0(EnAni* self, GlobalContext* globalCtx);
+void func_809B0524(EnAni* self, GlobalContext* globalCtx);
+void func_809B0558(EnAni* self, GlobalContext* globalCtx);
+void func_809B05F0(EnAni* self, GlobalContext* globalCtx);
+void func_809B064C(EnAni* self, GlobalContext* globalCtx);
+void func_809B07F8(EnAni* self, GlobalContext* globalCtx);
+void func_809B0988(EnAni* self, GlobalContext* globalCtx);
+void func_809B0994(EnAni* self, GlobalContext* globalCtx);
+void func_809B0A28(EnAni* self, GlobalContext* globalCtx);
+void func_809B0A6C(EnAni* self, GlobalContext* globalCtx);
 
 const ActorInit En_Ani_InitVars = {
     ACTOR_EN_ANI,
@@ -60,8 +60,8 @@ static ColliderCylinderInit sCylinderInit = {
     { 30, 40, 0, { 0 } },
 };
 
-void EnAni_SetupAction(EnAni* this, EnAniActionFunc actionFunc) {
-    this->actionFunc = actionFunc;
+void EnAni_SetupAction(EnAni* self, EnAniActionFunc actionFunc) {
+    self->actionFunc = actionFunc;
 }
 
 static InitChainEntry sInitChain[] = {
@@ -71,74 +71,74 @@ static InitChainEntry sInitChain[] = {
 
 void EnAni_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
-    EnAni* this = THIS;
+    EnAni* self = THIS;
 
-    Actor_ProcessInitChain(&this->actor, sInitChain);
-    ActorShape_Init(&this->actor.shape, -2800.0f, ActorShadow_DrawCircle, 36.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gRoofManSkel, &gRoofManIdleAnim, this->jointTable,
-                       this->morphTable, 0x10);
-    Animation_PlayOnce(&this->skelAnime, &gRoofManIdleAnim);
-    Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
-    this->actor.colChkInfo.mass = MASS_IMMOVABLE;
+    Actor_ProcessInitChain(&self->actor, sInitChain);
+    ActorShape_Init(&self->actor.shape, -2800.0f, ActorShadow_DrawCircle, 36.0f);
+    SkelAnime_InitFlex(globalCtx, &self->skelAnime, &gRoofManSkel, &gRoofManIdleAnim, self->jointTable,
+                       self->morphTable, 0x10);
+    Animation_PlayOnce(&self->skelAnime, &gRoofManIdleAnim);
+    Collider_InitCylinder(globalCtx, &self->collider);
+    Collider_SetCylinder(globalCtx, &self->collider, &self->actor, &sCylinderInit);
+    self->actor.colChkInfo.mass = MASS_IMMOVABLE;
     if (!LINK_IS_ADULT) {
-        EnAni_SetupAction(this, func_809B064C);
+        EnAni_SetupAction(self, func_809B064C);
     } else {
-        EnAni_SetupAction(this, func_809B07F8);
+        EnAni_SetupAction(self, func_809B07F8);
     }
-    this->unk_2AA = 0;
-    this->unk_2A8 = 0;
-    this->actor.minVelocityY = -1.0f;
-    this->actor.velocity.y = -1.0f;
+    self->unk_2AA = 0;
+    self->unk_2A8 = 0;
+    self->actor.minVelocityY = -1.0f;
+    self->actor.velocity.y = -1.0f;
 }
 
 void EnAni_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    EnAni* this = THIS;
+    EnAni* self = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    Collider_DestroyCylinder(globalCtx, &self->collider);
 }
 
-s32 EnAni_SetText(EnAni* this, GlobalContext* globalCtx, u16 textId) {
-    this->actor.textId = textId;
-    this->unk_2A8 |= 1;
-    func_8002F2CC(&this->actor, globalCtx, 100.0f);
+s32 EnAni_SetText(EnAni* self, GlobalContext* globalCtx, u16 textId) {
+    self->actor.textId = textId;
+    self->unk_2A8 |= 1;
+    func_8002F2CC(&self->actor, globalCtx, 100.0f);
     return 0;
 }
 
-void func_809B04F0(EnAni* this, GlobalContext* globalCtx) {
-    if (func_8002F334(&this->actor, globalCtx)) {
-        EnAni_SetupAction(this, func_809B064C);
+void func_809B04F0(EnAni* self, GlobalContext* globalCtx) {
+    if (func_8002F334(&self->actor, globalCtx)) {
+        EnAni_SetupAction(self, func_809B064C);
     }
 }
 
-void func_809B0524(EnAni* this, GlobalContext* globalCtx) {
-    if (func_8002F334(&this->actor, globalCtx)) {
-        EnAni_SetupAction(this, func_809B07F8);
+void func_809B0524(EnAni* self, GlobalContext* globalCtx) {
+    if (func_8002F334(&self->actor, globalCtx)) {
+        EnAni_SetupAction(self, func_809B07F8);
     }
 }
 
-void func_809B0558(EnAni* this, GlobalContext* globalCtx) {
-    if (Actor_HasParent(&this->actor, globalCtx)) {
-        this->actor.parent = NULL;
+void func_809B0558(EnAni* self, GlobalContext* globalCtx) {
+    if (Actor_HasParent(&self->actor, globalCtx)) {
+        self->actor.parent = NULL;
         if (!LINK_IS_ADULT) {
-            EnAni_SetupAction(this, func_809B04F0);
+            EnAni_SetupAction(self, func_809B04F0);
         } else {
-            EnAni_SetupAction(this, func_809B0524);
+            EnAni_SetupAction(self, func_809B0524);
         }
         gSaveContext.itemGetInf[1] |= 0x20;
     } else {
-        func_8002F434(&this->actor, globalCtx, GI_HEART_PIECE, 10000.0f, 200.0f);
+        func_8002F434(&self->actor, globalCtx, GI_HEART_PIECE, 10000.0f, 200.0f);
     }
 }
 
-void func_809B05F0(EnAni* this, GlobalContext* globalCtx) {
-    if (func_8002F334(&this->actor, globalCtx)) {
-        EnAni_SetupAction(this, func_809B0558);
+void func_809B05F0(EnAni* self, GlobalContext* globalCtx) {
+    if (func_8002F334(&self->actor, globalCtx)) {
+        EnAni_SetupAction(self, func_809B0558);
     }
-    func_8002F434(&this->actor, globalCtx, GI_HEART_PIECE, 10000.0f, 200.0f);
+    func_8002F434(&self->actor, globalCtx, GI_HEART_PIECE, 10000.0f, 200.0f);
 }
 
-void func_809B064C(EnAni* this, GlobalContext* globalCtx) {
+void func_809B064C(EnAni* self, GlobalContext* globalCtx) {
     u16 textId;
     s16 yawDiff;
     u16 textId2;
@@ -152,112 +152,112 @@ void func_809B064C(EnAni* this, GlobalContext* globalCtx) {
         textId = !IS_DAY ? 0x5051 : 0x5050;
     }
 
-    yawDiff = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
-    if (func_8002F194(&this->actor, globalCtx)) {
-        if (this->actor.textId == 0x5056) {
-            EnAni_SetupAction(this, func_809B04F0);
-        } else if (this->actor.textId == 0x5055) {
-            EnAni_SetupAction(this, func_809B05F0);
+    yawDiff = self->actor.yawTowardsPlayer - self->actor.shape.rot.y;
+    if (func_8002F194(&self->actor, globalCtx)) {
+        if (self->actor.textId == 0x5056) {
+            EnAni_SetupAction(self, func_809B04F0);
+        } else if (self->actor.textId == 0x5055) {
+            EnAni_SetupAction(self, func_809B05F0);
         } else {
-            EnAni_SetupAction(this, func_809B04F0);
+            EnAni_SetupAction(self, func_809B04F0);
         }
-    } else if (yawDiff >= -0x36AF && yawDiff < 0 && this->actor.xzDistToPlayer < 150.0f &&
-               -80.0f < this->actor.yDistToPlayer) {
+    } else if (yawDiff >= -0x36AF && yawDiff < 0 && self->actor.xzDistToPlayer < 150.0f &&
+               -80.0f < self->actor.yDistToPlayer) {
         if (gSaveContext.itemGetInf[1] & 0x20) {
-            EnAni_SetText(this, globalCtx, 0x5056);
+            EnAni_SetText(self, globalCtx, 0x5056);
         } else {
-            EnAni_SetText(this, globalCtx, 0x5055);
+            EnAni_SetText(self, globalCtx, 0x5055);
         }
-    } else if (yawDiff >= -0x3E7 && yawDiff < 0x36B0 && this->actor.xzDistToPlayer < 350.0f) {
-        EnAni_SetText(this, globalCtx, textId);
+    } else if (yawDiff >= -0x3E7 && yawDiff < 0x36B0 && self->actor.xzDistToPlayer < 350.0f) {
+        EnAni_SetText(self, globalCtx, textId);
     }
 }
 
-void func_809B07F8(EnAni* this, GlobalContext* globalCtx) {
+void func_809B07F8(EnAni* self, GlobalContext* globalCtx) {
     s16 pad;
     s16 yawDiff;
     u16 textId;
 
-    yawDiff = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
-    if (func_8002F194(&this->actor, globalCtx)) {
-        if (this->actor.textId == 0x5056) {
-            EnAni_SetupAction(this, func_809B0524);
-        } else if (this->actor.textId == 0x5055) {
-            EnAni_SetupAction(this, func_809B05F0);
+    yawDiff = self->actor.yawTowardsPlayer - self->actor.shape.rot.y;
+    if (func_8002F194(&self->actor, globalCtx)) {
+        if (self->actor.textId == 0x5056) {
+            EnAni_SetupAction(self, func_809B0524);
+        } else if (self->actor.textId == 0x5055) {
+            EnAni_SetupAction(self, func_809B05F0);
         } else {
-            EnAni_SetupAction(this, func_809B0524);
+            EnAni_SetupAction(self, func_809B0524);
         }
-    } else if (yawDiff > -0x36B0 && yawDiff < 0 && this->actor.xzDistToPlayer < 150.0f &&
-               -80.0f < this->actor.yDistToPlayer) {
+    } else if (yawDiff > -0x36B0 && yawDiff < 0 && self->actor.xzDistToPlayer < 150.0f &&
+               -80.0f < self->actor.yDistToPlayer) {
         if (gSaveContext.itemGetInf[1] & 0x20) {
-            EnAni_SetText(this, globalCtx, 0x5056);
+            EnAni_SetText(self, globalCtx, 0x5056);
         } else {
-            EnAni_SetText(this, globalCtx, 0x5055);
+            EnAni_SetText(self, globalCtx, 0x5055);
         }
-    } else if (yawDiff > -0x3E8 && yawDiff < 0x36B0 && this->actor.xzDistToPlayer < 350.0f) {
+    } else if (yawDiff > -0x3E8 && yawDiff < 0x36B0 && self->actor.xzDistToPlayer < 350.0f) {
         if (!(gSaveContext.eventChkInf[2] & 0x8000)) {
             textId = 0x5052;
         } else {
             textId = (gSaveContext.itemGetInf[1] & 0x20) ? 0x5054 : 0x5053;
         }
-        EnAni_SetText(this, globalCtx, textId);
+        EnAni_SetText(self, globalCtx, textId);
     }
 }
 
-void func_809B0988(EnAni* this, GlobalContext* globalCtx) {
+void func_809B0988(EnAni* self, GlobalContext* globalCtx) {
 }
 
-void func_809B0994(EnAni* this, GlobalContext* globalCtx) {
+void func_809B0994(EnAni* self, GlobalContext* globalCtx) {
     if (globalCtx->csCtx.npcActions[0]->action == 4) {
-        Animation_Change(&this->skelAnime, &gRoofManGettingUpAfterKnockbackAnim, 1.0f, 0.0f,
+        Animation_Change(&self->skelAnime, &gRoofManGettingUpAfterKnockbackAnim, 1.0f, 0.0f,
                          Animation_GetLastFrame(&gRoofManGettingUpAfterKnockbackAnim), ANIMMODE_ONCE, -4.0f);
-        this->unk_2AA++;
-        this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
+        self->unk_2AA++;
+        self->actor.shape.shadowDraw = ActorShadow_DrawCircle;
     }
 }
 
-void func_809B0A28(EnAni* this, GlobalContext* globalCtx) {
-    if (SkelAnime_Update(&this->skelAnime)) {
-        this->unk_2AA++;
+void func_809B0A28(EnAni* self, GlobalContext* globalCtx) {
+    if (SkelAnime_Update(&self->skelAnime)) {
+        self->unk_2AA++;
     }
 }
 
-void func_809B0A6C(EnAni* this, GlobalContext* globalCtx) {
-    if (SkelAnime_Update(&this->skelAnime)) {
-        this->skelAnime.curFrame = 0.0f;
+void func_809B0A6C(EnAni* self, GlobalContext* globalCtx) {
+    if (SkelAnime_Update(&self->skelAnime)) {
+        self->skelAnime.curFrame = 0.0f;
     }
     if (globalCtx->csCtx.npcActions[0]->action == 2) {
-        Animation_Change(&this->skelAnime, &gRoofManKnockbackAnim, 1.0f, 0.0f,
+        Animation_Change(&self->skelAnime, &gRoofManKnockbackAnim, 1.0f, 0.0f,
                          Animation_GetLastFrame(&gRoofManKnockbackAnim), ANIMMODE_ONCE, 0.0f);
-        this->actor.shape.shadowDraw = NULL;
-        this->unk_2AA++;
+        self->actor.shape.shadowDraw = NULL;
+        self->unk_2AA++;
     }
 }
 
 void EnAni_Update(Actor* thisx, GlobalContext* globalCtx) {
-    EnAni* this = THIS;
+    EnAni* self = THIS;
     s32 pad[2];
 
-    Collider_UpdateCylinder(&this->actor, &this->collider);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-    Actor_MoveForward(&this->actor);
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Collider_UpdateCylinder(&self->actor, &self->collider);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
+    Actor_MoveForward(&self->actor);
+    Actor_UpdateBgCheckInfo(globalCtx, &self->actor, 0.0f, 0.0f, 0.0f, 4);
     if ((globalCtx->csCtx.state != CS_STATE_IDLE) && (globalCtx->csCtx.npcActions[0] != NULL)) {
-        switch (this->unk_2AA) {
+        switch (self->unk_2AA) {
             case 0:
-                func_809B0A6C(this, globalCtx);
+                func_809B0A6C(self, globalCtx);
                 break;
             case 1:
-                func_809B0A28(this, globalCtx);
+                func_809B0A28(self, globalCtx);
                 break;
             case 2:
-                func_809B0994(this, globalCtx);
+                func_809B0994(self, globalCtx);
                 break;
             case 3:
-                func_809B0A28(this, globalCtx);
+                func_809B0A28(self, globalCtx);
                 break;
             case 4:
-                func_809B0988(this, globalCtx);
+                func_809B0988(self, globalCtx);
                 break;
         }
 
@@ -265,49 +265,49 @@ void EnAni_Update(Actor* thisx, GlobalContext* globalCtx) {
             func_800788CC(NA_SE_IT_EARTHQUAKE);
         }
     } else {
-        if (SkelAnime_Update(&this->skelAnime) != 0) {
-            this->skelAnime.curFrame = 0.0f;
+        if (SkelAnime_Update(&self->skelAnime) != 0) {
+            self->skelAnime.curFrame = 0.0f;
         }
-        this->actionFunc(this, globalCtx);
+        self->actionFunc(self, globalCtx);
     }
 
-    if (this->unk_2A8 & 1) {
-        func_80038290(globalCtx, &this->actor, &this->unk_29C, &this->unk_2A2, this->actor.focus.pos);
-        this->unk_2A2.z = 0;
-        this->unk_2A2.y = this->unk_2A2.z;
-        this->unk_2A2.x = this->unk_2A2.z;
+    if (self->unk_2A8 & 1) {
+        func_80038290(globalCtx, &self->actor, &self->unk_29C, &self->unk_2A2, self->actor.focus.pos);
+        self->unk_2A2.z = 0;
+        self->unk_2A2.y = self->unk_2A2.z;
+        self->unk_2A2.x = self->unk_2A2.z;
     } else {
-        Math_SmoothStepToS(&this->unk_29C.x, 0, 6, 6200, 100);
-        Math_SmoothStepToS(&this->unk_29C.y, 0, 6, 6200, 100);
-        Math_SmoothStepToS(&this->unk_2A2.x, 0, 6, 6200, 100);
-        Math_SmoothStepToS(&this->unk_2A2.y, 0, 6, 6200, 100);
+        Math_SmoothStepToS(&self->unk_29C.x, 0, 6, 6200, 100);
+        Math_SmoothStepToS(&self->unk_29C.y, 0, 6, 6200, 100);
+        Math_SmoothStepToS(&self->unk_2A2.x, 0, 6, 6200, 100);
+        Math_SmoothStepToS(&self->unk_2A2.y, 0, 6, 6200, 100);
     }
 
-    if (DECR(this->blinkTimer) == 0) {
-        this->blinkTimer = Rand_S16Offset(60, 60);
+    if (DECR(self->blinkTimer) == 0) {
+        self->blinkTimer = Rand_S16Offset(60, 60);
     }
-    this->eyeIndex = this->blinkTimer;
-    if (this->eyeIndex >= 3) {
-        this->eyeIndex = 0;
+    self->eyeIndex = self->blinkTimer;
+    if (self->eyeIndex >= 3) {
+        self->eyeIndex = 0;
     }
 }
 
 s32 EnAni_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* thisx) {
-    EnAni* this = THIS;
+    EnAni* self = THIS;
 
     if (limbIndex == 15) {
-        rot->x += this->unk_29C.y;
-        rot->z += this->unk_29C.x;
+        rot->x += self->unk_29C.y;
+        rot->z += self->unk_29C.x;
     }
     return false;
 }
 
 void EnAni_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx) {
     static Vec3f sMultVec = { 800.0f, 500.0f, 0.0f };
-    EnAni* this = THIS;
+    EnAni* self = THIS;
 
     if (limbIndex == 15) {
-        Matrix_MultVec3f(&sMultVec, &this->actor.focus.pos);
+        Matrix_MultVec3f(&sMultVec, &self->actor.focus.pos);
     }
 }
 
@@ -317,17 +317,17 @@ void EnAni_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gRoofManEyeHalfTex,
         gRoofManEyeClosedTex,
     };
-    EnAni* this = THIS;
+    EnAni* self = THIS;
     s32 pad;
 
     OPEN_DISPS(globalCtx->state.gfxCtx, "../z_en_ani.c", 719);
 
     func_800943C8(globalCtx->state.gfxCtx);
 
-    gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(eyeTextures[this->eyeIndex]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(eyeTextures[self->eyeIndex]));
 
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          EnAni_OverrideLimbDraw, EnAni_PostLimbDraw, this);
+    SkelAnime_DrawFlexOpa(globalCtx, self->skelAnime.skeleton, self->skelAnime.jointTable, self->skelAnime.dListCount,
+                          EnAni_OverrideLimbDraw, EnAni_PostLimbDraw, self);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx, "../z_en_ani.c", 736);
 }

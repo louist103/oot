@@ -14,7 +14,7 @@
 void EnYabusameMark_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnYabusameMark_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnYabusameMark_Update(Actor* thisx, GlobalContext* globalCtx);
-void func_80B42F74(EnYabusameMark* this, GlobalContext* globalCtx);
+void func_80B42F74(EnYabusameMark* self, GlobalContext* globalCtx);
 
 static ColliderQuadInit sQuadInit = {
     {
@@ -72,51 +72,51 @@ static f32 sRingDistance[] = {
 };
 
 void EnYabusameMark_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    EnYabusameMark* this = THIS;
+    EnYabusameMark* self = THIS;
 
-    Collider_DestroyQuad(globalCtx, &this->collider);
+    Collider_DestroyQuad(globalCtx, &self->collider);
 }
 
 void EnYabusameMark_Init(Actor* thisx, GlobalContext* globalCtx) {
-    EnYabusameMark* this = THIS;
+    EnYabusameMark* self = THIS;
 
     osSyncPrintf("\n\n");
-    osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ やぶさめまと ☆☆☆☆☆ %x\n" VT_RST, this->actor.params);
-    this->actor.flags &= ~1;
-    this->typeIndex = this->actor.params;
-    this->actor.targetMode = 5;
-    osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ 種類インデックス \t   ☆☆☆☆☆ %d\n" VT_RST, this->typeIndex);
-    switch (this->typeIndex) {
+    osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ やぶさめまと ☆☆☆☆☆ %x\n" VT_RST, self->actor.params);
+    self->actor.flags &= ~1;
+    self->typeIndex = self->actor.params;
+    self->actor.targetMode = 5;
+    osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ 種類インデックス \t   ☆☆☆☆☆ %d\n" VT_RST, self->typeIndex);
+    switch (self->typeIndex) {
         case 0:
-            this->subTypeIndex = 0;
-            if (this->actor.world.pos.z > 0.0f) {
-                this->subTypeIndex = 1;
+            self->subTypeIndex = 0;
+            if (self->actor.world.pos.z > 0.0f) {
+                self->subTypeIndex = 1;
             }
             break;
         case 1:
-            this->subTypeIndex = 2;
-            if (this->actor.world.pos.z < -2000.0f) {
-                this->subTypeIndex = 3;
+            self->subTypeIndex = 2;
+            if (self->actor.world.pos.z < -2000.0f) {
+                self->subTypeIndex = 3;
             }
             break;
         case 2:
-            this->subTypeIndex = 4;
+            self->subTypeIndex = 4;
             break;
     }
-    Collider_InitQuad(globalCtx, &this->collider);
-    Collider_SetQuad(globalCtx, &this->collider, &this->actor, &sQuadInit);
-    this->worldPos = this->actor.world.pos;
-    this->actor.flags |= 0x10;
+    Collider_InitQuad(globalCtx, &self->collider);
+    Collider_SetQuad(globalCtx, &self->collider, &self->actor, &sQuadInit);
+    self->worldPos = self->actor.world.pos;
+    self->actor.flags |= 0x10;
     if (gSaveContext.sceneSetupIndex != 4) {
-        Actor_Kill(&this->actor);
+        Actor_Kill(&self->actor);
         return;
     }
-    osSyncPrintf(VT_FGCOL(PURPLE) "☆☆☆☆☆ 種類       ☆☆☆☆☆ %d\n" VT_RST, this->typeIndex);
-    osSyncPrintf(VT_FGCOL(CYAN) "☆☆☆☆☆ さらに分類 ☆☆☆☆☆ %d\n" VT_RST, this->subTypeIndex);
-    this->actionFunc = func_80B42F74;
+    osSyncPrintf(VT_FGCOL(PURPLE) "☆☆☆☆☆ 種類       ☆☆☆☆☆ %d\n" VT_RST, self->typeIndex);
+    osSyncPrintf(VT_FGCOL(CYAN) "☆☆☆☆☆ さらに分類 ☆☆☆☆☆ %d\n" VT_RST, self->subTypeIndex);
+    self->actionFunc = func_80B42F74;
 }
 
-void func_80B42F74(EnYabusameMark* this, GlobalContext* globalCtx) {
+void func_80B42F74(EnYabusameMark* self, GlobalContext* globalCtx) {
     Vec3f effectAccel = { 0.0f, 0.0f, 0.0f };
     Vec3f effectVelocity = { 0.0f, 0.0f, 0.0f };
     Vec3f arrowHitPos;
@@ -127,12 +127,12 @@ void func_80B42F74(EnYabusameMark* this, GlobalContext* globalCtx) {
     f32 scoreDistance60;
     f32 scoreDistance30;
 
-    if (this->collider.base.acFlags & AC_HIT) {
-        this->collider.base.acFlags &= ~AC_HIT;
+    if (self->collider.base.acFlags & AC_HIT) {
+        self->collider.base.acFlags &= ~AC_HIT;
 
-        arrowHitPos.x = this->collider.info.bumper.hitPos.x;
-        arrowHitPos.y = this->collider.info.bumper.hitPos.y;
-        arrowHitPos.z = this->collider.info.bumper.hitPos.z;
+        arrowHitPos.x = self->collider.info.bumper.hitPos.x;
+        arrowHitPos.y = self->collider.info.bumper.hitPos.y;
+        arrowHitPos.z = self->collider.info.bumper.hitPos.z;
 
         effectVelocity.y = 15.0f;
 
@@ -140,13 +140,13 @@ void func_80B42F74(EnYabusameMark* this, GlobalContext* globalCtx) {
 
         scoreIndex = 2;
 
-        scoreDistance100 = sRingDistance[this->typeIndex * 4 + 0];
-        scoreDistance60 = sRingDistance[this->typeIndex * 4 + 1];
-        scoreDistance30 = sRingDistance[this->typeIndex * 4 + 2];
+        scoreDistance100 = sRingDistance[self->typeIndex * 4 + 0];
+        scoreDistance60 = sRingDistance[self->typeIndex * 4 + 1];
+        scoreDistance30 = sRingDistance[self->typeIndex * 4 + 2];
 
-        distanceFromCenter.x = fabsf(sTargetPos[this->subTypeIndex].x - arrowHitPos.x);
-        distanceFromCenter.y = fabsf(sTargetPos[this->subTypeIndex].y - arrowHitPos.y);
-        distanceFromCenter.z = fabsf(sTargetPos[this->subTypeIndex].z - arrowHitPos.z);
+        distanceFromCenter.x = fabsf(sTargetPos[self->subTypeIndex].x - arrowHitPos.x);
+        distanceFromCenter.y = fabsf(sTargetPos[self->subTypeIndex].y - arrowHitPos.y);
+        distanceFromCenter.z = fabsf(sTargetPos[self->subTypeIndex].z - arrowHitPos.z);
 
         if (distanceFromCenter.x > scoreDistance100 || distanceFromCenter.y > scoreDistance100 ||
             distanceFromCenter.z > scoreDistance100) {
@@ -165,9 +165,9 @@ void func_80B42F74(EnYabusameMark* this, GlobalContext* globalCtx) {
         osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ posＸ ☆☆☆☆☆ %f\n" VT_RST, arrowHitPos.x);
         osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ posＹ ☆☆☆☆☆ %f\n" VT_RST, arrowHitPos.y);
         osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ posＺ ☆☆☆☆☆ %f\n" VT_RST, arrowHitPos.z);
-        osSyncPrintf(VT_FGCOL(YELLOW) "☆☆☆☆☆ hitＸ ☆☆☆☆☆ %f\n" VT_RST, sTargetPos[this->subTypeIndex].x);
-        osSyncPrintf(VT_FGCOL(YELLOW) "☆☆☆☆☆ hitＹ ☆☆☆☆☆ %f\n" VT_RST, sTargetPos[this->subTypeIndex].y);
-        osSyncPrintf(VT_FGCOL(YELLOW) "☆☆☆☆☆ hitＺ ☆☆☆☆☆ %f\n" VT_RST, sTargetPos[this->subTypeIndex].z);
+        osSyncPrintf(VT_FGCOL(YELLOW) "☆☆☆☆☆ hitＸ ☆☆☆☆☆ %f\n" VT_RST, sTargetPos[self->subTypeIndex].x);
+        osSyncPrintf(VT_FGCOL(YELLOW) "☆☆☆☆☆ hitＹ ☆☆☆☆☆ %f\n" VT_RST, sTargetPos[self->subTypeIndex].y);
+        osSyncPrintf(VT_FGCOL(YELLOW) "☆☆☆☆☆ hitＺ ☆☆☆☆☆ %f\n" VT_RST, sTargetPos[self->subTypeIndex].z);
         osSyncPrintf(VT_FGCOL(PURPLE) "☆☆☆☆☆ 小    ☆☆☆☆☆ %f\n" VT_RST, scoreDistance100);
         osSyncPrintf(VT_FGCOL(PURPLE) "☆☆☆☆☆ 大    ☆☆☆☆☆ %f\n" VT_RST, scoreDistance60);
         osSyncPrintf(VT_FGCOL(PURPLE) "☆☆☆☆☆ point ☆☆☆☆☆ %d\n" VT_RST, scoreIndex);
@@ -188,35 +188,35 @@ void func_80B42F74(EnYabusameMark* this, GlobalContext* globalCtx) {
 }
 
 void EnYabusameMark_Update(Actor* thisx, GlobalContext* globalCtx) {
-    EnYabusameMark* this = THIS;
+    EnYabusameMark* self = THIS;
     Vec3f* vertexArray;
     u32 arrayIndex;
 
-    this->actionFunc(this, globalCtx);
-    arrayIndex = this->typeIndex * 4;
+    self->actionFunc(self, globalCtx);
+    arrayIndex = self->typeIndex * 4;
     vertexArray = &sCollisionVertices[arrayIndex];
 
-    this->vertexA.x = vertexArray[0].x + this->actor.world.pos.x;
-    this->vertexA.y = vertexArray[0].y + this->actor.world.pos.y;
-    this->vertexA.z = vertexArray[0].z + this->actor.world.pos.z;
+    self->vertexA.x = vertexArray[0].x + self->actor.world.pos.x;
+    self->vertexA.y = vertexArray[0].y + self->actor.world.pos.y;
+    self->vertexA.z = vertexArray[0].z + self->actor.world.pos.z;
 
-    this->vertexB.x = vertexArray[1].x + this->actor.world.pos.x;
-    this->vertexB.y = vertexArray[1].y + this->actor.world.pos.y;
-    this->vertexB.z = vertexArray[1].z + this->actor.world.pos.z;
+    self->vertexB.x = vertexArray[1].x + self->actor.world.pos.x;
+    self->vertexB.y = vertexArray[1].y + self->actor.world.pos.y;
+    self->vertexB.z = vertexArray[1].z + self->actor.world.pos.z;
 
-    this->vertexC.x = vertexArray[2].x + this->actor.world.pos.x;
-    this->vertexC.y = vertexArray[2].y + this->actor.world.pos.y;
-    this->vertexC.z = vertexArray[2].z + this->actor.world.pos.z;
+    self->vertexC.x = vertexArray[2].x + self->actor.world.pos.x;
+    self->vertexC.y = vertexArray[2].y + self->actor.world.pos.y;
+    self->vertexC.z = vertexArray[2].z + self->actor.world.pos.z;
 
-    this->vertexD.x = vertexArray[3].x + this->actor.world.pos.x;
-    this->vertexD.y = vertexArray[3].y + this->actor.world.pos.y;
-    this->vertexD.z = vertexArray[3].z + this->actor.world.pos.z;
+    self->vertexD.x = vertexArray[3].x + self->actor.world.pos.x;
+    self->vertexD.y = vertexArray[3].y + self->actor.world.pos.y;
+    self->vertexD.z = vertexArray[3].z + self->actor.world.pos.z;
 
-    Collider_SetQuadVertices(&this->collider, &this->vertexA, &this->vertexB, &this->vertexC, &this->vertexD);
-    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    Collider_SetQuadVertices(&self->collider, &self->vertexA, &self->vertexB, &self->vertexC, &self->vertexD);
+    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
     if (BREG(0)) {
-        DebugDisplay_AddObject(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
-                               this->actor.world.rot.x, this->actor.world.rot.y, this->actor.world.rot.z, 1.0f, 1.0f,
+        DebugDisplay_AddObject(self->actor.world.pos.x, self->actor.world.pos.y, self->actor.world.pos.z,
+                               self->actor.world.rot.x, self->actor.world.rot.y, self->actor.world.rot.z, 1.0f, 1.0f,
                                1.0f, 0, 0xFF, 0, 0xFF, 4, globalCtx->state.gfxCtx);
     }
 }

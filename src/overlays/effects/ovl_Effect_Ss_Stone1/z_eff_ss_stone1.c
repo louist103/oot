@@ -9,9 +9,9 @@
 
 #define rReg0 regs[0]
 
-u32 EffectSsStone1_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx);
-void EffectSsStone1_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this);
-void EffectSsStone1_Update(GlobalContext* globalCtx, u32 index, EffectSs* this);
+u32 EffectSsStone1_Init(GlobalContext* globalCtx, u32 index, EffectSs* self, void* initParamsx);
+void EffectSsStone1_Draw(GlobalContext* globalCtx, u32 index, EffectSs* self);
+void EffectSsStone1_Update(GlobalContext* globalCtx, u32 index, EffectSs* self);
 
 EffectSsInit Effect_Ss_Stone1_InitVars = {
     EFFECT_SS_STONE1,
@@ -35,32 +35,32 @@ static EffStoneDrawInfo sDrawInfo[] = {
     { gUnknownEffStone1Tex, { 255, 255, 255, 255 }, { 0, 255, 255, 255 } },
 };
 
-u32 EffectSsStone1_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx) {
+u32 EffectSsStone1_Init(GlobalContext* globalCtx, u32 index, EffectSs* self, void* initParamsx) {
     EffectSsStone1InitParams* initParams = (EffectSsStone1InitParams*)initParamsx;
     Vec3f pos = initParams->pos;
 
-    this->pos = pos;
-    this->vec = pos;
-    this->life = 8;
-    this->rReg0 = initParams->unk_C;
-    this->draw = EffectSsStone1_Draw;
-    this->update = EffectSsStone1_Update;
+    self->pos = pos;
+    self->vec = pos;
+    self->life = 8;
+    self->rReg0 = initParams->unk_C;
+    self->draw = EffectSsStone1_Draw;
+    self->update = EffectSsStone1_Update;
 
     return 1;
 }
 
-void EffectSsStone1_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
+void EffectSsStone1_Draw(GlobalContext* globalCtx, u32 index, EffectSs* self) {
     GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
-    EffStoneDrawInfo* drawParams = &sDrawInfo[this->life];
+    EffStoneDrawInfo* drawParams = &sDrawInfo[self->life];
     Vec3f mfVec;
     f32 mfW;
     f32 scale;
 
     OPEN_DISPS(gfxCtx, "../z_eff_ss_stone1.c", 154);
 
-    SkinMatrix_Vec3fMtxFMultXYZW(&globalCtx->mf_11D60, &this->pos, &mfVec, &mfW);
+    SkinMatrix_Vec3fMtxFMultXYZW(&globalCtx->mf_11D60, &self->pos, &mfVec, &mfW);
     scale = (mfW < 1500.0f) ? 3.0f : (mfW / 1500.0f) * 3.0f;
-    Matrix_Translate(this->pos.x, this->pos.y, this->pos.z, MTXMODE_NEW);
+    Matrix_Translate(self->pos.x, self->pos.y, self->pos.z, MTXMODE_NEW);
     Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx, "../z_eff_ss_stone1.c", 168),
               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -74,8 +74,8 @@ void EffectSsStone1_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
     CLOSE_DISPS(gfxCtx, "../z_eff_ss_stone1.c", 183);
 }
 
-void EffectSsStone1_Update(GlobalContext* globalCtx, u32 index, EffectSs* this) {
-    if ((this->life == 6) && (this->rReg0 != 0)) {
+void EffectSsStone1_Update(GlobalContext* globalCtx, u32 index, EffectSs* self) {
+    if ((self->life == 6) && (self->rReg0 != 0)) {
         iREG(50) = 0;
     }
 }

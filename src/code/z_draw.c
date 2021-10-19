@@ -365,7 +365,7 @@ DrawItemTableEntry sDrawItemTable[] = {
     // kokiri sword, OBJECT_GI_SWORD_1
     { GetItem_DrawOpa0, { gGiKokiriSwordDL } },
     // gold skulltula token, OBJECT_ST
-    { GetItem_DrawSkullToken, { 0x06004DB0, 0x06004EB8 } }, // TODO symbols from this object
+    { GetItem_DrawSkullToken, { 0x06004DB0, 0x06004EB8 } }, // TODO symbols from self object
 };
 
 /**
@@ -376,7 +376,7 @@ void GetItem_Draw(GlobalContext* globalCtx, s16 drawId) {
     sDrawItemTable[drawId].drawFunc(globalCtx, drawId);
 }
 
-// All remaining functions in this file are draw functions referenced in the table and called by the function above
+// All remaining functions in self file are draw functions referenced in the table and called by the function above
 
 void GetItem_DrawMaskOrBombchu(GlobalContext* globalCtx, s16 drawId) {
     s32 pad;

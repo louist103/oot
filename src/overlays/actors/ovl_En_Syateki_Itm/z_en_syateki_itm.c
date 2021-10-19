@@ -22,12 +22,12 @@ void EnSyatekiItm_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnSyatekiItm_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSyatekiItm_Update(Actor* thisx, GlobalContext* globalCtx);
 
-void EnSyatekiItm_Idle(EnSyatekiItm* this, GlobalContext* globalCtx);
-void EnSyatekiItm_StartRound(EnSyatekiItm* this, GlobalContext* globalCtx);
-void EnSyatekiItm_SpawnTargets(EnSyatekiItm* this, GlobalContext* globalCtx);
-void EnSyatekiItm_CheckTargets(EnSyatekiItm* this, GlobalContext* globalCtx);
-void EnSyatekiItm_CleanupGame(EnSyatekiItm* this, GlobalContext* globalCtx);
-void EnSyatekiItm_EndGame(EnSyatekiItm* this, GlobalContext* globalCtx);
+void EnSyatekiItm_Idle(EnSyatekiItm* self, GlobalContext* globalCtx);
+void EnSyatekiItm_StartRound(EnSyatekiItm* self, GlobalContext* globalCtx);
+void EnSyatekiItm_SpawnTargets(EnSyatekiItm* self, GlobalContext* globalCtx);
+void EnSyatekiItm_CheckTargets(EnSyatekiItm* self, GlobalContext* globalCtx);
+void EnSyatekiItm_CleanupGame(EnSyatekiItm* self, GlobalContext* globalCtx);
+void EnSyatekiItm_EndGame(EnSyatekiItm* self, GlobalContext* globalCtx);
 
 const ActorInit En_Syateki_Itm_InitVars = {
     ACTOR_EN_SYATEKI_ITM,
@@ -71,40 +71,40 @@ static Vec3f sRupeePos[] = {
 
 void EnSyatekiItm_Init(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
-    EnSyatekiItm* this = THIS;
+    EnSyatekiItm* self = THIS;
     s32 i;
 
-    this->man = (EnSyatekiMan*)Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_SYATEKI_MAN,
+    self->man = (EnSyatekiMan*)Actor_SpawnAsChild(&globalCtx->actorCtx, &self->actor, globalCtx, ACTOR_EN_SYATEKI_MAN,
                                                   140.0f, 0.0f, 255.0f, 0, -0x4000, 0, 0);
-    if (this->man == NULL) {
+    if (self->man == NULL) {
         // "Spawn error"
         osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ エラー原 ☆☆☆☆ \n" VT_RST);
-        Actor_Kill(&this->actor);
+        Actor_Kill(&self->actor);
         return;
     }
     for (i = 0; i < 10; i++) {
-        this->markers[i] =
-            (EnExRuppy*)Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_EX_RUPPY,
+        self->markers[i] =
+            (EnExRuppy*)Actor_SpawnAsChild(&globalCtx->actorCtx, &self->actor, globalCtx, ACTOR_EN_EX_RUPPY,
                                            sRupeePos[i].x, sRupeePos[i].y, sRupeePos[i].z, 0, 0, 0, 4);
-        if (this->markers[i] == NULL) {
+        if (self->markers[i] == NULL) {
             // "Second spawn error"
             osSyncPrintf(VT_FGCOL(YELLOW) "☆☆☆☆☆ エラー原セカンド ☆☆☆☆ \n" VT_RST);
-            Actor_Kill(&this->actor);
+            Actor_Kill(&self->actor);
             return;
         }
-        this->markers[i]->colorIdx = sRupeeTypes[i];
+        self->markers[i]->colorIdx = sRupeeTypes[i];
     }
-    this->actionFunc = EnSyatekiItm_Idle;
+    self->actionFunc = EnSyatekiItm_Idle;
 }
 
 void EnSyatekiItm_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
-void EnSyatekiItm_Idle(EnSyatekiItm* this, GlobalContext* globalCtx) {
+void EnSyatekiItm_Idle(EnSyatekiItm* self, GlobalContext* globalCtx) {
     s32 i;
     Player* player = GET_PLAYER(globalCtx);
 
-    if (this->signal == ENSYATEKI_START) {
+    if (self->signal == ENSYATEKI_START) {
         player->actor.world.pos.x = -12.0f;
         player->actor.world.pos.y = 20.0f;
         player->actor.world.pos.z = 182.0f;
@@ -112,60 +112,60 @@ void EnSyatekiItm_Idle(EnSyatekiItm* this, GlobalContext* globalCtx) {
         player->actor.world.rot.x = player->actor.shape.rot.x = player->actor.world.rot.z = player->actor.shape.rot.z =
             0;
         func_8008EF44(globalCtx, 15);
-        this->roundNum = this->hitCount = 0;
+        self->roundNum = self->hitCount = 0;
         for (i = 0; i < 6; i++) {
-            this->roundFlags[i] = false;
+            self->roundFlags[i] = false;
         }
         for (i = 0; i < 10; i++) {
-            this->markers[i]->galleryFlag = false;
+            self->markers[i]->galleryFlag = false;
         }
-        this->actionFunc = EnSyatekiItm_StartRound;
+        self->actionFunc = EnSyatekiItm_StartRound;
     }
 }
 
-void EnSyatekiItm_StartRound(EnSyatekiItm* this, GlobalContext* globalCtx) {
+void EnSyatekiItm_StartRound(EnSyatekiItm* self, GlobalContext* globalCtx) {
     s32 i;
     s32 j;
     Player* player = GET_PLAYER(globalCtx);
 
-    if (this->unkTimer == 0) {
+    if (self->unkTimer == 0) {
         if (LINK_IS_ADULT) {
             for (i = 0, j = 0; i < SYATEKI_ROUND_MAX; i++) {
-                if (this->roundFlags[i]) {
+                if (self->roundFlags[i]) {
                     j++;
                 }
             }
             if (j >= SYATEKI_ROUND_MAX) {
                 player->actor.freezeTimer = 10;
-                this->signal = ENSYATEKI_END;
-                this->actionFunc = EnSyatekiItm_CleanupGame;
+                self->signal = ENSYATEKI_END;
+                self->actionFunc = EnSyatekiItm_CleanupGame;
                 return;
             }
             i = Rand_ZeroFloat(5.99f);
-            while (this->roundFlags[i]) {
+            while (self->roundFlags[i]) {
                 i = Rand_ZeroFloat(5.99f);
                 if (1) {}
             }
-            this->roundNum = i + 1;
-            this->roundFlags[i] = true;
+            self->roundNum = i + 1;
+            self->roundFlags[i] = true;
         } else {
-            this->roundNum++;
-            if (this->roundNum > SYATEKI_ROUND_MAX) {
+            self->roundNum++;
+            if (self->roundNum > SYATEKI_ROUND_MAX) {
                 player->actor.freezeTimer = 10;
-                this->signal = ENSYATEKI_END;
-                this->actionFunc = EnSyatekiItm_CleanupGame;
+                self->signal = ENSYATEKI_END;
+                self->actionFunc = EnSyatekiItm_CleanupGame;
                 return;
             }
         }
 
-        this->timer = (this->roundNum == 1) ? 50 : 30;
+        self->timer = (self->roundNum == 1) ? 50 : 30;
 
         func_80078884(NA_SE_SY_FOUND);
-        this->actionFunc = EnSyatekiItm_SpawnTargets;
+        self->actionFunc = EnSyatekiItm_SpawnTargets;
     }
 }
 
-void EnSyatekiItm_SpawnTargets(EnSyatekiItm* this, GlobalContext* globalCtx) {
+void EnSyatekiItm_SpawnTargets(EnSyatekiItm* self, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     Vec3f zeroVec = { 0.0f, 0.0f, 0.0f };
     s32 i;
@@ -173,150 +173,150 @@ void EnSyatekiItm_SpawnTargets(EnSyatekiItm* this, GlobalContext* globalCtx) {
 
     if (globalCtx->shootingGalleryStatus == -1) {
         player->actor.freezeTimer = 10;
-        this->signal = ENSYATEKI_END;
-        this->actionFunc = EnSyatekiItm_CleanupGame;
+        self->signal = ENSYATEKI_END;
+        self->actionFunc = EnSyatekiItm_CleanupGame;
         return;
     }
-    if (this->timer == 0) {
+    if (self->timer == 0) {
         for (i = 0; i < 2; i++) {
-            Math_Vec3f_Copy(&this->targetHome[i], &zeroVec);
-            Math_Vec3f_Copy(&this->targetFinal[i], &zeroVec);
-            this->targets[i] = NULL;
+            Math_Vec3f_Copy(&self->targetHome[i], &zeroVec);
+            Math_Vec3f_Copy(&self->targetFinal[i], &zeroVec);
+            self->targets[i] = NULL;
         }
-        this->numTargets = 2;
-        this->curMarkers[0] = this->curMarkers[1] = NULL;
-        roundIdx = this->roundNum - 1;
+        self->numTargets = 2;
+        self->curMarkers[0] = self->curMarkers[1] = NULL;
+        roundIdx = self->roundNum - 1;
 
         switch (roundIdx) {
             case SYATEKI_ROUND_GREEN_APPEAR:
-                Math_Vec3f_Copy(&this->targetHome[0], &sGreenAppearHome);
-                Math_Vec3f_Copy(&this->targetFinal[0], &sGreenAppearFinal);
-                this->curMarkers[0] = this->markers[0];
-                this->numTargets = 1;
+                Math_Vec3f_Copy(&self->targetHome[0], &sGreenAppearHome);
+                Math_Vec3f_Copy(&self->targetFinal[0], &sGreenAppearFinal);
+                self->curMarkers[0] = self->markers[0];
+                self->numTargets = 1;
                 break;
             case SYATEKI_ROUND_BLUE_SEQUENTIAL:
-                Math_Vec3f_Copy(&this->targetHome[0], &sBlueSeqHome1);
-                Math_Vec3f_Copy(&this->targetHome[1], &sBlueSeqHome2);
-                Math_Vec3f_Copy(&this->targetFinal[0], &sBlueSeqFinal1);
-                Math_Vec3f_Copy(&this->targetFinal[1], &sBlueSeqFinal2);
-                this->curMarkers[0] = this->markers[1];
-                this->curMarkers[1] = this->markers[2];
+                Math_Vec3f_Copy(&self->targetHome[0], &sBlueSeqHome1);
+                Math_Vec3f_Copy(&self->targetHome[1], &sBlueSeqHome2);
+                Math_Vec3f_Copy(&self->targetFinal[0], &sBlueSeqFinal1);
+                Math_Vec3f_Copy(&self->targetFinal[1], &sBlueSeqFinal2);
+                self->curMarkers[0] = self->markers[1];
+                self->curMarkers[1] = self->markers[2];
                 break;
             case SYATEKI_ROUND_GREEN_THROW:
-                Math_Vec3f_Copy(&this->targetHome[0], &sGreenThrowHome);
-                Math_Vec3f_Copy(&this->targetFinal[0], &sGreenThrowFinal);
-                this->curMarkers[0] = this->markers[3];
-                this->numTargets = 1;
+                Math_Vec3f_Copy(&self->targetHome[0], &sGreenThrowHome);
+                Math_Vec3f_Copy(&self->targetFinal[0], &sGreenThrowFinal);
+                self->curMarkers[0] = self->markers[3];
+                self->numTargets = 1;
                 break;
             case SYATEKI_ROUND_BLUE_SIMUL:
-                Math_Vec3f_Copy(&this->targetHome[0], &sBlueSimulHome1);
-                Math_Vec3f_Copy(&this->targetHome[1], &sBlueSimulHome2);
-                Math_Vec3f_Copy(&this->targetFinal[0], &sBlueSimulFinal1);
-                Math_Vec3f_Copy(&this->targetFinal[1], &sBlueSimulFinal2);
-                this->curMarkers[0] = this->markers[4];
-                this->curMarkers[1] = this->markers[5];
+                Math_Vec3f_Copy(&self->targetHome[0], &sBlueSimulHome1);
+                Math_Vec3f_Copy(&self->targetHome[1], &sBlueSimulHome2);
+                Math_Vec3f_Copy(&self->targetFinal[0], &sBlueSimulFinal1);
+                Math_Vec3f_Copy(&self->targetFinal[1], &sBlueSimulFinal2);
+                self->curMarkers[0] = self->markers[4];
+                self->curMarkers[1] = self->markers[5];
                 break;
             case SYATEKI_ROUND_RED_LEFT:
-                Math_Vec3f_Copy(&this->targetHome[0], &sRedLeftHome1);
-                Math_Vec3f_Copy(&this->targetHome[1], &sRedLeftHome2);
-                Math_Vec3f_Copy(&this->targetFinal[0], &sRedLeftFinal1);
-                Math_Vec3f_Copy(&this->targetFinal[1], &sRedLeftFinal2);
-                this->curMarkers[0] = this->markers[6];
-                this->curMarkers[1] = this->markers[7];
+                Math_Vec3f_Copy(&self->targetHome[0], &sRedLeftHome1);
+                Math_Vec3f_Copy(&self->targetHome[1], &sRedLeftHome2);
+                Math_Vec3f_Copy(&self->targetFinal[0], &sRedLeftFinal1);
+                Math_Vec3f_Copy(&self->targetFinal[1], &sRedLeftFinal2);
+                self->curMarkers[0] = self->markers[6];
+                self->curMarkers[1] = self->markers[7];
                 break;
             case SYATEKI_ROUND_RED_RIGHT:
-                Math_Vec3f_Copy(&this->targetHome[0], &sRedRightHome1);
-                Math_Vec3f_Copy(&this->targetHome[1], &sRedRightHome2);
-                Math_Vec3f_Copy(&this->targetFinal[0], &sRedRightFinal1);
-                Math_Vec3f_Copy(&this->targetFinal[1], &sRedRightFinal2);
-                this->curMarkers[0] = this->markers[8];
-                this->curMarkers[1] = this->markers[9];
+                Math_Vec3f_Copy(&self->targetHome[0], &sRedRightHome1);
+                Math_Vec3f_Copy(&self->targetHome[1], &sRedRightHome2);
+                Math_Vec3f_Copy(&self->targetFinal[0], &sRedRightFinal1);
+                Math_Vec3f_Copy(&self->targetFinal[1], &sRedRightFinal2);
+                self->curMarkers[0] = self->markers[8];
+                self->curMarkers[1] = self->markers[9];
                 break;
         }
 
-        for (i = 0; i < this->numTargets; i++) {
-            this->targets[i] = (EnGSwitch*)Actor_SpawnAsChild(
-                &globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_G_SWITCH, this->targetHome[i].x,
-                this->targetHome[i].y, this->targetHome[i].z, 0, 0, 0, (ENGSWITCH_TARGET_RUPEE << 0xC) | 0x3F);
-            if (this->targets[i] == NULL) {
+        for (i = 0; i < self->numTargets; i++) {
+            self->targets[i] = (EnGSwitch*)Actor_SpawnAsChild(
+                &globalCtx->actorCtx, &self->actor, globalCtx, ACTOR_EN_G_SWITCH, self->targetHome[i].x,
+                self->targetHome[i].y, self->targetHome[i].z, 0, 0, 0, (ENGSWITCH_TARGET_RUPEE << 0xC) | 0x3F);
+            if (self->targets[i] == NULL) {
                 // "Rupee spawn error"
                 osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ ルピーでエラー原 ☆☆☆☆ \n" VT_RST);
-                Actor_Kill(&this->actor);
+                Actor_Kill(&self->actor);
                 return;
             }
-            this->targets[i]->index = i;
-            this->targets[i]->colorIdx = sTargetColors[roundIdx];
-            Math_Vec3f_Copy(&this->targets[i]->targetPos, &this->targetFinal[i]);
+            self->targets[i]->index = i;
+            self->targets[i]->colorIdx = sTargetColors[roundIdx];
+            Math_Vec3f_Copy(&self->targets[i]->targetPos, &self->targetFinal[i]);
             switch (roundIdx) {
                 case SYATEKI_ROUND_BLUE_SEQUENTIAL:
                     if (i == 1) {
-                        this->targets[i]->delayTimer = 60;
+                        self->targets[i]->delayTimer = 60;
                     }
                     break;
                 case SYATEKI_ROUND_GREEN_THROW:
-                    this->targets[i]->actor.velocity.y = 15.0f;
-                    this->targets[i]->actor.gravity = -1.0f;
-                    this->targets[i]->moveMode = GSWITCH_THROW;
+                    self->targets[i]->actor.velocity.y = 15.0f;
+                    self->targets[i]->actor.gravity = -1.0f;
+                    self->targets[i]->moveMode = GSWITCH_THROW;
                     break;
                 case SYATEKI_ROUND_RED_LEFT:
-                    this->targets[i]->actor.velocity.x = -5.0f;
-                    this->targets[i]->moveMode = GSWITCH_LEFT;
+                    self->targets[i]->actor.velocity.x = -5.0f;
+                    self->targets[i]->moveMode = GSWITCH_LEFT;
                     break;
                 case SYATEKI_ROUND_RED_RIGHT:
-                    this->targets[i]->actor.velocity.x = 7.0f;
-                    this->targets[i]->moveMode = GSWITCH_RIGHT;
+                    self->targets[i]->actor.velocity.x = 7.0f;
+                    self->targets[i]->moveMode = GSWITCH_RIGHT;
                     break;
             }
         }
-        this->targetState[0] = this->targetState[1] = ENSYATEKIHIT_NONE;
-        this->actionFunc = EnSyatekiItm_CheckTargets;
+        self->targetState[0] = self->targetState[1] = ENSYATEKIHIT_NONE;
+        self->actionFunc = EnSyatekiItm_CheckTargets;
     }
 }
 
-void EnSyatekiItm_CheckTargets(EnSyatekiItm* this, GlobalContext* globalCtx) {
+void EnSyatekiItm_CheckTargets(EnSyatekiItm* self, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s32 i;
     s16 j;
 
     if (globalCtx->shootingGalleryStatus == -1) {
         player->actor.freezeTimer = 10;
-        this->signal = ENSYATEKI_END;
-        this->actionFunc = EnSyatekiItm_CleanupGame;
+        self->signal = ENSYATEKI_END;
+        self->actionFunc = EnSyatekiItm_CleanupGame;
     } else {
         for (i = 0, j = 0; i < 2; i++) {
-            if (this->targetState[i] != ENSYATEKIHIT_NONE) {
-                if (this->targetState[i] == ENSYATEKIHIT_HIT) {
-                    this->curMarkers[i]->galleryFlag = true;
+            if (self->targetState[i] != ENSYATEKIHIT_NONE) {
+                if (self->targetState[i] == ENSYATEKIHIT_HIT) {
+                    self->curMarkers[i]->galleryFlag = true;
                 }
                 j++;
             }
         }
-        if (j == this->numTargets) {
-            this->actionFunc = EnSyatekiItm_StartRound;
+        if (j == self->numTargets) {
+            self->actionFunc = EnSyatekiItm_StartRound;
         }
     }
 }
 
-void EnSyatekiItm_CleanupGame(EnSyatekiItm* this, GlobalContext* globalCtx) {
+void EnSyatekiItm_CleanupGame(EnSyatekiItm* self, GlobalContext* globalCtx) {
     s32 i;
 
     for (i = 0; i < 2; i++) {
-        if ((this->targetState[i] == ENSYATEKIHIT_NONE) && (this->targets[i] != NULL)) {
-            Actor_Kill(&this->targets[i]->actor);
+        if ((self->targetState[i] == ENSYATEKIHIT_NONE) && (self->targets[i] != NULL)) {
+            Actor_Kill(&self->targets[i]->actor);
         }
     }
-    this->actionFunc = EnSyatekiItm_EndGame;
+    self->actionFunc = EnSyatekiItm_EndGame;
 }
 
-void EnSyatekiItm_EndGame(EnSyatekiItm* this, GlobalContext* globalCtx) {
+void EnSyatekiItm_EndGame(EnSyatekiItm* self, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     player->actor.freezeTimer = 10;
-    if (this->signal == ENSYATEKI_RESULTS) {
-        this->signal = ENSYATEKI_NONE;
-        this->actionFunc = EnSyatekiItm_Idle;
+    if (self->signal == ENSYATEKI_RESULTS) {
+        self->signal = ENSYATEKI_NONE;
+        self->actionFunc = EnSyatekiItm_Idle;
     }
-    if (this->signal == ENSYATEKI_START) {
+    if (self->signal == ENSYATEKI_START) {
         // "1 frame attack and defense!"
         osSyncPrintf(VT_FGCOL(RED) "☆☆☆☆☆ １フレームの攻防！ ☆☆☆☆ \n" VT_RST);
         osSyncPrintf(VT_FGCOL(RED) "☆☆☆☆☆ １フレームの攻防！ ☆☆☆☆ \n" VT_RST);
@@ -328,26 +328,26 @@ void EnSyatekiItm_EndGame(EnSyatekiItm* this, GlobalContext* globalCtx) {
         osSyncPrintf(VT_FGCOL(RED) "☆☆☆☆☆ １フレームの攻防！ ☆☆☆☆ \n" VT_RST);
         osSyncPrintf(VT_FGCOL(RED) "☆☆☆☆☆ １フレームの攻防！ ☆☆☆☆ \n" VT_RST);
         osSyncPrintf(VT_FGCOL(RED) "☆☆☆☆☆ １フレームの攻防！ ☆☆☆☆ \n" VT_RST);
-        this->signal = ENSYATEKI_NONE;
-        this->actionFunc = EnSyatekiItm_Idle;
+        self->signal = ENSYATEKI_NONE;
+        self->actionFunc = EnSyatekiItm_Idle;
     }
 }
 
 void EnSyatekiItm_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
-    EnSyatekiItm* this = THIS;
+    EnSyatekiItm* self = THIS;
 
-    this->actionFunc(this, globalCtx);
+    self->actionFunc(self, globalCtx);
 
-    if (this->timer != 0) {
-        this->timer--;
+    if (self->timer != 0) {
+        self->timer--;
     }
-    if (this->unkTimer != 0) {
-        this->unkTimer--;
+    if (self->unkTimer != 0) {
+        self->unkTimer--;
     }
     if (BREG(0)) {
-        DebugDisplay_AddObject(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
-                               this->actor.world.rot.x, this->actor.world.rot.y, this->actor.world.rot.z, 1.0f, 1.0f,
+        DebugDisplay_AddObject(self->actor.world.pos.x, self->actor.world.pos.y, self->actor.world.pos.z,
+                               self->actor.world.rot.x, self->actor.world.rot.y, self->actor.world.rot.z, 1.0f, 1.0f,
                                1.0f, 255, 0, 0, 255, 4, globalCtx->state.gfxCtx);
     }
 }

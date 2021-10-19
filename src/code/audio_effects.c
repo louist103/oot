@@ -158,7 +158,7 @@ f32 Audio_GetVibratoFreqScale(VibratoState* vib) {
     extent = temp + 1.0f;
     invExtent = 1.0f / extent;
 
-    // fakematch: 2^16 and 1 need to be set at the very top of this function,
+    // fakematch: 2^16 and 1 need to be set at the very top of self function,
     // or else the addresses of D_80130510 and D_80130514 get computed once
     // instead of twice. 'temp' is also a fakematch sign; removing it causes
     // regalloc differences and reorderings at the top of the function.

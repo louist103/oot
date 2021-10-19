@@ -82,7 +82,7 @@ typedef struct {
     /* 0x12 */ s16 cylHeight; // Used for various purposes
     /* 0x14 */ s16 cylYShift; // Unused. Purpose inferred from Cylinder16 and CollisionCheck_CylSideVsLineSeg
     /* 0x16 */ u8 mass; // Used to compute displacement for OC collisions
-    /* 0x17 */ u8 health; // Note: some actors may use their own health variable instead of this one
+    /* 0x17 */ u8 health; // Note: some actors may use their own health variable instead of self one
     /* 0x18 */ u8 damage; // Amount to decrement health by
     /* 0x19 */ u8 damageEffect; // Stores what effect should occur when hit by a weapon
     /* 0x1A */ u8 atHitEffect; // Stores what effect should occur when AT connects with an AC
@@ -111,7 +111,7 @@ typedef struct Actor {
     /* 0x01F */ s8 targetMode; // Controls how far the actor can be targeted from and how far it can stay locked on
     /* 0x020 */ u16 sfx; // SFX ID to play. Sound plays when value is set, then is cleared the following update cycle
     /* 0x024 */ PosRot world; // Position/rotation in the world
-    /* 0x038 */ PosRot focus; // Target reticle focuses on this position. For player this represents head pos and rot
+    /* 0x038 */ PosRot focus; // Target reticle focuses on self position. For player self represents head pos and rot
     /* 0x04C */ f32 targetArrowOffset; // Height offset of the target arrow relative to `focus` position
     /* 0x050 */ Vec3f scale; // Scale of the actor in each axis
     /* 0x05C */ Vec3f velocity; // Velocity of the actor in each axis
@@ -149,13 +149,13 @@ typedef struct Actor {
     /* 0x117 */ u8 naviEnemyId; // Sets what 0600 dialog to display when talking to navi. Default 0xFF
     /* 0x118 */ struct Actor* parent; // Usage is actor specific. Set if actor is spawned via `Actor_SpawnAsChild`
     /* 0x11C */ struct Actor* child; // Usage is actor specific. Set if actor is spawned via `Actor_SpawnAsChild`
-    /* 0x120 */ struct Actor* prev; // Previous actor of this category
-    /* 0x124 */ struct Actor* next; // Next actor of this category
+    /* 0x120 */ struct Actor* prev; // Previous actor of self category
+    /* 0x124 */ struct Actor* next; // Next actor of self category
     /* 0x128 */ ActorFunc init; // Initialization Routine. Called by `Actor_Init` or `Actor_UpdateAll`
     /* 0x12C */ ActorFunc destroy; // Destruction Routine. Called by `Actor_Destroy`
     /* 0x130 */ ActorFunc update; // Update Routine. Called by `Actor_UpdateAll`
     /* 0x134 */ ActorFunc draw; // Draw Routine. Called by `Actor_Draw`
-    /* 0x138 */ ActorOverlay* overlayEntry; // Pointer to the overlay table entry for this actor
+    /* 0x138 */ ActorOverlay* overlayEntry; // Pointer to the overlay table entry for self actor
     /* 0x13C */ char dbgPad[0x10]; // Padding that only exists in the debug rom
 } Actor; // size = 0x14C
 
@@ -172,7 +172,7 @@ BgCheckFlags WIP documentation:
 & 0x008 : Touching a wall
 & 0x010 : Touching a ceiling
 & 0x020 : On or below water surface
-& 0x040 : Has touched water (actor is responsible for unsetting this the frame it touches the water)
+& 0x040 : Has touched water (actor is responsible for unsetting self the frame it touches the water)
 & 0x080 : Similar to & 0x1 but with no velocity check and is cleared every frame
 & 0x100 : Crushed between a floor and ceiling (triggers a void for player)
 & 0x200 : Unknown (only set/used by player so far)

@@ -30,7 +30,7 @@ const ActorInit En_Lightbox_InitVars = {
 
 void EnLightbox_Init(Actor* thisx, GlobalContext* globalCtx) {
     CollisionHeader* colHeader = NULL;
-    EnLightbox* this = THIS;
+    EnLightbox* self = THIS;
     s32 pad[4];
 
     switch (thisx->params) {
@@ -53,30 +53,30 @@ void EnLightbox_Init(Actor* thisx, GlobalContext* globalCtx) {
     thisx->colChkInfo.cylRadius = 30;
     thisx->colChkInfo.cylHeight = 50;
     ActorShape_Init(&thisx->shape, 0.0f, ActorShadow_DrawCircle, 6.0f);
-    this->dyna.unk_160 = 0;
-    this->dyna.unk_15C = 0;
+    self->dyna.unk_160 = 0;
+    self->dyna.unk_15C = 0;
     thisx->targetMode = 0;
     thisx->gravity = -2.0f;
     CollisionHeader_GetVirtual(&object_lightbox_Col_001F10, &colHeader);
-    this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, thisx, colHeader);
+    self->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, thisx, colHeader);
 }
 
 void EnLightbox_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    EnLightbox* this = THIS;
+    EnLightbox* self = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, self->dyna.bgId);
 }
 
 void EnLightbox_Update(Actor* thisx, GlobalContext* globalCtx) {
-    EnLightbox* this = THIS;
+    EnLightbox* self = THIS;
 
-    if (this->dyna.unk_162 != 0) {
+    if (self->dyna.unk_162 != 0) {
         if (Actor_HasNoParent(thisx, globalCtx)) {
-            this->dyna.unk_162 = 0;
+            self->dyna.unk_162 = 0;
         }
     } else {
         if (Actor_HasParent(thisx, globalCtx)) {
-            this->dyna.unk_162++;
+            self->dyna.unk_162++;
         } else {
             if (thisx->speedXZ) {
                 if (thisx->bgCheckFlags & 8) {

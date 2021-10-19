@@ -72,40 +72,40 @@ static InitChainEntry sInitChain[] = {
 };
 
 void ObjHana_Init(Actor* thisx, GlobalContext* globalCtx) {
-    ObjHana* this = THIS;
-    s16 type = this->actor.params & 3;
+    ObjHana* self = THIS;
+    s16 type = self->actor.params & 3;
     HanaParams* params = &sHanaParams[type];
 
-    Actor_ProcessInitChain(&this->actor, sInitChain);
-    Actor_SetScale(&this->actor, params->scale);
-    this->actor.shape.yOffset = params->yOffset;
+    Actor_ProcessInitChain(&self->actor, sInitChain);
+    Actor_SetScale(&self->actor, params->scale);
+    self->actor.shape.yOffset = params->yOffset;
     if (params->radius >= 0) {
-        Collider_InitCylinder(globalCtx, &this->collider);
-        Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
-        Collider_UpdateCylinder(&this->actor, &this->collider);
-        this->collider.dim.radius = params->radius;
-        this->collider.dim.height = params->height;
-        CollisionCheck_SetInfo(&this->actor.colChkInfo, NULL, &sColChkInfoInit);
+        Collider_InitCylinder(globalCtx, &self->collider);
+        Collider_SetCylinder(globalCtx, &self->collider, &self->actor, &sCylinderInit);
+        Collider_UpdateCylinder(&self->actor, &self->collider);
+        self->collider.dim.radius = params->radius;
+        self->collider.dim.height = params->height;
+        CollisionCheck_SetInfo(&self->actor.colChkInfo, NULL, &sColChkInfoInit);
     }
 
     if (type == 2 && (gSaveContext.eventChkInf[4] & 1)) {
-        Actor_Kill(&this->actor);
+        Actor_Kill(&self->actor);
     }
 }
 
 void ObjHana_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    ObjHana* this = THIS;
+    ObjHana* self = THIS;
 
-    if (sHanaParams[this->actor.params & 3].radius >= 0) {
-        Collider_DestroyCylinder(globalCtx, &this->collider);
+    if (sHanaParams[self->actor.params & 3].radius >= 0) {
+        Collider_DestroyCylinder(globalCtx, &self->collider);
     }
 }
 
 void ObjHana_Update(Actor* thisx, GlobalContext* globalCtx) {
-    ObjHana* this = THIS;
+    ObjHana* self = THIS;
 
-    if (sHanaParams[this->actor.params & 3].radius >= 0 && this->actor.xzDistToPlayer < 400.0f) {
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    if (sHanaParams[self->actor.params & 3].radius >= 0 && self->actor.xzDistToPlayer < 400.0f) {
+        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
     }
 }
 

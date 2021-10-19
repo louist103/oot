@@ -20,15 +20,15 @@ void EnFu_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnFu_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnFu_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void EnFu_WaitChild(EnFu* this, GlobalContext* globalCtx);
-void func_80A1DA04(EnFu* this, GlobalContext* globalCtx);
+void EnFu_WaitChild(EnFu* self, GlobalContext* globalCtx);
+void func_80A1DA04(EnFu* self, GlobalContext* globalCtx);
 
-void EnFu_WaitAdult(EnFu* this, GlobalContext* globalCtx);
-void EnFu_TeachSong(EnFu* this, GlobalContext* globalCtx);
-void EnFu_WaitForPlayback(EnFu* this, GlobalContext* globalCtx);
-void func_80A1DBA0(EnFu* this, GlobalContext* globalCtx);
-void func_80A1DBD4(EnFu* this, GlobalContext* globalCtx);
-void func_80A1DB60(EnFu* this, GlobalContext* globalCtx);
+void EnFu_WaitAdult(EnFu* self, GlobalContext* globalCtx);
+void EnFu_TeachSong(EnFu* self, GlobalContext* globalCtx);
+void EnFu_WaitForPlayback(EnFu* self, GlobalContext* globalCtx);
+void func_80A1DBA0(EnFu* self, GlobalContext* globalCtx);
+void func_80A1DBD4(EnFu* self, GlobalContext* globalCtx);
+void func_80A1DB60(EnFu* self, GlobalContext* globalCtx);
 
 const ActorInit En_Fu_InitVars = {
     ACTOR_EN_FU,
@@ -75,65 +75,65 @@ typedef enum {
 
 void EnFu_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
-    EnFu* this = THIS;
+    EnFu* self = THIS;
 
-    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelanime, &gWindmillManSkel, &gWindmillManPlayStillAnim, this->jointTable,
-                       this->morphTable, FU_LIMB_MAX);
-    Animation_PlayLoop(&this->skelanime, &gWindmillManPlayStillAnim);
-    Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
-    this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    Actor_SetScale(&this->actor, 0.01f);
+    ActorShape_Init(&self->actor.shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
+    SkelAnime_InitFlex(globalCtx, &self->skelanime, &gWindmillManSkel, &gWindmillManPlayStillAnim, self->jointTable,
+                       self->morphTable, FU_LIMB_MAX);
+    Animation_PlayLoop(&self->skelanime, &gWindmillManPlayStillAnim);
+    Collider_InitCylinder(globalCtx, &self->collider);
+    Collider_SetCylinder(globalCtx, &self->collider, &self->actor, &sCylinderInit);
+    self->actor.colChkInfo.mass = MASS_IMMOVABLE;
+    Actor_SetScale(&self->actor, 0.01f);
     if (!LINK_IS_ADULT) {
-        this->actionFunc = EnFu_WaitChild;
-        this->facialExpression = FU_FACE_CALM;
+        self->actionFunc = EnFu_WaitChild;
+        self->facialExpression = FU_FACE_CALM;
     } else {
-        this->actionFunc = EnFu_WaitAdult;
-        this->facialExpression = FU_FACE_MAD;
-        this->skelanime.playSpeed = 2.0f;
+        self->actionFunc = EnFu_WaitAdult;
+        self->facialExpression = FU_FACE_MAD;
+        self->skelanime.playSpeed = 2.0f;
     }
-    this->behaviorFlags = 0;
-    this->actor.targetMode = 6;
+    self->behaviorFlags = 0;
+    self->actor.targetMode = 6;
 }
 
 void EnFu_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    EnFu* this = THIS;
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    EnFu* self = THIS;
+    Collider_DestroyCylinder(globalCtx, &self->collider);
 }
 
-s32 func_80A1D94C(EnFu* this, GlobalContext* globalCtx, u16 textID, EnFuActionFunc actionFunc) {
+s32 func_80A1D94C(EnFu* self, GlobalContext* globalCtx, u16 textID, EnFuActionFunc actionFunc) {
     s16 yawDiff;
 
     // func_8002F194 returns 1 if actor flags & 0x100 is set and unsets it
-    if (func_8002F194(&this->actor, globalCtx)) {
-        this->actionFunc = actionFunc;
+    if (func_8002F194(&self->actor, globalCtx)) {
+        self->actionFunc = actionFunc;
         return true;
     }
-    this->actor.textId = textID;
-    yawDiff = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
+    self->actor.textId = textID;
+    yawDiff = self->actor.yawTowardsPlayer - self->actor.shape.rot.y;
 
-    if ((ABS(yawDiff) < 0x2301) && (this->actor.xzDistToPlayer < 100.0f)) {
-        func_8002F2CC(&this->actor, globalCtx, 100.0f);
+    if ((ABS(yawDiff) < 0x2301) && (self->actor.xzDistToPlayer < 100.0f)) {
+        func_8002F2CC(&self->actor, globalCtx, 100.0f);
     } else {
-        this->behaviorFlags |= FU_RESET_LOOK_ANGLE;
+        self->behaviorFlags |= FU_RESET_LOOK_ANGLE;
     }
     return false;
 }
 
-void func_80A1DA04(EnFu* this, GlobalContext* globalCtx) {
-    if (func_8002F334(&this->actor, globalCtx) != 0) {
-        this->behaviorFlags &= ~FU_WAIT;
-        this->actionFunc = EnFu_WaitChild;
+void func_80A1DA04(EnFu* self, GlobalContext* globalCtx) {
+    if (func_8002F334(&self->actor, globalCtx) != 0) {
+        self->behaviorFlags &= ~FU_WAIT;
+        self->actionFunc = EnFu_WaitChild;
 
-        if (this->skelanime.animation == &gWindmillManPlayAndMoveHeadAnim) {
-            Animation_Change(&this->skelanime, &gWindmillManPlayStillAnim, 1.0f, 0.0f,
+        if (self->skelanime.animation == &gWindmillManPlayAndMoveHeadAnim) {
+            Animation_Change(&self->skelanime, &gWindmillManPlayStillAnim, 1.0f, 0.0f,
                              Animation_GetLastFrame(&gWindmillManPlayStillAnim), ANIMMODE_ONCE, -4.0f);
         }
     }
 }
 
-void EnFu_WaitChild(EnFu* this, GlobalContext* globalCtx) {
+void EnFu_WaitChild(EnFu* self, GlobalContext* globalCtx) {
     u16 textID = Text_GetFaceReaction(globalCtx, 0xB);
 
     if (textID == 0) {
@@ -142,40 +142,40 @@ void EnFu_WaitChild(EnFu* this, GlobalContext* globalCtx) {
 
     // if actor flags & 0x100 is set and textID is 0x5033, change animation
     // if func_80A1D94C returns 1, actionFunc is set to func_80A1DA04
-    if (func_80A1D94C(this, globalCtx, textID, func_80A1DA04)) {
+    if (func_80A1D94C(self, globalCtx, textID, func_80A1DA04)) {
         if (textID == 0x5033) {
-            Animation_Change(&this->skelanime, &gWindmillManPlayAndMoveHeadAnim, 1.0f, 0.0f,
+            Animation_Change(&self->skelanime, &gWindmillManPlayAndMoveHeadAnim, 1.0f, 0.0f,
                              Animation_GetLastFrame(&gWindmillManPlayAndMoveHeadAnim), ANIMMODE_ONCE, -4.0f);
         }
     }
 }
 
-void func_80A1DB60(EnFu* this, GlobalContext* globalCtx) {
+void func_80A1DB60(EnFu* self, GlobalContext* globalCtx) {
     if (globalCtx->csCtx.state == CS_STATE_IDLE) {
-        this->actionFunc = EnFu_WaitAdult;
+        self->actionFunc = EnFu_WaitAdult;
         gSaveContext.eventChkInf[5] |= 0x800;
         globalCtx->msgCtx.unk_E3EE = 4;
     }
 }
 
-void func_80A1DBA0(EnFu* this, GlobalContext* globalCtx) {
+void func_80A1DBA0(EnFu* self, GlobalContext* globalCtx) {
     // if dialog state is 2 set action to WaitAdult
-    if (func_8002F334(&this->actor, globalCtx)) {
-        this->actionFunc = EnFu_WaitAdult;
+    if (func_8002F334(&self->actor, globalCtx)) {
+        self->actionFunc = EnFu_WaitAdult;
     }
 }
 
-void func_80A1DBD4(EnFu* this, GlobalContext* globalCtx) {
+void func_80A1DBD4(EnFu* self, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if (globalCtx->msgCtx.unk_E3EE >= 4) {
-        this->actionFunc = EnFu_WaitAdult;
+        self->actionFunc = EnFu_WaitAdult;
         globalCtx->msgCtx.unk_E3EE = 4;
-        this->actor.flags &= ~0x10000;
+        self->actor.flags &= ~0x10000;
     } else if (globalCtx->msgCtx.unk_E3EE == 3) {
         func_80078884(NA_SE_SY_CORRECT_CHIME);
-        this->actionFunc = func_80A1DB60;
-        this->actor.flags &= ~0x10000;
+        self->actionFunc = func_80A1DB60;
+        self->actor.flags &= ~0x10000;
         globalCtx->csCtx.segment = SEGMENTED_TO_VIRTUAL(gSongOfStormsCs);
         gSaveContext.cutsceneTrigger = 1;
         Item_Give(globalCtx, ITEM_SONG_STORMS);
@@ -183,54 +183,54 @@ void func_80A1DBD4(EnFu* this, GlobalContext* globalCtx) {
         gSaveContext.eventChkInf[6] |= 0x20;
     } else if (globalCtx->msgCtx.unk_E3EE == 2) {
         player->stateFlags2 &= ~0x1000000;
-        this->actionFunc = EnFu_WaitAdult;
+        self->actionFunc = EnFu_WaitAdult;
     } else if (globalCtx->msgCtx.unk_E3EE == 1) {
         player->stateFlags2 |= 0x800000;
     }
 }
 
-void EnFu_WaitForPlayback(EnFu* this, GlobalContext* globalCtx) {
+void EnFu_WaitForPlayback(EnFu* self, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     player->stateFlags2 |= 0x800000;
     // if dialog state is 7, player has played back the song
     if (func_8010BDBC(&globalCtx->msgCtx) == 7) {
         func_8010BD58(globalCtx, 0x1A);
-        this->actionFunc = func_80A1DBD4;
+        self->actionFunc = func_80A1DBD4;
     }
 }
 
-void EnFu_TeachSong(EnFu* this, GlobalContext* globalCtx) {
+void EnFu_TeachSong(EnFu* self, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     player->stateFlags2 |= 0x800000;
     // if dialog state is 2, start song demonstration
     if (func_8010BDBC(&globalCtx->msgCtx) == 2) {
-        this->behaviorFlags &= ~FU_WAIT;
+        self->behaviorFlags &= ~FU_WAIT;
         func_800ED858(4);              // seems to be related to setting instrument type
         func_8010BD58(globalCtx, 0xD); // play song demonstration, song 0xD = SoS
-        this->actionFunc = EnFu_WaitForPlayback;
+        self->actionFunc = EnFu_WaitForPlayback;
     }
 }
 
-void EnFu_WaitAdult(EnFu* this, GlobalContext* globalCtx) {
+void EnFu_WaitAdult(EnFu* self, GlobalContext* globalCtx) {
     static s16 yawDiff;
     Player* player = GET_PLAYER(globalCtx);
 
-    yawDiff = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
+    yawDiff = self->actor.yawTowardsPlayer - self->actor.shape.rot.y;
     if ((gSaveContext.eventChkInf[5] & 0x800)) {
-        func_80A1D94C(this, globalCtx, 0x508E, func_80A1DBA0);
+        func_80A1D94C(self, globalCtx, 0x508E, func_80A1DBA0);
     } else if (player->stateFlags2 & 0x1000000) {
-        this->actor.textId = 0x5035;
-        func_8010B680(globalCtx, this->actor.textId, NULL);
-        this->actionFunc = EnFu_TeachSong;
-        this->behaviorFlags |= FU_WAIT;
-    } else if (func_8002F194(&this->actor, globalCtx)) {
-        this->actionFunc = func_80A1DBA0;
+        self->actor.textId = 0x5035;
+        func_8010B680(globalCtx, self->actor.textId, NULL);
+        self->actionFunc = EnFu_TeachSong;
+        self->behaviorFlags |= FU_WAIT;
+    } else if (func_8002F194(&self->actor, globalCtx)) {
+        self->actionFunc = func_80A1DBA0;
     } else if (ABS(yawDiff) < 0x2301) {
-        if (this->actor.xzDistToPlayer < 100.0f) {
-            this->actor.textId = 0x5034;
-            func_8002F2CC(&this->actor, globalCtx, 100.0f);
+        if (self->actor.xzDistToPlayer < 100.0f) {
+            self->actor.textId = 0x5034;
+            func_8002F2CC(&self->actor, globalCtx, 100.0f);
             player->stateFlags2 |= 0x800000;
         }
     }
@@ -238,30 +238,30 @@ void EnFu_WaitAdult(EnFu* this, GlobalContext* globalCtx) {
 
 void EnFu_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
-    EnFu* this = THIS;
+    EnFu* self = THIS;
 
-    Collider_UpdateCylinder(&this->actor, &this->collider);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-    Actor_MoveForward(&this->actor);
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
-    if ((!(this->behaviorFlags & FU_WAIT)) && (SkelAnime_Update(&this->skelanime) != 0)) {
-        Animation_Change(&this->skelanime, this->skelanime.animation, 1.0f, 0.0f,
-                         Animation_GetLastFrame(this->skelanime.animation), ANIMMODE_ONCE, 0.0f);
+    Collider_UpdateCylinder(&self->actor, &self->collider);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
+    Actor_MoveForward(&self->actor);
+    Actor_UpdateBgCheckInfo(globalCtx, &self->actor, 0.0f, 0.0f, 0.0f, 4);
+    if ((!(self->behaviorFlags & FU_WAIT)) && (SkelAnime_Update(&self->skelanime) != 0)) {
+        Animation_Change(&self->skelanime, self->skelanime.animation, 1.0f, 0.0f,
+                         Animation_GetLastFrame(self->skelanime.animation), ANIMMODE_ONCE, 0.0f);
     }
-    this->actionFunc(this, globalCtx);
-    if ((this->behaviorFlags & FU_RESET_LOOK_ANGLE)) {
-        Math_SmoothStepToS(&this->lookAngleOffset.x, 0, 6, 6200, 100);
-        Math_SmoothStepToS(&this->lookAngleOffset.y, 0, 6, 6200, 100);
-        Math_SmoothStepToS(&this->unk_2A2.x, 0, 6, 6200, 100);
-        Math_SmoothStepToS(&this->unk_2A2.y, 0, 6, 6200, 100);
-        this->behaviorFlags &= ~FU_RESET_LOOK_ANGLE;
+    self->actionFunc(self, globalCtx);
+    if ((self->behaviorFlags & FU_RESET_LOOK_ANGLE)) {
+        Math_SmoothStepToS(&self->lookAngleOffset.x, 0, 6, 6200, 100);
+        Math_SmoothStepToS(&self->lookAngleOffset.y, 0, 6, 6200, 100);
+        Math_SmoothStepToS(&self->unk_2A2.x, 0, 6, 6200, 100);
+        Math_SmoothStepToS(&self->unk_2A2.y, 0, 6, 6200, 100);
+        self->behaviorFlags &= ~FU_RESET_LOOK_ANGLE;
     } else {
-        func_80038290(globalCtx, &this->actor, &this->lookAngleOffset, &this->unk_2A2, this->actor.focus.pos);
+        func_80038290(globalCtx, &self->actor, &self->lookAngleOffset, &self->unk_2A2, self->actor.focus.pos);
     }
 }
 
 s32 EnFu_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* thisx) {
-    EnFu* this = THIS;
+    EnFu* self = THIS;
     s32 pad;
 
     if (limbIndex == FU_LIMB_UNK) {
@@ -269,14 +269,14 @@ s32 EnFu_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     }
     switch (limbIndex) {
         case FU_LIMB_HEAD:
-            rot->x += this->lookAngleOffset.y;
-            rot->z += this->lookAngleOffset.x;
+            rot->x += self->lookAngleOffset.y;
+            rot->z += self->lookAngleOffset.x;
             break;
         case FU_LIMB_CHEST_MUSIC_BOX:
             break;
     }
 
-    if (!(this->behaviorFlags & FU_WAIT)) {
+    if (!(self->behaviorFlags & FU_WAIT)) {
         return false;
     }
 
@@ -288,10 +288,10 @@ s32 EnFu_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
 }
 
 void EnFu_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx) {
-    EnFu* this = THIS;
+    EnFu* self = THIS;
 
     if (limbIndex == FU_LIMB_HEAD) {
-        Matrix_MultVec3f(&sMtxSrc, &this->actor.focus.pos);
+        Matrix_MultVec3f(&sMtxSrc, &self->actor.focus.pos);
     }
 }
 
@@ -299,15 +299,15 @@ void EnFu_Draw(Actor* thisx, GlobalContext* globalCtx) {
     static void* sEyesSegments[] = { gWindmillManEyeClosedTex, gWindmillManEyeAngryTex };
     static void* sMouthSegments[] = { gWindmillManMouthOpenTex, gWindmillManMouthAngryTex };
     s32 pad;
-    EnFu* this = THIS;
+    EnFu* self = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx, "../z_en_fu.c", 773);
 
     func_800943C8(globalCtx->state.gfxCtx);
-    gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(sEyesSegments[this->facialExpression]));
-    gSPSegment(POLY_OPA_DISP++, 0x09, SEGMENTED_TO_VIRTUAL(sMouthSegments[this->facialExpression]));
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelanime.skeleton, this->skelanime.jointTable, this->skelanime.dListCount,
-                          EnFu_OverrideLimbDraw, EnFu_PostLimbDraw, this);
+    gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(sEyesSegments[self->facialExpression]));
+    gSPSegment(POLY_OPA_DISP++, 0x09, SEGMENTED_TO_VIRTUAL(sMouthSegments[self->facialExpression]));
+    SkelAnime_DrawFlexOpa(globalCtx, self->skelanime.skeleton, self->skelanime.jointTable, self->skelanime.dListCount,
+                          EnFu_OverrideLimbDraw, EnFu_PostLimbDraw, self);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx, "../z_en_fu.c", 791);
 }

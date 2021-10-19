@@ -17,8 +17,8 @@ void ElfMsg_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ElfMsg_Update(Actor* thisx, GlobalContext* globalCtx);
 void ElfMsg_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void ElfMsg_CallNaviCuboid(ElfMsg* this, GlobalContext* globalCtx);
-void ElfMsg_CallNaviCylinder(ElfMsg* this, GlobalContext* globalCtx);
+void ElfMsg_CallNaviCuboid(ElfMsg* self, GlobalContext* globalCtx);
+void ElfMsg_CallNaviCylinder(ElfMsg* self, GlobalContext* globalCtx);
 
 const ActorInit Elf_Msg_InitVars = {
     ACTOR_ELF_MSG,
@@ -87,42 +87,42 @@ static Gfx D_809AD4B8[] = {
     gsSP2Triangles(3, 0, 7, 0, 0, 7, 4, 0), gsSPEndDisplayList(),
 };
 
-void ElfMsg_SetupAction(ElfMsg* this, ElfMsgActionFunc actionFunc) {
-    this->actionFunc = actionFunc;
+void ElfMsg_SetupAction(ElfMsg* self, ElfMsgActionFunc actionFunc) {
+    self->actionFunc = actionFunc;
 }
 
 /**
  * Checks a scene flag - if flag is set, the actor is killed and function returns 1. Otherwise returns 0.
  * Can also set a switch flag from params while killing.
  */
-s32 ElfMsg_KillCheck(ElfMsg* this, GlobalContext* globalCtx) {
+s32 ElfMsg_KillCheck(ElfMsg* self, GlobalContext* globalCtx) {
 
-    if ((this->actor.world.rot.y > 0) && (this->actor.world.rot.y < 0x41) &&
-        (Flags_GetSwitch(globalCtx, this->actor.world.rot.y - 1))) {
+    if ((self->actor.world.rot.y > 0) && (self->actor.world.rot.y < 0x41) &&
+        (Flags_GetSwitch(globalCtx, self->actor.world.rot.y - 1))) {
         LOG_STRING("共倒れ", "../z_elf_msg.c", 161); // "Mutual destruction"
-        if (((this->actor.params >> 8) & 0x3F) != 0x3F) {
-            Flags_SetSwitch(globalCtx, ((this->actor.params >> 8) & 0x3F));
+        if (((self->actor.params >> 8) & 0x3F) != 0x3F) {
+            Flags_SetSwitch(globalCtx, ((self->actor.params >> 8) & 0x3F));
         }
-        Actor_Kill(&this->actor);
+        Actor_Kill(&self->actor);
         return 1;
-    } else if ((this->actor.world.rot.y == -1) && Flags_GetClear(globalCtx, this->actor.room)) {
+    } else if ((self->actor.world.rot.y == -1) && Flags_GetClear(globalCtx, self->actor.room)) {
         LOG_STRING("共倒れ", "../z_elf_msg.c", 172); // "Mutual destruction"
-        if (((this->actor.params >> 8) & 0x3F) != 0x3F) {
-            Flags_SetSwitch(globalCtx, ((this->actor.params >> 8) & 0x3F));
+        if (((self->actor.params >> 8) & 0x3F) != 0x3F) {
+            Flags_SetSwitch(globalCtx, ((self->actor.params >> 8) & 0x3F));
         }
-        Actor_Kill(&this->actor);
+        Actor_Kill(&self->actor);
         return 1;
-    } else if (((this->actor.params >> 8) & 0x3F) == 0x3F) {
+    } else if (((self->actor.params >> 8) & 0x3F) == 0x3F) {
         return 0;
-    } else if (Flags_GetSwitch(globalCtx, ((this->actor.params >> 8) & 0x3F))) {
-        Actor_Kill(&this->actor);
+    } else if (Flags_GetSwitch(globalCtx, ((self->actor.params >> 8) & 0x3F))) {
+        Actor_Kill(&self->actor);
         return 1;
     }
     return 0;
 }
 
 void ElfMsg_Init(Actor* thisx, GlobalContext* globalCtx) {
-    ElfMsg* this = THIS;
+    ElfMsg* self = THIS;
 
     // "Conditions for Elf Tag disappearing"
     osSyncPrintf(VT_FGCOL(CYAN) "\nエルフ タグ 消える条件 %d" VT_RST "\n", (thisx->params >> 8) & 0x3F);
@@ -132,7 +132,7 @@ void ElfMsg_Init(Actor* thisx, GlobalContext* globalCtx) {
         osSyncPrintf(VT_FGCOL(CYAN) "\nエルフ タグ 出現条件 %d" VT_RST "\n", thisx->shape.rot.y - 0x41);
     }
 
-    if (!ElfMsg_KillCheck(this, globalCtx)) {
+    if (!ElfMsg_KillCheck(self, globalCtx)) {
         Actor_ProcessInitChain(thisx, sInitChain);
         if (thisx->world.rot.x == 0) {
             thisx->scale.z = 0.4f;
@@ -148,9 +148,9 @@ void ElfMsg_Init(Actor* thisx, GlobalContext* globalCtx) {
         }
 
         if (thisx->params & 0x4000) {
-            ElfMsg_SetupAction(this, ElfMsg_CallNaviCuboid);
+            ElfMsg_SetupAction(self, ElfMsg_CallNaviCuboid);
         } else {
-            ElfMsg_SetupAction(this, ElfMsg_CallNaviCylinder);
+            ElfMsg_SetupAction(self, ElfMsg_CallNaviCylinder);
         }
 
         thisx->shape.rot.x = thisx->shape.rot.y = thisx->shape.rot.z = 0;
@@ -160,25 +160,25 @@ void ElfMsg_Init(Actor* thisx, GlobalContext* globalCtx) {
 void ElfMsg_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
-s32 ElfMsg_GetMessageId(ElfMsg* this) {
+s32 ElfMsg_GetMessageId(ElfMsg* self) {
     // Negative message ID forces link to talk to Navi
-    if (this->actor.params & 0x8000) {
-        return (this->actor.params & 0xFF) + 0x100;
+    if (self->actor.params & 0x8000) {
+        return (self->actor.params & 0xFF) + 0x100;
     } else {
-        return -((this->actor.params & 0xFF) + 0x100);
+        return -((self->actor.params & 0xFF) + 0x100);
     }
 }
 
-void ElfMsg_CallNaviCuboid(ElfMsg* this, GlobalContext* globalCtx) {
+void ElfMsg_CallNaviCuboid(ElfMsg* self, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     EnElf* navi = (EnElf*)player->naviActor;
 
-    if ((fabsf(player->actor.world.pos.x - this->actor.world.pos.x) < (100.0f * this->actor.scale.x)) &&
-        (this->actor.world.pos.y <= player->actor.world.pos.y) &&
-        ((player->actor.world.pos.y - this->actor.world.pos.y) < (100.0f * this->actor.scale.y)) &&
-        (fabsf(player->actor.world.pos.z - this->actor.world.pos.z) < (100.0f * this->actor.scale.z))) {
-        player->naviTextId = ElfMsg_GetMessageId(this);
-        navi->elfMsg = this;
+    if ((fabsf(player->actor.world.pos.x - self->actor.world.pos.x) < (100.0f * self->actor.scale.x)) &&
+        (self->actor.world.pos.y <= player->actor.world.pos.y) &&
+        ((player->actor.world.pos.y - self->actor.world.pos.y) < (100.0f * self->actor.scale.y)) &&
+        (fabsf(player->actor.world.pos.z - self->actor.world.pos.z) < (100.0f * self->actor.scale.z))) {
+        player->naviTextId = ElfMsg_GetMessageId(self);
+        navi->elfMsg = self;
     }
 }
 
@@ -186,32 +186,32 @@ s32 ElfMsg_WithinXZDistance(Vec3f* pos1, Vec3f* pos2, f32 distance) {
     return (SQ(pos2->x - pos1->x) + SQ(pos2->z - pos1->z)) < SQ(distance);
 }
 
-void ElfMsg_CallNaviCylinder(ElfMsg* this, GlobalContext* globalCtx) {
+void ElfMsg_CallNaviCylinder(ElfMsg* self, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     EnElf* navi = (EnElf*)player->naviActor;
 
-    if (ElfMsg_WithinXZDistance(&player->actor.world.pos, &this->actor.world.pos, this->actor.scale.x * 100.0f) &&
-        (this->actor.world.pos.y <= player->actor.world.pos.y) &&
-        ((player->actor.world.pos.y - this->actor.world.pos.y) < (100.0f * this->actor.scale.y))) {
-        player->naviTextId = ElfMsg_GetMessageId(this);
-        navi->elfMsg = this;
+    if (ElfMsg_WithinXZDistance(&player->actor.world.pos, &self->actor.world.pos, self->actor.scale.x * 100.0f) &&
+        (self->actor.world.pos.y <= player->actor.world.pos.y) &&
+        ((player->actor.world.pos.y - self->actor.world.pos.y) < (100.0f * self->actor.scale.y))) {
+        player->naviTextId = ElfMsg_GetMessageId(self);
+        navi->elfMsg = self;
     }
 }
 
 void ElfMsg_Update(Actor* thisx, GlobalContext* globalCtx) {
-    ElfMsg* this = THIS;
+    ElfMsg* self = THIS;
 
-    if (!ElfMsg_KillCheck(this, globalCtx)) {
-        if (func_8002F194(&this->actor, globalCtx)) {
-            if (((this->actor.params >> 8) & 0x3F) != 0x3F) {
-                Flags_SetSwitch(globalCtx, (this->actor.params >> 8) & 0x3F);
+    if (!ElfMsg_KillCheck(self, globalCtx)) {
+        if (func_8002F194(&self->actor, globalCtx)) {
+            if (((self->actor.params >> 8) & 0x3F) != 0x3F) {
+                Flags_SetSwitch(globalCtx, (self->actor.params >> 8) & 0x3F);
             }
-            Actor_Kill(&this->actor);
+            Actor_Kill(&self->actor);
             return;
         }
-        if ((this->actor.world.rot.y <= 0x41) || (this->actor.world.rot.y > 0x80) ||
-            Flags_GetSwitch(globalCtx, this->actor.world.rot.y - 0x41)) {
-            this->actionFunc(this, globalCtx);
+        if ((self->actor.world.rot.y <= 0x41) || (self->actor.world.rot.y > 0x80) ||
+            Flags_GetSwitch(globalCtx, self->actor.world.rot.y - 0x41)) {
+            self->actionFunc(self, globalCtx);
         }
     }
 }

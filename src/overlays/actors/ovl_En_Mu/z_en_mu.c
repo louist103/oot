@@ -16,7 +16,7 @@ void EnMu_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnMu_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnMu_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void EnMu_Pose(EnMu* this, GlobalContext* globalCtx);
+void EnMu_Pose(EnMu* self, GlobalContext* globalCtx);
 s16 EnMu_CheckDialogState(GlobalContext* globalCtx, Actor* thisx);
 
 static ColliderCylinderInit D_80AB0BD0 = {
@@ -53,11 +53,11 @@ const ActorInit En_Mu_InitVars = {
     (ActorFunc)EnMu_Draw,
 };
 
-void EnMu_SetupAction(EnMu* this, EnMuActionFunc actionFunc) {
-    this->actionFunc = actionFunc;
+void EnMu_SetupAction(EnMu* self, EnMuActionFunc actionFunc) {
+    self->actionFunc = actionFunc;
 }
 
-void EnMu_Interact(EnMu* this, GlobalContext* globalCtx) {
+void EnMu_Interact(EnMu* self, GlobalContext* globalCtx) {
     u8 textIdOffset[] = { 0x42, 0x43, 0x3F, 0x41, 0x3E };
     u8 bitmask[] = { 0x01, 0x02, 0x04, 0x08, 0x10 };
     u8 textFlags;
@@ -81,7 +81,7 @@ void EnMu_Interact(EnMu* this, GlobalContext* globalCtx) {
     }
 
     if (i == 5) {
-        if (this->defFaceReaction == (textIdOffset[randomIndex] | 0x7000)) {
+        if (self->defFaceReaction == (textIdOffset[randomIndex] | 0x7000)) {
             randomIndex++;
             if (randomIndex >= 5) {
                 randomIndex = 0;
@@ -91,23 +91,23 @@ void EnMu_Interact(EnMu* this, GlobalContext* globalCtx) {
     }
 
     textFlags |= bitmask[randomIndex];
-    this->defFaceReaction = textIdOffset[randomIndex] | 0x7000;
+    self->defFaceReaction = textIdOffset[randomIndex] | 0x7000;
     textFlags &= 0xFF;
     gSaveContext.eventInf[2] |= textFlags;
 }
 
 u16 EnMu_GetFaceReaction(GlobalContext* globalCtx, Actor* thisx) {
-    EnMu* this = THIS;
-    u16 faceReaction = Text_GetFaceReaction(globalCtx, this->actor.params + 0x3A);
+    EnMu* self = THIS;
+    u16 faceReaction = Text_GetFaceReaction(globalCtx, self->actor.params + 0x3A);
 
     if (faceReaction != 0) {
         return faceReaction;
     }
-    return this->defFaceReaction;
+    return self->defFaceReaction;
 }
 
 s16 EnMu_CheckDialogState(GlobalContext* globalCtx, Actor* thisx) {
-    EnMu* this = THIS;
+    EnMu* self = THIS;
 
     switch (func_8010BDBC(&globalCtx->msgCtx)) {
         case 0:
@@ -121,7 +121,7 @@ s16 EnMu_CheckDialogState(GlobalContext* globalCtx, Actor* thisx) {
         case 9:
             return 1;
         case 2:
-            EnMu_Interact(this, globalCtx);
+            EnMu_Interact(self, globalCtx);
             return 0;
         default:
             return 1;
@@ -129,61 +129,61 @@ s16 EnMu_CheckDialogState(GlobalContext* globalCtx, Actor* thisx) {
 }
 
 void EnMu_Init(Actor* thisx, GlobalContext* globalCtx) {
-    EnMu* this = THIS;
+    EnMu* self = THIS;
     s32 pad;
 
-    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 160.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_mu_Skel_004F70, &object_mu_Anim_0003F4, NULL, NULL, 0);
-    Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &D_80AB0BD0);
-    CollisionCheck_SetInfo2(&this->actor.colChkInfo, NULL, &D_80AB0BFC);
-    this->actor.targetMode = 6;
-    Actor_SetScale(&this->actor, 0.01f);
-    EnMu_Interact(this, globalCtx);
-    EnMu_SetupAction(this, EnMu_Pose);
+    ActorShape_Init(&self->actor.shape, 0.0f, ActorShadow_DrawCircle, 160.0f);
+    SkelAnime_InitFlex(globalCtx, &self->skelAnime, &object_mu_Skel_004F70, &object_mu_Anim_0003F4, NULL, NULL, 0);
+    Collider_InitCylinder(globalCtx, &self->collider);
+    Collider_SetCylinder(globalCtx, &self->collider, &self->actor, &D_80AB0BD0);
+    CollisionCheck_SetInfo2(&self->actor.colChkInfo, NULL, &D_80AB0BFC);
+    self->actor.targetMode = 6;
+    Actor_SetScale(&self->actor, 0.01f);
+    EnMu_Interact(self, globalCtx);
+    EnMu_SetupAction(self, EnMu_Pose);
 }
 
 void EnMu_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    EnMu* this = THIS;
+    EnMu* self = THIS;
 
-    SkelAnime_Free(&this->skelAnime, globalCtx);
+    SkelAnime_Free(&self->skelAnime, globalCtx);
 }
 
-void EnMu_Pose(EnMu* this, GlobalContext* globalCtx) {
-    func_80034F54(globalCtx, this->unk_20A, this->unk_22A, 16);
+void EnMu_Pose(EnMu* self, GlobalContext* globalCtx) {
+    func_80034F54(globalCtx, self->unk_20A, self->unk_22A, 16);
 }
 
 void EnMu_Update(Actor* thisx, GlobalContext* globalCtx) {
-    EnMu* this = THIS;
+    EnMu* self = THIS;
     s32 pad;
     f32 talkDist;
     Vec3s pos;
 
-    pos.x = this->actor.world.pos.x;
-    pos.y = this->actor.world.pos.y;
-    pos.z = this->actor.world.pos.z;
+    pos.x = self->actor.world.pos.x;
+    pos.y = self->actor.world.pos.y;
+    pos.z = self->actor.world.pos.z;
 
-    this->collider.dim.pos = pos;
+    self->collider.dim.pos = pos;
 
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-    SkelAnime_Update(&this->skelAnime);
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
-    this->actionFunc(this, globalCtx);
-    talkDist = this->collider.dim.radius + 30.0f;
-    func_800343CC(globalCtx, &this->actor, &this->npcInfo.unk_00, talkDist, EnMu_GetFaceReaction,
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
+    SkelAnime_Update(&self->skelAnime);
+    Actor_UpdateBgCheckInfo(globalCtx, &self->actor, 0.0f, 0.0f, 0.0f, 4);
+    self->actionFunc(self, globalCtx);
+    talkDist = self->collider.dim.radius + 30.0f;
+    func_800343CC(globalCtx, &self->actor, &self->npcInfo.unk_00, talkDist, EnMu_GetFaceReaction,
                   EnMu_CheckDialogState);
 
-    this->actor.focus.pos = this->actor.world.pos;
-    this->actor.focus.pos.y += 60.0f;
+    self->actor.focus.pos = self->actor.world.pos;
+    self->actor.focus.pos.y += 60.0f;
 }
 
 s32 EnMu_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* thisx) {
-    EnMu* this = THIS;
+    EnMu* self = THIS;
 
     if ((limbIndex == 5) || (limbIndex == 6) || (limbIndex == 7) || (limbIndex == 11) || (limbIndex == 12) ||
         (limbIndex == 13) || (limbIndex == 14)) {
-        rot->y += Math_SinS(this->unk_20A[limbIndex]) * 200.0f;
-        rot->z += Math_CosS(this->unk_22A[limbIndex]) * 200.0f;
+        rot->y += Math_SinS(self->unk_20A[limbIndex]) * 200.0f;
+        rot->z += Math_CosS(self->unk_22A[limbIndex]) * 200.0f;
     }
     return false;
 }
@@ -201,7 +201,7 @@ Gfx* EnMu_DisplayListSetColor(GraphicsContext* gfxCtx, u8 r, u8 g, u8 b, u8 a) {
 }
 
 void EnMu_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    EnMu* this = THIS;
+    EnMu* self = THIS;
     Color_RGBA8 colors[2][5] = {
         { { 100, 130, 235, 0 }, { 160, 250, 60, 0 }, { 90, 60, 20, 0 }, { 30, 240, 200, 0 }, { 140, 70, 20, 0 } },
         { { 140, 70, 20, 0 }, { 30, 240, 200, 0 }, { 90, 60, 20, 0 }, { 160, 250, 60, 0 }, { 100, 130, 235, 0 } }
@@ -213,11 +213,11 @@ void EnMu_Draw(Actor* thisx, GlobalContext* globalCtx) {
     Matrix_Translate(-1200.0f, 0.0f, -1400.0f, MTXMODE_APPLY);
     for (i = 0; i < 5; i++) {
         gSPSegment(POLY_OPA_DISP++, segmentId[i],
-                   EnMu_DisplayListSetColor(globalCtx->state.gfxCtx, colors[this->actor.params][i].r,
-                                            colors[this->actor.params][i].g, colors[this->actor.params][i].b,
-                                            colors[this->actor.params][i].a));
+                   EnMu_DisplayListSetColor(globalCtx->state.gfxCtx, colors[self->actor.params][i].r,
+                                            colors[self->actor.params][i].g, colors[self->actor.params][i].b,
+                                            colors[self->actor.params][i].a));
     }
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          EnMu_OverrideLimbDraw, EnMu_PostLimbDraw, this);
+    SkelAnime_DrawFlexOpa(globalCtx, self->skelAnime.skeleton, self->skelAnime.jointTable, self->skelAnime.dListCount,
+                          EnMu_OverrideLimbDraw, EnMu_PostLimbDraw, self);
     CLOSE_DISPS(globalCtx->state.gfxCtx, "../z_en_mu.c", 534);
 }

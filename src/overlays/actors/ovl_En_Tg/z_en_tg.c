@@ -16,7 +16,7 @@ void EnTg_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTg_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTg_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void EnTg_SpinIfNotTalking(EnTg* this, GlobalContext* globalCtx);
+void EnTg_SpinIfNotTalking(EnTg* self, GlobalContext* globalCtx);
 
 static ColliderCylinderInit sCylinderInit = {
     {
@@ -53,7 +53,7 @@ const ActorInit En_Tg_InitVars = {
 };
 
 u16 EnTg_GetTextId(GlobalContext* globalCtx, Actor* thisx) {
-    EnTg* this = THIS;
+    EnTg* self = THIS;
     u16 temp;
     u32 phi;
 
@@ -64,14 +64,14 @@ u16 EnTg_GetTextId(GlobalContext* globalCtx, Actor* thisx) {
     }
     // Use a different set of dialogue in Kakariko Village (Adult)
     if (globalCtx->sceneNum == SCENE_SPOT01) {
-        if (this->nextDialogue % 2 != 0) {
+        if (self->nextDialogue % 2 != 0) {
             phi = 0x5089;
         } else {
             phi = 0x508A;
         }
         return phi;
     } else {
-        if (this->nextDialogue % 2 != 0) {
+        if (self->nextDialogue % 2 != 0) {
             phi = 0x7025;
         } else {
             phi = 0x7026;
@@ -81,7 +81,7 @@ u16 EnTg_GetTextId(GlobalContext* globalCtx, Actor* thisx) {
 }
 
 s16 EnTg_OnTextComplete(GlobalContext* globalCtx, Actor* thisx) {
-    EnTg* this = THIS;
+    EnTg* self = THIS;
 
     switch (func_8010BDBC(&globalCtx->msgCtx)) {
         case 0:
@@ -95,15 +95,15 @@ s16 EnTg_OnTextComplete(GlobalContext* globalCtx, Actor* thisx) {
         case 9:
             return 1;
         case 2:
-            switch (this->actor.textId) {
+            switch (self->actor.textId) {
                 case 0x5089:
                 case 0x508A:
-                    this->nextDialogue++;
+                    self->nextDialogue++;
                     break;
                 case 0x7025:
                 case 0x7026:
-                    this->actor.params ^= 1;
-                    this->nextDialogue++;
+                    self->actor.params ^= 1;
+                    self->nextDialogue++;
                     break;
             }
             return 0;
@@ -113,48 +113,48 @@ s16 EnTg_OnTextComplete(GlobalContext* globalCtx, Actor* thisx) {
 }
 
 void EnTg_Init(Actor* thisx, GlobalContext* globalCtx) {
-    EnTg* this = THIS;
+    EnTg* self = THIS;
 
-    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 28.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gDancingCoupleSkel, &gDancingCoupleAnim, NULL, NULL, 0);
-    Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
-    CollisionCheck_SetInfo2(&this->actor.colChkInfo, NULL, &sColChkInfoInit);
-    this->actor.targetMode = 6;
-    Actor_SetScale(&this->actor, 0.01f);
-    this->nextDialogue = globalCtx->state.frames % 2;
-    this->actionFunc = EnTg_SpinIfNotTalking;
+    ActorShape_Init(&self->actor.shape, 0.0f, ActorShadow_DrawCircle, 28.0f);
+    SkelAnime_InitFlex(globalCtx, &self->skelAnime, &gDancingCoupleSkel, &gDancingCoupleAnim, NULL, NULL, 0);
+    Collider_InitCylinder(globalCtx, &self->collider);
+    Collider_SetCylinder(globalCtx, &self->collider, &self->actor, &sCylinderInit);
+    CollisionCheck_SetInfo2(&self->actor.colChkInfo, NULL, &sColChkInfoInit);
+    self->actor.targetMode = 6;
+    Actor_SetScale(&self->actor, 0.01f);
+    self->nextDialogue = globalCtx->state.frames % 2;
+    self->actionFunc = EnTg_SpinIfNotTalking;
 }
 
 void EnTg_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    EnTg* this = THIS;
+    EnTg* self = THIS;
 
-    SkelAnime_Free(&this->skelAnime, globalCtx);
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    SkelAnime_Free(&self->skelAnime, globalCtx);
+    Collider_DestroyCylinder(globalCtx, &self->collider);
 }
 
-void EnTg_SpinIfNotTalking(EnTg* this, GlobalContext* globalCtx) {
-    if (!this->isTalking) {
-        this->actor.shape.rot.y += 0x800;
+void EnTg_SpinIfNotTalking(EnTg* self, GlobalContext* globalCtx) {
+    if (!self->isTalking) {
+        self->actor.shape.rot.y += 0x800;
     }
 }
 
 void EnTg_Update(Actor* thisx, GlobalContext* globalCtx) {
-    EnTg* this = THIS;
+    EnTg* self = THIS;
     s32 pad;
     f32 temp;
     Vec3s sp2C;
 
-    sp2C.x = this->actor.world.pos.x;
-    sp2C.y = this->actor.world.pos.y;
-    sp2C.z = (s16)this->actor.world.pos.z + 3;
-    this->collider.dim.pos = sp2C;
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-    SkelAnime_Update(&this->skelAnime);
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
-    this->actionFunc(this, globalCtx);
-    temp = this->collider.dim.radius + 30.0f;
-    func_800343CC(globalCtx, &this->actor, &this->isTalking, temp, EnTg_GetTextId, EnTg_OnTextComplete);
+    sp2C.x = self->actor.world.pos.x;
+    sp2C.y = self->actor.world.pos.y;
+    sp2C.z = (s16)self->actor.world.pos.z + 3;
+    self->collider.dim.pos = sp2C;
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
+    SkelAnime_Update(&self->skelAnime);
+    Actor_UpdateBgCheckInfo(globalCtx, &self->actor, 0.0f, 0.0f, 0.0f, 4);
+    self->actionFunc(self, globalCtx);
+    temp = self->collider.dim.radius + 30.0f;
+    func_800343CC(globalCtx, &self->actor, &self->isTalking, temp, EnTg_GetTextId, EnTg_OnTextComplete);
 }
 
 s32 EnTg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* thisx) {
@@ -162,12 +162,12 @@ s32 EnTg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
 }
 
 void EnTg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx) {
-    EnTg* this = THIS;
+    EnTg* self = THIS;
     Vec3f targetOffset = { 0.0f, 800.0f, 0.0f };
 
     if (limbIndex == 9) {
         // Place the target point at the guy's head instead of the center of the actor
-        Matrix_MultVec3f(&targetOffset, &this->actor.focus.pos);
+        Matrix_MultVec3f(&targetOffset, &self->actor.focus.pos);
     }
 }
 
@@ -180,7 +180,7 @@ Gfx* EnTg_SetColor(GraphicsContext* gfxCtx, u8 r, u8 g, u8 b, u8 a) {
 }
 
 void EnTg_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    EnTg* this = THIS;
+    EnTg* self = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx, "../z_en_tg.c", 462);
     Matrix_Translate(0.0f, 0.0f, -560.0f, MTXMODE_APPLY);
@@ -191,7 +191,7 @@ void EnTg_Draw(Actor* thisx, GlobalContext* globalCtx) {
     // Set the girl's shirt to white
     gSPSegment(POLY_OPA_DISP++, 0x09, EnTg_SetColor(globalCtx->state.gfxCtx, 255, 255, 255, 0));
 
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          EnTg_OverrideLimbDraw, EnTg_PostLimbDraw, this);
+    SkelAnime_DrawFlexOpa(globalCtx, self->skelAnime.skeleton, self->skelAnime.jointTable, self->skelAnime.dListCount,
+                          EnTg_OverrideLimbDraw, EnTg_PostLimbDraw, self);
     CLOSE_DISPS(globalCtx->state.gfxCtx, "../z_en_tg.c", 480);
 }

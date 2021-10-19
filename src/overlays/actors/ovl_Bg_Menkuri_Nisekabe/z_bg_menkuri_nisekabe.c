@@ -31,29 +31,29 @@ const ActorInit Bg_Menkuri_Nisekabe_InitVars = {
 static Gfx* sDLists[] = { gGTGFakeWallDL, gGTGFakeCeilingDL };
 
 void BgMenkuriNisekabe_Init(Actor* thisx, GlobalContext* globalCtx) {
-    BgMenkuriNisekabe* this = THIS;
+    BgMenkuriNisekabe* self = THIS;
 
-    Actor_SetScale(&this->actor, 0.1f);
+    Actor_SetScale(&self->actor, 0.1f);
 }
 
 void BgMenkuriNisekabe_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void BgMenkuriNisekabe_Update(Actor* thisx, GlobalContext* globalCtx) {
-    BgMenkuriNisekabe* this = THIS;
+    BgMenkuriNisekabe* self = THIS;
 
     if (globalCtx->actorCtx.unk_03 != 0) {
-        this->actor.flags |= 0x80;
+        self->actor.flags |= 0x80;
     } else {
-        this->actor.flags &= ~0x80;
+        self->actor.flags &= ~0x80;
     }
 }
 
 void BgMenkuriNisekabe_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    BgMenkuriNisekabe* this = THIS;
-    u32 index = this->actor.params & 0xFF;
+    BgMenkuriNisekabe* self = THIS;
+    u32 index = self->actor.params & 0xFF;
 
-    if ((this->actor.flags & 0x80) == 0x80) {
+    if ((self->actor.flags & 0x80) == 0x80) {
         Gfx_DrawDListXlu(globalCtx, sDLists[index]);
     } else {
         Gfx_DrawDListOpa(globalCtx, sDLists[index]);

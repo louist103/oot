@@ -226,7 +226,7 @@ void PadMgr_ProcessInputs(PadMgr* padMgr) {
                 break;
             case 4:
                 input->cur = input->prev;
-                LOG_NUM("this->Key_switch[i]", padMgr->ctrlrIsConnected[i], "../padmgr.c", 380);
+                LOG_NUM("self->Key_switch[i]", padMgr->ctrlrIsConnected[i], "../padmgr.c", 380);
                 osSyncPrintf(VT_FGCOL(YELLOW));
                 // "Overrun error occurred"
                 osSyncPrintf("padmgr: %dコン: %s\n", i + 1, "オーバーランエラーが発生");
@@ -289,7 +289,7 @@ void PadMgr_HandleRetraceMsg(PadMgr* padMgr) {
             if (padMgr->padStatus[i].type == 5) {
                 mask |= 1 << i;
             } else {
-                LOG_HEX("this->pad_status[i].type", padMgr->padStatus[i].type, "../padmgr.c", 458);
+                LOG_HEX("self->pad_status[i].type", padMgr->padStatus[i].type, "../padmgr.c", 458);
                 // "An unknown type of controller is connected"
                 osSyncPrintf("知らない種類のコントローラが接続されています\n");
             }

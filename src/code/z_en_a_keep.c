@@ -11,16 +11,16 @@ void EnAObj_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnAObj_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnAObj_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_8001D204(EnAObj* this, GlobalContext* globalCtx);
-void func_8001D25C(EnAObj* this, GlobalContext* globalCtx);
-void func_8001D360(EnAObj* this, GlobalContext* globalCtx);
-void func_8001D4A8(EnAObj* this, GlobalContext* globalCtx);
-void func_8001D608(EnAObj* this, GlobalContext* globalCtx);
+void func_8001D204(EnAObj* self, GlobalContext* globalCtx);
+void func_8001D25C(EnAObj* self, GlobalContext* globalCtx);
+void func_8001D360(EnAObj* self, GlobalContext* globalCtx);
+void func_8001D4A8(EnAObj* self, GlobalContext* globalCtx);
+void func_8001D608(EnAObj* self, GlobalContext* globalCtx);
 
-void func_8001D234(EnAObj* this, s16 params);
-void func_8001D310(EnAObj* this, s16 params);
-void func_8001D480(EnAObj* this, s16 params);
-void func_8001D5C8(EnAObj* this, s16 params);
+void func_8001D234(EnAObj* self, s16 params);
+void func_8001D310(EnAObj* self, s16 params);
+void func_8001D480(EnAObj* self, s16 params);
+void func_8001D5C8(EnAObj* self, s16 params);
 
 const ActorInit En_A_Obj_InitVars = {
     ACTOR_EN_A_OBJ,
@@ -75,17 +75,17 @@ static Gfx* D_80115484[] = {
     gBoulderFragmentsDL,
 };
 
-void EnAObj_SetupAction(EnAObj* this, EnAObjActionFunc actionFunc) {
-    this->actionFunc = actionFunc;
+void EnAObj_SetupAction(EnAObj* self, EnAObjActionFunc actionFunc) {
+    self->actionFunc = actionFunc;
 }
 
 void EnAObj_Init(Actor* thisx, GlobalContext* globalCtx) {
     CollisionHeader* colHeader = NULL;
     s32 pad;
-    EnAObj* this = THIS;
+    EnAObj* self = THIS;
     f32 sp28 = 6.0f;
 
-    this->textId = (thisx->params >> 8) & 0xFF;
+    self->textId = (thisx->params >> 8) & 0xFF;
     thisx->params &= 0xFF;
 
     switch (thisx->params) {
@@ -116,57 +116,57 @@ void EnAObj_Init(Actor* thisx, GlobalContext* globalCtx) {
     ActorShape_Init(&thisx->shape, 0.0f, ActorShadow_DrawCircle, sp28);
 
     thisx->focus.pos = thisx->world.pos;
-    this->dyna.bgId = BGACTOR_NEG_ONE;
-    this->dyna.unk_160 = 0;
-    this->dyna.unk_15C = DPM_UNK;
+    self->dyna.bgId = BGACTOR_NEG_ONE;
+    self->dyna.unk_160 = 0;
+    self->dyna.unk_15C = DPM_UNK;
     thisx->uncullZoneDownward = 1200.0f;
     thisx->uncullZoneScale = 200.0f;
 
     switch (thisx->params) {
         case A_OBJ_BLOCK_LARGE:
         case A_OBJ_BLOCK_HUGE:
-            this->dyna.bgId = 1;
+            self->dyna.bgId = 1;
             Actor_ChangeCategory(globalCtx, &globalCtx->actorCtx, thisx, ACTORCAT_BG);
-            func_8001D5C8(this, thisx->params);
+            func_8001D5C8(self, thisx->params);
             break;
         case A_OBJ_BLOCK_SMALL_ROT:
         case A_OBJ_BLOCK_LARGE_ROT:
-            this->dyna.bgId = 3;
+            self->dyna.bgId = 3;
             Actor_ChangeCategory(globalCtx, &globalCtx->actorCtx, thisx, ACTORCAT_BG);
-            func_8001D310(this, thisx->params);
+            func_8001D310(self, thisx->params);
             break;
         case A_OBJ_UNKNOWN_6:
             // clang-format off
-            thisx->flags |= 0x1; this->dyna.bgId = 5; this->unk_178 = 10.0f;
+            thisx->flags |= 0x1; self->dyna.bgId = 5; self->unk_178 = 10.0f;
             // clang-format on
             thisx->gravity = -2.0f;
-            func_8001D234(this, thisx->params);
+            func_8001D234(self, thisx->params);
             break;
         case A_OBJ_GRASS_CLUMP:
         case A_OBJ_TREE_STUMP:
-            this->dyna.bgId = 0;
-            func_8001D234(this, thisx->params);
+            self->dyna.bgId = 0;
+            func_8001D234(self, thisx->params);
             break;
         case A_OBJ_SIGNPOST_OBLONG:
         case A_OBJ_SIGNPOST_ARROW:
-            thisx->textId = (this->textId & 0xFF) | 0x300;
+            thisx->textId = (self->textId & 0xFF) | 0x300;
             // clang-format off
             thisx->flags |= 0x1 | 0x8; thisx->targetArrowOffset = 500.0f;
             // clang-format on
-            this->unk_178 = 45.0f;
-            func_8001D234(this, thisx->params);
-            Collider_InitCylinder(globalCtx, &this->collider);
-            Collider_SetCylinder(globalCtx, &this->collider, thisx, &sCylinderInit);
+            self->unk_178 = 45.0f;
+            func_8001D234(self, thisx->params);
+            Collider_InitCylinder(globalCtx, &self->collider);
+            Collider_SetCylinder(globalCtx, &self->collider, thisx, &sCylinderInit);
             thisx->colChkInfo.mass = MASS_IMMOVABLE;
             thisx->targetMode = 0;
             break;
         case A_OBJ_KNOB:
             thisx->gravity = -1.5f;
-            func_8001D480(this, thisx->params);
+            func_8001D480(self, thisx->params);
             break;
         default:
             thisx->gravity = -2.0f;
-            func_8001D234(this, thisx->params);
+            func_8001D234(self, thisx->params);
             break;
     }
 
@@ -174,166 +174,166 @@ void EnAObj_Init(Actor* thisx, GlobalContext* globalCtx) {
         thisx->colChkInfo.mass = MASS_IMMOVABLE;
     }
 
-    if (this->dyna.bgId != BGACTOR_NEG_ONE) {
-        CollisionHeader_GetVirtual(D_8011546C[this->dyna.bgId], &colHeader);
-        this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, thisx, colHeader);
+    if (self->dyna.bgId != BGACTOR_NEG_ONE) {
+        CollisionHeader_GetVirtual(D_8011546C[self->dyna.bgId], &colHeader);
+        self->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, thisx, colHeader);
     }
 }
 
 void EnAObj_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    EnAObj* this = THIS;
+    EnAObj* self = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, self->dyna.bgId);
 
-    switch (this->dyna.actor.params) {
+    switch (self->dyna.actor.params) {
         case A_OBJ_SIGNPOST_OBLONG:
         case A_OBJ_SIGNPOST_ARROW:
-            Collider_DestroyCylinder(globalCtx, &this->collider);
+            Collider_DestroyCylinder(globalCtx, &self->collider);
     }
 }
 
-void func_8001D204(EnAObj* this, GlobalContext* globalCtx) {
-    if (func_8002F334(&this->dyna.actor, globalCtx)) {
-        func_8001D234(this, this->dyna.actor.params);
+void func_8001D204(EnAObj* self, GlobalContext* globalCtx) {
+    if (func_8002F334(&self->dyna.actor, globalCtx)) {
+        func_8001D234(self, self->dyna.actor.params);
     }
 }
 
-void func_8001D234(EnAObj* this, s16 params) {
-    EnAObj_SetupAction(this, func_8001D25C);
+void func_8001D234(EnAObj* self, s16 params) {
+    EnAObj_SetupAction(self, func_8001D25C);
 }
 
-void func_8001D25C(EnAObj* this, GlobalContext* globalCtx) {
+void func_8001D25C(EnAObj* self, GlobalContext* globalCtx) {
     s16 var;
 
-    if (this->dyna.actor.textId != 0) {
-        var = this->dyna.actor.yawTowardsPlayer - this->dyna.actor.shape.rot.y;
-        if ((ABS(var) < 0x2800) || ((this->dyna.actor.params == 0xA) && (ABS(var) > 0x5800))) {
-            if (func_8002F194(&this->dyna.actor, globalCtx)) {
-                EnAObj_SetupAction(this, func_8001D204);
+    if (self->dyna.actor.textId != 0) {
+        var = self->dyna.actor.yawTowardsPlayer - self->dyna.actor.shape.rot.y;
+        if ((ABS(var) < 0x2800) || ((self->dyna.actor.params == 0xA) && (ABS(var) > 0x5800))) {
+            if (func_8002F194(&self->dyna.actor, globalCtx)) {
+                EnAObj_SetupAction(self, func_8001D204);
             } else {
-                func_8002F2F4(&this->dyna.actor, globalCtx);
+                func_8002F2F4(&self->dyna.actor, globalCtx);
             }
         }
     }
 }
 
-void func_8001D310(EnAObj* this, s16 params) {
-    this->unk_16E = 0;
-    this->unk_168 = 10;
-    this->dyna.actor.world.rot.y = 0;
-    this->dyna.actor.shape.rot = this->dyna.actor.world.rot;
-    EnAObj_SetupAction(this, func_8001D360);
+void func_8001D310(EnAObj* self, s16 params) {
+    self->unk_16E = 0;
+    self->unk_168 = 10;
+    self->dyna.actor.world.rot.y = 0;
+    self->dyna.actor.shape.rot = self->dyna.actor.world.rot;
+    EnAObj_SetupAction(self, func_8001D360);
 }
 
-void func_8001D360(EnAObj* this, GlobalContext* globalCtx) {
-    if (this->unk_16E == 0) {
-        if (this->dyna.unk_160 != 0) {
-            this->unk_16E++;
-            this->unk_170 = 20;
+void func_8001D360(EnAObj* self, GlobalContext* globalCtx) {
+    if (self->unk_16E == 0) {
+        if (self->dyna.unk_160 != 0) {
+            self->unk_16E++;
+            self->unk_170 = 20;
 
-            if ((s16)(this->dyna.actor.yawTowardsPlayer + 0x4000) < 0) {
-                this->unk_174 = -1000;
+            if ((s16)(self->dyna.actor.yawTowardsPlayer + 0x4000) < 0) {
+                self->unk_174 = -1000;
             } else {
-                this->unk_174 = 1000;
+                self->unk_174 = 1000;
             }
 
-            if (this->dyna.actor.yawTowardsPlayer < 0) {
-                this->unk_172 = -this->unk_174;
+            if (self->dyna.actor.yawTowardsPlayer < 0) {
+                self->unk_172 = -self->unk_174;
             } else {
-                this->unk_172 = this->unk_174;
+                self->unk_172 = self->unk_174;
             }
         }
     } else {
-        if (this->unk_168 != 0) {
-            this->unk_168--;
+        if (self->unk_168 != 0) {
+            self->unk_168--;
         } else {
-            this->dyna.actor.shape.rot.y += this->unk_172;
-            this->dyna.actor.shape.rot.x += this->unk_174;
-            this->unk_170--;
-            this->dyna.actor.gravity = -1.0f;
+            self->dyna.actor.shape.rot.y += self->unk_172;
+            self->dyna.actor.shape.rot.x += self->unk_174;
+            self->unk_170--;
+            self->dyna.actor.gravity = -1.0f;
 
-            if (this->unk_170 == 0) {
-                this->dyna.actor.world.pos = this->dyna.actor.home.pos;
-                this->unk_16E = 0;
-                this->unk_168 = 10;
-                this->dyna.actor.velocity.y = 0.0f;
-                this->dyna.actor.gravity = 0.0f;
-                this->dyna.actor.shape.rot = this->dyna.actor.world.rot;
+            if (self->unk_170 == 0) {
+                self->dyna.actor.world.pos = self->dyna.actor.home.pos;
+                self->unk_16E = 0;
+                self->unk_168 = 10;
+                self->dyna.actor.velocity.y = 0.0f;
+                self->dyna.actor.gravity = 0.0f;
+                self->dyna.actor.shape.rot = self->dyna.actor.world.rot;
             }
         }
     }
 }
 
-void func_8001D480(EnAObj* this, s16 params) {
-    EnAObj_SetupAction(this, func_8001D4A8);
+void func_8001D480(EnAObj* self, s16 params) {
+    EnAObj_SetupAction(self, func_8001D4A8);
 }
 
-void func_8001D4A8(EnAObj* this, GlobalContext* globalCtx) {
-    Math_SmoothStepToF(&this->dyna.actor.speedXZ, 1.0f, 1.0f, 0.5f, 0.0f);
-    this->dyna.actor.shape.rot.x = this->dyna.actor.shape.rot.x + (this->dyna.actor.world.rot.x >> 1);
-    this->dyna.actor.shape.rot.z = this->dyna.actor.shape.rot.z + (this->dyna.actor.world.rot.z >> 1);
+void func_8001D4A8(EnAObj* self, GlobalContext* globalCtx) {
+    Math_SmoothStepToF(&self->dyna.actor.speedXZ, 1.0f, 1.0f, 0.5f, 0.0f);
+    self->dyna.actor.shape.rot.x = self->dyna.actor.shape.rot.x + (self->dyna.actor.world.rot.x >> 1);
+    self->dyna.actor.shape.rot.z = self->dyna.actor.shape.rot.z + (self->dyna.actor.world.rot.z >> 1);
 
-    if ((this->dyna.actor.speedXZ != 0.0f) && (this->dyna.actor.bgCheckFlags & 0x8)) {
-        this->dyna.actor.world.rot.y =
-            ((this->dyna.actor.wallYaw - this->dyna.actor.world.rot.y) + this->dyna.actor.wallYaw) - 0x8000;
+    if ((self->dyna.actor.speedXZ != 0.0f) && (self->dyna.actor.bgCheckFlags & 0x8)) {
+        self->dyna.actor.world.rot.y =
+            ((self->dyna.actor.wallYaw - self->dyna.actor.world.rot.y) + self->dyna.actor.wallYaw) - 0x8000;
         if (1) {} // Necessary to match
-        this->dyna.actor.bgCheckFlags &= ~0x8;
+        self->dyna.actor.bgCheckFlags &= ~0x8;
     }
 
-    if (this->dyna.actor.bgCheckFlags & 0x2) {
-        if (this->dyna.actor.velocity.y < -8.0f) {
-            this->dyna.actor.velocity.y *= -0.6f;
-            this->dyna.actor.speedXZ *= 0.6f;
-            this->dyna.actor.bgCheckFlags &= ~0x3;
+    if (self->dyna.actor.bgCheckFlags & 0x2) {
+        if (self->dyna.actor.velocity.y < -8.0f) {
+            self->dyna.actor.velocity.y *= -0.6f;
+            self->dyna.actor.speedXZ *= 0.6f;
+            self->dyna.actor.bgCheckFlags &= ~0x3;
         } else {
-            Actor_Kill(&this->dyna.actor);
+            Actor_Kill(&self->dyna.actor);
         }
     }
 }
 
-void func_8001D5C8(EnAObj* this, s16 params) {
-    this->dyna.actor.uncullZoneDownward = 1200.0f;
-    this->dyna.actor.uncullZoneScale = 720.0f;
-    EnAObj_SetupAction(this, func_8001D608);
+void func_8001D5C8(EnAObj* self, s16 params) {
+    self->dyna.actor.uncullZoneDownward = 1200.0f;
+    self->dyna.actor.uncullZoneScale = 720.0f;
+    EnAObj_SetupAction(self, func_8001D608);
 }
 
-void func_8001D608(EnAObj* this, GlobalContext* globalCtx) {
-    this->dyna.actor.speedXZ += this->dyna.unk_150;
-    this->dyna.actor.world.rot.y = this->dyna.unk_158;
-    this->dyna.actor.speedXZ = CLAMP(this->dyna.actor.speedXZ, -2.5f, 2.5f);
+void func_8001D608(EnAObj* self, GlobalContext* globalCtx) {
+    self->dyna.actor.speedXZ += self->dyna.unk_150;
+    self->dyna.actor.world.rot.y = self->dyna.unk_158;
+    self->dyna.actor.speedXZ = CLAMP(self->dyna.actor.speedXZ, -2.5f, 2.5f);
 
-    Math_SmoothStepToF(&this->dyna.actor.speedXZ, 0.0f, 1.0f, 1.0f, 0.0f);
+    Math_SmoothStepToF(&self->dyna.actor.speedXZ, 0.0f, 1.0f, 1.0f, 0.0f);
 
-    if (this->dyna.actor.speedXZ != 0.0f) {
-        Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_ROCK_SLIDE - SFX_FLAG);
+    if (self->dyna.actor.speedXZ != 0.0f) {
+        Audio_PlayActorSound2(&self->dyna.actor, NA_SE_EV_ROCK_SLIDE - SFX_FLAG);
     }
 
-    this->dyna.unk_154 = 0.0f;
-    this->dyna.unk_150 = 0.0f;
+    self->dyna.unk_154 = 0.0f;
+    self->dyna.unk_150 = 0.0f;
 }
 
 void EnAObj_Update(Actor* thisx, GlobalContext* globalCtx) {
-    EnAObj* this = THIS;
+    EnAObj* self = THIS;
 
-    this->actionFunc(this, globalCtx);
-    Actor_MoveForward(&this->dyna.actor);
+    self->actionFunc(self, globalCtx);
+    Actor_MoveForward(&self->dyna.actor);
 
-    if (this->dyna.actor.gravity != 0.0f) {
-        if (this->dyna.actor.params != A_OBJ_KNOB) {
-            Actor_UpdateBgCheckInfo(globalCtx, &this->dyna.actor, 5.0f, 40.0f, 0.0f, 0x1D);
+    if (self->dyna.actor.gravity != 0.0f) {
+        if (self->dyna.actor.params != A_OBJ_KNOB) {
+            Actor_UpdateBgCheckInfo(globalCtx, &self->dyna.actor, 5.0f, 40.0f, 0.0f, 0x1D);
         } else {
-            Actor_UpdateBgCheckInfo(globalCtx, &this->dyna.actor, 5.0f, 20.0f, 0.0f, 0x1D);
+            Actor_UpdateBgCheckInfo(globalCtx, &self->dyna.actor, 5.0f, 20.0f, 0.0f, 0x1D);
         }
     }
 
-    this->dyna.actor.focus.pos = this->dyna.actor.world.pos;
-    this->dyna.actor.focus.pos.y += this->unk_178;
+    self->dyna.actor.focus.pos = self->dyna.actor.world.pos;
+    self->dyna.actor.focus.pos.y += self->unk_178;
 
-    switch (this->dyna.actor.params) {
+    switch (self->dyna.actor.params) {
         case A_OBJ_SIGNPOST_OBLONG:
         case A_OBJ_SIGNPOST_ARROW:
-            Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
-            CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+            Collider_UpdateCylinder(&self->dyna.actor, &self->collider);
+            CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
     }
 }
 

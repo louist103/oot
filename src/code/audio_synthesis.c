@@ -740,7 +740,7 @@ Acmd* AudioSynth_ProcessNote(s32 noteIndex, NoteSubEu* noteSubEu, NoteSynthesisS
     synthState->samplePosFrac = samplesLenFixedPoint & 0xFFFF;
 
     // Partially-optimized out no-op ifs required for matching. SM64 decomp
-    // makes it clear that this is how it should look.
+    // makes it clear that self is how it should look.
     if (synthState->numAdpcmParts == 1 && nParts == 2) {
     } else if (synthState->numAdpcmParts == 2 && nParts == 1) {
     } else {

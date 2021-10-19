@@ -35,20 +35,20 @@ static InitChainEntry sInitChain[] = {
 
 void BgVbSima_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
-    BgVbSima* this = THIS;
+    BgVbSima* self = THIS;
     CollisionHeader* colHeader = NULL;
 
-    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPolyActor_Init(&this->dyna, DPM_PLAYER);
+    Actor_ProcessInitChain(&self->dyna.actor, sInitChain);
+    DynaPolyActor_Init(&self->dyna, DPM_PLAYER);
     CollisionHeader_GetVirtual(&gVolvagiaPlatformCol, &colHeader);
-    this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
+    self->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &self->dyna.actor, colHeader);
 }
 
 void BgVbSima_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
-    BgVbSima* this = THIS;
+    BgVbSima* self = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, self->dyna.bgId);
 }
 
 void BgVbSima_SpawnEmber(BossFdEffect* effect, Vec3f* position, Vec3f* velocity, Vec3f* acceleration, f32 scale) {
@@ -72,23 +72,23 @@ void BgVbSima_Update(Actor* thisx, GlobalContext* globalCtx) {
     static Color_RGBA8 colorYellow = { 255, 255, 0, 255 };
     static Color_RGBA8 colorRed = { 255, 10, 0, 255 };
     s32 pad;
-    BgVbSima* this = THIS;
-    BossFd* bossFd = (BossFd*)this->dyna.actor.parent;
+    BgVbSima* self = THIS;
+    BossFd* bossFd = (BossFd*)self->dyna.actor.parent;
     f32 minus1 = -1.0f;
 
-    this->shakeTimer++;
+    self->shakeTimer++;
     if (!Flags_GetClear(globalCtx, globalCtx->roomCtx.curRoom.num)) {
         s32 signal = bossFd->platformSignal;
 
         if (signal == VBSIMA_COLLAPSE) {
-            Math_SmoothStepToF(&this->dyna.actor.world.pos.y, -1000.0f, 1.0f, 1.5f, 0.0f);
-            this->dyna.actor.world.pos.z += 2.0f * Math_CosS(this->shakeTimer * 0x8000);
-            this->dyna.actor.shape.rot.x = (s16)Math_SinS(this->shakeTimer * 0x7000) * 0x37;
-            this->dyna.actor.shape.rot.z = (s16)Math_SinS(this->shakeTimer * 0x5000) * 0x37;
-            Audio_PlaySoundGeneral(NA_SE_EV_BLOCKSINK - SFX_FLAG, &this->dyna.actor.projectedPos, 4, &D_801333E0,
+            Math_SmoothStepToF(&self->dyna.actor.world.pos.y, -1000.0f, 1.0f, 1.5f, 0.0f);
+            self->dyna.actor.world.pos.z += 2.0f * Math_CosS(self->shakeTimer * 0x8000);
+            self->dyna.actor.shape.rot.x = (s16)Math_SinS(self->shakeTimer * 0x7000) * 0x37;
+            self->dyna.actor.shape.rot.z = (s16)Math_SinS(self->shakeTimer * 0x5000) * 0x37;
+            Audio_PlaySoundGeneral(NA_SE_EV_BLOCKSINK - SFX_FLAG, &self->dyna.actor.projectedPos, 4, &D_801333E0,
                                    &D_801333E0, &D_801333E8);
         } else if (signal == VBSIMA_KILL) {
-            Actor_Kill(&this->dyna.actor);
+            Actor_Kill(&self->dyna.actor);
         }
         if (bossFd->platformSignal != VBSIMA_STAND) {
             s16 i2;
@@ -109,7 +109,7 @@ void BgVbSima_Update(Actor* thisx, GlobalContext* globalCtx) {
                 } else {
                     edgeZ = 80.0f;
                     if (Rand_ZeroOne() < 0.5f) {
-                        // minus1 = -1.0f; // Not a fake match; the game really does this.
+                        // minus1 = -1.0f; // Not a fake match; the game really does self.
                         edgeZ = 80.0f * minus1;
                     }
                     edgeX = Rand_CenteredFloat(160.0f);
@@ -123,9 +123,9 @@ void BgVbSima_Update(Actor* thisx, GlobalContext* globalCtx) {
                 splashAcc.x = splashVel.x;
                 splashAcc.z = splashVel.z;
 
-                splashPos.x = this->dyna.actor.world.pos.x + edgeX;
+                splashPos.x = self->dyna.actor.world.pos.x + edgeX;
                 splashPos.y = -80.0f;
-                splashPos.z = this->dyna.actor.world.pos.z + edgeZ;
+                splashPos.z = self->dyna.actor.world.pos.z + edgeZ;
 
                 func_8002836C(globalCtx, &splashPos, &splashVel, &splashAcc, &colorYellow, &colorRed,
                               (s16)Rand_ZeroFloat(100.0f) + 500, 10, 20);

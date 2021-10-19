@@ -15,27 +15,27 @@ static Gfx sRCPSetupFade[] = {
 #define THIS ((TransitionFade*)thisx)
 
 void TransitionFade_Start(void* thisx) {
-    TransitionFade* this = THIS;
+    TransitionFade* self = THIS;
 
-    switch (this->fadeType) {
+    switch (self->fadeType) {
         case 0:
             break;
         case 1:
-            this->fadeTimer = 0;
-            this->fadeColor.a = this->fadeDirection != 0 ? 0xFF : 0;
+            self->fadeTimer = 0;
+            self->fadeColor.a = self->fadeDirection != 0 ? 0xFF : 0;
             break;
         case 2:
-            this->fadeColor.a = 0;
+            self->fadeColor.a = 0;
             break;
     }
-    this->isDone = 0;
+    self->isDone = 0;
 }
 
 void* TransitionFade_Init(void* thisx) {
-    TransitionFade* this = THIS;
+    TransitionFade* self = THIS;
 
-    bzero(this, sizeof(*this));
-    return this;
+    bzero(self, sizeof(*self));
+    return self;
 }
 
 void TransitionFade_Destroy(void* thisx) {
@@ -44,27 +44,27 @@ void TransitionFade_Destroy(void* thisx) {
 void TransitionFade_Update(void* thisx, s32 updateRate) {
     s32 alpha;
     s16 newAlpha;
-    TransitionFade* this = THIS;
+    TransitionFade* self = THIS;
 
-    switch (this->fadeType) {
+    switch (self->fadeType) {
         case 0:
             break;
         case 1:
-            this->fadeTimer += updateRate;
-            if (this->fadeTimer >= gSaveContext.fadeDuration) {
-                this->fadeTimer = gSaveContext.fadeDuration;
-                this->isDone = 1;
+            self->fadeTimer += updateRate;
+            if (self->fadeTimer >= gSaveContext.fadeDuration) {
+                self->fadeTimer = gSaveContext.fadeDuration;
+                self->isDone = 1;
             }
             if (!gSaveContext.fadeDuration) {
                 // "Divide by 0! Zero is included in ZCommonGet fade_speed"
                 osSyncPrintf(VT_COL(RED, WHITE) "０除算! ZCommonGet fade_speed に０がはいってる" VT_RST);
             }
 
-            alpha = (255.0f * this->fadeTimer) / ((void)0, gSaveContext.fadeDuration);
-            this->fadeColor.a = (this->fadeDirection != 0) ? 255 - alpha : alpha;
+            alpha = (255.0f * self->fadeTimer) / ((void)0, gSaveContext.fadeDuration);
+            self->fadeColor.a = (self->fadeDirection != 0) ? 255 - alpha : alpha;
             break;
         case 2:
-            newAlpha = this->fadeColor.a;
+            newAlpha = self->fadeColor.a;
             if (iREG(50) != 0) {
                 if (iREG(50) < 0) {
                     if (Math_StepToS(&newAlpha, 255, 255)) {
@@ -74,19 +74,19 @@ void TransitionFade_Update(void* thisx, s32 updateRate) {
                     Math_StepToS(&iREG(50), 20, 60);
                     if (Math_StepToS(&newAlpha, 0, iREG(50))) {
                         iREG(50) = 0;
-                        this->isDone = 1;
+                        self->isDone = 1;
                     }
                 }
             }
-            this->fadeColor.a = newAlpha;
+            self->fadeColor.a = newAlpha;
             break;
     }
 }
 
 void TransitionFade_Draw(void* thisx, Gfx** gfxP) {
-    TransitionFade* this = THIS;
+    TransitionFade* self = THIS;
     Gfx* gfx;
-    Color_RGBA8_u32* color = &this->fadeColor;
+    Color_RGBA8_u32* color = &self->fadeColor;
 
     if (color->a > 0) {
         gfx = *gfxP;
@@ -99,29 +99,29 @@ void TransitionFade_Draw(void* thisx, Gfx** gfxP) {
 }
 
 s32 TransitionFade_IsDone(void* thisx) {
-    TransitionFade* this = THIS;
+    TransitionFade* self = THIS;
 
-    return this->isDone;
+    return self->isDone;
 }
 
 void TransitionFade_SetColor(void* thisx, u32 color) {
-    TransitionFade* this = THIS;
+    TransitionFade* self = THIS;
 
-    this->fadeColor.rgba = color;
+    self->fadeColor.rgba = color;
 }
 
 void TransitionFade_SetType(void* thisx, s32 type) {
-    TransitionFade* this = THIS;
+    TransitionFade* self = THIS;
 
     if (type == 1) {
-        this->fadeType = 1;
-        this->fadeDirection = 1;
+        self->fadeType = 1;
+        self->fadeDirection = 1;
     } else if (type == 2) {
-        this->fadeType = 1;
-        this->fadeDirection = 0;
+        self->fadeType = 1;
+        self->fadeDirection = 0;
     } else if (type == 3) {
-        this->fadeType = 2;
+        self->fadeType = 2;
     } else {
-        this->fadeType = 0;
+        self->fadeType = 0;
     }
 }

@@ -19,18 +19,18 @@ void EnReeba_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnReeba_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnReeba_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80AE4F40(EnReeba* this, GlobalContext* globalCtx);
-void func_80AE5054(EnReeba* this, GlobalContext* globalCtx);
-void func_80AE5270(EnReeba* this, GlobalContext* globalCtx);
-void func_80AE5688(EnReeba* this, GlobalContext* globalCtx);
-void func_80AE56E0(EnReeba* this, GlobalContext* globalCtx);
-void func_80AE538C(EnReeba* this, GlobalContext* globalCtx);
-void func_80AE53AC(EnReeba* this, GlobalContext* globalCtx);
-void func_80AE5E48(EnReeba* this, GlobalContext* globalCtx);
-void func_80AE5854(EnReeba* this, GlobalContext* globalCtx);
-void func_80AE5C38(EnReeba* this, GlobalContext* globalCtx);
-void func_80AE5938(EnReeba* this, GlobalContext* globalCtx);
-void func_80AE5A9C(EnReeba* this, GlobalContext* globalCtx);
+void func_80AE4F40(EnReeba* self, GlobalContext* globalCtx);
+void func_80AE5054(EnReeba* self, GlobalContext* globalCtx);
+void func_80AE5270(EnReeba* self, GlobalContext* globalCtx);
+void func_80AE5688(EnReeba* self, GlobalContext* globalCtx);
+void func_80AE56E0(EnReeba* self, GlobalContext* globalCtx);
+void func_80AE538C(EnReeba* self, GlobalContext* globalCtx);
+void func_80AE53AC(EnReeba* self, GlobalContext* globalCtx);
+void func_80AE5E48(EnReeba* self, GlobalContext* globalCtx);
+void func_80AE5854(EnReeba* self, GlobalContext* globalCtx);
+void func_80AE5C38(EnReeba* self, GlobalContext* globalCtx);
+void func_80AE5938(EnReeba* self, GlobalContext* globalCtx);
+void func_80AE5A9C(EnReeba* self, GlobalContext* globalCtx);
 
 static DamageTable sDamageTable = {
     /* Deku nut      */ DMG_ENTRY(0, 0x0),
@@ -101,62 +101,62 @@ static ColliderCylinderInit sCylinderInit = {
 
 void EnReeba_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
-    EnReeba* this = THIS;
+    EnReeba* self = THIS;
     s32 surfaceType;
 
-    this->actor.naviEnemyId = 0x47;
-    this->actor.targetMode = 3;
-    this->actor.gravity = -3.5f;
-    this->actor.focus.pos = this->actor.world.pos;
-    SkelAnime_Init(globalCtx, &this->skelanime, &object_reeba_Skel_001EE8, &object_reeba_Anim_0001E4, this->jointTable,
-                   this->morphTable, 18);
-    this->actor.colChkInfo.mass = MASS_HEAVY;
-    this->actor.colChkInfo.health = 4;
-    Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
-    this->isBig = this->actor.params;
-    this->scale = 0.04f;
+    self->actor.naviEnemyId = 0x47;
+    self->actor.targetMode = 3;
+    self->actor.gravity = -3.5f;
+    self->actor.focus.pos = self->actor.world.pos;
+    SkelAnime_Init(globalCtx, &self->skelanime, &object_reeba_Skel_001EE8, &object_reeba_Anim_0001E4, self->jointTable,
+                   self->morphTable, 18);
+    self->actor.colChkInfo.mass = MASS_HEAVY;
+    self->actor.colChkInfo.health = 4;
+    Collider_InitCylinder(globalCtx, &self->collider);
+    Collider_SetCylinder(globalCtx, &self->collider, &self->actor, &sCylinderInit);
+    self->isBig = self->actor.params;
+    self->scale = 0.04f;
 
-    if (this->isBig) {
-        this->collider.dim.radius = 35;
-        this->collider.dim.height = 45;
-        this->scale *= 1.5f;
-        osSyncPrintf(VT_FGCOL(YELLOW) "☆☆☆☆☆ リーバぼす登場 ☆☆☆☆☆ %f\n" VT_RST, this->scale);
-        this->actor.colChkInfo.health = 20;
-        this->collider.info.toucher.effect = 4;
-        this->collider.info.toucher.damage = 16;
-        Actor_ChangeCategory(globalCtx, &globalCtx->actorCtx, &this->actor, ACTORCAT_ENEMY);
+    if (self->isBig) {
+        self->collider.dim.radius = 35;
+        self->collider.dim.height = 45;
+        self->scale *= 1.5f;
+        osSyncPrintf(VT_FGCOL(YELLOW) "☆☆☆☆☆ リーバぼす登場 ☆☆☆☆☆ %f\n" VT_RST, self->scale);
+        self->actor.colChkInfo.health = 20;
+        self->collider.info.toucher.effect = 4;
+        self->collider.info.toucher.damage = 16;
+        Actor_ChangeCategory(globalCtx, &globalCtx->actorCtx, &self->actor, ACTORCAT_ENEMY);
     }
 
-    this->actor.shape.yOffset = this->unk_284 = this->scale * -27500.0f;
-    ActorShape_Init(&this->actor.shape, this->actor.shape.yOffset, ActorShadow_DrawCircle, 0.0f);
-    this->actor.colChkInfo.damageTable = &sDamageTable;
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 35.0f, 60.0f, 60.0f, 0x1D);
+    self->actor.shape.yOffset = self->unk_284 = self->scale * -27500.0f;
+    ActorShape_Init(&self->actor.shape, self->actor.shape.yOffset, ActorShadow_DrawCircle, 0.0f);
+    self->actor.colChkInfo.damageTable = &sDamageTable;
+    Actor_UpdateBgCheckInfo(globalCtx, &self->actor, 35.0f, 60.0f, 60.0f, 0x1D);
 
-    surfaceType = func_80041D4C(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId);
+    surfaceType = func_80041D4C(&globalCtx->colCtx, self->actor.floorPoly, self->actor.floorBgId);
 
     if ((surfaceType != 4) && (surfaceType != 7)) {
-        Actor_Kill(&this->actor);
+        Actor_Kill(&self->actor);
         return;
     }
 
-    this->actionfunc = func_80AE4F40;
+    self->actionfunc = func_80AE4F40;
 }
 
 void EnReeba_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
-    EnReeba* this = THIS;
+    EnReeba* self = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    Collider_DestroyCylinder(globalCtx, &self->collider);
 
-    if (this->actor.parent != NULL) {
-        EnEncount1* spawner = (EnEncount1*)this->actor.parent;
+    if (self->actor.parent != NULL) {
+        EnEncount1* spawner = (EnEncount1*)self->actor.parent;
 
         if (spawner->actor.update != NULL) {
             if (spawner->curNumSpawn > 0) {
                 spawner->curNumSpawn--;
             }
-            if (this->isBig) {
+            if (self->isBig) {
                 spawner->bigLeever = NULL;
                 spawner->timer = 600;
             }
@@ -164,326 +164,326 @@ void EnReeba_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void func_80AE4F40(EnReeba* this, GlobalContext* globalCtx) {
+void func_80AE4F40(EnReeba* self, GlobalContext* globalCtx) {
     f32 frames = Animation_GetLastFrame(&object_reeba_Anim_0001E4);
     Player* player = GET_PLAYER(globalCtx);
     s16 playerSpeed;
 
-    Animation_Change(&this->skelanime, &object_reeba_Anim_0001E4, 2.0f, 0.0f, frames, ANIMMODE_LOOP, -10.0f);
+    Animation_Change(&self->skelanime, &object_reeba_Anim_0001E4, 2.0f, 0.0f, frames, ANIMMODE_LOOP, -10.0f);
 
     playerSpeed = fabsf(player->linearVelocity);
-    this->unk_278 = 20 - playerSpeed * 2;
-    if (this->unk_278 < 0) {
-        this->unk_278 = 2;
+    self->unk_278 = 20 - playerSpeed * 2;
+    if (self->unk_278 < 0) {
+        self->unk_278 = 2;
     }
-    if (this->unk_278 > 20) {
-        this->unk_278 = 20;
+    if (self->unk_278 > 20) {
+        self->unk_278 = 20;
     }
 
-    this->actor.flags &= ~0x08000000;
-    this->actor.world.pos.y = this->actor.floorHeight;
+    self->actor.flags &= ~0x08000000;
+    self->actor.world.pos.y = self->actor.floorHeight;
 
-    if (this->isBig) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_RIVA_BIG_APPEAR);
+    if (self->isBig) {
+        Audio_PlayActorSound2(&self->actor, NA_SE_EN_RIVA_BIG_APPEAR);
     } else {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_RIVA_APPEAR);
+        Audio_PlayActorSound2(&self->actor, NA_SE_EN_RIVA_APPEAR);
     }
 
-    this->actionfunc = func_80AE5054;
+    self->actionfunc = func_80AE5054;
 }
 
-void func_80AE5054(EnReeba* this, GlobalContext* globalCtx) {
+void func_80AE5054(EnReeba* self, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     f32 playerLinearVel;
 
-    SkelAnime_Update(&this->skelanime);
+    SkelAnime_Update(&self->skelanime);
 
     if ((globalCtx->gameplayFrames % 4) == 0) {
-        Actor_SpawnFloorDustRing(globalCtx, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale, 1,
+        Actor_SpawnFloorDustRing(globalCtx, &self->actor, &self->actor.world.pos, self->actor.shape.shadowScale, 1,
                                  8.0f, 500, 10, 1);
     }
 
-    if (this->unk_278 == 0) {
-        Math_ApproachF(&this->actor.shape.shadowScale, 12.0f, 1.0f, 1.0f);
-        if (this->actor.shape.yOffset < 0.0f) {
-            Math_ApproachZeroF(&this->actor.shape.yOffset, 1.0f, this->unk_288);
-            Math_ApproachF(&this->unk_288, 300.0f, 1.0f, 5.0f);
+    if (self->unk_278 == 0) {
+        Math_ApproachF(&self->actor.shape.shadowScale, 12.0f, 1.0f, 1.0f);
+        if (self->actor.shape.yOffset < 0.0f) {
+            Math_ApproachZeroF(&self->actor.shape.yOffset, 1.0f, self->unk_288);
+            Math_ApproachF(&self->unk_288, 300.0f, 1.0f, 5.0f);
         } else {
-            this->unk_288 = 0.0f;
-            this->actor.shape.yOffset = 0.0f;
+            self->unk_288 = 0.0f;
+            self->actor.shape.yOffset = 0.0f;
             playerLinearVel = player->linearVelocity;
 
-            switch (this->unk_280) {
+            switch (self->unk_280) {
                 case 0:
-                    this->actor.world.rot.y = this->actor.yawTowardsPlayer;
+                    self->actor.world.rot.y = self->actor.yawTowardsPlayer;
                     break;
                 case 1:
-                    this->actor.world.rot.y = this->actor.yawTowardsPlayer + (800.0f * playerLinearVel);
+                    self->actor.world.rot.y = self->actor.yawTowardsPlayer + (800.0f * playerLinearVel);
                     break;
                 case 2:
                 case 3:
-                    this->actor.world.rot.y =
-                        this->actor.yawTowardsPlayer +
-                        (player->actor.shape.rot.y - this->actor.yawTowardsPlayer) * (playerLinearVel * 0.15f);
+                    self->actor.world.rot.y =
+                        self->actor.yawTowardsPlayer +
+                        (player->actor.shape.rot.y - self->actor.yawTowardsPlayer) * (playerLinearVel * 0.15f);
                     break;
                 case 4:
-                    this->actor.world.rot.y = this->actor.yawTowardsPlayer - (800.0f * playerLinearVel);
+                    self->actor.world.rot.y = self->actor.yawTowardsPlayer - (800.0f * playerLinearVel);
                     break;
             }
 
-            if (this->isBig) {
-                this->actionfunc = func_80AE538C;
+            if (self->isBig) {
+                self->actionfunc = func_80AE538C;
             } else {
-                this->unk_272 = 130;
-                this->actor.speedXZ = Rand_ZeroFloat(4.0f) + 6.0f;
-                this->actionfunc = func_80AE5270;
+                self->unk_272 = 130;
+                self->actor.speedXZ = Rand_ZeroFloat(4.0f) + 6.0f;
+                self->actionfunc = func_80AE5270;
             }
         }
     }
 }
 
-void func_80AE5270(EnReeba* this, GlobalContext* globalCtx) {
+void func_80AE5270(EnReeba* self, GlobalContext* globalCtx) {
     s32 surfaceType;
 
-    SkelAnime_Update(&this->skelanime);
+    SkelAnime_Update(&self->skelanime);
 
-    if (this->actor.shape.shadowScale < 12.0f) {
-        Math_ApproachF(&this->actor.shape.shadowScale, 12.0f, 3.0f, 1.0f);
+    if (self->actor.shape.shadowScale < 12.0f) {
+        Math_ApproachF(&self->actor.shape.shadowScale, 12.0f, 3.0f, 1.0f);
     }
 
-    surfaceType = func_80041D4C(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId);
+    surfaceType = func_80041D4C(&globalCtx->colCtx, self->actor.floorPoly, self->actor.floorBgId);
 
     if ((surfaceType != 4) && (surfaceType != 7)) {
-        this->actor.speedXZ = 0.0f;
-        this->actionfunc = func_80AE5688;
-    } else if ((this->unk_272 == 0) || (this->actor.xzDistToPlayer < 30.0f) || (this->actor.xzDistToPlayer > 400.0f) ||
-               (this->actor.bgCheckFlags & 8)) {
-        this->actionfunc = func_80AE5688;
-    } else if (this->unk_274 == 0) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_RIVA_MOVE);
-        this->unk_274 = 10;
+        self->actor.speedXZ = 0.0f;
+        self->actionfunc = func_80AE5688;
+    } else if ((self->unk_272 == 0) || (self->actor.xzDistToPlayer < 30.0f) || (self->actor.xzDistToPlayer > 400.0f) ||
+               (self->actor.bgCheckFlags & 8)) {
+        self->actionfunc = func_80AE5688;
+    } else if (self->unk_274 == 0) {
+        Audio_PlayActorSound2(&self->actor, NA_SE_EN_RIVA_MOVE);
+        self->unk_274 = 10;
     }
 }
 
-void func_80AE538C(EnReeba* this, GlobalContext* globalCtx) {
-    this->actor.flags |= 5;
-    this->actionfunc = func_80AE53AC;
+void func_80AE538C(EnReeba* self, GlobalContext* globalCtx) {
+    self->actor.flags |= 5;
+    self->actionfunc = func_80AE53AC;
 }
 
-void func_80AE53AC(EnReeba* this, GlobalContext* globalCtx) {
+void func_80AE53AC(EnReeba* self, GlobalContext* globalCtx) {
     f32 speed;
     s16 yawDiff;
     s16 yaw;
     s32 surfaceType;
 
-    SkelAnime_Update(&this->skelanime);
+    SkelAnime_Update(&self->skelanime);
 
-    if (this->actor.shape.shadowScale < 12.0f) {
-        Math_ApproachF(&this->actor.shape.shadowScale, 12.0f, 3.0f, 1.0f);
+    if (self->actor.shape.shadowScale < 12.0f) {
+        Math_ApproachF(&self->actor.shape.shadowScale, 12.0f, 3.0f, 1.0f);
     }
 
-    surfaceType = func_80041D4C(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId);
+    surfaceType = func_80041D4C(&globalCtx->colCtx, self->actor.floorPoly, self->actor.floorBgId);
 
-    if (((surfaceType != 4) && (surfaceType != 7)) || (this->actor.xzDistToPlayer > 400.0f) ||
-        (this->actor.bgCheckFlags & 8)) {
-        this->actionfunc = func_80AE5688;
+    if (((surfaceType != 4) && (surfaceType != 7)) || (self->actor.xzDistToPlayer > 400.0f) ||
+        (self->actor.bgCheckFlags & 8)) {
+        self->actionfunc = func_80AE5688;
     } else {
-        if ((this->actor.xzDistToPlayer < 70.0f) && (this->unk_270 == 0)) {
-            this->unk_270 = 30;
+        if ((self->actor.xzDistToPlayer < 70.0f) && (self->unk_270 == 0)) {
+            self->unk_270 = 30;
         }
 
-        speed = (this->actor.xzDistToPlayer - 20.0f) / ((Rand_ZeroOne() * 50.0f) + 150.0f);
-        this->actor.speedXZ += speed * 1.8f;
-        if (this->actor.speedXZ >= 3.0f) {
-            this->actor.speedXZ = 3.0f;
+        speed = (self->actor.xzDistToPlayer - 20.0f) / ((Rand_ZeroOne() * 50.0f) + 150.0f);
+        self->actor.speedXZ += speed * 1.8f;
+        if (self->actor.speedXZ >= 3.0f) {
+            self->actor.speedXZ = 3.0f;
         }
-        if (this->actor.speedXZ < -3.0f) {
-            this->actor.speedXZ = -3.0f;
+        if (self->actor.speedXZ < -3.0f) {
+            self->actor.speedXZ = -3.0f;
         }
 
-        yawDiff = (this->unk_270 == 0) ? this->actor.yawTowardsPlayer : -this->actor.yawTowardsPlayer;
-        yawDiff -= this->actor.world.rot.y;
+        yawDiff = (self->unk_270 == 0) ? self->actor.yawTowardsPlayer : -self->actor.yawTowardsPlayer;
+        yawDiff -= self->actor.world.rot.y;
         yaw = (yawDiff > 0) ? ((yawDiff / 31.0f) + 10.0f) : ((yawDiff / 31.0f) - 10.0f);
-        this->actor.world.rot.y += yaw * 2.0f;
+        self->actor.world.rot.y += yaw * 2.0f;
 
-        if (this->unk_274 == 0) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_RIVA_MOVE);
-            this->unk_274 = 20;
+        if (self->unk_274 == 0) {
+            Audio_PlayActorSound2(&self->actor, NA_SE_EN_RIVA_MOVE);
+            self->unk_274 = 20;
         }
     }
 }
 
-void func_80AE561C(EnReeba* this, GlobalContext* globalCtx) {
-    Math_ApproachZeroF(&this->actor.speedXZ, 1.0f, 0.3f);
+void func_80AE561C(EnReeba* self, GlobalContext* globalCtx) {
+    Math_ApproachZeroF(&self->actor.speedXZ, 1.0f, 0.3f);
 
-    if (this->unk_272 == 0) {
-        if (this->isBig) {
-            this->actionfunc = func_80AE538C;
+    if (self->unk_272 == 0) {
+        if (self->isBig) {
+            self->actionfunc = func_80AE538C;
         } else {
-            this->actionfunc = func_80AE5688;
+            self->actionfunc = func_80AE5688;
         }
     }
 }
 
-void func_80AE5688(EnReeba* this, GlobalContext* globalCtx) {
-    this->unk_27E = 0;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
-    this->actor.flags |= 0x8000000;
-    this->actor.flags &= ~5;
-    this->actionfunc = func_80AE56E0;
+void func_80AE5688(EnReeba* self, GlobalContext* globalCtx) {
+    self->unk_27E = 0;
+    Audio_PlayActorSound2(&self->actor, NA_SE_EN_AKINDONUTS_HIDE);
+    self->actor.flags |= 0x8000000;
+    self->actor.flags &= ~5;
+    self->actionfunc = func_80AE56E0;
 }
 
-void func_80AE56E0(EnReeba* this, GlobalContext* globalCtx) {
-    Math_ApproachZeroF(&this->actor.shape.shadowScale, 1.0f, 0.3f);
-    Math_ApproachZeroF(&this->actor.speedXZ, 0.1f, 0.3f);
-    SkelAnime_Update(&this->skelanime);
+void func_80AE56E0(EnReeba* self, GlobalContext* globalCtx) {
+    Math_ApproachZeroF(&self->actor.shape.shadowScale, 1.0f, 0.3f);
+    Math_ApproachZeroF(&self->actor.speedXZ, 0.1f, 0.3f);
+    SkelAnime_Update(&self->skelanime);
 
-    if ((this->unk_284 + 10.0f) <= this->actor.shape.yOffset) {
+    if ((self->unk_284 + 10.0f) <= self->actor.shape.yOffset) {
         if ((globalCtx->gameplayFrames % 4) == 0) {
-            Actor_SpawnFloorDustRing(globalCtx, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale, 1,
+            Actor_SpawnFloorDustRing(globalCtx, &self->actor, &self->actor.world.pos, self->actor.shape.shadowScale, 1,
                                      8.0f, 500, 10, 1);
         }
 
-        Math_ApproachF(&this->actor.shape.yOffset, this->unk_284, 1.0f, this->unk_288);
-        Math_ApproachF(&this->unk_288, 300.0f, 1.0f, 5.0f);
+        Math_ApproachF(&self->actor.shape.yOffset, self->unk_284, 1.0f, self->unk_288);
+        Math_ApproachF(&self->unk_288, 300.0f, 1.0f, 5.0f);
     } else {
-        Actor_Kill(&this->actor);
+        Actor_Kill(&self->actor);
     }
 }
 
-void func_80AE57F0(EnReeba* this, GlobalContext* globalCtx) {
-    this->unk_276 = 14;
-    this->actor.speedXZ = -8.0f;
-    this->actor.world.rot.y = this->actor.yawTowardsPlayer;
-    Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 8);
-    this->actionfunc = func_80AE5854;
+void func_80AE57F0(EnReeba* self, GlobalContext* globalCtx) {
+    self->unk_276 = 14;
+    self->actor.speedXZ = -8.0f;
+    self->actor.world.rot.y = self->actor.yawTowardsPlayer;
+    Actor_SetColorFilter(&self->actor, 0x4000, 0xFF, 0, 8);
+    self->actionfunc = func_80AE5854;
 }
 
-void func_80AE5854(EnReeba* this, GlobalContext* globalCtx) {
-    SkelAnime_Update(&this->skelanime);
+void func_80AE5854(EnReeba* self, GlobalContext* globalCtx) {
+    SkelAnime_Update(&self->skelanime);
 
-    if (this->actor.speedXZ < 0.0f) {
-        this->actor.speedXZ += 1.0f;
+    if (self->actor.speedXZ < 0.0f) {
+        self->actor.speedXZ += 1.0f;
     }
 
-    if (this->unk_276 == 0) {
-        if (this->isBig) {
-            this->unk_270 = 30;
-            this->actionfunc = func_80AE538C;
+    if (self->unk_276 == 0) {
+        if (self->isBig) {
+            self->unk_270 = 30;
+            self->actionfunc = func_80AE538C;
         } else {
-            this->actionfunc = func_80AE5688;
+            self->actionfunc = func_80AE5688;
         }
     }
 }
 
-void func_80AE58EC(EnReeba* this, GlobalContext* globalCtx) {
-    this->unk_278 = 14;
-    this->actor.world.rot.y = this->actor.yawTowardsPlayer;
-    this->actor.speedXZ = -8.0f;
-    this->actor.flags |= 0x8000000;
-    this->actor.flags &= ~5;
-    this->actionfunc = func_80AE5938;
+void func_80AE58EC(EnReeba* self, GlobalContext* globalCtx) {
+    self->unk_278 = 14;
+    self->actor.world.rot.y = self->actor.yawTowardsPlayer;
+    self->actor.speedXZ = -8.0f;
+    self->actor.flags |= 0x8000000;
+    self->actor.flags &= ~5;
+    self->actionfunc = func_80AE5938;
 }
 
-void func_80AE5938(EnReeba* this, GlobalContext* globalCtx) {
+void func_80AE5938(EnReeba* self, GlobalContext* globalCtx) {
     Vec3f pos;
     f32 scale;
 
-    if (this->unk_278 != 0) {
-        if (this->actor.speedXZ < 0.0f) {
-            this->actor.speedXZ += 1.0f;
+    if (self->unk_278 != 0) {
+        if (self->actor.speedXZ < 0.0f) {
+            self->actor.speedXZ += 1.0f;
         }
     } else {
-        this->actor.speedXZ = 0.0f;
+        self->actor.speedXZ = 0.0f;
 
-        if ((this->unk_27E == 4) || (this->actor.colChkInfo.health != 0)) {
-            if (this->unk_27E == 2) {
-                pos.x = this->actor.world.pos.x + Rand_CenteredFloat(20.0f);
-                pos.y = this->actor.world.pos.y + Rand_CenteredFloat(20.0f);
-                pos.z = this->actor.world.pos.z + Rand_CenteredFloat(20.0f);
+        if ((self->unk_27E == 4) || (self->actor.colChkInfo.health != 0)) {
+            if (self->unk_27E == 2) {
+                pos.x = self->actor.world.pos.x + Rand_CenteredFloat(20.0f);
+                pos.y = self->actor.world.pos.y + Rand_CenteredFloat(20.0f);
+                pos.z = self->actor.world.pos.z + Rand_CenteredFloat(20.0f);
                 scale = 3.0f;
 
-                if (this->isBig) {
+                if (self->isBig) {
                     scale = 6.0f;
                 }
 
-                EffectSsEnIce_SpawnFlyingVec3f(globalCtx, &this->actor, &pos, 150, 150, 150, 250, 235, 245, 255, scale);
+                EffectSsEnIce_SpawnFlyingVec3f(globalCtx, &self->actor, &pos, 150, 150, 150, 250, 235, 245, 255, scale);
             }
 
-            this->unk_278 = 66;
-            this->actionfunc = func_80AE5E48;
+            self->unk_278 = 66;
+            self->actionfunc = func_80AE5E48;
         } else {
-            this->unk_278 = 30;
-            this->actionfunc = func_80AE5A9C;
+            self->unk_278 = 30;
+            self->actionfunc = func_80AE5A9C;
         }
     }
 }
 
-void func_80AE5A9C(EnReeba* this, GlobalContext* globalCtx) {
+void func_80AE5A9C(EnReeba* self, GlobalContext* globalCtx) {
     Vec3f pos;
     f32 scale;
 
-    if (this->unk_278 != 0) {
-        if ((this->unk_27E == 2) && ((this->unk_278 & 0xF) == 0)) {
-            pos.x = this->actor.world.pos.x + Rand_CenteredFloat(20.0f);
-            pos.y = this->actor.world.pos.y + Rand_CenteredFloat(20.0f);
-            pos.z = this->actor.world.pos.z + Rand_CenteredFloat(20.0f);
+    if (self->unk_278 != 0) {
+        if ((self->unk_27E == 2) && ((self->unk_278 & 0xF) == 0)) {
+            pos.x = self->actor.world.pos.x + Rand_CenteredFloat(20.0f);
+            pos.y = self->actor.world.pos.y + Rand_CenteredFloat(20.0f);
+            pos.z = self->actor.world.pos.z + Rand_CenteredFloat(20.0f);
 
             scale = 3.0f;
-            if (this->isBig) {
+            if (self->isBig) {
                 scale = 6.0f;
             }
 
-            EffectSsEnIce_SpawnFlyingVec3f(globalCtx, &this->actor, &pos, 150, 150, 150, 250, 235, 245, 255, scale);
+            EffectSsEnIce_SpawnFlyingVec3f(globalCtx, &self->actor, &pos, 150, 150, 150, 250, 235, 245, 255, scale);
         }
     } else {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_RIVA_DEAD);
-        Enemy_StartFinishingBlow(globalCtx, &this->actor);
-        this->actionfunc = func_80AE5C38;
+        Audio_PlayActorSound2(&self->actor, NA_SE_EN_RIVA_DEAD);
+        Enemy_StartFinishingBlow(globalCtx, &self->actor);
+        self->actionfunc = func_80AE5C38;
     }
 }
 
-void func_80AE5BC4(EnReeba* this, GlobalContext* globalCtx) {
-    this->actor.speedXZ = -8.0f;
-    this->actor.world.rot.y = this->actor.yawTowardsPlayer;
-    Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 8);
-    this->unk_278 = 14;
-    this->actor.flags &= ~1;
-    this->actionfunc = func_80AE5C38;
+void func_80AE5BC4(EnReeba* self, GlobalContext* globalCtx) {
+    self->actor.speedXZ = -8.0f;
+    self->actor.world.rot.y = self->actor.yawTowardsPlayer;
+    Actor_SetColorFilter(&self->actor, 0x4000, 0xFF, 0, 8);
+    self->unk_278 = 14;
+    self->actor.flags &= ~1;
+    self->actionfunc = func_80AE5C38;
 }
 
-void func_80AE5C38(EnReeba* this, GlobalContext* globalCtx) {
+void func_80AE5C38(EnReeba* self, GlobalContext* globalCtx) {
     Vec3f pos;
     Vec3f accel = { 0.0f, 0.0f, 0.0f };
     Vec3f velocity = { 0.0f, 0.0f, 0.0f };
 
-    if (this->unk_278 != 0) {
-        if (this->actor.speedXZ < 0.0f) {
-            this->actor.speedXZ += 1.0f;
+    if (self->unk_278 != 0) {
+        if (self->actor.speedXZ < 0.0f) {
+            self->actor.speedXZ += 1.0f;
         }
     } else {
-        this->actor.speedXZ = 0.0f;
-        Math_ApproachZeroF(&this->scale, 0.1f, 0.01f);
+        self->actor.speedXZ = 0.0f;
+        Math_ApproachZeroF(&self->scale, 0.1f, 0.01f);
 
-        if (this->scale < 0.01f) {
-            pos.x = this->actor.world.pos.x;
-            pos.y = this->actor.world.pos.y;
-            pos.z = this->actor.world.pos.z;
+        if (self->scale < 0.01f) {
+            pos.x = self->actor.world.pos.x;
+            pos.y = self->actor.world.pos.y;
+            pos.z = self->actor.world.pos.z;
 
             velocity.y = 4.0f;
 
             EffectSsDeadDb_Spawn(globalCtx, &pos, &velocity, &accel, 120, 0, 255, 255, 255, 255, 255, 0, 0, 1, 9, true);
 
-            if (!this->isBig) {
-                Item_DropCollectibleRandom(globalCtx, &this->actor, &pos, 0xE0);
+            if (!self->isBig) {
+                Item_DropCollectibleRandom(globalCtx, &self->actor, &pos, 0xE0);
             } else {
-                Item_DropCollectibleRandom(globalCtx, &this->actor, &pos, 0xC0);
+                Item_DropCollectibleRandom(globalCtx, &self->actor, &pos, 0xC0);
             }
 
-            if (this->actor.parent != NULL) {
-                EnEncount1* spawner = (EnEncount1*)this->actor.parent;
+            if (self->actor.parent != NULL) {
+                EnEncount1* spawner = (EnEncount1*)self->actor.parent;
 
-                if ((spawner->actor.update != NULL) && !this->isBig) {
+                if ((spawner->actor.update != NULL) && !self->isBig) {
                     if (spawner->killCount < 10) {
                         spawner->killCount++;
                     }
@@ -493,80 +493,80 @@ void func_80AE5C38(EnReeba* this, GlobalContext* globalCtx) {
                     osSyncPrintf("\n\n");
                 }
 
-                Actor_Kill(&this->actor);
+                Actor_Kill(&self->actor);
             }
         }
     }
 }
 
-void func_80AE5E48(EnReeba* this, GlobalContext* globalCtx) {
-    if (this->unk_278 < 37) {
-        this->actor.shape.rot.x = Rand_CenteredFloat(3000.0f);
-        this->actor.shape.rot.z = Rand_CenteredFloat(3000.0f);
+void func_80AE5E48(EnReeba* self, GlobalContext* globalCtx) {
+    if (self->unk_278 < 37) {
+        self->actor.shape.rot.x = Rand_CenteredFloat(3000.0f);
+        self->actor.shape.rot.z = Rand_CenteredFloat(3000.0f);
 
-        if (this->unk_278 == 0) {
-            if (this->isBig) {
-                this->actionfunc = func_80AE538C;
+        if (self->unk_278 == 0) {
+            if (self->isBig) {
+                self->actionfunc = func_80AE538C;
             } else {
-                this->actionfunc = func_80AE5688;
+                self->actionfunc = func_80AE5688;
             }
         }
     }
 }
 
-void func_80AE5EDC(EnReeba* this, GlobalContext* globalCtx) {
-    if (this->collider.base.acFlags & AC_HIT) {
-        this->collider.base.acFlags &= ~AC_HIT;
+void func_80AE5EDC(EnReeba* self, GlobalContext* globalCtx) {
+    if (self->collider.base.acFlags & AC_HIT) {
+        self->collider.base.acFlags &= ~AC_HIT;
 
-        if ((this->actionfunc != func_80AE5C38) && (this->actionfunc != func_80AE5854)) {
-            this->actor.shape.rot.x = this->actor.shape.rot.z = 0;
-            this->unk_27E = 0;
+        if ((self->actionfunc != func_80AE5C38) && (self->actionfunc != func_80AE5854)) {
+            self->actor.shape.rot.x = self->actor.shape.rot.z = 0;
+            self->unk_27E = 0;
 
-            switch (this->actor.colChkInfo.damageEffect) {
+            switch (self->actor.colChkInfo.damageEffect) {
                 case 11: // none
                 case 12: // boomerang
-                    if ((this->actor.colChkInfo.health > 1) && (this->unk_27E != 4)) {
-                        this->unk_27E = 4;
-                        Audio_PlayActorSound2(&this->actor, NA_SE_EN_GOMA_JR_FREEZE);
-                        Actor_SetColorFilter(&this->actor, 0, 0xFF, 0, 0x50);
-                        this->actionfunc = func_80AE58EC;
+                    if ((self->actor.colChkInfo.health > 1) && (self->unk_27E != 4)) {
+                        self->unk_27E = 4;
+                        Audio_PlayActorSound2(&self->actor, NA_SE_EN_GOMA_JR_FREEZE);
+                        Actor_SetColorFilter(&self->actor, 0, 0xFF, 0, 0x50);
+                        self->actionfunc = func_80AE58EC;
                         break;
                     }
                 case 13: // hookshot/longshot
-                    if ((this->actor.colChkInfo.health > 2) && (this->unk_27E != 4)) {
-                        this->unk_27E = 4;
-                        Actor_SetColorFilter(&this->actor, 0, 0xFF, 0, 0x50);
-                        Audio_PlayActorSound2(&this->actor, NA_SE_EN_GOMA_JR_FREEZE);
-                        this->actionfunc = func_80AE58EC;
+                    if ((self->actor.colChkInfo.health > 2) && (self->unk_27E != 4)) {
+                        self->unk_27E = 4;
+                        Actor_SetColorFilter(&self->actor, 0, 0xFF, 0, 0x50);
+                        Audio_PlayActorSound2(&self->actor, NA_SE_EN_GOMA_JR_FREEZE);
+                        self->actionfunc = func_80AE58EC;
                         break;
                     }
                 case 14:
-                    this->unk_27C = 6;
-                    Actor_ApplyDamage(&this->actor);
-                    if (this->actor.colChkInfo.health == 0) {
-                        Audio_PlayActorSound2(&this->actor, NA_SE_EN_RIVA_DEAD);
-                        Enemy_StartFinishingBlow(globalCtx, &this->actor);
-                        this->actionfunc = func_80AE5BC4;
+                    self->unk_27C = 6;
+                    Actor_ApplyDamage(&self->actor);
+                    if (self->actor.colChkInfo.health == 0) {
+                        Audio_PlayActorSound2(&self->actor, NA_SE_EN_RIVA_DEAD);
+                        Enemy_StartFinishingBlow(globalCtx, &self->actor);
+                        self->actionfunc = func_80AE5BC4;
                     } else {
-                        if (this->actionfunc == func_80AE5E48) {
-                            this->actor.shape.rot.x = this->actor.shape.rot.z = 0;
+                        if (self->actionfunc == func_80AE5E48) {
+                            self->actor.shape.rot.x = self->actor.shape.rot.z = 0;
                         }
-                        Audio_PlayActorSound2(&this->actor, NA_SE_EN_RIVA_DAMAGE);
-                        this->actionfunc = func_80AE57F0;
+                        Audio_PlayActorSound2(&self->actor, NA_SE_EN_RIVA_DAMAGE);
+                        self->actionfunc = func_80AE57F0;
                     }
                     break;
                 case 3: // ice arrows/ice magic
-                    Actor_ApplyDamage(&this->actor);
-                    this->unk_27C = 2;
-                    this->unk_27E = 2;
-                    Actor_SetColorFilter(&this->actor, 0, 0xFF, 0, 80);
-                    this->actionfunc = func_80AE58EC;
+                    Actor_ApplyDamage(&self->actor);
+                    self->unk_27C = 2;
+                    self->unk_27E = 2;
+                    Actor_SetColorFilter(&self->actor, 0, 0xFF, 0, 80);
+                    self->actionfunc = func_80AE58EC;
                     break;
                 case 1: // unknown
-                    if (this->unk_27E != 4) {
-                        this->unk_27E = 4;
-                        Actor_SetColorFilter(&this->actor, 0, 0xFF, 0, 80);
-                        this->actionfunc = func_80AE58EC;
+                    if (self->unk_27E != 4) {
+                        self->unk_27E = 4;
+                        Actor_SetColorFilter(&self->actor, 0, 0xFF, 0, 80);
+                        self->actionfunc = func_80AE58EC;
                     }
                     break;
             }
@@ -576,74 +576,74 @@ void func_80AE5EDC(EnReeba* this, GlobalContext* globalCtx) {
 
 void EnReeba_Update(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
-    EnReeba* this = THIS;
+    EnReeba* self = THIS;
     Player* player = GET_PLAYER(globalCtx);
 
-    func_80AE5EDC(this, globalCtx);
-    this->actionfunc(this, globalCtx);
-    Actor_SetScale(&this->actor, this->scale);
+    func_80AE5EDC(self, globalCtx);
+    self->actionfunc(self, globalCtx);
+    Actor_SetScale(&self->actor, self->scale);
 
-    if (this->unk_270 != 0) {
-        this->unk_270--;
+    if (self->unk_270 != 0) {
+        self->unk_270--;
     }
 
-    if (this->unk_272 != 0) {
-        this->unk_272--;
+    if (self->unk_272 != 0) {
+        self->unk_272--;
     }
 
-    if (this->unk_278 != 0) {
-        this->unk_278--;
+    if (self->unk_278 != 0) {
+        self->unk_278--;
     }
 
-    if (this->unk_274 != 0) {
-        this->unk_274--;
+    if (self->unk_274 != 0) {
+        self->unk_274--;
     }
 
-    if (this->unk_276 != 0) {
-        this->unk_276--;
+    if (self->unk_276 != 0) {
+        self->unk_276--;
     }
 
-    Actor_MoveForward(&this->actor);
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 35.0f, 60.0f, 60.0f, 0x1D);
+    Actor_MoveForward(&self->actor);
+    Actor_UpdateBgCheckInfo(globalCtx, &self->actor, 35.0f, 60.0f, 60.0f, 0x1D);
 
-    if (this->collider.base.atFlags & AT_BOUNCED) {
-        this->collider.base.atFlags &= ~AT_BOUNCED;
+    if (self->collider.base.atFlags & AT_BOUNCED) {
+        self->collider.base.atFlags &= ~AT_BOUNCED;
 
-        if ((this->actionfunc == func_80AE5270) || (this->actionfunc == func_80AE53AC)) {
-            this->actor.speedXZ = 8.0f;
-            this->actor.world.rot.y *= -1.0f;
-            this->unk_272 = 14;
-            this->actionfunc = func_80AE561C;
+        if ((self->actionfunc == func_80AE5270) || (self->actionfunc == func_80AE53AC)) {
+            self->actor.speedXZ = 8.0f;
+            self->actor.world.rot.y *= -1.0f;
+            self->unk_272 = 14;
+            self->actionfunc = func_80AE561C;
             return;
         }
     }
 
-    if (this->collider.base.atFlags & AT_HIT) {
-        this->collider.base.atFlags &= ~AT_HIT;
-        if ((this->collider.base.at == &player->actor) && !this->isBig && (this->actionfunc != func_80AE56E0)) {
-            this->actionfunc = func_80AE5688;
+    if (self->collider.base.atFlags & AT_HIT) {
+        self->collider.base.atFlags &= ~AT_HIT;
+        if ((self->collider.base.at == &player->actor) && !self->isBig && (self->actionfunc != func_80AE56E0)) {
+            self->actionfunc = func_80AE5688;
         }
     }
 
-    this->actor.focus.pos = this->actor.world.pos;
+    self->actor.focus.pos = self->actor.world.pos;
 
-    if (!this->isBig) {
-        this->actor.focus.pos.y += 15.0f;
+    if (!self->isBig) {
+        self->actor.focus.pos.y += 15.0f;
     } else {
-        this->actor.focus.pos.y += 30.0f;
+        self->actor.focus.pos.y += 30.0f;
     }
 
-    Collider_UpdateCylinder(&this->actor, &this->collider);
+    Collider_UpdateCylinder(&self->actor, &self->collider);
 
-    if ((this->actor.shape.yOffset >= -700.0f) && (this->actor.colChkInfo.health > 0) &&
-        (this->actionfunc != func_80AE56E0)) {
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    if ((self->actor.shape.yOffset >= -700.0f) && (self->actor.colChkInfo.health > 0) &&
+        (self->actionfunc != func_80AE56E0)) {
+        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
 
-        if (!(this->actor.shape.yOffset < 0.0f)) {
-            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        if (!(self->actor.shape.yOffset < 0.0f)) {
+            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
 
-            if ((this->actionfunc == func_80AE5270) || (this->actionfunc == func_80AE53AC)) {
-                CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+            if ((self->actionfunc == func_80AE5270) || (self->actionfunc == func_80AE53AC)) {
+                CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
             }
         }
     }
@@ -651,29 +651,29 @@ void EnReeba_Update(Actor* thisx, GlobalContext* globalCtx2) {
 
 void EnReeba_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
-    EnReeba* this = THIS;
+    EnReeba* self = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx, "../z_en_reeba.c", 1062);
 
     func_80093D18(globalCtx->state.gfxCtx);
 
-    if (this->isBig) {
+    if (self->isBig) {
         gDPSetPrimColor(POLY_OPA_DISP++, 0x0, 0x01, 155, 55, 255, 255);
     } else {
         gDPSetPrimColor(POLY_OPA_DISP++, 0x0, 0x01, 255, 255, 255, 255);
     }
 
-    SkelAnime_DrawOpa(globalCtx, this->skelanime.skeleton, this->skelanime.jointTable, NULL, NULL, this);
+    SkelAnime_DrawOpa(globalCtx, self->skelanime.skeleton, self->skelanime.jointTable, NULL, NULL, self);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx, "../z_en_reeba.c", 1088);
 
     if (BREG(0)) {
         Vec3f debugPos;
 
-        debugPos.x = (Math_SinS(this->actor.world.rot.y) * 30.0f) + this->actor.world.pos.x;
-        debugPos.y = this->actor.world.pos.y + 20.0f;
-        debugPos.z = (Math_CosS(this->actor.world.rot.y) * 30.0f) + this->actor.world.pos.z;
-        DebugDisplay_AddObject(debugPos.x, debugPos.y, debugPos.z, this->actor.world.rot.x, this->actor.world.rot.y,
-                               this->actor.world.rot.z, 1.0f, 1.0f, 1.0f, 255, 0, 0, 255, 4, globalCtx->state.gfxCtx);
+        debugPos.x = (Math_SinS(self->actor.world.rot.y) * 30.0f) + self->actor.world.pos.x;
+        debugPos.y = self->actor.world.pos.y + 20.0f;
+        debugPos.z = (Math_CosS(self->actor.world.rot.y) * 30.0f) + self->actor.world.pos.z;
+        DebugDisplay_AddObject(debugPos.x, debugPos.y, debugPos.z, self->actor.world.rot.x, self->actor.world.rot.y,
+                               self->actor.world.rot.z, 1.0f, 1.0f, 1.0f, 255, 0, 0, 255, 4, globalCtx->state.gfxCtx);
     }
 }

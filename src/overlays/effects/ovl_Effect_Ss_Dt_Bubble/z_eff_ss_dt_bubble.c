@@ -19,9 +19,9 @@
 #define rScale regs[9]
 #define rLifespan regs[10]
 
-u32 EffectSsDtBubble_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx);
-void EffectSsDtBubble_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this);
-void EffectSsDtBubble_Update(GlobalContext* globalCtx, u32 index, EffectSs* this);
+u32 EffectSsDtBubble_Init(GlobalContext* globalCtx, u32 index, EffectSs* self, void* initParamsx);
+void EffectSsDtBubble_Draw(GlobalContext* globalCtx, u32 index, EffectSs* self);
+void EffectSsDtBubble_Update(GlobalContext* globalCtx, u32 index, EffectSs* self);
 
 static Color_RGBA8 sPrimColors[] = { { 255, 255, 100, 255 }, { 150, 255, 255, 255 }, { 100, 255, 255, 255 } };
 static Color_RGBA8 sEnvColors[] = { { 170, 0, 0, 255 }, { 0, 100, 0, 255 }, { 0, 0, 255, 255 } };
@@ -31,77 +31,77 @@ EffectSsInit Effect_Ss_Dt_Bubble_InitVars = {
     EffectSsDtBubble_Init,
 };
 
-u32 EffectSsDtBubble_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx) {
+u32 EffectSsDtBubble_Init(GlobalContext* globalCtx, u32 index, EffectSs* self, void* initParamsx) {
     EffectSsDtBubbleInitParams* initParams = (EffectSsDtBubbleInitParams*)initParamsx;
 
     //! @bug Rand_ZeroOne in the macro means a random number is generated for both parts of the macro.
-    // In the base game this works out because both addresses are segment 4, but it may break if
+    // In the base game self works out because both addresses are segment 4, but it may break if
     // the addresses were changed to refer to different segments
-    this->gfx = SEGMENTED_TO_VIRTUAL(Rand_ZeroOne() < 0.5f ? &gEffBubble1Tex : &gEffBubble2Tex);
-    this->pos = initParams->pos;
-    this->velocity = initParams->velocity;
-    this->accel = initParams->accel;
-    this->life = initParams->life;
+    self->gfx = SEGMENTED_TO_VIRTUAL(Rand_ZeroOne() < 0.5f ? &gEffBubble1Tex : &gEffBubble2Tex);
+    self->pos = initParams->pos;
+    self->velocity = initParams->velocity;
+    self->accel = initParams->accel;
+    self->life = initParams->life;
 
     if (!initParams->customColor) {
-        this->rPrimColorR = sPrimColors[initParams->colorProfile].r;
-        this->rPrimColorG = sPrimColors[initParams->colorProfile].g;
-        this->rPrimColorB = sPrimColors[initParams->colorProfile].b;
-        this->rPrimColorA = sPrimColors[initParams->colorProfile].a;
-        this->rEnvColorR = sEnvColors[initParams->colorProfile].r;
-        this->rEnvColorG = sEnvColors[initParams->colorProfile].g;
-        this->rEnvColorB = sEnvColors[initParams->colorProfile].b;
-        this->rEnvColorA = sEnvColors[initParams->colorProfile].a;
+        self->rPrimColorR = sPrimColors[initParams->colorProfile].r;
+        self->rPrimColorG = sPrimColors[initParams->colorProfile].g;
+        self->rPrimColorB = sPrimColors[initParams->colorProfile].b;
+        self->rPrimColorA = sPrimColors[initParams->colorProfile].a;
+        self->rEnvColorR = sEnvColors[initParams->colorProfile].r;
+        self->rEnvColorG = sEnvColors[initParams->colorProfile].g;
+        self->rEnvColorB = sEnvColors[initParams->colorProfile].b;
+        self->rEnvColorA = sEnvColors[initParams->colorProfile].a;
     } else {
-        this->rPrimColorR = initParams->primColor.r;
-        this->rPrimColorG = initParams->primColor.g;
-        this->rPrimColorB = initParams->primColor.b;
-        this->rPrimColorA = initParams->primColor.a;
-        this->rEnvColorR = initParams->envColor.r;
-        this->rEnvColorG = initParams->envColor.g;
-        this->rEnvColorB = initParams->envColor.b;
-        this->rEnvColorA = initParams->envColor.a;
+        self->rPrimColorR = initParams->primColor.r;
+        self->rPrimColorG = initParams->primColor.g;
+        self->rPrimColorB = initParams->primColor.b;
+        self->rPrimColorA = initParams->primColor.a;
+        self->rEnvColorR = initParams->envColor.r;
+        self->rEnvColorG = initParams->envColor.g;
+        self->rEnvColorB = initParams->envColor.b;
+        self->rEnvColorA = initParams->envColor.a;
     }
 
-    this->rRandXZ = initParams->randXZ;
-    this->rScale = initParams->scale;
-    this->rLifespan = initParams->life;
-    this->draw = EffectSsDtBubble_Draw;
-    this->update = EffectSsDtBubble_Update;
+    self->rRandXZ = initParams->randXZ;
+    self->rScale = initParams->scale;
+    self->rLifespan = initParams->life;
+    self->draw = EffectSsDtBubble_Draw;
+    self->update = EffectSsDtBubble_Update;
 
     return 1;
 }
 
-void EffectSsDtBubble_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
+void EffectSsDtBubble_Draw(GlobalContext* globalCtx, u32 index, EffectSs* self) {
     GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
     f32 scale;
 
     OPEN_DISPS(gfxCtx, "../z_eff_ss_dt_bubble.c", 201);
 
-    scale = this->rScale * 0.004f;
-    Matrix_Translate(this->pos.x, this->pos.y, this->pos.z, MTXMODE_NEW);
+    scale = self->rScale * 0.004f;
+    Matrix_Translate(self->pos.x, self->pos.y, self->pos.z, MTXMODE_NEW);
     Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx, "../z_eff_ss_dt_bubble.c", 213),
               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     func_80093C14(gfxCtx);
-    gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, this->rPrimColorR, this->rPrimColorG, this->rPrimColorB,
-                    (this->rPrimColorA * this->life) / this->rLifespan);
-    gDPSetEnvColor(POLY_XLU_DISP++, this->rEnvColorR, this->rEnvColorG, this->rEnvColorB,
-                   (this->rEnvColorA * this->life) / this->rLifespan);
-    gSPSegment(POLY_XLU_DISP++, 0x08, this->gfx);
+    gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, self->rPrimColorR, self->rPrimColorG, self->rPrimColorB,
+                    (self->rPrimColorA * self->life) / self->rLifespan);
+    gDPSetEnvColor(POLY_XLU_DISP++, self->rEnvColorR, self->rEnvColorG, self->rEnvColorB,
+                   (self->rEnvColorA * self->life) / self->rLifespan);
+    gSPSegment(POLY_XLU_DISP++, 0x08, self->gfx);
     gSPDisplayList(POLY_XLU_DISP++, SEGMENTED_TO_VIRTUAL(gEffBubbleDL));
 
     CLOSE_DISPS(gfxCtx, "../z_eff_ss_dt_bubble.c", 236);
 }
 
-void EffectSsDtBubble_Update(GlobalContext* globalCtx, u32 index, EffectSs* this) {
+void EffectSsDtBubble_Update(GlobalContext* globalCtx, u32 index, EffectSs* self) {
     f32 rand;
 
-    if (this->rRandXZ == 1) {
+    if (self->rRandXZ == 1) {
         rand = Rand_ZeroOne();
-        this->pos.x += (rand * 2.0f) - 1.0f;
+        self->pos.x += (rand * 2.0f) - 1.0f;
 
         rand = Rand_ZeroOne();
-        this->pos.z += (rand * 2.0f) - 1.0f;
+        self->pos.z += (rand * 2.0f) - 1.0f;
     }
 }

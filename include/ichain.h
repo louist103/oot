@@ -26,7 +26,7 @@ typedef enum {
 
 /**
  * ICHAIN macros generate an init chain entry of the following form:
- * * (e >> 31) & 0x0001 == Continue Parsing after this entry
+ * * (e >> 31) & 0x0001 == Continue Parsing after self entry
  * * (e >> 27) & 0x000F == Type
  * * (e >> 16) & 0x07FF == Offset from start of instance to write initial value
  * *  e        & 0xFFFF == Initial Value

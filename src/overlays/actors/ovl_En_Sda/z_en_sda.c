@@ -15,7 +15,7 @@ void EnSda_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSda_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnSda_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80AF95C4(EnSda* this, u8* shadowTexture, Player* player, GlobalContext* globalCtx);
+void func_80AF95C4(EnSda* self, u8* shadowTexture, Player* player, GlobalContext* globalCtx);
 void func_80AF9C70(u8* shadowTexture, Player* player, GlobalContext* globalCtx);
 void func_80AF8F60(Player* player, u8* shadowTexture, f32 arg2);
 
@@ -122,37 +122,37 @@ void EnSda_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void EnSda_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
-    EnSda* this = THIS;
+    EnSda* self = THIS;
     Player* player;
 
     osSyncPrintf("SDA MOVE\n");
 
-    if (this->actor.params == 1) {
-        player = (Player*)this->actor.parent;
+    if (self->actor.params == 1) {
+        player = (Player*)self->actor.parent;
     } else {
         player = GET_PLAYER(globalCtx);
     }
 
-    this->actor.world.pos = player->actor.world.pos;
+    self->actor.world.pos = player->actor.world.pos;
 
     osSyncPrintf("SDA MOVE END\n");
 }
 
 void EnSda_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    EnSda* this = THIS;
+    EnSda* self = THIS;
     Player* player;
     u8* shadowTexture = Graph_Alloc(globalCtx->state.gfxCtx, 0x1000);
 
     osSyncPrintf("SDA DRAW \n");
 
-    if (this->actor.params == 1) {
-        player = (Player*)this->actor.parent;
+    if (self->actor.params == 1) {
+        player = (Player*)self->actor.parent;
     } else {
         player = GET_PLAYER(globalCtx);
     }
 
     player->actor.shape.shadowAlpha = 0;
-    func_80AF95C4(this, shadowTexture, player, globalCtx);
+    func_80AF95C4(self, shadowTexture, player, globalCtx);
 
     if (KREG(0) < 5) {
         func_80AF9C70(shadowTexture, player, globalCtx);
@@ -260,7 +260,7 @@ void func_80AF8F60(Player* player, u8* shadowTexture, f32 arg2) {
     }
 }
 
-void func_80AF95C4(EnSda* this, u8* shadowTexture, Player* player, GlobalContext* globalCtx) {
+void func_80AF95C4(EnSda* self, u8* shadowTexture, Player* player, GlobalContext* globalCtx) {
     s16 temp_t0;
     s16 temp_t1;
     s16 temp_v0;
@@ -306,7 +306,7 @@ void func_80AF95C4(EnSda* this, u8* shadowTexture, Player* player, GlobalContext
         func_80AF8F60(player, shadowTexture, i / 5.0f);
     }
     osSyncPrintf("SDA CONT 3\n");
-    if (this->actor.params != 1) {
+    if (self->actor.params != 1) {
         Matrix_MtxFToYXZRotS(&player->shieldMf, &sp178, false);
         sp178.y += (KREG(87) << 0xF) + 0x8000;
         sp178.x *= (KREG(88) - 1);

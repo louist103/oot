@@ -375,7 +375,7 @@ void IChain_Apply_Vec3s(u8* ptr, InitChainEntry* ichain) {
 }
 
 /**
- * Changes pValue by step towards target. If this step is more than fraction of the remaining distance, step by that
+ * Changes pValue by step towards target. If self step is more than fraction of the remaining distance, step by that
  * instead, with a minimum step of minStep. Returns remaining distance to target.
  */
 f32 Math_SmoothStepToF(f32* pValue, f32 target, f32 fraction, f32 step, f32 minStep) {
@@ -447,7 +447,7 @@ void Math_ApproachZeroF(f32* pValue, f32 fraction, f32 step) {
 }
 
 /**
- * Changes pValue by step towards target angle in degrees. If this step is more than fraction of the remaining distance,
+ * Changes pValue by step towards target angle in degrees. If self step is more than fraction of the remaining distance,
  * step by that instead, with a minimum step of minStep. Returns the value of the step taken.
  */
 f32 Math_SmoothStepToDegF(f32* pValue, f32 target, f32 fraction, f32 step, f32 minStep) {
@@ -503,7 +503,7 @@ f32 Math_SmoothStepToDegF(f32* pValue, f32 target, f32 fraction, f32 step, f32 m
 }
 
 /**
- * Changes pValue by step towards target. If this step is more than 1/scale of the remaining distance, step by that
+ * Changes pValue by step towards target. If self step is more than 1/scale of the remaining distance, step by that
  * instead, with a minimum step of minStep. Returns remaining distance to target.
  */
 s16 Math_SmoothStepToS(s16* pValue, s16 target, s16 scale, s16 step, s16 minStep) {

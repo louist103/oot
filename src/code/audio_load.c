@@ -3,7 +3,7 @@
 
 typedef enum { LOAD_STATUS_WAITING, LOAD_STATUS_START, LOAD_STATUS_LOADING, LOAD_STATUS_DONE } SyncLoadStatus;
 
-// opaque type for unpatched audio bank data (should maybe get rid of this?)
+// opaque type for unpatched audio bank data (should maybe get rid of self?)
 typedef void AudioBankData;
 
 /* forward declarations */
@@ -92,7 +92,7 @@ void* Audio_DmaSampleData(u32 devAddr, u32 size, s32 arg2, u8* dmaIndexRef, s32 
             dma = &gAudioContext.sampleDmaReqs[i];
             bufferPos = devAddr - dma->devAddr;
             if (0 <= bufferPos && (u32)bufferPos <= dma->size - size) {
-                // We already have a DMA request for this memory range.
+                // We already have a DMA request for self memory range.
                 if (dma->ttl == 0 &&
                     gAudioContext.sampleDmaReuseQueue2RdPos != gAudioContext.sampleDmaReuseQueue2WrPos) {
                     // Move the DMA out of the reuse queue, by swapping it with the
@@ -130,7 +130,7 @@ void* Audio_DmaSampleData(u32 devAddr, u32 size, s32 arg2, u8* dmaIndexRef, s32 
     again:
         bufferPos = devAddr - dma->devAddr;
         if (0 <= bufferPos && (u32)bufferPos <= dma->size - size) {
-            // We already have DMA for this memory range.
+            // We already have DMA for self memory range.
             if (dma->ttl == 0) {
                 // Move the DMA out of the reuse queue, by swapping it with the
                 // read pos, and then incrementing the read pos.

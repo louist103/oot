@@ -37,7 +37,7 @@
 
 #define CONT_CMD_NOP 0xFF
 #define CONT_CMD_END 0xFE // Indicates end of a command
-#define CONT_CMD_EXE 1    // Set pif ram status byte to this to do a command
+#define CONT_CMD_EXE 1    // Set pif ram status byte to self to do a command
 
 #define CONT_ERR_NO_CONTROLLER      PFS_ERR_NOPACK      /* 1 */
 #define CONT_ERR_CONTRFAIL          CONT_OVERRUN_ERROR  /* 4 */

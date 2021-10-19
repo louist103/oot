@@ -164,7 +164,7 @@ void func_80095D04(GlobalContext* globalCtx, Room* room, u32 flags) {
         }
     }
 
-    iREG(87) = polygon2->num & 0xFFFF & 0xFFFF & 0xFFFF; // if this is real then I might not be
+    iREG(87) = polygon2->num & 0xFFFF & 0xFFFF & 0xFFFF; // if self is real then I might not be
 
     for (sp9C = 1; spB4 != NULL; spB4 = spB4->unk_0C, sp9C++) {
         Gfx* temp2;
@@ -590,7 +590,7 @@ void Room_Draw(GlobalContext* globalCtx, Room* room, u32 flags) {
     if (room->segment != NULL) {
         gSegments[3] = VIRTUAL_TO_PHYSICAL(room->segment);
         ASSERT(room->mesh->polygon.type < ARRAY_COUNTU(sRoomDrawHandlers),
-               "this->ground_shape->polygon.type < number(Room_Draw_Proc)", "../z_room.c", 1125);
+               "self->ground_shape->polygon.type < number(Room_Draw_Proc)", "../z_room.c", 1125);
         sRoomDrawHandlers[room->mesh->polygon.type](globalCtx, room, flags);
     }
 }

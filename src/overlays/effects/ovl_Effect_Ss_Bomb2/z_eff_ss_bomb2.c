@@ -19,10 +19,10 @@
 #define rScaleStep regs[9]
 #define rDepth regs[10]
 
-u32 EffectSsBomb2_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx);
-void EffectSsBomb2_DrawFade(GlobalContext* globalCtx, u32 index, EffectSs* this);
-void EffectSsBomb2_DrawLayered(GlobalContext* globalCtx, u32 index, EffectSs* this);
-void EffectSsBomb2_Update(GlobalContext* globalCtx, u32 index, EffectSs* this);
+u32 EffectSsBomb2_Init(GlobalContext* globalCtx, u32 index, EffectSs* self, void* initParamsx);
+void EffectSsBomb2_DrawFade(GlobalContext* globalCtx, u32 index, EffectSs* self);
+void EffectSsBomb2_DrawLayered(GlobalContext* globalCtx, u32 index, EffectSs* self);
+void EffectSsBomb2_Update(GlobalContext* globalCtx, u32 index, EffectSs* self);
 
 EffectSsInit Effect_Ss_Bomb2_InitVars = {
     EFFECT_SS_BOMB2,
@@ -34,32 +34,32 @@ static EffectSsDrawFunc sDrawFuncs[] = {
     EffectSsBomb2_DrawLayered,
 };
 
-u32 EffectSsBomb2_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx) {
+u32 EffectSsBomb2_Init(GlobalContext* globalCtx, u32 index, EffectSs* self, void* initParamsx) {
 
     EffectSsBomb2InitParams* initParams = (EffectSsBomb2InitParams*)initParamsx;
 
-    Math_Vec3f_Copy(&this->pos, &initParams->pos);
-    Math_Vec3f_Copy(&this->velocity, &initParams->velocity);
-    Math_Vec3f_Copy(&this->accel, &initParams->accel);
-    this->gfx = SEGMENTED_TO_VIRTUAL(gEffBombExplosion1DL);
-    this->life = 24;
-    this->update = EffectSsBomb2_Update;
-    this->draw = sDrawFuncs[initParams->drawMode];
-    this->rScale = initParams->scale;
-    this->rScaleStep = initParams->scaleStep;
-    this->rPrimColorR = 255;
-    this->rPrimColorG = 255;
-    this->rPrimColorB = 255;
-    this->rPrimColorA = 255;
-    this->rEnvColorR = 0;
-    this->rEnvColorG = 0;
-    this->rEnvColorB = 200;
+    Math_Vec3f_Copy(&self->pos, &initParams->pos);
+    Math_Vec3f_Copy(&self->velocity, &initParams->velocity);
+    Math_Vec3f_Copy(&self->accel, &initParams->accel);
+    self->gfx = SEGMENTED_TO_VIRTUAL(gEffBombExplosion1DL);
+    self->life = 24;
+    self->update = EffectSsBomb2_Update;
+    self->draw = sDrawFuncs[initParams->drawMode];
+    self->rScale = initParams->scale;
+    self->rScaleStep = initParams->scaleStep;
+    self->rPrimColorR = 255;
+    self->rPrimColorG = 255;
+    self->rPrimColorB = 255;
+    self->rPrimColorA = 255;
+    self->rEnvColorR = 0;
+    self->rEnvColorG = 0;
+    self->rEnvColorB = 200;
 
     return 1;
 }
 
 // unused in the original game. looks like EffectSsBomb but with color
-void EffectSsBomb2_DrawFade(GlobalContext* globalCtx, u32 index, EffectSs* this) {
+void EffectSsBomb2_DrawFade(GlobalContext* globalCtx, u32 index, EffectSs* self) {
     static void* textures[] = {
         gEffBombExplosion1Tex, gEffBombExplosion2Tex, gEffBombExplosion3Tex, gEffBombExplosion4Tex,
         gEffBombExplosion5Tex, gEffBombExplosion6Tex, gEffBombExplosion7Tex, gEffBombExplosion8Tex,
@@ -75,8 +75,8 @@ void EffectSsBomb2_DrawFade(GlobalContext* globalCtx, u32 index, EffectSs* this)
 
     OPEN_DISPS(gfxCtx, "../z_eff_ss_bomb2.c", 298);
 
-    scale = this->rScale * 0.01f;
-    SkinMatrix_SetTranslate(&mfTrans, this->pos.x, this->pos.y, this->pos.z);
+    scale = self->rScale * 0.01f;
+    SkinMatrix_SetTranslate(&mfTrans, self->pos.x, self->pos.y, self->pos.z);
     SkinMatrix_SetScale(&mfScale, scale, scale, 1.0f);
     SkinMatrix_MtxFMtxFMult(&mfTrans, &globalCtx->mf_11DA0, &mfTrans11DA0);
     SkinMatrix_MtxFMtxFMult(&mfTrans11DA0, &mfScale, &mfResult);
@@ -86,11 +86,11 @@ void EffectSsBomb2_DrawFade(GlobalContext* globalCtx, u32 index, EffectSs* this)
     if (mtx != NULL) {
         gSPMatrix(POLY_XLU_DISP++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         func_80094BC4(gfxCtx);
-        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, this->rPrimColorR, this->rPrimColorG, this->rPrimColorB,
-                        this->rPrimColorA);
-        gDPSetEnvColor(POLY_XLU_DISP++, this->rEnvColorR, this->rEnvColorG, this->rEnvColorB, 0);
-        gSPSegment(POLY_XLU_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(textures[this->rTexIdx]));
-        gSPDisplayList(POLY_XLU_DISP++, this->gfx);
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, self->rPrimColorR, self->rPrimColorG, self->rPrimColorB,
+                        self->rPrimColorA);
+        gDPSetEnvColor(POLY_XLU_DISP++, self->rEnvColorR, self->rEnvColorG, self->rEnvColorB, 0);
+        gSPSegment(POLY_XLU_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(textures[self->rTexIdx]));
+        gSPDisplayList(POLY_XLU_DISP++, self->gfx);
     }
 
     if (1) {}
@@ -99,7 +99,7 @@ void EffectSsBomb2_DrawFade(GlobalContext* globalCtx, u32 index, EffectSs* this)
     CLOSE_DISPS(gfxCtx, "../z_eff_ss_bomb2.c", 345);
 }
 
-void EffectSsBomb2_DrawLayered(GlobalContext* globalCtx, u32 index, EffectSs* this) {
+void EffectSsBomb2_DrawLayered(GlobalContext* globalCtx, u32 index, EffectSs* self) {
     static void* textures[] = {
         gEffBombExplosion1Tex, gEffBombExplosion2Tex, gEffBombExplosion3Tex, gEffBombExplosion4Tex,
         gEffBombExplosion5Tex, gEffBombExplosion6Tex, gEffBombExplosion7Tex, gEffBombExplosion8Tex,
@@ -120,9 +120,9 @@ void EffectSsBomb2_DrawLayered(GlobalContext* globalCtx, u32 index, EffectSs* th
 
     OPEN_DISPS(gfxCtx, "../z_eff_ss_bomb2.c", 386);
 
-    depth = this->rDepth;
-    scale = this->rScale * 0.01f;
-    SkinMatrix_SetTranslate(&mfTrans, this->pos.x, this->pos.y, this->pos.z);
+    depth = self->rDepth;
+    scale = self->rScale * 0.01f;
+    SkinMatrix_SetTranslate(&mfTrans, self->pos.x, self->pos.y, self->pos.z);
     SkinMatrix_SetScale(&mfScale, scale, scale, 1.0f);
     SkinMatrix_MtxFMtxFMult(&mfTrans, &globalCtx->mf_11DA0, &mfTrans11DA0);
     SkinMatrix_MtxFMtxFMult(&mfTrans11DA0, &mfScale, &mfResult);
@@ -136,10 +136,10 @@ void EffectSsBomb2_DrawLayered(GlobalContext* globalCtx, u32 index, EffectSs* th
 
         if (mtx2 != NULL) {
             func_80094BC4(gfxCtx);
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, this->rPrimColorR, this->rPrimColorG, this->rPrimColorB,
-                            this->rPrimColorA);
-            gDPSetEnvColor(POLY_XLU_DISP++, this->rEnvColorR, this->rEnvColorG, this->rEnvColorB, 0);
-            gSPSegment(POLY_XLU_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(textures[this->rTexIdx]));
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, self->rPrimColorR, self->rPrimColorG, self->rPrimColorB,
+                            self->rPrimColorA);
+            gDPSetEnvColor(POLY_XLU_DISP++, self->rEnvColorR, self->rEnvColorG, self->rEnvColorB, 0);
+            gSPSegment(POLY_XLU_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(textures[self->rTexIdx]));
             gSPDisplayList(POLY_XLU_DISP++, gEffBombExplosion2DL);
             gSPDisplayList(POLY_XLU_DISP++, gEffBombExplosion3DL);
 
@@ -148,7 +148,7 @@ void EffectSsBomb2_DrawLayered(GlobalContext* globalCtx, u32 index, EffectSs* th
 
             for (i = 1; i >= 0; i--) {
                 Matrix_Translate(0.0f, 0.0f, depth, MTXMODE_APPLY);
-                Matrix_RotateZ((this->life * 0.02f) + 180.0f, MTXMODE_APPLY);
+                Matrix_RotateZ((self->life * 0.02f) + 180.0f, MTXMODE_APPLY);
                 Matrix_Scale(layer2Scale, layer2Scale, layer2Scale, MTXMODE_APPLY);
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx, "../z_eff_ss_bomb2.c", 448),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -164,35 +164,35 @@ void EffectSsBomb2_DrawLayered(GlobalContext* globalCtx, u32 index, EffectSs* th
     CLOSE_DISPS(gfxCtx, "../z_eff_ss_bomb2.c", 456);
 }
 
-void EffectSsBomb2_Update(GlobalContext* globalCtx, u32 index, EffectSs* this) {
+void EffectSsBomb2_Update(GlobalContext* globalCtx, u32 index, EffectSs* self) {
     s32 divisor;
 
-    this->rTexIdx = (23 - this->life) / 3;
-    this->rScale += this->rScaleStep;
+    self->rTexIdx = (23 - self->life) / 3;
+    self->rScale += self->rScaleStep;
 
-    if (this->rScaleStep == 30) {
-        this->rDepth += 4.0f;
+    if (self->rScaleStep == 30) {
+        self->rDepth += 4.0f;
     } else {
-        this->rDepth += 2.0f;
+        self->rDepth += 2.0f;
     }
 
-    if ((this->life < 23) && (this->life > 13)) {
-        divisor = this->life - 13;
-        this->rPrimColorR = func_80027DD4(this->rPrimColorR, 255, divisor);
-        this->rPrimColorG = func_80027DD4(this->rPrimColorG, 255, divisor);
-        this->rPrimColorB = func_80027DD4(this->rPrimColorB, 150, divisor);
-        this->rPrimColorA = func_80027DD4(this->rPrimColorA, 255, divisor);
-        this->rEnvColorR = func_80027DD4(this->rEnvColorR, 150, divisor);
-        this->rEnvColorG = func_80027DD4(this->rEnvColorG, 0, divisor);
-        this->rEnvColorB = func_80027DD4(this->rEnvColorB, 0, divisor);
-    } else if ((this->life < 14) && (this->life > -1)) {
-        divisor = this->life + 1;
-        this->rPrimColorR = func_80027DD4(this->rPrimColorR, 50, divisor);
-        this->rPrimColorG = func_80027DD4(this->rPrimColorG, 50, divisor);
-        this->rPrimColorB = func_80027DD4(this->rPrimColorB, 50, divisor);
-        this->rPrimColorA = func_80027DD4(this->rPrimColorA, 150, divisor);
-        this->rEnvColorR = func_80027DD4(this->rEnvColorR, 10, divisor);
-        this->rEnvColorG = func_80027DD4(this->rEnvColorG, 10, divisor);
-        this->rEnvColorB = func_80027DD4(this->rEnvColorB, 10, divisor);
+    if ((self->life < 23) && (self->life > 13)) {
+        divisor = self->life - 13;
+        self->rPrimColorR = func_80027DD4(self->rPrimColorR, 255, divisor);
+        self->rPrimColorG = func_80027DD4(self->rPrimColorG, 255, divisor);
+        self->rPrimColorB = func_80027DD4(self->rPrimColorB, 150, divisor);
+        self->rPrimColorA = func_80027DD4(self->rPrimColorA, 255, divisor);
+        self->rEnvColorR = func_80027DD4(self->rEnvColorR, 150, divisor);
+        self->rEnvColorG = func_80027DD4(self->rEnvColorG, 0, divisor);
+        self->rEnvColorB = func_80027DD4(self->rEnvColorB, 0, divisor);
+    } else if ((self->life < 14) && (self->life > -1)) {
+        divisor = self->life + 1;
+        self->rPrimColorR = func_80027DD4(self->rPrimColorR, 50, divisor);
+        self->rPrimColorG = func_80027DD4(self->rPrimColorG, 50, divisor);
+        self->rPrimColorB = func_80027DD4(self->rPrimColorB, 50, divisor);
+        self->rPrimColorA = func_80027DD4(self->rPrimColorA, 150, divisor);
+        self->rEnvColorR = func_80027DD4(self->rEnvColorR, 10, divisor);
+        self->rEnvColorG = func_80027DD4(self->rEnvColorG, 10, divisor);
+        self->rEnvColorB = func_80027DD4(self->rEnvColorB, 10, divisor);
     }
 }

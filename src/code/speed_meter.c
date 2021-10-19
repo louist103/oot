@@ -28,20 +28,20 @@ SpeedMeterTimeEntry sSpeedMeterTimeEntryArray[] = {
     gDPFillRectangle(gfx, (ulx), (uly), (lrx), (lry)); \
     gDPPipeSync(gfx);
 
-void SpeedMeter_InitImpl(SpeedMeter* this, u32 arg1, u32 y) {
-    LogUtils_CheckNullPointer("this", this, "../speed_meter.c", 181);
-    this->unk_18 = arg1;
-    this->y = y;
+void SpeedMeter_InitImpl(SpeedMeter* self, u32 arg1, u32 y) {
+    LogUtils_CheckNullPointer("self", self, "../speed_meter.c", 181);
+    self->unk_18 = arg1;
+    self->y = y;
 }
 
-void SpeedMeter_Init(SpeedMeter* this) {
-    SpeedMeter_InitImpl(this, 32, 22);
+void SpeedMeter_Init(SpeedMeter* self) {
+    SpeedMeter_InitImpl(self, 32, 22);
 }
 
-void SpeedMeter_Destroy(SpeedMeter* this) {
+void SpeedMeter_Destroy(SpeedMeter* self) {
 }
 
-void SpeedMeter_DrawTimeEntries(SpeedMeter* this, GraphicsContext* gfxCtx) {
+void SpeedMeter_DrawTimeEntries(SpeedMeter* self, GraphicsContext* gfxCtx) {
     s32 pad[2];
     u32 baseX = 32;
     s32 temp;
@@ -52,8 +52,8 @@ void SpeedMeter_DrawTimeEntries(SpeedMeter* this, GraphicsContext* gfxCtx) {
     u32 pad2[3];
     Gfx* gfx;
 
-    uly = this->y;
-    lry = this->y + 2;
+    uly = self->y;
+    lry = self->y + 2;
 
     OPEN_DISPS(gfxCtx, "../speed_meter.c", 225);
 
@@ -101,26 +101,26 @@ void SpeedMeter_DrawTimeEntries(SpeedMeter* this, GraphicsContext* gfxCtx) {
     CLOSE_DISPS(gfxCtx, "../speed_meter.c", 276);
 }
 
-void SpeedMeter_InitAllocEntry(SpeedMeterAllocEntry* this, u32 maxval, u32 val, u16 backColor, u16 foreColor, u32 ulx,
+void SpeedMeter_InitAllocEntry(SpeedMeterAllocEntry* self, u32 maxval, u32 val, u16 backColor, u16 foreColor, u32 ulx,
                                u32 lrx, u32 uly, u32 lry) {
-    this->maxval = maxval;
-    this->val = val;
-    this->backColor = backColor;
-    this->foreColor = foreColor;
-    this->ulx = ulx;
-    this->lrx = lrx;
-    this->uly = uly;
-    this->lry = lry;
+    self->maxval = maxval;
+    self->val = val;
+    self->backColor = backColor;
+    self->foreColor = foreColor;
+    self->ulx = ulx;
+    self->lrx = lrx;
+    self->uly = uly;
+    self->lry = lry;
 }
 
-void SpeedMeter_DrawAllocEntry(SpeedMeterAllocEntry* this, GraphicsContext* gfxCtx) {
+void SpeedMeter_DrawAllocEntry(SpeedMeterAllocEntry* self, GraphicsContext* gfxCtx) {
     s32 usedOff;
     View view;
     Gfx* gfx;
 
-    if (this->maxval == 0) {
+    if (self->maxval == 0) {
         osSyncPrintf(VT_FGCOL(RED));
-        LOG_NUM("this->maxval", this->maxval, "../speed_meter.c", 313);
+        LOG_NUM("self->maxval", self->maxval, "../speed_meter.c", 313);
         osSyncPrintf(VT_RST);
     } else {
         OPEN_DISPS(gfxCtx, "../speed_meter.c", 318);
@@ -139,9 +139,9 @@ void SpeedMeter_DrawAllocEntry(SpeedMeterAllocEntry* this, GraphicsContext* gfxC
                             G_TD_CLAMP | G_TP_NONE | G_CYC_FILL | G_PM_NPRIMITIVE,
                         G_AC_NONE | G_ZS_PIXEL | G_RM_NOOP | G_RM_NOOP2);
 
-        usedOff = ((this->lrx - this->ulx) * this->val) / this->maxval + this->ulx;
-        DrawRec(gfx++, this->backColor, usedOff, this->uly, this->lrx, this->lry);
-        DrawRec(gfx++, this->foreColor, this->ulx, this->uly, usedOff, this->lry);
+        usedOff = ((self->lrx - self->ulx) * self->val) / self->maxval + self->ulx;
+        DrawRec(gfx++, self->backColor, usedOff, self->uly, self->lrx, self->lry);
+        DrawRec(gfx++, self->foreColor, self->ulx, self->uly, usedOff, self->lry);
 
         gDPPipeSync(gfx++);
 

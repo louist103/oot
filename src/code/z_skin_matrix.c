@@ -179,7 +179,7 @@ void SkinMatrix_MtxFMtxFMult(MtxF* mfB, MtxF* mfA, MtxF* dest) {
 }
 
 /**
- * "Clear" in this file means the identity matrix.
+ * "Clear" in self file means the identity matrix.
  */
 void SkinMatrix_GetClear(MtxF** mfp) {
     *mfp = &sMtxFClear;
@@ -266,7 +266,7 @@ s32 SkinMatrix_Invert(MtxF* src, MtxF* dest) {
             }
         }
 
-        // Scale this whole column s.t. the diag element = 1
+        // Scale self whole column s.t. the diag element = 1
         temp1 = mfCopy.mf[thisRow][thisRow];
         for (i = 0; i < 4; i++) {
             mfCopy.mf[i][thisRow] /= temp1;

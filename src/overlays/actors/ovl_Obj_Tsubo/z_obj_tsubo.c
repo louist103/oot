@@ -17,20 +17,20 @@ void ObjTsubo_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjTsubo_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjTsubo_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void ObjTsubo_SpawnCollectible(ObjTsubo* this, GlobalContext* globalCtx);
-void ObjTsubo_ApplyGravity(ObjTsubo* this);
-s32 ObjTsubo_SnapToFloor(ObjTsubo* this, GlobalContext* globalCtx);
+void ObjTsubo_SpawnCollectible(ObjTsubo* self, GlobalContext* globalCtx);
+void ObjTsubo_ApplyGravity(ObjTsubo* self);
+s32 ObjTsubo_SnapToFloor(ObjTsubo* self, GlobalContext* globalCtx);
 void ObjTsubo_InitCollider(Actor* thisx, GlobalContext* globalCtx);
-void ObjTsubo_AirBreak(ObjTsubo* this, GlobalContext* globalCtx);
-void ObjTsubo_WaterBreak(ObjTsubo* this, GlobalContext* globalCtx);
-void ObjTsubo_SetupWaitForObject(ObjTsubo* this);
-void ObjTsubo_WaitForObject(ObjTsubo* this, GlobalContext* globalCtx);
-void ObjTsubo_SetupIdle(ObjTsubo* this);
-void ObjTsubo_Idle(ObjTsubo* this, GlobalContext* globalCtx);
-void ObjTsubo_SetupLiftedUp(ObjTsubo* this);
-void ObjTsubo_LiftedUp(ObjTsubo* this, GlobalContext* globalCtx);
-void ObjTsubo_SetupThrown(ObjTsubo* this);
-void ObjTsubo_Thrown(ObjTsubo* this, GlobalContext* globalCtx);
+void ObjTsubo_AirBreak(ObjTsubo* self, GlobalContext* globalCtx);
+void ObjTsubo_WaterBreak(ObjTsubo* self, GlobalContext* globalCtx);
+void ObjTsubo_SetupWaitForObject(ObjTsubo* self);
+void ObjTsubo_WaitForObject(ObjTsubo* self, GlobalContext* globalCtx);
+void ObjTsubo_SetupIdle(ObjTsubo* self);
+void ObjTsubo_Idle(ObjTsubo* self, GlobalContext* globalCtx);
+void ObjTsubo_SetupLiftedUp(ObjTsubo* self);
+void ObjTsubo_LiftedUp(ObjTsubo* self, GlobalContext* globalCtx);
+void ObjTsubo_SetupThrown(ObjTsubo* self);
+void ObjTsubo_Thrown(ObjTsubo* self, GlobalContext* globalCtx);
 
 static s16 D_80BA1B50 = 0;
 static s16 D_80BA1B54 = 0;
@@ -83,35 +83,35 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),   ICHAIN_F32(uncullZoneDownward, 800, ICHAIN_STOP),
 };
 
-void ObjTsubo_SpawnCollectible(ObjTsubo* this, GlobalContext* globalCtx) {
-    s16 dropParams = this->actor.params & 0x1F;
+void ObjTsubo_SpawnCollectible(ObjTsubo* self, GlobalContext* globalCtx) {
+    s16 dropParams = self->actor.params & 0x1F;
 
     if ((dropParams >= ITEM00_RUPEE_GREEN) && (dropParams <= ITEM00_BOMBS_SPECIAL)) {
-        Item_DropCollectible(globalCtx, &this->actor.world.pos,
-                             (dropParams | (((this->actor.params >> 9) & 0x3F) << 8)));
+        Item_DropCollectible(globalCtx, &self->actor.world.pos,
+                             (dropParams | (((self->actor.params >> 9) & 0x3F) << 8)));
     }
 }
 
-void ObjTsubo_ApplyGravity(ObjTsubo* this) {
-    this->actor.velocity.y += this->actor.gravity;
-    if (this->actor.velocity.y < this->actor.minVelocityY) {
-        this->actor.velocity.y = this->actor.minVelocityY;
+void ObjTsubo_ApplyGravity(ObjTsubo* self) {
+    self->actor.velocity.y += self->actor.gravity;
+    if (self->actor.velocity.y < self->actor.minVelocityY) {
+        self->actor.velocity.y = self->actor.minVelocityY;
     }
 }
 
-s32 ObjTsubo_SnapToFloor(ObjTsubo* this, GlobalContext* globalCtx) {
+s32 ObjTsubo_SnapToFloor(ObjTsubo* self, GlobalContext* globalCtx) {
     CollisionPoly* floorPoly;
     Vec3f pos;
     s32 bgID;
     f32 floorY;
 
-    pos.x = this->actor.world.pos.x;
-    pos.y = this->actor.world.pos.y + 20.0f;
-    pos.z = this->actor.world.pos.z;
-    floorY = BgCheck_EntityRaycastFloor4(&globalCtx->colCtx, &floorPoly, &bgID, &this->actor, &pos);
+    pos.x = self->actor.world.pos.x;
+    pos.y = self->actor.world.pos.y + 20.0f;
+    pos.z = self->actor.world.pos.z;
+    floorY = BgCheck_EntityRaycastFloor4(&globalCtx->colCtx, &floorPoly, &bgID, &self->actor, &pos);
     if (floorY > BGCHECK_Y_MIN) {
-        this->actor.world.pos.y = floorY;
-        Math_Vec3f_Copy(&this->actor.home.pos, &this->actor.world.pos);
+        self->actor.world.pos.y = floorY;
+        Math_Vec3f_Copy(&self->actor.home.pos, &self->actor.world.pos);
         return true;
     } else {
         osSyncPrintf("地面に付着失敗\n");
@@ -120,41 +120,41 @@ s32 ObjTsubo_SnapToFloor(ObjTsubo* this, GlobalContext* globalCtx) {
 }
 
 void ObjTsubo_InitCollider(Actor* thisx, GlobalContext* globalCtx) {
-    ObjTsubo* this = THIS;
+    ObjTsubo* self = THIS;
 
-    Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
-    Collider_UpdateCylinder(&this->actor, &this->collider);
+    Collider_InitCylinder(globalCtx, &self->collider);
+    Collider_SetCylinder(globalCtx, &self->collider, &self->actor, &sCylinderInit);
+    Collider_UpdateCylinder(&self->actor, &self->collider);
 }
 
 void ObjTsubo_Init(Actor* thisx, GlobalContext* globalCtx) {
-    ObjTsubo* this = THIS;
+    ObjTsubo* self = THIS;
 
-    Actor_ProcessInitChain(&this->actor, sInitChain);
-    ObjTsubo_InitCollider(&this->actor, globalCtx);
-    CollisionCheck_SetInfo(&this->actor.colChkInfo, NULL, sColChkInfoInit);
-    if (!ObjTsubo_SnapToFloor(this, globalCtx)) {
-        Actor_Kill(&this->actor);
+    Actor_ProcessInitChain(&self->actor, sInitChain);
+    ObjTsubo_InitCollider(&self->actor, globalCtx);
+    CollisionCheck_SetInfo(&self->actor.colChkInfo, NULL, sColChkInfoInit);
+    if (!ObjTsubo_SnapToFloor(self, globalCtx)) {
+        Actor_Kill(&self->actor);
         return;
     }
-    this->objTsuboBankIndex = Object_GetIndex(&globalCtx->objectCtx, sObjectIds[(this->actor.params >> 8) & 1]);
-    if (this->objTsuboBankIndex < 0) {
-        osSyncPrintf("Error : バンク危険！ (arg_data 0x%04x)(%s %d)\n", this->actor.params, "../z_obj_tsubo.c", 410);
-        Actor_Kill(&this->actor);
+    self->objTsuboBankIndex = Object_GetIndex(&globalCtx->objectCtx, sObjectIds[(self->actor.params >> 8) & 1]);
+    if (self->objTsuboBankIndex < 0) {
+        osSyncPrintf("Error : バンク危険！ (arg_data 0x%04x)(%s %d)\n", self->actor.params, "../z_obj_tsubo.c", 410);
+        Actor_Kill(&self->actor);
     } else {
-        ObjTsubo_SetupWaitForObject(this);
-        osSyncPrintf("(dungeon keep 壷)(arg_data 0x%04x)\n", this->actor.params);
+        ObjTsubo_SetupWaitForObject(self);
+        osSyncPrintf("(dungeon keep 壷)(arg_data 0x%04x)\n", self->actor.params);
     }
 }
 
 void ObjTsubo_Destroy(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
-    ObjTsubo* this = THIS;
+    ObjTsubo* self = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    Collider_DestroyCylinder(globalCtx, &self->collider);
 }
 
-void ObjTsubo_AirBreak(ObjTsubo* this, GlobalContext* globalCtx) {
+void ObjTsubo_AirBreak(ObjTsubo* self, GlobalContext* globalCtx) {
     s32 pad;
     f32 rand;
     s16 angle;
@@ -174,7 +174,7 @@ void ObjTsubo_AirBreak(ObjTsubo* this, GlobalContext* globalCtx) {
         velocity.x = pos.x * 0.23f;
         velocity.y = (Rand_ZeroOne() * 5.0f) + 2.0f;
         velocity.z = pos.z * 0.23f;
-        Math_Vec3f_Sum(&pos, &this->actor.world.pos, &pos);
+        Math_Vec3f_Sum(&pos, &self->actor.world.pos, &pos);
         rand = Rand_ZeroOne();
         if (rand < 0.2f) {
             arg5 = 96;
@@ -183,22 +183,22 @@ void ObjTsubo_AirBreak(ObjTsubo* this, GlobalContext* globalCtx) {
         } else {
             arg5 = 32;
         }
-        EffectSsKakera_Spawn(globalCtx, &pos, &velocity, &this->actor.world.pos, -240, arg5, 10, 10, 0,
+        EffectSsKakera_Spawn(globalCtx, &pos, &velocity, &self->actor.world.pos, -240, arg5, 10, 10, 0,
                              (Rand_ZeroOne() * 95.0f) + 15.0f, 0, 32, 60, KAKERA_COLOR_NONE,
-                             sObjectIds[(this->actor.params >> 8) & 1], D_80BA1B8C[(this->actor.params >> 8) & 1]);
+                             sObjectIds[(self->actor.params >> 8) & 1], D_80BA1B8C[(self->actor.params >> 8) & 1]);
     }
-    func_80033480(globalCtx, &this->actor.world.pos, 30.0f, 4, 20, 50, 1);
+    func_80033480(globalCtx, &self->actor.world.pos, 30.0f, 4, 20, 50, 1);
 }
 
-void ObjTsubo_WaterBreak(ObjTsubo* this, GlobalContext* globalCtx) {
+void ObjTsubo_WaterBreak(ObjTsubo* self, GlobalContext* globalCtx) {
     s32 pad[2];
     s16 angle;
-    Vec3f pos = this->actor.world.pos;
+    Vec3f pos = self->actor.world.pos;
     Vec3f velocity;
     s32 phi_s0;
     s32 i;
 
-    pos.y += this->actor.yDistToWater;
+    pos.y += self->actor.yDistToWater;
     EffectSsGSplash_Spawn(globalCtx, &pos, NULL, NULL, 0, 400);
     for (i = 0, angle = 0; i < 15; i++, angle += 0x4E20) {
         f32 sins = Math_SinS(angle);
@@ -210,128 +210,128 @@ void ObjTsubo_WaterBreak(ObjTsubo* this, GlobalContext* globalCtx) {
         velocity.x = pos.x * 0.2f;
         velocity.y = (Rand_ZeroOne() * 4.0f) + 2.0f;
         velocity.z = pos.z * 0.2f;
-        Math_Vec3f_Sum(&pos, &this->actor.world.pos, &pos);
+        Math_Vec3f_Sum(&pos, &self->actor.world.pos, &pos);
         phi_s0 = (Rand_ZeroOne() < .2f) ? 64 : 32;
-        EffectSsKakera_Spawn(globalCtx, &pos, &velocity, &this->actor.world.pos, -180, phi_s0, 30, 30, 0,
+        EffectSsKakera_Spawn(globalCtx, &pos, &velocity, &self->actor.world.pos, -180, phi_s0, 30, 30, 0,
                              (Rand_ZeroOne() * 95.0f) + 15.0f, 0, 32, 70, KAKERA_COLOR_NONE,
-                             sObjectIds[(this->actor.params >> 8) & 1], D_80BA1B8C[(this->actor.params >> 8) & 1]);
+                             sObjectIds[(self->actor.params >> 8) & 1], D_80BA1B8C[(self->actor.params >> 8) & 1]);
     }
 }
 
-void ObjTsubo_SetupWaitForObject(ObjTsubo* this) {
-    this->actionFunc = ObjTsubo_WaitForObject;
+void ObjTsubo_SetupWaitForObject(ObjTsubo* self) {
+    self->actionFunc = ObjTsubo_WaitForObject;
 }
 
-void ObjTsubo_WaitForObject(ObjTsubo* this, GlobalContext* globalCtx) {
-    if (Object_IsLoaded(&globalCtx->objectCtx, this->objTsuboBankIndex)) {
-        this->actor.draw = ObjTsubo_Draw;
-        this->actor.objBankIndex = this->objTsuboBankIndex;
-        ObjTsubo_SetupIdle(this);
-        this->actor.flags &= ~0x10;
+void ObjTsubo_WaitForObject(ObjTsubo* self, GlobalContext* globalCtx) {
+    if (Object_IsLoaded(&globalCtx->objectCtx, self->objTsuboBankIndex)) {
+        self->actor.draw = ObjTsubo_Draw;
+        self->actor.objBankIndex = self->objTsuboBankIndex;
+        ObjTsubo_SetupIdle(self);
+        self->actor.flags &= ~0x10;
     }
 }
 
-void ObjTsubo_SetupIdle(ObjTsubo* this) {
-    this->actionFunc = ObjTsubo_Idle;
+void ObjTsubo_SetupIdle(ObjTsubo* self) {
+    self->actionFunc = ObjTsubo_Idle;
 }
 
-void ObjTsubo_Idle(ObjTsubo* this, GlobalContext* globalCtx) {
+void ObjTsubo_Idle(ObjTsubo* self, GlobalContext* globalCtx) {
     s32 pad;
     s16 temp_v0;
     s32 phi_v1;
 
-    if (Actor_HasParent(&this->actor, globalCtx)) {
-        ObjTsubo_SetupLiftedUp(this);
-    } else if ((this->actor.bgCheckFlags & 0x20) && (this->actor.yDistToWater > 15.0f)) {
-        ObjTsubo_WaterBreak(this, globalCtx);
-        Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 20, NA_SE_EV_POT_BROKEN);
-        ObjTsubo_SpawnCollectible(this, globalCtx);
-        Actor_Kill(&this->actor);
-    } else if ((this->collider.base.acFlags & AC_HIT) &&
-               (this->collider.info.acHitInfo->toucher.dmgFlags & 0x4FC1FFFC)) {
-        ObjTsubo_AirBreak(this, globalCtx);
-        ObjTsubo_SpawnCollectible(this, globalCtx);
-        Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 20, NA_SE_EV_POT_BROKEN);
-        Actor_Kill(&this->actor);
+    if (Actor_HasParent(&self->actor, globalCtx)) {
+        ObjTsubo_SetupLiftedUp(self);
+    } else if ((self->actor.bgCheckFlags & 0x20) && (self->actor.yDistToWater > 15.0f)) {
+        ObjTsubo_WaterBreak(self, globalCtx);
+        Audio_PlaySoundAtPosition(globalCtx, &self->actor.world.pos, 20, NA_SE_EV_POT_BROKEN);
+        ObjTsubo_SpawnCollectible(self, globalCtx);
+        Actor_Kill(&self->actor);
+    } else if ((self->collider.base.acFlags & AC_HIT) &&
+               (self->collider.info.acHitInfo->toucher.dmgFlags & 0x4FC1FFFC)) {
+        ObjTsubo_AirBreak(self, globalCtx);
+        ObjTsubo_SpawnCollectible(self, globalCtx);
+        Audio_PlaySoundAtPosition(globalCtx, &self->actor.world.pos, 20, NA_SE_EV_POT_BROKEN);
+        Actor_Kill(&self->actor);
     } else {
-        if (this->actor.xzDistToPlayer < 600.0f) {
-            Collider_UpdateCylinder(&this->actor, &this->collider);
-            this->collider.base.acFlags &= ~AC_HIT;
-            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-            if (this->actor.xzDistToPlayer < 150.0f) {
-                CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        if (self->actor.xzDistToPlayer < 600.0f) {
+            Collider_UpdateCylinder(&self->actor, &self->collider);
+            self->collider.base.acFlags &= ~AC_HIT;
+            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
+            if (self->actor.xzDistToPlayer < 150.0f) {
+                CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
             }
         }
-        if (this->actor.xzDistToPlayer < 100.0f) {
-            temp_v0 = this->actor.yawTowardsPlayer - GET_PLAYER(globalCtx)->actor.world.rot.y;
+        if (self->actor.xzDistToPlayer < 100.0f) {
+            temp_v0 = self->actor.yawTowardsPlayer - GET_PLAYER(globalCtx)->actor.world.rot.y;
             phi_v1 = ABS(temp_v0);
             if (phi_v1 >= 0x5556) {
-                // GI_NONE in this case allows the player to lift the actor
-                func_8002F434(&this->actor, globalCtx, GI_NONE, 30.0f, 30.0f);
+                // GI_NONE in self case allows the player to lift the actor
+                func_8002F434(&self->actor, globalCtx, GI_NONE, 30.0f, 30.0f);
             }
         }
     }
 }
 
-void ObjTsubo_SetupLiftedUp(ObjTsubo* this) {
-    this->actionFunc = ObjTsubo_LiftedUp;
-    this->actor.room = -1;
-    func_8002F7DC(&this->actor, NA_SE_PL_PULL_UP_POT);
-    this->actor.flags |= 0x10;
+void ObjTsubo_SetupLiftedUp(ObjTsubo* self) {
+    self->actionFunc = ObjTsubo_LiftedUp;
+    self->actor.room = -1;
+    func_8002F7DC(&self->actor, NA_SE_PL_PULL_UP_POT);
+    self->actor.flags |= 0x10;
 }
 
-void ObjTsubo_LiftedUp(ObjTsubo* this, GlobalContext* globalCtx) {
-    if (Actor_HasNoParent(&this->actor, globalCtx)) {
-        this->actor.room = globalCtx->roomCtx.curRoom.num;
-        ObjTsubo_SetupThrown(this);
-        ObjTsubo_ApplyGravity(this);
-        func_8002D7EC(&this->actor);
-        Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 5.0f, 15.0f, 0.0f, 0x85);
+void ObjTsubo_LiftedUp(ObjTsubo* self, GlobalContext* globalCtx) {
+    if (Actor_HasNoParent(&self->actor, globalCtx)) {
+        self->actor.room = globalCtx->roomCtx.curRoom.num;
+        ObjTsubo_SetupThrown(self);
+        ObjTsubo_ApplyGravity(self);
+        func_8002D7EC(&self->actor);
+        Actor_UpdateBgCheckInfo(globalCtx, &self->actor, 5.0f, 15.0f, 0.0f, 0x85);
     }
 }
 
-void ObjTsubo_SetupThrown(ObjTsubo* this) {
-    this->actor.velocity.x = Math_SinS(this->actor.world.rot.y) * this->actor.speedXZ;
-    this->actor.velocity.z = Math_CosS(this->actor.world.rot.y) * this->actor.speedXZ;
-    this->actor.colChkInfo.mass = 240;
+void ObjTsubo_SetupThrown(ObjTsubo* self) {
+    self->actor.velocity.x = Math_SinS(self->actor.world.rot.y) * self->actor.speedXZ;
+    self->actor.velocity.z = Math_CosS(self->actor.world.rot.y) * self->actor.speedXZ;
+    self->actor.colChkInfo.mass = 240;
     D_80BA1B50 = (Rand_ZeroOne() - 0.7f) * 2800.0f;
     D_80BA1B58 = (Rand_ZeroOne() - 0.5f) * 2000.0f;
     D_80BA1B54 = 0;
     D_80BA1B5C = 0;
-    this->actionFunc = ObjTsubo_Thrown;
+    self->actionFunc = ObjTsubo_Thrown;
 }
 
-void ObjTsubo_Thrown(ObjTsubo* this, GlobalContext* globalCtx) {
+void ObjTsubo_Thrown(ObjTsubo* self, GlobalContext* globalCtx) {
     s32 pad[2];
 
-    if ((this->actor.bgCheckFlags & 0xB) || (this->collider.base.atFlags & AT_HIT)) {
-        ObjTsubo_AirBreak(this, globalCtx);
-        ObjTsubo_SpawnCollectible(this, globalCtx);
-        Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 20, NA_SE_EV_POT_BROKEN);
-        Actor_Kill(&this->actor);
-    } else if (this->actor.bgCheckFlags & 0x40) {
-        ObjTsubo_WaterBreak(this, globalCtx);
-        ObjTsubo_SpawnCollectible(this, globalCtx);
-        Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 20, NA_SE_EV_POT_BROKEN);
-        Actor_Kill(&this->actor);
+    if ((self->actor.bgCheckFlags & 0xB) || (self->collider.base.atFlags & AT_HIT)) {
+        ObjTsubo_AirBreak(self, globalCtx);
+        ObjTsubo_SpawnCollectible(self, globalCtx);
+        Audio_PlaySoundAtPosition(globalCtx, &self->actor.world.pos, 20, NA_SE_EV_POT_BROKEN);
+        Actor_Kill(&self->actor);
+    } else if (self->actor.bgCheckFlags & 0x40) {
+        ObjTsubo_WaterBreak(self, globalCtx);
+        ObjTsubo_SpawnCollectible(self, globalCtx);
+        Audio_PlaySoundAtPosition(globalCtx, &self->actor.world.pos, 20, NA_SE_EV_POT_BROKEN);
+        Actor_Kill(&self->actor);
     } else {
-        ObjTsubo_ApplyGravity(this);
-        func_8002D7EC(&this->actor);
+        ObjTsubo_ApplyGravity(self);
+        func_8002D7EC(&self->actor);
         Math_StepToS(&D_80BA1B54, D_80BA1B50, 0x64);
         Math_StepToS(&D_80BA1B5C, D_80BA1B58, 0x64);
-        this->actor.shape.rot.x += D_80BA1B54;
-        this->actor.shape.rot.y += D_80BA1B5C;
-        Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 5.0f, 15.0f, 0.0f, 0x85);
-        Collider_UpdateCylinder(&this->actor, &this->collider);
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        self->actor.shape.rot.x += D_80BA1B54;
+        self->actor.shape.rot.y += D_80BA1B5C;
+        Actor_UpdateBgCheckInfo(globalCtx, &self->actor, 5.0f, 15.0f, 0.0f, 0x85);
+        Collider_UpdateCylinder(&self->actor, &self->collider);
+        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
+        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
     }
 }
 
 void ObjTsubo_Update(Actor* thisx, GlobalContext* globalCtx) {
-    ObjTsubo* this = THIS;
+    ObjTsubo* self = THIS;
 
-    this->actionFunc(this, globalCtx);
+    self->actionFunc(self, globalCtx);
 }
 
 void ObjTsubo_Draw(Actor* thisx, GlobalContext* globalCtx) {

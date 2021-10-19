@@ -10,32 +10,32 @@
 #define rScale regs[0]
 #define rTexIdx regs[1]
 
-u32 EffectSsBomb_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx);
-void EffectSsBomb_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this);
-void EffectSsBomb_Update(GlobalContext* globalCtx, u32 index, EffectSs* this);
+u32 EffectSsBomb_Init(GlobalContext* globalCtx, u32 index, EffectSs* self, void* initParamsx);
+void EffectSsBomb_Draw(GlobalContext* globalCtx, u32 index, EffectSs* self);
+void EffectSsBomb_Update(GlobalContext* globalCtx, u32 index, EffectSs* self);
 
 EffectSsInit Effect_Ss_Bomb_InitVars = {
     EFFECT_SS_BOMB,
     EffectSsBomb_Init,
 };
 
-u32 EffectSsBomb_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx) {
+u32 EffectSsBomb_Init(GlobalContext* globalCtx, u32 index, EffectSs* self, void* initParamsx) {
     EffectSsBombInitParams* initParams = (EffectSsBombInitParams*)initParamsx;
 
-    Math_Vec3f_Copy(&this->pos, &initParams->pos);
-    Math_Vec3f_Copy(&this->velocity, &initParams->velocity);
-    Math_Vec3f_Copy(&this->accel, &initParams->accel);
-    this->gfx = SEGMENTED_TO_VIRTUAL(gEffBombExplosion1DL);
-    this->life = 20;
-    this->draw = EffectSsBomb_Draw;
-    this->update = EffectSsBomb_Update;
-    this->rScale = 100;
-    this->rTexIdx = 0;
+    Math_Vec3f_Copy(&self->pos, &initParams->pos);
+    Math_Vec3f_Copy(&self->velocity, &initParams->velocity);
+    Math_Vec3f_Copy(&self->accel, &initParams->accel);
+    self->gfx = SEGMENTED_TO_VIRTUAL(gEffBombExplosion1DL);
+    self->life = 20;
+    self->draw = EffectSsBomb_Draw;
+    self->update = EffectSsBomb_Update;
+    self->rScale = 100;
+    self->rTexIdx = 0;
 
     return 1;
 }
 
-void EffectSsBomb_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
+void EffectSsBomb_Draw(GlobalContext* globalCtx, u32 index, EffectSs* self) {
     static void* explosionTextures[] = {
         gEffBombExplosion1Tex,
         gEffBombExplosion2Tex,
@@ -56,9 +56,9 @@ void EffectSsBomb_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
 
     OPEN_DISPS(gfxCtx, "../z_eff_ss_bomb.c", 168);
 
-    scale = this->rScale / 100.0f;
+    scale = self->rScale / 100.0f;
 
-    SkinMatrix_SetTranslate(&mfTrans, this->pos.x, this->pos.y, this->pos.z);
+    SkinMatrix_SetTranslate(&mfTrans, self->pos.x, self->pos.y, self->pos.z);
     SkinMatrix_SetScale(&mfScale, scale, scale, 1.0f);
     SkinMatrix_MtxFMtxFMult(&mfTrans, &globalCtx->mf_11DA0, &mfTrans11DA0);
     SkinMatrix_MtxFMtxFMult(&mfTrans11DA0, &mfScale, &mfResult);
@@ -69,27 +69,27 @@ void EffectSsBomb_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
 
     if (mtx != NULL) {
         gSPMatrix(POLY_XLU_DISP++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPSegment(POLY_XLU_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(explosionTextures[this->rTexIdx]));
+        gSPSegment(POLY_XLU_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(explosionTextures[self->rTexIdx]));
         gDPPipeSync(POLY_XLU_DISP++);
         func_80094C50(gfxCtx);
-        color = this->life * 12.75f;
+        color = self->life * 12.75f;
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, color, color, color, color);
         gDPPipeSync(POLY_XLU_DISP++);
-        gSPDisplayList(POLY_XLU_DISP++, this->gfx);
+        gSPDisplayList(POLY_XLU_DISP++, self->gfx);
         gDPPipeSync(POLY_XLU_DISP++);
     }
 
     CLOSE_DISPS(gfxCtx, "../z_eff_ss_bomb.c", 214);
 }
 
-void EffectSsBomb_Update(GlobalContext* globalCtx, u32 index, EffectSs* this) {
-    if ((this->life < 21) && (this->life > 16)) {
-        this->rTexIdx = (20 - this->life);
+void EffectSsBomb_Update(GlobalContext* globalCtx, u32 index, EffectSs* self) {
+    if ((self->life < 21) && (self->life > 16)) {
+        self->rTexIdx = (20 - self->life);
     } else {
-        this->rScale += 0;
-        this->rTexIdx = 3;
+        self->rScale += 0;
+        self->rTexIdx = 3;
     }
 
-    this->accel.x = ((Rand_ZeroOne() * 0.4f) - 0.2f);
-    this->accel.z = ((Rand_ZeroOne() * 0.4f) - 0.2f);
+    self->accel.x = ((Rand_ZeroOne() * 0.4f) - 0.2f);
+    self->accel.z = ((Rand_ZeroOne() * 0.4f) - 0.2f);
 }

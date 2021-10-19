@@ -17,9 +17,9 @@ void BgGjyoBridge_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgGjyoBridge_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgGjyoBridge_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_808787A4(BgGjyoBridge* this, GlobalContext* globalCtx);
-void BgGjyoBridge_TriggerCutscene(BgGjyoBridge* this, GlobalContext* globalCtx);
-void BgGjyoBridge_SpawnBridge(BgGjyoBridge* this, GlobalContext* globalCtx);
+void func_808787A4(BgGjyoBridge* self, GlobalContext* globalCtx);
+void BgGjyoBridge_TriggerCutscene(BgGjyoBridge* self, GlobalContext* globalCtx);
+void BgGjyoBridge_SpawnBridge(BgGjyoBridge* self, GlobalContext* globalCtx);
 
 const ActorInit Bg_Gjyo_Bridge_InitVars = {
     ACTOR_BG_GJYO_BRIDGE,
@@ -39,37 +39,37 @@ static InitChainEntry sInitChain[] = {
 };
 
 void BgGjyoBridge_Init(Actor* thisx, GlobalContext* globalCtx) {
-    BgGjyoBridge* this = THIS;
+    BgGjyoBridge* self = THIS;
     s32 pad;
     CollisionHeader* colHeader;
 
     colHeader = NULL;
 
     Actor_ProcessInitChain(thisx, sInitChain);
-    DynaPolyActor_Init(&this->dyna, DPM_UNK);
+    DynaPolyActor_Init(&self->dyna, DPM_UNK);
     CollisionHeader_GetVirtual(&gRainbowBridgeCol, &colHeader);
 
-    this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, thisx, colHeader);
+    self->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, thisx, colHeader);
 
     if (gSaveContext.eventChkInf[4] & 0x2000) {
-        this->actionFunc = func_808787A4;
+        self->actionFunc = func_808787A4;
     } else {
-        this->dyna.actor.draw = NULL;
-        func_8003EBF8(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
-        this->actionFunc = BgGjyoBridge_TriggerCutscene;
+        self->dyna.actor.draw = NULL;
+        func_8003EBF8(globalCtx, &globalCtx->colCtx.dyna, self->dyna.bgId);
+        self->actionFunc = BgGjyoBridge_TriggerCutscene;
     }
 }
 
 void BgGjyoBridge_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    BgGjyoBridge* this = THIS;
+    BgGjyoBridge* self = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, self->dyna.bgId);
 }
 
-void func_808787A4(BgGjyoBridge* this, GlobalContext* globalCtx) {
+void func_808787A4(BgGjyoBridge* self, GlobalContext* globalCtx) {
 }
 
-void BgGjyoBridge_TriggerCutscene(BgGjyoBridge* this, GlobalContext* globalCtx) {
+void BgGjyoBridge_TriggerCutscene(BgGjyoBridge* self, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if (CHECK_QUEST_ITEM(QUEST_MEDALLION_SPIRIT) && CHECK_QUEST_ITEM(QUEST_MEDALLION_SHADOW) &&
@@ -79,27 +79,27 @@ void BgGjyoBridge_TriggerCutscene(BgGjyoBridge* this, GlobalContext* globalCtx) 
         !Gameplay_InCsMode(globalCtx)) {
         globalCtx->csCtx.segment = SEGMENTED_TO_VIRTUAL(gRainbowBridgeCs);
         gSaveContext.cutsceneTrigger = 1;
-        this->actionFunc = BgGjyoBridge_SpawnBridge;
+        self->actionFunc = BgGjyoBridge_SpawnBridge;
     }
 }
 
-void BgGjyoBridge_SpawnBridge(BgGjyoBridge* this, GlobalContext* globalCtx) {
+void BgGjyoBridge_SpawnBridge(BgGjyoBridge* self, GlobalContext* globalCtx) {
     if ((globalCtx->csCtx.state != CS_STATE_IDLE) && (globalCtx->csCtx.npcActions[2] != NULL) &&
         (globalCtx->csCtx.npcActions[2]->action == 2)) {
-        this->dyna.actor.draw = BgGjyoBridge_Draw;
-        func_8003EC50(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+        self->dyna.actor.draw = BgGjyoBridge_Draw;
+        func_8003EC50(globalCtx, &globalCtx->colCtx.dyna, self->dyna.bgId);
         gSaveContext.eventChkInf[4] |= 0x2000;
     }
 }
 
 void BgGjyoBridge_Update(Actor* thisx, GlobalContext* globalCtx) {
-    BgGjyoBridge* this = THIS;
+    BgGjyoBridge* self = THIS;
 
-    this->actionFunc(this, globalCtx);
+    self->actionFunc(self, globalCtx);
 }
 
 void BgGjyoBridge_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    BgGjyoBridge* this = THIS;
+    BgGjyoBridge* self = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx, "../z_bg_gjyo_bridge.c", 260);
 

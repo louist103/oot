@@ -283,97 +283,97 @@ Gfx sCircleDList[] = {
 #define THIS ((TransitionCircle*)thisx)
 
 void TransitionCircle_Start(void* thisx) {
-    TransitionCircle* this = THIS;
+    TransitionCircle* self = THIS;
 
-    this->isDone = 0;
+    self->isDone = 0;
 
-    switch (this->effect) {
+    switch (self->effect) {
         case 1:
-            this->texture = sCircleTexWave;
+            self->texture = sCircleTexWave;
             break;
         case 2:
-            this->texture = sCircleTexRipple;
+            self->texture = sCircleTexRipple;
             break;
         case 3:
-            this->texture = sCircleTexStarburst;
+            self->texture = sCircleTexStarburst;
             break;
         default:
-            this->texture = sCircleTexDefault;
+            self->texture = sCircleTexDefault;
             break;
     }
 
-    if (this->speed == 0) {
-        this->step = 0x14;
+    if (self->speed == 0) {
+        self->step = 0x14;
     } else {
-        this->step = 0xA;
+        self->step = 0xA;
     }
 
-    if (this->typeColor == 0) {
-        this->color.rgba = RGBA8(0, 0, 0, 255);
-    } else if (this->typeColor == 1) {
-        this->color.rgba = RGBA8(160, 160, 160, 255);
-    } else if (this->typeColor == 2) {
+    if (self->typeColor == 0) {
+        self->color.rgba = RGBA8(0, 0, 0, 255);
+    } else if (self->typeColor == 1) {
+        self->color.rgba = RGBA8(160, 160, 160, 255);
+    } else if (self->typeColor == 2) {
         // yes, really.
-        this->color.r = 100;
-        this->color.g = 100;
-        this->color.b = 100;
-        this->color.a = 255;
+        self->color.r = 100;
+        self->color.g = 100;
+        self->color.b = 100;
+        self->color.a = 255;
     } else {
-        this->step = 0x28;
-        this->color.rgba = this->effect == 1 ? RGBA8(0, 0, 0, 255) : RGBA8(160, 160, 160, 255);
+        self->step = 0x28;
+        self->color.rgba = self->effect == 1 ? RGBA8(0, 0, 0, 255) : RGBA8(160, 160, 160, 255);
     }
-    if (this->unk_14 != 0) {
-        this->texY = 0;
-        if (this->typeColor == 3) {
-            this->texY = 0xFA;
+    if (self->unk_14 != 0) {
+        self->texY = 0;
+        if (self->typeColor == 3) {
+            self->texY = 0xFA;
         }
     } else {
-        this->texY = 0x1F4;
-        if (this->effect == 2) {
+        self->texY = 0x1F4;
+        if (self->effect == 2) {
             Audio_PlaySoundGeneral(NA_SE_OC_SECRET_WARP_OUT, &D_801333D4, 4, &D_801333E0, &D_801333E0, &D_801333E8);
         }
     }
-    guPerspective(&this->projection, &this->normal, 60.0f, (4.0f / 3.0f), 10.0f, 12800.0f, 1.0f);
-    guLookAt(&this->lookAt, 0.0f, 0.0f, 400.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+    guPerspective(&self->projection, &self->normal, 60.0f, (4.0f / 3.0f), 10.0f, 12800.0f, 1.0f);
+    guLookAt(&self->lookAt, 0.0f, 0.0f, 400.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 }
 
 void* TransitionCircle_Init(void* thisx) {
-    TransitionCircle* this = THIS;
+    TransitionCircle* self = THIS;
 
-    bzero(this, sizeof(*this));
-    return this;
+    bzero(self, sizeof(*self));
+    return self;
 }
 
 void TransitionCircle_Destroy(void* thisx) {
 }
 
 void TransitionCircle_Update(void* thisx, s32 updateRate) {
-    TransitionCircle* this = THIS;
+    TransitionCircle* self = THIS;
     s32 temp_t2;
     s32 temp_t3;
 
-    if (this->unk_14 != 0) {
-        if (this->texY == 0) {
-            if (this->effect == 2) {
+    if (self->unk_14 != 0) {
+        if (self->texY == 0) {
+            if (self->effect == 2) {
                 Audio_PlaySoundGeneral(NA_SE_OC_SECRET_WARP_IN, &D_801333D4, 4, &D_801333E0, &D_801333E0, &D_801333E8);
             }
         }
-        this->texY += this->step * 3 / updateRate;
-        if (this->texY >= 0x1F4) {
-            this->texY = 0x1F4;
-            this->isDone = 1;
+        self->texY += self->step * 3 / updateRate;
+        if (self->texY >= 0x1F4) {
+            self->texY = 0x1F4;
+            self->isDone = 1;
         }
     } else {
-        this->texY -= this->step * 3 / updateRate;
-        if (this->typeColor != 3) {
-            if (this->texY <= 0) {
-                this->texY = 0;
-                this->isDone = 1;
+        self->texY -= self->step * 3 / updateRate;
+        if (self->typeColor != 3) {
+            if (self->texY <= 0) {
+                self->texY = 0;
+                self->isDone = 1;
             }
         } else {
-            if (this->texY < 0xFB) {
-                this->texY = 0xFA;
-                this->isDone = 1;
+            if (self->texY < 0xFB) {
+                self->texY = 0xFA;
+                self->isDone = 1;
             }
         }
     }
@@ -382,25 +382,25 @@ void TransitionCircle_Update(void* thisx, s32 updateRate) {
 void TransitionCircle_Draw(void* thisx, Gfx** gfxP) {
     Gfx* gfx = *gfxP;
     Mtx* modelView;
-    TransitionCircle* this = THIS;
+    TransitionCircle* self = THIS;
     Gfx* texScroll;
     // These variables are a best guess based on the other transition types.
     f32 tPos = 0.0f;
     f32 rot = 0.0f;
     f32 scale = 14.8f;
 
-    modelView = this->modelView[this->frame];
+    modelView = self->modelView[self->frame];
 
-    this->frame ^= 1;
+    self->frame ^= 1;
     gDPPipeSync(gfx++);
-    texScroll = Gfx_BranchTexScroll(&gfx, this->texX, this->texY, 0x10, 0x40);
+    texScroll = Gfx_BranchTexScroll(&gfx, self->texX, self->texY, 0x10, 0x40);
     gSPSegment(gfx++, 9, texScroll);
-    gSPSegment(gfx++, 8, this->texture);
-    gDPSetColor(gfx++, G_SETPRIMCOLOR, this->color.rgba);
-    gDPSetColor(gfx++, G_SETENVCOLOR, this->color.rgba);
-    gSPMatrix(gfx++, &this->projection, G_MTX_PROJECTION | G_MTX_LOAD);
-    gSPPerspNormalize(gfx++, this->normal);
-    gSPMatrix(gfx++, &this->lookAt, G_MTX_PROJECTION | G_MTX_NOPUSH | G_MTX_MUL);
+    gSPSegment(gfx++, 8, self->texture);
+    gDPSetColor(gfx++, G_SETPRIMCOLOR, self->color.rgba);
+    gDPSetColor(gfx++, G_SETENVCOLOR, self->color.rgba);
+    gSPMatrix(gfx++, &self->projection, G_MTX_PROJECTION | G_MTX_LOAD);
+    gSPPerspNormalize(gfx++, self->normal);
+    gSPMatrix(gfx++, &self->lookAt, G_MTX_PROJECTION | G_MTX_NOPUSH | G_MTX_MUL);
 
     if (scale != 1.0f) {
         guScale(&modelView[0], scale, scale, 1.0f);
@@ -422,34 +422,34 @@ void TransitionCircle_Draw(void* thisx, Gfx** gfxP) {
 }
 
 s32 TransitionCircle_IsDone(void* thisx) {
-    TransitionCircle* this = THIS;
+    TransitionCircle* self = THIS;
 
-    return this->isDone;
+    return self->isDone;
 }
 
 void TransitionCircle_SetType(void* thisx, s32 type) {
-    TransitionCircle* this = THIS;
+    TransitionCircle* self = THIS;
 
     if (type & 0x80) {
-        this->unk_14 = (type >> 5) & 0x1;
-        this->typeColor = (type >> 3) & 0x3;
-        this->speed = type & 0x1;
-        this->effect = (type >> 1) & 0x3;
+        self->unk_14 = (type >> 5) & 0x1;
+        self->typeColor = (type >> 3) & 0x3;
+        self->speed = type & 0x1;
+        self->effect = (type >> 1) & 0x3;
     } else if (type == 1) {
-        this->unk_14 = 1;
+        self->unk_14 = 1;
     } else {
-        this->unk_14 = 0;
+        self->unk_14 = 0;
     }
 }
 
 void TransitionCircle_SetColor(void* thisx, u32 color) {
-    TransitionCircle* this = THIS;
+    TransitionCircle* self = THIS;
 
-    this->color.rgba = color;
+    self->color.rgba = color;
 }
 
 void TransitionCircle_SetEnvColor(void* thisx, u32 envColor) {
-    TransitionCircle* this = THIS;
+    TransitionCircle* self = THIS;
 
-    this->envColor.rgba = envColor;
+    self->envColor.rgba = envColor;
 }

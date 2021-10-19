@@ -22,11 +22,11 @@ typedef enum {
 
 void EnDntDemo_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnDntDemo_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnDntDemo_Update(Actor* this, GlobalContext* globalCtx);
+void EnDntDemo_Update(Actor* self, GlobalContext* globalCtx);
 
-void EnDntDemo_Judge(EnDntDemo* this, GlobalContext* globalCtx);
-void EnDntDemo_Results(EnDntDemo* this, GlobalContext* globalCtx);
-void EnDntDemo_Prize(EnDntDemo* this, GlobalContext* globalCtx);
+void EnDntDemo_Judge(EnDntDemo* self, GlobalContext* globalCtx);
+void EnDntDemo_Results(EnDntDemo* self, GlobalContext* globalCtx);
+void EnDntDemo_Prize(EnDntDemo* self, GlobalContext* globalCtx);
 
 const ActorInit En_Dnt_Demo_InitVars = {
     ACTOR_EN_DNT_DEMO,
@@ -42,7 +42,7 @@ const ActorInit En_Dnt_Demo_InitVars = {
 
 //! @bug
 //! This table is missing a column for the Mask of Truth, so it reads the first value of the next row. In the last row,
-//! it reads the first entry of sResultValues (4), which is an invalid result. The scrubs have no reaction in this case.
+//! it reads the first entry of sResultValues (4), which is an invalid result. The scrubs have no reaction in self case.
 static s16 sResultTable[8][7] = {
     /* Keaton    Skull     Spooky    Bunny     Goron      Zora     Gerudo         Truth   */
     { DNT_LIKE, DNT_HATE, DNT_LIKE, DNT_HATE, DNT_LOVE, DNT_LIKE, DNT_HATE }, /* DNT_HATE */
@@ -72,7 +72,7 @@ void EnDntDemo_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void EnDntDemo_Init(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
-    EnDntDemo* this = THIS;
+    EnDntDemo* self = THIS;
     s32 i;
     s32 pad;
 
@@ -80,31 +80,31 @@ void EnDntDemo_Init(Actor* thisx, GlobalContext* globalCtx2) {
     // "Deku Scrub mask show start"
     osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ デグナッツお面品評会開始 ☆☆☆☆☆ \n" VT_RST);
     for (i = 0; i < 9; i++) {
-        this->scrubPos[i] = sScrubPos[i];
-        this->scrubs[i] = (EnDntNomal*)Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx,
-                                                          ACTOR_EN_DNT_NOMAL, this->scrubPos[i].x, this->scrubPos[i].y,
-                                                          this->scrubPos[i].z, 0, 0, 0, i + ENDNTNOMAL_STAGE);
-        if (this->scrubs[i] != NULL) {
+        self->scrubPos[i] = sScrubPos[i];
+        self->scrubs[i] = (EnDntNomal*)Actor_SpawnAsChild(&globalCtx->actorCtx, &self->actor, globalCtx,
+                                                          ACTOR_EN_DNT_NOMAL, self->scrubPos[i].x, self->scrubPos[i].y,
+                                                          self->scrubPos[i].z, 0, 0, 0, i + ENDNTNOMAL_STAGE);
+        if (self->scrubs[i] != NULL) {
             // "zako zako" [small fries]
-            osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ ザコザコ ☆☆☆☆☆ %x\n" VT_RST, this->scrubs[i]);
+            osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ ザコザコ ☆☆☆☆☆ %x\n" VT_RST, self->scrubs[i]);
         }
     }
 
-    this->leaderPos.x = 4050.0f;
-    this->leaderPos.y = -20.0f;
-    this->leaderPos.z = 1000.0f;
-    this->leader = (EnDntJiji*)Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_DNT_JIJI,
-                                                  this->leaderPos.x, this->leaderPos.y, this->leaderPos.z, 0, 0, 0, 0);
-    if (this->leader != NULL) {
+    self->leaderPos.x = 4050.0f;
+    self->leaderPos.y = -20.0f;
+    self->leaderPos.z = 1000.0f;
+    self->leader = (EnDntJiji*)Actor_SpawnAsChild(&globalCtx->actorCtx, &self->actor, globalCtx, ACTOR_EN_DNT_JIJI,
+                                                  self->leaderPos.x, self->leaderPos.y, self->leaderPos.z, 0, 0, 0, 0);
+    if (self->leader != NULL) {
         // "jiji jiji jiji jiji jiji" [onomatopoeia for the scrub sound?]
-        osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ じじじじじじじじじじい ☆☆☆☆☆ %x\n" VT_RST, this->leader);
+        osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ じじじじじじじじじじい ☆☆☆☆☆ %x\n" VT_RST, self->leader);
     }
-    this->subCamera = 0;
-    this->actor.flags &= ~1;
-    this->actionFunc = EnDntDemo_Judge;
+    self->subCamera = 0;
+    self->actor.flags &= ~1;
+    self->actionFunc = EnDntDemo_Judge;
 }
 
-void EnDntDemo_Judge(EnDntDemo* this, GlobalContext* globalCtx) {
+void EnDntDemo_Judge(EnDntDemo* self, GlobalContext* globalCtx) {
     s16 delay;
     s16 reaction;
     s16 rand9;
@@ -113,45 +113,45 @@ void EnDntDemo_Judge(EnDntDemo* this, GlobalContext* globalCtx) {
     u8 ignore;
     s32 i;
 
-    if (this->leaderSignal != DNT_SIGNAL_NONE) {
+    if (self->leaderSignal != DNT_SIGNAL_NONE) {
         for (i = 0; i < 9; i++) {
-            this->scrubs[i]->stageSignal = this->leaderSignal;
-            this->scrubs[i]->action = this->action;
-            this->scrubs[i]->stagePrize = DNT_PRIZE_NONE;
+            self->scrubs[i]->stageSignal = self->leaderSignal;
+            self->scrubs[i]->action = self->action;
+            self->scrubs[i]->stagePrize = DNT_PRIZE_NONE;
         }
-        if (this->leader->isSolid) {
-            this->leader->stageSignal = DNT_LEADER_SIGNAL_BURROW;
+        if (self->leader->isSolid) {
+            self->leader->stageSignal = DNT_LEADER_SIGNAL_BURROW;
         }
-        this->leaderSignal = DNT_SIGNAL_NONE;
-        this->actionFunc = EnDntDemo_Results;
-    } else if ((this->actor.xzDistToPlayer > 30.0f) || (Player_GetMask(globalCtx) == 0)) {
-        this->debugArrowTimer++;
-        if (this->subCamera != SUBCAM_FREE) {
-            this->subCamera = SUBCAM_FREE;
+        self->leaderSignal = DNT_SIGNAL_NONE;
+        self->actionFunc = EnDntDemo_Results;
+    } else if ((self->actor.xzDistToPlayer > 30.0f) || (Player_GetMask(globalCtx) == 0)) {
+        self->debugArrowTimer++;
+        if (self->subCamera != SUBCAM_FREE) {
+            self->subCamera = SUBCAM_FREE;
         }
-        if (this->judgeTimer != 0) {
+        if (self->judgeTimer != 0) {
             for (i = 0; i < 9; i++) {
-                this->scrubs[i]->stageSignal = DNT_SIGNAL_HIDE;
+                self->scrubs[i]->stageSignal = DNT_SIGNAL_HIDE;
             }
-            this->judgeTimer = 0;
+            self->judgeTimer = 0;
         }
     } else {
-        if ((Player_GetMask(globalCtx) != 0) && (this->subCamera == SUBCAM_FREE)) {
-            this->subCamera = OnePointCutscene_Init(globalCtx, 2220, -99, &this->scrubs[3]->actor, MAIN_CAM);
+        if ((Player_GetMask(globalCtx) != 0) && (self->subCamera == SUBCAM_FREE)) {
+            self->subCamera = OnePointCutscene_Init(globalCtx, 2220, -99, &self->scrubs[3]->actor, MAIN_CAM);
         }
-        this->debugArrowTimer = 0;
-        if (this->judgeTimer == 40) {
+        self->debugArrowTimer = 0;
+        if (self->judgeTimer == 40) {
             for (i = 0; i < 9; i++) {
-                this->scrubs[i]->stageSignal = DNT_SIGNAL_LOOK;
+                self->scrubs[i]->stageSignal = DNT_SIGNAL_LOOK;
             }
         }
-        if (this->judgeTimer > 40) {
+        if (self->judgeTimer > 40) {
             // "gera gera" [onomatopoeia for loud giggling]
             osSyncPrintf(VT_FGCOL(RED) "☆☆☆☆☆ げらげら ☆☆☆☆☆ \n" VT_RST);
-            func_800F436C(&this->actor.projectedPos, NA_SE_EV_CROWD - SFX_FLAG, 2.0f);
+            func_800F436C(&self->actor.projectedPos, NA_SE_EV_CROWD - SFX_FLAG, 2.0f);
         }
-        if (this->judgeTimer < 120) {
-            this->judgeTimer++;
+        if (self->judgeTimer < 120) {
+            self->judgeTimer++;
         } else {
             ignore = false;
             reaction = DNT_SIGNAL_NONE;
@@ -160,7 +160,7 @@ void EnDntDemo_Judge(EnDntDemo* this, GlobalContext* globalCtx) {
                 case PLAYER_MASK_SKULL:
                     if (!(gSaveContext.itemGetInf[1] & 0x4000)) {
                         reaction = DNT_SIGNAL_CELEBRATE;
-                        this->prize = DNT_PRIZE_STICK;
+                        self->prize = DNT_PRIZE_STICK;
                         Audio_QueueSeqCmd(0x3E);
                         break;
                     }
@@ -168,13 +168,13 @@ void EnDntDemo_Judge(EnDntDemo* this, GlobalContext* globalCtx) {
                     if (!(gSaveContext.itemGetInf[1] & 0x8000) && (Player_GetMask(globalCtx) != PLAYER_MASK_SKULL)) {
                         Audio_PlaySoundGeneral(NA_SE_SY_TRE_BOX_APPEAR, &D_801333D4, 4, &D_801333E0, &D_801333E0,
                                                &D_801333E8);
-                        this->prize = DNT_PRIZE_NUTS;
-                        this->leader->stageSignal = DNT_LEADER_SIGNAL_UP;
+                        self->prize = DNT_PRIZE_NUTS;
+                        self->leader->stageSignal = DNT_LEADER_SIGNAL_UP;
                         reaction = DNT_SIGNAL_LOOK;
-                        if (this->subCamera != SUBCAM_FREE) {
-                            this->subCamera = SUBCAM_FREE;
+                        if (self->subCamera != SUBCAM_FREE) {
+                            self->subCamera = SUBCAM_FREE;
                             reaction = DNT_SIGNAL_LOOK;
-                            OnePointCutscene_Init(globalCtx, 2340, -99, &this->leader->actor, MAIN_CAM);
+                            OnePointCutscene_Init(globalCtx, 2340, -99, &self->leader->actor, MAIN_CAM);
                         }
                         break;
                     }
@@ -205,15 +205,15 @@ void EnDntDemo_Judge(EnDntDemo* this, GlobalContext* globalCtx) {
 
                         resultIdx = sResultTable[rand9][maskIdx];
                         reaction = sResultValues[resultIdx][0];
-                        this->action = sResultValues[resultIdx][1];
-                        switch (this->action) {
+                        self->action = sResultValues[resultIdx][1];
+                        switch (self->action) {
                             case DNT_ACTION_LOW_RUPEES:
                                 Audio_QueueSeqCmd(0x2D);
                                 break;
                             case DNT_ACTION_ATTACK:
-                                if (this->subCamera != SUBCAM_FREE) {
-                                    this->subCamera = SUBCAM_FREE;
-                                    OnePointCutscene_Init(globalCtx, 2350, -99, &this->scrubs[3]->actor, MAIN_CAM);
+                                if (self->subCamera != SUBCAM_FREE) {
+                                    self->subCamera = SUBCAM_FREE;
+                                    OnePointCutscene_Init(globalCtx, 2350, -99, &self->scrubs[3]->actor, MAIN_CAM);
                                 }
                                 Audio_QueueSeqCmd(0x81A);
                                 break;
@@ -232,7 +232,7 @@ void EnDntDemo_Judge(EnDntDemo* this, GlobalContext* globalCtx) {
                         // "What kind of evaluation?"
                         osSyncPrintf(VT_FGCOL(YELLOW) "☆☆☆☆☆ どういう評価？  ☆☆☆☆☆☆ %d\n" VT_RST, reaction);
                         // "What kind of action?"
-                        osSyncPrintf(VT_FGCOL(PURPLE) "☆☆☆☆☆ どういうアクション？  ☆☆☆ %d\n" VT_RST, this->action);
+                        osSyncPrintf(VT_FGCOL(PURPLE) "☆☆☆☆☆ どういうアクション？  ☆☆☆ %d\n" VT_RST, self->action);
                         osSyncPrintf("\n\n");
                         break;
                     }
@@ -240,100 +240,100 @@ void EnDntDemo_Judge(EnDntDemo* this, GlobalContext* globalCtx) {
             if (reaction != DNT_SIGNAL_NONE) {
                 for (i = 0; i < 9; i++) {
                     if (delay != 0) {
-                        this->scrubs[i]->timer3 = delay * i;
+                        self->scrubs[i]->timer3 = delay * i;
                     }
-                    this->scrubs[i]->action = this->action;
-                    this->scrubs[i]->stageSignal = reaction;
-                    this->scrubs[i]->ignore = ignore;
-                    if (this->prize != DNT_PRIZE_NONE) {
-                        this->scrubs[i]->timer1 = 300;
-                        this->scrubs[i]->stagePrize = this->prize;
-                        this->scrubs[i]->targetPos = this->leader->actor.world.pos;
-                        if (this->prize == DNT_PRIZE_NUTS) {
-                            this->leader->stageSignal = DNT_LEADER_SIGNAL_UP;
+                    self->scrubs[i]->action = self->action;
+                    self->scrubs[i]->stageSignal = reaction;
+                    self->scrubs[i]->ignore = ignore;
+                    if (self->prize != DNT_PRIZE_NONE) {
+                        self->scrubs[i]->timer1 = 300;
+                        self->scrubs[i]->stagePrize = self->prize;
+                        self->scrubs[i]->targetPos = self->leader->actor.world.pos;
+                        if (self->prize == DNT_PRIZE_NUTS) {
+                            self->leader->stageSignal = DNT_LEADER_SIGNAL_UP;
                         }
-                        if (this->prize == DNT_PRIZE_STICK) {
-                            this->leader->timer = 300;
+                        if (self->prize == DNT_PRIZE_STICK) {
+                            self->leader->timer = 300;
                         }
                     }
                 }
-                this->actionFunc = EnDntDemo_Results;
+                self->actionFunc = EnDntDemo_Results;
             }
         }
     }
 }
 
-void EnDntDemo_Results(EnDntDemo* this, GlobalContext* globalCtx) {
+void EnDntDemo_Results(EnDntDemo* self, GlobalContext* globalCtx) {
     s32 i;
 
-    if (this->leaderSignal != DNT_SIGNAL_NONE) {
+    if (self->leaderSignal != DNT_SIGNAL_NONE) {
         for (i = 0; i < 9; i++) {
-            this->scrubs[i]->action = this->action;
-            this->scrubs[i]->stageSignal = this->leaderSignal;
-            this->scrubs[i]->stagePrize = DNT_PRIZE_NONE;
+            self->scrubs[i]->action = self->action;
+            self->scrubs[i]->stageSignal = self->leaderSignal;
+            self->scrubs[i]->stagePrize = DNT_PRIZE_NONE;
         }
-        if (this->leader->action == DNT_LEADER_ACTION_UP) {
-            this->leader->stageSignal = DNT_LEADER_SIGNAL_BURROW;
-        } else if (this->leader->unburrow) {
-            this->leader->stageSignal = DNT_LEADER_SIGNAL_RETURN;
+        if (self->leader->action == DNT_LEADER_ACTION_UP) {
+            self->leader->stageSignal = DNT_LEADER_SIGNAL_BURROW;
+        } else if (self->leader->unburrow) {
+            self->leader->stageSignal = DNT_LEADER_SIGNAL_RETURN;
         } else {
-            this->leader->action = DNT_LEADER_ACTION_ATTACK;
+            self->leader->action = DNT_LEADER_ACTION_ATTACK;
         }
-        this->leader->timer = 0;
-        this->leaderSignal = this->action = DNT_SIGNAL_NONE;
-        this->actionFunc = EnDntDemo_Prize;
-    } else if (this->prize == DNT_PRIZE_STICK) {
+        self->leader->timer = 0;
+        self->leaderSignal = self->action = DNT_SIGNAL_NONE;
+        self->actionFunc = EnDntDemo_Prize;
+    } else if (self->prize == DNT_PRIZE_STICK) {
         for (i = 0; i < 9; i++) {
-            s16 offsetAngle = -this->leader->actor.shape.rot.y;
-            Vec3f leaderPos = this->leader->actor.world.pos;
+            s16 offsetAngle = -self->leader->actor.shape.rot.y;
+            Vec3f leaderPos = self->leader->actor.world.pos;
             f32 offsetDist;
 
             if (!(i & 1)) {
                 offsetAngle -= 0x59D8;
             }
             offsetDist = ((i + 1) * 20.0f) + 20.0f;
-            this->scrubs[i]->timer2 = 10;
-            this->scrubs[i]->targetPos.x = leaderPos.x + Math_SinS(offsetAngle) * offsetDist;
-            this->scrubs[i]->targetPos.y = leaderPos.y;
-            this->scrubs[i]->targetPos.z = leaderPos.z + Math_CosS(offsetAngle) * offsetDist;
+            self->scrubs[i]->timer2 = 10;
+            self->scrubs[i]->targetPos.x = leaderPos.x + Math_SinS(offsetAngle) * offsetDist;
+            self->scrubs[i]->targetPos.y = leaderPos.y;
+            self->scrubs[i]->targetPos.z = leaderPos.z + Math_CosS(offsetAngle) * offsetDist;
         }
     }
 }
 
-void EnDntDemo_Prize(EnDntDemo* this, GlobalContext* globalCtx) {
+void EnDntDemo_Prize(EnDntDemo* self, GlobalContext* globalCtx) {
     s32 i;
 
-    if (this->leaderSignal != DNT_SIGNAL_NONE) {
+    if (self->leaderSignal != DNT_SIGNAL_NONE) {
         for (i = 0; i < 9; i++) {
-            this->scrubs[i]->action = this->action;
-            this->scrubs[i]->stageSignal = this->leaderSignal;
-            this->scrubs[i]->stagePrize = DNT_PRIZE_NONE;
+            self->scrubs[i]->action = self->action;
+            self->scrubs[i]->stageSignal = self->leaderSignal;
+            self->scrubs[i]->stagePrize = DNT_PRIZE_NONE;
         }
-        this->leaderSignal = this->action = DNT_SIGNAL_NONE;
+        self->leaderSignal = self->action = DNT_SIGNAL_NONE;
     }
 }
 
 void EnDntDemo_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
-    EnDntDemo* this = THIS;
+    EnDntDemo* self = THIS;
 
-    if (this->unkTimer2 != 0) {
-        this->unkTimer2--;
+    if (self->unkTimer2 != 0) {
+        self->unkTimer2--;
     }
-    if (this->unkTimer1 != 0) {
-        this->unkTimer1--;
+    if (self->unkTimer1 != 0) {
+        self->unkTimer1--;
     }
-    this->actionFunc(this, globalCtx);
+    self->actionFunc(self, globalCtx);
     if (BREG(0)) {
-        if (this->debugArrowTimer != 0) {
-            if (!(this->debugArrowTimer & 1)) {
-                DebugDisplay_AddObject(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
-                                       this->actor.world.rot.x, this->actor.world.rot.y, this->actor.world.rot.z, 1.0f,
+        if (self->debugArrowTimer != 0) {
+            if (!(self->debugArrowTimer & 1)) {
+                DebugDisplay_AddObject(self->actor.world.pos.x, self->actor.world.pos.y, self->actor.world.pos.z,
+                                       self->actor.world.rot.x, self->actor.world.rot.y, self->actor.world.rot.z, 1.0f,
                                        1.0f, 1.0f, 120, 120, 0, 255, 4, globalCtx->state.gfxCtx);
             }
         } else {
-            DebugDisplay_AddObject(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
-                                   this->actor.world.rot.x, this->actor.world.rot.y, this->actor.world.rot.z, 1.0f,
+            DebugDisplay_AddObject(self->actor.world.pos.x, self->actor.world.pos.y, self->actor.world.pos.z,
+                                   self->actor.world.rot.x, self->actor.world.rot.y, self->actor.world.rot.z, 1.0f,
                                    1.0f, 1.0f, 255, 255, 255, 255, 4, globalCtx->state.gfxCtx);
         }
     }

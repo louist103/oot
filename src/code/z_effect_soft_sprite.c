@@ -176,7 +176,7 @@ void EffectSs_Spawn(GlobalContext* globalCtx, s32 type, s32 priority, void* init
     ASSERT(type < EFFECT_SS_TYPE_MAX, "type < EFFECT_SS2_TYPE_LAST_LABEL", "../z_effect_soft_sprite.c", 556);
 
     if (EffectSs_FindSlot(priority, &index) != 0) {
-        // Abort because we couldn't find a suitable slot to add this effect in
+        // Abort because we couldn't find a suitable slot to add self effect in
         return;
     }
 
@@ -221,7 +221,7 @@ void EffectSs_Spawn(GlobalContext* globalCtx, s32 type, s32 priority, void* init
 
     if (initInfo->init == NULL) {
         // "Effects have already been loaded, but the constructor is NULL so the addition will not occur.
-        // Please fix this. (Waste of memory) %08x %d"
+        // Please fix self. (Waste of memory) %08x %d"
         osSyncPrintf("EffectSoftSprite2_makeEffect():すでにエフェクトはロード済みで\nすが,"
                      "コンストラクターがNULLなので追加をやめます。\n直してください。（メモリーの無駄) %08x %d\n",
                      initInfo, type);

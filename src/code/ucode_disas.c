@@ -14,11 +14,11 @@
     }
 
 #define DISAS_LOG        \
-    if (this->enableLog) \
+    if (self->enableLog) \
     osSyncPrintf
 
-u32 UCodeDisas_TranslateAddr(UCodeDisas* this, u32 addr) {
-    u32 physical = this->segments[SEGMENT_NUMBER(addr)] + SEGMENT_OFFSET(addr);
+u32 UCodeDisas_TranslateAddr(UCodeDisas* self, u32 addr) {
+    u32 physical = self->segments[SEGMENT_NUMBER(addr)] + SEGMENT_OFFSET(addr);
     return PHYSICAL_TO_VIRTUAL(physical);
 }
 
@@ -134,33 +134,33 @@ const char* UCodeDisas_ParseCombineAlpha(u32 value, u32 idx) {
     return ret;
 }
 
-void UCodeDisas_Init(UCodeDisas* this) {
+void UCodeDisas_Init(UCodeDisas* self) {
     u32 i;
-    bzero(this, sizeof(UCodeDisas));
+    bzero(self, sizeof(UCodeDisas));
     for (i = 0; i < NUM_SEGMENTS; i++) {
-        this->segments[i] = gSegments[i];
+        self->segments[i] = gSegments[i];
     }
 }
 
-void UCodeDisas_Destroy(UCodeDisas* this) {
+void UCodeDisas_Destroy(UCodeDisas* self) {
 }
 
-void UCodeDisas_SetCurUCodeImpl(UCodeDisas* this, void* ptr) {
+void UCodeDisas_SetCurUCodeImpl(UCodeDisas* self, void* ptr) {
     s32 i;
 
-    for (i = 0; i < this->ucodeInfoCount; i++) {
-        if (ptr == this->ucodeInfo[i].ptr) {
-            this->ucodeType = this->ucodeInfo[i].type;
+    for (i = 0; i < self->ucodeInfoCount; i++) {
+        if (ptr == self->ucodeInfo[i].ptr) {
+            self->ucodeType = self->ucodeInfo[i].type;
             break;
         }
     }
-    if (i >= this->ucodeInfoCount) {
+    if (i >= self->ucodeInfoCount) {
         DISAS_LOG("マイクロコードが一致しなかった\n"); // "Microcode did not match"
-        this->ucodeType = UCODE_NULL;
+        self->ucodeType = UCODE_NULL;
     }
 }
 
-void UCodeDisas_ParseGeometryMode(UCodeDisas* this, u32 mode) {
+void UCodeDisas_ParseGeometryMode(UCodeDisas* self, u32 mode) {
     u32 first = true;
     s32 i;
 
@@ -179,7 +179,7 @@ void UCodeDisas_ParseGeometryMode(UCodeDisas* this, u32 mode) {
     }
 }
 
-void UCodeDisas_ParseRenderMode(UCodeDisas* this, u32 mode) {
+void UCodeDisas_ParseRenderMode(UCodeDisas* self, u32 mode) {
     static F3dzexRenderMode sUCodeDisasRenderModeFlags[] = {
         F3DZEX_RENDERMODE(AA_EN, 0x8),
         F3DZEX_RENDERMODE(Z_CMP, 0x10),
@@ -221,20 +221,20 @@ void UCodeDisas_ParseRenderMode(UCodeDisas* this, u32 mode) {
     b = (mode >> 16) & 0x3333;
 
     // clang-format off
-    if (this->enableLog == 0) {} else { osSyncPrintf("\nGBL_c1(%s, %s, %s, %s)|",
+    if (self->enableLog == 0) {} else { osSyncPrintf("\nGBL_c1(%s, %s, %s, %s)|",
         D_8012DDDC[0][a >> 12 & 3], D_8012DDDC[1][a >> 8 & 3], D_8012DDDC[2][a >> 4 & 3], D_8012DDDC[3][a >> 0 & 3]); }
     // clang-format on
 
-    if (this->enableLog) {
+    if (self->enableLog) {
         osSyncPrintf("\nGBL_c2(%s, %s, %s, %s)", D_8012DDDC[0][b >> 12 & 3], D_8012DDDC[1][b >> 8 & 3],
                      D_8012DDDC[2][b >> 4 & 3], D_8012DDDC[3][b >> 0 & 3]);
     }
 }
 
-void UCodeDisas_PrintVertices(UCodeDisas* this, Vtx* vtx, s32 count, s32 start) {
+void UCodeDisas_PrintVertices(UCodeDisas* self, Vtx* vtx, s32 count, s32 start) {
     s32 i;
     for (i = 0; i < count; i++) {
-        if (this->geometryMode & G_LIGHTING) {
+        if (self->geometryMode & G_LIGHTING) {
             DISAS_LOG("\n{{%6d, %6d, %6d, %d, %6d, %6d, %3d, %3d, %3d, %3d}}, /* vc%d */", vtx->n.ob[0], vtx->n.ob[1],
                       vtx->n.ob[2], vtx->n.flag, vtx->n.tc[0], vtx->n.tc[1], vtx->n.n[0], vtx->n.n[1], vtx->n.n[2],
                       vtx->n.a, start + i);
@@ -249,7 +249,7 @@ void UCodeDisas_PrintVertices(UCodeDisas* this, Vtx* vtx, s32 count, s32 start) 
     }
 }
 
-void UCodeDisas_Disassemble(UCodeDisas* this, Gfx* gfx0);
+void UCodeDisas_Disassemble(UCodeDisas* self, Gfx* gfx0);
 #pragma GLOBAL_ASM("asm/non_matchings/code/ucode_disas/UCodeDisas_Disassemble.rodata.s")
 F3dzexSetModeMacro sUCodeDisasModeHMacros[] = {
     F3DZEX_SETRENDERMACRO("SetAlphaDither", G_MDSFT_ALPHADITHER, 2, G_AD_PATTERN, G_AD_NOTPATTERN, G_AD_NOISE,
@@ -274,16 +274,16 @@ F3dzexSetModeMacro sUCodeDisasModeLMacros[] = {
 };
 #pragma GLOBAL_ASM("asm/non_matchings/code/ucode_disas/UCodeDisas_Disassemble.s")
 
-void UCodeDisas_RegisterUCode(UCodeDisas* this, s32 count, UCodeInfo* ucodeArray) {
-    this->ucodeInfoCount = count;
-    this->ucodeInfo = ucodeArray;
+void UCodeDisas_RegisterUCode(UCodeDisas* self, s32 count, UCodeInfo* ucodeArray) {
+    self->ucodeInfoCount = count;
+    self->ucodeInfo = ucodeArray;
 }
 
-void UCodeDisas_SetCurUCode(UCodeDisas* this, void* ptr) {
-    UCodeDisas_SetCurUCodeImpl(this, ptr);
+void UCodeDisas_SetCurUCode(UCodeDisas* self, void* ptr) {
+    UCodeDisas_SetCurUCodeImpl(self, ptr);
 }
 
-// 4 bytes of nops, separating this file from audio_synthesis and padding .text
-// to a 32-byte boundary. Unclear what this comes from... maybe the audio
+// 4 bytes of nops, separating self file from audio_synthesis and padding .text
+// to a 32-byte boundary. Unclear what self comes from... maybe the audio
 // library was built separately and aligned to 32 bytes?
 #pragma GLOBAL_ASM("asm/non_matchings/code/ucode_disas/pad_800DACB0.s")

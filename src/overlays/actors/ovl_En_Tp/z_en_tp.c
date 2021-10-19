@@ -16,20 +16,20 @@ void EnTp_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTp_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTp_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void EnTp_Tail_SetupFollowHead(EnTp* this);
-void EnTp_Tail_FollowHead(EnTp* this, GlobalContext* globalCtx);
-void EnTp_Head_SetupApproachPlayer(EnTp* this);
-void EnTp_Head_ApproachPlayer(EnTp* this, GlobalContext* globalCtx);
-void EnTp_SetupDie(EnTp* this);
-void EnTp_Die(EnTp* this, GlobalContext* globalCtx);
-void EnTp_Fragment_SetupFade(EnTp* this);
-void EnTp_Fragment_Fade(EnTp* this, GlobalContext* globalCtx);
-void EnTp_Head_SetupTakeOff(EnTp* this);
-void EnTp_Head_TakeOff(EnTp* this, GlobalContext* globalCtx);
-void EnTp_Head_SetupWait(EnTp* this);
-void EnTp_Head_Wait(EnTp* this, GlobalContext* globalCtx);
-void EnTp_Head_SetupBurrowReturnHome(EnTp* this);
-void EnTp_Head_BurrowReturnHome(EnTp* this, GlobalContext* globalCtx);
+void EnTp_Tail_SetupFollowHead(EnTp* self);
+void EnTp_Tail_FollowHead(EnTp* self, GlobalContext* globalCtx);
+void EnTp_Head_SetupApproachPlayer(EnTp* self);
+void EnTp_Head_ApproachPlayer(EnTp* self, GlobalContext* globalCtx);
+void EnTp_SetupDie(EnTp* self);
+void EnTp_Die(EnTp* self, GlobalContext* globalCtx);
+void EnTp_Fragment_SetupFade(EnTp* self);
+void EnTp_Fragment_Fade(EnTp* self, GlobalContext* globalCtx);
+void EnTp_Head_SetupTakeOff(EnTp* self);
+void EnTp_Head_TakeOff(EnTp* self, GlobalContext* globalCtx);
+void EnTp_Head_SetupWait(EnTp* self);
+void EnTp_Head_Wait(EnTp* self, GlobalContext* globalCtx);
+void EnTp_Head_SetupBurrowReturnHome(EnTp* self);
+void EnTp_Head_BurrowReturnHome(EnTp* self, GlobalContext* globalCtx);
 
 typedef enum {
     /* 0 */ TAILPASARAN_ACTION_FRAGMENT_FADE,
@@ -126,48 +126,48 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(targetArrowOffset, 10, ICHAIN_STOP),
 };
 
-void EnTp_SetupAction(EnTp* this, EnTpActionFunc actionFunc) {
-    this->actionFunc = actionFunc;
+void EnTp_SetupAction(EnTp* self, EnTpActionFunc actionFunc) {
+    self->actionFunc = actionFunc;
 }
 
 void EnTp_Init(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
-    EnTp* this = THIS;
+    EnTp* self = THIS;
     EnTp* now;
     EnTp* next;
     s32 i;
 
-    Actor_ProcessInitChain(&this->actor, sInitChain);
-    this->actor.targetMode = 3;
-    this->actor.colChkInfo.damageTable = &sDamageTable;
-    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 0.14f);
-    this->unk_150 = 0;
-    this->actor.colChkInfo.health = 1;
-    now = this;
-    this->alpha = 255;
-    Collider_InitJntSph(globalCtx, &this->collider);
-    Collider_SetJntSph(globalCtx, &this->collider, &this->actor, &sJntSphInit, this->colliderItems);
+    Actor_ProcessInitChain(&self->actor, sInitChain);
+    self->actor.targetMode = 3;
+    self->actor.colChkInfo.damageTable = &sDamageTable;
+    ActorShape_Init(&self->actor.shape, 0.0f, ActorShadow_DrawCircle, 0.14f);
+    self->unk_150 = 0;
+    self->actor.colChkInfo.health = 1;
+    now = self;
+    self->alpha = 255;
+    Collider_InitJntSph(globalCtx, &self->collider);
+    Collider_SetJntSph(globalCtx, &self->collider, &self->actor, &sJntSphInit, self->colliderItems);
 
-    if (this->actor.params <= TAILPASARAN_HEAD) {
-        this->actor.naviEnemyId = 0x06;
-        this->timer = 0;
-        this->collider.base.acFlags |= AC_HARD;
-        this->collider.elements->dim.modelSphere.radius = this->collider.elements->dim.worldSphere.radius = 8;
-        EnTp_Head_SetupWait(this);
-        this->actor.focus.pos = this->actor.world.pos;
-        this->actor.flags |= 0x15;
-        Actor_SetScale(&this->actor, 1.5f);
+    if (self->actor.params <= TAILPASARAN_HEAD) {
+        self->actor.naviEnemyId = 0x06;
+        self->timer = 0;
+        self->collider.base.acFlags |= AC_HARD;
+        self->collider.elements->dim.modelSphere.radius = self->collider.elements->dim.worldSphere.radius = 8;
+        EnTp_Head_SetupWait(self);
+        self->actor.focus.pos = self->actor.world.pos;
+        self->actor.flags |= 0x15;
+        Actor_SetScale(&self->actor, 1.5f);
 
         for (i = 0; i <= 6; i++) {
-            next = (EnTp*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_TP, this->actor.world.pos.x,
-                                      this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 0 * i);
+            next = (EnTp*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_TP, self->actor.world.pos.x,
+                                      self->actor.world.pos.y, self->actor.world.pos.z, 0, 0, 0, 0 * i);
 
             if (0 * i) {} // Very fake, but needed to get the s registers right
             if (next != NULL) {
                 now->actor.child = &next->actor;
                 next->actor.parent = &now->actor;
                 next->kiraSpawnTimer = i + 1;
-                next->head = this;
+                next->head = self;
                 Actor_SetScale(&next->actor, 0.3f);
 
                 if (i == 2) {
@@ -181,315 +181,315 @@ void EnTp_Init(Actor* thisx, GlobalContext* globalCtx2) {
                 if (0 * i) {}
             }
         }
-    } else if (this->actor.params == TAILPASARAN_TAIL) {
-        EnTp_Tail_SetupFollowHead(this);
+    } else if (self->actor.params == TAILPASARAN_TAIL) {
+        EnTp_Tail_SetupFollowHead(self);
     } else {
-        EnTp_Fragment_SetupFade(this);
+        EnTp_Fragment_SetupFade(self);
     }
 }
 
 void EnTp_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    EnTp* this = THIS;
+    EnTp* self = THIS;
 
-    Collider_DestroyJntSph(globalCtx, &this->collider);
+    Collider_DestroyJntSph(globalCtx, &self->collider);
 }
 
-void EnTp_Tail_SetupFollowHead(EnTp* this) {
-    this->actionIndex = TAILPASARAN_ACTION_TAIL_FOLLOWHEAD;
-    EnTp_SetupAction(this, EnTp_Tail_FollowHead);
+void EnTp_Tail_SetupFollowHead(EnTp* self) {
+    self->actionIndex = TAILPASARAN_ACTION_TAIL_FOLLOWHEAD;
+    EnTp_SetupAction(self, EnTp_Tail_FollowHead);
 }
 
-void EnTp_Tail_FollowHead(EnTp* this, GlobalContext* globalCtx) {
+void EnTp_Tail_FollowHead(EnTp* self, GlobalContext* globalCtx) {
     s16 angle;
     s16 phase;
 
-    if (this->actor.params == TAILPASARAN_TAIL_DYING) {
-        this->actionIndex = TAILPASARAN_ACTION_DIE;
+    if (self->actor.params == TAILPASARAN_TAIL_DYING) {
+        self->actionIndex = TAILPASARAN_ACTION_DIE;
 
-        if (this->actor.parent == NULL) {
-            EnTp_SetupDie(this);
+        if (self->actor.parent == NULL) {
+            EnTp_SetupDie(self);
         }
     } else {
-        if (this->unk_150 != 0) {
-            this->actor.flags |= 1;
+        if (self->unk_150 != 0) {
+            self->actor.flags |= 1;
         }
 
-        if (this->head->unk_150 != 0) {
-            this->actor.speedXZ = this->red = this->actor.velocity.y = this->heightPhase = 0.0f;
-            if (this->actor.world.pos.y < this->head->actor.home.pos.y) {
-                this->actor.flags &= ~1;
+        if (self->head->unk_150 != 0) {
+            self->actor.speedXZ = self->red = self->actor.velocity.y = self->heightPhase = 0.0f;
+            if (self->actor.world.pos.y < self->head->actor.home.pos.y) {
+                self->actor.flags &= ~1;
             }
 
-            this->actor.world.pos = this->actor.parent->prevPos;
+            self->actor.world.pos = self->actor.parent->prevPos;
         } else {
-            Math_SmoothStepToF(&this->actor.world.pos.y, this->actor.parent->world.pos.y - 4.0f, 1.0f, 1.0f, 0.0f);
-            angle = this->head->actor.shape.rot.y + 0x4000;
-            phase = 2000 * (this->head->unk_15C + this->timer);
-            this->actor.world.pos.x =
-                this->actor.home.pos.x + Math_SinS(phase) * (Math_SinS(angle) * this->horizontalVariation);
-            this->actor.world.pos.z =
-                this->actor.home.pos.z + Math_SinS(phase) * (Math_CosS(angle) * this->horizontalVariation);
+            Math_SmoothStepToF(&self->actor.world.pos.y, self->actor.parent->world.pos.y - 4.0f, 1.0f, 1.0f, 0.0f);
+            angle = self->head->actor.shape.rot.y + 0x4000;
+            phase = 2000 * (self->head->unk_15C + self->timer);
+            self->actor.world.pos.x =
+                self->actor.home.pos.x + Math_SinS(phase) * (Math_SinS(angle) * self->horizontalVariation);
+            self->actor.world.pos.z =
+                self->actor.home.pos.z + Math_SinS(phase) * (Math_CosS(angle) * self->horizontalVariation);
         }
     }
 }
 
-void EnTp_Head_SetupApproachPlayer(EnTp* this) {
-    this->actionIndex = TAILPASARAN_ACTION_HEAD_APPROACHPLAYER;
-    this->timer = 200;
-    EnTp_SetupAction(this, EnTp_Head_ApproachPlayer);
+void EnTp_Head_SetupApproachPlayer(EnTp* self) {
+    self->actionIndex = TAILPASARAN_ACTION_HEAD_APPROACHPLAYER;
+    self->timer = 200;
+    EnTp_SetupAction(self, EnTp_Head_ApproachPlayer);
 }
 
-void EnTp_Head_ApproachPlayer(EnTp* this, GlobalContext* globalCtx) {
+void EnTp_Head_ApproachPlayer(EnTp* self, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    Math_SmoothStepToF(&this->actor.world.pos.y, player->actor.world.pos.y + 30.0f, 1.0f, 0.5f, 0.0f);
-    Audio_PlaySoundGeneral(NA_SE_EN_TAIL_FLY - SFX_FLAG, &this->actor.projectedPos, 4, &D_801333E0, &D_801333E0,
+    Math_SmoothStepToF(&self->actor.world.pos.y, player->actor.world.pos.y + 30.0f, 1.0f, 0.5f, 0.0f);
+    Audio_PlaySoundGeneral(NA_SE_EN_TAIL_FLY - SFX_FLAG, &self->actor.projectedPos, 4, &D_801333E0, &D_801333E0,
                            &D_801333E8);
 
-    if (this->collider.base.atFlags & AT_HIT) {
-        this->collider.base.atFlags &= ~AT_HIT;
-        if (&player->actor == this->collider.base.at) {
-            this->timer = 1;
+    if (self->collider.base.atFlags & AT_HIT) {
+        self->collider.base.atFlags &= ~AT_HIT;
+        if (&player->actor == self->collider.base.at) {
+            self->timer = 1;
         }
     }
 
-    if (this->red < 255) {
-        this->red += 15;
+    if (self->red < 255) {
+        self->red += 15;
     }
 
-    if (Math_CosF(this->heightPhase) == 0.0f) {
-        this->extraHeightVariation = 2.0f * Rand_ZeroOne();
+    if (Math_CosF(self->heightPhase) == 0.0f) {
+        self->extraHeightVariation = 2.0f * Rand_ZeroOne();
     }
 
-    this->actor.world.pos.y += Math_CosF(this->heightPhase) * (2.0f + this->extraHeightVariation);
-    this->heightPhase += 0.2f;
-    Math_SmoothStepToF(&this->actor.speedXZ, 2.5f, 0.1f, 0.2f, 0.0f);
-    this->timer--;
+    self->actor.world.pos.y += Math_CosF(self->heightPhase) * (2.0f + self->extraHeightVariation);
+    self->heightPhase += 0.2f;
+    Math_SmoothStepToF(&self->actor.speedXZ, 2.5f, 0.1f, 0.2f, 0.0f);
+    self->timer--;
 
-    if (this->timer != 0) {
-        Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1, 750, 0);
-        this->actor.shape.rot.y = this->actor.world.rot.y;
+    if (self->timer != 0) {
+        Math_SmoothStepToS(&self->actor.world.rot.y, self->actor.yawTowardsPlayer, 1, 750, 0);
+        self->actor.shape.rot.y = self->actor.world.rot.y;
     } else {
-        EnTp_Head_SetupBurrowReturnHome(this);
+        EnTp_Head_SetupBurrowReturnHome(self);
     }
 }
 
-void EnTp_SetupDie(EnTp* this) {
+void EnTp_SetupDie(EnTp* self) {
     Actor* now;
 
-    this->timer = 2;
+    self->timer = 2;
 
-    if (this->actor.params <= TAILPASARAN_HEAD) {
-        for (now = this->actor.child; now != NULL; now = now->child) {
+    if (self->actor.params <= TAILPASARAN_HEAD) {
+        for (now = self->actor.child; now != NULL; now = now->child) {
             now->params = TAILPASARAN_TAIL_DYING;
             now->colChkInfo.health = 0;
         }
 
-        this->timer = 13;
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_TAIL_DEAD);
+        self->timer = 13;
+        Audio_PlayActorSound2(&self->actor, NA_SE_EN_TAIL_DEAD);
     }
-    this->actionIndex = TAILPASARAN_ACTION_DIE;
-    EnTp_SetupAction(this, EnTp_Die);
+    self->actionIndex = TAILPASARAN_ACTION_DIE;
+    EnTp_SetupAction(self, EnTp_Die);
 }
 
 /**
  * Spawns effects and smaller tail segment-like fragments
  */
-void EnTp_Die(EnTp* this, GlobalContext* globalCtx) {
+void EnTp_Die(EnTp* self, GlobalContext* globalCtx) {
     EnTp* now;
     s16 i;
     s32 pad;
     Vec3f effectVelAccel = { 0.0f, 0.5f, 0.0f };
     Vec3f effectPos = { 0.0f, 0.0f, 0.0f };
 
-    this->timer--;
+    self->timer--;
 
-    if (this->timer <= 0) {
-        if (this->actor.params == TAILPASARAN_HEAD_DYING) {
-            effectPos.x = ((Rand_ZeroOne() - 0.5f) * 15.0f) + this->actor.world.pos.x;
-            effectPos.z = ((Rand_ZeroOne() - 0.5f) * 15.0f) + this->actor.world.pos.z;
-            effectPos.y = ((Rand_ZeroOne() - 0.5f) * 5.0f) + this->actor.world.pos.y;
+    if (self->timer <= 0) {
+        if (self->actor.params == TAILPASARAN_HEAD_DYING) {
+            effectPos.x = ((Rand_ZeroOne() - 0.5f) * 15.0f) + self->actor.world.pos.x;
+            effectPos.z = ((Rand_ZeroOne() - 0.5f) * 15.0f) + self->actor.world.pos.z;
+            effectPos.y = ((Rand_ZeroOne() - 0.5f) * 5.0f) + self->actor.world.pos.y;
             EffectSsDeadDb_Spawn(globalCtx, &effectPos, &effectVelAccel, &effectVelAccel, 100, 0, 255, 255, 255, 255, 0,
                                  0, 255, 1, 9, 1);
 
-            effectPos.x = ((Rand_ZeroOne() - 0.5f) * 15.0f) + this->actor.world.pos.x;
-            effectPos.z = ((Rand_ZeroOne() - 0.5f) * 15.0f) + this->actor.world.pos.z;
-            effectPos.y = ((Rand_ZeroOne() - 0.5f) * 5.0f) + this->actor.world.pos.y;
+            effectPos.x = ((Rand_ZeroOne() - 0.5f) * 15.0f) + self->actor.world.pos.x;
+            effectPos.z = ((Rand_ZeroOne() - 0.5f) * 15.0f) + self->actor.world.pos.z;
+            effectPos.y = ((Rand_ZeroOne() - 0.5f) * 5.0f) + self->actor.world.pos.y;
             EffectSsDeadDb_Spawn(globalCtx, &effectPos, &effectVelAccel, &effectVelAccel, 100, 0, 255, 255, 255, 255, 0,
                                  0, 255, 1, 9, 1);
-            Item_DropCollectibleRandom(globalCtx, &this->actor, &this->actor.world.pos, 0x50);
+            Item_DropCollectibleRandom(globalCtx, &self->actor, &self->actor.world.pos, 0x50);
         } else {
             for (i = 0; i < 1; i++) {
                 now =
-                    (EnTp*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_TP, this->actor.world.pos.x,
-                                       this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, TAILPASARAN_FRAGMENT);
+                    (EnTp*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_TP, self->actor.world.pos.x,
+                                       self->actor.world.pos.y, self->actor.world.pos.z, 0, 0, 0, TAILPASARAN_FRAGMENT);
 
                 if (now != NULL) {
-                    Actor_SetScale(&now->actor, this->actor.scale.z * 0.5f);
-                    now->red = this->red;
+                    Actor_SetScale(&now->actor, self->actor.scale.z * 0.5f);
+                    now->red = self->red;
                 }
             }
         }
 
-        if (this->actor.child != NULL) {
-            this->actor.child->parent = NULL;
-            this->actor.child->params = TAILPASARAN_TAIL_DYING;
-            this->actor.child->colChkInfo.health = 0;
+        if (self->actor.child != NULL) {
+            self->actor.child->parent = NULL;
+            self->actor.child->params = TAILPASARAN_TAIL_DYING;
+            self->actor.child->colChkInfo.health = 0;
         }
 
-        this->unk_150 = 2;
-        Actor_Kill(&this->actor);
+        self->unk_150 = 2;
+        Actor_Kill(&self->actor);
     }
 }
 
-void EnTp_Fragment_SetupFade(EnTp* this) {
-    this->actionIndex = TAILPASARAN_ACTION_FRAGMENT_FADE;
-    this->actor.world.pos.x += ((Rand_ZeroOne() - 0.5f) * 5.0f);
-    this->actor.world.pos.y += ((Rand_ZeroOne() - 0.5f) * 5.0f);
-    this->actor.world.pos.z += ((Rand_ZeroOne() - 0.5f) * 5.0f);
-    this->actor.velocity.x = (Rand_ZeroOne() - 0.5f) * 1.5f;
-    this->actor.velocity.y = (Rand_ZeroOne() - 0.5f) * 1.5f;
-    this->actor.velocity.z = (Rand_ZeroOne() - 0.5f) * 1.5f;
-    this->actor.flags &= ~1;
-    EnTp_SetupAction(this, EnTp_Fragment_Fade);
+void EnTp_Fragment_SetupFade(EnTp* self) {
+    self->actionIndex = TAILPASARAN_ACTION_FRAGMENT_FADE;
+    self->actor.world.pos.x += ((Rand_ZeroOne() - 0.5f) * 5.0f);
+    self->actor.world.pos.y += ((Rand_ZeroOne() - 0.5f) * 5.0f);
+    self->actor.world.pos.z += ((Rand_ZeroOne() - 0.5f) * 5.0f);
+    self->actor.velocity.x = (Rand_ZeroOne() - 0.5f) * 1.5f;
+    self->actor.velocity.y = (Rand_ZeroOne() - 0.5f) * 1.5f;
+    self->actor.velocity.z = (Rand_ZeroOne() - 0.5f) * 1.5f;
+    self->actor.flags &= ~1;
+    EnTp_SetupAction(self, EnTp_Fragment_Fade);
 }
 
-void EnTp_Fragment_Fade(EnTp* this, GlobalContext* globalCtx) {
-    func_8002D7EC(&this->actor);
-    this->alpha -= 20;
+void EnTp_Fragment_Fade(EnTp* self, GlobalContext* globalCtx) {
+    func_8002D7EC(&self->actor);
+    self->alpha -= 20;
 
-    if (this->alpha < 20) {
-        this->alpha = 0;
-        Actor_Kill(&this->actor);
+    if (self->alpha < 20) {
+        self->alpha = 0;
+        Actor_Kill(&self->actor);
     }
 }
 
-void EnTp_Head_SetupTakeOff(EnTp* this) {
-    this->timer = (Rand_ZeroOne() * 15.0f) + 40.0f;
-    this->actionIndex = TAILPASARAN_ACTION_HEAD_TAKEOFF;
-    EnTp_SetupAction(this, EnTp_Head_TakeOff);
+void EnTp_Head_SetupTakeOff(EnTp* self) {
+    self->timer = (Rand_ZeroOne() * 15.0f) + 40.0f;
+    self->actionIndex = TAILPASARAN_ACTION_HEAD_TAKEOFF;
+    EnTp_SetupAction(self, EnTp_Head_TakeOff);
 }
 
 /**
  * Flies up and loops around until it makes for Player
  */
-void EnTp_Head_TakeOff(EnTp* this, GlobalContext* globalCtx) {
+void EnTp_Head_TakeOff(EnTp* self, GlobalContext* globalCtx) {
     s32 pad;
     Player* player = GET_PLAYER(globalCtx);
 
-    Math_SmoothStepToF(&this->actor.speedXZ, 2.5f, 0.1f, 0.2f, 0.0f);
-    Math_SmoothStepToF(&this->actor.world.pos.y, player->actor.world.pos.y + 85.0f + this->horizontalVariation, 1.0f,
-                       this->actor.speedXZ * 0.25f, 0.0f);
-    Audio_PlaySoundGeneral(NA_SE_EN_TAIL_FLY - SFX_FLAG, &this->actor.projectedPos, 4, &D_801333E0, &D_801333E0,
+    Math_SmoothStepToF(&self->actor.speedXZ, 2.5f, 0.1f, 0.2f, 0.0f);
+    Math_SmoothStepToF(&self->actor.world.pos.y, player->actor.world.pos.y + 85.0f + self->horizontalVariation, 1.0f,
+                       self->actor.speedXZ * 0.25f, 0.0f);
+    Audio_PlaySoundGeneral(NA_SE_EN_TAIL_FLY - SFX_FLAG, &self->actor.projectedPos, 4, &D_801333E0, &D_801333E0,
                            &D_801333E8);
 
-    if (this->collider.base.atFlags & AT_HIT) {
-        this->collider.base.atFlags &= ~AT_HIT;
-        if (&player->actor == this->collider.base.at) {
-            this->unk_15C = 1;
+    if (self->collider.base.atFlags & AT_HIT) {
+        self->collider.base.atFlags &= ~AT_HIT;
+        if (&player->actor == self->collider.base.at) {
+            self->unk_15C = 1;
         }
     }
 
-    if (this->red != 0) {
-        this->red -= 15;
+    if (self->red != 0) {
+        self->red -= 15;
     }
 
-    if (Math_CosF(this->heightPhase) == 0.0f) {
-        this->extraHeightVariation = Rand_ZeroOne() * 4.0f;
+    if (Math_CosF(self->heightPhase) == 0.0f) {
+        self->extraHeightVariation = Rand_ZeroOne() * 4.0f;
     }
 
-    this->actor.world.pos.y +=
-        Math_CosF(this->heightPhase) * ((this->actor.speedXZ * 0.25f) + this->extraHeightVariation);
-    this->actor.world.rot.y += this->unk_164;
-    this->heightPhase += 0.2f;
+    self->actor.world.pos.y +=
+        Math_CosF(self->heightPhase) * ((self->actor.speedXZ * 0.25f) + self->extraHeightVariation);
+    self->actor.world.rot.y += self->unk_164;
+    self->heightPhase += 0.2f;
 
-    if (this->timer != 0) {
-        this->timer--;
+    if (self->timer != 0) {
+        self->timer--;
     }
 
-    Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &this->actor.home.pos), 1, 750,
+    Math_SmoothStepToS(&self->actor.world.rot.y, Math_Vec3f_Yaw(&self->actor.world.pos, &self->actor.home.pos), 1, 750,
                        0);
 
-    if (this->timer == 0) {
-        EnTp_Head_SetupApproachPlayer(this);
+    if (self->timer == 0) {
+        EnTp_Head_SetupApproachPlayer(self);
     }
 
-    this->actor.shape.rot.y = this->actor.world.rot.y;
+    self->actor.shape.rot.y = self->actor.world.rot.y;
 }
 
-void EnTp_Head_SetupWait(EnTp* this) {
-    this->actionIndex = TAILPASARAN_ACTION_HEAD_WAIT;
-    this->unk_150 = 0;
-    this->actor.shape.rot.x = -0x4000;
-    this->timer = 60;
-    this->unk_15C = 0;
-    this->actor.speedXZ = 0.0f;
-    EnTp_SetupAction(this, EnTp_Head_Wait);
+void EnTp_Head_SetupWait(EnTp* self) {
+    self->actionIndex = TAILPASARAN_ACTION_HEAD_WAIT;
+    self->unk_150 = 0;
+    self->actor.shape.rot.x = -0x4000;
+    self->timer = 60;
+    self->unk_15C = 0;
+    self->actor.speedXZ = 0.0f;
+    EnTp_SetupAction(self, EnTp_Head_Wait);
 }
 
 /**
  * Awaken and rise from the ground when Player is closer than 200
  */
-void EnTp_Head_Wait(EnTp* this, GlobalContext* globalCtx) {
+void EnTp_Head_Wait(EnTp* self, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s16 yaw;
 
-    this->unk_15C--;
+    self->unk_15C--;
 
-    if (this->actor.xzDistToPlayer < 200.0f) {
-        if (this->collider.base.atFlags & AT_HIT) {
-            this->collider.base.atFlags &= ~AT_HIT;
-            if (&player->actor == this->collider.base.at) {
-                this->timer = 0;
+    if (self->actor.xzDistToPlayer < 200.0f) {
+        if (self->collider.base.atFlags & AT_HIT) {
+            self->collider.base.atFlags &= ~AT_HIT;
+            if (&player->actor == self->collider.base.at) {
+                self->timer = 0;
             }
         }
 
-        if (this->timer != 0) {
-            this->timer--;
+        if (self->timer != 0) {
+            self->timer--;
 
-            Math_SmoothStepToS(&this->actor.shape.rot.x, 0, 1, 500, 0);
-            Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1, 1500, 0);
+            Math_SmoothStepToS(&self->actor.shape.rot.x, 0, 1, 500, 0);
+            Math_SmoothStepToS(&self->actor.world.rot.y, self->actor.yawTowardsPlayer, 1, 1500, 0);
 
-            yaw = Math_Vec3f_Yaw(&this->actor.home.pos, &player->actor.world.pos) + 0x4000;
-            Math_SmoothStepToF(&this->actor.world.pos.y, this->actor.home.pos.y + 30.0f, 0.3f, 1.0f, 0.3f);
-            this->actor.world.pos.x = this->actor.home.pos.x +
-                                      (Math_SinS(2000 * this->unk_15C) * (Math_SinS(yaw) * this->horizontalVariation));
-            this->actor.world.pos.z = this->actor.home.pos.z +
-                                      (Math_SinS(2000 * this->unk_15C) * (Math_CosS(yaw) * this->horizontalVariation));
+            yaw = Math_Vec3f_Yaw(&self->actor.home.pos, &player->actor.world.pos) + 0x4000;
+            Math_SmoothStepToF(&self->actor.world.pos.y, self->actor.home.pos.y + 30.0f, 0.3f, 1.0f, 0.3f);
+            self->actor.world.pos.x = self->actor.home.pos.x +
+                                      (Math_SinS(2000 * self->unk_15C) * (Math_SinS(yaw) * self->horizontalVariation));
+            self->actor.world.pos.z = self->actor.home.pos.z +
+                                      (Math_SinS(2000 * self->unk_15C) * (Math_CosS(yaw) * self->horizontalVariation));
         } else {
-            this->actor.shape.rot.x = 0;
-            this->unk_150 = 1;
-            EnTp_Head_SetupTakeOff(this);
+            self->actor.shape.rot.x = 0;
+            self->unk_150 = 1;
+            EnTp_Head_SetupTakeOff(self);
         }
     } else {
-        Math_SmoothStepToS(&this->actor.shape.rot.x, -0x4000, 1, 500, 0);
+        Math_SmoothStepToS(&self->actor.shape.rot.x, -0x4000, 1, 500, 0);
 
-        if (Math_SmoothStepToF(&this->actor.world.pos.y, this->actor.home.pos.y, 0.3f, 1.5f, 0.3f) == 0.0f) {
-            this->timer = 60;
+        if (Math_SmoothStepToF(&self->actor.world.pos.y, self->actor.home.pos.y, 0.3f, 1.5f, 0.3f) == 0.0f) {
+            self->timer = 60;
         } else {
-            yaw = Math_Vec3f_Yaw(&this->actor.home.pos, &player->actor.world.pos);
-            this->actor.world.pos.x =
-                this->actor.home.pos.x + (Math_SinS(2000 * this->unk_15C) * (Math_SinS(yaw) * 6.0f));
-            this->actor.world.pos.z =
-                this->actor.home.pos.z + (Math_SinS(2000 * this->unk_15C) * (Math_CosS(yaw) * 6.0f));
+            yaw = Math_Vec3f_Yaw(&self->actor.home.pos, &player->actor.world.pos);
+            self->actor.world.pos.x =
+                self->actor.home.pos.x + (Math_SinS(2000 * self->unk_15C) * (Math_SinS(yaw) * 6.0f));
+            self->actor.world.pos.z =
+                self->actor.home.pos.z + (Math_SinS(2000 * self->unk_15C) * (Math_CosS(yaw) * 6.0f));
         }
     }
 
-    this->actor.shape.rot.y = this->actor.world.rot.y;
+    self->actor.shape.rot.y = self->actor.world.rot.y;
 
-    if (this->actor.world.pos.y != this->actor.home.pos.y) {
-        Audio_PlaySoundGeneral(NA_SE_EN_TAIL_FLY - SFX_FLAG, &this->actor.projectedPos, 4, &D_801333E0, &D_801333E0,
+    if (self->actor.world.pos.y != self->actor.home.pos.y) {
+        Audio_PlaySoundGeneral(NA_SE_EN_TAIL_FLY - SFX_FLAG, &self->actor.projectedPos, 4, &D_801333E0, &D_801333E0,
                                &D_801333E8);
     }
 }
 
-void EnTp_Head_SetupBurrowReturnHome(EnTp* this) {
-    this->actionIndex = TAILPASARAN_ACTION_HEAD_BURROWRETURNHOME;
-    this->timer = 0;
-    EnTp_SetupAction(this, EnTp_Head_BurrowReturnHome);
+void EnTp_Head_SetupBurrowReturnHome(EnTp* self) {
+    self->actionIndex = TAILPASARAN_ACTION_HEAD_BURROWRETURNHOME;
+    self->timer = 0;
+    EnTp_SetupAction(self, EnTp_Head_BurrowReturnHome);
 }
 
-void EnTp_Head_BurrowReturnHome(EnTp* this, GlobalContext* globalCtx) {
+void EnTp_Head_BurrowReturnHome(EnTp* self, GlobalContext* globalCtx) {
     static Vec3f bubbleAccel = { 0.0f, -0.5f, 0.0f };
     static Color_RGBA8 bubblePrimColor = { 255, 255, 255, 255 };
     static Color_RGBA8 bubbleEnvColor = { 150, 150, 150, 0 };
@@ -500,61 +500,61 @@ void EnTp_Head_BurrowReturnHome(EnTp* this, GlobalContext* globalCtx) {
     s16 temp_v0; // Required to match, usage can maybe be improved
 
     closeToFloor = false;
-    temp_v0 = this->timer;
-    this->unk_15C--;
+    temp_v0 = self->timer;
+    self->unk_15C--;
 
-    if ((temp_v0 != 0) || ((this->actor.home.pos.y - this->actor.world.pos.y) > 60.0f)) {
-        this->timer = temp_v0 - 1;
-        temp_v0 = this->timer;
+    if ((temp_v0 != 0) || ((self->actor.home.pos.y - self->actor.world.pos.y) > 60.0f)) {
+        self->timer = temp_v0 - 1;
+        temp_v0 = self->timer;
 
         if (temp_v0 == 0) {
-            EnTp_Head_SetupWait(this);
+            EnTp_Head_SetupWait(self);
 
-            for (now = (EnTp*)this->actor.child; now != NULL; now = (EnTp*)now->actor.child) {
+            for (now = (EnTp*)self->actor.child; now != NULL; now = (EnTp*)now->actor.child) {
                 now->unk_15C = now->timer;
             }
         } else {
-            if (this->actor.shape.rot.x != -0x4000) {
-                this->timer = 80;
-                this->actor.velocity.y = 0.0f;
-                this->actor.speedXZ = 0.0f;
-                this->actor.world.pos = this->actor.home.pos;
-                this->actor.shape.rot.x = -0x4000;
+            if (self->actor.shape.rot.x != -0x4000) {
+                self->timer = 80;
+                self->actor.velocity.y = 0.0f;
+                self->actor.speedXZ = 0.0f;
+                self->actor.world.pos = self->actor.home.pos;
+                self->actor.shape.rot.x = -0x4000;
 
-                for (now = (EnTp*)this->actor.child; now != NULL; now = (EnTp*)now->actor.child) {
+                for (now = (EnTp*)self->actor.child; now != NULL; now = (EnTp*)now->actor.child) {
                     now->actor.velocity.y = 0.0f;
                     now->actor.speedXZ = 0.0f;
-                    now->actor.world.pos = this->actor.home.pos;
-                    now->actor.world.pos.y = this->actor.home.pos.y - 80.0f;
+                    now->actor.world.pos = self->actor.home.pos;
+                    now->actor.world.pos.y = self->actor.home.pos.y - 80.0f;
                 }
             }
 
-            this->actor.world.pos.y = this->actor.home.pos.y - this->timer;
+            self->actor.world.pos.y = self->actor.home.pos.y - self->timer;
         }
     } else {
-        if (this->actor.shape.rot.x != 0x4000) {
-            this->actor.shape.rot.x -= 0x400;
+        if (self->actor.shape.rot.x != 0x4000) {
+            self->actor.shape.rot.x -= 0x400;
         }
 
-        if (this->red != 0) {
-            this->red -= 15;
+        if (self->red != 0) {
+            self->red -= 15;
         }
 
-        this->actor.speedXZ = 2.0f * Math_CosS(this->actor.shape.rot.x);
-        this->actor.velocity.y = Math_SinS(this->actor.shape.rot.x) * -2.0f;
+        self->actor.speedXZ = 2.0f * Math_CosS(self->actor.shape.rot.x);
+        self->actor.velocity.y = Math_SinS(self->actor.shape.rot.x) * -2.0f;
 
-        if ((this->actor.world.pos.y - this->actor.floorHeight) < 20.0f) {
+        if ((self->actor.world.pos.y - self->actor.floorHeight) < 20.0f) {
             closeToFloor = true;
         }
 
-        if (this->actor.world.pos.y != this->actor.home.pos.y) {
-            Audio_PlaySoundGeneral(NA_SE_EN_TAIL_FLY - SFX_FLAG, &this->actor.projectedPos, 4, &D_801333E0, &D_801333E0,
+        if (self->actor.world.pos.y != self->actor.home.pos.y) {
+            Audio_PlaySoundGeneral(NA_SE_EN_TAIL_FLY - SFX_FLAG, &self->actor.projectedPos, 4, &D_801333E0, &D_801333E0,
                                    &D_801333E8);
         }
 
         if (closeToFloor && ((globalCtx->gameplayFrames & 1) != 0)) {
-            bubblePos = this->actor.world.pos;
-            bubblePos.y = this->actor.floorHeight;
+            bubblePos = self->actor.world.pos;
+            bubblePos.y = self->actor.floorHeight;
 
             bubbleVelocity.x = Rand_CenteredFloat(5.0f);
             bubbleVelocity.y = (Rand_ZeroOne() * 3.5f) + 1.5f;
@@ -566,59 +566,59 @@ void EnTp_Head_BurrowReturnHome(EnTp* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnTp_UpdateDamage(EnTp* this, GlobalContext* globalCtx) {
+void EnTp_UpdateDamage(EnTp* self, GlobalContext* globalCtx) {
     s32 phi_s2;
     s32 phi_s4;
-    EnTp* head; // Can eliminate this and just use now, but they're used differently
+    EnTp* head; // Can eliminate self and just use now, but they're used differently
     EnTp* now;
 
-    if ((this->collider.base.acFlags & AC_HIT) && (this->actionIndex >= TAILPASARAN_ACTION_TAIL_FOLLOWHEAD)) {
+    if ((self->collider.base.acFlags & AC_HIT) && (self->actionIndex >= TAILPASARAN_ACTION_TAIL_FOLLOWHEAD)) {
         phi_s4 = phi_s2 = 0;
 
-        if (this->actor.params <= TAILPASARAN_HEAD) {
+        if (self->actor.params <= TAILPASARAN_HEAD) {
             phi_s2 = 1;
         }
 
-        this->collider.base.acFlags &= ~AC_HIT;
-        Actor_SetDropFlagJntSph(&this->actor, &this->collider, 1);
-        this->damageEffect = this->actor.colChkInfo.damageEffect;
+        self->collider.base.acFlags &= ~AC_HIT;
+        Actor_SetDropFlagJntSph(&self->actor, &self->collider, 1);
+        self->damageEffect = self->actor.colChkInfo.damageEffect;
 
-        if (this->actor.colChkInfo.damageEffect != TAILPASARAN_DMGEFF_NONE) {
-            if (this->actor.colChkInfo.damageEffect == TAILPASARAN_DMGEFF_DEKUNUT) {
+        if (self->actor.colChkInfo.damageEffect != TAILPASARAN_DMGEFF_NONE) {
+            if (self->actor.colChkInfo.damageEffect == TAILPASARAN_DMGEFF_DEKUNUT) {
                 phi_s4 = 1;
             }
 
             // Head is invincible
             if (phi_s2 == 0) {
-                Actor_ApplyDamage(&this->actor);
+                Actor_ApplyDamage(&self->actor);
             }
 
-            if (this->actor.colChkInfo.health == 0) {
-                this->actor.flags &= ~1;
-                head = this->head;
+            if (self->actor.colChkInfo.health == 0) {
+                self->actor.flags &= ~1;
+                head = self->head;
 
                 if (head->actor.params <= TAILPASARAN_HEAD) {
                     EnTp_SetupDie(head);
-                    head->damageEffect = this->actor.colChkInfo.damageEffect;
+                    head->damageEffect = self->actor.colChkInfo.damageEffect;
                     head->actor.params = TAILPASARAN_HEAD_DYING;
                 }
             } else {
                 if (phi_s4 != 0) {
-                    this->actor.freezeTimer = 80;
-                    Audio_PlayActorSound2(&this->actor, NA_SE_EN_GOMA_JR_FREEZE);
+                    self->actor.freezeTimer = 80;
+                    Audio_PlayActorSound2(&self->actor, NA_SE_EN_GOMA_JR_FREEZE);
                     if (phi_s2 != 0) {
-                        Actor_SetColorFilter(&this->actor, 0, 0xFF, 0, 0x50);
+                        Actor_SetColorFilter(&self->actor, 0, 0xFF, 0, 0x50);
                     } else {
-                        Actor_SetColorFilter(&this->actor, 0, 0xFF, 0x2000, 0x50);
+                        Actor_SetColorFilter(&self->actor, 0, 0xFF, 0x2000, 0x50);
                     }
                 }
 
-                for (now = (EnTp*)this->actor.parent; now != NULL; now = (EnTp*)now->actor.parent) {
+                for (now = (EnTp*)self->actor.parent; now != NULL; now = (EnTp*)now->actor.parent) {
                     now->collider.base.acFlags &= ~AC_HIT;
 
                     if (phi_s4 != 0) {
                         now->actor.freezeTimer = 80;
-                        Audio_PlayActorSound2(&this->actor, NA_SE_EN_GOMA_JR_FREEZE);
+                        Audio_PlayActorSound2(&self->actor, NA_SE_EN_GOMA_JR_FREEZE);
 
                         if (phi_s2 != 0) {
                             Actor_SetColorFilter(&now->actor, 0, 0xFF, 0, 0x50);
@@ -628,7 +628,7 @@ void EnTp_UpdateDamage(EnTp* this, GlobalContext* globalCtx) {
                     }
                 }
 
-                for (now = (EnTp*)this->actor.child; now != NULL; now = (EnTp*)now->actor.child) {
+                for (now = (EnTp*)self->actor.child; now != NULL; now = (EnTp*)now->actor.child) {
                     now->collider.base.acFlags &= ~AC_HIT;
                     if (phi_s4 != 0) {
                         now->actor.freezeTimer = 80;
@@ -647,7 +647,7 @@ void EnTp_UpdateDamage(EnTp* this, GlobalContext* globalCtx) {
 
 void EnTp_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
-    EnTp* this = THIS;
+    EnTp* self = THIS;
     Vec3f kiraVelocity = { 0.0f, 0.0f, 0.0f };
     Vec3f kiraAccel = { 0.0f, -0.6f, 0.0f };
     Vec3f kiraPos;
@@ -657,83 +657,83 @@ void EnTp_Update(Actor* thisx, GlobalContext* globalCtx) {
     s16 yawToWall;
 
     if (player->stateFlags1 & 0x4000000) { // Shielding
-        this->damageEffect = TAILPASARAN_DMGEFF_NONE;
+        self->damageEffect = TAILPASARAN_DMGEFF_NONE;
     }
 
-    if (this->actor.colChkInfo.health != 0) {
-        EnTp_UpdateDamage(this, globalCtx);
+    if (self->actor.colChkInfo.health != 0) {
+        EnTp_UpdateDamage(self, globalCtx);
     }
 
-    this->actionFunc(this, globalCtx);
+    self->actionFunc(self, globalCtx);
 
-    if (this->actor.params <= TAILPASARAN_HEAD) {
-        Actor_MoveForward(&this->actor);
+    if (self->actor.params <= TAILPASARAN_HEAD) {
+        Actor_MoveForward(&self->actor);
 
-        if (this->actionIndex != TAILPASARAN_ACTION_HEAD_BURROWRETURNHOME) {
-            Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 15.0f, 10.0f, 5);
+        if (self->actionIndex != TAILPASARAN_ACTION_HEAD_BURROWRETURNHOME) {
+            Actor_UpdateBgCheckInfo(globalCtx, &self->actor, 0.0f, 15.0f, 10.0f, 5);
         }
 
         // Turn away from wall
-        if ((this->actor.speedXZ != 0.0f) && (this->actor.bgCheckFlags & 8)) {
-            yawToWall = this->actor.wallYaw - this->actor.world.rot.y;
+        if ((self->actor.speedXZ != 0.0f) && (self->actor.bgCheckFlags & 8)) {
+            yawToWall = self->actor.wallYaw - self->actor.world.rot.y;
 
             if (ABS(yawToWall) > 0x4000) {
                 if (yawToWall >= 0) {
-                    this->actor.world.rot.y -= 500;
+                    self->actor.world.rot.y -= 500;
                 } else {
-                    this->actor.world.rot.y += 500;
+                    self->actor.world.rot.y += 500;
                 }
 
-                this->actor.shape.rot.y = this->actor.world.rot.y;
+                self->actor.shape.rot.y = self->actor.world.rot.y;
             }
         }
 
-        this->actor.shape.rot.z += 0x800;
+        self->actor.shape.rot.z += 0x800;
 
-        if (this->actor.shape.rot.z == 0) {
-            Audio_PlaySoundGeneral(NA_SE_EN_TAIL_CRY, &this->actor.projectedPos, 4, &D_801333E0, &D_801333E0,
+        if (self->actor.shape.rot.z == 0) {
+            Audio_PlaySoundGeneral(NA_SE_EN_TAIL_CRY, &self->actor.projectedPos, 4, &D_801333E0, &D_801333E0,
                                    &D_801333E8);
         }
 
-        if (this->actionIndex >= TAILPASARAN_ACTION_TAIL_FOLLOWHEAD) {
-            CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        if (self->actionIndex >= TAILPASARAN_ACTION_TAIL_FOLLOWHEAD) {
+            CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
         }
     }
 
-    if (this->actor.params != TAILPASARAN_TAIL_DYING) {
-        this->kiraSpawnTimer--;
-        this->kiraSpawnTimer &= 7;
+    if (self->actor.params != TAILPASARAN_TAIL_DYING) {
+        self->kiraSpawnTimer--;
+        self->kiraSpawnTimer &= 7;
     }
 
-    this->actor.focus.pos = this->actor.world.pos;
+    self->actor.focus.pos = self->actor.world.pos;
 
-    if (this->damageEffect == TAILPASARAN_DMGEFF_SHOCKING) {
-        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    if (self->damageEffect == TAILPASARAN_DMGEFF_SHOCKING) {
+        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
     }
 
-    if ((this->kiraSpawnTimer & 7) == 0) {
-        kiraPrimColor.r = this->red;
-        kiraAccel.x = -this->actor.velocity.x * 0.25f;
-        kiraAccel.y = -this->actor.velocity.y * 0.25f;
-        kiraAccel.z = -this->actor.velocity.z * 0.25f;
-        kiraPos.x = ((Rand_ZeroOne() - 0.5f) * 25.0f) + this->actor.world.pos.x;
-        kiraPos.y = ((Rand_ZeroOne() - 0.5f) * 20.0f) + this->actor.world.pos.y;
-        kiraPos.z = ((Rand_ZeroOne() - 0.5f) * 25.0f) + this->actor.world.pos.z;
+    if ((self->kiraSpawnTimer & 7) == 0) {
+        kiraPrimColor.r = self->red;
+        kiraAccel.x = -self->actor.velocity.x * 0.25f;
+        kiraAccel.y = -self->actor.velocity.y * 0.25f;
+        kiraAccel.z = -self->actor.velocity.z * 0.25f;
+        kiraPos.x = ((Rand_ZeroOne() - 0.5f) * 25.0f) + self->actor.world.pos.x;
+        kiraPos.y = ((Rand_ZeroOne() - 0.5f) * 20.0f) + self->actor.world.pos.y;
+        kiraPos.z = ((Rand_ZeroOne() - 0.5f) * 25.0f) + self->actor.world.pos.z;
         EffectSsKiraKira_SpawnSmall(globalCtx, &kiraPos, &kiraVelocity, &kiraAccel, &kiraPrimColor, &kiraEnvColor);
     }
 
-    if ((this->actionIndex >= TAILPASARAN_ACTION_TAIL_FOLLOWHEAD) && (this->actor.colChkInfo.health != 0)) {
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    if ((self->actionIndex >= TAILPASARAN_ACTION_TAIL_FOLLOWHEAD) && (self->actor.colChkInfo.health != 0)) {
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
     }
 }
 
 void EnTp_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
-    EnTp* this = THIS;
+    EnTp* self = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx, "../z_en_tp.c", 1451);
 
-    if (this->unk_150 != 2) {
+    if (self->unk_150 != 2) {
         if ((thisx->params <= TAILPASARAN_HEAD) || (thisx->params == TAILPASARAN_HEAD_DYING)) {
             func_80093D18(globalCtx->state.gfxCtx);
 
@@ -746,7 +746,7 @@ void EnTp_Draw(Actor* thisx, GlobalContext* globalCtx) {
             func_80093D84(globalCtx->state.gfxCtx);
             func_800D1FD4(&globalCtx->mf_11DA0);
 
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, this->red, 0, 255, this->alpha);
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, self->red, 0, 255, self->alpha);
             gDPPipeSync(POLY_XLU_DISP++);
             gDPSetCombineLERP(POLY_XLU_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, PRIMITIVE, ENVIRONMENT,
                               TEXEL0, ENVIRONMENT, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, PRIMITIVE, ENVIRONMENT,
@@ -763,6 +763,6 @@ void EnTp_Draw(Actor* thisx, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx, "../z_en_tp.c", 1495);
 
     if ((thisx->params <= TAILPASARAN_TAIL) || (thisx->params == TAILPASARAN_TAIL_DYING)) {
-        Collider_UpdateSpheres(0, &this->collider);
+        Collider_UpdateSpheres(0, &self->collider);
     }
 }

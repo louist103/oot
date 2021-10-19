@@ -17,13 +17,13 @@ void DemoGeff_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DemoGeff_Update(Actor* thisx, GlobalContext* globalCtx);
 void DemoGeff_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80978030(DemoGeff* this, GlobalContext* globalCtx);
+void func_80978030(DemoGeff* self, GlobalContext* globalCtx);
 
-void func_809783D4(DemoGeff* this, GlobalContext* globalCtx);
-void func_80978308(DemoGeff* this, GlobalContext* globalCtx);
+void func_809783D4(DemoGeff* self, GlobalContext* globalCtx);
+void func_80978308(DemoGeff* self, GlobalContext* globalCtx);
 
-void func_809784D4(DemoGeff* this, GlobalContext* globalCtx);
-void func_80978344(DemoGeff* this, GlobalContext* globalCtx);
+void func_809784D4(DemoGeff* self, GlobalContext* globalCtx);
+void func_80978344(DemoGeff* self, GlobalContext* globalCtx);
 
 static s16 sObjectIDs[] = {
     OBJECT_GEFF, OBJECT_GEFF, OBJECT_GEFF, OBJECT_GEFF, OBJECT_GEFF, OBJECT_GEFF, OBJECT_GEFF, OBJECT_GEFF, OBJECT_GEFF,
@@ -60,15 +60,15 @@ void DemoGeff_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void DemoGeff_Init(Actor* thisx, GlobalContext* globalCtx) {
-    DemoGeff* this = THIS;
+    DemoGeff* self = THIS;
 
-    if (this->actor.params < 0 || this->actor.params >= 9) {
+    if (self->actor.params < 0 || self->actor.params >= 9) {
         osSyncPrintf(VT_FGCOL(RED) "Demo_Geff_Actor_ct:arg_dataがおかしい!!!!!!!!!!!!\n" VT_RST);
-        Actor_Kill(&this->actor);
+        Actor_Kill(&self->actor);
         return;
     }
-    this->action = 0;
-    this->drawConfig = 0;
+    self->action = 0;
+    self->drawConfig = 0;
 }
 
 void func_80977EA8(GlobalContext* globalCtx, Gfx* dlist) {
@@ -86,9 +86,9 @@ void func_80977EA8(GlobalContext* globalCtx, Gfx* dlist) {
     CLOSE_DISPS(gfxCtx, "../z_demo_geff.c", 188);
 }
 
-void func_80977F80(DemoGeff* this, GlobalContext* globalCtx) {
+void func_80977F80(DemoGeff* self, GlobalContext* globalCtx) {
     s32 pad[2];
-    s32 objBankIndex = this->objBankIndex;
+    s32 objBankIndex = self->objBankIndex;
     GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
 
     OPEN_DISPS(gfxCtx, "../z_demo_geff.c", 204);
@@ -102,13 +102,13 @@ void func_80977F80(DemoGeff* this, GlobalContext* globalCtx) {
     CLOSE_DISPS(gfxCtx, "../z_demo_geff.c", 212);
 }
 
-void func_80978030(DemoGeff* this, GlobalContext* globalCtx) {
-    Vec3f* thisScale = &this->actor.scale;
+void func_80978030(DemoGeff* self, GlobalContext* globalCtx) {
+    Vec3f* thisScale = &self->actor.scale;
 
-    this->action = 1;
-    this->drawConfig = 1;
+    self->action = 1;
+    self->drawConfig = 1;
 
-    switch (this->actor.params) {
+    switch (self->actor.params) {
         case 0:
         case 3:
         case 6:
@@ -131,63 +131,63 @@ void func_80978030(DemoGeff* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_809781FC(DemoGeff* this, GlobalContext* globalCtx) {
+void func_809781FC(DemoGeff* self, GlobalContext* globalCtx) {
     s32 targetParams = 2;
     Actor* propIt;
 
-    if (this->demoGt == NULL) {
+    if (self->demoGt == NULL) {
         propIt = globalCtx->actorCtx.actorLists[ACTORCAT_PROP].head;
-        if ((this->actor.params != 0) && (this->actor.params != 1) && (this->actor.params != 2)) {
+        if ((self->actor.params != 0) && (self->actor.params != 1) && (self->actor.params != 2)) {
             targetParams = 2;
         } else {
             targetParams = 1;
         }
         while (propIt != NULL) {
             if (propIt->id == ACTOR_DEMO_GT && propIt->params == targetParams) {
-                this->deltaPosX = this->actor.world.pos.x - propIt->world.pos.x;
-                this->deltaPosY = this->actor.world.pos.y - propIt->world.pos.y;
-                this->deltaPosZ = this->actor.world.pos.z - propIt->world.pos.z;
-                this->demoGt = (DemoGt*)propIt;
+                self->deltaPosX = self->actor.world.pos.x - propIt->world.pos.x;
+                self->deltaPosY = self->actor.world.pos.y - propIt->world.pos.y;
+                self->deltaPosZ = self->actor.world.pos.z - propIt->world.pos.z;
+                self->demoGt = (DemoGt*)propIt;
             }
             propIt = propIt->next;
         }
     }
 }
 
-void func_809782A0(DemoGeff* this, GlobalContext* globalCtx) {
-    DemoGt* demoGt = this->demoGt;
-    s16 params = this->actor.params;
+void func_809782A0(DemoGeff* self, GlobalContext* globalCtx) {
+    DemoGt* demoGt = self->demoGt;
+    s16 params = self->actor.params;
     if (demoGt != NULL && (params != 6) && (params != 7) && (params != 8)) {
-        this->actor.world.pos.x = demoGt->dyna.actor.world.pos.x + this->deltaPosX;
-        this->actor.world.pos.y = demoGt->dyna.actor.world.pos.y + this->deltaPosY;
-        this->actor.world.pos.z = demoGt->dyna.actor.world.pos.z + this->deltaPosZ;
+        self->actor.world.pos.x = demoGt->dyna.actor.world.pos.x + self->deltaPosX;
+        self->actor.world.pos.y = demoGt->dyna.actor.world.pos.y + self->deltaPosY;
+        self->actor.world.pos.z = demoGt->dyna.actor.world.pos.z + self->deltaPosZ;
     }
 }
 
-void func_80978308(DemoGeff* this, GlobalContext* globalCtx) {
-    func_809781FC(this, globalCtx);
-    func_809782A0(this, globalCtx);
-    func_80978030(this, globalCtx);
+void func_80978308(DemoGeff* self, GlobalContext* globalCtx) {
+    func_809781FC(self, globalCtx);
+    func_809782A0(self, globalCtx);
+    func_80978030(self, globalCtx);
 }
 
-void func_80978344(DemoGeff* this, GlobalContext* globalCtx) {
+void func_80978344(DemoGeff* self, GlobalContext* globalCtx) {
     func_80977EA8(globalCtx, gGanonRubbleDL);
 }
 
-void func_80978370(DemoGeff* this, GlobalContext* globalCtx) {
-    s16 params = this->actor.params;
+void func_80978370(DemoGeff* self, GlobalContext* globalCtx) {
+    s16 params = self->actor.params;
     DemoGeffInitFunc initFunc = sInitFuncs[params];
     if (initFunc == NULL) {
         osSyncPrintf(VT_FGCOL(RED) " Demo_Geff_main_init:初期化処理がおかしいarg_data = %d!\n" VT_RST, params);
-        Actor_Kill(&this->actor);
+        Actor_Kill(&self->actor);
         return;
     }
-    initFunc(this, globalCtx);
+    initFunc(self, globalCtx);
 }
 
-void func_809783D4(DemoGeff* this, GlobalContext* globalCtx) {
+void func_809783D4(DemoGeff* self, GlobalContext* globalCtx) {
     ObjectContext* objCtx = &globalCtx->objectCtx;
-    Actor* thisx = &this->actor;
+    Actor* thisx = &self->actor;
     s32 params = thisx->params;
     s16 objectId = sObjectIDs[params];
     s32 objBankIndex = Object_GetIndex(objCtx, objectId);
@@ -199,34 +199,34 @@ void func_809783D4(DemoGeff* this, GlobalContext* globalCtx) {
         return;
     }
     if (Object_IsLoaded(objCtx, objBankIndex)) {
-        this->objBankIndex = objBankIndex;
-        func_80978370(this, globalCtx);
+        self->objBankIndex = objBankIndex;
+        func_80978370(self, globalCtx);
     }
 }
 
 void DemoGeff_Update(Actor* thisx, GlobalContext* globalCtx) {
-    DemoGeff* this = THIS;
+    DemoGeff* self = THIS;
 
-    if (this->action < 0 || this->action >= 2 || sActionFuncs[this->action] == NULL) {
+    if (self->action < 0 || self->action >= 2 || sActionFuncs[self->action] == NULL) {
         osSyncPrintf(VT_FGCOL(RED) "メインモードがおかしい!!!!!!!!!!!!!!!!!!!!!!!!!\n" VT_RST);
         return;
     }
-    sActionFuncs[this->action](this, globalCtx);
+    sActionFuncs[self->action](self, globalCtx);
 }
 
-void func_809784D4(DemoGeff* this, GlobalContext* globalCtx) {
+void func_809784D4(DemoGeff* self, GlobalContext* globalCtx) {
 }
 
 void DemoGeff_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    DemoGeff* this = THIS;
-    s32 drawConfig = this->drawConfig;
+    DemoGeff* self = THIS;
+    s32 drawConfig = self->drawConfig;
 
     if (drawConfig < 0 || drawConfig >= 2 || sDrawFuncs[drawConfig] == NULL) {
         osSyncPrintf(VT_FGCOL(RED) "描画モードがおかしい!!!!!!!!!!!!!!!!!!!!!!!!!\n" VT_RST);
         return;
     }
     if (drawConfig != 0) {
-        func_80977F80(this, globalCtx);
+        func_80977F80(self, globalCtx);
     }
-    sDrawFuncs[drawConfig](this, globalCtx);
+    sDrawFuncs[drawConfig](self, globalCtx);
 }

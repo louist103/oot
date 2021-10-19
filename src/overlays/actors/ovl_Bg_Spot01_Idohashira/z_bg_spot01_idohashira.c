@@ -17,11 +17,11 @@ void BgSpot01Idohashira_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgSpot01Idohashira_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgSpot01Idohashira_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_808AB504(BgSpot01Idohashira* this, GlobalContext* globalCtx);
-void func_808AB510(BgSpot01Idohashira* this, GlobalContext* globalCtx);
-void func_808AB530(BgSpot01Idohashira* this, GlobalContext* globalCtx);
-void func_808AB570(BgSpot01Idohashira* this, GlobalContext* globalCtx);
-void func_808AB700(BgSpot01Idohashira* this, GlobalContext* globalCtx);
+void func_808AB504(BgSpot01Idohashira* self, GlobalContext* globalCtx);
+void func_808AB510(BgSpot01Idohashira* self, GlobalContext* globalCtx);
+void func_808AB530(BgSpot01Idohashira* self, GlobalContext* globalCtx);
+void func_808AB570(BgSpot01Idohashira* self, GlobalContext* globalCtx);
+void func_808AB700(BgSpot01Idohashira* self, GlobalContext* globalCtx);
 
 static BgSpot01IdohashiraActionFunc sActionFuncs[] = {
     func_808AB504,
@@ -50,12 +50,12 @@ const ActorInit Bg_Spot01_Idohashira_InitVars = {
     (ActorFunc)BgSpot01Idohashira_Draw,
 };
 
-void BgSpot01Idohashira_PlayBreakSfx1(BgSpot01Idohashira* this) {
-    func_80078914(&this->dyna.actor.projectedPos, NA_SE_EV_BOX_BREAK);
+void BgSpot01Idohashira_PlayBreakSfx1(BgSpot01Idohashira* self) {
+    func_80078914(&self->dyna.actor.projectedPos, NA_SE_EV_BOX_BREAK);
 }
 
-void BgSpot01Idohashira_PlayBreakSfx2(BgSpot01Idohashira* this, GlobalContext* globalCtx) {
-    Audio_PlaySoundAtPosition(globalCtx, &this->dyna.actor.world.pos, 60, NA_SE_EV_WOODBOX_BREAK);
+void BgSpot01Idohashira_PlayBreakSfx2(BgSpot01Idohashira* self, GlobalContext* globalCtx) {
+    Audio_PlaySoundAtPosition(globalCtx, &self->dyna.actor.world.pos, 60, NA_SE_EV_WOODBOX_BREAK);
 }
 
 void func_808AAD3C(GlobalContext* globalCtx, Vec3f* vec, u32 arg2) {
@@ -107,22 +107,22 @@ void func_808AAD3C(GlobalContext* globalCtx, Vec3f* vec, u32 arg2) {
     Effect_Add(globalCtx, &sp24, EFFECT_SPARK, 0, 1, &effect);
 }
 
-void func_808AAE6C(BgSpot01Idohashira* this, GlobalContext* globalCtx) {
+void func_808AAE6C(BgSpot01Idohashira* self, GlobalContext* globalCtx) {
     s32 pad;
-    Vec3f sp30 = this->dyna.actor.world.pos;
+    Vec3f sp30 = self->dyna.actor.world.pos;
 
     sp30.y += kREG(15);
     func_80033480(globalCtx, &sp30, kREG(11) + 350.0f, kREG(12) + 5, kREG(13) + 0x7D0, kREG(14) + 0x320, 0);
     func_808AAD3C(globalCtx, &sp30, 5);
-    BgSpot01Idohashira_PlayBreakSfx2(this, globalCtx);
+    BgSpot01Idohashira_PlayBreakSfx2(self, globalCtx);
 }
 
-void func_808AAF34(BgSpot01Idohashira* this, GlobalContext* globalCtx) {
+void func_808AAF34(BgSpot01Idohashira* self, GlobalContext* globalCtx) {
     s32 pad[2];
     Vec3f dest;
     Vec3f src;
 
-    if (this->unk_170 != 0) {
+    if (self->unk_170 != 0) {
         src.x = kREG(20) + 1300.0f;
         src.y = kREG(21) + 200.0f;
         src.z = 0.0f;
@@ -135,15 +135,15 @@ void func_808AAF34(BgSpot01Idohashira* this, GlobalContext* globalCtx) {
         Matrix_MultVec3f(&src, &dest);
         func_80033480(globalCtx, &dest, kREG(16) + 80.0f, kREG(17) + 10, kREG(18) + 1000, kREG(19), 0);
         func_808AAD3C(globalCtx, &dest, 3);
-        this->unk_170 = 0;
-        BgSpot01Idohashira_PlayBreakSfx1(this);
+        self->unk_170 = 0;
+        BgSpot01Idohashira_PlayBreakSfx1(self);
     }
 }
 
 void BgSpot01Idohashira_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    BgSpot01Idohashira* this = THIS;
+    BgSpot01Idohashira* self = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, self->dyna.bgId);
 }
 
 s32 BgSpot01Idohashira_NotInCsMode(GlobalContext* globalCtx) {
@@ -163,10 +163,10 @@ CsCmdActorAction* BgSpot01Idohashira_GetNpcAction(GlobalContext* globalCtx, s32 
     return npcAction;
 }
 
-void func_808AB18C(BgSpot01Idohashira* this) {
-    this->dyna.actor.shape.rot.x += kREG(6);
-    this->dyna.actor.shape.rot.y += (s16)(kREG(7) + 0x3E8);
-    this->dyna.actor.shape.rot.z += (s16)(kREG(8) + 0x7D0);
+void func_808AB18C(BgSpot01Idohashira* self) {
+    self->dyna.actor.shape.rot.x += kREG(6);
+    self->dyna.actor.shape.rot.y += (s16)(kREG(7) + 0x3E8);
+    self->dyna.actor.shape.rot.z += (s16)(kREG(8) + 0x7D0);
 }
 
 f32 func_808AB1DC(f32 arg0, f32 arg1, u16 arg2, u16 arg3, u16 arg4) {
@@ -186,7 +186,7 @@ f32 func_808AB1DC(f32 arg0, f32 arg1, u16 arg2, u16 arg3, u16 arg4) {
     return 0.0f;
 }
 
-s32 func_808AB29C(BgSpot01Idohashira* this, GlobalContext* globalCtx) {
+s32 func_808AB29C(BgSpot01Idohashira* self, GlobalContext* globalCtx) {
     CsCmdActorAction* npcAction;
     Vec3f* thisPos;
     f32 endX;
@@ -200,11 +200,11 @@ s32 func_808AB29C(BgSpot01Idohashira* this, GlobalContext* globalCtx) {
     npcAction = BgSpot01Idohashira_GetNpcAction(globalCtx, 2);
     if (npcAction != NULL) {
         temp_f0 = Environment_LerpWeight(npcAction->endFrame, npcAction->startFrame, globalCtx->csCtx.frames);
-        initPos = this->dyna.actor.home.pos;
+        initPos = self->dyna.actor.home.pos;
         endX = npcAction->endPos.x;
         tempY = ((kREG(10) + 1100.0f) / 10.0f) + npcAction->endPos.y;
         endZ = npcAction->endPos.z;
-        thisPos = &this->dyna.actor.world.pos;
+        thisPos = &self->dyna.actor.world.pos;
         thisPos->x = ((endX - initPos.x) * temp_f0) + initPos.x;
         thisPos->y =
             func_808AB1DC(initPos.y, tempY, npcAction->endFrame, npcAction->startFrame, globalCtx->csCtx.frames) +
@@ -220,106 +220,106 @@ s32 func_808AB29C(BgSpot01Idohashira* this, GlobalContext* globalCtx) {
     return false;
 }
 
-void func_808AB3E8(BgSpot01Idohashira* this) {
-    this->action = 1;
-    this->drawConfig = 0;
+void func_808AB3E8(BgSpot01Idohashira* self) {
+    self->action = 1;
+    self->drawConfig = 0;
 }
 
-void func_808AB3F8(BgSpot01Idohashira* this, GlobalContext* globalCtx) {
-    this->action = 2;
-    this->drawConfig = 0;
-    this->unk_170 = 1;
+void func_808AB3F8(BgSpot01Idohashira* self, GlobalContext* globalCtx) {
+    self->action = 2;
+    self->drawConfig = 0;
+    self->unk_170 = 1;
 }
 
-void func_808AB414(BgSpot01Idohashira* this, GlobalContext* globalCtx) {
-    func_808AAE6C(this, globalCtx);
-    this->action = 3;
-    this->drawConfig = 0;
+void func_808AB414(BgSpot01Idohashira* self, GlobalContext* globalCtx) {
+    func_808AAE6C(self, globalCtx);
+    self->action = 3;
+    self->drawConfig = 0;
 }
 
-void func_808AB444(BgSpot01Idohashira* this, GlobalContext* globalCtx) {
+void func_808AB444(BgSpot01Idohashira* self, GlobalContext* globalCtx) {
     CsCmdActorAction* npcAction = BgSpot01Idohashira_GetNpcAction(globalCtx, 2);
     u32 action;
     u32 currentNpcAction;
 
     if (npcAction != NULL) {
         action = npcAction->action;
-        currentNpcAction = this->npcAction;
+        currentNpcAction = self->npcAction;
         if (action != currentNpcAction) {
             switch (action) {
                 case 1:
-                    func_808AB3E8(this);
+                    func_808AB3E8(self);
                     break;
                 case 2:
-                    func_808AB3F8(this, globalCtx);
+                    func_808AB3F8(self, globalCtx);
                     break;
                 case 3:
-                    Actor_Kill(&this->dyna.actor);
+                    Actor_Kill(&self->dyna.actor);
                     break;
                 default:
                     osSyncPrintf("Bg_Spot01_Idohashira_Check_DemoMode:そんな動作は無い!!!!!!!!\n");
             }
-            this->npcAction = action;
+            self->npcAction = action;
         }
     }
 }
 
-void func_808AB504(BgSpot01Idohashira* this, GlobalContext* globalCtx) {
+void func_808AB504(BgSpot01Idohashira* self, GlobalContext* globalCtx) {
 }
 
-void func_808AB510(BgSpot01Idohashira* this, GlobalContext* globalCtx) {
-    func_808AB444(this, globalCtx);
+void func_808AB510(BgSpot01Idohashira* self, GlobalContext* globalCtx) {
+    func_808AB444(self, globalCtx);
 }
 
-void func_808AB530(BgSpot01Idohashira* this, GlobalContext* globalCtx) {
-    func_808AB18C(this);
-    if (func_808AB29C(this, globalCtx)) {
-        func_808AB414(this, globalCtx);
+void func_808AB530(BgSpot01Idohashira* self, GlobalContext* globalCtx) {
+    func_808AB18C(self);
+    if (func_808AB29C(self, globalCtx)) {
+        func_808AB414(self, globalCtx);
     }
 }
 
-void func_808AB570(BgSpot01Idohashira* this, GlobalContext* globalCtx) {
-    func_808AB444(this, globalCtx);
+void func_808AB570(BgSpot01Idohashira* self, GlobalContext* globalCtx) {
+    func_808AB444(self, globalCtx);
 }
 
 void BgSpot01Idohashira_Update(Actor* thisx, GlobalContext* globalCtx) {
-    BgSpot01Idohashira* this = THIS;
+    BgSpot01Idohashira* self = THIS;
 
-    if (this->action < 0 || this->action >= 4 || sActionFuncs[this->action] == NULL) {
+    if (self->action < 0 || self->action >= 4 || sActionFuncs[self->action] == NULL) {
         osSyncPrintf(VT_FGCOL(RED) "メインモードがおかしい!!!!!!!!!!!!!!!!!!!!!!!!!\n" VT_RST);
         return;
     }
-    sActionFuncs[this->action](this, globalCtx);
+    sActionFuncs[self->action](self, globalCtx);
 }
 
 void BgSpot01Idohashira_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad[2];
-    BgSpot01Idohashira* this = THIS;
+    BgSpot01Idohashira* self = THIS;
     CollisionHeader* colHeader;
 
-    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPolyActor_Init(&this->dyna, DPM_UNK);
+    Actor_ProcessInitChain(&self->dyna.actor, sInitChain);
+    DynaPolyActor_Init(&self->dyna, DPM_UNK);
     colHeader = NULL;
     CollisionHeader_GetVirtual(&gKakarikoWellArchCol, &colHeader);
-    this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
+    self->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &self->dyna.actor, colHeader);
 
     if (gSaveContext.sceneSetupIndex < 4) {
         if ((gSaveContext.eventChkInf[5] & 0x10) && LINK_IS_ADULT) {
-            Actor_Kill(&this->dyna.actor);
+            Actor_Kill(&self->dyna.actor);
         } else {
-            this->action = 0;
+            self->action = 0;
         }
     } else if (gSaveContext.sceneSetupIndex == 4) {
-        this->action = 1;
-        this->dyna.actor.shape.yOffset = -(kREG(10) + 1100.0f);
+        self->action = 1;
+        self->dyna.actor.shape.yOffset = -(kREG(10) + 1100.0f);
     } else if (gSaveContext.sceneSetupIndex == 6) {
-        this->action = 0;
+        self->action = 0;
     } else {
-        Actor_Kill(&this->dyna.actor);
+        Actor_Kill(&self->dyna.actor);
     }
 }
 
-void func_808AB700(BgSpot01Idohashira* this, GlobalContext* globalCtx) {
+void func_808AB700(BgSpot01Idohashira* self, GlobalContext* globalCtx) {
     GraphicsContext* localGfxCtx = globalCtx->state.gfxCtx;
 
     OPEN_DISPS(localGfxCtx, "../z_bg_spot01_idohashira.c", 689);
@@ -328,18 +328,18 @@ void func_808AB700(BgSpot01Idohashira* this, GlobalContext* globalCtx) {
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(localGfxCtx, "../z_bg_spot01_idohashira.c", 699),
               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    func_808AAF34(this, globalCtx);
+    func_808AAF34(self, globalCtx);
     gSPDisplayList(POLY_OPA_DISP++, gKakarikoWellArchDL);
 
     CLOSE_DISPS(localGfxCtx, "../z_bg_spot01_idohashira.c", 708);
 }
 
 void BgSpot01Idohashira_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    BgSpot01Idohashira* this = THIS;
+    BgSpot01Idohashira* self = THIS;
 
-    if (this->drawConfig < 0 || this->drawConfig > 0 || sDrawFuncs[this->drawConfig] == NULL) {
+    if (self->drawConfig < 0 || self->drawConfig > 0 || sDrawFuncs[self->drawConfig] == NULL) {
         osSyncPrintf(VT_FGCOL(RED) "描画モードがおかしい!!!!!!!!!!!!!!!!!!!!!!!!!\n" VT_RST);
         return;
     }
-    sDrawFuncs[this->drawConfig](this, globalCtx);
+    sDrawFuncs[self->drawConfig](self, globalCtx);
 }

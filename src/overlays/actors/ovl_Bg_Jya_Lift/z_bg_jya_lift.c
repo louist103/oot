@@ -16,11 +16,11 @@ void BgJyaLift_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgJyaLift_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgJyaLift_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void BgJyaLift_SetFinalPosY(BgJyaLift* this);
-void BgJyaLift_SetInitPosY(BgJyaLift* this);
-void BgJyaLift_DelayMove(BgJyaLift* this, GlobalContext* globalCtx);
-void BgJyaLift_SetupMove(BgJyaLift* this);
-void BgJyaLift_Move(BgJyaLift* this, GlobalContext* globalCtx);
+void BgJyaLift_SetFinalPosY(BgJyaLift* self);
+void BgJyaLift_SetInitPosY(BgJyaLift* self);
+void BgJyaLift_DelayMove(BgJyaLift* self, GlobalContext* globalCtx);
+void BgJyaLift_SetupMove(BgJyaLift* self);
+void BgJyaLift_Move(BgJyaLift* self, GlobalContext* globalCtx);
 
 static s16 sIsSpawned = false;
 
@@ -43,19 +43,19 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 2500, ICHAIN_STOP),
 };
 
-void BgJyaLift_InitDynapoly(BgJyaLift* this, GlobalContext* globalCtx, CollisionHeader* collisionHeader, s32 moveFlag) {
+void BgJyaLift_InitDynapoly(BgJyaLift* self, GlobalContext* globalCtx, CollisionHeader* collisionHeader, s32 moveFlag) {
     s32 pad;
     CollisionHeader* colHeader = NULL;
 
-    DynaPolyActor_Init(&this->dyna, moveFlag);
+    DynaPolyActor_Init(&self->dyna, moveFlag);
     CollisionHeader_GetVirtual(collisionHeader, &colHeader);
-    this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
+    self->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &self->dyna.actor, colHeader);
 }
 
 void BgJyaLift_Init(Actor* thisx, GlobalContext* globalCtx) {
-    BgJyaLift* this = THIS;
+    BgJyaLift* self = THIS;
 
-    this->isSpawned = false;
+    self->isSpawned = false;
     if (sIsSpawned) {
         Actor_Kill(thisx);
         return;
@@ -63,87 +63,87 @@ void BgJyaLift_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     // "Goddess lift CT"
     osSyncPrintf("女神リフト CT\n");
-    BgJyaLift_InitDynapoly(this, globalCtx, &gLiftCol, DPM_UNK);
+    BgJyaLift_InitDynapoly(self, globalCtx, &gLiftCol, DPM_UNK);
     Actor_ProcessInitChain(thisx, sInitChain);
     if (Flags_GetSwitch(globalCtx, (thisx->params & 0x3F))) {
-        BgJyaLift_SetFinalPosY(this);
+        BgJyaLift_SetFinalPosY(self);
     } else {
-        BgJyaLift_SetInitPosY(this);
+        BgJyaLift_SetInitPosY(self);
     }
     thisx->room = -1;
     sIsSpawned = true;
-    this->isSpawned = true;
+    self->isSpawned = true;
 }
 
 void BgJyaLift_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    BgJyaLift* this = THIS;
+    BgJyaLift* self = THIS;
 
-    if (this->isSpawned) {
+    if (self->isSpawned) {
 
         // "Goddess Lift DT"
         osSyncPrintf("女神リフト DT\n");
         sIsSpawned = false;
-        DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, self->dyna.bgId);
     }
 }
 
-void BgJyaLift_SetInitPosY(BgJyaLift* this) {
-    this->actionFunc = BgJyaLift_DelayMove;
-    this->dyna.actor.world.pos.y = 1613.0f;
-    this->moveDelay = 0;
+void BgJyaLift_SetInitPosY(BgJyaLift* self) {
+    self->actionFunc = BgJyaLift_DelayMove;
+    self->dyna.actor.world.pos.y = 1613.0f;
+    self->moveDelay = 0;
 }
 
-void BgJyaLift_DelayMove(BgJyaLift* this, GlobalContext* globalCtx) {
-    if (Flags_GetSwitch(globalCtx, this->dyna.actor.params & 0x3F) || (this->moveDelay > 0)) {
-        this->moveDelay++;
-        if (this->moveDelay >= 20) {
-            OnePointCutscene_Init(globalCtx, 3430, -99, &this->dyna.actor, MAIN_CAM);
-            BgJyaLift_SetupMove(this);
+void BgJyaLift_DelayMove(BgJyaLift* self, GlobalContext* globalCtx) {
+    if (Flags_GetSwitch(globalCtx, self->dyna.actor.params & 0x3F) || (self->moveDelay > 0)) {
+        self->moveDelay++;
+        if (self->moveDelay >= 20) {
+            OnePointCutscene_Init(globalCtx, 3430, -99, &self->dyna.actor, MAIN_CAM);
+            BgJyaLift_SetupMove(self);
         }
     }
 }
 
-void BgJyaLift_SetupMove(BgJyaLift* this) {
-    this->actionFunc = BgJyaLift_Move;
+void BgJyaLift_SetupMove(BgJyaLift* self) {
+    self->actionFunc = BgJyaLift_Move;
 }
 
-void BgJyaLift_Move(BgJyaLift* this, GlobalContext* globalCtx) {
+void BgJyaLift_Move(BgJyaLift* self, GlobalContext* globalCtx) {
     f32 distFromBottom;
     f32 tempVelocity;
 
-    Math_SmoothStepToF(&this->dyna.actor.velocity.y, 4.0f, 0.1f, 1.0f, 0.0f);
-    tempVelocity = (this->dyna.actor.velocity.y < 0.2f) ? 0.2f : this->dyna.actor.velocity.y;
-    distFromBottom = Math_SmoothStepToF(&this->dyna.actor.world.pos.y, 973.0f, 0.1f, tempVelocity, 0.2f);
-    if ((this->dyna.actor.world.pos.y < 1440.0f) && (1440.0f <= this->dyna.actor.prevPos.y)) {
+    Math_SmoothStepToF(&self->dyna.actor.velocity.y, 4.0f, 0.1f, 1.0f, 0.0f);
+    tempVelocity = (self->dyna.actor.velocity.y < 0.2f) ? 0.2f : self->dyna.actor.velocity.y;
+    distFromBottom = Math_SmoothStepToF(&self->dyna.actor.world.pos.y, 973.0f, 0.1f, tempVelocity, 0.2f);
+    if ((self->dyna.actor.world.pos.y < 1440.0f) && (1440.0f <= self->dyna.actor.prevPos.y)) {
         func_8005B1A4(GET_ACTIVE_CAM(globalCtx));
     }
     if (fabsf(distFromBottom) < 0.001f) {
-        BgJyaLift_SetFinalPosY(this);
-        Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_ELEVATOR_STOP);
+        BgJyaLift_SetFinalPosY(self);
+        Audio_PlayActorSound2(&self->dyna.actor, NA_SE_EV_ELEVATOR_STOP);
     } else {
-        func_8002F974(&this->dyna.actor, NA_SE_EV_BRIDGE_OPEN - SFX_FLAG);
+        func_8002F974(&self->dyna.actor, NA_SE_EV_BRIDGE_OPEN - SFX_FLAG);
     }
 }
 
-void BgJyaLift_SetFinalPosY(BgJyaLift* this) {
-    this->actionFunc = NULL;
-    this->dyna.actor.world.pos.y = 973.0f;
+void BgJyaLift_SetFinalPosY(BgJyaLift* self) {
+    self->actionFunc = NULL;
+    self->dyna.actor.world.pos.y = 973.0f;
 }
 
 void BgJyaLift_Update(Actor* thisx, GlobalContext* globalCtx2) {
-    BgJyaLift* this = THIS;
+    BgJyaLift* self = THIS;
     GlobalContext* globalCtx = globalCtx2;
 
-    if (this->actionFunc != NULL) {
-        this->actionFunc(this, globalCtx);
+    if (self->actionFunc != NULL) {
+        self->actionFunc(self, globalCtx);
     }
-    if ((this->dyna.unk_160 & 4) && ((this->unk_16B & 4) == 0)) {
+    if ((self->dyna.unk_160 & 4) && ((self->unk_16B & 4) == 0)) {
         Camera_ChangeSetting(globalCtx->cameraPtrs[MAIN_CAM], CAM_SET_TEPPEN);
-    } else if (((this->dyna.unk_160) & 4) == 0 && ((this->unk_16B & 4)) &&
+    } else if (((self->dyna.unk_160) & 4) == 0 && ((self->unk_16B & 4)) &&
                (globalCtx->cameraPtrs[MAIN_CAM]->setting == CAM_SET_TEPPEN)) {
         Camera_ChangeSetting(globalCtx->cameraPtrs[MAIN_CAM], CAM_SET_DUNGEON0);
     }
-    this->unk_16B = this->dyna.unk_160;
+    self->unk_16B = self->dyna.unk_160;
 
     // Spirit Temple room 5 is the main room with the statue room 25 is directly above room 5
     if ((globalCtx->roomCtx.curRoom.num != 5) && (globalCtx->roomCtx.curRoom.num != 25)) {

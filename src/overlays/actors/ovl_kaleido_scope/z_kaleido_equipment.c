@@ -577,7 +577,11 @@ void KaleidoScope_DrawEquipment(GlobalContext* globalCtx) {
 
     if ((pauseCtx->unk_1E4 == 7) && (sEquipTimer == 9)) {
         //! @bug: This function shouldn't take any arguments
+        #ifdef AVOID_UB
+        KaleidoScope_ProcessPlayerPreRender();
+        #else
         KaleidoScope_ProcessPlayerPreRender(globalCtx);
+        #endif
     }
 
     gSPSegment(POLY_OPA_DISP++, 0x07, pauseCtx->playerSegment);

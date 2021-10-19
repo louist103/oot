@@ -38,28 +38,28 @@ const ActorInit Magic_Dark_InitVars = {
 static Color_RGBA8 D_80B88B10[] = { { 50, 100, 150, 200 }, { 255, 200, 150, 100 } };
 
 void MagicDark_Init(Actor* thisx, GlobalContext* globalCtx) {
-    MagicDark* this = THIS;
+    MagicDark* self = THIS;
     Player* player = GET_PLAYER(globalCtx);
 
     if (!LINK_IS_ADULT) {
-        this->scale = 0.4f;
+        self->scale = 0.4f;
     } else {
-        this->scale = 0.6f;
+        self->scale = 0.6f;
     }
 
     thisx->world.pos = player->actor.world.pos;
-    Actor_SetScale(&this->actor, 0.0f);
+    Actor_SetScale(&self->actor, 0.0f);
     thisx->room = -1;
 
     if (gSaveContext.nayrusLoveTimer != 0) {
         thisx->update = MagicDark_DiamondUpdate;
         thisx->draw = MagicDark_DiamondDraw;
-        thisx->scale.x = thisx->scale.z = this->scale * 1.6f;
-        thisx->scale.y = this->scale * 0.8f;
-        this->timer = 0;
-        this->primAlpha = 0;
+        thisx->scale.x = thisx->scale.z = self->scale * 1.6f;
+        thisx->scale.y = self->scale * 0.8f;
+        self->timer = 0;
+        self->primAlpha = 0;
     } else {
-        this->timer = 0;
+        self->timer = 0;
         gSaveContext.nayrusLoveTimer = 0;
     }
 }
@@ -71,7 +71,7 @@ void MagicDark_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void MagicDark_DiamondUpdate(Actor* thisx, GlobalContext* globalCtx) {
-    MagicDark* this = THIS;
+    MagicDark* self = THIS;
     u8 phi_a0;
     Player* player = GET_PLAYER(globalCtx);
     s16 pad;
@@ -93,39 +93,39 @@ void MagicDark_DiamondUpdate(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     player->invincibilityTimer = -100;
-    thisx->scale.x = thisx->scale.z = this->scale;
+    thisx->scale.x = thisx->scale.z = self->scale;
 
-    if (this->timer < 20) {
-        thisx->scale.x = thisx->scale.z = (1.6f - (this->timer * 0.03f)) * this->scale;
-        thisx->scale.y = ((this->timer * 0.01f) + 0.8f) * this->scale;
+    if (self->timer < 20) {
+        thisx->scale.x = thisx->scale.z = (1.6f - (self->timer * 0.03f)) * self->scale;
+        thisx->scale.y = ((self->timer * 0.01f) + 0.8f) * self->scale;
     } else {
-        thisx->scale.x = thisx->scale.z = this->scale;
-        thisx->scale.y = this->scale;
+        thisx->scale.x = thisx->scale.z = self->scale;
+        thisx->scale.y = self->scale;
     }
 
     thisx->scale.x *= 1.3f;
     thisx->scale.z *= 1.3f;
 
-    phi_a0 = (this->timer < 20) ? (this->timer * 12) : 255;
+    phi_a0 = (self->timer < 20) ? (self->timer * 12) : 255;
 
     if (nayrusLoveTimer >= 1180) {
-        this->primAlpha = 15595 - (nayrusLoveTimer * 13);
+        self->primAlpha = 15595 - (nayrusLoveTimer * 13);
         if (nayrusLoveTimer & 1) {
-            this->primAlpha = (u8)(this->primAlpha >> 1);
+            self->primAlpha = (u8)(self->primAlpha >> 1);
         }
     } else if (nayrusLoveTimer >= 1100) {
-        this->primAlpha = (u8)(nayrusLoveTimer << 7) + 127;
+        self->primAlpha = (u8)(nayrusLoveTimer << 7) + 127;
     } else {
-        this->primAlpha = 255;
+        self->primAlpha = 255;
     }
 
-    if (this->primAlpha > phi_a0) {
-        this->primAlpha = phi_a0;
+    if (self->primAlpha > phi_a0) {
+        self->primAlpha = phi_a0;
     }
 
     thisx->world.rot.y += 0x3E8;
     thisx->shape.rot.y = thisx->world.rot.y + Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx));
-    this->timer++;
+    self->timer++;
     gSaveContext.nayrusLoveTimer = nayrusLoveTimer + 1;
 
     if (nayrusLoveTimer < 1100) {
@@ -170,35 +170,35 @@ void MagicDark_DimLighting(GlobalContext* globalCtx, f32 intensity) {
 }
 
 void MagicDark_OrbUpdate(Actor* thisx, GlobalContext* globalCtx) {
-    MagicDark* this = THIS;
+    MagicDark* self = THIS;
     s32 pad;
     Player* player = GET_PLAYER(globalCtx);
 
-    func_8002F974(&this->actor, NA_SE_PL_MAGIC_SOUL_BALL - SFX_FLAG);
-    if (this->timer < 35) {
-        MagicDark_DimLighting(globalCtx, this->timer * (1 / 45.0f));
-        Math_SmoothStepToF(&thisx->scale.x, this->scale * (1 / 12.000001f), 0.05f, 0.01f, 0.0001f);
-        Actor_SetScale(&this->actor, thisx->scale.x);
-    } else if (this->timer < 55) {
-        Actor_SetScale(&this->actor, thisx->scale.x * 0.9f);
-        Math_SmoothStepToF(&this->orbOffset.y, player->bodyPartsPos[0].y, 0.5f, 3.0f, 1.0f);
-        if (this->timer > 48) {
-            MagicDark_DimLighting(globalCtx, (54 - this->timer) * 0.2f);
+    func_8002F974(&self->actor, NA_SE_PL_MAGIC_SOUL_BALL - SFX_FLAG);
+    if (self->timer < 35) {
+        MagicDark_DimLighting(globalCtx, self->timer * (1 / 45.0f));
+        Math_SmoothStepToF(&thisx->scale.x, self->scale * (1 / 12.000001f), 0.05f, 0.01f, 0.0001f);
+        Actor_SetScale(&self->actor, thisx->scale.x);
+    } else if (self->timer < 55) {
+        Actor_SetScale(&self->actor, thisx->scale.x * 0.9f);
+        Math_SmoothStepToF(&self->orbOffset.y, player->bodyPartsPos[0].y, 0.5f, 3.0f, 1.0f);
+        if (self->timer > 48) {
+            MagicDark_DimLighting(globalCtx, (54 - self->timer) * 0.2f);
         }
     } else {
         thisx->update = MagicDark_DiamondUpdate;
         thisx->draw = MagicDark_DiamondDraw;
-        thisx->scale.x = thisx->scale.z = this->scale * 1.6f;
-        thisx->scale.y = this->scale * 0.8f;
-        this->timer = 0;
-        this->primAlpha = 0;
+        thisx->scale.x = thisx->scale.z = self->scale * 1.6f;
+        thisx->scale.y = self->scale * 0.8f;
+        self->timer = 0;
+        self->primAlpha = 0;
     }
 
-    this->timer++;
+    self->timer++;
 }
 
 void MagicDark_DiamondDraw(Actor* thisx, GlobalContext* globalCtx) {
-    MagicDark* this = THIS;
+    MagicDark* self = THIS;
     s32 pad;
     u16 gameplayFrames = globalCtx->gameplayFrames;
 
@@ -210,20 +210,20 @@ void MagicDark_DiamondDraw(Actor* thisx, GlobalContext* globalCtx) {
         Player* player = GET_PLAYER(globalCtx);
         f32 heightDiff;
 
-        this->actor.world.pos.x = player->bodyPartsPos[0].x;
-        this->actor.world.pos.z = player->bodyPartsPos[0].z;
-        heightDiff = player->bodyPartsPos[0].y - this->actor.world.pos.y;
+        self->actor.world.pos.x = player->bodyPartsPos[0].x;
+        self->actor.world.pos.z = player->bodyPartsPos[0].z;
+        heightDiff = player->bodyPartsPos[0].y - self->actor.world.pos.y;
         if (heightDiff < -2.0f) {
-            this->actor.world.pos.y = player->bodyPartsPos[0].y + 2.0f;
+            self->actor.world.pos.y = player->bodyPartsPos[0].y + 2.0f;
         } else if (heightDiff > 2.0f) {
-            this->actor.world.pos.y = player->bodyPartsPos[0].y - 2.0f;
+            self->actor.world.pos.y = player->bodyPartsPos[0].y - 2.0f;
         }
-        Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
-        Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        Matrix_RotateY(this->actor.shape.rot.y * (M_PI / 0x8000), MTXMODE_APPLY);
+        Matrix_Translate(self->actor.world.pos.x, self->actor.world.pos.y, self->actor.world.pos.z, MTXMODE_NEW);
+        Matrix_Scale(self->actor.scale.x, self->actor.scale.y, self->actor.scale.z, MTXMODE_APPLY);
+        Matrix_RotateY(self->actor.shape.rot.y * (M_PI / 0x8000), MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx, "../z_magic_dark.c", 553),
                   G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 170, 255, 255, (s32)(this->primAlpha * 0.6f) & 0xFF);
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 170, 255, 255, (s32)(self->primAlpha * 0.6f) & 0xFF);
         gDPSetEnvColor(POLY_XLU_DISP++, 0, 100, 255, 128);
         gSPDisplayList(POLY_XLU_DISP++, sMagicDarkDiamondTexDL);
         gSPDisplayList(POLY_XLU_DISP++,
@@ -236,30 +236,30 @@ void MagicDark_DiamondDraw(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void MagicDark_OrbDraw(Actor* thisx, GlobalContext* globalCtx) {
-    MagicDark* this = THIS;
+    MagicDark* self = THIS;
     Vec3f pos;
     Player* player = GET_PLAYER(globalCtx);
     s32 pad;
     f32 sp6C = globalCtx->state.frames & 0x1F;
 
-    if (this->timer < 32) {
+    if (self->timer < 32) {
         pos.x = (player->bodyPartsPos[12].x + player->bodyPartsPos[15].x) * 0.5f;
         pos.y = (player->bodyPartsPos[12].y + player->bodyPartsPos[15].y) * 0.5f;
         pos.z = (player->bodyPartsPos[12].z + player->bodyPartsPos[15].z) * 0.5f;
-        if (this->timer > 20) {
-            pos.y += (this->timer - 20) * 1.4f;
+        if (self->timer > 20) {
+            pos.y += (self->timer - 20) * 1.4f;
         }
-        this->orbOffset = pos;
-    } else if (this->timer < 130) {
-        pos = this->orbOffset;
+        self->orbOffset = pos;
+    } else if (self->timer < 130) {
+        pos = self->orbOffset;
     } else {
         return;
     }
 
-    pos.x -= (this->actor.scale.x * 300.0f * Math_SinS(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx))) *
+    pos.x -= (self->actor.scale.x * 300.0f * Math_SinS(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx))) *
               Math_CosS(Camera_GetCamDirPitch(GET_ACTIVE_CAM(globalCtx))));
-    pos.y -= (this->actor.scale.x * 300.0f * Math_SinS(Camera_GetCamDirPitch(GET_ACTIVE_CAM(globalCtx))));
-    pos.z -= (this->actor.scale.x * 300.0f * Math_CosS(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx))) *
+    pos.y -= (self->actor.scale.x * 300.0f * Math_SinS(Camera_GetCamDirPitch(GET_ACTIVE_CAM(globalCtx))));
+    pos.z -= (self->actor.scale.x * 300.0f * Math_CosS(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx))) *
               Math_CosS(Camera_GetCamDirPitch(GET_ACTIVE_CAM(globalCtx))));
 
     OPEN_DISPS(globalCtx->state.gfxCtx, "../z_magic_dark.c", 619);
@@ -268,7 +268,7 @@ void MagicDark_OrbDraw(Actor* thisx, GlobalContext* globalCtx) {
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 170, 255, 255, 255);
     gDPSetEnvColor(POLY_XLU_DISP++, 0, 150, 255, 255);
     Matrix_Translate(pos.x, pos.y, pos.z, MTXMODE_NEW);
-    Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
+    Matrix_Scale(self->actor.scale.x, self->actor.scale.y, self->actor.scale.z, MTXMODE_APPLY);
     Matrix_Mult(&globalCtx->mf_11DA0, MTXMODE_APPLY);
     Matrix_Push();
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx, "../z_magic_dark.c", 632),

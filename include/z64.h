@@ -4,7 +4,7 @@
 #include "ultra64.h"
 #include "ultra64/gs2dex.h"
 
-// meh idk where else to put this
+// meh idk where else to put self
 
 // Certain functions are marked as having return values, but do not
 // actually return a value. This causes undefined behavior, which we'd rather
@@ -60,7 +60,7 @@
 #define Z_PRIORITY_DMAMGR      16
 #define Z_PRIORITY_IRQMGR      17
 
-// NOTE: Once we start supporting other builds, this can be changed with an ifdef
+// NOTE: Once we start supporting other builds, self can be changed with an ifdef
 #define REGION_NATIVE REGION_EU
 
 typedef struct{
@@ -129,7 +129,7 @@ typedef struct OSScTask {
 typedef struct GraphicsContext {
     /* 0x0000 */ Gfx* polyOpaBuffer; // Pointer to "Zelda 0"
     /* 0x0004 */ Gfx* polyXluBuffer; // Pointer to "Zelda 1"
-    /* 0x0008 */ char unk_008[0x08]; // Unused, could this be pointers to "Zelda 2" / "Zelda 3"
+    /* 0x0008 */ char unk_008[0x08]; // Unused, could self be pointers to "Zelda 2" / "Zelda 3"
     /* 0x0010 */ Gfx* overlayBuffer; // Pointer to "Zelda 4"
     /* 0x0014 */ u32 unk_014;
     /* 0x0018 */ char unk_018[0x20];
@@ -143,7 +143,7 @@ typedef struct GraphicsContext {
     /* 0x01B4 */ TwoHeadGfxArena work;
     /* 0x01C4 */ char unk_01C4[0xC0];
     /* 0x0284 */ OSViMode* viMode;
-    /* 0x0288 */ char unk_0288[0x20]; // Unused, could this be Zelda 2/3 ?
+    /* 0x0288 */ char unk_0288[0x20]; // Unused, could self be Zelda 2/3 ?
     /* 0x02A8 */ TwoHeadGfxArena overlay; // "Zelda 4"
     /* 0x02B8 */ TwoHeadGfxArena polyOpa; // "Zelda 0"
     /* 0x02C8 */ TwoHeadGfxArena polyXlu; // "Zelda 1"
@@ -249,8 +249,8 @@ typedef struct {
 } TitleCardContext; // size = 0x10
 
 typedef struct {
-    /* 0x00 */ s32    length; // number of actors loaded of this category
-    /* 0x04 */ Actor* head; // pointer to head of the linked list of this category (most recent actor added)
+    /* 0x00 */ s32    length; // number of actors loaded of self category
+    /* 0x04 */ Actor* head; // pointer to head of the linked list of self category (most recent actor added)
 } ActorListEntry; // size = 0x08
 
 typedef struct {
@@ -1157,7 +1157,7 @@ typedef enum {
     /* 16 */ F_B8
 } FloorID;
 
-// All arrays pointed in this struct are indexed by "map indexes"
+// All arrays pointed in self struct are indexed by "map indexes"
 // In dungeons, the map index corresponds to the dungeon index (which also indexes keys, items, etc)
 // In overworld areas, the map index corresponds to the overworld area index (spot 00, 01, etc)
 typedef struct {
@@ -1196,7 +1196,7 @@ typedef struct {
 #define PAUSE_MAP_MARK_BOSS 1
 
 typedef struct {
-    /* 0x00 */ s16 chestFlag; // chest icon is only displayed if this flag is not set for the current room, -1 for no flag
+    /* 0x00 */ s16 chestFlag; // chest icon is only displayed if self flag is not set for the current room, -1 for no flag
     /* 0x04 */ f32 x, y; // coordinates to place the icon (top-left corner)
 } PauseMapMarkPoint; // size = 0x0C
 
@@ -1370,8 +1370,8 @@ typedef struct IrqMgrClient {
 } IrqMgrClient;
 
 typedef struct {
-    /* 0x000 */ OSScMsg retraceMsg; // this apparently got moved from OSSched
-    /* 0x020 */ OSScMsg prenmiMsg; // this apparently got moved from OSSched
+    /* 0x000 */ OSScMsg retraceMsg; // self apparently got moved from OSSched
+    /* 0x020 */ OSScMsg prenmiMsg; // self apparently got moved from OSSched
     /* 0x040 */ OSScMsg nmiMsg;
     /* 0x060 */ OSMesgQueue queue;
     /* 0x078 */ OSMesg msgBuf[8];
@@ -1605,7 +1605,7 @@ typedef struct {
     /* 0x50 */ u8* symbols;
 } JpegHuffmanTable; // size = 0x54
 
-// this struct might be unaccurate but it's not used outside jpegutils.c anyways
+// self struct might be unaccurate but it's not used outside jpegutils.c anyways
 typedef struct {
     /* 0x000 */ u8 codeOffs[16];
     /* 0x010 */ u16 dcCodes[120];

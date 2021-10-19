@@ -13,7 +13,7 @@ COMPILER ?= gcc
 # Define normal gameplay. Mostly, restore the title as-is for a GCC build.
 NORMAL_GAMEPLAY ?= 1
 # Convert text to EUC-JP before compilation
-CONV_TEXT ?= 1
+CONV_TEXT ?= 0
 
 # If gcc is used, define the NON_MATCHING and NON_EQUIVALENT flags respectively so the files that
 # are safe to be used can avoid using GLOBAL_ASM which doesn't work with gcc.
@@ -191,11 +191,11 @@ PIPEIN = $<
 ifeq ($(COMPILER),gcc)
   include gcc_safe_files.mk
 ifeq ($(CONV_TEXT),1)
-  $(SAFE_C_FILES): CC = iconv -f UTF-8 -t EUC-JP $< | mips-linux-gnu-gcc -x c -
+  $(SAFE_C_FILES): CC = iconv -f UTF-8 -t EUC-JP $< | mips-linux-gnu-g++ -x c++ -
 else
-$(SAFE_C_FILES): CC = mips-linux-gnu-gcc $<
+$(SAFE_C_FILES): CC = mips-linux-gnu-g++ $<
 endif
-  $(SAFE_C_FILES): CFLAGS := -c -G 0 -nostdinc -Iinclude -Isrc -Iassets -Ibuild -I. -DNON_MATCHING=1 -DNON_EQUIVALENT=1 -DMODDING=1 -DNORMAL_GAMEPLAY=1 -DAVOID_UB=1 -mno-shared -march=vr4300 -mfix4300 -mabi=32 -mhard-float -mdivide-breaks -fno-stack-protector -fno-common -fno-zero-initialized-in-bss -mno-abicalls -fno-strict-aliasing -fno-inline-functions -fno-inline-small-functions -fno-toplevel-reorder -ffreestanding -fwrapv $(CHECK_WARNINGS) -g -mno-explicit-relocs -mno-split-addresses -funsigned-char
+  $(SAFE_C_FILES): CFLAGS := -c -G 0 -nostdinc -Iinclude -Isrc -Iassets -Ibuild -I. -DNON_MATCHING=1 -DNON_EQUIVALENT=1 -DMODDING=1 -DNORMAL_GAMEPLAY=1 -DAVOID_UB=1 -mno-shared -march=vr4300 -mfix4300 -mabi=32 -mhard-float -mdivide-breaks -fno-stack-protector -fno-common -fno-zero-initialized-in-bss -mno-abicalls -fno-strict-aliasing -fno-inline-functions -fno-inline-small-functions -fno-toplevel-reorder -ffreestanding -fwrapv $(CHECK_WARNINGS) -g -mno-explicit-relocs -mno-split-addresses -funsigned-char -fpermissive -Wno-narrowing
   $(SAFE_C_FILES): MIPS_VERSION := -mips3
   $(SAFE_C_FILES): OPTFLAGS := -O2
   $(SAFE_C_FILES): PIPEIN := 

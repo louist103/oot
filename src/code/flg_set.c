@@ -4,7 +4,7 @@ void FlagSet_Update(GlobalContext* globalCtx) {
     static s32 entryIdx = 0;
     static u32 curBit = 0;
     static s32 timer = 0;
-    static s32 bitIdx; // ? this doesn't need to be static
+    static s32 bitIdx; // ? self doesn't need to be static
 
     FlagSetEntry entries[53] = {
         { &gSaveContext.eventChkInf[0], "event_chk_inf[0]" },   { &gSaveContext.eventChkInf[1], "event_chk_inf[1]" },

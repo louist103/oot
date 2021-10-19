@@ -21,51 +21,51 @@
 #define rBodyPart regs[11]
 #define rType regs[12]
 
-u32 EffectSsFireTail_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx);
-void EffectSsFireTail_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this);
-void EffectSsFireTail_Update(GlobalContext* globalCtx, u32 index, EffectSs* this);
+u32 EffectSsFireTail_Init(GlobalContext* globalCtx, u32 index, EffectSs* self, void* initParamsx);
+void EffectSsFireTail_Draw(GlobalContext* globalCtx, u32 index, EffectSs* self);
+void EffectSsFireTail_Update(GlobalContext* globalCtx, u32 index, EffectSs* self);
 
 EffectSsInit Effect_Ss_Fire_Tail_InitVars = {
     EFFECT_SS_FIRE_TAIL,
     EffectSsFireTail_Init,
 };
 
-u32 EffectSsFireTail_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx) {
+u32 EffectSsFireTail_Init(GlobalContext* globalCtx, u32 index, EffectSs* self, void* initParamsx) {
     EffectSsFireTailInitParams* initParams = (EffectSsFireTailInitParams*)initParamsx;
 
-    this->pos = initParams->pos;
-    this->vec = initParams->unk_14;
-    this->velocity.x = 0.0f;
-    this->velocity.y = 0.0f;
-    this->velocity.z = 0.0f;
-    this->accel.x = 0.0f;
-    this->accel.y = 0.0f;
-    this->accel.z = 0.0f;
-    this->life = initParams->life;
-    this->actor = initParams->actor;
-    this->draw = EffectSsFireTail_Draw;
-    this->update = EffectSsFireTail_Update;
-    this->rScale = initParams->scale * 1000.0f;
-    this->rLifespan = initParams->life;
-    this->rReg2 = -0xA;
-    this->rReg3 = -0xF;
+    self->pos = initParams->pos;
+    self->vec = initParams->unk_14;
+    self->velocity.x = 0.0f;
+    self->velocity.y = 0.0f;
+    self->velocity.z = 0.0f;
+    self->accel.x = 0.0f;
+    self->accel.y = 0.0f;
+    self->accel.z = 0.0f;
+    self->life = initParams->life;
+    self->actor = initParams->actor;
+    self->draw = EffectSsFireTail_Draw;
+    self->update = EffectSsFireTail_Update;
+    self->rScale = initParams->scale * 1000.0f;
+    self->rLifespan = initParams->life;
+    self->rReg2 = -0xA;
+    self->rReg3 = -0xF;
     if (initParams->unk_20 == 0) {
         initParams->unk_20 = 1;
     }
-    this->rReg10 = initParams->unk_20;
-    this->rPrimColorR = initParams->primColor.r;
-    this->rPrimColorG = initParams->primColor.g;
-    this->rPrimColorB = initParams->primColor.b;
-    this->rEnvColorR = initParams->envColor.r;
-    this->rEnvColorG = initParams->envColor.g;
-    this->rEnvColorB = initParams->envColor.b;
-    this->rBodyPart = initParams->bodyPart;
-    this->rType = initParams->type;
+    self->rReg10 = initParams->unk_20;
+    self->rPrimColorR = initParams->primColor.r;
+    self->rPrimColorG = initParams->primColor.g;
+    self->rPrimColorB = initParams->primColor.b;
+    self->rEnvColorR = initParams->envColor.r;
+    self->rEnvColorG = initParams->envColor.g;
+    self->rEnvColorB = initParams->envColor.b;
+    self->rBodyPart = initParams->bodyPart;
+    self->rType = initParams->type;
 
     return 1;
 }
 
-void EffectSsFireTail_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
+void EffectSsFireTail_Draw(GlobalContext* globalCtx, u32 index, EffectSs* self) {
     GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
     s32 pad;
     s16 yaw;
@@ -78,40 +78,40 @@ void EffectSsFireTail_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) 
 
     scale.x = scale.y = scale.z = 0.0f;
 
-    if (this->actor != NULL) {
+    if (self->actor != NULL) {
 
-        this->vec = this->actor->velocity;
+        self->vec = self->actor->velocity;
 
-        if (this->rBodyPart < 0) {
-            Matrix_Translate(this->pos.x + this->actor->world.pos.x, this->pos.y + this->actor->world.pos.y,
-                             this->pos.z + this->actor->world.pos.z, MTXMODE_NEW);
+        if (self->rBodyPart < 0) {
+            Matrix_Translate(self->pos.x + self->actor->world.pos.x, self->pos.y + self->actor->world.pos.y,
+                             self->pos.z + self->actor->world.pos.z, MTXMODE_NEW);
         } else {
             Player* player = GET_PLAYER(globalCtx);
-            s16 bodyPart = this->rBodyPart;
+            s16 bodyPart = self->rBodyPart;
 
-            this->pos.x =
+            self->pos.x =
                 player->bodyPartsPos[bodyPart].x - (Math_SinS(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx))) * 5.0f);
-            this->pos.y = player->bodyPartsPos[bodyPart].y;
-            this->pos.z =
+            self->pos.y = player->bodyPartsPos[bodyPart].y;
+            self->pos.z =
                 player->bodyPartsPos[bodyPart].z - (Math_CosS(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx))) * 5.0f);
 
-            Matrix_Translate(this->pos.x, this->pos.y, this->pos.z, MTXMODE_NEW);
+            Matrix_Translate(self->pos.x, self->pos.y, self->pos.z, MTXMODE_NEW);
         }
     } else {
-        Matrix_Translate(this->pos.x, this->pos.y, this->pos.z, MTXMODE_NEW);
+        Matrix_Translate(self->pos.x, self->pos.y, self->pos.z, MTXMODE_NEW);
     }
 
-    yaw = Math_Vec3f_Yaw(&scale, &this->vec) - Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx));
+    yaw = Math_Vec3f_Yaw(&scale, &self->vec) - Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx));
     temp1 = fabsf(Math_CosS(yaw));
     temp2 = Math_SinS(yaw);
-    dist = Math_Vec3f_DistXZ(&scale, &this->vec) / (this->rReg10 * 0.1f);
+    dist = Math_Vec3f_DistXZ(&scale, &self->vec) / (self->rReg10 * 0.1f);
     Matrix_RotateY((s16)(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx)) + 0x8000) * (M_PI / 0x8000), MTXMODE_APPLY);
-    Matrix_RotateZ(temp2 * this->rReg2 * dist * (M_PI / 180.0f), MTXMODE_APPLY);
-    temp2 = 1.0f - ((f32)(this->life + 1) / this->rLifespan);
+    Matrix_RotateZ(temp2 * self->rReg2 * dist * (M_PI / 180.0f), MTXMODE_APPLY);
+    temp2 = 1.0f - ((f32)(self->life + 1) / self->rLifespan);
     temp2 = 1.0f - SQ(temp2);
-    scale.x = scale.y = scale.z = temp2 * (this->rScale * 0.000010000001f);
+    scale.x = scale.y = scale.z = temp2 * (self->rScale * 0.000010000001f);
     Matrix_Scale(scale.x, scale.y, scale.z, MTXMODE_APPLY);
-    temp1 = (this->rReg3 * 0.01f * temp1 * dist) + 1.0f;
+    temp1 = (self->rReg3 * 0.01f * temp1 * dist) + 1.0f;
 
     if (temp1 < 0.1f) {
         temp1 = 0.1f;
@@ -122,13 +122,13 @@ void EffectSsFireTail_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx, "../z_eff_fire_tail.c", 238),
               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     func_80093D84(globalCtx->state.gfxCtx);
-    gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, this->rPrimColorR, this->rPrimColorG, this->rPrimColorB, 255);
-    gDPSetEnvColor(POLY_XLU_DISP++, this->rEnvColorR, this->rEnvColorG, this->rEnvColorB, 0);
+    gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, self->rPrimColorR, self->rPrimColorG, self->rPrimColorB, 255);
+    gDPSetEnvColor(POLY_XLU_DISP++, self->rEnvColorR, self->rEnvColorG, self->rEnvColorB, 0);
     gSPSegment(POLY_XLU_DISP++, 0x08,
                Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 32, 64, 1, 0,
                                 (globalCtx->state.frames * -0x14) & 0x1FF, 32, 128));
 
-    if (this->rType != 0) {
+    if (self->rType != 0) {
         gSPDisplayList(POLY_XLU_DISP++, gEffFire2DL);
     } else {
         gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
@@ -137,6 +137,6 @@ void EffectSsFireTail_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) 
     CLOSE_DISPS(gfxCtx, "../z_eff_fire_tail.c", 273);
 }
 
-void EffectSsFireTail_Update(GlobalContext* globalCtx, u32 index, EffectSs* this) {
-    this->rScale *= 0.9f;
+void EffectSsFireTail_Update(GlobalContext* globalCtx, u32 index, EffectSs* self) {
+    self->rScale *= 0.9f;
 }

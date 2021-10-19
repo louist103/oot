@@ -17,10 +17,10 @@ void ShotSun_Init(Actor* thisx, GlobalContext* globalCtx);
 void ShotSun_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ShotSun_Update(Actor* thisx, GlobalContext* globalCtx);
 
-void ShotSun_SpawnFairy(ShotSun* this, GlobalContext* globalCtx);
-void ShotSun_TriggerFairy(ShotSun* this, GlobalContext* globalCtx);
-void func_80BADF0C(ShotSun* this, GlobalContext* globalCtx);
-void ShotSun_UpdateHyliaSun(ShotSun* this, GlobalContext* globalCtx);
+void ShotSun_SpawnFairy(ShotSun* self, GlobalContext* globalCtx);
+void ShotSun_TriggerFairy(ShotSun* self, GlobalContext* globalCtx);
+void func_80BADF0C(ShotSun* self, GlobalContext* globalCtx);
+void ShotSun_UpdateHyliaSun(ShotSun* self, GlobalContext* globalCtx);
 
 const ActorInit Shot_Sun_InitVars = {
     ACTOR_SHOT_SUN,
@@ -55,41 +55,41 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 void ShotSun_Init(Actor* thisx, GlobalContext* globalCtx) {
-    ShotSun* this = THIS;
+    ShotSun* self = THIS;
     s32 params;
 
     // "Ocarina secret occurrence"
-    osSyncPrintf("%d ---- オカリナの秘密発生!!!!!!!!!!!!!\n", this->actor.params);
-    params = this->actor.params & 0xFF;
+    osSyncPrintf("%d ---- オカリナの秘密発生!!!!!!!!!!!!!\n", self->actor.params);
+    params = self->actor.params & 0xFF;
     if (params == 0x40 || params == 0x41) {
-        this->unk_1A4 = 0;
-        this->actor.flags |= 0x10;
-        this->actor.flags |= 0x2000000;
-        this->actionFunc = func_80BADF0C;
-        this->actor.flags |= 0x8000000;
+        self->unk_1A4 = 0;
+        self->actor.flags |= 0x10;
+        self->actor.flags |= 0x2000000;
+        self->actionFunc = func_80BADF0C;
+        self->actor.flags |= 0x8000000;
     } else {
-        Collider_InitCylinder(globalCtx, &this->collider);
-        Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
-        this->actionFunc = ShotSun_UpdateHyliaSun;
-        this->actor.flags &= ~1;
+        Collider_InitCylinder(globalCtx, &self->collider);
+        Collider_SetCylinder(globalCtx, &self->collider, &self->actor, &sCylinderInit);
+        self->actionFunc = ShotSun_UpdateHyliaSun;
+        self->actor.flags &= ~1;
     }
 }
 
 void ShotSun_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    ShotSun* this = THIS;
-    s32 params = this->actor.params & 0xFF;
+    ShotSun* self = THIS;
+    s32 params = self->actor.params & 0xFF;
 
     if (params != 0x40 && params != 0x41) {
-        Collider_DestroyCylinder(globalCtx, &this->collider);
+        Collider_DestroyCylinder(globalCtx, &self->collider);
     }
 }
 
-void ShotSun_SpawnFairy(ShotSun* this, GlobalContext* globalCtx) {
-    s32 params = this->actor.params & 0xFF;
+void ShotSun_SpawnFairy(ShotSun* self, GlobalContext* globalCtx) {
+    s32 params = self->actor.params & 0xFF;
     s32 fairyType;
 
-    if (this->timer > 0) {
-        this->timer--;
+    if (self->timer > 0) {
+        self->timer--;
     } else {
         switch (params) {
             case 0x40:
@@ -101,66 +101,66 @@ void ShotSun_SpawnFairy(ShotSun* this, GlobalContext* globalCtx) {
         }
 
         //! @bug fairyType may be uninitialized
-        Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ELF, this->actor.home.pos.x, this->actor.home.pos.y,
-                    this->actor.home.pos.z, 0, 0, 0, fairyType);
+        Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ELF, self->actor.home.pos.x, self->actor.home.pos.y,
+                    self->actor.home.pos.z, 0, 0, 0, fairyType);
 
-        Actor_Kill(&this->actor);
+        Actor_Kill(&self->actor);
     }
 }
 
-void ShotSun_TriggerFairy(ShotSun* this, GlobalContext* globalCtx) {
-    if ((func_8005B198() == this->actor.category) || (this->timer != 0)) {
-        this->actionFunc = ShotSun_SpawnFairy;
-        this->timer = 50;
+void ShotSun_TriggerFairy(ShotSun* self, GlobalContext* globalCtx) {
+    if ((func_8005B198() == self->actor.category) || (self->timer != 0)) {
+        self->actionFunc = ShotSun_SpawnFairy;
+        self->timer = 50;
 
-        Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_DEMO_KANKYO, this->actor.home.pos.x, this->actor.home.pos.y,
-                    this->actor.home.pos.z, 0, 0, 0, 0x11);
+        Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_DEMO_KANKYO, self->actor.home.pos.x, self->actor.home.pos.y,
+                    self->actor.home.pos.z, 0, 0, 0, 0x11);
 
-        func_80078914(&this->actor.projectedPos, NA_SE_EV_TRE_BOX_APPEAR);
+        func_80078914(&self->actor.projectedPos, NA_SE_EV_TRE_BOX_APPEAR);
     }
 }
 
-void func_80BADF0C(ShotSun* this, GlobalContext* globalCtx) {
+void func_80BADF0C(ShotSun* self, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s32 pad;
-    s32 params = this->actor.params & 0xFF;
+    s32 params = self->actor.params & 0xFF;
 
-    if (Math3D_Vec3fDistSq(&this->actor.world.pos, &player->actor.world.pos) > 22500.0f) {
-        this->unk_1A4 = 0;
+    if (Math3D_Vec3fDistSq(&self->actor.world.pos, &player->actor.world.pos) > 22500.0f) {
+        self->unk_1A4 = 0;
     } else {
-        if (this->unk_1A4 == 0) {
+        if (self->unk_1A4 == 0) {
             if (!(player->stateFlags2 & 0x1000000)) {
                 player->stateFlags2 |= 0x800000;
                 return;
             } else {
-                this->unk_1A4 = 1;
+                self->unk_1A4 = 1;
             }
         }
-        if (this->unk_1A4 == 1) {
+        if (self->unk_1A4 == 1) {
             func_8010BD58(globalCtx, 1);
-            this->unk_1A4 = 2;
-        } else if (this->unk_1A4 == 2 && globalCtx->msgCtx.unk_E3EE == 4) {
+            self->unk_1A4 = 2;
+        } else if (self->unk_1A4 == 2 && globalCtx->msgCtx.unk_E3EE == 4) {
             if ((params == 0x40 && globalCtx->msgCtx.unk_E3EC == 9) ||
                 (params == 0x41 && globalCtx->msgCtx.unk_E3EC == 0xB)) {
-                this->actionFunc = ShotSun_TriggerFairy;
-                OnePointCutscene_Attention(globalCtx, &this->actor);
-                this->timer = 0;
+                self->actionFunc = ShotSun_TriggerFairy;
+                OnePointCutscene_Attention(globalCtx, &self->actor);
+                self->timer = 0;
             } else {
-                this->unk_1A4 = 0;
+                self->unk_1A4 = 0;
             }
-            this->unk_1A4 = 0;
+            self->unk_1A4 = 0;
         }
     }
 }
 
-void ShotSun_UpdateHyliaSun(ShotSun* this, GlobalContext* globalCtx) {
+void ShotSun_UpdateHyliaSun(ShotSun* self, GlobalContext* globalCtx) {
     Vec3s cylinderPos;
     Player* player = GET_PLAYER(globalCtx);
     EnItem00* collectible;
     s32 pad;
     Vec3f spawnPos;
 
-    if (this->collider.base.acFlags & AC_HIT) {
+    if (self->collider.base.acFlags & AC_HIT) {
         func_80078884(NA_SE_SY_CORRECT_CHIME);
         osSyncPrintf(VT_FGCOL(CYAN) "SHOT_SUN HIT!!!!!!!\n" VT_RST);
         if (INV_CONTENT(ITEM_ARROW_FIRE) == ITEM_NONE) {
@@ -179,23 +179,23 @@ void ShotSun_UpdateHyliaSun(ShotSun* this, GlobalContext* globalCtx) {
                 collectible->actor.speedXZ = 0.0f;
             }
         }
-        Actor_Kill(&this->actor);
+        Actor_Kill(&self->actor);
     } else {
-        if (!(this->actor.xzDistToPlayer > 120.0f) && gSaveContext.dayTime >= 0x4555 && gSaveContext.dayTime < 0x5000) {
+        if (!(self->actor.xzDistToPlayer > 120.0f) && gSaveContext.dayTime >= 0x4555 && gSaveContext.dayTime < 0x5000) {
             cylinderPos.x = player->bodyPartsPos[7].x + globalCtx->envCtx.sunPos.x * (1.0f / 6.0f);
             cylinderPos.y = player->bodyPartsPos[7].y - 30.0f + globalCtx->envCtx.sunPos.y * (1.0f / 6.0f);
             cylinderPos.z = player->bodyPartsPos[7].z + globalCtx->envCtx.sunPos.z * (1.0f / 6.0f);
 
-            this->hitboxPos = cylinderPos;
+            self->hitboxPos = cylinderPos;
 
-            Collider_SetCylinderPosition(&this->collider, &cylinderPos);
-            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+            Collider_SetCylinderPosition(&self->collider, &cylinderPos);
+            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
         }
     }
 }
 
 void ShotSun_Update(Actor* thisx, GlobalContext* globalCtx) {
-    ShotSun* this = THIS;
+    ShotSun* self = THIS;
 
-    this->actionFunc(this, globalCtx);
+    self->actionFunc(self, globalCtx);
 }

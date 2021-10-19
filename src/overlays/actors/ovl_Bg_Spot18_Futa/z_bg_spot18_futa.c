@@ -36,34 +36,34 @@ static InitChainEntry sInitChain[] = {
 };
 
 void BgSpot18Futa_Init(Actor* thisx, GlobalContext* globalCtx) {
-    BgSpot18Futa* this = THIS;
+    BgSpot18Futa* self = THIS;
     s32 pad;
     CollisionHeader* colHeader = NULL;
 
-    DynaPolyActor_Init(&this->dyna, DPM_UNK);
+    DynaPolyActor_Init(&self->dyna, DPM_UNK);
     CollisionHeader_GetVirtual(&gGoronCityVaseLidCol, &colHeader);
-    this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
-    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
+    self->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &self->dyna.actor, colHeader);
+    Actor_ProcessInitChain(&self->dyna.actor, sInitChain);
 }
 
 void BgSpot18Futa_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    BgSpot18Futa* this = THIS;
+    BgSpot18Futa* self = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, self->dyna.bgId);
 }
 
 void BgSpot18Futa_Update(Actor* thisx, GlobalContext* globalCtx) {
-    BgSpot18Futa* this = THIS;
+    BgSpot18Futa* self = THIS;
     s32 iVar1;
 
-    if (this->dyna.actor.parent == NULL) {
-        iVar1 = Math_StepToF(&this->dyna.actor.scale.x, 0, 0.005);
+    if (self->dyna.actor.parent == NULL) {
+        iVar1 = Math_StepToF(&self->dyna.actor.scale.x, 0, 0.005);
 
         if (iVar1 != 0) {
-            Actor_Kill(&this->dyna.actor);
+            Actor_Kill(&self->dyna.actor);
         } else {
-            this->dyna.actor.scale.z = this->dyna.actor.scale.x;
-            this->dyna.actor.scale.y = this->dyna.actor.scale.x;
+            self->dyna.actor.scale.z = self->dyna.actor.scale.x;
+            self->dyna.actor.scale.y = self->dyna.actor.scale.x;
         }
     }
 }

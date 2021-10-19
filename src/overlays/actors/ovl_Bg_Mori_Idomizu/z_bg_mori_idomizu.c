@@ -16,10 +16,10 @@ void BgMoriIdomizu_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgMoriIdomizu_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgMoriIdomizu_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void BgMoriIdomizu_SetupWaitForMoriTex(BgMoriIdomizu* this);
-void BgMoriIdomizu_WaitForMoriTex(BgMoriIdomizu* this, GlobalContext* globalCtx);
-void BgMoriIdomizu_SetupMain(BgMoriIdomizu* this);
-void BgMoriIdomizu_Main(BgMoriIdomizu* this, GlobalContext* globalCtx);
+void BgMoriIdomizu_SetupWaitForMoriTex(BgMoriIdomizu* self);
+void BgMoriIdomizu_WaitForMoriTex(BgMoriIdomizu* self, GlobalContext* globalCtx);
+void BgMoriIdomizu_SetupMain(BgMoriIdomizu* self);
+void BgMoriIdomizu_Main(BgMoriIdomizu* self, GlobalContext* globalCtx);
 
 static s16 sIsSpawned = false;
 
@@ -35,8 +35,8 @@ const ActorInit Bg_Mori_Idomizu_InitVars = {
     NULL,
 };
 
-void BgMoriIdomizu_SetupAction(BgMoriIdomizu* this, BgMoriIdomizuActionFunc actionFunc) {
-    this->actionFunc = actionFunc;
+void BgMoriIdomizu_SetupAction(BgMoriIdomizu* self, BgMoriIdomizuActionFunc actionFunc) {
+    self->actionFunc = actionFunc;
 }
 
 void BgMoriIdomizu_SetWaterLevel(GlobalContext* globalCtx, s16 waterLevel) {
@@ -49,91 +49,91 @@ void BgMoriIdomizu_SetWaterLevel(GlobalContext* globalCtx, s16 waterLevel) {
 
 void BgMoriIdomizu_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
-    BgMoriIdomizu* this = THIS;
+    BgMoriIdomizu* self = THIS;
 
     if (sIsSpawned) {
-        Actor_Kill(&this->actor);
+        Actor_Kill(&self->actor);
         return;
     }
-    this->actor.scale.x = 1.1f;
-    this->actor.scale.y = 1.0f;
-    this->actor.scale.z = 1.0f;
-    this->actor.world.pos.x = 119.0f;
-    this->actor.world.pos.z = -1820.0f;
-    this->prevSwitchFlagSet = Flags_GetSwitch(globalCtx, this->actor.params & 0x3F);
-    if (this->prevSwitchFlagSet != 0) {
-        this->actor.world.pos.y = -282.0f;
+    self->actor.scale.x = 1.1f;
+    self->actor.scale.y = 1.0f;
+    self->actor.scale.z = 1.0f;
+    self->actor.world.pos.x = 119.0f;
+    self->actor.world.pos.z = -1820.0f;
+    self->prevSwitchFlagSet = Flags_GetSwitch(globalCtx, self->actor.params & 0x3F);
+    if (self->prevSwitchFlagSet != 0) {
+        self->actor.world.pos.y = -282.0f;
         BgMoriIdomizu_SetWaterLevel(globalCtx, -282);
     } else {
-        this->actor.world.pos.y = 184.0f;
+        self->actor.world.pos.y = 184.0f;
         BgMoriIdomizu_SetWaterLevel(globalCtx, 184);
     }
-    this->moriTexObjIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_MORI_TEX);
-    if (this->moriTexObjIndex < 0) {
-        Actor_Kill(&this->actor);
+    self->moriTexObjIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_MORI_TEX);
+    if (self->moriTexObjIndex < 0) {
+        Actor_Kill(&self->actor);
         // "Bank danger!"
-        osSyncPrintf("Error : バンク危険！(arg_data 0x%04x)(%s %d)\n", this->actor.params, "../z_bg_mori_idomizu.c",
+        osSyncPrintf("Error : バンク危険！(arg_data 0x%04x)(%s %d)\n", self->actor.params, "../z_bg_mori_idomizu.c",
                      202);
         return;
     }
-    BgMoriIdomizu_SetupWaitForMoriTex(this);
+    BgMoriIdomizu_SetupWaitForMoriTex(self);
     sIsSpawned = true;
-    this->isLoaded = true;
-    this->actor.room = -1;
+    self->isLoaded = true;
+    self->actor.room = -1;
     // "Forest Temple well water"
-    osSyncPrintf("(森の神殿 井戸水)(arg_data 0x%04x)\n", this->actor.params);
+    osSyncPrintf("(森の神殿 井戸水)(arg_data 0x%04x)\n", self->actor.params);
 }
 
 void BgMoriIdomizu_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
-    BgMoriIdomizu* this = THIS;
+    BgMoriIdomizu* self = THIS;
 
-    if (this->isLoaded) {
+    if (self->isLoaded) {
         sIsSpawned = false;
     }
 }
 
-void BgMoriIdomizu_SetupWaitForMoriTex(BgMoriIdomizu* this) {
-    BgMoriIdomizu_SetupAction(this, BgMoriIdomizu_WaitForMoriTex);
+void BgMoriIdomizu_SetupWaitForMoriTex(BgMoriIdomizu* self) {
+    BgMoriIdomizu_SetupAction(self, BgMoriIdomizu_WaitForMoriTex);
 }
 
-void BgMoriIdomizu_WaitForMoriTex(BgMoriIdomizu* this, GlobalContext* globalCtx) {
-    if (Object_IsLoaded(&globalCtx->objectCtx, this->moriTexObjIndex)) {
-        BgMoriIdomizu_SetupMain(this);
-        this->actor.draw = BgMoriIdomizu_Draw;
+void BgMoriIdomizu_WaitForMoriTex(BgMoriIdomizu* self, GlobalContext* globalCtx) {
+    if (Object_IsLoaded(&globalCtx->objectCtx, self->moriTexObjIndex)) {
+        BgMoriIdomizu_SetupMain(self);
+        self->actor.draw = BgMoriIdomizu_Draw;
     }
 }
 
-void BgMoriIdomizu_SetupMain(BgMoriIdomizu* this) {
-    BgMoriIdomizu_SetupAction(this, BgMoriIdomizu_Main);
+void BgMoriIdomizu_SetupMain(BgMoriIdomizu* self) {
+    BgMoriIdomizu_SetupAction(self, BgMoriIdomizu_Main);
 }
 
-void BgMoriIdomizu_Main(BgMoriIdomizu* this, GlobalContext* globalCtx) {
+void BgMoriIdomizu_Main(BgMoriIdomizu* self, GlobalContext* globalCtx) {
     s8 roomNum;
-    Actor* thisx = &this->actor;
+    Actor* thisx = &self->actor;
     s32 switchFlagSet;
 
     roomNum = globalCtx->roomCtx.curRoom.num;
     switchFlagSet = Flags_GetSwitch(globalCtx, thisx->params & 0x3F);
     if (switchFlagSet) {
-        this->targetWaterLevel = -282.0f;
+        self->targetWaterLevel = -282.0f;
     } else {
-        this->targetWaterLevel = 184.0f;
+        self->targetWaterLevel = 184.0f;
     }
-    if (switchFlagSet && !this->prevSwitchFlagSet) {
+    if (switchFlagSet && !self->prevSwitchFlagSet) {
         OnePointCutscene_Init(globalCtx, 3240, 70, thisx, MAIN_CAM);
-        this->drainTimer = 90;
-    } else if (!switchFlagSet && this->prevSwitchFlagSet) {
+        self->drainTimer = 90;
+    } else if (!switchFlagSet && self->prevSwitchFlagSet) {
         OnePointCutscene_Init(globalCtx, 3240, 70, thisx, MAIN_CAM);
-        this->drainTimer = 90;
+        self->drainTimer = 90;
         thisx->world.pos.y = 0.0f;
     }
-    this->drainTimer--;
+    self->drainTimer--;
     if ((roomNum == 7) || (roomNum == 8) || (roomNum == 9)) {
-        if (this->drainTimer < 70) {
-            Math_StepToF(&thisx->world.pos.y, this->targetWaterLevel, 3.5f);
+        if (self->drainTimer < 70) {
+            Math_StepToF(&thisx->world.pos.y, self->targetWaterLevel, 3.5f);
             BgMoriIdomizu_SetWaterLevel(globalCtx, thisx->world.pos.y);
-            if (this->drainTimer > 0) {
+            if (self->drainTimer > 0) {
                 if (switchFlagSet) {
                     func_800788CC(NA_SE_EV_WATER_LEVEL_DOWN - SFX_FLAG);
                 } else {
@@ -142,26 +142,26 @@ void BgMoriIdomizu_Main(BgMoriIdomizu* this, GlobalContext* globalCtx) {
             }
         }
     } else {
-        thisx->world.pos.y = this->targetWaterLevel;
+        thisx->world.pos.y = self->targetWaterLevel;
         BgMoriIdomizu_SetWaterLevel(globalCtx, thisx->world.pos.y);
         Actor_Kill(thisx);
         return;
     }
-    this->prevSwitchFlagSet = switchFlagSet;
+    self->prevSwitchFlagSet = switchFlagSet;
 }
 
 void BgMoriIdomizu_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
-    BgMoriIdomizu* this = THIS;
+    BgMoriIdomizu* self = THIS;
 
-    if (this->actionFunc != NULL) {
-        this->actionFunc(this, globalCtx);
+    if (self->actionFunc != NULL) {
+        self->actionFunc(self, globalCtx);
     }
 }
 
 void BgMoriIdomizu_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
-    BgMoriIdomizu* this = THIS;
+    BgMoriIdomizu* self = THIS;
     u32 gameplayFrames = globalCtx->gameplayFrames;
 
     OPEN_DISPS(globalCtx->state.gfxCtx, "../z_bg_mori_idomizu.c", 356);
@@ -171,7 +171,7 @@ void BgMoriIdomizu_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx, "../z_bg_mori_idomizu.c", 360),
               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    gSPSegment(POLY_XLU_DISP++, 0x08, globalCtx->objectCtx.status[this->moriTexObjIndex].segment);
+    gSPSegment(POLY_XLU_DISP++, 0x08, globalCtx->objectCtx.status[self->moriTexObjIndex].segment);
 
     gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, 128);
 

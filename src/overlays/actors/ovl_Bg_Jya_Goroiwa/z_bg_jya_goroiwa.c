@@ -17,13 +17,13 @@ void BgJyaGoroiwa_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgJyaGoroiwa_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgJyaGoroiwa_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void BgJyaGoroiwa_Wait(BgJyaGoroiwa* this, GlobalContext* globalCtx);
-void BgJyaGoroiwa_Move(BgJyaGoroiwa* this, GlobalContext* globalCtx);
+void BgJyaGoroiwa_Wait(BgJyaGoroiwa* self, GlobalContext* globalCtx);
+void BgJyaGoroiwa_Move(BgJyaGoroiwa* self, GlobalContext* globalCtx);
 
-void BgJyaGoroiwa_SetupWait(BgJyaGoroiwa* this);
-void BgJyaGoroiwa_SetupMove(BgJyaGoroiwa* this);
-void BgJyaGoroiwa_UpdateRotation(BgJyaGoroiwa* this);
-void BgJyaGoroiwa_UpdateCollider(BgJyaGoroiwa* this);
+void BgJyaGoroiwa_SetupWait(BgJyaGoroiwa* self);
+void BgJyaGoroiwa_SetupMove(BgJyaGoroiwa* self);
+void BgJyaGoroiwa_UpdateRotation(BgJyaGoroiwa* self);
+void BgJyaGoroiwa_UpdateCollider(BgJyaGoroiwa* self);
 
 const ActorInit Bg_Jya_Goroiwa_InitVars = {
     ACTOR_BG_JYA_GOROIWA,
@@ -73,56 +73,56 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 1000, ICHAIN_STOP),
 };
 
-void BgJyaGoroiwa_UpdateCollider(BgJyaGoroiwa* this) {
-    Sphere16* worldSphere = &this->collider.elements[0].dim.worldSphere;
+void BgJyaGoroiwa_UpdateCollider(BgJyaGoroiwa* self) {
+    Sphere16* worldSphere = &self->collider.elements[0].dim.worldSphere;
 
-    worldSphere->center.x = this->actor.world.pos.x;
-    worldSphere->center.y = this->actor.world.pos.y + 59.5f;
-    worldSphere->center.z = this->actor.world.pos.z;
+    worldSphere->center.x = self->actor.world.pos.x;
+    worldSphere->center.y = self->actor.world.pos.y + 59.5f;
+    worldSphere->center.z = self->actor.world.pos.z;
 }
 
-void BgJyaGoroiwa_InitCollider(BgJyaGoroiwa* this, GlobalContext* globalCtx) {
+void BgJyaGoroiwa_InitCollider(BgJyaGoroiwa* self, GlobalContext* globalCtx) {
     s32 pad;
 
-    Collider_InitJntSph(globalCtx, &this->collider);
-    Collider_SetJntSph(globalCtx, &this->collider, &this->actor, &sJntSphInit, &this->colliderItem);
-    BgJyaGoroiwa_UpdateCollider(this);
-    this->collider.elements[0].dim.worldSphere.radius = 58;
+    Collider_InitJntSph(globalCtx, &self->collider);
+    Collider_SetJntSph(globalCtx, &self->collider, &self->actor, &sJntSphInit, &self->colliderItem);
+    BgJyaGoroiwa_UpdateCollider(self);
+    self->collider.elements[0].dim.worldSphere.radius = 58;
 }
 
-void BgJyaGoroiwa_UpdateRotation(BgJyaGoroiwa* this) {
-    f32 xDiff = this->actor.world.pos.x - this->actor.prevPos.x;
+void BgJyaGoroiwa_UpdateRotation(BgJyaGoroiwa* self) {
+    f32 xDiff = self->actor.world.pos.x - self->actor.prevPos.x;
 
-    this->actor.shape.rot.z -= 0x10000 / (119 * M_PI) * xDiff;
+    self->actor.shape.rot.z -= 0x10000 / (119 * M_PI) * xDiff;
 }
 
 void BgJyaGoroiwa_Init(Actor* thisx, GlobalContext* globalCtx) {
-    BgJyaGoroiwa* this = THIS;
+    BgJyaGoroiwa* self = THIS;
 
-    Actor_ProcessInitChain(&this->actor, sInitChain);
-    BgJyaGoroiwa_InitCollider(this, globalCtx);
-    this->actor.shape.rot.x = this->actor.shape.rot.y = this->actor.shape.rot.z = 0;
-    CollisionCheck_SetInfo(&this->actor.colChkInfo, NULL, &sColChkInfoInit);
-    ActorShape_Init(&this->actor.shape, 595.0f, ActorShadow_DrawCircle, 9.0f);
-    this->actor.shape.shadowAlpha = 128;
-    BgJyaGoroiwa_SetupMove(this);
+    Actor_ProcessInitChain(&self->actor, sInitChain);
+    BgJyaGoroiwa_InitCollider(self, globalCtx);
+    self->actor.shape.rot.x = self->actor.shape.rot.y = self->actor.shape.rot.z = 0;
+    CollisionCheck_SetInfo(&self->actor.colChkInfo, NULL, &sColChkInfoInit);
+    ActorShape_Init(&self->actor.shape, 595.0f, ActorShadow_DrawCircle, 9.0f);
+    self->actor.shape.shadowAlpha = 128;
+    BgJyaGoroiwa_SetupMove(self);
 }
 
 void BgJyaGoroiwa_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    BgJyaGoroiwa* this = THIS;
+    BgJyaGoroiwa* self = THIS;
 
-    Collider_DestroyJntSph(globalCtx, &this->collider);
+    Collider_DestroyJntSph(globalCtx, &self->collider);
 }
 
-void BgJyaGoroiwa_SetupMove(BgJyaGoroiwa* this) {
-    this->actionFunc = BgJyaGoroiwa_Move;
-    this->collider.base.atFlags |= AT_ON;
-    this->hasHit = false;
-    this->speedFactor = 1.0f;
+void BgJyaGoroiwa_SetupMove(BgJyaGoroiwa* self) {
+    self->actionFunc = BgJyaGoroiwa_Move;
+    self->collider.base.atFlags |= AT_ON;
+    self->hasHit = false;
+    self->speedFactor = 1.0f;
 }
 
-void BgJyaGoroiwa_Move(BgJyaGoroiwa* this, GlobalContext* globalCtx) {
-    Actor* thisx = &this->actor;
+void BgJyaGoroiwa_Move(BgJyaGoroiwa* self, GlobalContext* globalCtx) {
+    Actor* thisx = &self->actor;
     s16 relYawTowardsPlayer;
     f32 speedXZsqBase = (-100.0f - thisx->world.pos.y) * 2.5f;
     f32 posYfac;
@@ -131,7 +131,7 @@ void BgJyaGoroiwa_Move(BgJyaGoroiwa* this, GlobalContext* globalCtx) {
         speedXZsqBase = 0.01f;
     }
 
-    thisx->speedXZ = sqrtf(speedXZsqBase) * this->speedFactor;
+    thisx->speedXZ = sqrtf(speedXZsqBase) * self->speedFactor;
     thisx->velocity.x = Math_SinS(thisx->world.rot.y) * thisx->speedXZ;
     thisx->velocity.z = Math_CosS(thisx->world.rot.y) * thisx->speedXZ;
 
@@ -146,8 +146,8 @@ void BgJyaGoroiwa_Move(BgJyaGoroiwa* this, GlobalContext* globalCtx) {
         thisx->world.pos.y = ((35.0f / 92.0f) * posYfac) - 129.5f;
     }
 
-    if (this->collider.base.atFlags & AT_HIT) {
-        this->collider.base.atFlags &= ~AT_HIT & ~AT_ON;
+    if (self->collider.base.atFlags & AT_HIT) {
+        self->collider.base.atFlags &= ~AT_HIT & ~AT_ON;
 
         relYawTowardsPlayer = thisx->yawTowardsPlayer - thisx->world.rot.y;
         if ((relYawTowardsPlayer > -0x4000) && (relYawTowardsPlayer < 0x4000)) {
@@ -157,20 +157,20 @@ void BgJyaGoroiwa_Move(BgJyaGoroiwa* this, GlobalContext* globalCtx) {
         func_8002F6D4(globalCtx, thisx, 2.0f, thisx->yawTowardsPlayer, 0.0f, 0);
         func_8002F7DC(&GET_PLAYER(globalCtx)->actor, NA_SE_PL_BODY_HIT);
 
-        this->yOffsetSpeed = 10.0f;
-        this->speedFactor = 0.5f;
-        this->hasHit = true;
+        self->yOffsetSpeed = 10.0f;
+        self->speedFactor = 0.5f;
+        self->hasHit = true;
     }
 
-    if (this->hasHit) {
-        this->yOffsetSpeed -= 1.5f;
-        thisx->shape.yOffset += this->yOffsetSpeed * 10.0f;
+    if (self->hasHit) {
+        self->yOffsetSpeed -= 1.5f;
+        thisx->shape.yOffset += self->yOffsetSpeed * 10.0f;
         if (thisx->shape.yOffset < 595.0f) {
             thisx->shape.yOffset = 595.0f;
-            BgJyaGoroiwa_SetupWait(this);
+            BgJyaGoroiwa_SetupWait(self);
         }
     } else {
-        Math_StepToF(&this->speedFactor, 1.0f, 0.04f);
+        Math_StepToF(&self->speedFactor, 1.0f, 0.04f);
     }
 
     if (thisx->world.pos.x > 1745.0f) {
@@ -182,39 +182,39 @@ void BgJyaGoroiwa_Move(BgJyaGoroiwa* this, GlobalContext* globalCtx) {
     Audio_PlayActorSound2(thisx, NA_SE_EV_BIGBALL_ROLL - SFX_FLAG);
 }
 
-void BgJyaGoroiwa_SetupWait(BgJyaGoroiwa* this) {
-    this->actionFunc = BgJyaGoroiwa_Wait;
-    this->waitTimer = 0;
+void BgJyaGoroiwa_SetupWait(BgJyaGoroiwa* self) {
+    self->actionFunc = BgJyaGoroiwa_Wait;
+    self->waitTimer = 0;
 }
 
-void BgJyaGoroiwa_Wait(BgJyaGoroiwa* this, GlobalContext* globalCtx) {
-    this->waitTimer++;
-    if (this->waitTimer > 60) {
-        BgJyaGoroiwa_SetupMove(this);
-        this->speedFactor = 0.1f;
+void BgJyaGoroiwa_Wait(BgJyaGoroiwa* self, GlobalContext* globalCtx) {
+    self->waitTimer++;
+    if (self->waitTimer > 60) {
+        BgJyaGoroiwa_SetupMove(self);
+        self->speedFactor = 0.1f;
     }
 }
 
 void BgJyaGoroiwa_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
-    BgJyaGoroiwa* this = THIS;
+    BgJyaGoroiwa* self = THIS;
     Player* player = GET_PLAYER(globalCtx);
     s32 bgId;
     Vec3f pos;
 
     if (!(player->stateFlags1 & 0x300000C0)) {
-        this->actionFunc(this, globalCtx);
-        BgJyaGoroiwa_UpdateRotation(this);
-        pos.x = this->actor.world.pos.x;
-        pos.y = this->actor.world.pos.y + 59.5f;
-        pos.z = this->actor.world.pos.z;
-        this->actor.floorHeight =
-            BgCheck_EntityRaycastFloor4(&globalCtx->colCtx, &this->actor.floorPoly, &bgId, &this->actor, &pos);
-        BgJyaGoroiwa_UpdateCollider(this);
-        if (this->collider.base.atFlags & AT_ON) {
-            CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        self->actionFunc(self, globalCtx);
+        BgJyaGoroiwa_UpdateRotation(self);
+        pos.x = self->actor.world.pos.x;
+        pos.y = self->actor.world.pos.y + 59.5f;
+        pos.z = self->actor.world.pos.z;
+        self->actor.floorHeight =
+            BgCheck_EntityRaycastFloor4(&globalCtx->colCtx, &self->actor.floorPoly, &bgId, &self->actor, &pos);
+        BgJyaGoroiwa_UpdateCollider(self);
+        if (self->collider.base.atFlags & AT_ON) {
+            CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
         }
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
     }
 }
 

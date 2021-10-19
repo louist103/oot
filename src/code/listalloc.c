@@ -1,12 +1,12 @@
 #include "global.h"
 
-ListAlloc* ListAlloc_Init(ListAlloc* this) {
-    this->prev = NULL;
-    this->next = NULL;
-    return this;
+ListAlloc* ListAlloc_Init(ListAlloc* self) {
+    self->prev = NULL;
+    self->next = NULL;
+    return self;
 }
 
-void* ListAlloc_Alloc(ListAlloc* this, u32 size) {
+void* ListAlloc_Alloc(ListAlloc* self, u32 size) {
     ListAlloc* ptr = SystemArena_MallocDebug(size + sizeof(ListAlloc), "../listalloc.c", 40);
     ListAlloc* next;
 
@@ -14,23 +14,23 @@ void* ListAlloc_Alloc(ListAlloc* this, u32 size) {
         return NULL;
     }
 
-    next = this->next;
+    next = self->next;
     if (next != NULL) {
         next->next = ptr;
     }
 
     ptr->prev = next;
     ptr->next = NULL;
-    this->next = ptr;
+    self->next = ptr;
 
-    if (this->prev == NULL) {
-        this->prev = ptr;
+    if (self->prev == NULL) {
+        self->prev = ptr;
     }
 
     return (u8*)ptr + sizeof(ListAlloc);
 }
 
-void ListAlloc_Free(ListAlloc* this, void* data) {
+void ListAlloc_Free(ListAlloc* self, void* data) {
     ListAlloc* ptr = &((ListAlloc*)data)[-1];
 
     if (ptr->prev != NULL) {
@@ -41,22 +41,22 @@ void ListAlloc_Free(ListAlloc* this, void* data) {
         ptr->next->prev = ptr->prev;
     }
 
-    if (this->prev == ptr) {
-        this->prev = ptr->next;
+    if (self->prev == ptr) {
+        self->prev = ptr->next;
     }
 
-    if (this->next == ptr) {
-        this->next = ptr->prev;
+    if (self->next == ptr) {
+        self->next = ptr->prev;
     }
 
     SystemArena_FreeDebug(ptr, "../listalloc.c", 72);
 }
 
-void ListAlloc_FreeAll(ListAlloc* this) {
-    ListAlloc* iter = this->prev;
+void ListAlloc_FreeAll(ListAlloc* self) {
+    ListAlloc* iter = self->prev;
 
     while (iter != NULL) {
-        ListAlloc_Free(this, (u8*)iter + sizeof(ListAlloc));
-        iter = this->prev;
+        ListAlloc_Free(self, (u8*)iter + sizeof(ListAlloc));
+        iter = self->prev;
     }
 }

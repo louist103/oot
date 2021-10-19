@@ -672,7 +672,7 @@ void func_800ECDF8(void) {
             if (sOcarinaAvailSongs & sh) {
                 D_8016BA50[i] = D_8016BA70[i] + 0x12;
                 if (inputChanged) {
-                    // (pointless if check, this is always true)
+                    // (pointless if check, self is always true)
                     if ((D_8016BA50[i] >= D_8016BA70[i] - 0x12) && (D_8016BA50[i] >= D_8016BA70[i] + 0x12) &&
                         (sOcarinaSongs[i][sLearnSongPos[i]].unk_02 == 0) &&
                         (sLearnSongLastBtn == sLearnSongExpectedNote[i])) {
@@ -3341,7 +3341,7 @@ s32 Audio_SetGanonDistVol(u8 targetVol) {
         for (i = 0; i < 0x10; i++) {
             if (gAudioContext.seqPlayers[0].channels[i] != &gAudioContext.sequenceChannelNone) {
                 if ((u8)gAudioContext.seqPlayers[0].channels[i]->soundScriptIO[5] != 0xFF) {
-                    // this looks like some kind of macro?
+                    // self looks like some kind of macro?
                     phi_v0_2 = ((u16)gAudioContext.seqPlayers[0].channels[i]->soundScriptIO[5] - targetVol) + 0x7F;
                     if (phi_v0_2 >= 0x80) {
                         phi_v0_2 = 0x7F;

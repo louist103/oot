@@ -16,9 +16,9 @@ void BgSpot15Saku_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgSpot15Saku_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgSpot15Saku_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_808B4930(BgSpot15Saku* this, GlobalContext* globalCtx);
-void func_808B4978(BgSpot15Saku* this, GlobalContext* globalCtx);
-void func_808B4A04(BgSpot15Saku* this, GlobalContext* globalCtx);
+void func_808B4930(BgSpot15Saku* self, GlobalContext* globalCtx);
+void func_808B4978(BgSpot15Saku* self, GlobalContext* globalCtx);
+void func_808B4A04(BgSpot15Saku* self, GlobalContext* globalCtx);
 
 const ActorInit Bg_Spot15_Saku_InitVars = {
     ACTOR_BG_SPOT15_SAKU,
@@ -34,65 +34,65 @@ const ActorInit Bg_Spot15_Saku_InitVars = {
 
 void BgSpot15Saku_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
-    BgSpot15Saku* this = THIS;
+    BgSpot15Saku* self = THIS;
     s32 pad2;
     CollisionHeader* colHeader = NULL;
 
-    DynaPolyActor_Init(&this->dyna, DPM_UNK);
+    DynaPolyActor_Init(&self->dyna, DPM_UNK);
     CollisionHeader_GetVirtual(&gLonLonCorralFenceCol, &colHeader);
-    this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
-    this->dyna.actor.scale.x = 0.1f;
-    this->dyna.actor.scale.y = 0.1f;
-    this->dyna.actor.scale.z = 0.1f;
-    this->unk_170.x = this->dyna.actor.world.pos.x;
-    this->unk_170.y = this->dyna.actor.world.pos.y;
-    this->unk_170.z = this->dyna.actor.world.pos.z;
+    self->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &self->dyna.actor, colHeader);
+    self->dyna.actor.scale.x = 0.1f;
+    self->dyna.actor.scale.y = 0.1f;
+    self->dyna.actor.scale.z = 0.1f;
+    self->unk_170.x = self->dyna.actor.world.pos.x;
+    self->unk_170.y = self->dyna.actor.world.pos.y;
+    self->unk_170.z = self->dyna.actor.world.pos.z;
     if (gSaveContext.infTable[7] & 2) {
-        this->dyna.actor.world.pos.z = 2659.0f;
+        self->dyna.actor.world.pos.z = 2659.0f;
     }
-    this->actionFunc = func_808B4930;
+    self->actionFunc = func_808B4930;
 }
 
 void BgSpot15Saku_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    BgSpot15Saku* this = THIS;
+    BgSpot15Saku* self = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, self->dyna.bgId);
 }
 
-void func_808B4930(BgSpot15Saku* this, GlobalContext* globalCtx) {
-    if (this->unk_168 && !(gSaveContext.infTable[7] & 2)) {
-        this->timer = 2;
-        this->actionFunc = func_808B4978;
+void func_808B4930(BgSpot15Saku* self, GlobalContext* globalCtx) {
+    if (self->unk_168 && !(gSaveContext.infTable[7] & 2)) {
+        self->timer = 2;
+        self->actionFunc = func_808B4978;
     }
 }
 
-void func_808B4978(BgSpot15Saku* this, GlobalContext* globalCtx) {
-    if (this->timer == 0) {
-        Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_METALGATE_OPEN - SFX_FLAG);
-        this->dyna.actor.world.pos.z -= 2.0f;
-        if (this->dyna.actor.world.pos.z < 2660.0f) {
-            Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_BRIDGE_OPEN_STOP);
-            this->timer = 30;
-            this->actionFunc = func_808B4A04;
+void func_808B4978(BgSpot15Saku* self, GlobalContext* globalCtx) {
+    if (self->timer == 0) {
+        Audio_PlayActorSound2(&self->dyna.actor, NA_SE_EV_METALGATE_OPEN - SFX_FLAG);
+        self->dyna.actor.world.pos.z -= 2.0f;
+        if (self->dyna.actor.world.pos.z < 2660.0f) {
+            Audio_PlayActorSound2(&self->dyna.actor, NA_SE_EV_BRIDGE_OPEN_STOP);
+            self->timer = 30;
+            self->actionFunc = func_808B4A04;
         }
     }
 }
 
-void func_808B4A04(BgSpot15Saku* this, GlobalContext* globalCtx) {
-    if (this->timer == 0) {
-        this->unk_168 = 0;
-        this->actionFunc = func_808B4930;
+void func_808B4A04(BgSpot15Saku* self, GlobalContext* globalCtx) {
+    if (self->timer == 0) {
+        self->unk_168 = 0;
+        self->actionFunc = func_808B4930;
     }
 }
 
 void BgSpot15Saku_Update(Actor* thisx, GlobalContext* globalCtx) {
-    BgSpot15Saku* this = THIS;
+    BgSpot15Saku* self = THIS;
 
-    if (this->timer != 0) {
-        this->timer--;
+    if (self->timer != 0) {
+        self->timer--;
     }
 
-    this->actionFunc(this, globalCtx);
+    self->actionFunc(self, globalCtx);
 }
 
 void BgSpot15Saku_Draw(Actor* thisx, GlobalContext* globalCtx) {

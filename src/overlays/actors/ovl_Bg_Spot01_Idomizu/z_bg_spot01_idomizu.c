@@ -16,7 +16,7 @@ void BgSpot01Idomizu_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgSpot01Idomizu_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgSpot01Idomizu_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_808ABB84(BgSpot01Idomizu* this, GlobalContext* globalCtx);
+void func_808ABB84(BgSpot01Idomizu* self, GlobalContext* globalCtx);
 
 const ActorInit Bg_Spot01_Idomizu_InitVars = {
     ACTOR_BG_SPOT01_IDOMIZU,
@@ -35,37 +35,37 @@ static InitChainEntry sInitChain[] = {
 };
 
 void BgSpot01Idomizu_Init(Actor* thisx, GlobalContext* globalCtx) {
-    BgSpot01Idomizu* this = THIS;
+    BgSpot01Idomizu* self = THIS;
 
-    Actor_ProcessInitChain(&this->actor, sInitChain);
+    Actor_ProcessInitChain(&self->actor, sInitChain);
     if (gSaveContext.eventChkInf[6] & 0x80 || LINK_AGE_IN_YEARS == YEARS_ADULT) {
-        this->waterHeight = -550.0f;
+        self->waterHeight = -550.0f;
     } else {
-        this->waterHeight = 52.0f;
+        self->waterHeight = 52.0f;
     }
-    this->actionFunc = func_808ABB84;
-    this->actor.world.pos.y = this->waterHeight;
+    self->actionFunc = func_808ABB84;
+    self->actor.world.pos.y = self->waterHeight;
 }
 
 void BgSpot01Idomizu_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
-void func_808ABB84(BgSpot01Idomizu* this, GlobalContext* globalCtx) {
+void func_808ABB84(BgSpot01Idomizu* self, GlobalContext* globalCtx) {
     if (gSaveContext.eventChkInf[6] & 0x80) {
-        this->waterHeight = -550.0f;
+        self->waterHeight = -550.0f;
     }
-    globalCtx->colCtx.colHeader->waterBoxes[0].ySurface = this->actor.world.pos.y;
-    if (this->waterHeight < this->actor.world.pos.y) {
+    globalCtx->colCtx.colHeader->waterBoxes[0].ySurface = self->actor.world.pos.y;
+    if (self->waterHeight < self->actor.world.pos.y) {
         Audio_PlaySoundGeneral(NA_SE_EV_WATER_LEVEL_DOWN - SFX_FLAG, &D_801333D4, 4, &D_801333E0, &D_801333E0,
                                &D_801333E8);
     }
-    Math_ApproachF(&this->actor.world.pos.y, this->waterHeight, 1.0f, 2.0f);
+    Math_ApproachF(&self->actor.world.pos.y, self->waterHeight, 1.0f, 2.0f);
 }
 
 void BgSpot01Idomizu_Update(Actor* thisx, GlobalContext* globalCtx) {
-    BgSpot01Idomizu* this = THIS;
+    BgSpot01Idomizu* self = THIS;
 
-    this->actionFunc(this, globalCtx);
+    self->actionFunc(self, globalCtx);
 }
 
 void BgSpot01Idomizu_Draw(Actor* thisx, GlobalContext* globalCtx) {

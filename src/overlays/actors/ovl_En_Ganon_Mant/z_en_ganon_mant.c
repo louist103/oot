@@ -46,7 +46,7 @@ typedef struct {
 } TearShape; // size = 0x8
 
 /**
- * The arrays pointed to by this table describe how many pixels should
+ * The arrays pointed to by self table describe how many pixels should
  * be removed from the cloak texture in a single pass
  */
 static TearShape sTearShapes[] = {
@@ -102,9 +102,9 @@ static u64 sForceAlignment = 0;
 #include "overlays/ovl_En_Ganon_Mant/ovl_En_Ganon_Mant.c"
 
 void EnGanonMant_Init(Actor* thisx, GlobalContext* globalCtx) {
-    EnGanonMant* this = THIS;
+    EnGanonMant* self = THIS;
 
-    this->actor.flags &= ~1;
+    self->actor.flags &= ~1;
 }
 
 void EnGanonMant_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -113,7 +113,7 @@ void EnGanonMant_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 /**
  * Randomly zeros portions of the cloak texture
  */
-void EnGanonMant_Tear(EnGanonMant* this) {
+void EnGanonMant_Tear(EnGanonMant* self) {
     s32 pad;
     s16 i;
     s16 areaX;
@@ -146,7 +146,7 @@ void EnGanonMant_Tear(EnGanonMant* this) {
     }
 
     for (i = 0; i < 4; i++) {
-        this->strands[(s16)Rand_ZeroFloat(GANON_MANT_NUM_STRANDS - 0.1f)]
+        self->strands[(s16)Rand_ZeroFloat(GANON_MANT_NUM_STRANDS - 0.1f)]
             .torn[(s16)Rand_ZeroFloat(GANON_MANT_NUM_JOINTS - 0.1f)] = true;
     }
 }
@@ -154,7 +154,7 @@ void EnGanonMant_Tear(EnGanonMant* this) {
 /**
  * Updates the dynamic strands that control the shape and motion of the cloak
  */
-void EnGanonMant_UpdateStrand(GlobalContext* globalCtx, EnGanonMant* this, Vec3f* root, Vec3f* pos, Vec3f* nextPos,
+void EnGanonMant_UpdateStrand(GlobalContext* globalCtx, EnGanonMant* self, Vec3f* root, Vec3f* pos, Vec3f* nextPos,
                               Vec3f* rot, Vec3f* vel, s16 strandNum) {
     f32 xDiff;
     f32 zDiff;
@@ -172,11 +172,11 @@ void EnGanonMant_UpdateStrand(GlobalContext* globalCtx, EnGanonMant* this, Vec3f
     Vec3f sideSwayOffset;
 
     delta.y = 0;
-    if (this->actor.params == 0x23) {
+    if (self->actor.params == 0x23) {
         // Pushes all the strands away from the actor
         delta.x = 0.0f;
         delta.z = -30.0f;
-        Matrix_RotateY(BINANG_TO_RAD(this->actor.shape.rot.y), MTXMODE_NEW);
+        Matrix_RotateY(BINANG_TO_RAD(self->actor.shape.rot.y), MTXMODE_NEW);
         Matrix_MultVec3f(&delta, &posStep);
         for (i = 0; i < GANON_MANT_NUM_JOINTS; i++) {
             (pos + i)->x += posStep.x;
@@ -202,19 +202,19 @@ void EnGanonMant_UpdateStrand(GlobalContext* globalCtx, EnGanonMant* this, Vec3f
 
             // Push the cloak away from attached actor, plus oscillations
             delta.x = 0;
-            delta.z = (this->backPush + (sinf((strandNum * (2 * M_PI)) / 2.1f) * this->backSwayMagnitude)) *
+            delta.z = (self->backPush + (sinf((strandNum * (2 * M_PI)) / 2.1f) * self->backSwayMagnitude)) *
                       sBackSwayCoefficients[i];
-            Matrix_RotateY(this->baseYaw, MTXMODE_NEW);
+            Matrix_RotateY(self->baseYaw, MTXMODE_NEW);
             Matrix_MultVec3f(&delta, &backSwayOffset);
 
             // Push the cloak out to either side, in a swaying manner
-            delta.x = cosf((strandNum * M_PI) / (GANON_MANT_NUM_STRANDS - 1.0f)) * this->sideSwayMagnitude *
+            delta.x = cosf((strandNum * M_PI) / (GANON_MANT_NUM_STRANDS - 1.0f)) * self->sideSwayMagnitude *
                       sSideSwayCoefficients[i];
             delta.z = 0;
             Matrix_MultVec3f(&delta, &sideSwayOffset);
 
             // Calculate position difference
-            gravity = this->gravity;
+            gravity = self->gravity;
             x = ((pos->x + vel->x) - (pos - 1)->x) + (backSwayOffset.x + sideSwayOffset.x);
             y = ((pos->y + vel->y) - (pos - 1)->y) + gravity;
             z = ((pos->z + vel->z) - (pos - 1)->z) + (backSwayOffset.z + sideSwayOffset.z);
@@ -242,20 +242,20 @@ void EnGanonMant_UpdateStrand(GlobalContext* globalCtx, EnGanonMant* this, Vec3f
             pos->z = (pos - 1)->z + posStep.z;
 
             // Pushes the cloak away from the actor if it is too close
-            xDiff = pos->x - this->actor.world.pos.x;
-            zDiff = pos->z - this->actor.world.pos.z;
-            if (sqrtf(SQ(xDiff) + SQ(zDiff)) < (sDistMultipliers[i] * this->minDist)) {
+            xDiff = pos->x - self->actor.world.pos.x;
+            zDiff = pos->z - self->actor.world.pos.z;
+            if (sqrtf(SQ(xDiff) + SQ(zDiff)) < (sDistMultipliers[i] * self->minDist)) {
                 yaw = Math_Atan2F(zDiff, xDiff);
-                delta.z = this->minDist * sDistMultipliers[i];
+                delta.z = self->minDist * sDistMultipliers[i];
                 Matrix_RotateY(yaw, MTXMODE_NEW);
                 Matrix_MultVec3f(&delta, &posStep);
-                pos->x = this->actor.world.pos.x + posStep.x;
-                pos->z = this->actor.world.pos.z + posStep.z;
+                pos->x = self->actor.world.pos.x + posStep.x;
+                pos->z = self->actor.world.pos.z + posStep.z;
             }
 
             // Enforces minY constraint
-            if (pos->y < this->minY) {
-                pos->y = this->minY;
+            if (pos->y < self->minY) {
+                pos->y = self->minY;
             }
 
             // Calculate next velocity
@@ -263,7 +263,7 @@ void EnGanonMant_UpdateStrand(GlobalContext* globalCtx, EnGanonMant* this, Vec3f
             vel->y = (pos->y - y) * 80.0f / 100.0f;
             vel->z = (pos->z - z) * 80.0f / 100.0f;
 
-            if (this->actor.params != 0x23) {
+            if (self->actor.params != 0x23) {
                 // Clamp elements of vel into [-5.0, 5.0]
                 if (vel->x > 5.0f) {
                     vel->x = 5.0f;
@@ -295,7 +295,7 @@ void EnGanonMant_UpdateStrand(GlobalContext* globalCtx, EnGanonMant* this, Vec3f
 /**
  * Update the cloak vertices using the current state of the strands
  */
-void EnGanonMant_UpdateVertices(EnGanonMant* this) {
+void EnGanonMant_UpdateVertices(EnGanonMant* self) {
     s16 i;
     Vtx* vtx;
     Vtx* vertices;
@@ -305,7 +305,7 @@ void EnGanonMant_UpdateVertices(EnGanonMant* this) {
     Vec3f up;
     Vec3f normal;
 
-    if (this->frameTimer % 2 != 0) {
+    if (self->frameTimer % 2 != 0) {
         vertices = SEGMENTED_TO_VIRTUAL(gMant1Vtx);
     } else {
         vertices = SEGMENTED_TO_VIRTUAL(gMant2Vtx);
@@ -314,7 +314,7 @@ void EnGanonMant_UpdateVertices(EnGanonMant* this) {
     up.y = 30.0f;
     up.z = 0.0f;
 
-    strand = &this->strands[0];
+    strand = &self->strands[0];
     for (i = 0; i < GANON_MANT_NUM_STRANDS; i++, strand++) {
         for (j = 0, k = 0; j < GANON_MANT_NUM_JOINTS; j++, k += GANON_MANT_NUM_JOINTS) {
             vtx = &vertices[sVerticesMap[i + k]];
@@ -332,32 +332,32 @@ void EnGanonMant_UpdateVertices(EnGanonMant* this) {
 }
 
 void EnGanonMant_Update(Actor* thisx, GlobalContext* globalCtx) {
-    EnGanonMant* this = THIS;
-    BossGanon* ganon = (BossGanon*)this->actor.parent;
+    EnGanonMant* self = THIS;
+    BossGanon* ganon = (BossGanon*)self->actor.parent;
 
-    this->updateHasRun = true;
-    this->frameTimer++;
+    self->updateHasRun = true;
+    self->frameTimer++;
 
-    if (this->attachLeftArmTimer == 0.0f) {
+    if (self->attachLeftArmTimer == 0.0f) {
     } else {
-        this->attachLeftArmTimer -= 1.0f;
+        self->attachLeftArmTimer -= 1.0f;
     }
-    if (this->attachRightArmTimer != 0.0f) {
-        this->attachRightArmTimer -= 1.0f;
+    if (self->attachRightArmTimer != 0.0f) {
+        self->attachRightArmTimer -= 1.0f;
     }
-    if (this->attachShouldersTimer != 0.0f) {
-        this->attachShouldersTimer -= 1.0f;
+    if (self->attachShouldersTimer != 0.0f) {
+        self->attachShouldersTimer -= 1.0f;
     }
 
-    this->actor.shape.rot.y = ganon->actor.shape.rot.y;
+    self->actor.shape.rot.y = ganon->actor.shape.rot.y;
 
-    if (this->tearTimer != 0) {
-        this->tearTimer--;
-        EnGanonMant_Tear(this);
+    if (self->tearTimer != 0) {
+        self->tearTimer--;
+        EnGanonMant_Tear(self);
     }
 }
 
-void EnGanonMant_DrawCloak(GlobalContext* globalCtx, EnGanonMant* this) {
+void EnGanonMant_DrawCloak(GlobalContext* globalCtx, EnGanonMant* self) {
     s32 pad;
 
     OPEN_DISPS(globalCtx->state.gfxCtx, "../z_en_ganon_mant.c", 564);
@@ -372,7 +372,7 @@ void EnGanonMant_DrawCloak(GlobalContext* globalCtx, EnGanonMant* this) {
 
     // set vertices, vertices are double buffered to prevent
     // modification of vertices as they are being drawn
-    if (this->frameTimer % 2 != 0) {
+    if (self->frameTimer % 2 != 0) {
         gSPSegment(POLY_OPA_DISP++, 0x0C, gMant1Vtx);
     } else {
         gSPSegment(POLY_OPA_DISP++, 0x0C, gMant2Vtx);
@@ -385,7 +385,7 @@ void EnGanonMant_DrawCloak(GlobalContext* globalCtx, EnGanonMant* this) {
 }
 
 void EnGanonMant_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    EnGanonMant* this = THIS;
+    EnGanonMant* self = THIS;
     f32 xDiff;
     f32 pitch;
     Vec3f strandOffset;
@@ -400,25 +400,25 @@ void EnGanonMant_Draw(Actor* thisx, GlobalContext* globalCtx) {
     Vec3f midpoint;
     s16 nextStrandIdx;
 
-    if (this->updateHasRun) {
-        // Only run this if update has run since last draw
+    if (self->updateHasRun) {
+        // Only run self if update has run since last draw
 
         // Choose endpoints
-        if (this->attachRightArmTimer != 0.0f) {
-            rightPos = &this->rightForearmPos;
-            leftPos = &this->leftShoulderPos;
-            this->gravity = -13.0f;
-        } else if (this->attachLeftArmTimer != 0.0f) {
-            rightPos = &this->rightShoulderPos;
-            leftPos = &this->leftForearmPos;
-            this->gravity = -13.0f;
-        } else if (this->attachShouldersTimer != 0.0f) {
-            rightPos = &this->rightShoulderPos;
-            leftPos = &this->leftShoulderPos;
-            this->gravity = -3.0f;
+        if (self->attachRightArmTimer != 0.0f) {
+            rightPos = &self->rightForearmPos;
+            leftPos = &self->leftShoulderPos;
+            self->gravity = -13.0f;
+        } else if (self->attachLeftArmTimer != 0.0f) {
+            rightPos = &self->rightShoulderPos;
+            leftPos = &self->leftForearmPos;
+            self->gravity = -13.0f;
+        } else if (self->attachShouldersTimer != 0.0f) {
+            rightPos = &self->rightShoulderPos;
+            leftPos = &self->leftShoulderPos;
+            self->gravity = -3.0f;
         } else {
-            rightPos = &this->rightForearmPos;
-            leftPos = &this->leftForearmPos;
+            rightPos = &self->rightForearmPos;
+            leftPos = &self->leftForearmPos;
         }
 
         xDiff = leftPos->x - rightPos->x;
@@ -436,7 +436,7 @@ void EnGanonMant_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
         Matrix_RotateY(yaw, MTXMODE_NEW);
         Matrix_RotateX(pitch, MTXMODE_APPLY);
-        this->baseYaw = yaw - M_PI / 2.0f;
+        self->baseYaw = yaw - M_PI / 2.0f;
 
         for (strandIdx = 0; strandIdx < GANON_MANT_NUM_STRANDS; strandIdx++) {
             Matrix_Push();
@@ -446,9 +446,9 @@ void EnGanonMant_Draw(Actor* thisx, GlobalContext* globalCtx) {
             strandOffset.y = 0;
             strandOffset.z = -cosf((strandIdx * M_PI) / (GANON_MANT_NUM_STRANDS - 1)) * diffHalfDist;
             Matrix_MultVec3f(&strandOffset, &strandDivPos);
-            this->strands[strandIdx].root.x = midpoint.x + strandDivPos.x;
-            this->strands[strandIdx].root.y = midpoint.y + strandDivPos.y;
-            this->strands[strandIdx].root.z = midpoint.z + strandDivPos.z;
+            self->strands[strandIdx].root.x = midpoint.x + strandDivPos.x;
+            self->strands[strandIdx].root.y = midpoint.y + strandDivPos.y;
+            self->strands[strandIdx].root.z = midpoint.z + strandDivPos.z;
 
             nextStrandIdx = strandIdx + 1;
             if (nextStrandIdx >= GANON_MANT_NUM_STRANDS) {
@@ -456,14 +456,14 @@ void EnGanonMant_Draw(Actor* thisx, GlobalContext* globalCtx) {
             }
 
             // Update the strand joints
-            EnGanonMant_UpdateStrand(globalCtx, this, &this->strands[strandIdx].root, this->strands[strandIdx].joints,
-                                     this->strands[nextStrandIdx].joints, this->strands[strandIdx].rotations,
-                                     this->strands[strandIdx].velocities, strandIdx);
+            EnGanonMant_UpdateStrand(globalCtx, self, &self->strands[strandIdx].root, self->strands[strandIdx].joints,
+                                     self->strands[nextStrandIdx].joints, self->strands[strandIdx].rotations,
+                                     self->strands[strandIdx].velocities, strandIdx);
             Matrix_Pop();
         }
-        EnGanonMant_UpdateVertices(this);
-        this->updateHasRun = false;
+        EnGanonMant_UpdateVertices(self);
+        self->updateHasRun = false;
     }
 
-    EnGanonMant_DrawCloak(globalCtx, this);
+    EnGanonMant_DrawCloak(globalCtx, self);
 }

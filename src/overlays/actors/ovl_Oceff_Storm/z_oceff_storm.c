@@ -17,8 +17,8 @@ void OceffStorm_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void OceffStorm_Draw2(Actor* thisx, GlobalContext* globalCtx);
 
-void OceffStorm_DefaultAction(OceffStorm* this, GlobalContext* globalCtx);
-void OceffStorm_UnkAction(OceffStorm* this, GlobalContext* globalCtx);
+void OceffStorm_DefaultAction(OceffStorm* self, GlobalContext* globalCtx);
+void OceffStorm_UnkAction(OceffStorm* self, GlobalContext* globalCtx);
 
 const ActorInit Oceff_Storm_InitVars = {
     ACTOR_OCEFF_STORM,
@@ -34,33 +34,33 @@ const ActorInit Oceff_Storm_InitVars = {
 
 #include "z_oceff_storm_gfx.c"
 
-void OceffStorm_SetupAction(OceffStorm* this, OceffStormActionFunc actionFunc) {
-    this->actionFunc = actionFunc;
+void OceffStorm_SetupAction(OceffStorm* self, OceffStormActionFunc actionFunc) {
+    self->actionFunc = actionFunc;
 }
 
 void OceffStorm_Init(Actor* thisx, GlobalContext* globalCtx) {
-    OceffStorm* this = THIS;
-    OceffStorm_SetupAction(this, OceffStorm_DefaultAction);
-    this->posYOffAdd = 0;
-    this->counter = 0;
-    this->primColorAlpha = 0;
-    this->vtxAlpha = 0;
-    this->actor.scale.y = 0.0f;
-    this->actor.scale.z = 0.0f;
-    this->actor.scale.x = 0.0f;
-    this->posYOff = this->posYOffAdd;
+    OceffStorm* self = THIS;
+    OceffStorm_SetupAction(self, OceffStorm_DefaultAction);
+    self->posYOffAdd = 0;
+    self->counter = 0;
+    self->primColorAlpha = 0;
+    self->vtxAlpha = 0;
+    self->actor.scale.y = 0.0f;
+    self->actor.scale.z = 0.0f;
+    self->actor.scale.x = 0.0f;
+    self->posYOff = self->posYOffAdd;
 
-    if (this->actor.params == 1) {
-        OceffStorm_SetupAction(this, OceffStorm_UnkAction);
-        this->actor.draw = OceffStorm_Draw2;
+    if (self->actor.params == 1) {
+        OceffStorm_SetupAction(self, OceffStorm_UnkAction);
+        self->actor.draw = OceffStorm_Draw2;
     } else {
-        Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_OKARINA_EFFECT, this->actor.world.pos.x,
-                    this->actor.world.pos.y - 30.0f, this->actor.world.pos.z, 0, 0, 0, 1);
+        Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_OKARINA_EFFECT, self->actor.world.pos.x,
+                    self->actor.world.pos.y - 30.0f, self->actor.world.pos.z, 0, 0, 0, 1);
     }
 }
 
 void OceffStorm_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    OceffStorm* this = THIS;
+    OceffStorm* self = THIS;
     Player* player = GET_PLAYER(globalCtx);
 
     func_800876C8(globalCtx);
@@ -69,64 +69,64 @@ void OceffStorm_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void OceffStorm_DefaultAction(OceffStorm* this, GlobalContext* globalCtx) {
-    if (this->counter < 20) {
-        this->primColorAlpha = (s8)(this->counter * 5.0f);
-    } else if (this->counter > 80) {
-        this->primColorAlpha = (s8)((100 - this->counter) * 5.0f);
+void OceffStorm_DefaultAction(OceffStorm* self, GlobalContext* globalCtx) {
+    if (self->counter < 20) {
+        self->primColorAlpha = (s8)(self->counter * 5.0f);
+    } else if (self->counter > 80) {
+        self->primColorAlpha = (s8)((100 - self->counter) * 5.0f);
     } else {
-        this->primColorAlpha = 100;
+        self->primColorAlpha = 100;
     }
 
-    if (this->counter < 10 || this->counter >= 90) {
-        this->vtxAlpha = 0;
+    if (self->counter < 10 || self->counter >= 90) {
+        self->vtxAlpha = 0;
     } else {
-        if (this->counter <= 65) {
-            if (this->vtxAlpha <= 200) {
-                this->vtxAlpha += 10;
+        if (self->counter <= 65) {
+            if (self->vtxAlpha <= 200) {
+                self->vtxAlpha += 10;
             }
-            this->actor.scale.x = this->actor.scale.z = 0.4f;
-            this->actor.scale.y = 0.3f;
-        } else if (this->counter > 65) {
-            this->vtxAlpha = (90 - this->counter) * 10;
+            self->actor.scale.x = self->actor.scale.z = 0.4f;
+            self->actor.scale.y = 0.3f;
+        } else if (self->counter > 65) {
+            self->vtxAlpha = (90 - self->counter) * 10;
         } else {
-            this->vtxAlpha = 255;
-            this->actor.scale.x = this->actor.scale.z = 0.4f;
+            self->vtxAlpha = 255;
+            self->actor.scale.x = self->actor.scale.z = 0.4f;
         }
     }
 
-    if (this->counter > 60) {
-        this->actor.world.pos.y += this->posYOff * 0.01f;
-        this->posYOff += this->posYOffAdd;
-        this->posYOffAdd += 10;
+    if (self->counter > 60) {
+        self->actor.world.pos.y += self->posYOff * 0.01f;
+        self->posYOff += self->posYOffAdd;
+        self->posYOffAdd += 10;
     }
 
-    if (this->counter < 100) {
-        this->counter++;
+    if (self->counter < 100) {
+        self->counter++;
     } else {
-        Actor_Kill(&this->actor);
+        Actor_Kill(&self->actor);
     }
 }
 
-void OceffStorm_UnkAction(OceffStorm* this, GlobalContext* globalCtx) {
-    if (this->primColorAlpha < 100) {
-        this->primColorAlpha += 5;
+void OceffStorm_UnkAction(OceffStorm* self, GlobalContext* globalCtx) {
+    if (self->primColorAlpha < 100) {
+        self->primColorAlpha += 5;
     }
     //! @bug Actor_Kill is never called so the actor will stay alive forever
 }
 
 void OceffStorm_Update(Actor* thisx, GlobalContext* globalCtx) {
-    OceffStorm* this = THIS;
+    OceffStorm* self = THIS;
     Player* player = GET_PLAYER(globalCtx);
 
-    this->actor.world.pos = player->actor.world.pos;
-    this->actor.shape.rot.y = Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx));
-    this->actionFunc(this, globalCtx);
+    self->actor.world.pos = player->actor.world.pos;
+    self->actor.shape.rot.y = Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx));
+    self->actionFunc(self, globalCtx);
 }
 
 void OceffStorm_Draw2(Actor* thisx, GlobalContext* globalCtx) {
     u32 scroll = globalCtx->state.frames & 0xFFF;
-    OceffStorm* this = THIS;
+    OceffStorm* self = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx, "../z_oceff_storm.c", 449);
 
@@ -137,7 +137,7 @@ void OceffStorm_Draw2(Actor* thisx, GlobalContext* globalCtx) {
     POLY_XLU_DISP = func_80093F34(POLY_XLU_DISP);
     gDPSetAlphaDither(POLY_XLU_DISP++, G_AD_NOISE);
     gDPSetColorDither(POLY_XLU_DISP++, G_CD_NOISE);
-    gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 200, 200, 150, this->primColorAlpha);
+    gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 200, 200, 150, self->primColorAlpha);
     gSPDisplayList(POLY_XLU_DISP++, sTextureDL);
     gSPDisplayList(POLY_XLU_DISP++, Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, scroll * 8, scroll * 4, 64, 64, 1,
                                                      scroll * 4, scroll * 4, 64, 64));
@@ -149,7 +149,7 @@ void OceffStorm_Draw2(Actor* thisx, GlobalContext* globalCtx) {
 
 void OceffStorm_Draw(Actor* thisx, GlobalContext* globalCtx) {
     u32 scroll = globalCtx->state.frames & 0xFFF;
-    OceffStorm* this = THIS;
+    OceffStorm* self = THIS;
     Vtx* vtxPtr = sCylinderVtx;
 
     OPEN_DISPS(globalCtx->state.gfxCtx, "../z_oceff_storm.c", 486);
@@ -161,8 +161,8 @@ void OceffStorm_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gDPSetAlphaDither(POLY_XLU_DISP++, G_AD_NOISE);
     gDPSetColorDither(POLY_XLU_DISP++, G_CD_NOISE);
 
-    vtxPtr[0].v.cn[3] = vtxPtr[6].v.cn[3] = vtxPtr[16].v.cn[3] = vtxPtr[25].v.cn[3] = this->vtxAlpha >> 1;
-    vtxPtr[10].v.cn[3] = vtxPtr[22].v.cn[3] = this->vtxAlpha;
+    vtxPtr[0].v.cn[3] = vtxPtr[6].v.cn[3] = vtxPtr[16].v.cn[3] = vtxPtr[25].v.cn[3] = self->vtxAlpha >> 1;
+    vtxPtr[10].v.cn[3] = vtxPtr[22].v.cn[3] = self->vtxAlpha;
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx, "../z_oceff_storm.c", 498),
               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -174,5 +174,5 @@ void OceffStorm_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     CLOSE_DISPS(globalCtx->state.gfxCtx, "../z_oceff_storm.c", 512);
 
-    OceffStorm_Draw2(&this->actor, globalCtx);
+    OceffStorm_Draw2(&self->actor, globalCtx);
 }

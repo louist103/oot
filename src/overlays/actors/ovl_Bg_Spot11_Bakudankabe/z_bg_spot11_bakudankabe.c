@@ -53,18 +53,18 @@ static ColliderCylinderInit sCylinderInit = {
 static Vec3f D_808B272C = { 2259.0f, 108.0f, -1550.0f };
 static Vec3f D_808B2738 = { 2259.0f, 108.0f, -1550.0f };
 
-void func_808B2180(BgSpot11Bakudankabe* this, GlobalContext* globalCtx) {
+void func_808B2180(BgSpot11Bakudankabe* self, GlobalContext* globalCtx) {
     s32 pad;
 
-    Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinder(globalCtx, &this->collider, &this->dyna.actor, &sCylinderInit);
-    this->collider.dim.pos.x += (s16)this->dyna.actor.world.pos.x;
-    this->collider.dim.pos.y += (s16)this->dyna.actor.world.pos.y;
-    this->collider.dim.pos.z += (s16)this->dyna.actor.world.pos.z;
+    Collider_InitCylinder(globalCtx, &self->collider);
+    Collider_SetCylinder(globalCtx, &self->collider, &self->dyna.actor, &sCylinderInit);
+    self->collider.dim.pos.x += (s16)self->dyna.actor.world.pos.x;
+    self->collider.dim.pos.y += (s16)self->dyna.actor.world.pos.y;
+    self->collider.dim.pos.z += (s16)self->dyna.actor.world.pos.z;
 }
 
-void func_808B2218(BgSpot11Bakudankabe* this, GlobalContext* globalCtx) {
-    Actor* thisx = &this->dyna.actor;
+void func_808B2218(BgSpot11Bakudankabe* self, GlobalContext* globalCtx) {
+    Actor* thisx = &self->dyna.actor;
     Vec3f burstDepthY;
     Vec3f burstDepthX;
     s32 i;
@@ -110,45 +110,45 @@ void func_808B2218(BgSpot11Bakudankabe* this, GlobalContext* globalCtx) {
 }
 
 void BgSpot11Bakudankabe_Init(Actor* thisx, GlobalContext* globalCtx) {
-    BgSpot11Bakudankabe* this = THIS;
+    BgSpot11Bakudankabe* self = THIS;
     s32 pad;
     CollisionHeader* colHeader = NULL;
 
-    DynaPolyActor_Init(&this->dyna, DPM_UNK);
-    if (Flags_GetSwitch(globalCtx, (this->dyna.actor.params & 0x3F))) {
-        Actor_Kill(&this->dyna.actor);
+    DynaPolyActor_Init(&self->dyna, DPM_UNK);
+    if (Flags_GetSwitch(globalCtx, (self->dyna.actor.params & 0x3F))) {
+        Actor_Kill(&self->dyna.actor);
         return;
     }
-    func_808B2180(this, globalCtx);
+    func_808B2180(self, globalCtx);
     CollisionHeader_GetVirtual(&gDesertColossusBombableWallCol, &colHeader);
-    this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
-    Actor_SetScale(&this->dyna.actor, 1.0f);
-    osSyncPrintf("(spot11 爆弾壁)(arg_data 0x%04x)\n", this->dyna.actor.params);
+    self->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &self->dyna.actor, colHeader);
+    Actor_SetScale(&self->dyna.actor, 1.0f);
+    osSyncPrintf("(spot11 爆弾壁)(arg_data 0x%04x)\n", self->dyna.actor.params);
 }
 
 void BgSpot11Bakudankabe_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    BgSpot11Bakudankabe* this = THIS;
+    BgSpot11Bakudankabe* self = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, self->dyna.bgId);
+    Collider_DestroyCylinder(globalCtx, &self->collider);
 }
 
 void BgSpot11Bakudankabe_Update(Actor* thisx, GlobalContext* globalCtx) {
-    BgSpot11Bakudankabe* this = THIS;
+    BgSpot11Bakudankabe* self = THIS;
 
-    if (this->collider.base.acFlags & AC_HIT) {
-        func_808B2218(this, globalCtx);
-        Flags_SetSwitch(globalCtx, (this->dyna.actor.params & 0x3F));
+    if (self->collider.base.acFlags & AC_HIT) {
+        func_808B2218(self, globalCtx);
+        Flags_SetSwitch(globalCtx, (self->dyna.actor.params & 0x3F));
         Audio_PlaySoundAtPosition(globalCtx, &D_808B2738, 40, NA_SE_EV_WALL_BROKEN);
         func_80078884(NA_SE_SY_CORRECT_CHIME);
-        Actor_Kill(&this->dyna.actor);
+        Actor_Kill(&self->dyna.actor);
         return;
     }
-    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
 }
 
 void BgSpot11Bakudankabe_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    BgSpot11Bakudankabe* this = THIS;
+    BgSpot11Bakudankabe* self = THIS;
 
     Gfx_DrawDListOpa(globalCtx, gDesertColossusBombableWallDL);
 }

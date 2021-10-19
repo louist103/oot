@@ -15,7 +15,7 @@ void SysCfb_Init(s32 n64dd) {
             osSyncPrintf("RAM 8M mode (N64DD対応)\n"); // "RAM 8M mode (N64DD compatible)"
             sSysCfbEnd = 0x805FB000;
         } else {
-            // "The margin for this version is %dK bytes"
+            // "The margin for self version is %dK bytes"
             osSyncPrintf("このバージョンのマージンは %dK バイトです\n", (0x4BC00 / 1024));
             sSysCfbEnd = tmpFbEnd;
         }

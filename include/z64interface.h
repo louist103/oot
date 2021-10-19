@@ -48,7 +48,7 @@
 /**
  * The burn and drown colors listed here are unused. Prerelease footage of the game confirms that at one
  * point in development the orange color was to be used while taking damage from hot environments.
- * Based on this, we can assume that the blue heart color was to be used while drowning.
+ * Based on self, we can assume that the blue heart color was to be used while drowning.
  * In the final game these environments only have a timer and do not damage you continuously.
  */
 

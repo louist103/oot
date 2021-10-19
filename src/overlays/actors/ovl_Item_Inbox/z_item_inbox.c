@@ -15,7 +15,7 @@ void ItemInbox_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ItemInbox_Update(Actor* thisx, GlobalContext* globalCtx);
 void ItemInbox_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void ItemInbox_Wait(ItemInbox* this, GlobalContext* globalCtx);
+void ItemInbox_Wait(ItemInbox* self, GlobalContext* globalCtx);
 
 const ActorInit Item_Inbox_InitVars = {
     ACTOR_ITEM_INBOX,
@@ -30,31 +30,31 @@ const ActorInit Item_Inbox_InitVars = {
 };
 
 void ItemInbox_Init(Actor* thisx, GlobalContext* globalCtx) {
-    ItemInbox* this = THIS;
+    ItemInbox* self = THIS;
 
-    this->actionFunc = ItemInbox_Wait;
-    Actor_SetScale(&this->actor, 0.2);
+    self->actionFunc = ItemInbox_Wait;
+    Actor_SetScale(&self->actor, 0.2);
 }
 
 void ItemInbox_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
-void ItemInbox_Wait(ItemInbox* this, GlobalContext* globalCtx) {
-    if (Flags_GetTreasure(globalCtx, (this->actor.params >> 8) & 0x1F)) {
-        Actor_Kill(&this->actor);
+void ItemInbox_Wait(ItemInbox* self, GlobalContext* globalCtx) {
+    if (Flags_GetTreasure(globalCtx, (self->actor.params >> 8) & 0x1F)) {
+        Actor_Kill(&self->actor);
     }
 }
 
 void ItemInbox_Update(Actor* thisx, GlobalContext* globalCtx) {
-    ItemInbox* this = THIS;
+    ItemInbox* self = THIS;
 
-    this->actionFunc(this, globalCtx);
+    self->actionFunc(self, globalCtx);
 }
 
 void ItemInbox_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    ItemInbox* this = THIS;
+    ItemInbox* self = THIS;
 
-    func_8002EBCC(&this->actor, globalCtx, 0);
-    func_8002ED80(&this->actor, globalCtx, 0);
-    GetItem_Draw(globalCtx, this->actor.params & 0xFF);
+    func_8002EBCC(&self->actor, globalCtx, 0);
+    func_8002ED80(&self->actor, globalCtx, 0);
+    GetItem_Draw(globalCtx, self->actor.params & 0xFF);
 }

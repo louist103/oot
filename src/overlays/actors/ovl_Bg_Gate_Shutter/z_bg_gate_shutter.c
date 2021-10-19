@@ -17,10 +17,10 @@ void BgGateShutter_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgGateShutter_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgGateShutter_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_8087828C(BgGateShutter* this, GlobalContext* globalCtx);
-void func_80878300(BgGateShutter* this, GlobalContext* globalCtx);
-void func_808783AC(BgGateShutter* this, GlobalContext* globalCtx);
-void func_808783D4(BgGateShutter* this, GlobalContext* globalCtx);
+void func_8087828C(BgGateShutter* self, GlobalContext* globalCtx);
+void func_80878300(BgGateShutter* self, GlobalContext* globalCtx);
+void func_808783AC(BgGateShutter* self, GlobalContext* globalCtx);
+void func_808783D4(BgGateShutter* self, GlobalContext* globalCtx);
 
 const ActorInit Bg_Gate_Shutter_InitVars = {
     ACTOR_BG_GATE_SHUTTER,
@@ -35,16 +35,16 @@ const ActorInit Bg_Gate_Shutter_InitVars = {
 };
 
 void BgGateShutter_Init(Actor* thisx, GlobalContext* globalCtx) {
-    BgGateShutter* this = THIS;
+    BgGateShutter* self = THIS;
     s32 pad[2];
     CollisionHeader* colHeader = NULL;
 
-    DynaPolyActor_Init(&this->dyna, DPM_UNK);
+    DynaPolyActor_Init(&self->dyna, DPM_UNK);
     CollisionHeader_GetVirtual(&gKakarikoGuardGateCol, &colHeader);
-    this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, thisx, colHeader);
-    this->somePos.x = thisx->world.pos.x;
-    this->somePos.y = thisx->world.pos.y;
-    this->somePos.z = thisx->world.pos.z;
+    self->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, thisx, colHeader);
+    self->somePos.x = thisx->world.pos.x;
+    self->somePos.y = thisx->world.pos.y;
+    self->somePos.z = thisx->world.pos.z;
     if (((gSaveContext.infTable[7] & 0x40) || (gSaveContext.eventChkInf[4] & 0x20)) &&
         (globalCtx->sceneNum == SCENE_SPOT01)) {
         thisx->world.pos.x = -89.0f;
@@ -55,73 +55,73 @@ void BgGateShutter_Init(Actor* thisx, GlobalContext* globalCtx) {
     thisx->scale.z = 1.0f;
     osSyncPrintf("\n\n");
     osSyncPrintf(VT_FGCOL(GREEN) " ☆☆☆☆☆ 柵でたなぁ ☆☆☆☆☆ \n" VT_RST);
-    this->actionFunc = func_8087828C;
+    self->actionFunc = func_8087828C;
 }
 
 void BgGateShutter_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    BgGateShutter* this = THIS;
+    BgGateShutter* self = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, self->dyna.bgId);
 }
 
-void func_8087828C(BgGateShutter* this, GlobalContext* globalCtx) {
-    if (this->openingState == 1 && !(gSaveContext.infTable[7] & 0x40)) {
-        this->unk_178 = 2;
-        this->actionFunc = func_80878300;
-    } else if (this->openingState == 2) {
-        this->unk_178 = 2;
-        this->actionFunc = func_80878300;
-    } else if (this->openingState < 0) {
-        this->unk_178 = 2;
-        this->actionFunc = func_808783D4;
+void func_8087828C(BgGateShutter* self, GlobalContext* globalCtx) {
+    if (self->openingState == 1 && !(gSaveContext.infTable[7] & 0x40)) {
+        self->unk_178 = 2;
+        self->actionFunc = func_80878300;
+    } else if (self->openingState == 2) {
+        self->unk_178 = 2;
+        self->actionFunc = func_80878300;
+    } else if (self->openingState < 0) {
+        self->unk_178 = 2;
+        self->actionFunc = func_808783D4;
     }
 }
 
-void func_80878300(BgGateShutter* this, GlobalContext* globalCtx) {
-    Actor* thisx = &this->dyna.actor;
+void func_80878300(BgGateShutter* self, GlobalContext* globalCtx) {
+    Actor* thisx = &self->dyna.actor;
 
-    if (this->unk_178 == 0) {
+    if (self->unk_178 == 0) {
         Audio_PlayActorSound2(thisx, NA_SE_EV_METALGATE_OPEN - SFX_FLAG);
         thisx->world.pos.x -= 2.0f;
         Math_ApproachF(&thisx->world.pos.z, -1375.0f, 0.8f, 0.3f);
         if (thisx->world.pos.x < -89.0f) {
             Audio_PlayActorSound2(thisx, NA_SE_EV_BRIDGE_OPEN_STOP);
-            this->unk_178 = 0x1E;
-            this->actionFunc = func_808783AC;
+            self->unk_178 = 0x1E;
+            self->actionFunc = func_808783AC;
         }
     }
 }
 
-void func_808783AC(BgGateShutter* this, GlobalContext* globalCtx) {
-    if (this->unk_178 == 0) {
-        this->openingState = 0;
-        this->actionFunc = func_8087828C;
+void func_808783AC(BgGateShutter* self, GlobalContext* globalCtx) {
+    if (self->unk_178 == 0) {
+        self->openingState = 0;
+        self->actionFunc = func_8087828C;
     }
 }
 
-void func_808783D4(BgGateShutter* this, GlobalContext* globalCtx) {
-    Actor* thisx = &this->dyna.actor;
+void func_808783D4(BgGateShutter* self, GlobalContext* globalCtx) {
+    Actor* thisx = &self->dyna.actor;
 
-    if (this->unk_178 == 0) {
+    if (self->unk_178 == 0) {
         Audio_PlayActorSound2(thisx, NA_SE_EV_METALGATE_OPEN - SFX_FLAG);
         thisx->world.pos.x += 2.0f;
         Math_ApproachF(&thisx->world.pos.z, -1350.0f, 0.8f, 0.3f);
         if (thisx->world.pos.x > 90.0f) {
             thisx->world.pos.x = 91.0f;
             Audio_PlayActorSound2(thisx, NA_SE_EV_BRIDGE_OPEN_STOP);
-            this->unk_178 = 30;
-            this->actionFunc = func_808783AC;
+            self->unk_178 = 30;
+            self->actionFunc = func_808783AC;
         }
     }
 }
 
 void BgGateShutter_Update(Actor* thisx, GlobalContext* globalCtx) {
-    BgGateShutter* this = THIS;
+    BgGateShutter* self = THIS;
 
-    if (this->unk_178 != 0) {
-        this->unk_178 -= 1;
+    if (self->unk_178 != 0) {
+        self->unk_178 -= 1;
     }
-    this->actionFunc(this, globalCtx);
+    self->actionFunc(self, globalCtx);
 }
 
 void BgGateShutter_Draw(Actor* thisx, GlobalContext* globalCtx) {

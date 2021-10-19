@@ -16,16 +16,16 @@ void BgMoriRakkatenjo_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgMoriRakkatenjo_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgMoriRakkatenjo_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void BgMoriRakkatenjo_SetupWaitForMoriTex(BgMoriRakkatenjo* this);
-void BgMoriRakkatenjo_WaitForMoriTex(BgMoriRakkatenjo* this, GlobalContext* globalCtx);
-void BgMoriRakkatenjo_SetupWait(BgMoriRakkatenjo* this);
-void BgMoriRakkatenjo_Wait(BgMoriRakkatenjo* this, GlobalContext* globalCtx);
-void BgMoriRakkatenjo_SetupFall(BgMoriRakkatenjo* this);
-void BgMoriRakkatenjo_Fall(BgMoriRakkatenjo* this, GlobalContext* globalCtx);
-void BgMoriRakkatenjo_SetupRest(BgMoriRakkatenjo* this);
-void BgMoriRakkatenjo_Rest(BgMoriRakkatenjo* this, GlobalContext* globalCtx);
-void BgMoriRakkatenjo_SetupRise(BgMoriRakkatenjo* this);
-void BgMoriRakkatenjo_Rise(BgMoriRakkatenjo* this, GlobalContext* globalCtx);
+void BgMoriRakkatenjo_SetupWaitForMoriTex(BgMoriRakkatenjo* self);
+void BgMoriRakkatenjo_WaitForMoriTex(BgMoriRakkatenjo* self, GlobalContext* globalCtx);
+void BgMoriRakkatenjo_SetupWait(BgMoriRakkatenjo* self);
+void BgMoriRakkatenjo_Wait(BgMoriRakkatenjo* self, GlobalContext* globalCtx);
+void BgMoriRakkatenjo_SetupFall(BgMoriRakkatenjo* self);
+void BgMoriRakkatenjo_Fall(BgMoriRakkatenjo* self, GlobalContext* globalCtx);
+void BgMoriRakkatenjo_SetupRest(BgMoriRakkatenjo* self);
+void BgMoriRakkatenjo_Rest(BgMoriRakkatenjo* self, GlobalContext* globalCtx);
+void BgMoriRakkatenjo_SetupRise(BgMoriRakkatenjo* self);
+void BgMoriRakkatenjo_Rise(BgMoriRakkatenjo* self, GlobalContext* globalCtx);
 
 static s16 sCamSetting = 0;
 
@@ -49,121 +49,121 @@ static InitChainEntry sInitChain[] = {
 
 void BgMoriRakkatenjo_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
-    BgMoriRakkatenjo* this = THIS;
+    BgMoriRakkatenjo* self = THIS;
     CollisionHeader* colHeader = NULL;
 
-    DynaPolyActor_Init(&this->dyna, DPM_PLAYER);
+    DynaPolyActor_Init(&self->dyna, DPM_PLAYER);
     // "Forest Temple obj. Falling Ceiling"
-    osSyncPrintf("森の神殿 obj. 落下天井 (home posY %f)\n", this->dyna.actor.home.pos.y);
-    if ((fabsf(1991.0f - this->dyna.actor.home.pos.x) > 0.001f) ||
-        (fabsf(683.0f - this->dyna.actor.home.pos.y) > 0.001f) ||
-        (fabsf(-2520.0f - this->dyna.actor.home.pos.z) > 0.001f)) {
+    osSyncPrintf("森の神殿 obj. 落下天井 (home posY %f)\n", self->dyna.actor.home.pos.y);
+    if ((fabsf(1991.0f - self->dyna.actor.home.pos.x) > 0.001f) ||
+        (fabsf(683.0f - self->dyna.actor.home.pos.y) > 0.001f) ||
+        (fabsf(-2520.0f - self->dyna.actor.home.pos.z) > 0.001f)) {
         // "The set position has been changed. Let's fix the program."
         osSyncPrintf("Warning : セット位置が変更されています。プログラムを修正しましょう。\n");
     }
-    if (this->dyna.actor.home.rot.y != 0x8000) {
+    if (self->dyna.actor.home.rot.y != 0x8000) {
         // "The set Angle has changed. Let's fix the program."
         osSyncPrintf("Warning : セット Angle が変更されています。プログラムを修正しましょう。\n");
     }
-    this->moriTexObjIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_MORI_TEX);
-    if (this->moriTexObjIndex < 0) {
+    self->moriTexObjIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_MORI_TEX);
+    if (self->moriTexObjIndex < 0) {
         // "Forest Temple obj Falling Ceiling Bank Danger!"
         osSyncPrintf("Error : 森の神殿 obj 落下天井 バンク危険！(%s %d)\n", "../z_bg_mori_rakkatenjo.c", 205);
-        Actor_Kill(&this->dyna.actor);
+        Actor_Kill(&self->dyna.actor);
         return;
     }
-    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
+    Actor_ProcessInitChain(&self->dyna.actor, sInitChain);
     CollisionHeader_GetVirtual(&gMoriRakkatenjoCol, &colHeader);
-    this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
-    BgMoriRakkatenjo_SetupWaitForMoriTex(this);
+    self->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &self->dyna.actor, colHeader);
+    BgMoriRakkatenjo_SetupWaitForMoriTex(self);
     sCamSetting = 0;
 }
 
 void BgMoriRakkatenjo_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
-    BgMoriRakkatenjo* this = THIS;
+    BgMoriRakkatenjo* self = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, self->dyna.bgId);
 }
 
-s32 BgMoriRakkatenjo_IsLinkUnder(BgMoriRakkatenjo* this, GlobalContext* globalCtx) {
+s32 BgMoriRakkatenjo_IsLinkUnder(BgMoriRakkatenjo* self, GlobalContext* globalCtx) {
     Vec3f* pos = &GET_PLAYER(globalCtx)->actor.world.pos;
 
     return (-3300.0f < pos->z) && (pos->z < -1840.0f) && (1791.0f < pos->x) && (pos->x < 2191.0f);
 }
 
-s32 BgMoriRakkatenjo_IsLinkClose(BgMoriRakkatenjo* this, GlobalContext* globalCtx) {
+s32 BgMoriRakkatenjo_IsLinkClose(BgMoriRakkatenjo* self, GlobalContext* globalCtx) {
     Vec3f* pos = &GET_PLAYER(globalCtx)->actor.world.pos;
 
     return (-3360.0f < pos->z) && (pos->z < -1840.0f) && (1791.0f < pos->x) && (pos->x < 2191.0f);
 }
 
-void BgMoriRakkatenjo_SetupWaitForMoriTex(BgMoriRakkatenjo* this) {
-    this->actionFunc = BgMoriRakkatenjo_WaitForMoriTex;
+void BgMoriRakkatenjo_SetupWaitForMoriTex(BgMoriRakkatenjo* self) {
+    self->actionFunc = BgMoriRakkatenjo_WaitForMoriTex;
 }
 
-void BgMoriRakkatenjo_WaitForMoriTex(BgMoriRakkatenjo* this, GlobalContext* globalCtx) {
-    if (Object_IsLoaded(&globalCtx->objectCtx, this->moriTexObjIndex)) {
-        BgMoriRakkatenjo_SetupWait(this);
-        this->dyna.actor.draw = BgMoriRakkatenjo_Draw;
+void BgMoriRakkatenjo_WaitForMoriTex(BgMoriRakkatenjo* self, GlobalContext* globalCtx) {
+    if (Object_IsLoaded(&globalCtx->objectCtx, self->moriTexObjIndex)) {
+        BgMoriRakkatenjo_SetupWait(self);
+        self->dyna.actor.draw = BgMoriRakkatenjo_Draw;
     }
 }
 
-void BgMoriRakkatenjo_SetupWait(BgMoriRakkatenjo* this) {
-    this->timer = (this->fallCount > 0) ? 100 : 21;
-    this->dyna.actor.world.pos.y = 683.0f;
-    this->actionFunc = BgMoriRakkatenjo_Wait;
+void BgMoriRakkatenjo_SetupWait(BgMoriRakkatenjo* self) {
+    self->timer = (self->fallCount > 0) ? 100 : 21;
+    self->dyna.actor.world.pos.y = 683.0f;
+    self->actionFunc = BgMoriRakkatenjo_Wait;
 }
 
-void BgMoriRakkatenjo_Wait(BgMoriRakkatenjo* this, GlobalContext* globalCtx) {
-    if (this->fallCount == 0) {
-        if (BgMoriRakkatenjo_IsLinkClose(this, globalCtx) || (this->timer < 20)) {
-            if (this->timer <= 0) {
-                BgMoriRakkatenjo_SetupFall(this);
+void BgMoriRakkatenjo_Wait(BgMoriRakkatenjo* self, GlobalContext* globalCtx) {
+    if (self->fallCount == 0) {
+        if (BgMoriRakkatenjo_IsLinkClose(self, globalCtx) || (self->timer < 20)) {
+            if (self->timer <= 0) {
+                BgMoriRakkatenjo_SetupFall(self);
             }
         } else {
-            this->timer = 21;
+            self->timer = 21;
         }
     } else {
-        if (BgMoriRakkatenjo_IsLinkUnder(this, globalCtx) || (this->timer < 20)) {
-            if (this->timer <= 0) {
-                BgMoriRakkatenjo_SetupFall(this);
+        if (BgMoriRakkatenjo_IsLinkUnder(self, globalCtx) || (self->timer < 20)) {
+            if (self->timer <= 0) {
+                BgMoriRakkatenjo_SetupFall(self);
             }
         } else {
-            this->timer = 100;
+            self->timer = 100;
         }
     }
-    if (this->timer < 20) {
+    if (self->timer < 20) {
         func_800788CC(NA_SE_EV_BLOCKSINK - SFX_FLAG);
     }
 }
 
-void BgMoriRakkatenjo_SetupFall(BgMoriRakkatenjo* this) {
-    this->actionFunc = BgMoriRakkatenjo_Fall;
-    this->bounceCount = 0;
-    this->dyna.actor.velocity.y = 0.0f;
+void BgMoriRakkatenjo_SetupFall(BgMoriRakkatenjo* self) {
+    self->actionFunc = BgMoriRakkatenjo_Fall;
+    self->bounceCount = 0;
+    self->dyna.actor.velocity.y = 0.0f;
 }
 
-void BgMoriRakkatenjo_Fall(BgMoriRakkatenjo* this, GlobalContext* globalCtx) {
+void BgMoriRakkatenjo_Fall(BgMoriRakkatenjo* self, GlobalContext* globalCtx) {
     static f32 bounceVel[] = { 4.0f, 1.5f, 0.4f, 0.1f };
     s32 pad;
-    Actor* thisx = &this->dyna.actor;
+    Actor* thisx = &self->dyna.actor;
     s32 quake;
 
     Actor_MoveForward(thisx);
     if ((thisx->velocity.y < 0.0f) && (thisx->world.pos.y <= 403.0f)) {
-        if (this->bounceCount >= ARRAY_COUNT(bounceVel)) {
-            BgMoriRakkatenjo_SetupRest(this);
+        if (self->bounceCount >= ARRAY_COUNT(bounceVel)) {
+            BgMoriRakkatenjo_SetupRest(self);
         } else {
-            if (this->bounceCount == 0) {
-                this->fallCount++;
+            if (self->bounceCount == 0) {
+                self->fallCount++;
                 func_800788CC(NA_SE_EV_STONE_BOUND);
                 func_800AA000(SQ(thisx->yDistToPlayer), 0xFF, 0x14, 0x96);
             }
             thisx->world.pos.y =
-                403.0f - (thisx->world.pos.y - 403.0f) * bounceVel[this->bounceCount] / fabsf(thisx->velocity.y);
-            thisx->velocity.y = bounceVel[this->bounceCount];
-            this->bounceCount++;
+                403.0f - (thisx->world.pos.y - 403.0f) * bounceVel[self->bounceCount] / fabsf(thisx->velocity.y);
+            thisx->velocity.y = bounceVel[self->bounceCount];
+            self->bounceCount++;
             quake = Quake_Add(GET_ACTIVE_CAM(globalCtx), 3);
             Quake_SetSpeed(quake, 50000);
             Quake_SetQuakeValues(quake, 5, 0, 0, 0);
@@ -172,44 +172,44 @@ void BgMoriRakkatenjo_Fall(BgMoriRakkatenjo* this, GlobalContext* globalCtx) {
     }
 }
 
-void BgMoriRakkatenjo_SetupRest(BgMoriRakkatenjo* this) {
-    this->actionFunc = BgMoriRakkatenjo_Rest;
-    this->dyna.actor.world.pos.y = 403.0f;
-    this->timer = 20;
+void BgMoriRakkatenjo_SetupRest(BgMoriRakkatenjo* self) {
+    self->actionFunc = BgMoriRakkatenjo_Rest;
+    self->dyna.actor.world.pos.y = 403.0f;
+    self->timer = 20;
 }
 
-void BgMoriRakkatenjo_Rest(BgMoriRakkatenjo* this, GlobalContext* globalCtx) {
-    if (this->timer <= 0) {
-        BgMoriRakkatenjo_SetupRise(this);
+void BgMoriRakkatenjo_Rest(BgMoriRakkatenjo* self, GlobalContext* globalCtx) {
+    if (self->timer <= 0) {
+        BgMoriRakkatenjo_SetupRise(self);
     }
 }
 
-void BgMoriRakkatenjo_SetupRise(BgMoriRakkatenjo* this) {
-    this->actionFunc = BgMoriRakkatenjo_Rise;
-    this->dyna.actor.velocity.y = -0.1f;
+void BgMoriRakkatenjo_SetupRise(BgMoriRakkatenjo* self) {
+    self->actionFunc = BgMoriRakkatenjo_Rise;
+    self->dyna.actor.velocity.y = -0.1f;
 }
 
-void BgMoriRakkatenjo_Rise(BgMoriRakkatenjo* this, GlobalContext* globalCtx) {
-    Math_SmoothStepToF(&this->dyna.actor.velocity.y, 5.0f, 0.06f, 0.1f, 0.0f);
-    this->dyna.actor.world.pos.y += this->dyna.actor.velocity.y;
-    if (this->dyna.actor.world.pos.y >= 683.0f) {
-        BgMoriRakkatenjo_SetupWait(this);
+void BgMoriRakkatenjo_Rise(BgMoriRakkatenjo* self, GlobalContext* globalCtx) {
+    Math_SmoothStepToF(&self->dyna.actor.velocity.y, 5.0f, 0.06f, 0.1f, 0.0f);
+    self->dyna.actor.world.pos.y += self->dyna.actor.velocity.y;
+    if (self->dyna.actor.world.pos.y >= 683.0f) {
+        BgMoriRakkatenjo_SetupWait(self);
     }
 }
 
 void BgMoriRakkatenjo_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
-    BgMoriRakkatenjo* this = THIS;
+    BgMoriRakkatenjo* self = THIS;
 
-    if (this->timer > 0) {
-        this->timer--;
+    if (self->timer > 0) {
+        self->timer--;
     }
-    this->actionFunc(this, globalCtx);
-    if (BgMoriRakkatenjo_IsLinkUnder(this, globalCtx)) {
+    self->actionFunc(self, globalCtx);
+    if (BgMoriRakkatenjo_IsLinkUnder(self, globalCtx)) {
         if (sCamSetting == CAM_SET_NONE) {
             osSyncPrintf("camera changed (mori rakka tenjyo) ... \n");
             sCamSetting = globalCtx->cameraPtrs[MAIN_CAM]->setting;
-            Camera_SetCameraData(globalCtx->cameraPtrs[MAIN_CAM], 1, &this->dyna.actor, NULL, 0, 0, 0);
+            Camera_SetCameraData(globalCtx->cameraPtrs[MAIN_CAM], 1, &self->dyna.actor, NULL, 0, 0, 0);
             Camera_ChangeSetting(globalCtx->cameraPtrs[MAIN_CAM], CAM_SET_MORI1);
         }
     } else if (sCamSetting != CAM_SET_NONE) {
@@ -221,12 +221,12 @@ void BgMoriRakkatenjo_Update(Actor* thisx, GlobalContext* globalCtx) {
 
 void BgMoriRakkatenjo_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
-    BgMoriRakkatenjo* this = THIS;
+    BgMoriRakkatenjo* self = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx, "../z_bg_mori_rakkatenjo.c", 497);
     func_80093D18(globalCtx->state.gfxCtx);
 
-    gSPSegment(POLY_OPA_DISP++, 0x08, globalCtx->objectCtx.status[this->moriTexObjIndex].segment);
+    gSPSegment(POLY_OPA_DISP++, 0x08, globalCtx->objectCtx.status[self->moriTexObjIndex].segment);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx, "../z_bg_mori_rakkatenjo.c", 502),
               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

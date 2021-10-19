@@ -73,8 +73,8 @@ typedef struct ColliderInfo {
     /* 0x15 */ u8 toucherFlags; // Information flags for AT collisions
     /* 0x16 */ u8 bumperFlags; // Information flags for AC collisions
     /* 0x17 */ u8 ocElemFlags; // Information flags for OC collisions
-    /* 0x18 */ Collider* atHit;                // object touching this element's AT collider
-    /* 0x1C */ Collider* acHit;                // object touching this element's AC collider
+    /* 0x18 */ Collider* atHit;                // object touching self element's AT collider
+    /* 0x1C */ Collider* acHit;                // object touching self element's AC collider
     /* 0x20 */ struct ColliderInfo* atHitInfo; // element that hit the AT collider
     /* 0x24 */ struct ColliderInfo* acHitInfo; // element that hit the AC collider
 } ColliderInfo; // size = 0x28
@@ -195,7 +195,7 @@ typedef struct {
     /* 0x00 */ Vec3f quad[4];
     /* 0x30 */ Vec3s dcMid; // midpoint of vectors d, c
     /* 0x36 */ Vec3s baMid; // midpoint of vectors b, a
-    /* 0x3C */ f32 acDist; // distance to nearest AC collision this frame.
+    /* 0x3C */ f32 acDist; // distance to nearest AC collision self frame.
 } ColliderQuadDim; // size = 0x40
 
 typedef struct {
@@ -259,7 +259,7 @@ typedef enum {
  * Affects the sound Link's sword makes when hitting it, hookability,
  * and possibly other things. It's definitely not flags, as all checks
  * are == or !=. Will probably need more actors decomped to truly 
- * understand what this is.
+ * understand what self is.
  */
 typedef enum {
     /* 0 */ ELEMTYPE_UNK0,
@@ -320,7 +320,7 @@ typedef enum {
 #define TOUCH_SFX_WOOD (2 << 3) // Always uses wood deflection sound
 #define TOUCH_SFX_NONE (3 << 3) // No hit sound effect
 #define TOUCH_AT_HITMARK (1 << 5) // Draw hitmarks for every AT collision
-#define TOUCH_DREW_HITMARK (1 << 6) // Already drew hitmark for this frame
+#define TOUCH_DREW_HITMARK (1 << 6) // Already drew hitmark for self frame
 #define TOUCH_UNK7 (1 << 7) // Unknown purpose. Used by some enemy quads
 
 #define BUMP_NONE 0 // No flags set. Cannot have AC collisions
@@ -331,7 +331,7 @@ typedef enum {
 #define BUMP_NO_DAMAGE (1 << 4) // Does not take damage.
 #define BUMP_NO_SWORD_SFX (1 << 5) // Does not have a sound when hit by player-attached AT colliders.
 #define BUMP_NO_HITMARK (1 << 6) // Skips hit effects.
-#define BUMP_DRAW_HITMARK (1 << 7) // Draw hitmark for AC collision this frame.
+#define BUMP_DRAW_HITMARK (1 << 7) // Draw hitmark for AC collision self frame.
 
 #define OCELEM_NONE 0 // No flags set. Cannot have OC collisions
 #define OCELEM_ON (1 << 0) // Can have OC collisions

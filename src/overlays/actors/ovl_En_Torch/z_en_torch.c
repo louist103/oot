@@ -29,14 +29,14 @@ static u8 sChestContents[] = {
 };
 
 void EnTorch_Init(Actor* thisx, GlobalContext* globalCtx) {
-    EnTorch* this = THIS;
+    EnTorch* self = THIS;
     s8 returnData = gSaveContext.respawn[RESPAWN_MODE_RETURN].data;
 
     /* Spawn chest with desired contents.
        Contents are passed to en_torch from grotto params via Save Context. */
-    Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_BOX, this->actor.world.pos.x, this->actor.world.pos.y,
-                this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0,
+    Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_BOX, self->actor.world.pos.x, self->actor.world.pos.y,
+                self->actor.world.pos.z, 0, self->actor.shape.rot.y, 0,
                 (sChestContents[(returnData >> 0x5) & 0x7] << 0x5) | 0x5000 | (returnData & 0x1F));
 
-    Actor_Kill(&this->actor);
+    Actor_Kill(&self->actor);
 }

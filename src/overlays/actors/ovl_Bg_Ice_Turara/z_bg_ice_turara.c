@@ -16,11 +16,11 @@ void BgIceTurara_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgIceTurara_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgIceTurara_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void BgIceTurara_Stalagmite(BgIceTurara* this, GlobalContext* globalCtx);
-void BgIceTurara_Wait(BgIceTurara* this, GlobalContext* globalCtx);
-void BgIceTurara_Shiver(BgIceTurara* this, GlobalContext* globalCtx);
-void BgIceTurara_Fall(BgIceTurara* this, GlobalContext* globalCtx);
-void BgIceTurara_Regrow(BgIceTurara* this, GlobalContext* globalCtx);
+void BgIceTurara_Stalagmite(BgIceTurara* self, GlobalContext* globalCtx);
+void BgIceTurara_Wait(BgIceTurara* self, GlobalContext* globalCtx);
+void BgIceTurara_Shiver(BgIceTurara* self, GlobalContext* globalCtx);
+void BgIceTurara_Fall(BgIceTurara* self, GlobalContext* globalCtx);
+void BgIceTurara_Regrow(BgIceTurara* self, GlobalContext* globalCtx);
 
 static ColliderCylinderInit sCylinderInit = {
     {
@@ -62,34 +62,34 @@ static InitChainEntry sInitChain[] = {
 };
 
 void BgIceTurara_Init(Actor* thisx, GlobalContext* globalCtx) {
-    BgIceTurara* this = THIS;
+    BgIceTurara* self = THIS;
     s32 pad;
     CollisionHeader* colHeader = NULL;
 
-    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPolyActor_Init(&this->dyna, DPM_UNK);
+    Actor_ProcessInitChain(&self->dyna.actor, sInitChain);
+    DynaPolyActor_Init(&self->dyna, DPM_UNK);
     CollisionHeader_GetVirtual(&object_ice_objects_Col_002594, &colHeader);
-    Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinder(globalCtx, &this->collider, &this->dyna.actor, &sCylinderInit);
-    Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
-    this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
-    if (this->dyna.actor.params == TURARA_STALAGMITE) {
-        this->actionFunc = BgIceTurara_Stalagmite;
+    Collider_InitCylinder(globalCtx, &self->collider);
+    Collider_SetCylinder(globalCtx, &self->collider, &self->dyna.actor, &sCylinderInit);
+    Collider_UpdateCylinder(&self->dyna.actor, &self->collider);
+    self->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &self->dyna.actor, colHeader);
+    if (self->dyna.actor.params == TURARA_STALAGMITE) {
+        self->actionFunc = BgIceTurara_Stalagmite;
     } else {
-        this->dyna.actor.shape.rot.x = -0x8000;
-        this->dyna.actor.shape.yOffset = 1200.0f;
-        this->actionFunc = BgIceTurara_Wait;
+        self->dyna.actor.shape.rot.x = -0x8000;
+        self->dyna.actor.shape.yOffset = 1200.0f;
+        self->actionFunc = BgIceTurara_Wait;
     }
 }
 
 void BgIceTurara_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    BgIceTurara* this = THIS;
+    BgIceTurara* self = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, self->dyna.bgId);
+    Collider_DestroyCylinder(globalCtx, &self->collider);
 }
 
-void BgIceTurara_Break(BgIceTurara* this, GlobalContext* globalCtx, f32 arg2) {
+void BgIceTurara_Break(BgIceTurara* self, GlobalContext* globalCtx, f32 arg2) {
     static Vec3f accel = { 0.0f, -1.0f, 0.0f };
     static Color_RGBA8 primColor = { 170, 255, 255, 255 };
     static Color_RGBA8 envColor = { 0, 50, 100, 255 };
@@ -98,12 +98,12 @@ void BgIceTurara_Break(BgIceTurara* this, GlobalContext* globalCtx, f32 arg2) {
     s32 j;
     s32 i;
 
-    Audio_PlaySoundAtPosition(globalCtx, &this->dyna.actor.world.pos, 30, NA_SE_EV_ICE_BROKEN);
+    Audio_PlaySoundAtPosition(globalCtx, &self->dyna.actor.world.pos, 30, NA_SE_EV_ICE_BROKEN);
     for (i = 0; i < 2; i++) {
         for (j = 0; j < 10; j++) {
-            pos.x = this->dyna.actor.world.pos.x + Rand_CenteredFloat(8.0f);
-            pos.y = this->dyna.actor.world.pos.y + (Rand_ZeroOne() * arg2) + (i * arg2);
-            pos.z = this->dyna.actor.world.pos.z + Rand_CenteredFloat(8.0f);
+            pos.x = self->dyna.actor.world.pos.x + Rand_CenteredFloat(8.0f);
+            pos.y = self->dyna.actor.world.pos.y + (Rand_ZeroOne() * arg2) + (i * arg2);
+            pos.z = self->dyna.actor.world.pos.z + Rand_CenteredFloat(8.0f);
 
             vel.x = Rand_CenteredFloat(7.0f);
             vel.z = Rand_CenteredFloat(7.0f);
@@ -115,87 +115,87 @@ void BgIceTurara_Break(BgIceTurara* this, GlobalContext* globalCtx, f32 arg2) {
     }
 }
 
-void BgIceTurara_Stalagmite(BgIceTurara* this, GlobalContext* globalCtx) {
-    if (this->collider.base.acFlags & AC_HIT) {
-        BgIceTurara_Break(this, globalCtx, 50.0f);
-        Actor_Kill(&this->dyna.actor);
+void BgIceTurara_Stalagmite(BgIceTurara* self, GlobalContext* globalCtx) {
+    if (self->collider.base.acFlags & AC_HIT) {
+        BgIceTurara_Break(self, globalCtx, 50.0f);
+        Actor_Kill(&self->dyna.actor);
         return;
     }
-    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
 }
 
-void BgIceTurara_Wait(BgIceTurara* this, GlobalContext* globalCtx) {
-    if (this->dyna.actor.xzDistToPlayer < 60.0f) {
-        this->shiverTimer = 10;
-        this->actionFunc = BgIceTurara_Shiver;
+void BgIceTurara_Wait(BgIceTurara* self, GlobalContext* globalCtx) {
+    if (self->dyna.actor.xzDistToPlayer < 60.0f) {
+        self->shiverTimer = 10;
+        self->actionFunc = BgIceTurara_Shiver;
     }
 }
 
-void BgIceTurara_Shiver(BgIceTurara* this, GlobalContext* globalCtx) {
+void BgIceTurara_Shiver(BgIceTurara* self, GlobalContext* globalCtx) {
     s16 phi_v0_3;
     s16 phi_v0_2;
     f32 sp28;
 
-    if (this->shiverTimer != 0) {
-        this->shiverTimer--;
+    if (self->shiverTimer != 0) {
+        self->shiverTimer--;
     }
-    if (!(this->shiverTimer % 4)) {
-        Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_ICE_SWING);
+    if (!(self->shiverTimer % 4)) {
+        Audio_PlayActorSound2(&self->dyna.actor, NA_SE_EV_ICE_SWING);
     }
-    if (this->shiverTimer == 0) {
-        this->dyna.actor.world.pos.x = this->dyna.actor.home.pos.x;
-        this->dyna.actor.world.pos.z = this->dyna.actor.home.pos.z;
-        Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
-        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-        func_8003EBF8(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
-        this->actionFunc = BgIceTurara_Fall;
+    if (self->shiverTimer == 0) {
+        self->dyna.actor.world.pos.x = self->dyna.actor.home.pos.x;
+        self->dyna.actor.world.pos.z = self->dyna.actor.home.pos.z;
+        Collider_UpdateCylinder(&self->dyna.actor, &self->collider);
+        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
+        func_8003EBF8(globalCtx, &globalCtx->colCtx.dyna, self->dyna.bgId);
+        self->actionFunc = BgIceTurara_Fall;
     } else {
         sp28 = Rand_ZeroOne();
         phi_v0_2 = (Rand_ZeroOne() < 0.5f ? -1 : 1);
-        this->dyna.actor.world.pos.x = (phi_v0_2 * ((0.5f * sp28) + 0.5f)) + this->dyna.actor.home.pos.x;
+        self->dyna.actor.world.pos.x = (phi_v0_2 * ((0.5f * sp28) + 0.5f)) + self->dyna.actor.home.pos.x;
         sp28 = Rand_ZeroOne();
         phi_v0_3 = (Rand_ZeroOne() < 0.5f ? -1 : 1);
-        this->dyna.actor.world.pos.z = (phi_v0_3 * ((0.5f * sp28) + 0.5f)) + this->dyna.actor.home.pos.z;
+        self->dyna.actor.world.pos.z = (phi_v0_3 * ((0.5f * sp28) + 0.5f)) + self->dyna.actor.home.pos.z;
     }
 }
 
-void BgIceTurara_Fall(BgIceTurara* this, GlobalContext* globalCtx) {
-    if ((this->collider.base.atFlags & AT_HIT) || (this->dyna.actor.bgCheckFlags & 1)) {
-        this->collider.base.atFlags &= ~AT_HIT;
-        this->dyna.actor.bgCheckFlags &= ~1;
-        if (this->dyna.actor.world.pos.y < this->dyna.actor.floorHeight) {
-            this->dyna.actor.world.pos.y = this->dyna.actor.floorHeight;
+void BgIceTurara_Fall(BgIceTurara* self, GlobalContext* globalCtx) {
+    if ((self->collider.base.atFlags & AT_HIT) || (self->dyna.actor.bgCheckFlags & 1)) {
+        self->collider.base.atFlags &= ~AT_HIT;
+        self->dyna.actor.bgCheckFlags &= ~1;
+        if (self->dyna.actor.world.pos.y < self->dyna.actor.floorHeight) {
+            self->dyna.actor.world.pos.y = self->dyna.actor.floorHeight;
         }
-        BgIceTurara_Break(this, globalCtx, 40.0f);
-        if (this->dyna.actor.params == TURARA_STALACTITE_REGROW) {
-            this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + 120.0f;
-            func_8003EC50(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
-            this->actionFunc = BgIceTurara_Regrow;
+        BgIceTurara_Break(self, globalCtx, 40.0f);
+        if (self->dyna.actor.params == TURARA_STALACTITE_REGROW) {
+            self->dyna.actor.world.pos.y = self->dyna.actor.home.pos.y + 120.0f;
+            func_8003EC50(globalCtx, &globalCtx->colCtx.dyna, self->dyna.bgId);
+            self->actionFunc = BgIceTurara_Regrow;
         } else {
-            Actor_Kill(&this->dyna.actor);
+            Actor_Kill(&self->dyna.actor);
             return;
         }
     } else {
-        Actor_MoveForward(&this->dyna.actor);
-        this->dyna.actor.world.pos.y += 40.0f;
-        Actor_UpdateBgCheckInfo(globalCtx, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 4);
-        this->dyna.actor.world.pos.y -= 40.0f;
-        Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
-        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        Actor_MoveForward(&self->dyna.actor);
+        self->dyna.actor.world.pos.y += 40.0f;
+        Actor_UpdateBgCheckInfo(globalCtx, &self->dyna.actor, 0.0f, 0.0f, 0.0f, 4);
+        self->dyna.actor.world.pos.y -= 40.0f;
+        Collider_UpdateCylinder(&self->dyna.actor, &self->collider);
+        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
     }
 }
 
-void BgIceTurara_Regrow(BgIceTurara* this, GlobalContext* globalCtx) {
-    if (Math_StepToF(&this->dyna.actor.world.pos.y, this->dyna.actor.home.pos.y, 1.0f)) {
-        this->actionFunc = BgIceTurara_Wait;
-        this->dyna.actor.velocity.y = 0.0f;
+void BgIceTurara_Regrow(BgIceTurara* self, GlobalContext* globalCtx) {
+    if (Math_StepToF(&self->dyna.actor.world.pos.y, self->dyna.actor.home.pos.y, 1.0f)) {
+        self->actionFunc = BgIceTurara_Wait;
+        self->dyna.actor.velocity.y = 0.0f;
     }
 }
 
 void BgIceTurara_Update(Actor* thisx, GlobalContext* globalCtx) {
-    BgIceTurara* this = THIS;
+    BgIceTurara* self = THIS;
 
-    this->actionFunc(this, globalCtx);
+    self->actionFunc(self, globalCtx);
 }
 
 void BgIceTurara_Draw(Actor* thisx, GlobalContext* globalCtx) {

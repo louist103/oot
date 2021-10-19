@@ -31,15 +31,15 @@ const ActorInit Oceff_Wipe2_InitVars = {
 #include "z_oceff_wipe2_gfx.c"
 
 void OceffWipe2_Init(Actor* thisx, GlobalContext* globalCtx) {
-    OceffWipe2* this = THIS;
-    Actor_SetScale(&this->actor, 0.1f);
-    this->counter = 0;
-    this->actor.world.pos = GET_ACTIVE_CAM(globalCtx)->eye;
-    osSyncPrintf(VT_FGCOL(CYAN) " WIPE2 arg_data = %d\n" VT_RST, this->actor.params);
+    OceffWipe2* self = THIS;
+    Actor_SetScale(&self->actor, 0.1f);
+    self->counter = 0;
+    self->actor.world.pos = GET_ACTIVE_CAM(globalCtx)->eye;
+    osSyncPrintf(VT_FGCOL(CYAN) " WIPE2 arg_data = %d\n" VT_RST, self->actor.params);
 }
 
 void OceffWipe2_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    OceffWipe2* this = THIS;
+    OceffWipe2* self = THIS;
     Player* player = GET_PLAYER(globalCtx);
 
     func_800876C8(globalCtx);
@@ -49,18 +49,18 @@ void OceffWipe2_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void OceffWipe2_Update(Actor* thisx, GlobalContext* globalCtx) {
-    OceffWipe2* this = THIS;
-    this->actor.world.pos = GET_ACTIVE_CAM(globalCtx)->eye;
-    if (this->counter < 100) {
-        this->counter++;
+    OceffWipe2* self = THIS;
+    self->actor.world.pos = GET_ACTIVE_CAM(globalCtx)->eye;
+    if (self->counter < 100) {
+        self->counter++;
     } else {
-        Actor_Kill(&this->actor);
+        Actor_Kill(&self->actor);
     }
 }
 
 void OceffWipe2_Draw(Actor* thisx, GlobalContext* globalCtx) {
     u32 scroll = globalCtx->state.frames & 0xFF;
-    OceffWipe2* this = THIS;
+    OceffWipe2* self = THIS;
     f32 z;
     u8 alpha;
     s32 pad[2];
@@ -70,15 +70,15 @@ void OceffWipe2_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     eye = GET_ACTIVE_CAM(globalCtx)->eye;
     Camera_GetSkyboxOffset(&vec, GET_ACTIVE_CAM(globalCtx));
-    if (this->counter < 32) {
-        z = Math_SinS(this->counter << 9) * 1330;
+    if (self->counter < 32) {
+        z = Math_SinS(self->counter << 9) * 1330;
     } else {
         z = 1330;
     }
 
     vtxPtr = sFrustumVtx;
-    if (this->counter >= 80) {
-        alpha = 12 * (100 - this->counter);
+    if (self->counter >= 80) {
+        alpha = 12 * (100 - self->counter);
     } else {
         alpha = 255;
     }

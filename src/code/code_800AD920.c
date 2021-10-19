@@ -6,33 +6,33 @@
 extern u16 D_0E000000[];
 
 // Init
-void func_800AD920(struct_80166500* this) {
-    this->useRgba = false;
-    this->setScissor = false;
-    this->primColor.r = 255;
-    this->primColor.g = 255;
-    this->primColor.b = 255;
-    this->primColor.a = 255;
-    this->envColor.a = 255;
-    this->envColor.r = 0;
-    this->envColor.g = 0;
-    this->envColor.b = 0;
+void func_800AD920(struct_80166500* self) {
+    self->useRgba = false;
+    self->setScissor = false;
+    self->primColor.r = 255;
+    self->primColor.g = 255;
+    self->primColor.b = 255;
+    self->primColor.a = 255;
+    self->envColor.a = 255;
+    self->envColor.r = 0;
+    self->envColor.g = 0;
+    self->envColor.b = 0;
 }
 
 // Destroy
-void func_800AD950(struct_80166500* this) {
+void func_800AD950(struct_80166500* self) {
 }
 
 // Draw
-void func_800AD958(struct_80166500* this, Gfx** gfxp) {
+void func_800AD958(struct_80166500* self, Gfx** gfxp) {
     Gfx* gfx = *gfxp;
     u16* tex = D_0E000000;
-    s32 fmt = this->useRgba == false ? G_IM_FMT_IA : G_IM_FMT_RGBA;
+    s32 fmt = self->useRgba == false ? G_IM_FMT_IA : G_IM_FMT_RGBA;
     s32 y;
     s32 height = 6;
 
     gDPPipeSync(gfx++);
-    if (this->setScissor == true) {
+    if (self->setScissor == true) {
         gDPSetScissor(gfx++, G_SC_NON_INTERLACE, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     }
 
@@ -43,8 +43,8 @@ void func_800AD958(struct_80166500* this, Gfx** gfxp) {
     gDPSetCombineLERP(gfx++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT,
                       PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT);
 
-    gDPSetColor(gfx++, G_SETPRIMCOLOR, this->primColor.rgba);
-    gDPSetColor(gfx++, G_SETENVCOLOR, this->envColor.rgba);
+    gDPSetColor(gfx++, G_SETPRIMCOLOR, self->primColor.rgba);
+    gDPSetColor(gfx++, G_SETENVCOLOR, self->envColor.rgba);
 
     for (y = 0; y <= SCREEN_HEIGHT - height; y += height) {
         gDPLoadTextureBlock(gfx++, tex, fmt, G_IM_SIZ_16b, SCREEN_WIDTH, height, 0, G_TX_NOMIRROR | G_TX_CLAMP,

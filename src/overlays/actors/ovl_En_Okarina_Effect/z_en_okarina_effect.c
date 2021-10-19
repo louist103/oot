@@ -15,8 +15,8 @@ void EnOkarinaEffect_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnOkarinaEffect_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnOkarinaEffect_Update(Actor* thisx, GlobalContext* globalCtx);
 
-void EnOkarinaEffect_TriggerStorm(EnOkarinaEffect* this, GlobalContext* globalCtx);
-void EnOkarinaEffect_ManageStorm(EnOkarinaEffect* this, GlobalContext* globalCtx);
+void EnOkarinaEffect_TriggerStorm(EnOkarinaEffect* self, GlobalContext* globalCtx);
+void EnOkarinaEffect_ManageStorm(EnOkarinaEffect* self, GlobalContext* globalCtx);
 
 const ActorInit En_Okarina_Effect_InitVars = {
     ACTOR_EN_OKARINA_EFFECT,
@@ -30,12 +30,12 @@ const ActorInit En_Okarina_Effect_InitVars = {
     NULL,
 };
 
-void EnOkarinaEffect_SetupAction(EnOkarinaEffect* this, EnOkarinaEffectActionFunc actionFunc) {
-    this->actionFunc = actionFunc;
+void EnOkarinaEffect_SetupAction(EnOkarinaEffect* self, EnOkarinaEffectActionFunc actionFunc) {
+    self->actionFunc = actionFunc;
 }
 
 void EnOkarinaEffect_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    EnOkarinaEffect* this = THIS;
+    EnOkarinaEffect* self = THIS;
 
     globalCtx->envCtx.unk_F2[0] = 0;
     if ((gWeatherMode != 4) && (gWeatherMode != 5) && (globalCtx->envCtx.gloomySkyMode == 1)) {
@@ -46,20 +46,20 @@ void EnOkarinaEffect_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnOkarinaEffect_Init(Actor* thisx, GlobalContext* globalCtx) {
-    EnOkarinaEffect* this = THIS;
+    EnOkarinaEffect* self = THIS;
 
     osSyncPrintf("\n\n");
     // "Ocarina Storm Effect"
     osSyncPrintf(VT_FGCOL(YELLOW) "☆☆☆☆☆ オカリナあらし効果ビカビカビカ〜 ☆☆☆☆☆ \n" VT_RST);
     osSyncPrintf("\n\n");
     if (globalCtx->envCtx.unk_EE[1] != 0) {
-        Actor_Kill(&this->actor);
+        Actor_Kill(&self->actor);
     }
-    EnOkarinaEffect_SetupAction(this, EnOkarinaEffect_TriggerStorm);
+    EnOkarinaEffect_SetupAction(self, EnOkarinaEffect_TriggerStorm);
 }
 
-void EnOkarinaEffect_TriggerStorm(EnOkarinaEffect* this, GlobalContext* globalCtx) {
-    this->timer = 400;                   // 20 seconds
+void EnOkarinaEffect_TriggerStorm(EnOkarinaEffect* self, GlobalContext* globalCtx) {
+    self->timer = 400;                   // 20 seconds
     globalCtx->envCtx.unk_F2[0] = 20;    // rain intensity target
     globalCtx->envCtx.gloomySkyMode = 1; // start gloomy sky
     if ((gWeatherMode != 0) || globalCtx->envCtx.unk_17 != 0) {
@@ -67,30 +67,30 @@ void EnOkarinaEffect_TriggerStorm(EnOkarinaEffect* this, GlobalContext* globalCt
     }
     globalCtx->envCtx.lightningMode = LIGHTNING_MODE_ON;
     func_80077624(globalCtx);
-    EnOkarinaEffect_SetupAction(this, EnOkarinaEffect_ManageStorm);
+    EnOkarinaEffect_SetupAction(self, EnOkarinaEffect_ManageStorm);
 }
 
-void EnOkarinaEffect_ManageStorm(EnOkarinaEffect* this, GlobalContext* globalCtx) {
+void EnOkarinaEffect_ManageStorm(EnOkarinaEffect* self, GlobalContext* globalCtx) {
     Flags_UnsetEnv(globalCtx, 5); // clear storms env flag
     if (((globalCtx->pauseCtx.state == 0) && (globalCtx->gameOverCtx.state == GAMEOVER_INACTIVE) &&
          (globalCtx->msgCtx.unk_E300 == 0) && (!FrameAdvance_IsEnabled(globalCtx)) &&
          ((globalCtx->transitionMode == 0) || (gSaveContext.gameMode != 0))) ||
-        (this->timer >= 250)) {
+        (self->timer >= 250)) {
         if (globalCtx->envCtx.indoors || globalCtx->envCtx.unk_1F != 1) {
-            this->timer--;
+            self->timer--;
         }
-        osSyncPrintf("\nthis->timer=[%d]", this->timer);
-        if (this->timer == 308) {
+        osSyncPrintf("\nthis->timer=[%d]", self->timer);
+        if (self->timer == 308) {
             osSyncPrintf("\n\n\n豆よ のびろ 指定\n\n\n"); // "Let's grow some beans"
             Flags_SetEnv(globalCtx, 5);                   // set storms env flag
         }
     }
 
     if (D_8011FB38 != 0) {
-        this->timer = 0;
+        self->timer = 0;
     }
 
-    if (this->timer == 0) {
+    if (self->timer == 0) {
         globalCtx->envCtx.unk_F2[0] = 0;
         if (globalCtx->csCtx.state == CS_STATE_IDLE) {
             func_80077684(globalCtx);
@@ -107,17 +107,17 @@ void EnOkarinaEffect_ManageStorm(EnOkarinaEffect* this, GlobalContext* globalCtx
             globalCtx->envCtx.unk_DE = 0;
         }
         globalCtx->envCtx.lightningMode = LIGHTNING_MODE_LAST;
-        Actor_Kill(&this->actor);
+        Actor_Kill(&self->actor);
     }
 }
 
 void EnOkarinaEffect_Update(Actor* thisx, GlobalContext* globalCtx) {
-    EnOkarinaEffect* this = THIS;
+    EnOkarinaEffect* self = THIS;
 
-    this->actionFunc(this, globalCtx);
+    self->actionFunc(self, globalCtx);
     if (BREG(0) != 0) {
-        DebugDisplay_AddObject(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
-                               this->actor.world.rot.x, this->actor.world.rot.y, this->actor.world.rot.z, 1.0f, 1.0f,
+        DebugDisplay_AddObject(self->actor.world.pos.x, self->actor.world.pos.y, self->actor.world.pos.z,
+                               self->actor.world.rot.x, self->actor.world.rot.y, self->actor.world.rot.z, 1.0f, 1.0f,
                                1.0f, 0xFF, 0, 0xFF, 0xFF, 4, globalCtx->state.gfxCtx);
     }
 }

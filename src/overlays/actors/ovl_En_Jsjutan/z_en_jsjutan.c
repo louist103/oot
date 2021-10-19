@@ -38,30 +38,30 @@ static s32 sUnused[2] = { 0, 0 };
 #include "overlays/ovl_En_Jsjutan/ovl_En_Jsjutan.c"
 
 void EnJsjutan_Init(Actor* thisx, GlobalContext* globalCtx) {
-    EnJsjutan* this = THIS;
+    EnJsjutan* self = THIS;
     s32 pad;
     CollisionHeader* header = NULL;
 
-    this->dyna.actor.flags &= ~1;
-    DynaPolyActor_Init(&this->dyna, DPM_UNK);
+    self->dyna.actor.flags &= ~1;
+    DynaPolyActor_Init(&self->dyna, DPM_UNK);
     CollisionHeader_GetVirtual(&gJsjutanCol, &header);
-    this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, thisx, header);
+    self->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, thisx, header);
     Actor_SetScale(thisx, 0.02f);
-    this->unk_164 = true;
-    this->shadowAlpha = 100.0f;
+    self->unk_164 = true;
+    self->shadowAlpha = 100.0f;
 }
 
 void EnJsjutan_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    EnJsjutan* this = THIS;
+    EnJsjutan* self = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, self->dyna.bgId);
 }
 
-void func_80A89860(EnJsjutan* this, GlobalContext* globalCtx) {
+void func_80A89860(EnJsjutan* self, GlobalContext* globalCtx) {
     s16 i;
     Vtx* phi_s0;
     Vtx* phi_s2;
-    Vec3f actorPos = this->dyna.actor.world.pos;
+    Vec3f actorPos = self->dyna.actor.world.pos;
 
     phi_s0 = SEGMENTED_TO_VIRTUAL(gJsjutanShadowOddVtx);
     phi_s2 = SEGMENTED_TO_VIRTUAL(gJsjutanShadowEvenVtx);
@@ -69,19 +69,19 @@ void func_80A89860(EnJsjutan* this, GlobalContext* globalCtx) {
     for (i = 0; i < ARRAY_COUNT(D_80A8EE10); i++, phi_s0++, phi_s2++) {
         D_80A8EE10[i].x = phi_s0->v.ob[0];
         D_80A8EE10[i].z = phi_s0->v.ob[2];
-        if (this->dyna.actor.params == ENJSJUTAN_TYPE_01) {
+        if (self->dyna.actor.params == ENJSJUTAN_TYPE_01) {
             phi_s0->v.ob[1] = phi_s2->v.ob[1] = 0x585;
         } else {
-            this->dyna.actor.world.pos.x = phi_s0->v.ob[0] * 0.02f + actorPos.x;
-            this->dyna.actor.world.pos.z = phi_s0->v.ob[2] * 0.02f + actorPos.z;
-            Actor_UpdateBgCheckInfo(globalCtx, &this->dyna.actor, 10.0f, 10.0f, 10.0f, 4);
-            phi_s0->v.ob[1] = phi_s2->v.ob[1] = this->dyna.actor.floorHeight;
-            this->dyna.actor.world.pos = actorPos;
+            self->dyna.actor.world.pos.x = phi_s0->v.ob[0] * 0.02f + actorPos.x;
+            self->dyna.actor.world.pos.z = phi_s0->v.ob[2] * 0.02f + actorPos.z;
+            Actor_UpdateBgCheckInfo(globalCtx, &self->dyna.actor, 10.0f, 10.0f, 10.0f, 4);
+            phi_s0->v.ob[1] = phi_s2->v.ob[1] = self->dyna.actor.floorHeight;
+            self->dyna.actor.world.pos = actorPos;
         }
     }
 }
 
-void func_80A89A6C(EnJsjutan* this, GlobalContext* globalCtx) {
+void func_80A89A6C(EnJsjutan* self, GlobalContext* globalCtx) {
     u8 isPlayerOnTop = false; // sp127
     s16 i;
     s16 j;
@@ -114,7 +114,7 @@ void func_80A89A6C(EnJsjutan* this, GlobalContext* globalCtx) {
     f32 maxAmp;
     f32 waveform;
     Player* player = GET_PLAYER(globalCtx);
-    Actor* parent = this->dyna.actor.parent;
+    Actor* parent = self->dyna.actor.parent;
     Actor* actorExplosive = globalCtx->actorCtx.actorLists[ACTORCAT_EXPLOSIVE].head;
     u8 isInCreditsScene = false; // sp8B
 
@@ -127,9 +127,9 @@ void func_80A89A6C(EnJsjutan* this, GlobalContext* globalCtx) {
     }
 
     // Distance of player to carpet.
-    spB8 = (player->actor.world.pos.x - this->dyna.actor.world.pos.x) * 50.0f;
-    spB4 = (player->actor.world.pos.y - this->unk_168) * 50.0f;
-    spB0 = (player->actor.world.pos.z - this->dyna.actor.world.pos.z) * 50.0f;
+    spB8 = (player->actor.world.pos.x - self->dyna.actor.world.pos.x) * 50.0f;
+    spB4 = (player->actor.world.pos.y - self->unk_168) * 50.0f;
+    spB0 = (player->actor.world.pos.z - self->dyna.actor.world.pos.z) * 50.0f;
     phi_s0_2 = phi_s0;
 
     if ((fabsf(spB8) < 5500.0f) && (fabsf(spB4) < 3000.0f) && (fabsf(spB0) < 5500.0f)) {
@@ -137,9 +137,9 @@ void func_80A89A6C(EnJsjutan* this, GlobalContext* globalCtx) {
     }
 
     // Distance of Magic Carpet Salesman to carpet.
-    spD4[0] = (parent->world.pos.x - this->dyna.actor.world.pos.x) * 50.0f;
-    spC8[0] = ((parent->world.pos.y - 8.0f) - this->unk_168) * 50.0f;
-    spBC[0] = (parent->world.pos.z - this->dyna.actor.world.pos.z) * 50.0f;
+    spD4[0] = (parent->world.pos.x - self->dyna.actor.world.pos.x) * 50.0f;
+    spC8[0] = ((parent->world.pos.y - 8.0f) - self->unk_168) * 50.0f;
+    spBC[0] = (parent->world.pos.z - self->dyna.actor.world.pos.z) * 50.0f;
     spE0[0] = 1;
 
     for (i = 1; i < 3; i++) {
@@ -169,28 +169,28 @@ void func_80A89A6C(EnJsjutan* this, GlobalContext* globalCtx) {
         }
 
         // If somehow, neither of these two actors is not found, the game
-        // will dereference a NULL pointer, but this is unlikely to happen.
+        // will dereference a NULL pointer, but self is unlikely to happen.
 
-        spD4[1] = 50.0f * (actorProfessor->world.pos.x - this->dyna.actor.world.pos.x);
-        spC8[1] = 50.0f * (actorProfessor->world.pos.y - this->unk_168);
-        spBC[1] = 50.0f * (actorProfessor->world.pos.z - this->dyna.actor.world.pos.z);
+        spD4[1] = 50.0f * (actorProfessor->world.pos.x - self->dyna.actor.world.pos.x);
+        spC8[1] = 50.0f * (actorProfessor->world.pos.y - self->unk_168);
+        spBC[1] = 50.0f * (actorProfessor->world.pos.z - self->dyna.actor.world.pos.z);
         spE0[1] = 1;
 
-        spD4[2] = 50.0f * (actorBeanGuy->world.pos.x - this->dyna.actor.world.pos.x);
-        spC8[2] = 50.0f * (actorBeanGuy->world.pos.y - this->unk_168);
-        spBC[2] = 50.0f * (actorBeanGuy->world.pos.z - this->dyna.actor.world.pos.z);
+        spD4[2] = 50.0f * (actorBeanGuy->world.pos.x - self->dyna.actor.world.pos.x);
+        spC8[2] = 50.0f * (actorBeanGuy->world.pos.y - self->unk_168);
+        spBC[2] = 50.0f * (actorBeanGuy->world.pos.z - self->dyna.actor.world.pos.z);
         spE0[2] = 1;
     } else {
         // Player can place bombs in carpet and it will react to it.
         while (actorExplosive != NULL) {
             if (i < 3) {
-                spD4[i] = (actorExplosive->world.pos.x - this->dyna.actor.world.pos.x) * 50.0f;
-                spC8[i] = (actorExplosive->world.pos.y - this->unk_168) * 50.0f;
-                spBC[i] = (actorExplosive->world.pos.z - this->dyna.actor.world.pos.z) * 50.0f;
+                spD4[i] = (actorExplosive->world.pos.x - self->dyna.actor.world.pos.x) * 50.0f;
+                spC8[i] = (actorExplosive->world.pos.y - self->unk_168) * 50.0f;
+                spBC[i] = (actorExplosive->world.pos.z - self->dyna.actor.world.pos.z) * 50.0f;
 
                 if ((fabsf(spD4[i]) < 5500.0f) && (fabsf(spC8[i]) < 3000.0f) && (fabsf(spBC[i]) < 5500.0f)) {
                     if (actorExplosive->params == BOMB_EXPLOSION) {
-                        spE0[i] = 35; // Code never checks this, so it goes unused. Maybe it was planned to damage the
+                        spE0[i] = 35; // Code never checks self, so it goes unused. Maybe it was planned to damage the
                                       // carpet with explosions (?)
                     } else {
                         spE0[i] = 1;
@@ -210,12 +210,12 @@ void func_80A89A6C(EnJsjutan* this, GlobalContext* globalCtx) {
             dzVtx = phi_s0->n.ob[2] - spB0;
             distVtx = sqrtf(SQ(dxVtx) + SQ(dzVtx));
 
-            // Distance percentage. 0.0f to 1.0f. 2500.0f is the max distance to an actor that this wave will consider.
+            // Distance percentage. 0.0f to 1.0f. 2500.0f is the max distance to an actor that self wave will consider.
             weight = (2500.0f - distVtx) / 2500.0f;
             if (weight < 0.0f) {
                 weight = 0.0f;
             }
-            offset = (spB4 * weight) + ((this->unk_170 - (this->unk_170 * weight)) - 200.0f);
+            offset = (spB4 * weight) + ((self->unk_170 - (self->unk_170 * weight)) - 200.0f);
 
             distVtx -= 1500.0f;
             if (distVtx < 0.0f) {
@@ -226,7 +226,7 @@ void func_80A89A6C(EnJsjutan* this, GlobalContext* globalCtx) {
             spA8 = CLAMP_MAX(spA8, 100.0f);
 
         } else {
-            offset = this->unk_170 - 200.f;
+            offset = self->unk_170 - 200.f;
             spA8 = 100.0f;
         }
 
@@ -247,9 +247,9 @@ void func_80A89A6C(EnJsjutan* this, GlobalContext* globalCtx) {
                 }
 
                 // should be the following, but doesn't match that way.
-                // maxoffset = (spC8[i] * weight) + ((this->unk_170 - (this->unk_170 * weight)) - 200.0f);
+                // maxoffset = (spC8[i] * weight) + ((self->unk_170 - (self->unk_170 * weight)) - 200.0f);
                 maxOffset = (spC8[j] * weight);
-                maxOffset += ((this->unk_170 - (this->unk_170 * weight)) - 200.0f);
+                maxOffset += ((self->unk_170 - (self->unk_170 * weight)) - 200.0f);
 
                 distVtx -= 1500.0f;
                 if (distVtx < 0.0f) {
@@ -276,9 +276,9 @@ void func_80A89A6C(EnJsjutan* this, GlobalContext* globalCtx) {
          */
         waveform = spA8 * Math_SinS(globalCtx->gameplayFrames * 4000 + i * 10000);
 
-        if (this->unk_174) {
+        if (self->unk_174) {
             s16 phi_v1_4 = offset + waveform;
-            s16 temp_a0_3 = (phi_s3->n.ob[1] - this->unk_168) * 50.0f;
+            s16 temp_a0_3 = (phi_s3->n.ob[1] - self->unk_168) * 50.0f;
 
             if (phi_v1_4 < temp_a0_3) {
                 phi_v1_4 = temp_a0_3;
@@ -296,24 +296,24 @@ void func_80A89A6C(EnJsjutan* this, GlobalContext* globalCtx) {
         }
     }
 
-    if (!this->unk_174) {
+    if (!self->unk_174) {
         u16 dayTime;
 
-        this->dyna.actor.velocity.y = 0.0f;
-        this->dyna.actor.world.pos.y = this->unk_168;
+        self->dyna.actor.velocity.y = 0.0f;
+        self->dyna.actor.world.pos.y = self->unk_168;
 
         dayTime = gSaveContext.dayTime;
         if (dayTime >= 0x8000) {
             dayTime = 0xFFFF - dayTime;
         }
 
-        this->shadowAlpha = (dayTime * 0.00275f) + 10.0f; // (1.0f / 364.0f) ?
-        this->unk_170 = 1000.0f;
+        self->shadowAlpha = (dayTime * 0.00275f) + 10.0f; // (1.0f / 364.0f) ?
+        self->unk_170 = 1000.0f;
     } else {
-        Math_ApproachF(&this->dyna.actor.world.pos.y, this->unk_168 - 1000.0f, 1.0f, this->dyna.actor.velocity.y);
-        Math_ApproachF(&this->dyna.actor.velocity.y, 5.0f, 1.0f, 0.5f);
-        Math_ApproachF(&this->shadowAlpha, 0.0f, 1.0f, 3.0f);
-        Math_ApproachF(&this->unk_170, -5000.0f, 1.0f, 100.0f);
+        Math_ApproachF(&self->dyna.actor.world.pos.y, self->unk_168 - 1000.0f, 1.0f, self->dyna.actor.velocity.y);
+        Math_ApproachF(&self->dyna.actor.velocity.y, 5.0f, 1.0f, 0.5f);
+        Math_ApproachF(&self->shadowAlpha, 0.0f, 1.0f, 3.0f);
+        Math_ApproachF(&self->unk_170, -5000.0f, 1.0f, 100.0f);
     }
 
     phi_s0 = phi_s0_2;
@@ -368,7 +368,7 @@ void EnJsjutan_Update(Actor* thisx, GlobalContext* globalCtx2) {
 }
 
 void EnJsjutan_Draw(Actor* thisx, GlobalContext* globalCtx2) {
-    EnJsjutan* this = THIS;
+    EnJsjutan* self = THIS;
     GlobalContext* globalCtx = globalCtx2;
     s16 i;
     Actor* parent = thisx->parent;
@@ -379,23 +379,23 @@ void EnJsjutan_Draw(Actor* thisx, GlobalContext* globalCtx2) {
         thisx->world.pos.x = parent->world.pos.x;
         thisx->world.pos.y = parent->world.pos.y;
         thisx->world.pos.z = parent->world.pos.z;
-        this->unk_168 = thisx->world.pos.y;
-        if (!this->unk_175) {
-            this->unk_175 = true;
-            func_80A89860(this, globalCtx);
+        self->unk_168 = thisx->world.pos.y;
+        if (!self->unk_175) {
+            self->unk_175 = true;
+            func_80A89860(self, globalCtx);
         }
-    } else if (!this->unk_175) {
-        this->unk_175 = true;
+    } else if (!self->unk_175) {
+        self->unk_175 = true;
         thisx->world.pos.x = Math_SinS(parent->shape.rot.y) * 60.0f + parent->world.pos.x;
         thisx->world.pos.y = (parent->world.pos.y + 5.0f) - 10.0f;
         thisx->world.pos.z = Math_CosS(parent->shape.rot.y) * 60.0f + parent->world.pos.z;
-        this->unk_168 = thisx->world.pos.y;
-        func_80A89860(this, globalCtx);
+        self->unk_168 = thisx->world.pos.y;
+        func_80A89860(self, globalCtx);
     }
 
-    func_80A89A6C(this, globalCtx);
-    if (this->unk_164) {
-        this->unk_164 = false;
+    func_80A89A6C(self, globalCtx);
+    if (self->unk_164) {
+        self->unk_164 = false;
         for (i = 0; i < ARRAY_COUNT(gJsjutanShadowTex); i++) {
             if (((u16*)gJsjutanCarpetTex)[i] != 0) { // Hack to bypass ZAPD exporting textures as u64.
                 gJsjutanShadowTex[i] = 0xFF;
@@ -406,7 +406,7 @@ void EnJsjutan_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     }
     func_80093D18(globalCtx->state.gfxCtx);
 
-    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, (s16)this->shadowAlpha);
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, (s16)self->shadowAlpha);
 
     Matrix_Translate(thisx->world.pos.x, 3.0f, thisx->world.pos.z, MTXMODE_NEW);
     Matrix_Scale(thisx->scale.x, 1.0f, thisx->scale.z, MTXMODE_APPLY);
@@ -427,7 +427,7 @@ void EnJsjutan_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     gSPDisplayList(POLY_OPA_DISP++, gJsjutanGeometryDL);
 
     func_80093D18(globalCtx->state.gfxCtx);
-    Matrix_Translate(thisx->world.pos.x, this->unk_168 + 3.0f, thisx->world.pos.z, MTXMODE_NEW);
+    Matrix_Translate(thisx->world.pos.x, self->unk_168 + 3.0f, thisx->world.pos.z, MTXMODE_NEW);
     Matrix_Scale(thisx->scale.x, thisx->scale.y, thisx->scale.z, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx, "../z_en_jsjutan.c", 805),

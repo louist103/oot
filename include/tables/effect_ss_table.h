@@ -3,7 +3,7 @@
  *
  * DEFINE_EFFECT_SS should be used for normal effects soft sprites
  *    - Argument 1: Name of the effect (without the ovl_ part)
- *    - Argument 2: Enum value for this effect
+ *    - Argument 2: Enum value for self effect
  *
  * DEFINE_EFFECT_SS_UNSET is needed to define empty entries from the original game
  */

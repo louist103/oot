@@ -28,31 +28,31 @@ const ActorInit En_River_Sound_InitVars = {
 };
 
 void EnRiverSound_Init(Actor* thisx, GlobalContext* globalCtx) {
-    EnRiverSound* this = THIS;
+    EnRiverSound* self = THIS;
 
-    this->playSound = 0;
-    this->pathIndex = (this->actor.params >> 8) & 0xFF;
-    this->actor.params = this->actor.params & 0xFF;
+    self->playSound = 0;
+    self->pathIndex = (self->actor.params >> 8) & 0xFF;
+    self->actor.params = self->actor.params & 0xFF;
 
-    if (this->actor.params >= RS_MAX) { // used for ganon and ganon_boss scenes
-        func_800F4870(this->actor.params - RS_MAX);
-        Actor_Kill(&this->actor);
-    } else if (this->actor.params == RS_UNK_F7) {
+    if (self->actor.params >= RS_MAX) { // used for ganon and ganon_boss scenes
+        func_800F4870(self->actor.params - RS_MAX);
+        Actor_Kill(&self->actor);
+    } else if (self->actor.params == RS_UNK_F7) {
         func_800F6FB4(4);
-        Actor_Kill(&this->actor);
-    } else if (this->actor.params == RS_SARIAS_SONG) {
+        Actor_Kill(&self->actor);
+    } else if (self->actor.params == RS_SARIAS_SONG) {
         if (!CHECK_QUEST_ITEM(QUEST_SONG_LULLABY) || CHECK_QUEST_ITEM(QUEST_SONG_SARIA)) {
-            Actor_Kill(&this->actor);
+            Actor_Kill(&self->actor);
         }
     }
 }
 
 void EnRiverSound_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    EnRiverSound* this = THIS;
+    EnRiverSound* self = THIS;
 
-    if (this->actor.params == RS_SARIAS_SONG) {
-        Audio_ClearSariaBgmAtPos(&this->actor.projectedPos);
-    } else if (this->actor.params == RS_UNK_13) {
+    if (self->actor.params == RS_SARIAS_SONG) {
+        Audio_ClearSariaBgmAtPos(&self->actor.projectedPos);
+    } else if (self->actor.params == RS_UNK_13) {
         Audio_ClearSariaBgm2();
     }
 }
@@ -168,33 +168,33 @@ void EnRiverSound_Update(Actor* thisx, GlobalContext* globalCtx) {
     Path* path;
     Vec3f* pos;
     Player* player = GET_PLAYER(globalCtx);
-    EnRiverSound* this = THIS;
+    EnRiverSound* self = THIS;
     s32 sp34;
 
     if ((thisx->params == RS_UNK_0) || (thisx->params == RS_UNK_4) || (thisx->params == RS_UNK_5)) {
-        path = &globalCtx->setupPathList[this->pathIndex];
+        path = &globalCtx->setupPathList[self->pathIndex];
         pos = &thisx->world.pos;
 
         if (EnRiverSound_GetSoundPos(SEGMENTED_TO_VIRTUAL(path->points), path->count, &player->actor.world.pos, pos)) {
             if (BgCheck_EntityRaycastFloor4(&globalCtx->colCtx, &thisx->floorPoly, &sp34, thisx, pos) !=
                 BGCHECK_Y_MIN) {
                 // Get the sound volume pitch based on the speed of the river current under the actor
-                this->soundPitchIndex = SurfaceType_GetConveyorSpeed(&globalCtx->colCtx, thisx->floorPoly, sp34);
+                self->soundPitchIndex = SurfaceType_GetConveyorSpeed(&globalCtx->colCtx, thisx->floorPoly, sp34);
             } else {
-                this->soundPitchIndex = 0;
+                self->soundPitchIndex = 0;
             }
 
-            if (this->soundPitchIndex == 0) {
+            if (self->soundPitchIndex == 0) {
                 if (thisx->params == RS_UNK_4) {
-                    this->soundPitchIndex = 0;
+                    self->soundPitchIndex = 0;
                 } else if (thisx->params == RS_UNK_0) {
-                    this->soundPitchIndex = 1;
+                    self->soundPitchIndex = 1;
                 } else {
-                    this->soundPitchIndex = 2;
+                    self->soundPitchIndex = 2;
                 }
             } else {
-                this->soundPitchIndex--;
-                this->soundPitchIndex = CLAMP_MAX(this->soundPitchIndex, 2);
+                self->soundPitchIndex--;
+                self->soundPitchIndex = CLAMP_MAX(self->soundPitchIndex, 2);
             }
         }
     } else if ((thisx->params == RS_UNK_13) || (thisx->params == RS_UNK_19)) {
@@ -230,25 +230,25 @@ void EnRiverSound_Draw(Actor* thisx, GlobalContext* globalCtx) {
         NA_SE_EV_COW_CRY_LV - SFX_FLAG,
     };
     static f32 soundPitch[] = { 0.7f, 1.0f, 1.4f };
-    EnRiverSound* this = THIS;
+    EnRiverSound* self = THIS;
 
-    if (!(this->playSound)) {
-        this->playSound = true;
-    } else if ((this->actor.params == RS_UNK_0) || (this->actor.params == RS_UNK_4) ||
-               (this->actor.params == RS_UNK_5)) {
-        Audio_PlaySoundRiver(&this->actor.projectedPos, soundPitch[this->soundPitchIndex]);
-    } else if (this->actor.params == RS_UNK_11) {
+    if (!(self->playSound)) {
+        self->playSound = true;
+    } else if ((self->actor.params == RS_UNK_0) || (self->actor.params == RS_UNK_4) ||
+               (self->actor.params == RS_UNK_5)) {
+        Audio_PlaySoundRiver(&self->actor.projectedPos, soundPitch[self->soundPitchIndex]);
+    } else if (self->actor.params == RS_UNK_11) {
         func_800F4A54(90);
-    } else if (this->actor.params == RS_SARIAS_SONG) {
-        func_800F4E30(&this->actor.projectedPos, this->actor.xzDistToPlayer);
-    } else if (this->actor.params == RS_UNK_13) {
-        Audio_PlaySariaBgm(&this->actor.home.pos, 62, 1000);
-    } else if (this->actor.params == RS_UNK_19) {
-        Audio_PlaySariaBgm(&this->actor.home.pos, 40, 800);
-    } else if ((this->actor.params == RS_SANDSTORM) || (this->actor.params == RS_CHAMBER_OF_SAGES_1) ||
-               (this->actor.params == RS_CHAMBER_OF_SAGES_2) || (this->actor.params == RS_RUMBLING)) {
-        func_800788CC(soundEffects[this->actor.params]);
+    } else if (self->actor.params == RS_SARIAS_SONG) {
+        func_800F4E30(&self->actor.projectedPos, self->actor.xzDistToPlayer);
+    } else if (self->actor.params == RS_UNK_13) {
+        Audio_PlaySariaBgm(&self->actor.home.pos, 62, 1000);
+    } else if (self->actor.params == RS_UNK_19) {
+        Audio_PlaySariaBgm(&self->actor.home.pos, 40, 800);
+    } else if ((self->actor.params == RS_SANDSTORM) || (self->actor.params == RS_CHAMBER_OF_SAGES_1) ||
+               (self->actor.params == RS_CHAMBER_OF_SAGES_2) || (self->actor.params == RS_RUMBLING)) {
+        func_800788CC(soundEffects[self->actor.params]);
     } else {
-        Audio_PlayActorSound2(&this->actor, soundEffects[this->actor.params]);
+        Audio_PlayActorSound2(&self->actor, soundEffects[self->actor.params]);
     }
 }

@@ -5932,7 +5932,7 @@ s32 Camera_Demo5(Camera* camera) {
         D_8011D954[0].timerInit = camera->timer - 5;
         sp4A = 0;
         if (!func_800C0D34(camera->globalCtx, camera->target, &sp4A)) {
-            osSyncPrintf(VT_COL(YELLOW, BLACK) "camera: attention demo: this door is dummy door!\n" VT_RST);
+            osSyncPrintf(VT_COL(YELLOW, BLACK) "camera: attention demo: self door is dummy door!\n" VT_RST);
             if (ABS(playerTargetGeo.yaw - camera->target->shape.rot.y) >= 0x4000) {
                 sp4A = camera->target->shape.rot.y;
             } else {
@@ -7036,7 +7036,7 @@ void Camera_PrintSettings(Camera* camera) {
             sp50[i++] = '-';
         }
 
-        //! @bug: this code was clearly meaning to print `abs(camera->camDataIdx)` as a
+        //! @bug: self code was clearly meaning to print `abs(camera->camDataIdx)` as a
         //! one-or-two-digit number, instead of `i`.
         // "sp50[i++] = ..." matches here, but is undefined behavior due to conflicting
         // reads/writes between sequence points, triggering warnings. Work around by

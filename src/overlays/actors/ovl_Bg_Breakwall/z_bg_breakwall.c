@@ -22,9 +22,9 @@ void BgBreakwall_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgBreakwall_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgBreakwall_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void BgBreakwall_WaitForObject(BgBreakwall* this, GlobalContext* globalCtx);
-void BgBreakwall_Wait(BgBreakwall* this, GlobalContext* globalCtx);
-void BgBreakwall_LavaCoverMove(BgBreakwall* this, GlobalContext* globalCtx);
+void BgBreakwall_WaitForObject(BgBreakwall* self, GlobalContext* globalCtx);
+void BgBreakwall_Wait(BgBreakwall* self, GlobalContext* globalCtx);
+void BgBreakwall_LavaCoverMove(BgBreakwall* self, GlobalContext* globalCtx);
 
 const ActorInit Bg_Breakwall_InitVars = {
     ACTOR_BG_BREAKWALL,
@@ -72,58 +72,58 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 400, ICHAIN_STOP),
 };
 
-void BgBreakwall_SetupAction(BgBreakwall* this, BgBreakwallActionFunc actionFunc) {
-    this->actionFunc = actionFunc;
+void BgBreakwall_SetupAction(BgBreakwall* self, BgBreakwallActionFunc actionFunc) {
+    self->actionFunc = actionFunc;
 }
 
 void BgBreakwall_Init(Actor* thisx, GlobalContext* globalCtx) {
-    BgBreakwall* this = THIS;
+    BgBreakwall* self = THIS;
     s32 pad;
-    s32 wallType = ((this->dyna.actor.params >> 13) & 3) & 0xFF;
+    s32 wallType = ((self->dyna.actor.params >> 13) & 3) & 0xFF;
 
-    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPolyActor_Init(&this->dyna, DPM_UNK);
-    this->bombableWallDList = sBombableWallInfo[wallType].dList;
-    this->colType = sBombableWallInfo[wallType].colType;
+    Actor_ProcessInitChain(&self->dyna.actor, sInitChain);
+    DynaPolyActor_Init(&self->dyna, DPM_UNK);
+    self->bombableWallDList = sBombableWallInfo[wallType].dList;
+    self->colType = sBombableWallInfo[wallType].colType;
 
-    if (this->colType == 1) {
-        this->dyna.actor.world.rot.x = 0x4000;
+    if (self->colType == 1) {
+        self->dyna.actor.world.rot.x = 0x4000;
     }
 
-    if (this->bombableWallDList != NULL) {
-        if (Flags_GetSwitch(globalCtx, this->dyna.actor.params & 0x3F)) {
-            Actor_Kill(&this->dyna.actor);
+    if (self->bombableWallDList != NULL) {
+        if (Flags_GetSwitch(globalCtx, self->dyna.actor.params & 0x3F)) {
+            Actor_Kill(&self->dyna.actor);
             return;
         }
 
-        ActorShape_Init(&this->dyna.actor.shape, 0.0f, NULL, 0.0f);
-        Collider_InitQuad(globalCtx, &this->collider);
-        Collider_SetQuad(globalCtx, &this->collider, &this->dyna.actor, &sQuadInit);
+        ActorShape_Init(&self->dyna.actor.shape, 0.0f, NULL, 0.0f);
+        Collider_InitQuad(globalCtx, &self->collider);
+        Collider_SetQuad(globalCtx, &self->collider, &self->dyna.actor, &sQuadInit);
     } else {
-        this->dyna.actor.world.pos.y -= 40.0f;
+        self->dyna.actor.world.pos.y -= 40.0f;
     }
 
-    this->bankIndex = (wallType >= BWALL_KD_FLOOR) ? Object_GetIndex(&globalCtx->objectCtx, OBJECT_KINGDODONGO)
+    self->bankIndex = (wallType >= BWALL_KD_FLOOR) ? Object_GetIndex(&globalCtx->objectCtx, OBJECT_KINGDODONGO)
                                                    : Object_GetIndex(&globalCtx->objectCtx, OBJECT_BWALL);
 
-    if (this->bankIndex < 0) {
-        Actor_Kill(&this->dyna.actor);
+    if (self->bankIndex < 0) {
+        Actor_Kill(&self->dyna.actor);
     } else {
-        BgBreakwall_SetupAction(this, BgBreakwall_WaitForObject);
+        BgBreakwall_SetupAction(self, BgBreakwall_WaitForObject);
     }
 }
 
 void BgBreakwall_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    BgBreakwall* this = THIS;
+    BgBreakwall* self = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, self->dyna.bgId);
 }
 
 /**
  * Spawns fragments using ACTOR_EN_A_OBJ whenever the wall or floor is exploded.
  * Returns the last spawned actor
  */
-Actor* BgBreakwall_SpawnFragments(GlobalContext* globalCtx, BgBreakwall* this, Vec3f* pos, f32 velocity, f32 scaleY,
+Actor* BgBreakwall_SpawnFragments(GlobalContext* globalCtx, BgBreakwall* self, Vec3f* pos, f32 velocity, f32 scaleY,
                                   f32 scaleX, s32 count, f32 accel) {
     Actor* actor;
     Vec3f actorPos;
@@ -161,10 +161,10 @@ Actor* BgBreakwall_SpawnFragments(GlobalContext* globalCtx, BgBreakwall* this, V
     }
 
     for (i = 0; i < count; angle2 += 0x4000, i++) {
-        angle1 = ABS(this->dyna.actor.world.rot.y) + angle2;
-        Matrix_Translate(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
+        angle1 = ABS(self->dyna.actor.world.rot.y) + angle2;
+        Matrix_Translate(self->dyna.actor.world.pos.x, self->dyna.actor.world.pos.y, self->dyna.actor.world.pos.z,
                          MTXMODE_NEW);
-        Matrix_RotateRPY(this->dyna.actor.world.rot.x, this->dyna.actor.world.rot.y, this->dyna.actor.world.rot.z,
+        Matrix_RotateRPY(self->dyna.actor.world.rot.x, self->dyna.actor.world.rot.y, self->dyna.actor.world.rot.z,
                          MTXMODE_APPLY);
         Matrix_Translate(pos->x, pos->y, pos->z, MTXMODE_APPLY);
 
@@ -186,7 +186,7 @@ Actor* BgBreakwall_SpawnFragments(GlobalContext* globalCtx, BgBreakwall* this, V
                     actor->world.rot.y += (s16)((Rand_ZeroOne() - 0.5f) * 3000.0f);
                     actor->world.rot.x = (s16)(Rand_ZeroOne() * 3500.0f) + 2000;
                     actor->world.rot.z = (s16)(Rand_ZeroOne() * 3500.0f) + 2000;
-                    actor->parent = &this->dyna.actor;
+                    actor->parent = &self->dyna.actor;
                     actor->scale.x = actorScaleList[k].x + Rand_CenteredFloat(0.001f);
                     actor->scale.y = actorScaleList[k].y + Rand_CenteredFloat(0.001f);
                     actor->scale.z = actorScaleList[k].z + Rand_CenteredFloat(0.001f);
@@ -201,22 +201,22 @@ Actor* BgBreakwall_SpawnFragments(GlobalContext* globalCtx, BgBreakwall* this, V
 /**
  * Sets up the collision model as well is the object dependency and action function to use.
  */
-void BgBreakwall_WaitForObject(BgBreakwall* this, GlobalContext* globalCtx) {
-    if (Object_IsLoaded(&globalCtx->objectCtx, this->bankIndex)) {
+void BgBreakwall_WaitForObject(BgBreakwall* self, GlobalContext* globalCtx) {
+    if (Object_IsLoaded(&globalCtx->objectCtx, self->bankIndex)) {
         CollisionHeader* colHeader = NULL;
-        s32 wallType = ((this->dyna.actor.params >> 13) & 3) & 0xFF;
+        s32 wallType = ((self->dyna.actor.params >> 13) & 3) & 0xFF;
 
-        this->dyna.actor.objBankIndex = this->bankIndex;
-        Actor_SetObjectDependency(globalCtx, &this->dyna.actor);
-        this->dyna.actor.flags &= ~0x10;
-        this->dyna.actor.draw = BgBreakwall_Draw;
+        self->dyna.actor.objBankIndex = self->bankIndex;
+        Actor_SetObjectDependency(globalCtx, &self->dyna.actor);
+        self->dyna.actor.flags &= ~0x10;
+        self->dyna.actor.draw = BgBreakwall_Draw;
         CollisionHeader_GetVirtual(sBombableWallInfo[wallType].colHeader, &colHeader);
-        this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
+        self->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &self->dyna.actor, colHeader);
 
         if (wallType == BWALL_KD_LAVA_COVER) {
-            BgBreakwall_SetupAction(this, BgBreakwall_LavaCoverMove);
+            BgBreakwall_SetupAction(self, BgBreakwall_LavaCoverMove);
         } else {
-            BgBreakwall_SetupAction(this, BgBreakwall_Wait);
+            BgBreakwall_SetupAction(self, BgBreakwall_Wait);
         }
     }
 }
@@ -225,28 +225,28 @@ void BgBreakwall_WaitForObject(BgBreakwall* this, GlobalContext* globalCtx) {
  * Checks for an explosion using quad collision. If the wall or floor is exploded then it will spawn fragments and
  * despawn itself.
  */
-void BgBreakwall_Wait(BgBreakwall* this, GlobalContext* globalCtx) {
-    if (this->collider.base.acFlags & 2) {
+void BgBreakwall_Wait(BgBreakwall* self, GlobalContext* globalCtx) {
+    if (self->collider.base.acFlags & 2) {
         Vec3f effectPos;
-        s32 wallType = ((this->dyna.actor.params >> 13) & 3) & 0xFF;
+        s32 wallType = ((self->dyna.actor.params >> 13) & 3) & 0xFF;
 
-        DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, self->dyna.bgId);
         effectPos.y = effectPos.z = effectPos.x = 0.0f;
 
-        if (this->dyna.actor.world.rot.x == 0) {
+        if (self->dyna.actor.world.rot.x == 0) {
             effectPos.y = 55.0f;
         } else {
             effectPos.z = 25.0f;
             effectPos.y = -10.0f;
         }
 
-        BgBreakwall_SpawnFragments(globalCtx, this, &effectPos, 0.0f, 6.4f, 5.0f, 1, 2.0f);
-        Flags_SetSwitch(globalCtx, this->dyna.actor.params & 0x3F);
+        BgBreakwall_SpawnFragments(globalCtx, self, &effectPos, 0.0f, 6.4f, 5.0f, 1, 2.0f);
+        Flags_SetSwitch(globalCtx, self->dyna.actor.params & 0x3F);
 
         if (wallType == BWALL_KD_FLOOR) {
-            Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_EXPLOSION);
+            Audio_PlayActorSound2(&self->dyna.actor, NA_SE_EV_EXPLOSION);
         } else {
-            Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_WALL_BROKEN);
+            Audio_PlayActorSound2(&self->dyna.actor, NA_SE_EV_WALL_BROKEN);
         }
 
         if ((wallType == BWALL_DC_ENTRANCE) && (!(Flags_GetEventChkInf(0xB0)))) {
@@ -257,11 +257,11 @@ void BgBreakwall_Wait(BgBreakwall* this, GlobalContext* globalCtx) {
             func_8002DF54(globalCtx, NULL, 0x31);
         }
 
-        if (this->dyna.actor.params < 0) {
+        if (self->dyna.actor.params < 0) {
             Audio_PlaySoundGeneral(NA_SE_SY_TRE_BOX_APPEAR, &D_801333D4, 4, &D_801333E0, &D_801333E0, &D_801333E8);
         }
 
-        Actor_Kill(&this->dyna.actor);
+        Actor_Kill(&self->dyna.actor);
     }
 }
 
@@ -269,14 +269,14 @@ void BgBreakwall_Wait(BgBreakwall* this, GlobalContext* globalCtx) {
  * Moves the actor's y position to cover the lava floor in King Dodongo's lair after he is defeated so the player is no
  * longer hurt by the lava.
  */
-void BgBreakwall_LavaCoverMove(BgBreakwall* this, GlobalContext* globalCtx) {
-    Math_StepToF(&this->dyna.actor.world.pos.y, KREG(80) + this->dyna.actor.home.pos.y, 1.0f);
+void BgBreakwall_LavaCoverMove(BgBreakwall* self, GlobalContext* globalCtx) {
+    Math_StepToF(&self->dyna.actor.world.pos.y, KREG(80) + self->dyna.actor.home.pos.y, 1.0f);
 }
 
 void BgBreakwall_Update(Actor* thisx, GlobalContext* globalCtx) {
-    BgBreakwall* this = THIS;
+    BgBreakwall* self = THIS;
 
-    this->actionFunc(this, globalCtx);
+    self->actionFunc(self, globalCtx);
 }
 
 /**
@@ -290,19 +290,19 @@ static Vec3f sColQuadList[][4] = {
 
 void BgBreakwall_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
-    BgBreakwall* this = THIS;
+    BgBreakwall* self = THIS;
 
-    if (this->bombableWallDList != NULL) {
+    if (self->bombableWallDList != NULL) {
         OPEN_DISPS(globalCtx->state.gfxCtx, "../z_bg_breakwall.c", 767);
 
         func_80093D18(globalCtx->state.gfxCtx);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx, "../z_bg_breakwall.c", 771),
                   G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, this->bombableWallDList);
+        gSPDisplayList(POLY_OPA_DISP++, self->bombableWallDList);
 
-        if (this->colType >= 0) {
+        if (self->colType >= 0) {
             Vec3f colQuad[4];
-            Vec3f* src = &sColQuadList[this->colType][0];
+            Vec3f* src = &sColQuadList[self->colType][0];
             Vec3f* dst = &colQuad[0];
             s32 i;
 
@@ -310,8 +310,8 @@ void BgBreakwall_Draw(Actor* thisx, GlobalContext* globalCtx) {
                 Matrix_MultVec3f(src++, dst++);
             }
 
-            Collider_SetQuadVertices(&this->collider, &colQuad[0], &colQuad[1], &colQuad[2], &colQuad[3]);
-            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+            Collider_SetQuadVertices(&self->collider, &colQuad[0], &colQuad[1], &colQuad[2], &colQuad[3]);
+            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
         }
 
         CLOSE_DISPS(globalCtx->state.gfxCtx, "../z_bg_breakwall.c", 822);

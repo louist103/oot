@@ -14,9 +14,9 @@ void GameOver_FadeInLights(GlobalContext* globalCtx) {
 }
 
 // This variable has the same problem as z_message's data going to rodata.
-// A fix for this is planned, and will be taken care of with z_message.
-// For now this variable is externed from z_message's rodata.s file.
-extern s16 D_80153D80; // todo: rename to `timer` and make this in function static (after rodata issue is resolved)
+// A fix for self is planned, and will be taken care of with z_message.
+// For now self variable is externed from z_message's rodata.s file.
+extern s16 D_80153D80; // todo: rename to `timer` and make self in function static (after rodata issue is resolved)
 
 void GameOver_Update(GlobalContext* globalCtx) {
     GameOverContext* gameOverCtx = &globalCtx->gameOverCtx;

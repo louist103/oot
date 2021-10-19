@@ -15,16 +15,16 @@
 #define rEnvColorG regs[5]
 #define rEnvColorB regs[6]
 #define rEnvColorA regs[7]
-#define rTexIdx regs[8] // this reg is also used to set specific colors in the fire update function
+#define rTexIdx regs[8] // self reg is also used to set specific colors in the fire update function
 #define rScale regs[9]
 #define rScaleStep regs[10]
 #define rDrawFlags regs[11]
 #define rLifespan regs[12]
 
-u32 EffectSsDust_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx);
-void EffectSsDust_Update(GlobalContext* globalCtx, u32 index, EffectSs* this);
-void EffectSsBlast_UpdateFire(GlobalContext* globalCtx, u32 index, EffectSs* this);
-void EffectSsDust_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this);
+u32 EffectSsDust_Init(GlobalContext* globalCtx, u32 index, EffectSs* self, void* initParamsx);
+void EffectSsDust_Update(GlobalContext* globalCtx, u32 index, EffectSs* self);
+void EffectSsBlast_UpdateFire(GlobalContext* globalCtx, u32 index, EffectSs* self);
+void EffectSsDust_Draw(GlobalContext* globalCtx, u32 index, EffectSs* self);
 
 EffectSsInit Effect_Ss_Dust_InitVars = {
     EFFECT_SS_DUST,
@@ -36,47 +36,47 @@ static EffectSsUpdateFunc sUpdateFuncs[] = {
     EffectSsBlast_UpdateFire,
 };
 
-u32 EffectSsDust_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx) {
+u32 EffectSsDust_Init(GlobalContext* globalCtx, u32 index, EffectSs* self, void* initParamsx) {
     s32 randColorOffset;
     EffectSsDustInitParams* initParams = (EffectSsDustInitParams*)initParamsx;
 
-    Math_Vec3f_Copy(&this->pos, &initParams->pos);
-    Math_Vec3f_Copy(&this->velocity, &initParams->velocity);
-    Math_Vec3f_Copy(&this->accel, &initParams->accel);
-    this->gfx = SEGMENTED_TO_VIRTUAL(gEffDustDL);
-    this->life = initParams->life;
-    this->update = sUpdateFuncs[initParams->updateMode];
-    this->draw = EffectSsDust_Draw;
+    Math_Vec3f_Copy(&self->pos, &initParams->pos);
+    Math_Vec3f_Copy(&self->velocity, &initParams->velocity);
+    Math_Vec3f_Copy(&self->accel, &initParams->accel);
+    self->gfx = SEGMENTED_TO_VIRTUAL(gEffDustDL);
+    self->life = initParams->life;
+    self->update = sUpdateFuncs[initParams->updateMode];
+    self->draw = EffectSsDust_Draw;
 
     if (initParams->drawFlags & 4) {
         randColorOffset = Rand_ZeroOne() * 20.0f - 10.0f;
-        this->rPrimColorR = initParams->primColor.r + randColorOffset;
-        this->rPrimColorG = initParams->primColor.g + randColorOffset;
-        this->rPrimColorB = initParams->primColor.b + randColorOffset;
-        this->rEnvColorR = initParams->envColor.r + randColorOffset;
-        this->rEnvColorG = initParams->envColor.g + randColorOffset;
-        this->rEnvColorB = initParams->envColor.b + randColorOffset;
+        self->rPrimColorR = initParams->primColor.r + randColorOffset;
+        self->rPrimColorG = initParams->primColor.g + randColorOffset;
+        self->rPrimColorB = initParams->primColor.b + randColorOffset;
+        self->rEnvColorR = initParams->envColor.r + randColorOffset;
+        self->rEnvColorG = initParams->envColor.g + randColorOffset;
+        self->rEnvColorB = initParams->envColor.b + randColorOffset;
     } else {
-        this->rPrimColorR = initParams->primColor.r;
-        this->rPrimColorG = initParams->primColor.g;
-        this->rPrimColorB = initParams->primColor.b;
-        this->rEnvColorR = initParams->envColor.r;
-        this->rEnvColorG = initParams->envColor.g;
-        this->rEnvColorB = initParams->envColor.b;
+        self->rPrimColorR = initParams->primColor.r;
+        self->rPrimColorG = initParams->primColor.g;
+        self->rPrimColorB = initParams->primColor.b;
+        self->rEnvColorR = initParams->envColor.r;
+        self->rEnvColorG = initParams->envColor.g;
+        self->rEnvColorB = initParams->envColor.b;
     }
 
-    this->rPrimColorA = initParams->primColor.a;
-    this->rEnvColorA = initParams->envColor.a;
-    this->rTexIdx = 0;
-    this->rScale = initParams->scale;
-    this->rScaleStep = initParams->scaleStep;
-    this->rLifespan = initParams->life;
-    this->rDrawFlags = initParams->drawFlags;
+    self->rPrimColorA = initParams->primColor.a;
+    self->rEnvColorA = initParams->envColor.a;
+    self->rTexIdx = 0;
+    self->rScale = initParams->scale;
+    self->rScaleStep = initParams->scaleStep;
+    self->rLifespan = initParams->life;
+    self->rDrawFlags = initParams->drawFlags;
 
     return 1;
 }
 
-void EffectSsDust_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
+void EffectSsDust_Draw(GlobalContext* globalCtx, u32 index, EffectSs* self) {
     static void* dustTextures[] = {
         gDust1Tex, gDust2Tex, gDust3Tex, gDust4Tex, gDust5Tex, gDust6Tex, gDust7Tex, gDust8Tex,
     };
@@ -91,8 +91,8 @@ void EffectSsDust_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
 
     OPEN_DISPS(gfxCtx, "../z_eff_ss_dust.c", 321);
 
-    scale = this->rScale * 0.0025f;
-    SkinMatrix_SetTranslate(&mfTrans, this->pos.x, this->pos.y, this->pos.z);
+    scale = self->rScale * 0.0025f;
+    SkinMatrix_SetTranslate(&mfTrans, self->pos.x, self->pos.y, self->pos.z);
     SkinMatrix_SetScale(&mfScale, scale, scale, 1.0f);
     SkinMatrix_MtxFMtxFMult(&mfTrans, &globalCtx->mf_11DA0, &mfTrans11DA0);
     SkinMatrix_MtxFMtxFMult(&mfTrans11DA0, &mfScale, &mfResult);
@@ -103,16 +103,16 @@ void EffectSsDust_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
     if (mtx != NULL) {
         gSPMatrix(POLY_XLU_DISP++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPPipeSync(POLY_XLU_DISP++);
-        gSPSegment(POLY_XLU_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(dustTextures[this->rTexIdx]));
+        gSPSegment(POLY_XLU_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(dustTextures[self->rTexIdx]));
         POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0);
         gDPPipeSync(POLY_XLU_DISP++);
 
-        if (this->rDrawFlags & 1) {
+        if (self->rDrawFlags & 1) {
             gDPSetCombineLERP(POLY_XLU_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, PRIMITIVE, 0, TEXEL0, 0,
                               COMBINED, 0, SHADE, 0, 0, 0, 0, COMBINED);
             gDPSetRenderMode(POLY_XLU_DISP++, G_RM_FOG_SHADE_A, G_RM_ZB_CLD_SURF2);
             gSPSetGeometryMode(POLY_XLU_DISP++, G_FOG | G_LIGHTING);
-        } else if (this->rDrawFlags & 2) {
+        } else if (self->rDrawFlags & 2) {
             gDPSetRenderMode(POLY_XLU_DISP++, G_RM_PASS, G_RM_ZB_CLD_SURF2);
             gSPClearGeometryMode(POLY_XLU_DISP++, G_FOG | G_LIGHTING);
         } else {
@@ -120,70 +120,70 @@ void EffectSsDust_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
         }
 
         gDPPipeSync(POLY_XLU_DISP++);
-        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, this->rPrimColorR, this->rPrimColorG, this->rPrimColorB, 255);
-        gDPSetEnvColor(POLY_XLU_DISP++, this->rEnvColorR, this->rEnvColorG, this->rEnvColorB, this->rEnvColorA);
-        gSPDisplayList(POLY_XLU_DISP++, this->gfx);
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, self->rPrimColorR, self->rPrimColorG, self->rPrimColorB, 255);
+        gDPSetEnvColor(POLY_XLU_DISP++, self->rEnvColorR, self->rEnvColorG, self->rEnvColorB, self->rEnvColorA);
+        gSPDisplayList(POLY_XLU_DISP++, self->gfx);
     }
 
     CLOSE_DISPS(gfxCtx, "../z_eff_ss_dust.c", 389);
 }
 
-void EffectSsDust_Update(GlobalContext* globalCtx, u32 index, EffectSs* this) {
-    this->accel.x = (Rand_ZeroOne() * 0.4f) - 0.2f;
-    this->accel.z = (Rand_ZeroOne() * 0.4f) - 0.2f;
+void EffectSsDust_Update(GlobalContext* globalCtx, u32 index, EffectSs* self) {
+    self->accel.x = (Rand_ZeroOne() * 0.4f) - 0.2f;
+    self->accel.z = (Rand_ZeroOne() * 0.4f) - 0.2f;
 
-    if ((this->life <= this->rLifespan) && (this->life >= (this->rLifespan - 7))) {
-        if (this->rLifespan >= 5) {
-            this->rTexIdx = this->rLifespan - this->life;
+    if ((self->life <= self->rLifespan) && (self->life >= (self->rLifespan - 7))) {
+        if (self->rLifespan >= 5) {
+            self->rTexIdx = self->rLifespan - self->life;
         } else {
-            this->rTexIdx = ((this->rLifespan - this->life) * (8 / this->rLifespan));
+            self->rTexIdx = ((self->rLifespan - self->life) * (8 / self->rLifespan));
         }
     } else {
-        this->rTexIdx = 7;
+        self->rTexIdx = 7;
     }
 
-    this->rScale += this->rScaleStep;
+    self->rScale += self->rScaleStep;
 }
 
-// this update mode is unused in the original game
-void EffectSsBlast_UpdateFire(GlobalContext* globalCtx, u32 index, EffectSs* this) {
-    this->accel.x = (Rand_ZeroOne() * 0.4f) - 0.2f;
-    this->accel.z = (Rand_ZeroOne() * 0.4f) - 0.2f;
+// self update mode is unused in the original game
+void EffectSsBlast_UpdateFire(GlobalContext* globalCtx, u32 index, EffectSs* self) {
+    self->accel.x = (Rand_ZeroOne() * 0.4f) - 0.2f;
+    self->accel.z = (Rand_ZeroOne() * 0.4f) - 0.2f;
 
-    switch (this->rTexIdx) {
+    switch (self->rTexIdx) {
         case 0:
-            this->rPrimColorR = 255;
-            this->rPrimColorG = 150;
-            this->rPrimColorB = 0;
-            this->rEnvColorR = 150;
-            this->rEnvColorG = 50;
-            this->rEnvColorB = 0;
+            self->rPrimColorR = 255;
+            self->rPrimColorG = 150;
+            self->rPrimColorB = 0;
+            self->rEnvColorR = 150;
+            self->rEnvColorG = 50;
+            self->rEnvColorB = 0;
             break;
         case 1:
-            this->rPrimColorR = 200;
-            this->rPrimColorG = 50;
-            this->rPrimColorB = 0;
-            this->rEnvColorR = 100;
-            this->rEnvColorG = 0;
-            this->rEnvColorB = 0;
+            self->rPrimColorR = 200;
+            self->rPrimColorG = 50;
+            self->rPrimColorB = 0;
+            self->rEnvColorR = 100;
+            self->rEnvColorG = 0;
+            self->rEnvColorB = 0;
             break;
         case 2:
-            this->rPrimColorR = 50;
-            this->rPrimColorG = 0;
-            this->rPrimColorB = 0;
-            this->rEnvColorR = 0;
-            this->rEnvColorG = 0;
-            this->rEnvColorB = 0;
+            self->rPrimColorR = 50;
+            self->rPrimColorG = 0;
+            self->rPrimColorB = 0;
+            self->rEnvColorR = 0;
+            self->rEnvColorG = 0;
+            self->rEnvColorB = 0;
             break;
         case 3:
-            this->rPrimColorR = 50;
-            this->rEnvColorR = this->rPrimColorG = this->rEnvColorG = this->rPrimColorB = this->rEnvColorB = 0;
+            self->rPrimColorR = 50;
+            self->rEnvColorR = self->rPrimColorG = self->rEnvColorG = self->rPrimColorB = self->rEnvColorB = 0;
             break;
     }
 
-    if (this->rTexIdx < 7) {
-        this->rTexIdx++;
+    if (self->rTexIdx < 7) {
+        self->rTexIdx++;
     }
 
-    this->rScale += this->rScaleStep;
+    self->rScale += self->rScaleStep;
 }

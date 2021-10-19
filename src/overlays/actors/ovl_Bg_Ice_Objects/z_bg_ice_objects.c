@@ -16,10 +16,10 @@ void BgIceObjects_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgIceObjects_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgIceObjects_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void BgIceObjects_Idle(BgIceObjects* this, GlobalContext* globalCtx);
-void BgIceObjects_Slide(BgIceObjects* this, GlobalContext* globalCtx);
-void BgIceObjects_Reset(BgIceObjects* this, GlobalContext* globalCtx);
-void BgIceObjects_Stuck(BgIceObjects* this, GlobalContext* globalCtx);
+void BgIceObjects_Idle(BgIceObjects* self, GlobalContext* globalCtx);
+void BgIceObjects_Slide(BgIceObjects* self, GlobalContext* globalCtx);
+void BgIceObjects_Reset(BgIceObjects* self, GlobalContext* globalCtx);
+void BgIceObjects_Stuck(BgIceObjects* self, GlobalContext* globalCtx);
 
 static Color_RGBA8 sWhite = { 250, 250, 250, 255 };
 static Color_RGBA8 sGray = { 180, 180, 180, 255 };
@@ -43,23 +43,23 @@ static InitChainEntry sInitChain[] = {
 
 void BgIceObjects_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
-    BgIceObjects* this = THIS;
+    BgIceObjects* self = THIS;
     CollisionHeader* colHeader = NULL;
 
-    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPolyActor_Init(&this->dyna, DPM_UNK);
+    Actor_ProcessInitChain(&self->dyna.actor, sInitChain);
+    DynaPolyActor_Init(&self->dyna, DPM_UNK);
     CollisionHeader_GetVirtual(&object_ice_objects_Col_0003F0, &colHeader);
-    Math_Vec3f_Copy(&this->targetPos, &this->dyna.actor.home.pos);
-    this->actionFunc = BgIceObjects_Idle;
-    this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
-    this->dyna.actor.params = 0;
+    Math_Vec3f_Copy(&self->targetPos, &self->dyna.actor.home.pos);
+    self->actionFunc = BgIceObjects_Idle;
+    self->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &self->dyna.actor, colHeader);
+    self->dyna.actor.params = 0;
 }
 
 void BgIceObjects_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
-    BgIceObjects* this = THIS;
+    BgIceObjects* self = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, self->dyna.bgId);
 }
 
 static s16 sXStarts[] = {
@@ -81,39 +81,39 @@ static s16 sXStops[7][2] = {
  * defaulting to the maximum x wall or minimum z wall. Each x and z position
  * has only one possible wall or pit on each side of it.
  */
-void BgIceObjects_SetNextTarget(BgIceObjects* this, GlobalContext* globalCtx) {
+void BgIceObjects_SetNextTarget(BgIceObjects* self, GlobalContext* globalCtx) {
     s16 x16;
     s16 z16 = 0; // needed to match
     s32 i;
 
-    if ((this->dyna.unk_158 == 0) || (this->dyna.unk_158 == -0x8000)) {
-        x16 = this->dyna.actor.world.pos.x;
+    if ((self->dyna.unk_158 == 0) || (self->dyna.unk_158 == -0x8000)) {
+        x16 = self->dyna.actor.world.pos.x;
         for (i = 0; i < 7; i++) {
             if (x16 == sXStarts[i]) {
-                z16 = (this->dyna.unk_158 == 0) ? sZStops[i][0] : sZStops[i][1];
-                this->targetPos.z = z16;
+                z16 = (self->dyna.unk_158 == 0) ? sZStops[i][0] : sZStops[i][1];
+                self->targetPos.z = z16;
                 return;
             }
         }
-        this->targetPos.z = (this->dyna.unk_158 == 0) ? -340 : -1260;
+        self->targetPos.z = (self->dyna.unk_158 == 0) ? -340 : -1260;
     } else {
-        z16 = this->dyna.actor.world.pos.z;
+        z16 = self->dyna.actor.world.pos.z;
         for (i = 0; i < 7; i++) {
             if (z16 == sZStarts[i]) {
-                x16 = (this->dyna.unk_158 == 0x4000) ? sXStops[i][0] : sXStops[i][1];
-                this->targetPos.x = x16;
+                x16 = (self->dyna.unk_158 == 0x4000) ? sXStops[i][0] : sXStops[i][1];
+                self->targetPos.x = x16;
                 return;
             }
         }
-        this->targetPos.x = (this->dyna.unk_158 == 0x4000) ? -860 : -1780;
+        self->targetPos.x = (self->dyna.unk_158 == 0x4000) ? -860 : -1780;
     }
 }
 
 /*
  * Checks if the block has fallen into any of the pits.
  */
-void BgIceObjects_CheckPits(BgIceObjects* this, GlobalContext* globalCtx) {
-    Actor* thisx = &this->dyna.actor;
+void BgIceObjects_CheckPits(BgIceObjects* self, GlobalContext* globalCtx) {
+    Actor* thisx = &self->dyna.actor;
 
     if ((thisx->velocity.y > 0.0f) || ((thisx->world.pos.x <= -1660.0f) && (thisx->world.pos.z <= -1060.0f)) ||
         ((thisx->world.pos.x <= -1580.0f) && (thisx->world.pos.z >= -420.0f)) ||
@@ -129,47 +129,47 @@ void BgIceObjects_CheckPits(BgIceObjects* this, GlobalContext* globalCtx) {
             if (thisx->params != 0) {
                 func_8002DF54(globalCtx, thisx, 7);
             }
-            this->actionFunc = BgIceObjects_Reset;
+            self->actionFunc = BgIceObjects_Reset;
         }
     }
 }
 
-void BgIceObjects_Idle(BgIceObjects* this, GlobalContext* globalCtx) {
+void BgIceObjects_Idle(BgIceObjects* self, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    Actor* thisx = &this->dyna.actor;
+    Actor* thisx = &self->dyna.actor;
 
-    if (this->dyna.unk_150 != 0.0f) {
+    if (self->dyna.unk_150 != 0.0f) {
         player->stateFlags2 &= ~0x10;
-        if ((this->dyna.unk_150 > 0.0f) && !Player_InCsMode(globalCtx)) {
-            BgIceObjects_SetNextTarget(this, globalCtx);
-            if (Actor_WorldDistXZToPoint(thisx, &this->targetPos) > 1.0f) {
+        if ((self->dyna.unk_150 > 0.0f) && !Player_InCsMode(globalCtx)) {
+            BgIceObjects_SetNextTarget(self, globalCtx);
+            if (Actor_WorldDistXZToPoint(thisx, &self->targetPos) > 1.0f) {
                 thisx->flags |= 0x10;
                 func_8002DF54(globalCtx, thisx, 8);
                 thisx->params = 1;
-                this->actionFunc = BgIceObjects_Slide;
+                self->actionFunc = BgIceObjects_Slide;
             }
         }
-        this->dyna.unk_150 = 0.0f;
+        self->dyna.unk_150 = 0.0f;
     }
     if (thisx->velocity.y > 0.0f) {
-        BgIceObjects_CheckPits(this, globalCtx);
+        BgIceObjects_CheckPits(self, globalCtx);
     }
 }
 
-void BgIceObjects_Slide(BgIceObjects* this, GlobalContext* globalCtx) {
+void BgIceObjects_Slide(BgIceObjects* self, GlobalContext* globalCtx) {
     s32 atTarget;
     Vec3f pos;
     Vec3f velocity;
     f32 spread;
-    Actor* thisx = &this->dyna.actor;
+    Actor* thisx = &self->dyna.actor;
 
     Math_StepToF(&thisx->speedXZ, 10.0f, 0.5f);
-    atTarget = Math_StepToF(&thisx->world.pos.x, this->targetPos.x, thisx->speedXZ);
-    atTarget &= Math_StepToF(&thisx->world.pos.z, this->targetPos.z, thisx->speedXZ);
+    atTarget = Math_StepToF(&thisx->world.pos.x, self->targetPos.x, thisx->speedXZ);
+    atTarget &= Math_StepToF(&thisx->world.pos.z, self->targetPos.z, thisx->speedXZ);
     if (atTarget) {
         thisx->speedXZ = 0.0f;
-        this->targetPos.x = thisx->world.pos.x;
-        this->targetPos.z = thisx->world.pos.z;
+        self->targetPos.x = thisx->world.pos.x;
+        self->targetPos.z = thisx->world.pos.z;
         if (thisx->velocity.y <= 0.0f) {
             thisx->flags &= ~0x10;
         }
@@ -177,63 +177,63 @@ void BgIceObjects_Slide(BgIceObjects* this, GlobalContext* globalCtx) {
         func_8002DF54(globalCtx, thisx, 7);
         Audio_PlayActorSound2(thisx, NA_SE_EV_BLOCK_BOUND);
         if ((fabsf(thisx->world.pos.x + 1387.0f) < 1.0f) && (fabsf(thisx->world.pos.z + 260.0f) < 1.0f)) {
-            this->actionFunc = BgIceObjects_Stuck;
+            self->actionFunc = BgIceObjects_Stuck;
         } else {
-            this->actionFunc = BgIceObjects_Idle;
+            self->actionFunc = BgIceObjects_Idle;
         }
     } else if ((thisx->speedXZ > 6.0f) && (thisx->world.pos.y >= 0.0f)) {
         spread = Rand_CenteredFloat(120.0f);
-        velocity.x = -(1.5f + Rand_ZeroOne()) * Math_SinS(this->dyna.unk_158);
+        velocity.x = -(1.5f + Rand_ZeroOne()) * Math_SinS(self->dyna.unk_158);
         velocity.y = Rand_ZeroOne() + 1.0f;
-        velocity.z = -(1.5f + Rand_ZeroOne()) * Math_CosS(this->dyna.unk_158);
-        pos.x = thisx->world.pos.x - (60.0f * Math_SinS(this->dyna.unk_158)) - (Math_CosS(this->dyna.unk_158) * spread);
-        pos.z = thisx->world.pos.z - (60.0f * Math_CosS(this->dyna.unk_158)) + (Math_SinS(this->dyna.unk_158) * spread);
+        velocity.z = -(1.5f + Rand_ZeroOne()) * Math_CosS(self->dyna.unk_158);
+        pos.x = thisx->world.pos.x - (60.0f * Math_SinS(self->dyna.unk_158)) - (Math_CosS(self->dyna.unk_158) * spread);
+        pos.z = thisx->world.pos.z - (60.0f * Math_CosS(self->dyna.unk_158)) + (Math_SinS(self->dyna.unk_158) * spread);
         pos.y = thisx->world.pos.y;
         func_8002829C(globalCtx, &pos, &velocity, &sZeroVec, &sWhite, &sGray, 250, Rand_S16Offset(40, 15));
         spread = Rand_CenteredFloat(120.0f);
-        pos.x = thisx->world.pos.x - (60.0f * Math_SinS(this->dyna.unk_158)) + (Math_CosS(this->dyna.unk_158) * spread);
-        pos.z = thisx->world.pos.z - (60.0f * Math_CosS(this->dyna.unk_158)) - (Math_SinS(this->dyna.unk_158) * spread);
+        pos.x = thisx->world.pos.x - (60.0f * Math_SinS(self->dyna.unk_158)) + (Math_CosS(self->dyna.unk_158) * spread);
+        pos.z = thisx->world.pos.z - (60.0f * Math_CosS(self->dyna.unk_158)) - (Math_SinS(self->dyna.unk_158) * spread);
         func_8002829C(globalCtx, &pos, &velocity, &sZeroVec, &sWhite, &sGray, 250, Rand_S16Offset(40, 15));
         func_8002F974(thisx, NA_SE_PL_SLIP_ICE_LEVEL - SFX_FLAG);
     }
-    BgIceObjects_CheckPits(this, globalCtx);
+    BgIceObjects_CheckPits(self, globalCtx);
 }
 
-void BgIceObjects_Reset(BgIceObjects* this, GlobalContext* globalCtx) {
+void BgIceObjects_Reset(BgIceObjects* self, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    Actor* thisx = &this->dyna.actor;
+    Actor* thisx = &self->dyna.actor;
 
-    if (this->dyna.unk_150 != 0.0f) {
+    if (self->dyna.unk_150 != 0.0f) {
         player->stateFlags2 &= ~0x10;
-        this->dyna.unk_150 = 0.0f;
+        self->dyna.unk_150 = 0.0f;
     }
     if (Math_StepToF(&thisx->world.pos.y, thisx->home.pos.y, 1.0f)) {
         thisx->flags &= ~0x10;
-        Math_Vec3f_Copy(&this->targetPos, &thisx->home.pos);
-        this->actionFunc = BgIceObjects_Idle;
+        Math_Vec3f_Copy(&self->targetPos, &thisx->home.pos);
+        self->actionFunc = BgIceObjects_Idle;
         thisx->speedXZ = 0.0f;
     }
 }
 
-void BgIceObjects_Stuck(BgIceObjects* this, GlobalContext* globalCtx) {
+void BgIceObjects_Stuck(BgIceObjects* self, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if (this->dyna.unk_150 != 0.0f) {
+    if (self->dyna.unk_150 != 0.0f) {
         player->stateFlags2 &= ~0x10;
-        this->dyna.unk_150 = 0.0f;
+        self->dyna.unk_150 = 0.0f;
     }
 }
 
 void BgIceObjects_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
-    BgIceObjects* this = THIS;
+    BgIceObjects* self = THIS;
 
-    this->actionFunc(this, globalCtx);
+    self->actionFunc(self, globalCtx);
 }
 
 void BgIceObjects_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
-    BgIceObjects* this = THIS;
+    BgIceObjects* self = THIS;
 
     Gfx_DrawDListOpa(globalCtx, object_ice_objects_DL_000190);
 }

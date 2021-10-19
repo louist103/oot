@@ -31,34 +31,34 @@ const ActorInit Oceff_Wipe4_InitVars = {
 #include "z_oceff_wipe4_gfx.c"
 
 void OceffWipe4_Init(Actor* thisx, GlobalContext* globalCtx) {
-    OceffWipe4* this = THIS;
+    OceffWipe4* self = THIS;
 
-    Actor_SetScale(&this->actor, 0.1f);
-    this->counter = 0;
-    this->actor.world.pos = GET_ACTIVE_CAM(globalCtx)->eye;
-    osSyncPrintf(VT_FGCOL(CYAN) " WIPE4 arg_data = %d\n" VT_RST, this->actor.params);
+    Actor_SetScale(&self->actor, 0.1f);
+    self->counter = 0;
+    self->actor.world.pos = GET_ACTIVE_CAM(globalCtx)->eye;
+    osSyncPrintf(VT_FGCOL(CYAN) " WIPE4 arg_data = %d\n" VT_RST, self->actor.params);
 }
 
 void OceffWipe4_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    OceffWipe4* this = THIS;
+    OceffWipe4* self = THIS;
 
     func_800876C8(globalCtx);
 }
 
 void OceffWipe4_Update(Actor* thisx, GlobalContext* globalCtx) {
-    OceffWipe4* this = THIS;
+    OceffWipe4* self = THIS;
 
-    this->actor.world.pos = GET_ACTIVE_CAM(globalCtx)->eye;
-    if (this->counter < 50) {
-        this->counter++;
+    self->actor.world.pos = GET_ACTIVE_CAM(globalCtx)->eye;
+    if (self->counter < 50) {
+        self->counter++;
     } else {
-        Actor_Kill(&this->actor);
+        Actor_Kill(&self->actor);
     }
 }
 
 void OceffWipe4_Draw(Actor* thisx, GlobalContext* globalCtx) {
     u32 scroll = globalCtx->state.frames & 0xFFF;
-    OceffWipe4* this = THIS;
+    OceffWipe4* self = THIS;
     f32 z;
     u8 alpha;
     s32 pad[2];
@@ -68,15 +68,15 @@ void OceffWipe4_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     eye = GET_ACTIVE_CAM(globalCtx)->eye;
     Camera_GetSkyboxOffset(&vec, GET_ACTIVE_CAM(globalCtx));
-    if (this->counter < 16) {
-        z = Math_SinS(this->counter << 10) * 1330;
+    if (self->counter < 16) {
+        z = Math_SinS(self->counter << 10) * 1330;
     } else {
         z = 1330;
     }
 
     vtxPtr = sFrustumVtx;
-    if (this->counter >= 30) {
-        alpha = 12 * (50 - this->counter);
+    if (self->counter >= 30) {
+        alpha = 12 * (50 - self->counter);
     } else {
         alpha = 255;
     }
@@ -97,7 +97,7 @@ void OceffWipe4_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx, "../z_oceff_wipe4.c", 324),
               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    if (this->actor.params == OCEFF_WIPE4_UNUSED) {
+    if (self->actor.params == OCEFF_WIPE4_UNUSED) {
         gSPDisplayList(POLY_XLU_DISP++, sTexture1DL);
     } else {
         gSPDisplayList(POLY_XLU_DISP++, sTexture0DL);

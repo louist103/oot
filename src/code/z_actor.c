@@ -3236,7 +3236,7 @@ Actor* Actor_GetProjectileActor(GlobalContext* globalCtx, Actor* refActor, f32 r
             //! @bug The projectile actor gets unsafely casted to a hookshot to check its timer, even though
             //  it can also be an arrow.
             //  Luckily, the field at the same offset in the arrow actor is the x component of a vector
-            //  which will rarely ever be 0. So its very unlikely for this bug to cause an issue.
+            //  which will rarely ever be 0. So its very unlikely for self bug to cause an issue.
             if ((Math_Vec3f_DistXYZ(&refActor->world.pos, &actor->world.pos) > radius) ||
                 (((ArmsHook*)actor)->timer == 0)) {
                 actor = actor->next;
@@ -3911,7 +3911,7 @@ u8 func_800353E8(GlobalContext* globalCtx) {
 
 /**
  * Finds the first actor instance of a specified ID and category within a given range from
- * an actor if there is one. If the ID provided is -1, this will look for any actor of the
+ * an actor if there is one. If the ID provided is -1, self will look for any actor of the
  * specified category rather than a specific ID.
  */
 Actor* Actor_FindNearby(GlobalContext* globalCtx, Actor* refActor, s16 actorId, u8 actorCategory, f32 range) {

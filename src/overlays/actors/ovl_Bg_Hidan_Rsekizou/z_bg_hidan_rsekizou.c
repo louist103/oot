@@ -122,68 +122,68 @@ static void* sFireballsTexs[] = {
 };
 
 void BgHidanRsekizou_Init(Actor* thisx, GlobalContext* globalCtx) {
-    BgHidanRsekizou* this = THIS;
+    BgHidanRsekizou* self = THIS;
     s32 i;
     s32 pad;
     CollisionHeader* colHeader;
 
     colHeader = NULL;
-    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPolyActor_Init(&this->dyna, DPM_UNK);
+    Actor_ProcessInitChain(&self->dyna.actor, sInitChain);
+    DynaPolyActor_Init(&self->dyna, DPM_UNK);
     CollisionHeader_GetVirtual(&gFireTempleSpinningFlamethrowerCol, &colHeader);
-    this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
-    Collider_InitJntSph(globalCtx, &this->collider);
-    Collider_SetJntSph(globalCtx, &this->collider, &this->dyna.actor, &sJntSphInit, this->colliderItems);
-    for (i = 0; i < ARRAY_COUNT(this->colliderItems); i++) {
-        this->collider.elements[i].dim.worldSphere.radius = this->collider.elements[i].dim.modelSphere.radius;
+    self->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &self->dyna.actor, colHeader);
+    Collider_InitJntSph(globalCtx, &self->collider);
+    Collider_SetJntSph(globalCtx, &self->collider, &self->dyna.actor, &sJntSphInit, self->colliderItems);
+    for (i = 0; i < ARRAY_COUNT(self->colliderItems); i++) {
+        self->collider.elements[i].dim.worldSphere.radius = self->collider.elements[i].dim.modelSphere.radius;
     }
-    this->burnFrame = 0;
-    this->bendFrame = 0;
+    self->burnFrame = 0;
+    self->bendFrame = 0;
 }
 
 void BgHidanRsekizou_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    BgHidanRsekizou* this = THIS;
+    BgHidanRsekizou* self = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
-    Collider_DestroyJntSph(globalCtx, &this->collider);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, self->dyna.bgId);
+    Collider_DestroyJntSph(globalCtx, &self->collider);
 }
 
 void BgHidanRsekizou_Update(Actor* thisx, GlobalContext* globalCtx) {
-    BgHidanRsekizou* this = THIS;
+    BgHidanRsekizou* self = THIS;
     s32 i;
     ColliderJntSphElement* sphere;
     s32 pad;
     f32 yawSine;
     f32 yawCosine;
 
-    this->burnFrame = (this->burnFrame + 1) % 8;
+    self->burnFrame = (self->burnFrame + 1) % 8;
 
-    if (this->bendFrame != 0) {
-        this->bendFrame--;
+    if (self->bendFrame != 0) {
+        self->bendFrame--;
     }
 
-    if (this->bendFrame == 0) {
-        this->bendFrame = 3;
+    if (self->bendFrame == 0) {
+        self->bendFrame = 3;
     }
 
-    this->dyna.actor.shape.rot.y += 0x180; // Approximately 2 Degrees per Frame
-    yawSine = Math_SinS(this->dyna.actor.shape.rot.y);
-    yawCosine = Math_CosS(this->dyna.actor.shape.rot.y);
+    self->dyna.actor.shape.rot.y += 0x180; // Approximately 2 Degrees per Frame
+    yawSine = Math_SinS(self->dyna.actor.shape.rot.y);
+    yawCosine = Math_CosS(self->dyna.actor.shape.rot.y);
 
-    for (i = 0; i < ARRAY_COUNT(this->colliderItems); i++) {
-        sphere = &this->collider.elements[i];
-        sphere->dim.worldSphere.center.x = this->dyna.actor.home.pos.x + yawCosine * sphere->dim.modelSphere.center.x +
+    for (i = 0; i < ARRAY_COUNT(self->colliderItems); i++) {
+        sphere = &self->collider.elements[i];
+        sphere->dim.worldSphere.center.x = self->dyna.actor.home.pos.x + yawCosine * sphere->dim.modelSphere.center.x +
                                            yawSine * sphere->dim.modelSphere.center.z;
-        sphere->dim.worldSphere.center.y = (s16)this->dyna.actor.home.pos.y + sphere->dim.modelSphere.center.y;
-        sphere->dim.worldSphere.center.z = (this->dyna.actor.home.pos.z - yawSine * sphere->dim.modelSphere.center.x) +
+        sphere->dim.worldSphere.center.y = (s16)self->dyna.actor.home.pos.y + sphere->dim.modelSphere.center.y;
+        sphere->dim.worldSphere.center.z = (self->dyna.actor.home.pos.z - yawSine * sphere->dim.modelSphere.center.x) +
                                            yawCosine * sphere->dim.modelSphere.center.z;
     }
 
-    CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-    func_8002F974(&this->dyna.actor, NA_SE_EV_FIRE_PILLAR - SFX_FLAG);
+    CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
+    func_8002F974(&self->dyna.actor, NA_SE_EV_FIRE_PILLAR - SFX_FLAG);
 }
 
-Gfx* BgHidanRsekizou_DrawFireball(GlobalContext* globalCtx, BgHidanRsekizou* this, s16 frame, MtxF* mf, s32 a,
+Gfx* BgHidanRsekizou_DrawFireball(GlobalContext* globalCtx, BgHidanRsekizou* self, s16 frame, MtxF* mf, s32 a,
                                   Gfx* displayList) {
     f32 coss;
     f32 sins;
@@ -191,29 +191,29 @@ Gfx* BgHidanRsekizou_DrawFireball(GlobalContext* globalCtx, BgHidanRsekizou* thi
     f32 fVar6;
     f32 tmpf7;
 
-    temp = (((this->burnFrame + frame) % 8) * 7) * (1.0f / 7.0f);
+    temp = (((self->burnFrame + frame) % 8) * 7) * (1.0f / 7.0f);
     gSPSegment(displayList++, 0x09, SEGMENTED_TO_VIRTUAL(sFireballsTexs[temp]));
 
     frame++;
-    fVar6 = (frame != 4) ? frame + ((3 - this->bendFrame) * (1.0f / 3.0f)) : frame;
+    fVar6 = (frame != 4) ? frame + ((3 - self->bendFrame) * (1.0f / 3.0f)) : frame;
 
     gDPSetPrimColor(displayList++, 0, 1, 255, 255, 0, 150);
     gDPSetEnvColor(displayList++, 255, 0, 0, 255);
 
     if (a == 0) {
-        sins = -Math_SinS(this->dyna.actor.shape.rot.y - (frame * 1500));
-        coss = -Math_CosS(this->dyna.actor.shape.rot.y - (frame * 1500));
+        sins = -Math_SinS(self->dyna.actor.shape.rot.y - (frame * 1500));
+        coss = -Math_CosS(self->dyna.actor.shape.rot.y - (frame * 1500));
     } else {
-        sins = Math_SinS(this->dyna.actor.shape.rot.y - (frame * 1500));
-        coss = Math_CosS(this->dyna.actor.shape.rot.y - (frame * 1500));
+        sins = Math_SinS(self->dyna.actor.shape.rot.y - (frame * 1500));
+        coss = Math_CosS(self->dyna.actor.shape.rot.y - (frame * 1500));
     }
 
     mf->xx = mf->yy = mf->zz = (0.7f * fVar6) + 0.5f;
     tmpf7 = (((((0.7f * fVar6) + 0.5f) * 10.0f) * fVar6) + 20.0f);
 
-    mf->xw = (tmpf7 * sins) + this->dyna.actor.world.pos.x;
-    mf->yw = (this->dyna.actor.world.pos.y + 30.0f) + ((7.0f / 10.0f) * fVar6);
-    mf->zw = (tmpf7 * coss) + this->dyna.actor.world.pos.z;
+    mf->xw = (tmpf7 * sins) + self->dyna.actor.world.pos.x;
+    mf->yw = (self->dyna.actor.world.pos.y + 30.0f) + ((7.0f / 10.0f) * fVar6);
+    mf->zw = (tmpf7 * coss) + self->dyna.actor.world.pos.z;
 
     gSPMatrix(displayList++,
               Matrix_MtxFToMtx(Matrix_CheckFloats(mf, "../z_bg_hidan_rsekizou.c", 543),
@@ -225,7 +225,7 @@ Gfx* BgHidanRsekizou_DrawFireball(GlobalContext* globalCtx, BgHidanRsekizou* thi
 }
 
 void BgHidanRsekizou_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    BgHidanRsekizou* this = THIS;
+    BgHidanRsekizou* self = THIS;
     s32 i;
     s32 pad;
     MtxF mf;
@@ -241,21 +241,21 @@ void BgHidanRsekizou_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0x14);
 
-    if ((s16)((Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx)) - this->dyna.actor.shape.rot.y) - 0x2E6C) >= 0) {
+    if ((s16)((Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx)) - self->dyna.actor.shape.rot.y) - 0x2E6C) >= 0) {
         for (i = 3; i >= 0; i--) {
-            POLY_XLU_DISP = BgHidanRsekizou_DrawFireball(globalCtx, this, i, &mf, 0, POLY_XLU_DISP);
+            POLY_XLU_DISP = BgHidanRsekizou_DrawFireball(globalCtx, self, i, &mf, 0, POLY_XLU_DISP);
         }
 
         for (i = 0; i < 4; i++) {
-            POLY_XLU_DISP = BgHidanRsekizou_DrawFireball(globalCtx, this, i, &mf, 1, POLY_XLU_DISP);
+            POLY_XLU_DISP = BgHidanRsekizou_DrawFireball(globalCtx, self, i, &mf, 1, POLY_XLU_DISP);
         }
     } else {
         for (i = 3; i >= 0; i--) {
-            POLY_XLU_DISP = BgHidanRsekizou_DrawFireball(globalCtx, this, i, &mf, 1, POLY_XLU_DISP);
+            POLY_XLU_DISP = BgHidanRsekizou_DrawFireball(globalCtx, self, i, &mf, 1, POLY_XLU_DISP);
         }
 
         for (i = 0; i < 4; i++) {
-            POLY_XLU_DISP = BgHidanRsekizou_DrawFireball(globalCtx, this, i, &mf, 0, POLY_XLU_DISP);
+            POLY_XLU_DISP = BgHidanRsekizou_DrawFireball(globalCtx, self, i, &mf, 0, POLY_XLU_DISP);
         }
     }
 

@@ -216,7 +216,7 @@ typedef struct Player {
     /* 0x0151 */ s8         heldItemActionParam; // Action param for the item currently used
     /* 0x0152 */ u8         heldItemId; // Item id for the item currently used
     /* 0x0153 */ s8         prevBoots; // previous boots from `PlayerBoots`
-    /* 0x0154 */ s8         itemActionParam; // the difference between this and heldItemActionParam is unclear
+    /* 0x0154 */ s8         itemActionParam; // the difference between self and heldItemActionParam is unclear
     /* 0x0155 */ char       unk_155[0x003];
     /* 0x0158 */ u8         modelGroup;
     /* 0x0159 */ u8         nextModelGroup;

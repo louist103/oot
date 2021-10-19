@@ -15,7 +15,7 @@ void BgPushbox_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgPushbox_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgPushbox_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_808A8BAC(BgPushbox* this, GlobalContext* globalCtx);
+void func_808A8BAC(BgPushbox* self, GlobalContext* globalCtx);
 
 const ActorInit Bg_Pushbox_InitVars = {
     ACTOR_BG_PUSHBOX,
@@ -36,46 +36,46 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_STOP),
 };
 
-void BgPushbox_SetupAction(BgPushbox* this, BgPushboxActionFunc actionFunc) {
-    this->actionFunc = actionFunc;
+void BgPushbox_SetupAction(BgPushbox* self, BgPushboxActionFunc actionFunc) {
+    self->actionFunc = actionFunc;
 }
 
 void BgPushbox_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
-    BgPushbox* this = THIS;
+    BgPushbox* self = THIS;
     CollisionHeader* colHeader = NULL;
     s32 pad2;
 
-    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPolyActor_Init(&this->dyna, DPM_UNK);
+    Actor_ProcessInitChain(&self->dyna.actor, sInitChain);
+    DynaPolyActor_Init(&self->dyna, DPM_UNK);
     CollisionHeader_GetVirtual(&D_06000350, &colHeader);
-    this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
-    ActorShape_Init(&this->dyna.actor.shape, 0.0f, NULL, 0.0f);
-    BgPushbox_SetupAction(this, func_808A8BAC);
+    self->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &self->dyna.actor, colHeader);
+    ActorShape_Init(&self->dyna.actor.shape, 0.0f, NULL, 0.0f);
+    BgPushbox_SetupAction(self, func_808A8BAC);
 }
 
 void BgPushbox_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    BgPushbox* this = THIS;
+    BgPushbox* self = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, self->dyna.bgId);
 }
 
-void func_808A8BAC(BgPushbox* this, GlobalContext* globalCtx) {
-    this->dyna.actor.speedXZ += this->dyna.unk_150 * 0.2f;
-    this->dyna.actor.speedXZ = (this->dyna.actor.speedXZ < -1.0f)
+void func_808A8BAC(BgPushbox* self, GlobalContext* globalCtx) {
+    self->dyna.actor.speedXZ += self->dyna.unk_150 * 0.2f;
+    self->dyna.actor.speedXZ = (self->dyna.actor.speedXZ < -1.0f)
                                    ? -1.0f
-                                   : ((this->dyna.actor.speedXZ > 1.0f) ? 1.0f : this->dyna.actor.speedXZ);
-    Math_StepToF(&this->dyna.actor.speedXZ, 0.0f, 0.2f);
-    this->dyna.actor.world.rot.y = this->dyna.unk_158;
-    Actor_MoveForward(&this->dyna.actor);
-    Actor_UpdateBgCheckInfo(globalCtx, &this->dyna.actor, 20.0f, 40.0f, 40.0f, 0x1D);
+                                   : ((self->dyna.actor.speedXZ > 1.0f) ? 1.0f : self->dyna.actor.speedXZ);
+    Math_StepToF(&self->dyna.actor.speedXZ, 0.0f, 0.2f);
+    self->dyna.actor.world.rot.y = self->dyna.unk_158;
+    Actor_MoveForward(&self->dyna.actor);
+    Actor_UpdateBgCheckInfo(globalCtx, &self->dyna.actor, 20.0f, 40.0f, 40.0f, 0x1D);
 }
 
 void BgPushbox_Update(Actor* thisx, GlobalContext* globalCtx) {
-    BgPushbox* this = THIS;
+    BgPushbox* self = THIS;
 
-    this->actionFunc(this, globalCtx);
-    func_8002DF90(&this->dyna);
+    self->actionFunc(self, globalCtx);
+    func_8002DF90(&self->dyna);
 }
 
 void BgPushbox_Draw(Actor* thisx, GlobalContext* globalCtx) {

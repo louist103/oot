@@ -16,9 +16,9 @@ void DoorAna_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DoorAna_Update(Actor* thisx, GlobalContext* globalCtx);
 void DoorAna_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void DoorAna_WaitClosed(DoorAna* this, GlobalContext* globalCtx);
-void DoorAna_WaitOpen(DoorAna* this, GlobalContext* globalCtx);
-void DoorAna_GrabPlayer(DoorAna* this, GlobalContext* globalCtx);
+void DoorAna_WaitClosed(DoorAna* self, GlobalContext* globalCtx);
+void DoorAna_WaitOpen(DoorAna* self, GlobalContext* globalCtx);
+void DoorAna_GrabPlayer(DoorAna* self, GlobalContext* globalCtx);
 
 const ActorInit Door_Ana_InitVars = {
     ACTOR_DOOR_ANA,
@@ -58,119 +58,119 @@ static s16 entrances[] = {
     0x05B0, 0x05B4, 0x05B8, 0x05BC, 0x05C0, 0x05C4, 0x05FC,
 };
 
-void DoorAna_SetupAction(DoorAna* this, DoorAnaActionFunc actionFunc) {
-    this->actionFunc = actionFunc;
+void DoorAna_SetupAction(DoorAna* self, DoorAnaActionFunc actionFunc) {
+    self->actionFunc = actionFunc;
 }
 
 void DoorAna_Init(Actor* thisx, GlobalContext* globalCtx) {
-    DoorAna* this = THIS;
+    DoorAna* self = THIS;
 
-    this->actor.shape.rot.z = 0;
-    this->actor.shape.rot.y = this->actor.shape.rot.z;
+    self->actor.shape.rot.z = 0;
+    self->actor.shape.rot.y = self->actor.shape.rot.z;
     // init block for grottos that are initially "hidden" (require explosives/hammer/song of storms to open)
-    if ((this->actor.params & 0x300) != 0) {
+    if ((self->actor.params & 0x300) != 0) {
         // only allocate collider for grottos that need bombing/hammering open
-        if ((this->actor.params & 0x200) != 0) {
-            Collider_InitCylinder(globalCtx, &this->collider);
-            Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+        if ((self->actor.params & 0x200) != 0) {
+            Collider_InitCylinder(globalCtx, &self->collider);
+            Collider_SetCylinder(globalCtx, &self->collider, &self->actor, &sCylinderInit);
         } else {
-            this->actor.flags |= 0x10;
+            self->actor.flags |= 0x10;
         }
-        Actor_SetScale(&this->actor, 0);
-        DoorAna_SetupAction(this, DoorAna_WaitClosed);
+        Actor_SetScale(&self->actor, 0);
+        DoorAna_SetupAction(self, DoorAna_WaitClosed);
     } else {
-        DoorAna_SetupAction(this, DoorAna_WaitOpen);
+        DoorAna_SetupAction(self, DoorAna_WaitOpen);
     }
-    this->actor.targetMode = 0;
+    self->actor.targetMode = 0;
 }
 
 void DoorAna_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    DoorAna* this = THIS;
+    DoorAna* self = THIS;
 
     // free collider if it has one
-    if ((this->actor.params & 0x200) != 0) {
-        Collider_DestroyCylinder(globalCtx, &this->collider);
+    if ((self->actor.params & 0x200) != 0) {
+        Collider_DestroyCylinder(globalCtx, &self->collider);
     }
 }
 
 // update routine for grottos that are currently "hidden"/unopened
-void DoorAna_WaitClosed(DoorAna* this, GlobalContext* globalCtx) {
+void DoorAna_WaitClosed(DoorAna* self, GlobalContext* globalCtx) {
     u32 openGrotto = false;
-    if (!(this->actor.params & 0x200)) {
+    if (!(self->actor.params & 0x200)) {
         // opening with song of storms
-        if (this->actor.xyzDistToPlayerSq < 40000.0f && Flags_GetEnv(globalCtx, 5)) {
+        if (self->actor.xyzDistToPlayerSq < 40000.0f && Flags_GetEnv(globalCtx, 5)) {
             openGrotto = true;
-            this->actor.flags &= ~0x10;
+            self->actor.flags &= ~0x10;
         }
     } else {
         // bombing/hammering open a grotto
-        if (this->collider.base.acFlags & AC_HIT) {
+        if (self->collider.base.acFlags & AC_HIT) {
             openGrotto = true;
-            Collider_DestroyCylinder(globalCtx, &this->collider);
+            Collider_DestroyCylinder(globalCtx, &self->collider);
         } else {
-            Collider_UpdateCylinder(&this->actor, &this->collider);
-            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+            Collider_UpdateCylinder(&self->actor, &self->collider);
+            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
         }
     }
     // open the grotto
     if (openGrotto) {
-        this->actor.params &= ~0x0300;
-        DoorAna_SetupAction(this, DoorAna_WaitOpen);
+        self->actor.params &= ~0x0300;
+        DoorAna_SetupAction(self, DoorAna_WaitOpen);
         Audio_PlaySoundGeneral(NA_SE_SY_CORRECT_CHIME, &D_801333D4, 4, &D_801333E0, &D_801333E0, &D_801333E8);
     }
-    func_8002F5F0(&this->actor, globalCtx);
+    func_8002F5F0(&self->actor, globalCtx);
 }
 
 // update routine for grottos that are open
-void DoorAna_WaitOpen(DoorAna* this, GlobalContext* globalCtx) {
+void DoorAna_WaitOpen(DoorAna* self, GlobalContext* globalCtx) {
     Player* player;
     s32 destinationIdx;
 
     player = GET_PLAYER(globalCtx);
-    if (Math_StepToF(&this->actor.scale.x, 0.01f, 0.001f)) {
-        if ((this->actor.targetMode != 0) && (globalCtx->sceneLoadFlag == 0) && (player->stateFlags1 & 0x80000000) &&
+    if (Math_StepToF(&self->actor.scale.x, 0.01f, 0.001f)) {
+        if ((self->actor.targetMode != 0) && (globalCtx->sceneLoadFlag == 0) && (player->stateFlags1 & 0x80000000) &&
             (player->unk_84F == 0)) {
-            destinationIdx = ((this->actor.params >> 0xC) & 7) - 1;
+            destinationIdx = ((self->actor.params >> 0xC) & 7) - 1;
             Gameplay_SetupRespawnPoint(globalCtx, RESPAWN_MODE_RETURN, 0x4FF);
-            gSaveContext.respawn[RESPAWN_MODE_RETURN].pos.y = this->actor.world.pos.y;
-            gSaveContext.respawn[RESPAWN_MODE_RETURN].yaw = this->actor.home.rot.y;
-            gSaveContext.respawn[RESPAWN_MODE_RETURN].data = this->actor.params & 0xFFFF;
+            gSaveContext.respawn[RESPAWN_MODE_RETURN].pos.y = self->actor.world.pos.y;
+            gSaveContext.respawn[RESPAWN_MODE_RETURN].yaw = self->actor.home.rot.y;
+            gSaveContext.respawn[RESPAWN_MODE_RETURN].data = self->actor.params & 0xFFFF;
             if (destinationIdx < 0) {
-                destinationIdx = this->actor.home.rot.z + 1;
+                destinationIdx = self->actor.home.rot.z + 1;
             }
             globalCtx->nextEntranceIndex = entrances[destinationIdx];
-            DoorAna_SetupAction(this, DoorAna_GrabPlayer);
+            DoorAna_SetupAction(self, DoorAna_GrabPlayer);
         } else {
             if (!Player_InCsMode(globalCtx) && !(player->stateFlags1 & 0x8800000) &&
-                this->actor.xzDistToPlayer <= 15.0f && -50.0f <= this->actor.yDistToPlayer &&
-                this->actor.yDistToPlayer <= 15.0f) {
+                self->actor.xzDistToPlayer <= 15.0f && -50.0f <= self->actor.yDistToPlayer &&
+                self->actor.yDistToPlayer <= 15.0f) {
                 player->stateFlags1 |= 0x80000000;
-                this->actor.targetMode = 1;
+                self->actor.targetMode = 1;
             } else {
-                this->actor.targetMode = 0;
+                self->actor.targetMode = 0;
             }
         }
     }
-    Actor_SetScale(&this->actor, this->actor.scale.x);
+    Actor_SetScale(&self->actor, self->actor.scale.x);
 }
 
 // update function for after the player has triggered the grotto
-void DoorAna_GrabPlayer(DoorAna* this, GlobalContext* globalCtx) {
+void DoorAna_GrabPlayer(DoorAna* self, GlobalContext* globalCtx) {
     Player* player;
 
-    if (this->actor.yDistToPlayer <= 0.0f && 15.0f < this->actor.xzDistToPlayer) {
+    if (self->actor.yDistToPlayer <= 0.0f && 15.0f < self->actor.xzDistToPlayer) {
         player = GET_PLAYER(globalCtx);
-        player->actor.world.pos.x = Math_SinS(this->actor.yawTowardsPlayer) * 15.0f + this->actor.world.pos.x;
-        player->actor.world.pos.z = Math_CosS(this->actor.yawTowardsPlayer) * 15.0f + this->actor.world.pos.z;
+        player->actor.world.pos.x = Math_SinS(self->actor.yawTowardsPlayer) * 15.0f + self->actor.world.pos.x;
+        player->actor.world.pos.z = Math_CosS(self->actor.yawTowardsPlayer) * 15.0f + self->actor.world.pos.z;
     }
 }
 
 void DoorAna_Update(Actor* thisx, GlobalContext* globalCtx) {
-    DoorAna* this = THIS;
+    DoorAna* self = THIS;
 
-    this->actionFunc(this, globalCtx);
+    self->actionFunc(self, globalCtx);
     // changes the grottos facing angle based on camera angle
-    this->actor.shape.rot.y = Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx)) + 0x8000;
+    self->actor.shape.rot.y = Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx)) + 0x8000;
 }
 
 void DoorAna_Draw(Actor* thisx, GlobalContext* globalCtx) {

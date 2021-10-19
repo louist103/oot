@@ -1374,7 +1374,7 @@ s32 CollisionCheck_SetOC_SAC(GlobalContext* globalCtx, CollisionCheckContext* co
 }
 
 /**
- * Sets a line as an OC collider for this frame.
+ * Sets a line as an OC collider for self frame.
  * OC lines are entirely unused, and do not even have collision check functions.
  */
 s32 CollisionCheck_SetOCLine(GlobalContext* globalCtx, CollisionCheckContext* colChkCtx, OcLine* collider) {
@@ -3246,8 +3246,8 @@ void Collider_SetTrisDim(GlobalContext* globalCtx, ColliderTris* collider, s32 i
 }
 
 // Due to an unknown reason, bss ordering changed between the 2 static Vec3f variables in the function below.
-// In order to reproduce this behavior, we need a specific number of bss variables in the file before that point.
-// For this, we introduce a certain amount of dummy variables throughout the file, which we fit inside padding added
+// In order to reproduce self behavior, we need a specific number of bss variables in the file before that point.
+// For self, we introduce a certain amount of dummy variables throughout the file, which we fit inside padding added
 // by the compiler between structs like TriNorm and/or Vec3f, so they don't take space in bss.
 static s8 sBssDummy11;
 static s8 sBssDummy12;

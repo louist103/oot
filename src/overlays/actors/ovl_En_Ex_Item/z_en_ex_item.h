@@ -6,7 +6,7 @@
 
 struct EnExItem;
 
-typedef void (*EnExItemActionFunc)(struct EnExItem* this, GlobalContext* globalCtx);
+typedef void (*EnExItemActionFunc)(struct EnExItem* self, GlobalContext* globalCtx);
 typedef void (*EnExItemLightFunc)(Actor*, GlobalContext*, s32);
 
 typedef struct EnExItem {

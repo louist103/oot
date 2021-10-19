@@ -18,11 +18,11 @@ void BgJyaIronobj_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgJyaIronobj_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgJyaIronobj_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgJyaIronobj_Draw(Actor* thisx, GlobalContext* globalCtx);
-void func_808992D8(BgJyaIronobj* this);
-void func_808992E8(BgJyaIronobj* this, GlobalContext* globalCtx);
+void func_808992D8(BgJyaIronobj* self);
+void func_808992E8(BgJyaIronobj* self, GlobalContext* globalCtx);
 
-void BgJyaIronobj_SpawnPillarParticles(BgJyaIronobj* this, GlobalContext* globalCtx, EnIk* enIk);
-void BgJyaIronobj_SpawnThoneParticles(BgJyaIronobj* this, GlobalContext* arg1, EnIk* enIk);
+void BgJyaIronobj_SpawnPillarParticles(BgJyaIronobj* self, GlobalContext* globalCtx, EnIk* enIk);
+void BgJyaIronobj_SpawnThoneParticles(BgJyaIronobj* self, GlobalContext* arg1, EnIk* enIk);
 
 static int sUnused = 0;
 
@@ -81,22 +81,22 @@ static InitChainEntry sInitChain[] = {
 
 static CollisionHeader* sCollisionHeaders[] = { &gPillarCol, &gThroneCol };
 
-void BgJyaIronobj_InitCylinder(BgJyaIronobj* this, GlobalContext* globalCtx) {
-    ColliderCylinder* colCylinder = &this->colCylinder;
+void BgJyaIronobj_InitCylinder(BgJyaIronobj* self, GlobalContext* globalCtx) {
+    ColliderCylinder* colCylinder = &self->colCylinder;
 
     Collider_InitCylinder(globalCtx, colCylinder);
-    Collider_SetCylinder(globalCtx, colCylinder, &this->dyna.actor, &sCylinderInit);
-    if ((this->dyna.actor.params & 1) == 1) {
-        this->colCylinder.dim.radius = 40;
-        this->colCylinder.dim.height = 100;
+    Collider_SetCylinder(globalCtx, colCylinder, &self->dyna.actor, &sCylinderInit);
+    if ((self->dyna.actor.params & 1) == 1) {
+        self->colCylinder.dim.radius = 40;
+        self->colCylinder.dim.height = 100;
     }
-    Collider_UpdateCylinder(&this->dyna.actor, colCylinder);
+    Collider_UpdateCylinder(&self->dyna.actor, colCylinder);
 }
 
 /*
  * Spawns particles for the destroyed pillar
  */
-void BgJyaIronobj_SpawnPillarParticles(BgJyaIronobj* this, GlobalContext* globalCtx, EnIk* enIk) {
+void BgJyaIronobj_SpawnPillarParticles(BgJyaIronobj* self, GlobalContext* globalCtx, EnIk* enIk) {
     s32 i;
     s32 j;
     s16 unkArg5;
@@ -113,22 +113,22 @@ void BgJyaIronobj_SpawnPillarParticles(BgJyaIronobj* this, GlobalContext* global
         return;
     }
     osSyncPrintf("¢ attack_type(%d)\n", enIk->unk_2FF);
-    rotY = Actor_WorldYawTowardActor(&this->dyna.actor, &enIk->actor) + D_808994D8[enIk->unk_2FF - 1];
+    rotY = Actor_WorldYawTowardActor(&self->dyna.actor, &enIk->actor) + D_808994D8[enIk->unk_2FF - 1];
 
     for (i = 0; i < 8; i++) {
         Actor* actor =
-            Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_BG_JYA_HAHENIRON, this->dyna.actor.world.pos.x,
-                        Rand_ZeroOne() * 80.0f + this->dyna.actor.world.pos.y + 20.0f, this->dyna.actor.world.pos.z, 0,
+            Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_BG_JYA_HAHENIRON, self->dyna.actor.world.pos.x,
+                        Rand_ZeroOne() * 80.0f + self->dyna.actor.world.pos.y + 20.0f, self->dyna.actor.world.pos.z, 0,
                         (s16)(Rand_ZeroOne() * 0x4000) + rotY - 0x2000, 0, 0);
         if (actor != NULL) {
             actor->speedXZ = Rand_ZeroOne() * 8.0f + 9.0f;
             actor->velocity.y = Rand_ZeroOne() * 10.0f + 6.0f;
         }
     }
-    Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_BG_JYA_HAHENIRON, this->dyna.actor.world.pos.x,
-                this->dyna.actor.world.pos.y + 150.0f, this->dyna.actor.world.pos.z, 0, 0, 0, 1);
-    Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_BG_JYA_HAHENIRON, this->dyna.actor.world.pos.x,
-                this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, 0, 0, 0, 2);
+    Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_BG_JYA_HAHENIRON, self->dyna.actor.world.pos.x,
+                self->dyna.actor.world.pos.y + 150.0f, self->dyna.actor.world.pos.z, 0, 0, 0, 1);
+    Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_BG_JYA_HAHENIRON, self->dyna.actor.world.pos.x,
+                self->dyna.actor.world.pos.y, self->dyna.actor.world.pos.z, 0, 0, 0, 2);
     sins = Math_SinS(rotY);
     coss = Math_CosS(rotY);
     for (j = 0; j < 32; j++) {
@@ -140,9 +140,9 @@ void BgJyaIronobj_SpawnPillarParticles(BgJyaIronobj* this, GlobalContext* global
         } else {
             unkArg5 = 0x20;
         }
-        pos.x = this->dyna.actor.world.pos.x;
-        pos.y = this->dyna.actor.world.pos.y + ((4.375f * j) + 10.0f);
-        pos.z = this->dyna.actor.world.pos.z;
+        pos.x = self->dyna.actor.world.pos.x;
+        pos.y = self->dyna.actor.world.pos.y + ((4.375f * j) + 10.0f);
+        pos.z = self->dyna.actor.world.pos.z;
         temp_f22 = fabsf(j - 15.5f) * (1.0f / 31) + 0.5f;
         vel.x = 2.0f * ((Rand_ZeroOne() * 6.0f) - 3.0f) + (Rand_ZeroOne() * sins * 8.0f * temp_f22);
         vel.y = (Rand_ZeroOne() * 8.0f) - 3.0f;
@@ -158,7 +158,7 @@ void BgJyaIronobj_SpawnPillarParticles(BgJyaIronobj* this, GlobalContext* global
 /*
  * Spawns particles for the destroyed throne
  */
-void BgJyaIronobj_SpawnThoneParticles(BgJyaIronobj* this, GlobalContext* arg1, EnIk* enIk) {
+void BgJyaIronobj_SpawnThoneParticles(BgJyaIronobj* self, GlobalContext* arg1, EnIk* enIk) {
     s32 i;
     s32 j;
     s16 unkArg5;
@@ -175,11 +175,11 @@ void BgJyaIronobj_SpawnThoneParticles(BgJyaIronobj* this, GlobalContext* arg1, E
         return;
     }
     osSyncPrintf("¢ attack_type(%d)\n", enIk->unk_2FF);
-    rotY = Actor_WorldYawTowardActor(&this->dyna.actor, &enIk->actor) + D_808994D8[enIk->unk_2FF - 1];
+    rotY = Actor_WorldYawTowardActor(&self->dyna.actor, &enIk->actor) + D_808994D8[enIk->unk_2FF - 1];
     for (i = 0; i < 8; i++) {
         Actor* actor =
-            Actor_Spawn(&arg1->actorCtx, arg1, ACTOR_BG_JYA_HAHENIRON, this->dyna.actor.world.pos.x,
-                        (Rand_ZeroOne() * 80.0f) + this->dyna.actor.world.pos.y + 10.0f, this->dyna.actor.world.pos.z,
+            Actor_Spawn(&arg1->actorCtx, arg1, ACTOR_BG_JYA_HAHENIRON, self->dyna.actor.world.pos.x,
+                        (Rand_ZeroOne() * 80.0f) + self->dyna.actor.world.pos.y + 10.0f, self->dyna.actor.world.pos.z,
                         0, ((s16)(s32)(Rand_ZeroOne() * 0x4000) + rotY) - 0x2000, 0, 0);
         if (actor != NULL) {
             actor->speedXZ = Rand_ZeroOne() * 8.0f + 9.0f;
@@ -198,9 +198,9 @@ void BgJyaIronobj_SpawnThoneParticles(BgJyaIronobj* this, GlobalContext* arg1, E
         } else {
             unkArg5 = 0x20;
         }
-        pos.x = this->dyna.actor.world.pos.x + (Rand_ZeroOne() * 40 - 20);
-        pos.y = this->dyna.actor.world.pos.y + (3.75f * j);
-        pos.z = this->dyna.actor.world.pos.z + (Rand_ZeroOne() * 40 - 20);
+        pos.x = self->dyna.actor.world.pos.x + (Rand_ZeroOne() * 40 - 20);
+        pos.y = self->dyna.actor.world.pos.y + (3.75f * j);
+        pos.z = self->dyna.actor.world.pos.z + (Rand_ZeroOne() * 40 - 20);
         temp_f22 = fabsf(j - 15.5f) * (1.0f / 31) + 0.5f;
         vel.x = 2.0f * (Rand_ZeroOne() * 6.0f - 3.0f) + (Rand_ZeroOne() * sins * 8.0f * temp_f22);
         vel.y = Rand_ZeroOne() * 8.0f - 3.0f;
@@ -214,60 +214,60 @@ void BgJyaIronobj_SpawnThoneParticles(BgJyaIronobj* this, GlobalContext* arg1, E
 }
 
 void BgJyaIronobj_Init(Actor* thisx, GlobalContext* globalCtx) {
-    BgJyaIronobj* this = THIS;
+    BgJyaIronobj* self = THIS;
     s32 pad;
     CollisionHeader* colHeader = NULL;
 
-    DynaPolyActor_Init(&this->dyna, 0);
-    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    BgJyaIronobj_InitCylinder(this, globalCtx);
+    DynaPolyActor_Init(&self->dyna, 0);
+    Actor_ProcessInitChain(&self->dyna.actor, sInitChain);
+    BgJyaIronobj_InitCylinder(self, globalCtx);
     CollisionHeader_GetVirtual(sCollisionHeaders[thisx->params & 1], &colHeader);
-    this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
-    func_808992D8(this);
+    self->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &self->dyna.actor, colHeader);
+    func_808992D8(self);
 }
 
 void BgJyaIronobj_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    BgJyaIronobj* this = THIS;
+    BgJyaIronobj* self = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->colCylinder);
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    Collider_DestroyCylinder(globalCtx, &self->colCylinder);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, self->dyna.bgId);
 }
 
-void func_808992D8(BgJyaIronobj* this) {
-    this->actionFunc = func_808992E8;
+void func_808992D8(BgJyaIronobj* self) {
+    self->actionFunc = func_808992E8;
 }
 
-void func_808992E8(BgJyaIronobj* this, GlobalContext* globalCtx) {
+void func_808992E8(BgJyaIronobj* self, GlobalContext* globalCtx) {
     static BgJyaIronobjIkFunc particleFunc[] = { BgJyaIronobj_SpawnPillarParticles, BgJyaIronobj_SpawnThoneParticles };
     Actor* actor;
     Vec3f dropPos;
     s32 i;
 
-    if (this->colCylinder.base.acFlags & AC_HIT) {
-        actor = this->colCylinder.base.ac;
-        this->colCylinder.base.acFlags &= ~AC_HIT;
+    if (self->colCylinder.base.acFlags & AC_HIT) {
+        actor = self->colCylinder.base.ac;
+        self->colCylinder.base.acFlags &= ~AC_HIT;
         if (actor != NULL && actor->id == ACTOR_EN_IK) {
-            particleFunc[this->dyna.actor.params & 1](this, globalCtx, (EnIk*)actor);
-            Audio_PlaySoundAtPosition(globalCtx, &this->dyna.actor.world.pos, 80, NA_SE_EN_IRONNACK_BREAK_PILLAR);
-            dropPos.x = this->dyna.actor.world.pos.x;
-            dropPos.y = this->dyna.actor.world.pos.y + 20.0f;
-            dropPos.z = this->dyna.actor.world.pos.z;
+            particleFunc[self->dyna.actor.params & 1](self, globalCtx, (EnIk*)actor);
+            Audio_PlaySoundAtPosition(globalCtx, &self->dyna.actor.world.pos, 80, NA_SE_EN_IRONNACK_BREAK_PILLAR);
+            dropPos.x = self->dyna.actor.world.pos.x;
+            dropPos.y = self->dyna.actor.world.pos.y + 20.0f;
+            dropPos.z = self->dyna.actor.world.pos.z;
             for (i = 0; i < 3; i++) {
                 Item_DropCollectible(globalCtx, &dropPos, ITEM00_HEART);
                 dropPos.y += 18.0f;
             }
-            Actor_Kill(&this->dyna.actor);
+            Actor_Kill(&self->dyna.actor);
             return;
         }
     } else {
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->colCylinder.base);
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &self->colCylinder.base);
     }
 }
 
 void BgJyaIronobj_Update(Actor* thisx, GlobalContext* globalCtx) {
-    BgJyaIronobj* this = THIS;
+    BgJyaIronobj* self = THIS;
 
-    this->actionFunc(this, globalCtx);
+    self->actionFunc(self, globalCtx);
 }
 
 void BgJyaIronobj_Draw(Actor* thisx, GlobalContext* globalCtx) {

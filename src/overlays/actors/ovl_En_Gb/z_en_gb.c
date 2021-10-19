@@ -16,17 +16,17 @@ void EnGb_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnGb_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnGb_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80A2F83C(EnGb* this, GlobalContext* globalCtx);
-void func_80A2FC70(EnGb* this, GlobalContext* globalCtx);
-void func_80A2FA50(EnGb* this, GlobalContext* globalCtx);
-void func_80A2F9C0(EnGb* this, GlobalContext* globalCtx);
-void func_80A2F94C(EnGb* this, GlobalContext* globalCtx);
-void func_80A2FB40(EnGb* this, GlobalContext* globalCtx);
-void func_80A2FBB0(EnGb* this, GlobalContext* globalCtx);
-void func_80A2FC0C(EnGb* this, GlobalContext* globalCtx);
+void func_80A2F83C(EnGb* self, GlobalContext* globalCtx);
+void func_80A2FC70(EnGb* self, GlobalContext* globalCtx);
+void func_80A2FA50(EnGb* self, GlobalContext* globalCtx);
+void func_80A2F9C0(EnGb* self, GlobalContext* globalCtx);
+void func_80A2F94C(EnGb* self, GlobalContext* globalCtx);
+void func_80A2FB40(EnGb* self, GlobalContext* globalCtx);
+void func_80A2FBB0(EnGb* self, GlobalContext* globalCtx);
+void func_80A2FC0C(EnGb* self, GlobalContext* globalCtx);
 
-void EnGb_DrawCagedSouls(EnGb* this, GlobalContext* globalCtx);
-void EnGb_UpdateCagedSouls(EnGb* this, GlobalContext* globalCtx);
+void EnGb_DrawCagedSouls(EnGb* self, GlobalContext* globalCtx);
+void EnGb_UpdateCagedSouls(EnGb* self, GlobalContext* globalCtx);
 
 const ActorInit En_Gb_InitVars = {
     ACTOR_EN_GB,
@@ -142,195 +142,195 @@ static Vec3f sBottlesPositions[] = {
     { -48.0f, 0.0f, 60.0f },
 };
 
-void func_80A2F180(EnGb* this) {
+void func_80A2F180(EnGb* self) {
     if (gSaveContext.infTable[0xB] & 0x40) {
-        this->textId = 0x70F5;
+        self->textId = 0x70F5;
     } else {
-        this->textId = 0x70F4;
+        self->textId = 0x70F4;
     }
 }
 
 void EnGb_Init(Actor* thisx, GlobalContext* globalCtx) {
-    EnGb* this = THIS;
+    EnGb* self = THIS;
     s32 pad;
     CollisionHeader* colHeader = NULL;
     s32 i;
     f32 rand;
     Vec3f focusOffset;
 
-    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPolyActor_Init(&this->dyna, DPM_UNK);
+    Actor_ProcessInitChain(&self->dyna.actor, sInitChain);
+    DynaPolyActor_Init(&self->dyna, DPM_UNK);
     CollisionHeader_GetVirtual(&gPoeSellerCol, &colHeader);
-    this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gPoeSellerSkel, &gPoeSellerIdleAnim, this->jointTable,
-                       this->morphTable, 12);
-    Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinderType1(globalCtx, &this->collider, &this->dyna.actor, &sCylinderInit);
+    self->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &self->dyna.actor, colHeader);
+    SkelAnime_InitFlex(globalCtx, &self->skelAnime, &gPoeSellerSkel, &gPoeSellerIdleAnim, self->jointTable,
+                       self->morphTable, 12);
+    Collider_InitCylinder(globalCtx, &self->collider);
+    Collider_SetCylinderType1(globalCtx, &self->collider, &self->dyna.actor, &sCylinderInit);
 
     for (i = 0; i < ARRAY_COUNT(sBottlesCylindersInit); i++) {
-        Collider_InitCylinder(globalCtx, &this->bottlesColliders[i]);
-        Collider_SetCylinderType1(globalCtx, &this->bottlesColliders[i], &this->dyna.actor, &sBottlesCylindersInit[i]);
+        Collider_InitCylinder(globalCtx, &self->bottlesColliders[i]);
+        Collider_SetCylinderType1(globalCtx, &self->bottlesColliders[i], &self->dyna.actor, &sBottlesCylindersInit[i]);
     }
 
-    this->light = LightContext_InsertLight(globalCtx, &globalCtx->lightCtx, &this->lightInfo);
-    Lights_PointNoGlowSetInfo(&this->lightInfo, this->dyna.actor.home.pos.x, this->dyna.actor.home.pos.y,
-                              this->dyna.actor.home.pos.z, 255, 255, 255, 200);
+    self->light = LightContext_InsertLight(globalCtx, &globalCtx->lightCtx, &self->lightInfo);
+    Lights_PointNoGlowSetInfo(&self->lightInfo, self->dyna.actor.home.pos.x, self->dyna.actor.home.pos.y,
+                              self->dyna.actor.home.pos.z, 255, 255, 255, 200);
 
-    ActorShape_Init(&this->dyna.actor.shape, 0.0f, ActorShadow_DrawCircle, 35.0f);
-    Actor_SetScale(&this->dyna.actor, 0.01f);
-    this->dyna.actor.colChkInfo.mass = 0xFF;
-    this->dyna.actor.speedXZ = 0.0f;
-    this->dyna.actor.velocity.y = 0.0f;
-    this->dyna.actor.gravity = -1.0f;
-    this->actionTimer = (s16)Rand_ZeroFloat(100.0f) + 100;
+    ActorShape_Init(&self->dyna.actor.shape, 0.0f, ActorShadow_DrawCircle, 35.0f);
+    Actor_SetScale(&self->dyna.actor, 0.01f);
+    self->dyna.actor.colChkInfo.mass = 0xFF;
+    self->dyna.actor.speedXZ = 0.0f;
+    self->dyna.actor.velocity.y = 0.0f;
+    self->dyna.actor.gravity = -1.0f;
+    self->actionTimer = (s16)Rand_ZeroFloat(100.0f) + 100;
 
     for (i = 0; i < ARRAY_COUNT(sCagedSoulPositions); i++) {
-        this->cagedSouls[i].infoIdx = (s32)Rand_ZeroFloat(30.0f) % 3;
-        this->cagedSouls[i].unk_14.x = this->cagedSouls[i].translation.x =
-            sCagedSoulPositions[i].x + this->dyna.actor.world.pos.x;
-        this->cagedSouls[i].unk_14.y = this->cagedSouls[i].translation.y =
-            sCagedSoulPositions[i].y + this->dyna.actor.world.pos.y;
-        this->cagedSouls[i].unk_14.z = this->cagedSouls[i].translation.z =
-            sCagedSoulPositions[i].z + this->dyna.actor.world.pos.z;
-        this->cagedSouls[i].unk_1 = 1;
-        this->cagedSouls[i].unk_3 = this->cagedSouls[i].unk_2 = 0;
-        this->cagedSouls[i].unk_20 = this->cagedSouls[i].unk_24 = 0.0f;
-        this->cagedSouls[i].unk_6 = Rand_ZeroFloat(40.0f);
-        this->cagedSouls[i].rotate180 = this->cagedSouls[i].unk_6 & 1;
-        this->cagedSouls[i].unk_28 = 0.2f;
+        self->cagedSouls[i].infoIdx = (s32)Rand_ZeroFloat(30.0f) % 3;
+        self->cagedSouls[i].unk_14.x = self->cagedSouls[i].translation.x =
+            sCagedSoulPositions[i].x + self->dyna.actor.world.pos.x;
+        self->cagedSouls[i].unk_14.y = self->cagedSouls[i].translation.y =
+            sCagedSoulPositions[i].y + self->dyna.actor.world.pos.y;
+        self->cagedSouls[i].unk_14.z = self->cagedSouls[i].translation.z =
+            sCagedSoulPositions[i].z + self->dyna.actor.world.pos.z;
+        self->cagedSouls[i].unk_1 = 1;
+        self->cagedSouls[i].unk_3 = self->cagedSouls[i].unk_2 = 0;
+        self->cagedSouls[i].unk_20 = self->cagedSouls[i].unk_24 = 0.0f;
+        self->cagedSouls[i].unk_6 = Rand_ZeroFloat(40.0f);
+        self->cagedSouls[i].rotate180 = self->cagedSouls[i].unk_6 & 1;
+        self->cagedSouls[i].unk_28 = 0.2f;
     }
 
     rand = Rand_ZeroOne();
-    this->lightColor.r = (s8)(rand * 30.0f) + 225;
-    this->lightColor.g = (s8)(rand * 100.0f) + 155;
-    this->lightColor.b = (s8)(rand * 160.0f) + 95;
-    this->lightColor.a = 200;
-    Matrix_Translate(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
+    self->lightColor.r = (s8)(rand * 30.0f) + 225;
+    self->lightColor.g = (s8)(rand * 100.0f) + 155;
+    self->lightColor.b = (s8)(rand * 160.0f) + 95;
+    self->lightColor.a = 200;
+    Matrix_Translate(self->dyna.actor.world.pos.x, self->dyna.actor.world.pos.y, self->dyna.actor.world.pos.z,
                      MTXMODE_NEW);
-    Matrix_RotateRPY(this->dyna.actor.world.rot.x, this->dyna.actor.world.rot.y, this->dyna.actor.world.rot.z,
+    Matrix_RotateRPY(self->dyna.actor.world.rot.x, self->dyna.actor.world.rot.y, self->dyna.actor.world.rot.z,
                      MTXMODE_APPLY);
     focusOffset.x = focusOffset.y = 0.0f;
     focusOffset.z = 44.0f;
-    Matrix_MultVec3f(&focusOffset, &this->dyna.actor.focus.pos);
-    this->dyna.actor.focus.pos.y += 62.5f;
-    func_80A2F180(this);
-    this->actionFunc = func_80A2F83C;
+    Matrix_MultVec3f(&focusOffset, &self->dyna.actor.focus.pos);
+    self->dyna.actor.focus.pos.y += 62.5f;
+    func_80A2F180(self);
+    self->actionFunc = func_80A2F83C;
 }
 
 void EnGb_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    EnGb* this = THIS;
+    EnGb* self = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->collider);
-    LightContext_RemoveLight(globalCtx, &globalCtx->lightCtx, this->light);
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    Collider_DestroyCylinder(globalCtx, &self->collider);
+    LightContext_RemoveLight(globalCtx, &globalCtx->lightCtx, self->light);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, self->dyna.bgId);
 }
 
-void func_80A2F608(EnGb* this) {
+void func_80A2F608(EnGb* self) {
     s32 i;
     Vec3f sp48;
     Vec3f sp3C;
 
-    Matrix_Translate(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
+    Matrix_Translate(self->dyna.actor.world.pos.x, self->dyna.actor.world.pos.y, self->dyna.actor.world.pos.z,
                      MTXMODE_NEW);
-    Matrix_RotateRPY(this->dyna.actor.world.rot.x, this->dyna.actor.world.rot.y, this->dyna.actor.world.rot.z,
+    Matrix_RotateRPY(self->dyna.actor.world.rot.x, self->dyna.actor.world.rot.y, self->dyna.actor.world.rot.z,
                      MTXMODE_APPLY);
     sp48.x = sp48.y = 0.0f;
     sp48.z = 25.0f;
     Matrix_MultVec3f(&sp48, &sp3C);
-    this->collider.dim.pos.x = sp3C.x;
-    this->collider.dim.pos.y = sp3C.y;
-    this->collider.dim.pos.z = sp3C.z;
+    self->collider.dim.pos.x = sp3C.x;
+    self->collider.dim.pos.y = sp3C.y;
+    self->collider.dim.pos.z = sp3C.z;
 
     for (i = 0; i < ARRAY_COUNT(sBottlesPositions); i++) {
-        Matrix_Translate(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
+        Matrix_Translate(self->dyna.actor.world.pos.x, self->dyna.actor.world.pos.y, self->dyna.actor.world.pos.z,
                          MTXMODE_NEW);
-        Matrix_RotateRPY(this->dyna.actor.world.rot.x, this->dyna.actor.world.rot.y, this->dyna.actor.world.rot.z,
+        Matrix_RotateRPY(self->dyna.actor.world.rot.x, self->dyna.actor.world.rot.y, self->dyna.actor.world.rot.z,
                          MTXMODE_APPLY);
         Matrix_MultVec3f(&sBottlesPositions[i], &sp3C);
-        this->bottlesColliders[i].dim.pos.x = sp3C.x;
-        this->bottlesColliders[i].dim.pos.y = sp3C.y;
-        this->bottlesColliders[i].dim.pos.z = sp3C.z;
+        self->bottlesColliders[i].dim.pos.x = sp3C.x;
+        self->bottlesColliders[i].dim.pos.y = sp3C.y;
+        self->bottlesColliders[i].dim.pos.z = sp3C.z;
     }
 }
 
-s32 func_80A2F760(EnGb* this) {
+s32 func_80A2F760(EnGb* self) {
     s32 i;
-    for (i = 0; i < ARRAY_COUNT(this->cagedSouls); i++) {
-        if (this->cagedSouls[i].unk_3) {
+    for (i = 0; i < ARRAY_COUNT(self->cagedSouls); i++) {
+        if (self->cagedSouls[i].unk_3) {
             return 1;
         }
     }
     return 0;
 }
 
-void func_80A2F7C0(EnGb* this) {
-    Animation_Change(&this->skelAnime, &gPoeSellerSwingStickAnim, 1.0f, 0.0f,
+void func_80A2F7C0(EnGb* self) {
+    Animation_Change(&self->skelAnime, &gPoeSellerSwingStickAnim, 1.0f, 0.0f,
                      Animation_GetLastFrame(&gPoeSellerSwingStickAnim), ANIMMODE_ONCE, 0.0f);
-    Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_NALE_MAGIC);
-    this->actionFunc = func_80A2FC70;
+    Audio_PlayActorSound2(&self->dyna.actor, NA_SE_EV_NALE_MAGIC);
+    self->actionFunc = func_80A2FC70;
 }
 
-void func_80A2F83C(EnGb* this, GlobalContext* globalCtx) {
+void func_80A2F83C(EnGb* self, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if (!func_80A2F760(this)) {
-        if (this->actionTimer != 0) {
-            this->actionTimer--;
+    if (!func_80A2F760(self)) {
+        if (self->actionTimer != 0) {
+            self->actionTimer--;
         } else {
-            func_80A2F7C0(this);
+            func_80A2F7C0(self);
             return;
         }
     }
-    if (func_8002F194(&this->dyna.actor, globalCtx)) {
+    if (func_8002F194(&self->dyna.actor, globalCtx)) {
         switch (func_8002F368(globalCtx)) {
             case EXCH_ITEM_NONE:
-                func_80A2F180(this);
-                this->actionFunc = func_80A2F94C;
+                func_80A2F180(self);
+                self->actionFunc = func_80A2F94C;
                 break;
             case EXCH_ITEM_POE:
                 player->actor.textId = 0x70F6;
-                this->actionFunc = func_80A2F9C0;
+                self->actionFunc = func_80A2F9C0;
                 break;
             case EXCH_ITEM_BIG_POE:
                 player->actor.textId = 0x70F7;
-                this->actionFunc = func_80A2FA50;
+                self->actionFunc = func_80A2FA50;
                 break;
         }
         return;
     }
-    if (this->dyna.actor.xzDistToPlayer < 100.0f) {
-        func_8002F298(&this->dyna.actor, globalCtx, 100.0f, EXCH_ITEM_POE);
+    if (self->dyna.actor.xzDistToPlayer < 100.0f) {
+        func_8002F298(&self->dyna.actor, globalCtx, 100.0f, EXCH_ITEM_POE);
     }
 }
 
-void func_80A2F94C(EnGb* this, GlobalContext* globalCtx) {
+void func_80A2F94C(EnGb* self, GlobalContext* globalCtx) {
     if (func_8010BDBC(&globalCtx->msgCtx) == 6 && func_80106BC8(globalCtx)) {
         if (!(gSaveContext.infTable[0xB] & 0x40)) {
             gSaveContext.infTable[0xB] |= 0x40;
         }
-        func_80A2F180(this);
-        this->actionFunc = func_80A2F83C;
+        func_80A2F180(self);
+        self->actionFunc = func_80A2F83C;
     }
 }
 
-void func_80A2F9C0(EnGb* this, GlobalContext* globalCtx) {
+void func_80A2F9C0(EnGb* self, GlobalContext* globalCtx) {
     if (func_8010BDBC(&globalCtx->msgCtx) == 6 && func_80106BC8(globalCtx)) {
         if (!(gSaveContext.infTable[0xB] & 0x40)) {
             gSaveContext.infTable[0xB] |= 0x40;
         }
-        func_80A2F180(this);
+        func_80A2F180(self);
         Player_UpdateBottleHeld(globalCtx, GET_PLAYER(globalCtx), ITEM_BOTTLE, PLAYER_AP_BOTTLE);
         Rupees_ChangeBy(10);
-        this->actionFunc = func_80A2F83C;
+        self->actionFunc = func_80A2F83C;
     }
 }
 
-void func_80A2FA50(EnGb* this, GlobalContext* globalCtx) {
+void func_80A2FA50(EnGb* self, GlobalContext* globalCtx) {
     if (func_8010BDBC(&globalCtx->msgCtx) == 6 && func_80106BC8(globalCtx)) {
         if (!(gSaveContext.infTable[0xB] & 0x40)) {
             gSaveContext.infTable[0xB] |= 0x40;
         }
-        func_80A2F180(this);
+        func_80A2F180(self);
         Player_UpdateBottleHeld(globalCtx, GET_PLAYER(globalCtx), ITEM_BOTTLE, PLAYER_AP_BOTTLE);
         Rupees_ChangeBy(50);
         HIGH_SCORE(HS_POE_POINTS) += 100;
@@ -338,90 +338,90 @@ void func_80A2FA50(EnGb* this, GlobalContext* globalCtx) {
             if (HIGH_SCORE(HS_POE_POINTS) > 1100) {
                 HIGH_SCORE(HS_POE_POINTS) = 1100;
             }
-            this->actionFunc = func_80A2F83C;
+            self->actionFunc = func_80A2F83C;
         } else {
             Player* player = GET_PLAYER(globalCtx);
 
             player->exchangeItemId = EXCH_ITEM_NONE;
-            this->textId = 0x70F8;
-            func_8010B720(globalCtx, this->textId);
-            this->actionFunc = func_80A2FB40;
+            self->textId = 0x70F8;
+            func_8010B720(globalCtx, self->textId);
+            self->actionFunc = func_80A2FB40;
         }
     }
 }
 
-void func_80A2FB40(EnGb* this, GlobalContext* globalCtx) {
+void func_80A2FB40(EnGb* self, GlobalContext* globalCtx) {
     if (func_8010BDBC(&globalCtx->msgCtx) == 6 && func_80106BC8(globalCtx)) {
-        func_8002F434(&this->dyna.actor, globalCtx, GI_BOTTLE, 100.0f, 10.0f);
-        this->actionFunc = func_80A2FBB0;
+        func_8002F434(&self->dyna.actor, globalCtx, GI_BOTTLE, 100.0f, 10.0f);
+        self->actionFunc = func_80A2FBB0;
     }
 }
 
-void func_80A2FBB0(EnGb* this, GlobalContext* globalCtx) {
-    if (Actor_HasParent(&this->dyna.actor, globalCtx)) {
-        this->dyna.actor.parent = NULL;
-        this->actionFunc = func_80A2FC0C;
+void func_80A2FBB0(EnGb* self, GlobalContext* globalCtx) {
+    if (Actor_HasParent(&self->dyna.actor, globalCtx)) {
+        self->dyna.actor.parent = NULL;
+        self->actionFunc = func_80A2FC0C;
     } else {
-        func_8002F434(&this->dyna.actor, globalCtx, GI_BOTTLE, 100.0f, 10.0f);
+        func_8002F434(&self->dyna.actor, globalCtx, GI_BOTTLE, 100.0f, 10.0f);
     }
 }
 
-void func_80A2FC0C(EnGb* this, GlobalContext* globalCtx) {
+void func_80A2FC0C(EnGb* self, GlobalContext* globalCtx) {
     if (func_8010BDBC(&globalCtx->msgCtx) == 6 && func_80106BC8(globalCtx)) {
-        func_8002F194(&this->dyna.actor, globalCtx);
-        func_80A2F180(this);
-        this->actionFunc = func_80A2F83C;
+        func_8002F194(&self->dyna.actor, globalCtx);
+        func_80A2F180(self);
+        self->actionFunc = func_80A2F83C;
     }
 }
 
-void func_80A2FC70(EnGb* this, GlobalContext* globalCtx) {
-    if (this->skelAnime.curFrame == Animation_GetLastFrame(&gPoeSellerSwingStickAnim)) {
-        Animation_Change(&this->skelAnime, &gPoeSellerIdleAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gPoeSellerIdleAnim),
+void func_80A2FC70(EnGb* self, GlobalContext* globalCtx) {
+    if (self->skelAnime.curFrame == Animation_GetLastFrame(&gPoeSellerSwingStickAnim)) {
+        Animation_Change(&self->skelAnime, &gPoeSellerIdleAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gPoeSellerIdleAnim),
                          ANIMMODE_LOOP, 0.0f);
-        this->actionFunc = func_80A2F83C;
-    } else if (this->skelAnime.curFrame == 18.0f) {
-        this->cagedSouls[1].unk_1 = 3;
-        this->cagedSouls[1].unk_3 = 1;
-        this->cagedSouls[2].unk_1 = 3;
-        this->cagedSouls[2].unk_3 = 1;
-        this->cagedSouls[3].unk_1 = 3;
-        this->cagedSouls[3].unk_3 = 1;
-        if (this->actionFunc) {} // these ifs cannot just contain a constant
-        this->cagedSouls[0].unk_1 = 3;
-        this->cagedSouls[0].unk_3 = 1;
-        if (this->actionFunc) {}
-        this->actionTimer = (s16)Rand_ZeroFloat(600.0f) + 600;
-        Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_WOOD_HIT);
+        self->actionFunc = func_80A2F83C;
+    } else if (self->skelAnime.curFrame == 18.0f) {
+        self->cagedSouls[1].unk_1 = 3;
+        self->cagedSouls[1].unk_3 = 1;
+        self->cagedSouls[2].unk_1 = 3;
+        self->cagedSouls[2].unk_3 = 1;
+        self->cagedSouls[3].unk_1 = 3;
+        self->cagedSouls[3].unk_3 = 1;
+        if (self->actionFunc) {} // these ifs cannot just contain a constant
+        self->cagedSouls[0].unk_1 = 3;
+        self->cagedSouls[0].unk_3 = 1;
+        if (self->actionFunc) {}
+        self->actionTimer = (s16)Rand_ZeroFloat(600.0f) + 600;
+        Audio_PlayActorSound2(&self->dyna.actor, NA_SE_EV_WOOD_HIT);
     }
 }
 
 void EnGb_Update(Actor* thisx, GlobalContext* globalCtx2) {
-    EnGb* this = THIS;
+    EnGb* self = THIS;
     GlobalContext* globalCtx = globalCtx2;
     s32 i;
     f32 rand;
 
-    this->frameTimer++;
-    SkelAnime_Update(&this->skelAnime);
-    this->actionFunc(this, globalCtx);
-    this->dyna.actor.textId = this->textId;
-    func_80A2F608(this);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    self->frameTimer++;
+    SkelAnime_Update(&self->skelAnime);
+    self->actionFunc(self, globalCtx);
+    self->dyna.actor.textId = self->textId;
+    func_80A2F608(self);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
 
-    for (i = 0; i < ARRAY_COUNT(this->bottlesColliders); i++) {
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->bottlesColliders[i].base);
+    for (i = 0; i < ARRAY_COUNT(self->bottlesColliders); i++) {
+        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &self->bottlesColliders[i].base);
     }
 
     rand = Rand_ZeroOne();
-    this->lightColor.r = (s8)(rand * 30.0f) + 225;
-    this->lightColor.g = (s8)(rand * 100.0f) + 155;
-    this->lightColor.b = (s8)(rand * 160.0f) + 95;
-    this->lightColor.a = 200;
-    EnGb_UpdateCagedSouls(this, globalCtx);
+    self->lightColor.r = (s8)(rand * 30.0f) + 225;
+    self->lightColor.g = (s8)(rand * 100.0f) + 155;
+    self->lightColor.b = (s8)(rand * 160.0f) + 95;
+    self->lightColor.a = 200;
+    EnGb_UpdateCagedSouls(self, globalCtx);
 }
 
 void EnGb_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    EnGb* this = THIS;
+    EnGb* self = THIS;
     s32 pad;
 
     OPEN_DISPS(globalCtx->state.gfxCtx, "../z_en_gb.c", 763);
@@ -429,92 +429,92 @@ void EnGb_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_80093D18(globalCtx->state.gfxCtx);
 
     gDPPipeSync(POLY_OPA_DISP++);
-    gDPSetEnvColor(POLY_OPA_DISP++, this->lightColor.r, this->lightColor.g, this->lightColor.b, 255);
+    gDPSetEnvColor(POLY_OPA_DISP++, self->lightColor.r, self->lightColor.g, self->lightColor.b, 255);
 
-    Lights_PointNoGlowSetInfo(&this->lightInfo, this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
-                              this->dyna.actor.world.pos.z, this->lightColor.r, this->lightColor.g, this->lightColor.b,
-                              this->lightColor.a);
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          NULL, NULL, &this->dyna.actor);
-    EnGb_DrawCagedSouls(this, globalCtx);
+    Lights_PointNoGlowSetInfo(&self->lightInfo, self->dyna.actor.world.pos.x, self->dyna.actor.world.pos.y,
+                              self->dyna.actor.world.pos.z, self->lightColor.r, self->lightColor.g, self->lightColor.b,
+                              self->lightColor.a);
+    SkelAnime_DrawFlexOpa(globalCtx, self->skelAnime.skeleton, self->skelAnime.jointTable, self->skelAnime.dListCount,
+                          NULL, NULL, &self->dyna.actor);
+    EnGb_DrawCagedSouls(self, globalCtx);
     CLOSE_DISPS(globalCtx->state.gfxCtx, "../z_en_gb.c", 796);
 }
 
-void EnGb_UpdateCagedSouls(EnGb* this, GlobalContext* globalCtx) {
+void EnGb_UpdateCagedSouls(EnGb* self, GlobalContext* globalCtx) {
     f32 temp_f20;
     s16 rot;
     s32 i;
 
     for (i = 0; i < 4; i++) {
-        switch (this->cagedSouls[i].unk_1) {
+        switch (self->cagedSouls[i].unk_1) {
             case 0:
-                Math_ApproachF(&this->cagedSouls[i].unk_20, 1.0f, 0.02f, this->cagedSouls[i].unk_24);
-                Math_ApproachF(&this->cagedSouls[i].unk_24, 1.0f, 0.001f, 1.0f);
-                if ((this->cagedSouls[i].unk_28 - .01f) <= this->cagedSouls[i].unk_20) {
-                    this->cagedSouls[i].unk_20 = this->cagedSouls[i].unk_28;
-                    this->cagedSouls[i].unk_24 = 0.0f;
-                    this->cagedSouls[i].unk_1 = 1;
-                    this->cagedSouls[i].unk_2 = 2;
-                    this->cagedSouls[i].unk_6 = 0;
+                Math_ApproachF(&self->cagedSouls[i].unk_20, 1.0f, 0.02f, self->cagedSouls[i].unk_24);
+                Math_ApproachF(&self->cagedSouls[i].unk_24, 1.0f, 0.001f, 1.0f);
+                if ((self->cagedSouls[i].unk_28 - .01f) <= self->cagedSouls[i].unk_20) {
+                    self->cagedSouls[i].unk_20 = self->cagedSouls[i].unk_28;
+                    self->cagedSouls[i].unk_24 = 0.0f;
+                    self->cagedSouls[i].unk_1 = 1;
+                    self->cagedSouls[i].unk_2 = 2;
+                    self->cagedSouls[i].unk_6 = 0;
                 }
                 break;
             case 1:
-                if (this->cagedSouls[i].unk_6 != 0) {
-                    this->cagedSouls[i].unk_6--;
+                if (self->cagedSouls[i].unk_6 != 0) {
+                    self->cagedSouls[i].unk_6--;
                 } else {
-                    this->cagedSouls[i].unk_3 = 0;
-                    this->cagedSouls[i].unk_24 = 0.0f;
-                    this->cagedSouls[i].unk_1 = this->cagedSouls[i].unk_2;
+                    self->cagedSouls[i].unk_3 = 0;
+                    self->cagedSouls[i].unk_24 = 0.0f;
+                    self->cagedSouls[i].unk_1 = self->cagedSouls[i].unk_2;
                 }
                 break;
             case 2:
-                Math_ApproachF(&this->cagedSouls[i].unk_20, 0.0f, 0.02f, this->cagedSouls[i].unk_24);
-                Math_ApproachF(&this->cagedSouls[i].unk_24, 1.0f, 0.001f, 1.0f);
-                if (this->cagedSouls[i].unk_20 <= 0.01f) {
-                    this->cagedSouls[i].unk_28 = this->cagedSouls[i].unk_28 + 0.2f;
-                    if (this->cagedSouls[i].unk_28 > 1.0f) {
-                        this->cagedSouls[i].unk_28 = 1.0f;
+                Math_ApproachF(&self->cagedSouls[i].unk_20, 0.0f, 0.02f, self->cagedSouls[i].unk_24);
+                Math_ApproachF(&self->cagedSouls[i].unk_24, 1.0f, 0.001f, 1.0f);
+                if (self->cagedSouls[i].unk_20 <= 0.01f) {
+                    self->cagedSouls[i].unk_28 = self->cagedSouls[i].unk_28 + 0.2f;
+                    if (self->cagedSouls[i].unk_28 > 1.0f) {
+                        self->cagedSouls[i].unk_28 = 1.0f;
                     }
-                    this->cagedSouls[i].unk_20 = 0.0f;
-                    this->cagedSouls[i].unk_24 = 0.0f;
-                    this->cagedSouls[i].unk_1 = 1;
-                    this->cagedSouls[i].unk_2 = 0;
-                    this->cagedSouls[i].unk_6 = 0;
+                    self->cagedSouls[i].unk_20 = 0.0f;
+                    self->cagedSouls[i].unk_24 = 0.0f;
+                    self->cagedSouls[i].unk_1 = 1;
+                    self->cagedSouls[i].unk_2 = 0;
+                    self->cagedSouls[i].unk_6 = 0;
                 }
                 break;
             case 3:
-                Math_ApproachF(&this->cagedSouls[i].unk_20, 0.0f, 0.5f, 1.0f);
-                if (this->cagedSouls[i].unk_20 <= 0.01f) {
-                    this->cagedSouls[i].unk_28 = 0.2f;
-                    this->cagedSouls[i].unk_20 = 0.0f;
-                    this->cagedSouls[i].unk_24 = 0.0f;
-                    this->cagedSouls[i].unk_1 = 1;
-                    this->cagedSouls[i].unk_2 = 0;
-                    this->cagedSouls[i].unk_6 = (s16)Rand_ZeroFloat(60.0f) + 60;
+                Math_ApproachF(&self->cagedSouls[i].unk_20, 0.0f, 0.5f, 1.0f);
+                if (self->cagedSouls[i].unk_20 <= 0.01f) {
+                    self->cagedSouls[i].unk_28 = 0.2f;
+                    self->cagedSouls[i].unk_20 = 0.0f;
+                    self->cagedSouls[i].unk_24 = 0.0f;
+                    self->cagedSouls[i].unk_1 = 1;
+                    self->cagedSouls[i].unk_2 = 0;
+                    self->cagedSouls[i].unk_6 = (s16)Rand_ZeroFloat(60.0f) + 60;
                 }
                 break;
         }
 
-        temp_f20 = this->cagedSouls[i].unk_20 * 60.0f;
+        temp_f20 = self->cagedSouls[i].unk_20 * 60.0f;
         if ((i == 0) || (i == 3)) {
-            this->cagedSouls[i].translation.x = this->cagedSouls[i].unk_14.x;
-            this->cagedSouls[i].translation.y = this->cagedSouls[i].unk_14.y + temp_f20;
-            this->cagedSouls[i].translation.z = this->cagedSouls[i].unk_14.z;
+            self->cagedSouls[i].translation.x = self->cagedSouls[i].unk_14.x;
+            self->cagedSouls[i].translation.y = self->cagedSouls[i].unk_14.y + temp_f20;
+            self->cagedSouls[i].translation.z = self->cagedSouls[i].unk_14.z;
         } else if (i == 1) {
-            rot = this->dyna.actor.world.rot.y - 0x4000;
-            this->cagedSouls[i].translation.x = this->cagedSouls[i].unk_14.x + Math_SinS(rot) * temp_f20;
-            this->cagedSouls[i].translation.z = this->cagedSouls[i].unk_14.z + Math_CosS(rot) * temp_f20;
-            this->cagedSouls[i].translation.y = this->cagedSouls[i].unk_14.y;
+            rot = self->dyna.actor.world.rot.y - 0x4000;
+            self->cagedSouls[i].translation.x = self->cagedSouls[i].unk_14.x + Math_SinS(rot) * temp_f20;
+            self->cagedSouls[i].translation.z = self->cagedSouls[i].unk_14.z + Math_CosS(rot) * temp_f20;
+            self->cagedSouls[i].translation.y = self->cagedSouls[i].unk_14.y;
         } else {
-            rot = this->dyna.actor.world.rot.y + 0x4000;
-            this->cagedSouls[i].translation.x = this->cagedSouls[i].unk_14.x + Math_SinS(rot) * temp_f20;
-            this->cagedSouls[i].translation.z = this->cagedSouls[i].unk_14.z + Math_CosS(rot) * temp_f20;
-            this->cagedSouls[i].translation.y = this->cagedSouls[i].unk_14.y;
+            rot = self->dyna.actor.world.rot.y + 0x4000;
+            self->cagedSouls[i].translation.x = self->cagedSouls[i].unk_14.x + Math_SinS(rot) * temp_f20;
+            self->cagedSouls[i].translation.z = self->cagedSouls[i].unk_14.z + Math_CosS(rot) * temp_f20;
+            self->cagedSouls[i].translation.y = self->cagedSouls[i].unk_14.y;
         }
     }
 }
 
-void EnGb_DrawCagedSouls(EnGb* this, GlobalContext* globalCtx) {
+void EnGb_DrawCagedSouls(EnGb* self, GlobalContext* globalCtx) {
     s32 pad;
     s32 i;
 
@@ -523,11 +523,11 @@ void EnGb_DrawCagedSouls(EnGb* this, GlobalContext* globalCtx) {
     func_80093D84(globalCtx->state.gfxCtx);
 
     for (i = 0; i < 4; i++) {
-        s32 idx = this->cagedSouls[i].infoIdx;
+        s32 idx = self->cagedSouls[i].infoIdx;
 
         gSPSegment(POLY_XLU_DISP++, 0x08,
                    Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 32, 64, 1, 0,
-                                    (u32)(sCagedSoulInfo[idx].timerMultiplier * this->frameTimer) % 512, 32, 128));
+                                    (u32)(sCagedSoulInfo[idx].timerMultiplier * self->frameTimer) % 512, 32, 128));
         gSPSegment(POLY_XLU_DISP++, 0x09, SEGMENTED_TO_VIRTUAL(sCagedSoulInfo[idx].texture));
         gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, sCagedSoulInfo[idx].prim.r, sCagedSoulInfo[idx].prim.g,
                         sCagedSoulInfo[idx].prim.b, sCagedSoulInfo[idx].prim.a);
@@ -535,11 +535,11 @@ void EnGb_DrawCagedSouls(EnGb* this, GlobalContext* globalCtx) {
                        sCagedSoulInfo[idx].env.a);
 
         Matrix_Push();
-        Matrix_Translate(this->cagedSouls[i].translation.x, this->cagedSouls[i].translation.y,
-                         this->cagedSouls[i].translation.z, MTXMODE_NEW);
+        Matrix_Translate(self->cagedSouls[i].translation.x, self->cagedSouls[i].translation.y,
+                         self->cagedSouls[i].translation.z, MTXMODE_NEW);
         func_800D1FD4(&globalCtx->mf_11DA0);
 
-        if (this->cagedSouls[i].rotate180) {
+        if (self->cagedSouls[i].rotate180) {
             Matrix_RotateRPY(0, -0x8000, 0, MTXMODE_APPLY);
         }
         Matrix_Scale(0.007f, 0.007f, 1.0f, MTXMODE_APPLY);

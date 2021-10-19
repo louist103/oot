@@ -3474,7 +3474,7 @@ OnePointCsFull D_8011D6AC[] = {
       { 0.0f, 20.0f, 0.0f } },
     { // initFlags & 0x00FF (at): 0 none
       // initFlags & 0xFF00 (eye): 0 none
-      // action: 18, copy this camera to default camera.
+      // action: 18, copy self camera to default camera.
       0x12,
       0xFF,
       0x0000,

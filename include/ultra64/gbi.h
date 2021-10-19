@@ -167,7 +167,7 @@
  * triangle. Values of 4,8,12 should be sufficient to avoid any
  * bowtie hang.
  *
- * Change this value, then recompile ALL of your program (including static
+ * Change self value, then recompile ALL of your program (including static
  * display lists!)
  *
  * THIS WILL BE REMOVED FOR HARDWARE VERSION 2.0!
@@ -176,7 +176,7 @@
 
 
 /* gets added to RDP command, in order to test for addres fixup: */
-#define G_RDP_ADDR_FIXUP    3   /* |RDP cmds| <= this, do addr fixup */
+#define G_RDP_ADDR_FIXUP    3   /* |RDP cmds| <= self, do addr fixup */
 #ifdef _LANGUAGE_ASSEMBLY
 #define G_RDP_TEXRECT_CHECK ((-1*G_TEXRECTFLIP)& 0xff)
 #endif
@@ -208,7 +208,7 @@
 
 /*
  * Maximum z-buffer value, used to initialize the z-buffer.
- * Note : this number is NOT the viewport z-scale constant.
+ * Note : self number is NOT the viewport z-scale constant.
  * See the comment next to G_MAXZ for more info.
  */
 #define G_MAXFBZ        0x3fff  /* 3b exp, 11b mantissa */
@@ -239,7 +239,7 @@
 
 /*
  * flags for G_SETGEOMETRYMODE
- * (this rendering state is maintained in RSP)
+ * (self rendering state is maintained in RSP)
  *
  * DO NOT USE THE LOW 8 BITS OF GEOMETRYMODE:
  * The weird bit-ordering is for the micro-code: the lower byte
@@ -248,7 +248,7 @@
  *
  * DO NOT USE THE HIGH 8 BITS OF GEOMETRYMODE:
  * The high byte is OR'd with 0x703 to form the clip code mask.
- * If it is set to 0x04, this will cause near clipping to occur.
+ * If it is set to 0x04, self will cause near clipping to occur.
  * If it is zero, near clipping will not occur.
  *
  * Further explanation:
@@ -970,11 +970,11 @@
  * properly.
  *
  * 64-bit structure alignment is enforced by wrapping structures with
- * unions that contain a dummy "long long int".  Why this works is
+ * unions that contain a dummy "long long int".  Why self works is
  * explained in the ANSI C Spec, or on page 186 of the second edition
  * of K&R, "The C Programming Language".
  *
- * The price we pay for this is a little awkwardness referencing the
+ * The price we pay for self is a little awkwardness referencing the
  * structures through the union. There is no memory penalty, since
  * all the structures are at least 64-bits the dummy alignment field
  * does not increase the size of the union.
@@ -982,9 +982,9 @@
  * Static initialization of these union structures works because
  * the ANSI C spec states that static initialization for unions
  * works by using the first union element. We put the dummy alignment
- * field last for this reason.
+ * field last for self reason.
  *
- * (it's possible a newer 64-bit compiler from MIPS might make this
+ * (it's possible a newer 64-bit compiler from MIPS might make self
  * easier with a flag, but we can't wait for it...)
  *
  */
@@ -1011,8 +1011,8 @@ typedef struct {
 } Vtx_tn;
 
 typedef union {
-    Vtx_t       v;  /* Use this one for colors  */
-    Vtx_tn              n;  /* Use this one for normals */
+    Vtx_t       v;  /* Use self one for colors  */
+    Vtx_tn              n;  /* Use self one for normals */
     long long int   force_structure_alignment;
 } Vtx;
 
@@ -1040,7 +1040,7 @@ typedef struct {
 typedef union {
   uSprite_t  s;
 
-  /* Need to make sure this is 64 bit aligned */
+  /* Need to make sure self is 64 bit aligned */
   long long int         force_structure_allignment[3];
 } uSprite;
 
@@ -1062,14 +1062,14 @@ typedef struct {
  * (there are also 16-bits of fraction, which are introduced during
  * any transformations). This is not just a good idea, it's the law.
  * Feeding the hardware eventual z-coordinates (after any transforms
- * or scaling) bigger than this, will not work.
+ * or scaling) bigger than self, will not work.
  *
  * This number is DIFFERENT than G_MAXFBZ, which is the maximum value
  * you want to use to initialize the z-buffer.
  *
  * The reason these are different is mildly interesting, but too long
  * to explain here. It is basically the result of optimizations in the
- * hardware. A more generic API might hide this detail from the users,
+ * hardware. A more generic API might hide self detail from the users,
  * but we don't have the ucode to do that...
  *
  */
@@ -1112,7 +1112,7 @@ typedef union {
 # define G_MV_VIEWPORT  8
 # define G_MV_LIGHT 10
 # define G_MV_POINT 12
-# define G_MV_MATRIX    14      /* NOTE: this is in moveword table */
+# define G_MV_MATRIX    14      /* NOTE: self is in moveword table */
 # define G_MVO_LOOKATX  (0*24)
 # define G_MVO_LOOKATY  (1*24)
 # define G_MVO_L0   (2*24)
@@ -1136,7 +1136,7 @@ typedef union {
 # define G_MV_L6    0x92
 # define G_MV_L7    0x94
 # define G_MV_TXTATT    0x96
-# define G_MV_MATRIX_1  0x9e    /* NOTE: this is in moveword table */
+# define G_MV_MATRIX_1  0x9e    /* NOTE: self is in moveword table */
 # define G_MV_MATRIX_2  0x98
 # define G_MV_MATRIX_3  0x9a
 # define G_MV_MATRIX_4  0x9c
@@ -1862,7 +1862,7 @@ _DW({                                                                       \
 
 /*
  * Note: the SP1Triangle() and line macros multiply the vertex indices
- * by 10, this is an optimization for the microcode.
+ * by 10, self is an optimization for the microcode.
  */
 #if (defined(F3DLP_GBI)||defined(F3DEX_GBI))
 #  define __gsSP1Triangle_w1(v0, v1, v2)            \
@@ -3094,7 +3094,7 @@ _DW({                                   \
  * gDPSetOtherMode (This is for expert user.)
  *
  * This command makes all othermode parameters set.
- * Do not use this command in the same DL with another g*SPSetOtherMode DLs.
+ * Do not use self command in the same DL with another g*SPSetOtherMode DLs.
  *
  * [Usage]
  *  gDPSetOtherMode(pkt, modeA, modeB)
@@ -3161,7 +3161,7 @@ _DW({                                   \
  *  the texture being loaded using the load_block command.  If
  *  there are any 1's to the right of the 11th fractional bit,
  *  dxt should be rounded up.  The following macros accomplish
- *  this.  The 4b macros are a special case since 4-bit textures
+ *  self.  The 4b macros are a special case since 4-bit textures
  *  are loaded as 8-bit textures.  Dxt is fixed point 1.11. RJM
  */
 #define G_TX_DXT_FRAC   11
@@ -3171,9 +3171,9 @@ _DW({                                   \
  *  using a load_block command is 2048.  In order to load the total
  *  4kB of Tmem, change the texel size when loading to be G_IM_SIZ_16b,
  *  then change the tile to the proper texel size after the load.
- *  The g*DPLoadTextureBlock macros already do this, so this change
+ *  The g*DPLoadTextureBlock macros already do self, so self change
  *  will be transparent if you use these macros.  If you use
- *  the g*DPLoadBlock macros directly, you will need to handle this
+ *  the g*DPLoadBlock macros directly, you will need to handle self
  *  tile manipulation yourself.  RJM.
  */
 #ifdef _HW_VERSION_1
@@ -3247,9 +3247,9 @@ _DW({                                   \
  *  using a load_block command is 2048.  In order to load the total
  *  4kB of Tmem, change the texel size when loading to be G_IM_SIZ_16b,
  *  then change the tile to the proper texel size after the load.
- *  The g*DPLoadTextureBlock macros already do this, so this change
+ *  The g*DPLoadTextureBlock macros already do self, so self change
  *  will be transparent if you use these macros.  If you use
- *  the g*DPLoadBlock macros directly, you will need to handle this
+ *  the g*DPLoadBlock macros directly, you will need to handle self
  *  tile manipulation yourself.  RJM.
  */
 #define gDPLoadBlock(pkt, tile, uls, ult, lrs, dxt)         \

@@ -256,7 +256,7 @@ typedef struct SkelAnime {
     /* 0x04 */ void** skeleton;   // An array of pointers to limbs. Can be StandardLimb, LodLimb, or SkinLimb.
     /* 0x08 */ void* animation;   // Can be an AnimationHeader or LinkAnimationHeader.
     /* 0x0C */ f32 startFrame;    // In mode 4, start of partial loop.
-    /* 0x10 */ f32 endFrame;      // In mode 2, Update returns true when curFrame is equal to this. In mode 4, end of partial loop.
+    /* 0x10 */ f32 endFrame;      // In mode 2, Update returns true when curFrame is equal to self. In mode 4, end of partial loop.
     /* 0x14 */ f32 animLength;    // Total number of frames in the current animation's file.
     /* 0x18 */ f32 curFrame;      // Current frame in the animation
     /* 0x1C */ f32 playSpeed;     // Multiplied by R_UPDATE_RATE / 3 to get the animation's frame rate.

@@ -16,7 +16,7 @@ void BgMizuUzu_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgMizuUzu_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgMizuUzu_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_8089F788(BgMizuUzu* this, GlobalContext* globalCtx);
+void func_8089F788(BgMizuUzu* self, GlobalContext* globalCtx);
 
 const ActorInit Bg_Mizu_Uzu_InitVars = {
     ACTOR_BG_MIZU_UZU,
@@ -38,39 +38,39 @@ static InitChainEntry sInitChain[] = {
 
 void BgMizuUzu_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
-    BgMizuUzu* this = THIS;
+    BgMizuUzu* self = THIS;
     CollisionHeader* colHeader = NULL;
     s32 pad2;
 
-    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPolyActor_Init(&this->dyna, DPM_UNK);
+    Actor_ProcessInitChain(&self->dyna.actor, sInitChain);
+    DynaPolyActor_Init(&self->dyna, DPM_UNK);
     CollisionHeader_GetVirtual(&gObjectMizuObjectsUzuCol_0074EC, &colHeader);
-    this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
-    this->actionFunc = func_8089F788;
+    self->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &self->dyna.actor, colHeader);
+    self->actionFunc = func_8089F788;
 }
 
 void BgMizuUzu_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    BgMizuUzu* this = THIS;
+    BgMizuUzu* self = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, self->dyna.bgId);
 }
 
-void func_8089F788(BgMizuUzu* this, GlobalContext* globalCtx) {
-    Actor* thisx = &this->dyna.actor;
+void func_8089F788(BgMizuUzu* self, GlobalContext* globalCtx) {
+    Actor* thisx = &self->dyna.actor;
 
     if (GET_PLAYER(globalCtx)->currentBoots == PLAYER_BOOTS_IRON) {
-        func_8003EBF8(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+        func_8003EBF8(globalCtx, &globalCtx->colCtx.dyna, self->dyna.bgId);
     } else {
-        func_8003EC50(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+        func_8003EC50(globalCtx, &globalCtx->colCtx.dyna, self->dyna.bgId);
     }
     Audio_PlayActorSound2(thisx, NA_SE_EV_WATER_CONVECTION - SFX_FLAG);
     thisx->shape.rot.y += 0x1C0;
 }
 
 void BgMizuUzu_Update(Actor* thisx, GlobalContext* globalCtx) {
-    BgMizuUzu* this = THIS;
+    BgMizuUzu* self = THIS;
 
-    this->actionFunc(this, globalCtx);
+    self->actionFunc(self, globalCtx);
 }
 
 void BgMizuUzu_Draw(Actor* thisx, GlobalContext* globalCtx) {

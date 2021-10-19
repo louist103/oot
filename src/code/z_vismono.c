@@ -7,25 +7,25 @@
 // framebuffer
 extern u16 D_0F000000[];
 
-void VisMono_Init(VisMono* this) {
-    bzero(this, sizeof(VisMono));
-    this->unk_00 = 0;
-    this->setScissor = false;
-    this->primColor.r = 255;
-    this->primColor.g = 255;
-    this->primColor.b = 255;
-    this->primColor.a = 255;
-    this->envColor.r = 0;
-    this->envColor.g = 0;
-    this->envColor.b = 0;
-    this->envColor.a = 0;
+void VisMono_Init(VisMono* self) {
+    bzero(self, sizeof(VisMono));
+    self->unk_00 = 0;
+    self->setScissor = false;
+    self->primColor.r = 255;
+    self->primColor.g = 255;
+    self->primColor.b = 255;
+    self->primColor.a = 255;
+    self->envColor.r = 0;
+    self->envColor.g = 0;
+    self->envColor.b = 0;
+    self->envColor.a = 0;
 }
 
-void VisMono_Destroy(VisMono* this) {
-    SystemArena_FreeDebug(this->monoDl, "../z_vismono.c", 137);
+void VisMono_Destroy(VisMono* self) {
+    SystemArena_FreeDebug(self->monoDl, "../z_vismono.c", 137);
 }
 
-void VisMono_UpdateTexture(VisMono* this, u16* tex) {
+void VisMono_UpdateTexture(VisMono* self, u16* tex) {
     s32 i;
 
     for (i = 0; i < 256; i++) {
@@ -34,7 +34,7 @@ void VisMono_UpdateTexture(VisMono* this, u16* tex) {
     }
 }
 
-Gfx* VisMono_DrawTexture(VisMono* this, Gfx* gfx) {
+Gfx* VisMono_DrawTexture(VisMono* self, Gfx* gfx) {
     s32 y;
     s32 height = 3;
     u16* tex = D_0F000000;
@@ -70,24 +70,24 @@ Gfx* VisMono_DrawTexture(VisMono* this, Gfx* gfx) {
     return gfx;
 }
 
-void VisMono_Draw(VisMono* this, Gfx** gfxp) {
+void VisMono_Draw(VisMono* self, Gfx** gfxp) {
     Gfx* gfx = *gfxp;
     u16* tlut;
     Gfx* monoDL;
     Gfx* glistpEnd;
 
-    if (this->tlut) {
-        tlut = this->tlut;
+    if (self->tlut) {
+        tlut = self->tlut;
     } else {
         tlut = Graph_DlistAlloc(&gfx, 256 * sizeof(u16));
-        VisMono_UpdateTexture(this, tlut);
+        VisMono_UpdateTexture(self, tlut);
     }
 
-    if (this->monoDl) {
-        monoDL = this->monoDl;
+    if (self->monoDl) {
+        monoDL = self->monoDl;
     } else {
         monoDL = Graph_DlistAlloc(&gfx, DLSIZE * sizeof(Gfx));
-        glistpEnd = VisMono_DrawTexture(this, monoDL);
+        glistpEnd = VisMono_DrawTexture(self, monoDL);
 
         if (!(glistpEnd <= monoDL + DLSIZE)) {
             LOG_ADDRESS("glistp_end", glistpEnd, "../z_vismono.c", 257);
@@ -99,12 +99,12 @@ void VisMono_Draw(VisMono* this, Gfx** gfxp) {
     }
 
     gDPPipeSync(gfx++);
-    if (this->setScissor == true) {
+    if (self->setScissor == true) {
         gDPSetScissor(gfx++, G_SC_NON_INTERLACE, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     }
 
-    gDPSetColor(gfx++, G_SETPRIMCOLOR, this->primColor.rgba);
-    gDPSetColor(gfx++, G_SETENVCOLOR, this->envColor.rgba);
+    gDPSetColor(gfx++, G_SETPRIMCOLOR, self->primColor.rgba);
+    gDPSetColor(gfx++, G_SETENVCOLOR, self->envColor.rgba);
 
     gDPLoadTLUT_pal256(gfx++, tlut);
 
@@ -114,17 +114,17 @@ void VisMono_Draw(VisMono* this, Gfx** gfxp) {
     *gfxp = gfx;
 }
 
-void VisMono_DrawOld(VisMono* this) {
+void VisMono_DrawOld(VisMono* self) {
     Gfx* glistpEnd;
 
-    if (!this->tlut) {
-        this->tlut = SystemArena_MallocDebug(256 * sizeof(u16), "../z_vismono.c", 283);
-        VisMono_UpdateTexture(this, this->tlut);
+    if (!self->tlut) {
+        self->tlut = SystemArena_MallocDebug(256 * sizeof(u16), "../z_vismono.c", 283);
+        VisMono_UpdateTexture(self, self->tlut);
     }
 
-    if (!this->monoDl) {
-        this->monoDl = SystemArena_MallocDebug(DLSIZE * sizeof(Gfx), "../z_vismono.c", 289);
-        glistpEnd = VisMono_DrawTexture(this, this->monoDl);
-        ASSERT(glistpEnd <= this->monoDl + DLSIZE, "glistp_end <= this->mono_dl + DLSIZE", "../z_vismono.c", 292);
+    if (!self->monoDl) {
+        self->monoDl = SystemArena_MallocDebug(DLSIZE * sizeof(Gfx), "../z_vismono.c", 289);
+        glistpEnd = VisMono_DrawTexture(self, self->monoDl);
+        ASSERT(glistpEnd <= self->monoDl + DLSIZE, "glistp_end <= self->mono_dl + DLSIZE", "../z_vismono.c", 292);
     }
 }

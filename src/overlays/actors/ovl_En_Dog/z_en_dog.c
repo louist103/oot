@@ -16,12 +16,12 @@ void EnDog_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDog_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDog_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void EnDog_FollowPath(EnDog* this, GlobalContext* globalCtx);
-void EnDog_ChooseMovement(EnDog* this, GlobalContext* globalCtx);
-void EnDog_FollowLink(EnDog* this, GlobalContext* globalCtx);
-void EnDog_RunAway(EnDog* this, GlobalContext* globalCtx);
-void EnDog_FaceLink(EnDog* this, GlobalContext* globalCtx);
-void EnDog_Wait(EnDog* this, GlobalContext* globalCtx);
+void EnDog_FollowPath(EnDog* self, GlobalContext* globalCtx);
+void EnDog_ChooseMovement(EnDog* self, GlobalContext* globalCtx);
+void EnDog_FollowLink(EnDog* self, GlobalContext* globalCtx);
+void EnDog_RunAway(EnDog* self, GlobalContext* globalCtx);
+void EnDog_FaceLink(EnDog* self, GlobalContext* globalCtx);
+void EnDog_Wait(EnDog* self, GlobalContext* globalCtx);
 
 const ActorInit En_Dog_InitVars = {
     ACTOR_EN_DOG,
@@ -78,49 +78,49 @@ typedef enum {
     /* 0x06 */ DOG_BOW_2
 } DogBehavior;
 
-void EnDog_PlayWalkSFX(EnDog* this) {
+void EnDog_PlayWalkSFX(EnDog* self) {
     AnimationHeader* walk = &object_dog_Anim_001368;
 
-    if (this->skelAnime.animation == walk) {
-        if ((this->skelAnime.curFrame == 1.0f) || (this->skelAnime.curFrame == 7.0f)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_CHIBI_WALK);
+    if (self->skelAnime.animation == walk) {
+        if ((self->skelAnime.curFrame == 1.0f) || (self->skelAnime.curFrame == 7.0f)) {
+            Audio_PlayActorSound2(&self->actor, NA_SE_EV_CHIBI_WALK);
         }
     }
 }
 
-void EnDog_PlayRunSFX(EnDog* this) {
+void EnDog_PlayRunSFX(EnDog* self) {
     AnimationHeader* run = &object_dog_Anim_000D78;
 
-    if (this->skelAnime.animation == run) {
-        if ((this->skelAnime.curFrame == 2.0f) || (this->skelAnime.curFrame == 4.0f)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_CHIBI_WALK);
+    if (self->skelAnime.animation == run) {
+        if ((self->skelAnime.curFrame == 2.0f) || (self->skelAnime.curFrame == 4.0f)) {
+            Audio_PlayActorSound2(&self->actor, NA_SE_EV_CHIBI_WALK);
         }
     }
 }
 
-void EnDog_PlayBarkSFX(EnDog* this) {
+void EnDog_PlayBarkSFX(EnDog* self) {
     AnimationHeader* bark = &object_dog_Anim_000278;
 
-    if (this->skelAnime.animation == bark) {
-        if ((this->skelAnime.curFrame == 13.0f) || (this->skelAnime.curFrame == 19.0f)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_SMALL_DOG_BARK);
+    if (self->skelAnime.animation == bark) {
+        if ((self->skelAnime.curFrame == 13.0f) || (self->skelAnime.curFrame == 19.0f)) {
+            Audio_PlayActorSound2(&self->actor, NA_SE_EV_SMALL_DOG_BARK);
         }
     }
 }
 
-s32 EnDog_PlayAnimAndSFX(EnDog* this) {
+s32 EnDog_PlayAnimAndSFX(EnDog* self) {
     s32 animation;
 
-    if (this->behavior != this->nextBehavior) {
-        if (this->nextBehavior == DOG_SIT_2) {
-            this->nextBehavior = DOG_SIT;
+    if (self->behavior != self->nextBehavior) {
+        if (self->nextBehavior == DOG_SIT_2) {
+            self->nextBehavior = DOG_SIT;
         }
-        if (this->nextBehavior == DOG_BOW_2) {
-            this->nextBehavior = DOG_BOW;
+        if (self->nextBehavior == DOG_BOW_2) {
+            self->nextBehavior = DOG_BOW;
         }
 
-        this->behavior = this->nextBehavior;
-        switch (this->behavior) {
+        self->behavior = self->nextBehavior;
+        switch (self->behavior) {
             case DOG_WALK:
                 animation = 1;
                 break;
@@ -137,39 +137,39 @@ s32 EnDog_PlayAnimAndSFX(EnDog* this) {
                 animation = 6;
                 break;
         }
-        func_80034EC0(&this->skelAnime, sAnimations, animation);
+        func_80034EC0(&self->skelAnime, sAnimations, animation);
     }
 
-    switch (this->behavior) {
+    switch (self->behavior) {
         case DOG_SIT:
-            if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) != 0) {
-                func_80034EC0(&this->skelAnime, sAnimations, 5);
-                this->behavior = this->nextBehavior = DOG_SIT_2;
+            if (Animation_OnFrame(&self->skelAnime, self->skelAnime.endFrame) != 0) {
+                func_80034EC0(&self->skelAnime, sAnimations, 5);
+                self->behavior = self->nextBehavior = DOG_SIT_2;
             }
             break;
         case DOG_BOW:
-            if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) != 0) {
-                func_80034EC0(&this->skelAnime, sAnimations, 7);
-                this->behavior = this->nextBehavior = DOG_BOW_2;
+            if (Animation_OnFrame(&self->skelAnime, self->skelAnime.endFrame) != 0) {
+                func_80034EC0(&self->skelAnime, sAnimations, 7);
+                self->behavior = self->nextBehavior = DOG_BOW_2;
             }
             break;
         case DOG_WALK:
-            EnDog_PlayWalkSFX(this);
+            EnDog_PlayWalkSFX(self);
             break;
         case DOG_RUN:
-            EnDog_PlayRunSFX(this);
+            EnDog_PlayRunSFX(self);
             break;
         case DOG_BARK:
-            EnDog_PlayBarkSFX(this);
-            if (this) {} // needed for regalloc
+            EnDog_PlayBarkSFX(self);
+            if (self) {} // needed for regalloc
             break;
     }
     return 0;
 }
 
-s8 EnDog_CanFollow(EnDog* this, GlobalContext* globalCtx) {
-    if (this->collider.base.acFlags & AC_HIT) {
-        this->collider.base.acFlags &= ~AC_HIT;
+s8 EnDog_CanFollow(EnDog* self, GlobalContext* globalCtx) {
+    if (self->collider.base.acFlags & AC_HIT) {
+        self->collider.base.acFlags &= ~AC_HIT;
         return 2;
     }
 
@@ -177,146 +177,146 @@ s8 EnDog_CanFollow(EnDog* this, GlobalContext* globalCtx) {
         return 0;
     }
 
-    if (this->collider.base.ocFlags2 & OC2_HIT_PLAYER) {
-        this->collider.base.ocFlags2 &= ~OC2_HIT_PLAYER;
+    if (self->collider.base.ocFlags2 & OC2_HIT_PLAYER) {
+        self->collider.base.ocFlags2 &= ~OC2_HIT_PLAYER;
         if (gSaveContext.dogParams != 0) {
             return 0;
         }
-        gSaveContext.dogParams = (this->actor.params & 0x7FFF);
+        gSaveContext.dogParams = (self->actor.params & 0x7FFF);
         return 1;
     }
 
     return 0;
 }
 
-s32 EnDog_UpdateWaypoint(EnDog* this, GlobalContext* globalCtx) {
+s32 EnDog_UpdateWaypoint(EnDog* self, GlobalContext* globalCtx) {
     s32 change;
 
-    if (this->path == NULL) {
+    if (self->path == NULL) {
         return 0;
     }
 
-    if (this->reverse) {
+    if (self->reverse) {
         change = -1;
     } else {
         change = 1;
     }
 
-    this->waypoint += change;
+    self->waypoint += change;
 
-    if (this->reverse) {
-        if (this->waypoint < 0) {
-            this->waypoint = this->path->count - 1;
+    if (self->reverse) {
+        if (self->waypoint < 0) {
+            self->waypoint = self->path->count - 1;
         }
     } else {
-        if ((this->path->count - 1) < this->waypoint) {
-            this->waypoint = 0;
+        if ((self->path->count - 1) < self->waypoint) {
+            self->waypoint = 0;
         }
     }
 
     return 1;
 }
 
-s32 EnDog_Orient(EnDog* this, GlobalContext* globalCtx) {
+s32 EnDog_Orient(EnDog* self, GlobalContext* globalCtx) {
     s16 targetYaw;
     f32 waypointDistSq;
 
-    waypointDistSq = Path_OrientAndGetDistSq(&this->actor, this->path, this->waypoint, &targetYaw);
-    Math_SmoothStepToS(&this->actor.world.rot.y, targetYaw, 10, 1000, 1);
+    waypointDistSq = Path_OrientAndGetDistSq(&self->actor, self->path, self->waypoint, &targetYaw);
+    Math_SmoothStepToS(&self->actor.world.rot.y, targetYaw, 10, 1000, 1);
 
     if ((waypointDistSq > 0.0f) && (waypointDistSq < 1000.0f)) {
-        return EnDog_UpdateWaypoint(this, globalCtx);
+        return EnDog_UpdateWaypoint(self, globalCtx);
     } else {
         return 0;
     }
 }
 
 void EnDog_Init(Actor* thisx, GlobalContext* globalCtx) {
-    EnDog* this = THIS;
+    EnDog* self = THIS;
     s16 followingDog;
     s32 pad;
 
-    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_dog_Skel_007290, NULL, this->jointTable, this->morphTable,
+    ActorShape_Init(&self->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
+    SkelAnime_InitFlex(globalCtx, &self->skelAnime, &object_dog_Skel_007290, NULL, self->jointTable, self->morphTable,
                        13);
-    func_80034EC0(&this->skelAnime, sAnimations, 0);
+    func_80034EC0(&self->skelAnime, sAnimations, 0);
 
-    if ((this->actor.params & 0x8000) == 0) {
-        this->actor.params = (this->actor.params & 0xF0FF) | ((((this->actor.params & 0x0F00) >> 8) + 1) << 8);
+    if ((self->actor.params & 0x8000) == 0) {
+        self->actor.params = (self->actor.params & 0xF0FF) | ((((self->actor.params & 0x0F00) >> 8) + 1) << 8);
     }
 
     followingDog = ((gSaveContext.dogParams & 0x0F00) >> 8);
-    if (followingDog == ((this->actor.params & 0x0F00) >> 8) && ((this->actor.params & 0x8000) == 0)) {
-        Actor_Kill(&this->actor);
+    if (followingDog == ((self->actor.params & 0x0F00) >> 8) && ((self->actor.params & 0x8000) == 0)) {
+        Actor_Kill(&self->actor);
         return;
     }
 
-    Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
-    CollisionCheck_SetInfo2(&this->actor.colChkInfo, 0, &sColChkInfoInit);
-    Actor_SetScale(&this->actor, 0.0075f);
-    this->waypoint = 0;
-    this->actor.gravity = -1.0f;
-    this->path = Path_GetByIndex(globalCtx, (this->actor.params & 0x00F0) >> 4, 0xF);
+    Collider_InitCylinder(globalCtx, &self->collider);
+    Collider_SetCylinder(globalCtx, &self->collider, &self->actor, &sCylinderInit);
+    CollisionCheck_SetInfo2(&self->actor.colChkInfo, 0, &sColChkInfoInit);
+    Actor_SetScale(&self->actor, 0.0075f);
+    self->waypoint = 0;
+    self->actor.gravity = -1.0f;
+    self->path = Path_GetByIndex(globalCtx, (self->actor.params & 0x00F0) >> 4, 0xF);
 
     switch (globalCtx->sceneNum) {
         case SCENE_MARKET_NIGHT:
-            if ((!gSaveContext.dogIsLost) && (((this->actor.params & 0x0F00) >> 8) == 1)) {
-                Actor_Kill(&this->actor);
+            if ((!gSaveContext.dogIsLost) && (((self->actor.params & 0x0F00) >> 8) == 1)) {
+                Actor_Kill(&self->actor);
             }
             break;
         case SCENE_IMPA: // Richard's Home
-            if ((u32)(this->actor.params & 0x8000) == 0) {
+            if ((u32)(self->actor.params & 0x8000) == 0) {
                 if (!gSaveContext.dogIsLost) {
-                    this->nextBehavior = DOG_SIT;
-                    this->actionFunc = EnDog_Wait;
-                    this->actor.speedXZ = 0.0f;
+                    self->nextBehavior = DOG_SIT;
+                    self->actionFunc = EnDog_Wait;
+                    self->actor.speedXZ = 0.0f;
                     return;
                 } else {
-                    Actor_Kill(&this->actor);
+                    Actor_Kill(&self->actor);
                     return;
                 }
             }
             break;
     }
 
-    if ((u32)(this->actor.params & 0x8000) != 0) {
-        this->nextBehavior = DOG_WALK;
-        this->actionFunc = EnDog_FollowLink;
+    if ((u32)(self->actor.params & 0x8000) != 0) {
+        self->nextBehavior = DOG_WALK;
+        self->actionFunc = EnDog_FollowLink;
     } else {
-        this->nextBehavior = DOG_SIT;
-        this->actionFunc = EnDog_ChooseMovement;
+        self->nextBehavior = DOG_SIT;
+        self->actionFunc = EnDog_ChooseMovement;
     }
 }
 
 void EnDog_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    EnDog* this = THIS;
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    EnDog* self = THIS;
+    Collider_DestroyCylinder(globalCtx, &self->collider);
 }
 
-void EnDog_FollowPath(EnDog* this, GlobalContext* globalCtx) {
+void EnDog_FollowPath(EnDog* self, GlobalContext* globalCtx) {
     s32 behaviors[] = { DOG_SIT, DOG_BOW, DOG_BARK };
     s32 unused[] = { 40, 80, 20 };
     f32 speed;
     s32 frame;
 
-    if (EnDog_CanFollow(this, globalCtx) == 1) {
-        this->actionFunc = EnDog_FollowLink;
+    if (EnDog_CanFollow(self, globalCtx) == 1) {
+        self->actionFunc = EnDog_FollowLink;
     }
 
-    if (DECR(this->behaviorTimer) != 0) {
-        if (this->nextBehavior == DOG_WALK) {
+    if (DECR(self->behaviorTimer) != 0) {
+        if (self->nextBehavior == DOG_WALK) {
             speed = 1.0f;
         } else {
             speed = 4.0f;
         }
-        Math_SmoothStepToF(&this->actor.speedXZ, speed, 0.4f, 1.0f, 0.0f);
-        EnDog_Orient(this, globalCtx);
-        this->actor.shape.rot = this->actor.world.rot;
+        Math_SmoothStepToF(&self->actor.speedXZ, speed, 0.4f, 1.0f, 0.0f);
+        EnDog_Orient(self, globalCtx);
+        self->actor.shape.rot = self->actor.world.rot;
 
         // Used to change between two text boxes for Richard's owner in the Market Day scene
         // depending on where he is on his path. En_Hy checks these event flags.
-        if (this->waypoint < 9) {
+        if (self->waypoint < 9) {
             // Richard is close to her, text says something about his coat
             gSaveContext.eventInf[3] |= 1;
         } else {
@@ -325,133 +325,133 @@ void EnDog_FollowPath(EnDog* this, GlobalContext* globalCtx) {
         }
     } else {
         frame = globalCtx->state.frames % 3;
-        this->nextBehavior = behaviors[frame];
+        self->nextBehavior = behaviors[frame];
         // no clue why they're using the behavior id to calculate timer. possibly meant to use the unused array?
-        this->behaviorTimer = Rand_S16Offset(60, behaviors[frame]);
-        this->actionFunc = EnDog_ChooseMovement;
+        self->behaviorTimer = Rand_S16Offset(60, behaviors[frame]);
+        self->actionFunc = EnDog_ChooseMovement;
     }
 }
 
-void EnDog_ChooseMovement(EnDog* this, GlobalContext* globalCtx) {
-    if (EnDog_CanFollow(this, globalCtx) == 1) {
-        this->actionFunc = EnDog_FollowLink;
+void EnDog_ChooseMovement(EnDog* self, GlobalContext* globalCtx) {
+    if (EnDog_CanFollow(self, globalCtx) == 1) {
+        self->actionFunc = EnDog_FollowLink;
     }
 
-    if (DECR(this->behaviorTimer) == 0) {
-        this->behaviorTimer = Rand_S16Offset(200, 100);
+    if (DECR(self->behaviorTimer) == 0) {
+        self->behaviorTimer = Rand_S16Offset(200, 100);
         if (globalCtx->state.frames % 2) {
-            this->nextBehavior = DOG_WALK;
+            self->nextBehavior = DOG_WALK;
         } else {
-            this->nextBehavior = DOG_RUN;
+            self->nextBehavior = DOG_RUN;
         }
 
-        if (this->nextBehavior == DOG_RUN) {
-            this->behaviorTimer /= 2;
+        if (self->nextBehavior == DOG_RUN) {
+            self->behaviorTimer /= 2;
         }
-        this->actionFunc = EnDog_FollowPath;
+        self->actionFunc = EnDog_FollowPath;
     }
-    Math_SmoothStepToF(&this->actor.speedXZ, 0.0f, 0.4f, 1.0f, 0.0f);
+    Math_SmoothStepToF(&self->actor.speedXZ, 0.0f, 0.4f, 1.0f, 0.0f);
 }
 
-void EnDog_FollowLink(EnDog* this, GlobalContext* globalCtx) {
+void EnDog_FollowLink(EnDog* self, GlobalContext* globalCtx) {
     f32 speed;
 
     if (gSaveContext.dogParams == 0) {
-        this->nextBehavior = DOG_SIT;
-        this->actionFunc = EnDog_Wait;
-        this->actor.speedXZ = 0.0f;
+        self->nextBehavior = DOG_SIT;
+        self->actionFunc = EnDog_Wait;
+        self->actor.speedXZ = 0.0f;
         return;
     }
 
-    if (this->actor.xzDistToPlayer > 400.0f) {
-        if (this->nextBehavior != DOG_SIT && this->nextBehavior != DOG_SIT_2) {
-            this->nextBehavior = DOG_BOW;
+    if (self->actor.xzDistToPlayer > 400.0f) {
+        if (self->nextBehavior != DOG_SIT && self->nextBehavior != DOG_SIT_2) {
+            self->nextBehavior = DOG_BOW;
         }
         gSaveContext.dogParams = 0;
         speed = 0.0f;
-    } else if (this->actor.xzDistToPlayer > 100.0f) {
-        this->nextBehavior = DOG_RUN;
+    } else if (self->actor.xzDistToPlayer > 100.0f) {
+        self->nextBehavior = DOG_RUN;
         speed = 4.0f;
-    } else if (this->actor.xzDistToPlayer < 40.0f) {
-        if (this->nextBehavior != DOG_BOW && this->nextBehavior != DOG_BOW_2) {
-            this->nextBehavior = DOG_BOW;
+    } else if (self->actor.xzDistToPlayer < 40.0f) {
+        if (self->nextBehavior != DOG_BOW && self->nextBehavior != DOG_BOW_2) {
+            self->nextBehavior = DOG_BOW;
         }
         speed = 0.0f;
     } else {
-        this->nextBehavior = DOG_WALK;
+        self->nextBehavior = DOG_WALK;
         speed = 1.0f;
     }
 
-    Math_ApproachF(&this->actor.speedXZ, speed, 0.6f, 1.0f);
+    Math_ApproachF(&self->actor.speedXZ, speed, 0.6f, 1.0f);
 
-    if (!(this->actor.xzDistToPlayer > 400.0f)) {
-        Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 10, 1000, 1);
-        this->actor.shape.rot = this->actor.world.rot;
+    if (!(self->actor.xzDistToPlayer > 400.0f)) {
+        Math_SmoothStepToS(&self->actor.world.rot.y, self->actor.yawTowardsPlayer, 10, 1000, 1);
+        self->actor.shape.rot = self->actor.world.rot;
     }
 }
 
-void EnDog_RunAway(EnDog* this, GlobalContext* globalCtx) {
-    if (this->actor.xzDistToPlayer < 200.0f) {
-        Math_ApproachF(&this->actor.speedXZ, 4.0f, 0.6f, 1.0f);
-        Math_SmoothStepToS(&this->actor.world.rot.y, (this->actor.yawTowardsPlayer ^ 0x8000), 10, 1000, 1);
+void EnDog_RunAway(EnDog* self, GlobalContext* globalCtx) {
+    if (self->actor.xzDistToPlayer < 200.0f) {
+        Math_ApproachF(&self->actor.speedXZ, 4.0f, 0.6f, 1.0f);
+        Math_SmoothStepToS(&self->actor.world.rot.y, (self->actor.yawTowardsPlayer ^ 0x8000), 10, 1000, 1);
     } else {
-        this->actionFunc = EnDog_FaceLink;
+        self->actionFunc = EnDog_FaceLink;
     }
-    this->actor.shape.rot = this->actor.world.rot;
+    self->actor.shape.rot = self->actor.world.rot;
 }
 
-void EnDog_FaceLink(EnDog* this, GlobalContext* globalCtx) {
+void EnDog_FaceLink(EnDog* self, GlobalContext* globalCtx) {
     s16 rotTowardLink;
     s16 prevRotY;
     f32 absAngleDiff;
 
     // if the dog is more than 200 units away from Link, turn to face him then wait
-    if (200.0f <= this->actor.xzDistToPlayer) {
-        this->nextBehavior = DOG_WALK;
+    if (200.0f <= self->actor.xzDistToPlayer) {
+        self->nextBehavior = DOG_WALK;
 
-        Math_ApproachF(&this->actor.speedXZ, 1.0f, 0.6f, 1.0f);
+        Math_ApproachF(&self->actor.speedXZ, 1.0f, 0.6f, 1.0f);
 
-        rotTowardLink = this->actor.yawTowardsPlayer;
-        prevRotY = this->actor.world.rot.y;
-        Math_SmoothStepToS(&this->actor.world.rot.y, rotTowardLink, 10, 1000, 1);
+        rotTowardLink = self->actor.yawTowardsPlayer;
+        prevRotY = self->actor.world.rot.y;
+        Math_SmoothStepToS(&self->actor.world.rot.y, rotTowardLink, 10, 1000, 1);
 
-        absAngleDiff = this->actor.world.rot.y;
+        absAngleDiff = self->actor.world.rot.y;
         absAngleDiff -= prevRotY;
         absAngleDiff = fabsf(absAngleDiff);
         if (absAngleDiff < 200.0f) {
-            this->nextBehavior = DOG_SIT;
-            this->actionFunc = EnDog_Wait;
-            this->actor.speedXZ = 0.0f;
+            self->nextBehavior = DOG_SIT;
+            self->actionFunc = EnDog_Wait;
+            self->actor.speedXZ = 0.0f;
         }
     } else {
-        this->nextBehavior = DOG_RUN;
-        this->actionFunc = EnDog_RunAway;
+        self->nextBehavior = DOG_RUN;
+        self->actionFunc = EnDog_RunAway;
     }
-    this->actor.shape.rot = this->actor.world.rot;
+    self->actor.shape.rot = self->actor.world.rot;
 }
 
-void EnDog_Wait(EnDog* this, GlobalContext* globalCtx) {
-    this->unusedAngle = (this->actor.yawTowardsPlayer - this->actor.shape.rot.y);
+void EnDog_Wait(EnDog* self, GlobalContext* globalCtx) {
+    self->unusedAngle = (self->actor.yawTowardsPlayer - self->actor.shape.rot.y);
 
     // If another dog is following Link and he gets within 200 units of waiting dog, run away
-    if ((gSaveContext.dogParams != 0) && (this->actor.xzDistToPlayer < 200.0f)) {
-        this->nextBehavior = DOG_RUN;
-        this->actionFunc = EnDog_RunAway;
+    if ((gSaveContext.dogParams != 0) && (self->actor.xzDistToPlayer < 200.0f)) {
+        self->nextBehavior = DOG_RUN;
+        self->actionFunc = EnDog_RunAway;
     }
 }
 
 void EnDog_Update(Actor* thisx, GlobalContext* globalCtx) {
-    EnDog* this = THIS;
+    EnDog* self = THIS;
     s32 pad;
 
-    EnDog_PlayAnimAndSFX(this);
-    SkelAnime_Update(&this->skelAnime);
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, this->collider.dim.radius, this->collider.dim.height * 0.5f, 0.0f,
+    EnDog_PlayAnimAndSFX(self);
+    SkelAnime_Update(&self->skelAnime);
+    Actor_UpdateBgCheckInfo(globalCtx, &self->actor, self->collider.dim.radius, self->collider.dim.height * 0.5f, 0.0f,
                             5);
-    Actor_MoveForward(&this->actor);
-    this->actionFunc(this, globalCtx);
-    Collider_UpdateCylinder(&this->actor, &this->collider);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    Actor_MoveForward(&self->actor);
+    self->actionFunc(self, globalCtx);
+    Collider_UpdateCylinder(&self->actor, &self->collider);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
 }
 
 s32 EnDog_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* thisx) {
@@ -462,7 +462,7 @@ void EnDog_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
 }
 
 void EnDog_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    EnDog* this = THIS;
+    EnDog* self = THIS;
     Color_RGBA8 colors[] = { { 255, 255, 200, 0 }, { 150, 100, 50, 0 } };
 
     OPEN_DISPS(globalCtx->state.gfxCtx, "../z_en_dog.c", 972);
@@ -470,11 +470,11 @@ void EnDog_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_80093D18(globalCtx->state.gfxCtx);
 
     gDPPipeSync(POLY_OPA_DISP++);
-    gDPSetEnvColor(POLY_OPA_DISP++, colors[this->actor.params & 0xF].r, colors[this->actor.params & 0xF].g,
-                   colors[this->actor.params & 0xF].b, colors[this->actor.params & 0xF].a);
+    gDPSetEnvColor(POLY_OPA_DISP++, colors[self->actor.params & 0xF].r, colors[self->actor.params & 0xF].g,
+                   colors[self->actor.params & 0xF].b, colors[self->actor.params & 0xF].a);
 
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          EnDog_OverrideLimbDraw, EnDog_PostLimbDraw, this);
+    SkelAnime_DrawFlexOpa(globalCtx, self->skelAnime.skeleton, self->skelAnime.jointTable, self->skelAnime.dListCount,
+                          EnDog_OverrideLimbDraw, EnDog_PostLimbDraw, self);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx, "../z_en_dog.c", 994);
 }

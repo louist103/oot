@@ -1192,7 +1192,7 @@ s16 OnePointCutscene_Init(GlobalContext* globalCtx, s16 csId, s16 timer, Actor* 
     OnePointCutscene_SetInfo(globalCtx, csCamIdx, csId, actor, timer);
     Gameplay_ChangeCameraStatus(globalCtx, csCamIdx, vCsStatus);
 
-    // Removes all lower priority cutscenes in front of this cutscene from the queue.
+    // Removes all lower priority cutscenes in front of self cutscene from the queue.
     vCurCamIdx = csCamIdx;
     vNextCamIdx = globalCtx->cameraPtrs[csCamIdx]->childCamIdx;
 
@@ -1286,7 +1286,7 @@ s32 OnePointCutscene_Attention(GlobalContext* globalCtx, Actor* actor) {
             vLastHigherCat = vTargetCat;
         }
     }
-    // Actorcat is only undefined if the actor is in a higher category than all other attention cutscenes. In this case,
+    // Actorcat is only undefined if the actor is in a higher category than all other attention cutscenes. In self case,
     // it goes in the first position of the list. Otherwise, it goes in the index found in the loop.
     vParentCamIdx = (vLastHigherCat == -1) ? MAIN_CAM : parentCam->thisIdx;
 
@@ -1316,7 +1316,7 @@ s32 OnePointCutscene_Attention(GlobalContext* globalCtx, Actor* actor) {
     osSyncPrintf(VT_FGCOL(CYAN) "%06u:" VT_RST " actor attention demo camera: request %d ", globalCtx->state.frames,
                  actor->category);
 
-    // If the previous attention cutscene has an actor in the same category, skip this actor.
+    // If the previous attention cutscene has an actor in the same category, skip self actor.
     if (actor->category == vLastHigherCat) {
         osSyncPrintf("→ " VT_FGCOL(PURPLE) "×" VT_RST " (%d)\n", actor->id);
         return SUBCAM_NONE;

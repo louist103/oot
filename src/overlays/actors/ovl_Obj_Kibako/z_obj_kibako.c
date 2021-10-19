@@ -17,12 +17,12 @@ void ObjKibako_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjKibako_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjKibako_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void ObjKibako_SetupIdle(ObjKibako* this);
-void ObjKibako_Idle(ObjKibako* this, GlobalContext* globalCtx);
-void ObjKibako_SetupHeld(ObjKibako* this);
-void ObjKibako_Held(ObjKibako* this, GlobalContext* globalCtx);
-void ObjKibako_SetupThrown(ObjKibako* this);
-void ObjKibako_Thrown(ObjKibako* this, GlobalContext* globalCtx);
+void ObjKibako_SetupIdle(ObjKibako* self);
+void ObjKibako_Idle(ObjKibako* self, GlobalContext* globalCtx);
+void ObjKibako_SetupHeld(ObjKibako* self);
+void ObjKibako_Held(ObjKibako* self, GlobalContext* globalCtx);
+void ObjKibako_SetupThrown(ObjKibako* self);
+void ObjKibako_Thrown(ObjKibako* self, GlobalContext* globalCtx);
 
 const ActorInit Obj_Kibako_InitVars = {
     ACTOR_OBJ_KIBAKO,
@@ -65,56 +65,56 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 1000, ICHAIN_STOP),
 };
 
-void ObjKibako_SpawnCollectible(ObjKibako* this, GlobalContext* globalCtx) {
+void ObjKibako_SpawnCollectible(ObjKibako* self, GlobalContext* globalCtx) {
     s16 collectible;
 
-    collectible = this->actor.params & 0x1F;
+    collectible = self->actor.params & 0x1F;
     if ((collectible >= 0) && (collectible <= 0x19)) {
-        Item_DropCollectible(globalCtx, &this->actor.world.pos,
-                             collectible | (((this->actor.params >> 8) & 0x3F) << 8));
+        Item_DropCollectible(globalCtx, &self->actor.world.pos,
+                             collectible | (((self->actor.params >> 8) & 0x3F) << 8));
     }
 }
 
-void ObjKibako_ApplyGravity(ObjKibako* this) {
-    this->actor.velocity.y += this->actor.gravity;
-    if (this->actor.velocity.y < this->actor.minVelocityY) {
-        this->actor.velocity.y = this->actor.minVelocityY;
+void ObjKibako_ApplyGravity(ObjKibako* self) {
+    self->actor.velocity.y += self->actor.gravity;
+    if (self->actor.velocity.y < self->actor.minVelocityY) {
+        self->actor.velocity.y = self->actor.minVelocityY;
     }
 }
 
 void ObjKibako_InitCollider(Actor* thisx, GlobalContext* globalCtx) {
-    ObjKibako* this = THIS;
+    ObjKibako* self = THIS;
 
-    Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
-    Collider_UpdateCylinder(&this->actor, &this->collider);
+    Collider_InitCylinder(globalCtx, &self->collider);
+    Collider_SetCylinder(globalCtx, &self->collider, &self->actor, &sCylinderInit);
+    Collider_UpdateCylinder(&self->actor, &self->collider);
 }
 
 void ObjKibako_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
-    ObjKibako* this = THIS;
+    ObjKibako* self = THIS;
 
-    Actor_ProcessInitChain(&this->actor, sInitChain);
-    this->actor.gravity = -1.2f;
-    this->actor.minVelocityY = -13.0f;
-    ObjKibako_InitCollider(&this->actor, globalCtx);
-    CollisionCheck_SetInfo(&this->actor.colChkInfo, NULL, &sCCInfoInit);
-    ObjKibako_SetupIdle(this);
+    Actor_ProcessInitChain(&self->actor, sInitChain);
+    self->actor.gravity = -1.2f;
+    self->actor.minVelocityY = -13.0f;
+    ObjKibako_InitCollider(&self->actor, globalCtx);
+    CollisionCheck_SetInfo(&self->actor.colChkInfo, NULL, &sCCInfoInit);
+    ObjKibako_SetupIdle(self);
     // "wooden box"
-    osSyncPrintf("(dungeon keep 木箱)(arg_data 0x%04x)\n", this->actor.params);
+    osSyncPrintf("(dungeon keep 木箱)(arg_data 0x%04x)\n", self->actor.params);
 }
 
 void ObjKibako_Destroy(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
-    ObjKibako* this = THIS;
+    ObjKibako* self = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    Collider_DestroyCylinder(globalCtx, &self->collider);
 }
 
-void ObjKibako_AirBreak(ObjKibako* this, GlobalContext* globalCtx) {
+void ObjKibako_AirBreak(ObjKibako* self, GlobalContext* globalCtx) {
     s16 angle;
     s32 i;
-    Vec3f* breakPos = &this->actor.world.pos;
+    Vec3f* breakPos = &self->actor.world.pos;
     Vec3f pos;
     Vec3f velocity;
 
@@ -145,18 +145,18 @@ void ObjKibako_AirBreak(ObjKibako* this, GlobalContext* globalCtx) {
                              (Rand_ZeroOne() * 30.0f) + 10.0f, 0, 32, 60, KAKERA_COLOR_NONE,
                              OBJECT_GAMEPLAY_DANGEON_KEEP, gSmallWoodenBoxFragmentDL);
     }
-    func_80033480(globalCtx, &this->actor.world.pos, 40.0f, 3, 50, 140, 1);
+    func_80033480(globalCtx, &self->actor.world.pos, 40.0f, 3, 50, 140, 1);
 }
 
-void ObjKibako_WaterBreak(ObjKibako* this, GlobalContext* globalCtx) {
+void ObjKibako_WaterBreak(ObjKibako* self, GlobalContext* globalCtx) {
     s16 angle;
     s32 i;
-    Vec3f* breakPos = &this->actor.world.pos;
+    Vec3f* breakPos = &self->actor.world.pos;
     Vec3f pos;
     Vec3f velocity;
 
     pos = *breakPos;
-    pos.y += this->actor.yDistToWater;
+    pos.y += self->actor.yDistToWater;
     EffectSsGSplash_Spawn(globalCtx, &pos, NULL, NULL, 0, 500);
 
     for (i = 0, angle = 0; i < 12; i++, angle += 0x4E20) {
@@ -182,108 +182,108 @@ void ObjKibako_WaterBreak(ObjKibako* this, GlobalContext* globalCtx) {
     }
 }
 
-void ObjKibako_SetupIdle(ObjKibako* this) {
-    this->actionFunc = ObjKibako_Idle;
-    this->actor.colChkInfo.mass = MASS_HEAVY;
+void ObjKibako_SetupIdle(ObjKibako* self) {
+    self->actionFunc = ObjKibako_Idle;
+    self->actor.colChkInfo.mass = MASS_HEAVY;
 }
 
-void ObjKibako_Idle(ObjKibako* this, GlobalContext* globalCtx) {
+void ObjKibako_Idle(ObjKibako* self, GlobalContext* globalCtx) {
     s32 pad;
 
-    if (Actor_HasParent(&this->actor, globalCtx)) {
-        ObjKibako_SetupHeld(this);
-    } else if ((this->actor.bgCheckFlags & 0x20) && (this->actor.yDistToWater > 19.0f)) {
-        ObjKibako_WaterBreak(this, globalCtx);
-        Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 20, NA_SE_EV_WOODBOX_BREAK);
-        ObjKibako_SpawnCollectible(this, globalCtx);
-        Actor_Kill(&this->actor);
-    } else if (this->collider.base.acFlags & AC_HIT) {
-        ObjKibako_AirBreak(this, globalCtx);
-        Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 20, NA_SE_EV_WOODBOX_BREAK);
-        ObjKibako_SpawnCollectible(this, globalCtx);
-        Actor_Kill(&this->actor);
+    if (Actor_HasParent(&self->actor, globalCtx)) {
+        ObjKibako_SetupHeld(self);
+    } else if ((self->actor.bgCheckFlags & 0x20) && (self->actor.yDistToWater > 19.0f)) {
+        ObjKibako_WaterBreak(self, globalCtx);
+        Audio_PlaySoundAtPosition(globalCtx, &self->actor.world.pos, 20, NA_SE_EV_WOODBOX_BREAK);
+        ObjKibako_SpawnCollectible(self, globalCtx);
+        Actor_Kill(&self->actor);
+    } else if (self->collider.base.acFlags & AC_HIT) {
+        ObjKibako_AirBreak(self, globalCtx);
+        Audio_PlaySoundAtPosition(globalCtx, &self->actor.world.pos, 20, NA_SE_EV_WOODBOX_BREAK);
+        ObjKibako_SpawnCollectible(self, globalCtx);
+        Actor_Kill(&self->actor);
     } else {
-        Actor_MoveForward(&this->actor);
-        Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 19.0f, 20.0f, 0.0f, 5);
-        if (!(this->collider.base.ocFlags1 & OC1_TYPE_PLAYER) && (this->actor.xzDistToPlayer > 28.0f)) {
-            this->collider.base.ocFlags1 |= OC1_TYPE_PLAYER;
+        Actor_MoveForward(&self->actor);
+        Actor_UpdateBgCheckInfo(globalCtx, &self->actor, 19.0f, 20.0f, 0.0f, 5);
+        if (!(self->collider.base.ocFlags1 & OC1_TYPE_PLAYER) && (self->actor.xzDistToPlayer > 28.0f)) {
+            self->collider.base.ocFlags1 |= OC1_TYPE_PLAYER;
         }
-        if (this->actor.xzDistToPlayer < 600.0f) {
-            Collider_UpdateCylinder(&this->actor, &this->collider);
-            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-            if (this->actor.xzDistToPlayer < 180.0f) {
-                CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        if (self->actor.xzDistToPlayer < 600.0f) {
+            Collider_UpdateCylinder(&self->actor, &self->collider);
+            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
+            if (self->actor.xzDistToPlayer < 180.0f) {
+                CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
             }
         }
-        if (this->actor.xzDistToPlayer < 100.0f) {
-            func_8002F580(&this->actor, globalCtx);
+        if (self->actor.xzDistToPlayer < 100.0f) {
+            func_8002F580(&self->actor, globalCtx);
         }
     }
 }
 
-void ObjKibako_SetupHeld(ObjKibako* this) {
-    this->actionFunc = ObjKibako_Held;
-    this->actor.room = -1;
-    func_8002F7DC(&this->actor, NA_SE_PL_PULL_UP_WOODBOX);
+void ObjKibako_SetupHeld(ObjKibako* self) {
+    self->actionFunc = ObjKibako_Held;
+    self->actor.room = -1;
+    func_8002F7DC(&self->actor, NA_SE_PL_PULL_UP_WOODBOX);
 }
 
-void ObjKibako_Held(ObjKibako* this, GlobalContext* globalCtx) {
-    if (Actor_HasNoParent(&this->actor, globalCtx)) {
-        this->actor.room = globalCtx->roomCtx.curRoom.num;
-        if (fabsf(this->actor.speedXZ) < 0.1f) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_PUT_DOWN_WOODBOX);
-            ObjKibako_SetupIdle(this);
-            this->collider.base.ocFlags1 &= ~OC1_TYPE_PLAYER;
+void ObjKibako_Held(ObjKibako* self, GlobalContext* globalCtx) {
+    if (Actor_HasNoParent(&self->actor, globalCtx)) {
+        self->actor.room = globalCtx->roomCtx.curRoom.num;
+        if (fabsf(self->actor.speedXZ) < 0.1f) {
+            Audio_PlayActorSound2(&self->actor, NA_SE_EV_PUT_DOWN_WOODBOX);
+            ObjKibako_SetupIdle(self);
+            self->collider.base.ocFlags1 &= ~OC1_TYPE_PLAYER;
         } else {
-            ObjKibako_SetupThrown(this);
-            ObjKibako_ApplyGravity(this);
-            func_8002D7EC(&this->actor);
+            ObjKibako_SetupThrown(self);
+            ObjKibako_ApplyGravity(self);
+            func_8002D7EC(&self->actor);
         }
-        Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 19.0f, 20.0f, 0.0f, 5);
+        Actor_UpdateBgCheckInfo(globalCtx, &self->actor, 19.0f, 20.0f, 0.0f, 5);
     }
 }
 
-void ObjKibako_SetupThrown(ObjKibako* this) {
-    this->actor.velocity.x = Math_SinS(this->actor.world.rot.y) * this->actor.speedXZ;
-    this->actor.velocity.z = Math_CosS(this->actor.world.rot.y) * this->actor.speedXZ;
-    this->actor.colChkInfo.mass = 240;
-    this->actionFunc = ObjKibako_Thrown;
+void ObjKibako_SetupThrown(ObjKibako* self) {
+    self->actor.velocity.x = Math_SinS(self->actor.world.rot.y) * self->actor.speedXZ;
+    self->actor.velocity.z = Math_CosS(self->actor.world.rot.y) * self->actor.speedXZ;
+    self->actor.colChkInfo.mass = 240;
+    self->actionFunc = ObjKibako_Thrown;
 }
 
-void ObjKibako_Thrown(ObjKibako* this, GlobalContext* globalCtx) {
+void ObjKibako_Thrown(ObjKibako* self, GlobalContext* globalCtx) {
     s32 pad;
     s32 pad2;
 
-    if ((this->actor.bgCheckFlags & 0xB) || (this->collider.base.atFlags & AT_HIT)) {
-        ObjKibako_AirBreak(this, globalCtx);
-        Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 20, NA_SE_EV_WOODBOX_BREAK);
-        ObjKibako_SpawnCollectible(this, globalCtx);
-        Actor_Kill(&this->actor);
-    } else if (this->actor.bgCheckFlags & 0x40) {
-        ObjKibako_WaterBreak(this, globalCtx);
-        Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 20, NA_SE_EV_WOODBOX_BREAK);
-        ObjKibako_SpawnCollectible(this, globalCtx);
-        Actor_Kill(&this->actor);
+    if ((self->actor.bgCheckFlags & 0xB) || (self->collider.base.atFlags & AT_HIT)) {
+        ObjKibako_AirBreak(self, globalCtx);
+        Audio_PlaySoundAtPosition(globalCtx, &self->actor.world.pos, 20, NA_SE_EV_WOODBOX_BREAK);
+        ObjKibako_SpawnCollectible(self, globalCtx);
+        Actor_Kill(&self->actor);
+    } else if (self->actor.bgCheckFlags & 0x40) {
+        ObjKibako_WaterBreak(self, globalCtx);
+        Audio_PlaySoundAtPosition(globalCtx, &self->actor.world.pos, 20, NA_SE_EV_WOODBOX_BREAK);
+        ObjKibako_SpawnCollectible(self, globalCtx);
+        Actor_Kill(&self->actor);
     } else {
-        ObjKibako_ApplyGravity(this);
-        func_8002D7EC(&this->actor);
-        Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 19.0f, 20.0f, 0.0f, 5);
-        Collider_UpdateCylinder(&this->actor, &this->collider);
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        ObjKibako_ApplyGravity(self);
+        func_8002D7EC(&self->actor);
+        Actor_UpdateBgCheckInfo(globalCtx, &self->actor, 19.0f, 20.0f, 0.0f, 5);
+        Collider_UpdateCylinder(&self->actor, &self->collider);
+        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
+        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
     }
 }
 
 void ObjKibako_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
-    ObjKibako* this = THIS;
+    ObjKibako* self = THIS;
 
-    this->actionFunc(this, globalCtx);
+    self->actionFunc(self, globalCtx);
 }
 
 void ObjKibako_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
-    ObjKibako* this = THIS;
+    ObjKibako* self = THIS;
 
     Gfx_DrawDListOpa(globalCtx, gSmallWoodenBoxDL);
 }

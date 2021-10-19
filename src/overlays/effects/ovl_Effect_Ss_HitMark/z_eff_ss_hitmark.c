@@ -17,9 +17,9 @@
 #define rEnvColorB regs[7]
 #define rScale regs[8]
 
-u32 EffectSsHitMark_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx);
-void EffectSsHitMark_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this);
-void EffectSsHitMark_Update(GlobalContext* globalCtx, u32 index, EffectSs* this);
+u32 EffectSsHitMark_Init(GlobalContext* globalCtx, u32 index, EffectSs* self, void* initParamsx);
+void EffectSsHitMark_Draw(GlobalContext* globalCtx, u32 index, EffectSs* self);
+void EffectSsHitMark_Update(GlobalContext* globalCtx, u32 index, EffectSs* self);
 
 static Color_RGB8 sColors[] = {
     { 255, 255, 255 }, { 255, 255, 0 }, { 255, 255, 255 }, { 255, 0, 0 },   { 255, 200, 100 }, { 200, 150, 0 },
@@ -41,35 +41,35 @@ EffectSsInit Effect_Ss_HitMark_InitVars = {
     EffectSsHitMark_Init,
 };
 
-u32 EffectSsHitMark_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx) {
+u32 EffectSsHitMark_Init(GlobalContext* globalCtx, u32 index, EffectSs* self, void* initParamsx) {
     s32 colorIdx;
     EffectSsHitMarkInitParams* initParams = (EffectSsHitMarkInitParams*)initParamsx;
-    this->pos = initParams->pos;
-    this->gfx = SEGMENTED_TO_VIRTUAL(gEffHitMarkDL);
+    self->pos = initParams->pos;
+    self->gfx = SEGMENTED_TO_VIRTUAL(gEffHitMarkDL);
 
     if (initParams->type == EFFECT_HITMARK_DUST) {
-        this->life = 16;
+        self->life = 16;
     } else {
-        this->life = 8;
+        self->life = 8;
     }
 
-    this->draw = EffectSsHitMark_Draw;
-    this->update = EffectSsHitMark_Update;
+    self->draw = EffectSsHitMark_Draw;
+    self->update = EffectSsHitMark_Update;
     colorIdx = initParams->type * 4;
-    this->rTexIdx = 0;
-    this->rType = initParams->type;
-    this->rPrimColorR = sColors[colorIdx].r;
-    this->rPrimColorG = sColors[colorIdx].g;
-    this->rPrimColorB = sColors[colorIdx].b;
-    this->rEnvColorR = sColors[colorIdx + 1].r;
-    this->rEnvColorG = sColors[colorIdx + 1].g;
-    this->rEnvColorB = sColors[colorIdx + 1].b;
-    this->rScale = initParams->scale;
+    self->rTexIdx = 0;
+    self->rType = initParams->type;
+    self->rPrimColorR = sColors[colorIdx].r;
+    self->rPrimColorG = sColors[colorIdx].g;
+    self->rPrimColorB = sColors[colorIdx].b;
+    self->rEnvColorR = sColors[colorIdx + 1].r;
+    self->rEnvColorG = sColors[colorIdx + 1].g;
+    self->rEnvColorB = sColors[colorIdx + 1].b;
+    self->rScale = initParams->scale;
 
     return 1;
 }
 
-void EffectSsHitMark_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
+void EffectSsHitMark_Draw(GlobalContext* globalCtx, u32 index, EffectSs* self) {
     GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
     MtxF mfTrans;
     MtxF mfScale;
@@ -81,8 +81,8 @@ void EffectSsHitMark_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
 
     OPEN_DISPS(gfxCtx, "../z_eff_ss_hitmark.c", 297);
 
-    SkinMatrix_SetTranslate(&mfTrans, this->pos.x, this->pos.y, this->pos.z);
-    scale = this->rScale / 100.0f;
+    SkinMatrix_SetTranslate(&mfTrans, self->pos.x, self->pos.y, self->pos.z);
+    scale = self->rScale / 100.0f;
     SkinMatrix_SetScale(&mfScale, scale, scale, 1.0f);
     SkinMatrix_MtxFMtxFMult(&mfTrans, &globalCtx->mf_11DA0, &mfTrans11DA0);
     SkinMatrix_MtxFMtxFMult(&mfTrans11DA0, &mfScale, &mfResult);
@@ -92,31 +92,31 @@ void EffectSsHitMark_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
 
     if (mtx != NULL) {
         gSPMatrix(POLY_XLU_DISP++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPSegment(POLY_XLU_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(sTextures[(this->rType * 8) + (this->rTexIdx)]));
+        gSPSegment(POLY_XLU_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(sTextures[(self->rType * 8) + (self->rTexIdx)]));
         func_80094C50(gfxCtx);
-        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, this->rPrimColorR, this->rPrimColorG, this->rPrimColorB, 255);
-        gDPSetEnvColor(POLY_XLU_DISP++, this->rEnvColorR, this->rEnvColorG, this->rEnvColorB, 0);
-        gSPDisplayList(POLY_XLU_DISP++, this->gfx);
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, self->rPrimColorR, self->rPrimColorG, self->rPrimColorB, 255);
+        gDPSetEnvColor(POLY_XLU_DISP++, self->rEnvColorR, self->rEnvColorG, self->rEnvColorB, 0);
+        gSPDisplayList(POLY_XLU_DISP++, self->gfx);
     }
     CLOSE_DISPS(gfxCtx, "../z_eff_ss_hitmark.c", 341);
 }
 
-void EffectSsHitMark_Update(GlobalContext* globalCtx, u32 index, EffectSs* this) {
+void EffectSsHitMark_Update(GlobalContext* globalCtx, u32 index, EffectSs* self) {
     s32 colorIdx;
 
-    if (this->rType == EFFECT_HITMARK_DUST) {
-        this->rTexIdx = (15 - this->life) / 2;
+    if (self->rType == EFFECT_HITMARK_DUST) {
+        self->rTexIdx = (15 - self->life) / 2;
     } else {
-        this->rTexIdx = 7 - this->life;
+        self->rTexIdx = 7 - self->life;
     }
 
-    if (this->rTexIdx != 0) {
-        colorIdx = this->rType * 4 + 2;
-        this->rPrimColorR = func_80027DD4(this->rPrimColorR, sColors[colorIdx].r, this->life + 1);
-        this->rPrimColorG = func_80027DD4(this->rPrimColorG, sColors[colorIdx].g, this->life + 1);
-        this->rPrimColorB = func_80027DD4(this->rPrimColorB, sColors[colorIdx].b, this->life + 1);
-        this->rEnvColorR = func_80027DD4(this->rEnvColorR, sColors[colorIdx + 1].r, this->life + 1);
-        this->rEnvColorG = func_80027DD4(this->rEnvColorG, sColors[colorIdx + 1].g, this->life + 1);
-        this->rEnvColorB = func_80027DD4(this->rEnvColorB, sColors[colorIdx + 1].b, this->life + 1);
+    if (self->rTexIdx != 0) {
+        colorIdx = self->rType * 4 + 2;
+        self->rPrimColorR = func_80027DD4(self->rPrimColorR, sColors[colorIdx].r, self->life + 1);
+        self->rPrimColorG = func_80027DD4(self->rPrimColorG, sColors[colorIdx].g, self->life + 1);
+        self->rPrimColorB = func_80027DD4(self->rPrimColorB, sColors[colorIdx].b, self->life + 1);
+        self->rEnvColorR = func_80027DD4(self->rEnvColorR, sColors[colorIdx + 1].r, self->life + 1);
+        self->rEnvColorG = func_80027DD4(self->rEnvColorG, sColors[colorIdx + 1].g, self->life + 1);
+        self->rEnvColorB = func_80027DD4(self->rEnvColorB, sColors[colorIdx + 1].b, self->life + 1);
     }
 }

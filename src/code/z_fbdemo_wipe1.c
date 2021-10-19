@@ -164,47 +164,47 @@ Gfx sWipeSyncDList[] = {
 #define THIS ((TransitionWipe*)thisx)
 
 void TransitionWipe_Start(void* thisx) {
-    TransitionWipe* this = THIS;
+    TransitionWipe* self = THIS;
 
-    this->isDone = 0;
+    self->isDone = 0;
 
-    if (this->direction) {
-        this->texY = 0x14D;
+    if (self->direction) {
+        self->texY = 0x14D;
     } else {
-        this->texY = 0x264;
+        self->texY = 0x264;
     }
 
-    guPerspective(&this->projection, &this->normal, 60.0f, (4.0 / 3.0f), 10.0f, 12800.0f, 1.0f);
-    guLookAt(&this->lookAt, 0.0f, 0.0f, 400.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+    guPerspective(&self->projection, &self->normal, 60.0f, (4.0 / 3.0f), 10.0f, 12800.0f, 1.0f);
+    guLookAt(&self->lookAt, 0.0f, 0.0f, 400.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 }
 
 void* TransitionWipe_Init(void* thisx) {
-    TransitionWipe* this = THIS;
+    TransitionWipe* self = THIS;
 
-    bzero(this, sizeof(*this));
-    return this;
+    bzero(self, sizeof(*self));
+    return self;
 }
 
 void TransitionWipe_Destroy(void* thisx) {
 }
 
 void TransitionWipe_Update(void* thisx, s32 updateRate) {
-    TransitionWipe* this = THIS;
+    TransitionWipe* self = THIS;
     u8 unk1419;
 
-    if (this->direction != 0) {
+    if (self->direction != 0) {
         unk1419 = gSaveContext.unk_1419;
-        this->texY += (unk1419 * 3) / updateRate;
-        if (this->texY >= 0x264) {
-            this->texY = 0x264;
-            this->isDone = 1;
+        self->texY += (unk1419 * 3) / updateRate;
+        if (self->texY >= 0x264) {
+            self->texY = 0x264;
+            self->isDone = 1;
         }
     } else {
         unk1419 = gSaveContext.unk_1419;
-        this->texY -= (unk1419 * 3) / updateRate;
-        if (this->texY < 0x14E) {
-            this->texY = 0x14D;
-            this->isDone = 1;
+        self->texY -= (unk1419 * 3) / updateRate;
+        if (self->texY < 0x14E) {
+            self->texY = 0x14D;
+            self->isDone = 1;
         }
     }
 }
@@ -212,23 +212,23 @@ void TransitionWipe_Update(void* thisx, s32 updateRate) {
 void TransitionWipe_Draw(void* thisx, Gfx** gfxP) {
     Gfx* gfx = *gfxP;
     Mtx* modelView;
-    TransitionWipe* this = THIS;
+    TransitionWipe* self = THIS;
     s32 pad[4];
     Gfx* tex;
 
-    modelView = this->modelView[this->frame];
+    modelView = self->modelView[self->frame];
 
-    this->frame ^= 1;
+    self->frame ^= 1;
     guScale(&modelView[0], 0.56f, 0.56f, 1.0f);
     guRotate(&modelView[1], 0.0f, 0.0f, 0.0f, 1.0f);
     guTranslate(&modelView[2], 0.0f, 0.0f, 0.0f);
     gDPPipeSync(gfx++);
-    tex = Gfx_BranchTexScroll(&gfx, this->texX, this->texY, 0, 0);
+    tex = Gfx_BranchTexScroll(&gfx, self->texX, self->texY, 0, 0);
     gSPSegment(gfx++, 8, tex);
-    gDPSetPrimColor(gfx++, 0, 0x80, this->color.r, this->color.g, this->color.b, 255);
-    gSPMatrix(gfx++, &this->projection, G_MTX_LOAD | G_MTX_PROJECTION);
-    gSPPerspNormalize(gfx++, this->normal);
-    gSPMatrix(gfx++, &this->lookAt, G_MTX_MUL | G_MTX_PROJECTION);
+    gDPSetPrimColor(gfx++, 0, 0x80, self->color.r, self->color.g, self->color.b, 255);
+    gSPMatrix(gfx++, &self->projection, G_MTX_LOAD | G_MTX_PROJECTION);
+    gSPPerspNormalize(gfx++, self->normal);
+    gSPMatrix(gfx++, &self->lookAt, G_MTX_MUL | G_MTX_PROJECTION);
     gSPMatrix(gfx++, &modelView[0], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPMatrix(gfx++, &modelView[1], G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
     gSPMatrix(gfx++, &modelView[2], G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
@@ -238,35 +238,35 @@ void TransitionWipe_Draw(void* thisx, Gfx** gfxP) {
 }
 
 s32 TransitionWipe_IsDone(void* thisx) {
-    TransitionWipe* this = THIS;
+    TransitionWipe* self = THIS;
 
-    return this->isDone;
+    return self->isDone;
 }
 
 void TransitionWipe_SetType(void* thisx, s32 type) {
-    TransitionWipe* this = THIS;
+    TransitionWipe* self = THIS;
 
     if (type == 1) {
-        this->direction = 1;
+        self->direction = 1;
     } else {
-        this->direction = 0;
+        self->direction = 0;
     }
 
-    if (this->direction != 0) {
-        this->texY = 0x14D;
+    if (self->direction != 0) {
+        self->texY = 0x14D;
     } else {
-        this->texY = 0x264;
+        self->texY = 0x264;
     }
 }
 
 void TransitionWipe_SetColor(void* thisx, u32 color) {
-    TransitionWipe* this = THIS;
+    TransitionWipe* self = THIS;
 
-    this->color.rgba = color;
+    self->color.rgba = color;
 }
 
 void TransitionWipe_SetEnvColor(void* thisx, u32 color) {
-    TransitionWipe* this = THIS;
+    TransitionWipe* self = THIS;
 
-    this->envColor.rgba = color;
+    self->envColor.rgba = color;
 }

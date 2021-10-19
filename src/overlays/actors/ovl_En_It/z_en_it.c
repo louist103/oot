@@ -49,24 +49,24 @@ const ActorInit En_It_InitVars = {
 };
 
 void EnIt_Init(Actor* thisx, GlobalContext* globalCtx) {
-    EnIt* this = THIS;
+    EnIt* self = THIS;
 
-    this->actor.params = 0x0D05;
-    Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
-    CollisionCheck_SetInfo2(&this->actor.colChkInfo, 0, &sColChkInfoInit);
+    self->actor.params = 0x0D05;
+    Collider_InitCylinder(globalCtx, &self->collider);
+    Collider_SetCylinder(globalCtx, &self->collider, &self->actor, &sCylinderInit);
+    CollisionCheck_SetInfo2(&self->actor.colChkInfo, 0, &sColChkInfoInit);
 }
 
 void EnIt_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    EnIt* this = THIS;
+    EnIt* self = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    Collider_DestroyCylinder(globalCtx, &self->collider);
 }
 
 void EnIt_Update(Actor* thisx, GlobalContext* globalCtx) {
-    EnIt* this = THIS;
+    EnIt* self = THIS;
     s32 pad;
 
-    Collider_UpdateCylinder(&this->actor, &this->collider);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    Collider_UpdateCylinder(&self->actor, &self->collider);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
 }

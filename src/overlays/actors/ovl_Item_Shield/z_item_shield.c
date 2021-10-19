@@ -17,8 +17,8 @@ void ItemShield_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ItemShield_Update(Actor* thisx, GlobalContext* globalCtx);
 void ItemShield_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80B86F68(ItemShield* this, GlobalContext* globalCtx);
-void func_80B86BC8(ItemShield* this, GlobalContext* globalCtx);
+void func_80B86F68(ItemShield* self, GlobalContext* globalCtx);
+void func_80B86BC8(ItemShield* self, GlobalContext* globalCtx);
 
 static ColliderCylinderInit sCylinderInit = {
     {
@@ -55,92 +55,92 @@ const ActorInit Item_Shield_InitVars = {
 static Color_RGBA8 unused = { 255, 255, 0, 255 };
 static Color_RGBA8 unused2 = { 255, 0, 0, 255 };
 
-void ItemShield_SetupAction(ItemShield* this, ItemShieldActionFunc actionFunc) {
-    this->actionFunc = actionFunc;
+void ItemShield_SetupAction(ItemShield* self, ItemShieldActionFunc actionFunc) {
+    self->actionFunc = actionFunc;
 }
 
 void ItemShield_Init(Actor* thisx, GlobalContext* globalCtx) {
-    ItemShield* this = THIS;
+    ItemShield* self = THIS;
     s32 i;
 
-    this->timer = 0;
-    this->unk_19C = 0;
+    self->timer = 0;
+    self->unk_19C = 0;
 
-    switch (this->actor.params) {
+    switch (self->actor.params) {
         case 0:
-            ActorShape_Init(&this->actor.shape, 1400.0f, NULL, 0.0f);
-            this->actor.shape.rot.x = 0x4000;
-            ItemShield_SetupAction(this, func_80B86BC8);
+            ActorShape_Init(&self->actor.shape, 1400.0f, NULL, 0.0f);
+            self->actor.shape.rot.x = 0x4000;
+            ItemShield_SetupAction(self, func_80B86BC8);
             break;
 
         case 1:
-            ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-            ItemShield_SetupAction(this, func_80B86F68);
-            this->unk_19C |= 2;
+            ActorShape_Init(&self->actor.shape, 0.0f, NULL, 0.0f);
+            ItemShield_SetupAction(self, func_80B86F68);
+            self->unk_19C |= 2;
             for (i = 0; i < 8; i++) {
-                this->unk_19E[i] = 1 + 2 * i;
-                this->unk_1A8[i].x = Rand_CenteredFloat(10.0f);
-                this->unk_1A8[i].y = Rand_CenteredFloat(10.0f);
-                this->unk_1A8[i].z = Rand_CenteredFloat(10.0f);
+                self->unk_19E[i] = 1 + 2 * i;
+                self->unk_1A8[i].x = Rand_CenteredFloat(10.0f);
+                self->unk_1A8[i].y = Rand_CenteredFloat(10.0f);
+                self->unk_1A8[i].z = Rand_CenteredFloat(10.0f);
             }
             break;
     }
 
-    Actor_SetScale(&this->actor, 0.01f);
-    Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
-    osSyncPrintf(VT_FGCOL(GREEN) "Item_Shild %d \n" VT_RST, this->actor.params);
+    Actor_SetScale(&self->actor, 0.01f);
+    Collider_InitCylinder(globalCtx, &self->collider);
+    Collider_SetCylinder(globalCtx, &self->collider, &self->actor, &sCylinderInit);
+    osSyncPrintf(VT_FGCOL(GREEN) "Item_Shild %d \n" VT_RST, self->actor.params);
 }
 
 void ItemShield_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    ItemShield* this = THIS;
+    ItemShield* self = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    Collider_DestroyCylinder(globalCtx, &self->collider);
 }
 
-void func_80B86AC8(ItemShield* this, GlobalContext* globalCtx) {
-    Actor_MoveForward(&this->actor);
-    if (Actor_HasParent(&this->actor, globalCtx)) {
-        Actor_Kill(&this->actor);
+void func_80B86AC8(ItemShield* self, GlobalContext* globalCtx) {
+    Actor_MoveForward(&self->actor);
+    if (Actor_HasParent(&self->actor, globalCtx)) {
+        Actor_Kill(&self->actor);
         return;
     }
-    func_8002F434(&this->actor, globalCtx, GI_SHIELD_DEKU, 30.0f, 50.0f);
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 10.0f, 10.0f, 0.0f, 5);
-    if (this->actor.bgCheckFlags & 1) {
-        this->timer--;
-        if (this->timer < 60) {
-            if (this->timer & 1) {
-                this->unk_19C |= 2;
+    func_8002F434(&self->actor, globalCtx, GI_SHIELD_DEKU, 30.0f, 50.0f);
+    Actor_UpdateBgCheckInfo(globalCtx, &self->actor, 10.0f, 10.0f, 0.0f, 5);
+    if (self->actor.bgCheckFlags & 1) {
+        self->timer--;
+        if (self->timer < 60) {
+            if (self->timer & 1) {
+                self->unk_19C |= 2;
             } else {
-                this->unk_19C &= ~2;
+                self->unk_19C &= ~2;
             }
         }
-        if (this->timer == 0) {
-            Actor_Kill(&this->actor);
+        if (self->timer == 0) {
+            Actor_Kill(&self->actor);
         }
     }
 }
 
-void func_80B86BC8(ItemShield* this, GlobalContext* globalCtx) {
-    if (Actor_HasParent(&this->actor, globalCtx)) {
-        Actor_Kill(&this->actor);
+void func_80B86BC8(ItemShield* self, GlobalContext* globalCtx) {
+    if (Actor_HasParent(&self->actor, globalCtx)) {
+        Actor_Kill(&self->actor);
         return;
     }
-    func_8002F434(&this->actor, globalCtx, GI_SHIELD_DEKU, 30.0f, 50.0f);
-    if (this->collider.base.acFlags & AC_HIT) {
-        ItemShield_SetupAction(this, func_80B86AC8);
-        this->actor.velocity.y = 4.0f;
-        this->actor.minVelocityY = -4.0f;
-        this->actor.gravity = -0.8f;
-        this->actor.speedXZ = 0.0f;
-        this->timer = 160;
+    func_8002F434(&self->actor, globalCtx, GI_SHIELD_DEKU, 30.0f, 50.0f);
+    if (self->collider.base.acFlags & AC_HIT) {
+        ItemShield_SetupAction(self, func_80B86AC8);
+        self->actor.velocity.y = 4.0f;
+        self->actor.minVelocityY = -4.0f;
+        self->actor.gravity = -0.8f;
+        self->actor.speedXZ = 0.0f;
+        self->timer = 160;
     } else {
-        Collider_UpdateCylinder(&this->actor, &this->collider);
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        Collider_UpdateCylinder(&self->actor, &self->collider);
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
     }
 }
 
-void func_80B86CA8(ItemShield* this, GlobalContext* globalCtx) {
+void func_80B86CA8(ItemShield* self, GlobalContext* globalCtx) {
     static Vec3f D_80B871F4 = { 0.0f, 0.0f, 0.0f };
     static f32 D_80B87200[] = { 0.3f, 0.6f,  0.9f, 1.0f,  1.0f, 1.0f,  1.0f, 1.0f,
                                 1.0f, 0.85f, 0.7f, 0.55f, 0.4f, 0.25f, 0.1f, 0.0f };
@@ -149,78 +149,78 @@ void func_80B86CA8(ItemShield* this, GlobalContext* globalCtx) {
     s32 i;
     s32 temp;
 
-    Actor_MoveForward(&this->actor);
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 10.0f, 10.0f, 0.0f, 5);
-    this->actor.shape.yOffset = ABS(Math_SinS(this->actor.shape.rot.x)) * 1500.0f;
+    Actor_MoveForward(&self->actor);
+    Actor_UpdateBgCheckInfo(globalCtx, &self->actor, 10.0f, 10.0f, 0.0f, 5);
+    self->actor.shape.yOffset = ABS(Math_SinS(self->actor.shape.rot.x)) * 1500.0f;
 
     for (i = 0; i < 8; i++) {
-        temp = 15 - this->unk_19E[i];
-        D_80B871F4.x = this->unk_1A8[i].x;
-        D_80B871F4.y = this->unk_1A8[i].y + (this->actor.shape.yOffset * 0.01f) + (D_80B87200[temp] * -10.0f * 0.2f);
-        D_80B871F4.z = this->unk_1A8[i].z;
-        EffectSsFireTail_SpawnFlame(globalCtx, &this->actor, &D_80B871F4, D_80B87200[temp] * 0.2f, -1,
+        temp = 15 - self->unk_19E[i];
+        D_80B871F4.x = self->unk_1A8[i].x;
+        D_80B871F4.y = self->unk_1A8[i].y + (self->actor.shape.yOffset * 0.01f) + (D_80B87200[temp] * -10.0f * 0.2f);
+        D_80B871F4.z = self->unk_1A8[i].z;
+        EffectSsFireTail_SpawnFlame(globalCtx, &self->actor, &D_80B871F4, D_80B87200[temp] * 0.2f, -1,
                                     D_80B87240[temp]);
-        if (this->unk_19E[i] != 0) {
-            this->unk_19E[i]--;
-        } else if (this->timer > 16) {
-            this->unk_19E[i] = 15;
-            this->unk_1A8[i].x = Rand_CenteredFloat(15.0f);
-            this->unk_1A8[i].y = Rand_CenteredFloat(10.0f);
-            this->unk_1A8[i].z = Rand_CenteredFloat(15.0f);
+        if (self->unk_19E[i] != 0) {
+            self->unk_19E[i]--;
+        } else if (self->timer > 16) {
+            self->unk_19E[i] = 15;
+            self->unk_1A8[i].x = Rand_CenteredFloat(15.0f);
+            self->unk_1A8[i].y = Rand_CenteredFloat(10.0f);
+            self->unk_1A8[i].z = Rand_CenteredFloat(15.0f);
         }
     }
-    if (this->actor.bgCheckFlags & 1) {
-        this->unk_198 -= this->actor.shape.rot.x >> 1;
-        this->unk_198 -= this->unk_198 >> 2;
-        this->actor.shape.rot.x += this->unk_198;
-        if ((this->timer >= 8) && (this->timer < 24)) {
-            Actor_SetScale(&this->actor, (this->timer - 8) * 0.000625f);
+    if (self->actor.bgCheckFlags & 1) {
+        self->unk_198 -= self->actor.shape.rot.x >> 1;
+        self->unk_198 -= self->unk_198 >> 2;
+        self->actor.shape.rot.x += self->unk_198;
+        if ((self->timer >= 8) && (self->timer < 24)) {
+            Actor_SetScale(&self->actor, (self->timer - 8) * 0.000625f);
         }
-        if (this->timer != 0) {
-            this->timer--;
+        if (self->timer != 0) {
+            self->timer--;
         } else {
-            Actor_Kill(&this->actor);
+            Actor_Kill(&self->actor);
         }
     }
 }
 
-void func_80B86F68(ItemShield* this, GlobalContext* globalCtx) {
+void func_80B86F68(ItemShield* self, GlobalContext* globalCtx) {
     s32 pad;
     Player* player = GET_PLAYER(globalCtx);
     MtxF* shield = &player->shieldMf;
 
-    this->actor.world.pos.x = shield->xw;
-    this->actor.world.pos.y = shield->yw;
-    this->actor.world.pos.z = shield->zw;
-    this->unk_19C &= ~2;
+    self->actor.world.pos.x = shield->xw;
+    self->actor.world.pos.y = shield->yw;
+    self->actor.world.pos.z = shield->zw;
+    self->unk_19C &= ~2;
 
-    this->actor.shape.rot.y = Math_Atan2S(-shield->zz, -shield->xz);
-    this->actor.shape.rot.x = Math_Atan2S(-shield->yz, sqrtf(shield->zz * shield->zz + shield->xz * shield->xz));
+    self->actor.shape.rot.y = Math_Atan2S(-shield->zz, -shield->xz);
+    self->actor.shape.rot.x = Math_Atan2S(-shield->yz, sqrtf(shield->zz * shield->zz + shield->xz * shield->xz));
 
-    if (ABS(this->actor.shape.rot.x) > 0x4000) {
-        this->unk_19C |= 1;
+    if (ABS(self->actor.shape.rot.x) > 0x4000) {
+        self->unk_19C |= 1;
     }
 
-    ItemShield_SetupAction(this, func_80B86CA8);
+    ItemShield_SetupAction(self, func_80B86CA8);
 
-    this->actor.velocity.y = 4.0;
-    this->actor.minVelocityY = -4.0;
-    this->actor.gravity = -0.8;
-    this->unk_198 = 0;
-    this->timer = 70;
-    this->actor.speedXZ = 0;
+    self->actor.velocity.y = 4.0;
+    self->actor.minVelocityY = -4.0;
+    self->actor.gravity = -0.8;
+    self->unk_198 = 0;
+    self->timer = 70;
+    self->actor.speedXZ = 0;
 }
 
 void ItemShield_Update(Actor* thisx, GlobalContext* globalCtx) {
-    ItemShield* this = THIS;
+    ItemShield* self = THIS;
 
-    this->actionFunc(this, globalCtx);
+    self->actionFunc(self, globalCtx);
 }
 
 void ItemShield_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    ItemShield* this = THIS;
+    ItemShield* self = THIS;
 
-    if (!(this->unk_19C & 2)) {
+    if (!(self->unk_19C & 2)) {
         OPEN_DISPS(globalCtx->state.gfxCtx, "../z_item_shield.c", 457);
         func_80093D18(globalCtx->state.gfxCtx);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx, "../z_item_shield.c", 460),

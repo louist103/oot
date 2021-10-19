@@ -8,7 +8,7 @@
 #define MAP_MARK_BOSS 1
 
 typedef struct {
-    /* 0x00 */ s8 chestFlag; // chest icon is only displayed if this flag is not set for the current room
+    /* 0x00 */ s8 chestFlag; // chest icon is only displayed if self flag is not set for the current room
     /* 0x01 */ u8 x, y; // coordinates to place the icon (top-left corner), relative to the minimap texture
 } MapMarkPoint; // size = 0x3
 

@@ -23,8 +23,8 @@ void EnDaikuKakariko_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDaikuKakariko_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDaikuKakariko_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void EnDaikuKakariko_Wait(EnDaikuKakariko* this, GlobalContext* globalCtx);
-void EnDaikuKakariko_Run(EnDaikuKakariko* this, GlobalContext* globalCtx);
+void EnDaikuKakariko_Wait(EnDaikuKakariko* self, GlobalContext* globalCtx);
+void EnDaikuKakariko_Run(EnDaikuKakariko* self, GlobalContext* globalCtx);
 
 const ActorInit En_Daiku_Kakariko_InitVars = {
     ACTOR_EN_DAIKU_KAKARIKO,
@@ -101,7 +101,7 @@ static struct_D_80AA1678 sAnimations[] = {
     { &object_daiku_Anim_000600, 1.0f, 0, -7.0f }, { &object_daiku_Anim_008164, 1.0f, 0, -7.0f },
 };
 
-void EnDaikuKakariko_SetAnimFromIndex(EnDaikuKakariko* this, s32 animIndex, s32* currentAnimIndex) {
+void EnDaikuKakariko_SetAnimFromIndex(EnDaikuKakariko* self, s32 animIndex, s32* currentAnimIndex) {
     f32 morphFrames;
 
     if ((*currentAnimIndex < 0) || (animIndex == *currentAnimIndex)) {
@@ -110,7 +110,7 @@ void EnDaikuKakariko_SetAnimFromIndex(EnDaikuKakariko* this, s32 animIndex, s32*
         morphFrames = sAnimations[animIndex].transitionRate;
     }
 
-    Animation_Change(&this->skelAnime, sAnimations[animIndex].animation, 1.0f, 0.0f,
+    Animation_Change(&self->skelAnime, sAnimations[animIndex].animation, 1.0f, 0.0f,
                      Animation_GetLastFrame(sAnimations[animIndex].animation), sAnimations[animIndex].mode,
                      morphFrames);
 
@@ -118,95 +118,95 @@ void EnDaikuKakariko_SetAnimFromIndex(EnDaikuKakariko* this, s32 animIndex, s32*
 }
 
 void EnDaikuKakariko_Init(Actor* thisx, GlobalContext* globalCtx) {
-    static u16 initFlags[] = { 0x0080, 0x00B0, 0x0070, 0x0470 }; // List of inital values for this->flags
-    EnDaikuKakariko* this = THIS;
+    static u16 initFlags[] = { 0x0080, 0x00B0, 0x0070, 0x0470 }; // List of inital values for self->flags
+    EnDaikuKakariko* self = THIS;
     s32 pad;
 
     if (LINK_AGE_IN_YEARS == YEARS_CHILD) {
         switch (globalCtx->sceneNum) {
             case SCENE_SPOT01:
                 if (IS_DAY) {
-                    this->flags |= 1;
-                    this->flags |= initFlags[this->actor.params & 3];
+                    self->flags |= 1;
+                    self->flags |= initFlags[self->actor.params & 3];
                 }
                 break;
             case SCENE_KAKARIKO:
                 if (IS_NIGHT) {
-                    this->flags |= 2;
+                    self->flags |= 2;
                 }
                 break;
             case SCENE_DRAG:
-                this->flags |= 4;
+                self->flags |= 4;
                 break;
         }
     }
 
-    if (!(this->flags & 7)) {
-        Actor_Kill(&this->actor);
+    if (!(self->flags & 7)) {
+        Actor_Kill(&self->actor);
     }
 
     if (IS_NIGHT) {
-        this->flags |= 8;
+        self->flags |= 8;
     }
 
-    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 40.0f);
+    ActorShape_Init(&self->actor.shape, 0.0f, ActorShadow_DrawCircle, 40.0f);
 
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_daiku_Skel_007958, NULL, this->jointTable, this->morphTable,
+    SkelAnime_InitFlex(globalCtx, &self->skelAnime, &object_daiku_Skel_007958, NULL, self->jointTable, self->morphTable,
                        17);
-    Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+    Collider_InitCylinder(globalCtx, &self->collider);
+    Collider_SetCylinder(globalCtx, &self->collider, &self->actor, &sCylinderInit);
 
-    CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInit);
+    CollisionCheck_SetInfo2(&self->actor.colChkInfo, &sDamageTable, &sColChkInit);
 
-    Animation_Change(&this->skelAnime, sAnimations->animation, 1.0f, 0.0f,
+    Animation_Change(&self->skelAnime, sAnimations->animation, 1.0f, 0.0f,
                      Animation_GetLastFrame(sAnimations->animation), sAnimations->mode, sAnimations->transitionRate);
 
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(globalCtx, &self->actor, 0.0f, 0.0f, 0.0f, 4);
 
-    this->actor.gravity = 0.0f;
-    this->runSpeed = 3.0f;
-    this->actor.uncullZoneForward = 1200.0f;
-    this->actor.targetMode = 6;
-    this->currentAnimIndex = -1;
+    self->actor.gravity = 0.0f;
+    self->runSpeed = 3.0f;
+    self->actor.uncullZoneForward = 1200.0f;
+    self->actor.targetMode = 6;
+    self->currentAnimIndex = -1;
 
-    if (this->flags & 0x40) {
-        this->actor.gravity = -1.0f;
+    if (self->flags & 0x40) {
+        self->actor.gravity = -1.0f;
     }
 
-    if (this->flags & 0x10) {
-        EnDaikuKakariko_SetAnimFromIndex(this, 3, &this->currentAnimIndex);
-        this->actionFunc = EnDaikuKakariko_Run;
+    if (self->flags & 0x10) {
+        EnDaikuKakariko_SetAnimFromIndex(self, 3, &self->currentAnimIndex);
+        self->actionFunc = EnDaikuKakariko_Run;
     } else {
-        if (this->flags & 8) {
-            if (((this->actor.params & 3) == CARPENTER_SABOORO) || ((this->actor.params & 3) == CARPENTER_SHIRO)) {
-                EnDaikuKakariko_SetAnimFromIndex(this, 5, &this->currentAnimIndex);
-                this->flags |= 0x800;
+        if (self->flags & 8) {
+            if (((self->actor.params & 3) == CARPENTER_SABOORO) || ((self->actor.params & 3) == CARPENTER_SHIRO)) {
+                EnDaikuKakariko_SetAnimFromIndex(self, 5, &self->currentAnimIndex);
+                self->flags |= 0x800;
             } else {
-                EnDaikuKakariko_SetAnimFromIndex(this, 1, &this->currentAnimIndex);
+                EnDaikuKakariko_SetAnimFromIndex(self, 1, &self->currentAnimIndex);
             }
 
-            this->skelAnime.curFrame = (s32)(Rand_ZeroOne() * this->skelAnime.endFrame);
+            self->skelAnime.curFrame = (s32)(Rand_ZeroOne() * self->skelAnime.endFrame);
         } else {
-            EnDaikuKakariko_SetAnimFromIndex(this, 0, &this->currentAnimIndex);
-            this->skelAnime.curFrame = (s32)(Rand_ZeroOne() * this->skelAnime.endFrame);
+            EnDaikuKakariko_SetAnimFromIndex(self, 0, &self->currentAnimIndex);
+            self->skelAnime.curFrame = (s32)(Rand_ZeroOne() * self->skelAnime.endFrame);
         }
 
-        this->flags |= 0x100;
-        this->actionFunc = EnDaikuKakariko_Wait;
+        self->flags |= 0x100;
+        self->actionFunc = EnDaikuKakariko_Wait;
     }
 }
 
 void EnDaikuKakariko_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    EnDaikuKakariko* this = THIS;
+    EnDaikuKakariko* self = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    Collider_DestroyCylinder(globalCtx, &self->collider);
 }
 
-s32 EnDaikuKakariko_GetTalkState(EnDaikuKakariko* this, GlobalContext* globalCtx) {
+s32 EnDaikuKakariko_GetTalkState(EnDaikuKakariko* self, GlobalContext* globalCtx) {
     s32 talkState = 2;
 
     if ((func_8010BDBC(&globalCtx->msgCtx) == 6) && (func_80106BC8(globalCtx))) {
-        switch (this->actor.textId) {
+        switch (self->actor.textId) {
             case 0x6061:
                 gSaveContext.infTable[23] |= 0x40;
                 break;
@@ -219,50 +219,50 @@ s32 EnDaikuKakariko_GetTalkState(EnDaikuKakariko* this, GlobalContext* globalCtx
     return talkState;
 }
 
-void EnDaikuKakariko_HandleTalking(EnDaikuKakariko* this, GlobalContext* globalCtx) {
+void EnDaikuKakariko_HandleTalking(EnDaikuKakariko* self, GlobalContext* globalCtx) {
     static s32 maskReactionSets[] = { 1, 2, 3, 4 };
     s16 sp26;
     s16 sp24;
 
-    if (this->talkState == 2) {
-        this->talkState = EnDaikuKakariko_GetTalkState(this, globalCtx);
-    } else if (func_8002F194(&this->actor, globalCtx)) {
-        this->talkState = 2;
+    if (self->talkState == 2) {
+        self->talkState = EnDaikuKakariko_GetTalkState(self, globalCtx);
+    } else if (func_8002F194(&self->actor, globalCtx)) {
+        self->talkState = 2;
     } else {
-        func_8002F374(globalCtx, &this->actor, &sp26, &sp24);
+        func_8002F374(globalCtx, &self->actor, &sp26, &sp24);
 
-        if ((sp26 >= 0) && (sp26 <= 320) && (sp24 >= 0) && (sp24 <= 240) && (this->talkState == 0) &&
-            (func_8002F2CC(&this->actor, globalCtx, 100.0f) == 1)) {
-            this->actor.textId = Text_GetFaceReaction(globalCtx, maskReactionSets[this->actor.params & 3]);
+        if ((sp26 >= 0) && (sp26 <= 320) && (sp24 >= 0) && (sp24 <= 240) && (self->talkState == 0) &&
+            (func_8002F2CC(&self->actor, globalCtx, 100.0f) == 1)) {
+            self->actor.textId = Text_GetFaceReaction(globalCtx, maskReactionSets[self->actor.params & 3]);
 
-            if (this->actor.textId == 0) {
-                switch (this->actor.params & 3) {
+            if (self->actor.textId == 0) {
+                switch (self->actor.params & 3) {
                     case 0:
-                        if (this->flags & 8) {
-                            this->actor.textId = 0x5076;
+                        if (self->flags & 8) {
+                            self->actor.textId = 0x5076;
                         } else {
-                            this->actor.textId = 0x5075;
+                            self->actor.textId = 0x5075;
                         }
                         break;
                     case 1:
-                        if (this->flags & 1) {
-                            this->actor.textId = 0x502A;
+                        if (self->flags & 1) {
+                            self->actor.textId = 0x502A;
                         } else {
-                            this->actor.textId = 0x5074;
+                            self->actor.textId = 0x5074;
                         }
                         break;
                     case 2:
-                        if (this->flags & 1) {
-                            this->actor.textId = 0x506A;
+                        if (self->flags & 1) {
+                            self->actor.textId = 0x506A;
                         } else {
-                            this->actor.textId = 0x506B;
+                            self->actor.textId = 0x506B;
                         }
                         break;
                     case 3:
-                        if (this->flags & 1) {
-                            this->actor.textId = 0x5077;
+                        if (self->flags & 1) {
+                            self->actor.textId = 0x5077;
                         } else {
-                            this->actor.textId = 0x5078;
+                            self->actor.textId = 0x5078;
                         }
                         break;
                 }
@@ -271,77 +271,77 @@ void EnDaikuKakariko_HandleTalking(EnDaikuKakariko* this, GlobalContext* globalC
     }
 }
 
-void EnDaikuKakariko_Talk(EnDaikuKakariko* this, GlobalContext* globalCtx) {
-    if (SkelAnime_Update(&this->skelAnime)) {
-        EnDaikuKakariko_SetAnimFromIndex(this, 3, &this->currentAnimIndex);
+void EnDaikuKakariko_Talk(EnDaikuKakariko* self, GlobalContext* globalCtx) {
+    if (SkelAnime_Update(&self->skelAnime)) {
+        EnDaikuKakariko_SetAnimFromIndex(self, 3, &self->currentAnimIndex);
     }
 
-    EnDaikuKakariko_HandleTalking(this, globalCtx);
+    EnDaikuKakariko_HandleTalking(self, globalCtx);
 
-    if (this->talkState == 0) {
-        if (this->flags & 0x10) {
-            EnDaikuKakariko_SetAnimFromIndex(this, 3, &this->currentAnimIndex);
-            this->flags &= ~0x0300;
-            this->actionFunc = EnDaikuKakariko_Run;
+    if (self->talkState == 0) {
+        if (self->flags & 0x10) {
+            EnDaikuKakariko_SetAnimFromIndex(self, 3, &self->currentAnimIndex);
+            self->flags &= ~0x0300;
+            self->actionFunc = EnDaikuKakariko_Run;
             return;
         }
 
-        if (!(this->flags & 8)) {
-            EnDaikuKakariko_SetAnimFromIndex(this, 0, &this->currentAnimIndex);
+        if (!(self->flags & 8)) {
+            EnDaikuKakariko_SetAnimFromIndex(self, 0, &self->currentAnimIndex);
         }
 
-        if ((this->flags & 0x800) == 0) {
-            this->flags &= ~0x0200;
-            this->flags |= 0x100;
+        if ((self->flags & 0x800) == 0) {
+            self->flags &= ~0x0200;
+            self->flags |= 0x100;
         }
 
-        this->actionFunc = EnDaikuKakariko_Wait;
+        self->actionFunc = EnDaikuKakariko_Wait;
     }
 }
 
-void EnDaikuKakariko_Wait(EnDaikuKakariko* this, GlobalContext* globalCtx) {
-    EnDaikuKakariko_HandleTalking(this, globalCtx);
+void EnDaikuKakariko_Wait(EnDaikuKakariko* self, GlobalContext* globalCtx) {
+    EnDaikuKakariko_HandleTalking(self, globalCtx);
 
-    if (SkelAnime_Update(&this->skelAnime)) {
-        EnDaikuKakariko_SetAnimFromIndex(this, 0, &this->currentAnimIndex);
+    if (SkelAnime_Update(&self->skelAnime)) {
+        EnDaikuKakariko_SetAnimFromIndex(self, 0, &self->currentAnimIndex);
     }
 
-    if (this->talkState != 0) {
-        if (!(this->flags & 8)) {
-            EnDaikuKakariko_SetAnimFromIndex(this, 4, &this->currentAnimIndex);
+    if (self->talkState != 0) {
+        if (!(self->flags & 8)) {
+            EnDaikuKakariko_SetAnimFromIndex(self, 4, &self->currentAnimIndex);
         }
 
-        if (!(this->flags & 0x800)) {
-            this->flags |= 0x200;
-            this->flags &= ~0x0100;
+        if (!(self->flags & 0x800)) {
+            self->flags |= 0x200;
+            self->flags &= ~0x0100;
         }
 
-        this->actionFunc = EnDaikuKakariko_Talk;
+        self->actionFunc = EnDaikuKakariko_Talk;
     }
 }
 
-void EnDaikuKakariko_StopRunning(EnDaikuKakariko* this, GlobalContext* globalCtx) {
-    if (SkelAnime_Update(&this->skelAnime)) {
-        this->timer--;
+void EnDaikuKakariko_StopRunning(EnDaikuKakariko* self, GlobalContext* globalCtx) {
+    if (SkelAnime_Update(&self->skelAnime)) {
+        self->timer--;
 
-        if (this->timer <= 0) {
-            EnDaikuKakariko_SetAnimFromIndex(this, 3, &this->currentAnimIndex);
-            this->actionFunc = EnDaikuKakariko_Run;
+        if (self->timer <= 0) {
+            EnDaikuKakariko_SetAnimFromIndex(self, 3, &self->currentAnimIndex);
+            self->actionFunc = EnDaikuKakariko_Run;
         } else {
-            this->skelAnime.curFrame = this->skelAnime.startFrame;
+            self->skelAnime.curFrame = self->skelAnime.startFrame;
         }
     }
 
-    EnDaikuKakariko_HandleTalking(this, globalCtx);
+    EnDaikuKakariko_HandleTalking(self, globalCtx);
 
-    if (this->talkState != 0) {
-        this->flags |= 0x200;
-        EnDaikuKakariko_SetAnimFromIndex(this, 4, &this->currentAnimIndex);
-        this->actionFunc = EnDaikuKakariko_Talk;
+    if (self->talkState != 0) {
+        self->flags |= 0x200;
+        EnDaikuKakariko_SetAnimFromIndex(self, 4, &self->currentAnimIndex);
+        self->actionFunc = EnDaikuKakariko_Talk;
     }
 }
 
-void EnDaikuKakariko_Run(EnDaikuKakariko* this, GlobalContext* globalCtx) {
+void EnDaikuKakariko_Run(EnDaikuKakariko* self, GlobalContext* globalCtx) {
     s32 pad;
     Path* path;
     Vec3s* pathPos;
@@ -353,50 +353,50 @@ void EnDaikuKakariko_Run(EnDaikuKakariko* this, GlobalContext* globalCtx) {
     s32 run;
 
     do {
-        path = &globalCtx->setupPathList[(this->actor.params >> 8) & 0xFF];
-        pathPos = &((Vec3s*)SEGMENTED_TO_VIRTUAL(path->points))[this->waypoint];
-        xDist = pathPos->x - this->actor.world.pos.x;
-        zDist = pathPos->z - this->actor.world.pos.z;
+        path = &globalCtx->setupPathList[(self->actor.params >> 8) & 0xFF];
+        pathPos = &((Vec3s*)SEGMENTED_TO_VIRTUAL(path->points))[self->waypoint];
+        xDist = pathPos->x - self->actor.world.pos.x;
+        zDist = pathPos->z - self->actor.world.pos.z;
         runAngle = Math_FAtan2F(xDist, zDist) * (32768.0f / M_PI);
         runDist = sqrtf((xDist * xDist) + (zDist * zDist));
 
         run = false;
 
         if (runDist <= 10.0f) {
-            if (this->pathContinue == false) {
-                this->waypoint++;
+            if (self->pathContinue == false) {
+                self->waypoint++;
 
-                if (this->waypoint >= path->count) {
-                    if (this->flags & 0x20) {
-                        this->waypoint = path->count - 2;
-                        this->pathContinue = true;
-                        this->run = run = false;
+                if (self->waypoint >= path->count) {
+                    if (self->flags & 0x20) {
+                        self->waypoint = path->count - 2;
+                        self->pathContinue = true;
+                        self->run = run = false;
 
-                        if (this->flags & 0x400) {
-                            this->timer = 2;
-                            EnDaikuKakariko_SetAnimFromIndex(this, 0, &this->currentAnimIndex);
-                            this->actionFunc = EnDaikuKakariko_StopRunning;
+                        if (self->flags & 0x400) {
+                            self->timer = 2;
+                            EnDaikuKakariko_SetAnimFromIndex(self, 0, &self->currentAnimIndex);
+                            self->actionFunc = EnDaikuKakariko_StopRunning;
                             return;
                         }
                     } else {
-                        this->waypoint = 0;
+                        self->waypoint = 0;
                         run = true;
                     }
                 } else {
-                    this->run = run = true;
+                    self->run = run = true;
                 }
             } else {
-                this->waypoint--;
+                self->waypoint--;
 
-                if (this->waypoint < 0) {
-                    this->waypoint = 1;
-                    this->pathContinue = false;
-                    this->run = run = false;
+                if (self->waypoint < 0) {
+                    self->waypoint = 1;
+                    self->pathContinue = false;
+                    self->run = run = false;
 
-                    if (this->flags & 0x400) {
-                        this->timer = 2;
-                        EnDaikuKakariko_SetAnimFromIndex(this, 0, &this->currentAnimIndex);
-                        this->actionFunc = EnDaikuKakariko_StopRunning;
+                    if (self->flags & 0x400) {
+                        self->timer = 2;
+                        EnDaikuKakariko_SetAnimFromIndex(self, 0, &self->currentAnimIndex);
+                        self->actionFunc = EnDaikuKakariko_StopRunning;
                         return;
                     }
                 } else {
@@ -406,104 +406,104 @@ void EnDaikuKakariko_Run(EnDaikuKakariko* this, GlobalContext* globalCtx) {
         }
     } while (run);
 
-    angleStepDiff = Math_SmoothStepToS(&this->actor.shape.rot.y, runAngle, 1, 5000, 0);
+    angleStepDiff = Math_SmoothStepToS(&self->actor.shape.rot.y, runAngle, 1, 5000, 0);
 
-    this->actor.world.rot.y = this->actor.shape.rot.y;
+    self->actor.world.rot.y = self->actor.shape.rot.y;
 
-    if (this->run == false) {
+    if (self->run == false) {
         if (angleStepDiff == 0) {
-            this->run = true;
+            self->run = true;
         } else {
-            this->actor.speedXZ = 0.0f;
+            self->actor.speedXZ = 0.0f;
         }
     }
 
-    if (this->run == true) {
-        Math_SmoothStepToF(&this->actor.speedXZ, this->runSpeed, 0.8f, runDist, 0.0f);
+    if (self->run == true) {
+        Math_SmoothStepToF(&self->actor.speedXZ, self->runSpeed, 0.8f, runDist, 0.0f);
     }
 
-    Actor_MoveForward(&this->actor);
+    Actor_MoveForward(&self->actor);
 
-    if (this->flags & 0x40) {
-        Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
-    } else if (this->flags & 0x80) {
-        this->runFlag |= 1;
-        this->flags &= ~0x0080;
-    } else if (this->runFlag & 1) {
-        Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
-        this->runFlag &= ~1;
+    if (self->flags & 0x40) {
+        Actor_UpdateBgCheckInfo(globalCtx, &self->actor, 0.0f, 0.0f, 0.0f, 4);
+    } else if (self->flags & 0x80) {
+        self->runFlag |= 1;
+        self->flags &= ~0x0080;
+    } else if (self->runFlag & 1) {
+        Actor_UpdateBgCheckInfo(globalCtx, &self->actor, 0.0f, 0.0f, 0.0f, 4);
+        self->runFlag &= ~1;
     }
 
-    SkelAnime_Update(&this->skelAnime);
-    EnDaikuKakariko_HandleTalking(this, globalCtx);
+    SkelAnime_Update(&self->skelAnime);
+    EnDaikuKakariko_HandleTalking(self, globalCtx);
 
-    if (this->talkState != 0) {
-        this->flags |= 0x200;
-        EnDaikuKakariko_SetAnimFromIndex(this, 4, &this->currentAnimIndex);
-        this->actionFunc = EnDaikuKakariko_Talk;
+    if (self->talkState != 0) {
+        self->flags |= 0x200;
+        EnDaikuKakariko_SetAnimFromIndex(self, 4, &self->currentAnimIndex);
+        self->actionFunc = EnDaikuKakariko_Talk;
     }
 }
 
 void EnDaikuKakariko_Update(Actor* thisx, GlobalContext* globalCtx) {
-    EnDaikuKakariko* this = THIS;
+    EnDaikuKakariko* self = THIS;
     s32 pad;
     Player* player = GET_PLAYER(globalCtx);
     s32 pad2;
 
-    if (this->currentAnimIndex == 3) {
-        if (((s32)this->skelAnime.curFrame == 6) || ((s32)this->skelAnime.curFrame == 15)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_MORIBLIN_WALK);
+    if (self->currentAnimIndex == 3) {
+        if (((s32)self->skelAnime.curFrame == 6) || ((s32)self->skelAnime.curFrame == 15)) {
+            Audio_PlayActorSound2(&self->actor, NA_SE_EN_MORIBLIN_WALK);
         }
     }
 
-    Collider_UpdateCylinder(&this->actor, &this->collider);
+    Collider_UpdateCylinder(&self->actor, &self->collider);
 
-    if (this->flags & 4) {
-        this->collider.dim.pos.x -= 27;
-        this->collider.dim.pos.z -= 27;
-        this->collider.dim.radius = 63;
+    if (self->flags & 4) {
+        self->collider.dim.pos.x -= 27;
+        self->collider.dim.pos.z -= 27;
+        self->collider.dim.radius = 63;
     }
 
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
 
-    this->actionFunc(this, globalCtx);
+    self->actionFunc(self, globalCtx);
 
-    this->npcInfo.unk_18.x = player->actor.focus.pos.x;
-    this->npcInfo.unk_18.y = player->actor.focus.pos.y;
-    this->npcInfo.unk_18.z = player->actor.focus.pos.z;
+    self->npcInfo.unk_18.x = player->actor.focus.pos.x;
+    self->npcInfo.unk_18.y = player->actor.focus.pos.y;
+    self->npcInfo.unk_18.z = player->actor.focus.pos.z;
 
-    if (this->flags & 0x100) {
-        this->neckAngleTarget.x = 5900;
-        this->flags |= 0x1000;
-        func_80034A14(&this->actor, &this->npcInfo, 0, 2);
-    } else if (this->flags & 0x200) {
-        this->neckAngleTarget.x = 5900;
-        this->flags |= 0x1000;
-        func_80034A14(&this->actor, &this->npcInfo, 0, 4);
+    if (self->flags & 0x100) {
+        self->neckAngleTarget.x = 5900;
+        self->flags |= 0x1000;
+        func_80034A14(&self->actor, &self->npcInfo, 0, 2);
+    } else if (self->flags & 0x200) {
+        self->neckAngleTarget.x = 5900;
+        self->flags |= 0x1000;
+        func_80034A14(&self->actor, &self->npcInfo, 0, 4);
     }
 
-    Math_SmoothStepToS(&this->neckAngle.x, this->neckAngleTarget.x, 1, 1820, 0);
+    Math_SmoothStepToS(&self->neckAngle.x, self->neckAngleTarget.x, 1, 1820, 0);
 }
 
 s32 EnDaikuKakariko_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
                                      void* thisx) {
-    EnDaikuKakariko* this = THIS;
+    EnDaikuKakariko* self = THIS;
     Vec3s angle;
 
     switch (limbIndex) {
         case 8:
-            angle = this->npcInfo.unk_0E;
+            angle = self->npcInfo.unk_0E;
             Matrix_RotateX(-(angle.y * (M_PI / 32768.0f)), MTXMODE_APPLY);
             Matrix_RotateZ(-(angle.x * (M_PI / 32768.0f)), MTXMODE_APPLY);
             break;
         case 15:
             Matrix_Translate(1400.0f, 0.0f, 0.0f, MTXMODE_APPLY);
-            angle = this->npcInfo.unk_08;
+            angle = self->npcInfo.unk_08;
 
-            if (this->flags & 0x1000) {
-                osSyncPrintf("<%d>\n", this->neckAngle.x);
-                Matrix_RotateX((angle.y + this->neckAngle.y) * (M_PI / 32768.0f), MTXMODE_APPLY);
-                Matrix_RotateZ((angle.x + this->neckAngle.x) * (M_PI / 32768.0f), MTXMODE_APPLY);
+            if (self->flags & 0x1000) {
+                osSyncPrintf("<%d>\n", self->neckAngle.x);
+                Matrix_RotateX((angle.y + self->neckAngle.y) * (M_PI / 32768.0f), MTXMODE_APPLY);
+                Matrix_RotateZ((angle.x + self->neckAngle.x) * (M_PI / 32768.0f), MTXMODE_APPLY);
             } else {
                 Matrix_RotateX(angle.y * (M_PI / 32768.0f), MTXMODE_APPLY);
                 Matrix_RotateZ(angle.x * (M_PI / 32768.0f), MTXMODE_APPLY);
@@ -520,20 +520,20 @@ void EnDaikuKakariko_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx**
     static Gfx* carpenterHeadDLists[] = { object_daiku_DL_005BD0, object_daiku_DL_005AC0, object_daiku_DL_005990,
                                           object_daiku_DL_005880 };
     static Vec3f unkVec = { 700.0f, 1100.0f, 0.0f };
-    EnDaikuKakariko* this = THIS;
+    EnDaikuKakariko* self = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx, "../z_en_daiku_kakariko.c", 1104);
 
     if (limbIndex == 15) {
-        Matrix_MultVec3f(&unkVec, &this->actor.focus.pos);
-        gSPDisplayList(POLY_OPA_DISP++, carpenterHeadDLists[this->actor.params & 3]);
+        Matrix_MultVec3f(&unkVec, &self->actor.focus.pos);
+        gSPDisplayList(POLY_OPA_DISP++, carpenterHeadDLists[self->actor.params & 3]);
     }
 
     CLOSE_DISPS(globalCtx->state.gfxCtx, "../z_en_daiku_kakariko.c", 1113);
 }
 
 void EnDaikuKakariko_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    EnDaikuKakariko* this = THIS;
+    EnDaikuKakariko* self = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx, "../z_en_daiku_kakariko.c", 1124);
 
@@ -549,7 +549,7 @@ void EnDaikuKakariko_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gDPSetEnvColor(POLY_OPA_DISP++, 200, 0, 150, 255);
     }
 
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+    SkelAnime_DrawFlexOpa(globalCtx, self->skelAnime.skeleton, self->skelAnime.jointTable, self->skelAnime.dListCount,
                           EnDaikuKakariko_OverrideLimbDraw, EnDaikuKakariko_PostLimbDraw, thisx);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx, "../z_en_daiku_kakariko.c", 1151);

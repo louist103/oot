@@ -38,9 +38,9 @@
 
 static Vec3f sZeroVec = { 0.0f, 0.0f, 0.0f };
 
-// effects that use this draw function are responsible for making sure their regs line up with the usage here
+// effects that use self draw function are responsible for making sure their regs line up with the usage here
 
-void EffectSs_DrawGEffect(GlobalContext* globalCtx, EffectSs* this, void* texture) {
+void EffectSs_DrawGEffect(GlobalContext* globalCtx, EffectSs* self, void* texture) {
     GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
     f32 scale;
     MtxF mfTrans;
@@ -49,12 +49,12 @@ void EffectSs_DrawGEffect(GlobalContext* globalCtx, EffectSs* this, void* textur
     MtxF mfTrans11DA0;
     s32 pad1;
     Mtx* mtx;
-    void* object = globalCtx->objectCtx.status[this->rgObjBankIdx].segment;
+    void* object = globalCtx->objectCtx.status[self->rgObjBankIdx].segment;
 
     OPEN_DISPS(gfxCtx, "../z_effect_soft_sprite_old_init.c", 196);
 
-    scale = this->rgScale * 0.0025f;
-    SkinMatrix_SetTranslate(&mfTrans, this->pos.x, this->pos.y, this->pos.z);
+    scale = self->rgScale * 0.0025f;
+    SkinMatrix_SetTranslate(&mfTrans, self->pos.x, self->pos.y, self->pos.z);
     SkinMatrix_SetScale(&mfScale, scale, scale, scale);
     SkinMatrix_MtxFMtxFMult(&mfTrans, &globalCtx->mf_11DA0, &mfTrans11DA0);
     SkinMatrix_MtxFMtxFMult(&mfTrans11DA0, &mfScale, &mfResult);
@@ -67,10 +67,10 @@ void EffectSs_DrawGEffect(GlobalContext* globalCtx, EffectSs* this, void* textur
         gSPMatrix(POLY_XLU_DISP++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPSegment(POLY_XLU_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(texture));
         func_80094C50(gfxCtx);
-        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, this->rgPrimColorR, this->rgPrimColorG, this->rgPrimColorB,
-                        this->rgPrimColorA);
-        gDPSetEnvColor(POLY_XLU_DISP++, this->rgEnvColorR, this->rgEnvColorG, this->rgEnvColorB, this->rgEnvColorA);
-        gSPDisplayList(POLY_XLU_DISP++, this->gfx);
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, self->rgPrimColorR, self->rgPrimColorG, self->rgPrimColorB,
+                        self->rgPrimColorA);
+        gDPSetEnvColor(POLY_XLU_DISP++, self->rgEnvColorR, self->rgEnvColorG, self->rgEnvColorB, self->rgEnvColorA);
+        gSPDisplayList(POLY_XLU_DISP++, self->gfx);
     }
 
     CLOSE_DISPS(gfxCtx, "../z_effect_soft_sprite_old_init.c", 243);
@@ -732,7 +732,7 @@ void EffectSsHitMark_SpawnCustomScale(GlobalContext* globalCtx, s32 type, s16 sc
  * Spawn a light ball effect
  *
  * param changes the color of the ball. Refer to FhgFlashLightBallParam for the options.
- * Note: this type requires OBJECT_FHG to be loaded
+ * Note: self type requires OBJECT_FHG to be loaded
  */
 void EffectSsFhgFlash_SpawnLightBall(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale,
                                      u8 param) {
@@ -1172,7 +1172,7 @@ void EffectSsDeadSound_SpawnStationary(GlobalContext* globalCtx, Vec3f* pos, u16
 /**
  * Spawn an Ice Smoke effect
  *
- * Note: this effect requires OBJECT_FZ to be loaded
+ * Note: self effect requires OBJECT_FZ to be loaded
  */
 void EffectSsIceSmoke_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale) {
     EffectSsIceSmokeInitParams initParams;

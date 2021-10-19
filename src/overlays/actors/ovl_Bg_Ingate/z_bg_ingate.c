@@ -16,8 +16,8 @@ void BgInGate_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgInGate_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgInGate_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80892890(BgInGate* this, GlobalContext* globalCtx);
-void BgInGate_DoNothing(BgInGate* this, GlobalContext* globalCtx);
+void func_80892890(BgInGate* self, GlobalContext* globalCtx);
+void BgInGate_DoNothing(BgInGate* self, GlobalContext* globalCtx);
 
 const ActorInit Bg_Ingate_InitVars = {
     ACTOR_BG_INGATE,
@@ -31,54 +31,54 @@ const ActorInit Bg_Ingate_InitVars = {
     (ActorFunc)BgInGate_Draw,
 };
 
-void BgInGate_SetupAction(BgInGate* this, BgInGateActionFunc actionFunc) {
-    this->actionFunc = actionFunc;
+void BgInGate_SetupAction(BgInGate* self, BgInGateActionFunc actionFunc) {
+    self->actionFunc = actionFunc;
 }
 
 void BgInGate_Init(Actor* thisx, GlobalContext* globalCtx) {
-    BgInGate* this = THIS;
+    BgInGate* self = THIS;
 
     s32 pad;
     CollisionHeader* colHeader = NULL;
 
-    DynaPolyActor_Init(&this->dyna, DPM_UNK);
+    DynaPolyActor_Init(&self->dyna, DPM_UNK);
     CollisionHeader_GetVirtual(&gIngoGateCol, &colHeader);
 
-    this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
+    self->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &self->dyna.actor, colHeader);
 
     if ((globalCtx->sceneNum != SCENE_SPOT20 || !LINK_IS_ADULT) ||
         (((gSaveContext.eventChkInf[1] & 0x100)) && (gSaveContext.cutsceneIndex != 0xFFF0))) {
-        Actor_Kill(&this->dyna.actor);
+        Actor_Kill(&self->dyna.actor);
         return;
     }
 
-    Actor_SetScale(&this->dyna.actor, 0.1f);
-    if (((this->dyna.actor.params & 1) != 0) && ((gSaveContext.eventInf[0] & 0xF) == 6)) {
+    Actor_SetScale(&self->dyna.actor, 0.1f);
+    if (((self->dyna.actor.params & 1) != 0) && ((gSaveContext.eventInf[0] & 0xF) == 6)) {
         globalCtx->csCtx.frames = 0;
-        BgInGate_SetupAction(this, func_80892890);
+        BgInGate_SetupAction(self, func_80892890);
     } else {
-        BgInGate_SetupAction(this, BgInGate_DoNothing);
+        BgInGate_SetupAction(self, BgInGate_DoNothing);
     }
 }
 
 void BgInGate_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    BgInGate* this = THIS;
+    BgInGate* self = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, self->dyna.bgId);
 }
 
-void func_80892890(BgInGate* this, GlobalContext* globalCtx) {
+void func_80892890(BgInGate* self, GlobalContext* globalCtx) {
     s32 phi0;
     s16 phi1;
     s16 csFrames;
 
     if (globalCtx->csCtx.frames >= 50) {
         phi0 = 0x4000;
-        if ((this->dyna.actor.params & 2) == 0) {
+        if ((self->dyna.actor.params & 2) == 0) {
             phi0 = -0x4000;
         }
-        this->dyna.actor.shape.rot.y = this->dyna.actor.world.rot.y + phi0;
-        BgInGate_SetupAction(this, &BgInGate_DoNothing);
+        self->dyna.actor.shape.rot.y = self->dyna.actor.world.rot.y + phi0;
+        BgInGate_SetupAction(self, &BgInGate_DoNothing);
     } else if (globalCtx->csCtx.frames >= 10) {
         csFrames = globalCtx->csCtx.frames - 10;
         csFrames *= 400;
@@ -88,20 +88,20 @@ void func_80892890(BgInGate* this, GlobalContext* globalCtx) {
         }
         csFrames = (Math_SinS(csFrames) * 16384.0f);
         phi1 = csFrames;
-        if ((this->dyna.actor.params & 2) == 0) {
+        if ((self->dyna.actor.params & 2) == 0) {
             phi1 = -phi1;
         }
-        this->dyna.actor.shape.rot.y = this->dyna.actor.world.rot.y + phi1;
+        self->dyna.actor.shape.rot.y = self->dyna.actor.world.rot.y + phi1;
     }
 }
 
-void BgInGate_DoNothing(BgInGate* this, GlobalContext* globalCtx) {
+void BgInGate_DoNothing(BgInGate* self, GlobalContext* globalCtx) {
 }
 
 void BgInGate_Update(Actor* thisx, GlobalContext* globalCtx) {
-    BgInGate* this = THIS;
+    BgInGate* self = THIS;
 
-    this->actionFunc(this, globalCtx);
+    self->actionFunc(self, globalCtx);
 }
 
 void BgInGate_Draw(Actor* thisx, GlobalContext* globalCtx) {

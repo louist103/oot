@@ -34,20 +34,20 @@ static InitChainEntry sInitChain[] = {
 };
 
 void BgSpot17Funen_Init(Actor* thisx, GlobalContext* globalCtx) {
-    BgSpot17Funen* this = THIS;
+    BgSpot17Funen* self = THIS;
 
-    Actor_ProcessInitChain(&this->actor, sInitChain);
-    osSyncPrintf("spot17 obj. 噴煙 (arg_data 0x%04x)\n", this->actor.params);
+    Actor_ProcessInitChain(&self->actor, sInitChain);
+    osSyncPrintf("spot17 obj. 噴煙 (arg_data 0x%04x)\n", self->actor.params);
 }
 
 void BgSpot17Funen_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void BgSpot17Funen_Update(Actor* thisx, GlobalContext* globalCtx) {
-    BgSpot17Funen* this = THIS;
+    BgSpot17Funen* self = THIS;
 
-    this->actor.draw = func_808B7478;
-    this->actor.update = func_808B746C;
+    self->actor.draw = func_808B7478;
+    self->actor.update = func_808B746C;
 }
 
 void func_808B746C(Actor* thisx, GlobalContext* globalCtx) {

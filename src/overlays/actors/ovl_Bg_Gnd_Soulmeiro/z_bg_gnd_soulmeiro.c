@@ -17,9 +17,9 @@ void BgGndSoulmeiro_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgGndSoulmeiro_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgGndSoulmeiro_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_8087AF38(BgGndSoulmeiro* this, GlobalContext* globalCtx);
-void func_8087B284(BgGndSoulmeiro* this, GlobalContext* globalCtx);
-void func_8087B350(BgGndSoulmeiro* this, GlobalContext* globalCtx);
+void func_8087AF38(BgGndSoulmeiro* self, GlobalContext* globalCtx);
+void func_8087B284(BgGndSoulmeiro* self, GlobalContext* globalCtx);
+void func_8087B350(BgGndSoulmeiro* self, GlobalContext* globalCtx);
 
 const ActorInit Bg_Gnd_Soulmeiro_InitVars = {
     ACTOR_BG_GND_SOULMEIRO,
@@ -62,69 +62,69 @@ static InitChainEntry sInitChain[] = {
 
 void BgGndSoulmeiro_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
-    BgGndSoulmeiro* this = THIS;
+    BgGndSoulmeiro* self = THIS;
 
-    Actor_ProcessInitChain(&this->actor, sInitChain);
-    this->actionFunc = NULL;
+    Actor_ProcessInitChain(&self->actor, sInitChain);
+    self->actionFunc = NULL;
 
-    switch (this->actor.params & 0xFF) {
+    switch (self->actor.params & 0xFF) {
         case 0:
-            Collider_InitCylinder(globalCtx, &this->collider);
-            Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
-            this->actionFunc = func_8087B284;
-            if (Flags_GetSwitch(globalCtx, (this->actor.params >> 8) & 0x3F)) {
+            Collider_InitCylinder(globalCtx, &self->collider);
+            Collider_SetCylinder(globalCtx, &self->collider, &self->actor, &sCylinderInit);
+            self->actionFunc = func_8087B284;
+            if (Flags_GetSwitch(globalCtx, (self->actor.params >> 8) & 0x3F)) {
 
-                Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_MIR_RAY, this->actor.world.pos.x,
-                            this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 9);
-                this->actor.draw = NULL;
-                Actor_Kill(&this->actor);
+                Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_MIR_RAY, self->actor.world.pos.x,
+                            self->actor.world.pos.y, self->actor.world.pos.z, 0, 0, 0, 9);
+                self->actor.draw = NULL;
+                Actor_Kill(&self->actor);
                 return;
             } else {
-                this->actor.draw = BgGndSoulmeiro_Draw;
+                self->actor.draw = BgGndSoulmeiro_Draw;
             }
             break;
         case 1:
         case 2:
-            if (Flags_GetSwitch(globalCtx, (this->actor.params >> 8) & 0x3F)) {
-                this->actor.draw = BgGndSoulmeiro_Draw;
+            if (Flags_GetSwitch(globalCtx, (self->actor.params >> 8) & 0x3F)) {
+                self->actor.draw = BgGndSoulmeiro_Draw;
             } else {
-                this->actor.draw = NULL;
+                self->actor.draw = NULL;
             }
-            this->actionFunc = func_8087B350;
+            self->actionFunc = func_8087B350;
             break;
     }
 }
 
 void BgGndSoulmeiro_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    BgGndSoulmeiro* this = THIS;
+    BgGndSoulmeiro* self = THIS;
 
-    if ((this->actor.params & 0xFF) == 0) {
-        Collider_DestroyCylinder(globalCtx, &this->collider);
+    if ((self->actor.params & 0xFF) == 0) {
+        Collider_DestroyCylinder(globalCtx, &self->collider);
     }
 }
 
-void func_8087AF38(BgGndSoulmeiro* this, GlobalContext* globalCtx) {
+void func_8087AF38(BgGndSoulmeiro* self, GlobalContext* globalCtx) {
     static Vec3f zeroVec = { 0.0f, 0.0f, 0.0f };
     Vec3f vecA;
     Vec3f vecB;
-    Actor* thisx = &this->actor;
+    Actor* thisx = &self->actor;
 
-    if (this->unk_198 != 0) {
-        this->unk_198--;
+    if (self->unk_198 != 0) {
+        self->unk_198--;
     }
 
-    if (this->unk_198 == 20) {
+    if (self->unk_198 == 20) {
         Flags_SetSwitch(globalCtx, (thisx->params >> 8) & 0x3F);
         thisx->draw = NULL;
     }
 
-    // This should be this->unk_198 == 0, this is required to match
-    if (!this->unk_198) {
+    // This should be self->unk_198 == 0, self is required to match
+    if (!self->unk_198) {
         Flags_SetSwitch(globalCtx, (thisx->params >> 8) & 0x3F);
-        Actor_Kill(&this->actor);
+        Actor_Kill(&self->actor);
         Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_MIR_RAY, thisx->world.pos.x, thisx->world.pos.y,
                     thisx->world.pos.z, 0, 0, 0, 9);
-    } else if ((this->unk_198 % 6) == 0) {
+    } else if ((self->unk_198 % 6) == 0) {
         s32 i;
         s16 temp_2 = Rand_ZeroOne() * (10922.0f); // This should be: 0x10000 / 6.0f
 
@@ -158,35 +158,35 @@ void func_8087AF38(BgGndSoulmeiro* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_8087B284(BgGndSoulmeiro* this, GlobalContext* globalCtx) {
+void func_8087B284(BgGndSoulmeiro* self, GlobalContext* globalCtx) {
     s32 pad;
 
-    if (!Flags_GetSwitch(globalCtx, (this->actor.params >> 8) & 0x3F)) {
-        this->actor.draw = BgGndSoulmeiro_Draw;
-        if (this->collider.base.acFlags & AC_HIT) {
+    if (!Flags_GetSwitch(globalCtx, (self->actor.params >> 8) & 0x3F)) {
+        self->actor.draw = BgGndSoulmeiro_Draw;
+        if (self->collider.base.acFlags & AC_HIT) {
             Audio_PlaySoundGeneral(NA_SE_SY_CORRECT_CHIME, &D_801333D4, 4, &D_801333E0, &D_801333E0, &D_801333E8);
-            this->unk_198 = 40;
-            this->actionFunc = func_8087AF38;
+            self->unk_198 = 40;
+            self->actionFunc = func_8087AF38;
         } else {
-            Collider_UpdateCylinder(&this->actor, &this->collider);
-            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+            Collider_UpdateCylinder(&self->actor, &self->collider);
+            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
         }
     }
 }
 
-void func_8087B350(BgGndSoulmeiro* this, GlobalContext* globalCtx) {
-    if (Flags_GetSwitch(globalCtx, (this->actor.params >> 8) & 0x3F)) {
-        this->actor.draw = BgGndSoulmeiro_Draw;
+void func_8087B350(BgGndSoulmeiro* self, GlobalContext* globalCtx) {
+    if (Flags_GetSwitch(globalCtx, (self->actor.params >> 8) & 0x3F)) {
+        self->actor.draw = BgGndSoulmeiro_Draw;
     } else {
-        this->actor.draw = NULL;
+        self->actor.draw = NULL;
     }
 }
 
 void BgGndSoulmeiro_Update(Actor* thisx, GlobalContext* globalCtx) {
-    BgGndSoulmeiro* this = THIS;
+    BgGndSoulmeiro* self = THIS;
 
-    if (this->actionFunc != NULL) {
-        this->actionFunc(this, globalCtx);
+    if (self->actionFunc != NULL) {
+        self->actionFunc(self, globalCtx);
     }
 }
 

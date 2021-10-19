@@ -43,37 +43,37 @@ static BigMirrorDataEntry sCobraSpawnData[] = {
 };
 
 void BgJyaBigmirror_SetRoomFlag(Actor* thisx, GlobalContext* globalCtx) {
-    BgJyaBigmirror* this = THIS;
+    BgJyaBigmirror* self = THIS;
 
-    this->puzzleFlags &=
+    self->puzzleFlags &=
         ~(BIGMIR_PUZZLE_IN_STATUE_ROOM | BIGMIR_PUZZLE_IN_1ST_TOP_ROOM | BIGMIR_PUZZLE_IN_2ND_TOP_ROOM);
     if (globalCtx->roomCtx.curRoom.num == 5) {
-        this->puzzleFlags |= BIGMIR_PUZZLE_IN_STATUE_ROOM;
+        self->puzzleFlags |= BIGMIR_PUZZLE_IN_STATUE_ROOM;
     } else if (globalCtx->roomCtx.curRoom.num == 0x19) {
-        this->puzzleFlags |= BIGMIR_PUZZLE_IN_1ST_TOP_ROOM;
+        self->puzzleFlags |= BIGMIR_PUZZLE_IN_1ST_TOP_ROOM;
     } else if (globalCtx->roomCtx.curRoom.num == 0x1A) {
-        this->puzzleFlags |= BIGMIR_PUZZLE_IN_2ND_TOP_ROOM;
+        self->puzzleFlags |= BIGMIR_PUZZLE_IN_2ND_TOP_ROOM;
     }
 }
 
 void BgJyaBigmirror_HandleCobra(Actor* thisx, GlobalContext* globalCtx) {
     static u8 cobraPuzzleFlags[] = { BIGMIR_PUZZLE_COBRA1_SOLVED, BIGMIR_PUZZLE_COBRA2_SOLVED };
-    BgJyaBigmirror* this = THIS;
+    BgJyaBigmirror* self = THIS;
     BigMirrorDataEntry* curSpawnData;
     BigmirrorCobra* curCobraInfo;
     s32 i;
 
-    if (this->puzzleFlags & (BIGMIR_PUZZLE_IN_1ST_TOP_ROOM | BIGMIR_PUZZLE_IN_2ND_TOP_ROOM)) {
+    if (self->puzzleFlags & (BIGMIR_PUZZLE_IN_1ST_TOP_ROOM | BIGMIR_PUZZLE_IN_2ND_TOP_ROOM)) {
         for (i = 0; i < 2; i++) {
             curSpawnData = &sCobraSpawnData[i];
-            curCobraInfo = &this->cobraInfo[i];
+            curCobraInfo = &self->cobraInfo[i];
             if (curCobraInfo->cobra != NULL) {
                 curCobraInfo->rotY = curCobraInfo->cobra->dyna.actor.shape.rot.y;
 
                 if (curCobraInfo->rotY == curSpawnData->solvedRotY) {
-                    this->puzzleFlags |= cobraPuzzleFlags[i];
+                    self->puzzleFlags |= cobraPuzzleFlags[i];
                 } else {
-                    this->puzzleFlags &= ~cobraPuzzleFlags[i];
+                    self->puzzleFlags &= ~cobraPuzzleFlags[i];
                 }
 
                 if (curCobraInfo->cobra->dyna.actor.update == NULL) {
@@ -82,9 +82,9 @@ void BgJyaBigmirror_HandleCobra(Actor* thisx, GlobalContext* globalCtx) {
                 }
             } else {
                 curCobraInfo->cobra = (BgJyaCobra*)Actor_SpawnAsChild(
-                    &globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_BG_JYA_COBRA, curSpawnData->pos.x,
+                    &globalCtx->actorCtx, &self->actor, globalCtx, ACTOR_BG_JYA_COBRA, curSpawnData->pos.x,
                     curSpawnData->pos.y, curSpawnData->pos.z, 0, curCobraInfo->rotY, 0, curSpawnData->params);
-                this->actor.child = NULL;
+                self->actor.child = NULL;
 
                 if (&curCobraInfo->cobra->dyna.actor == NULL) {
                     // "Cobra generation failed"
@@ -95,7 +95,7 @@ void BgJyaBigmirror_HandleCobra(Actor* thisx, GlobalContext* globalCtx) {
     } else {
 
         for (i = 0; i < 2; i++) {
-            curCobraInfo = &this->cobraInfo[i];
+            curCobraInfo = &self->cobraInfo[i];
             if (curCobraInfo->cobra != NULL) {
                 if (curCobraInfo->cobra->dyna.actor.child != NULL) {
                     Actor_Kill(curCobraInfo->cobra->dyna.actor.child);
@@ -109,12 +109,12 @@ void BgJyaBigmirror_HandleCobra(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void BgJyaBigmirror_SetBombiwaFlag(Actor* thisx, GlobalContext* globalCtx) {
-    BgJyaBigmirror* this = THIS;
+    BgJyaBigmirror* self = THIS;
 
     if (Flags_GetSwitch(globalCtx, 0x29)) {
-        this->puzzleFlags |= BIGMIR_PUZZLE_BOMBIWA_DESTROYED;
+        self->puzzleFlags |= BIGMIR_PUZZLE_BOMBIWA_DESTROYED;
     } else {
-        this->puzzleFlags &= ~(BIGMIR_PUZZLE_BOMBIWA_DESTROYED);
+        self->puzzleFlags &= ~(BIGMIR_PUZZLE_BOMBIWA_DESTROYED);
     }
 }
 
@@ -125,7 +125,7 @@ void BgJyaBigmirror_HandleMirRay(Actor* thisx, GlobalContext* globalCtx) {
         { -560.0f, 1800.0f, -310.0f },
         { 60.0f, 1800.0f, -310.0f },
     };
-    BgJyaBigmirror* this = THIS;
+    BgJyaBigmirror* self = THIS;
     s32 puzzleSolved;
     s32 lightBeamToggles[3];
     s32 i;
@@ -133,71 +133,71 @@ void BgJyaBigmirror_HandleMirRay(Actor* thisx, GlobalContext* globalCtx) {
 
     objBankIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_MIR_RAY);
 
-    if ((objBankIndex < 0) || (objBankIndex != this->mirRayObjIndex)) {
-        this->lightBeams[2] = NULL;
-        this->lightBeams[1] = NULL;
-        this->lightBeams[0] = NULL;
+    if ((objBankIndex < 0) || (objBankIndex != self->mirRayObjIndex)) {
+        self->lightBeams[2] = NULL;
+        self->lightBeams[1] = NULL;
+        self->lightBeams[0] = NULL;
     } else {
-        puzzleSolved = !!(this->puzzleFlags & (BIGMIR_PUZZLE_IN_STATUE_ROOM | BIGMIR_PUZZLE_IN_1ST_TOP_ROOM));
+        puzzleSolved = !!(self->puzzleFlags & (BIGMIR_PUZZLE_IN_STATUE_ROOM | BIGMIR_PUZZLE_IN_1ST_TOP_ROOM));
 
         if (puzzleSolved) {
-            puzzleSolved = !!(this->puzzleFlags & BIGMIR_PUZZLE_COBRA2_SOLVED);
+            puzzleSolved = !!(self->puzzleFlags & BIGMIR_PUZZLE_COBRA2_SOLVED);
 
             if (puzzleSolved) {
-                puzzleSolved = !!(this->puzzleFlags & BIGMIR_PUZZLE_COBRA1_SOLVED);
+                puzzleSolved = !!(self->puzzleFlags & BIGMIR_PUZZLE_COBRA1_SOLVED);
             }
         }
         lightBeamToggles[0] = puzzleSolved; // Only spawn if puzzle solved
         if (1) {}
         lightBeamToggles[1] = lightBeamToggles[2] =
-            this->puzzleFlags & (BIGMIR_PUZZLE_IN_1ST_TOP_ROOM | BIGMIR_PUZZLE_IN_2ND_TOP_ROOM);
+            self->puzzleFlags & (BIGMIR_PUZZLE_IN_1ST_TOP_ROOM | BIGMIR_PUZZLE_IN_2ND_TOP_ROOM);
 
         for (i = 0; i < 3; i++) {
             if (lightBeamToggles[i]) {
-                if ((this->lightBeams[i] == NULL) && Object_IsLoaded(&globalCtx->objectCtx, objBankIndex)) {
-                    this->lightBeams[i] = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_MIR_RAY, sMirRayPoss[i].x,
+                if ((self->lightBeams[i] == NULL) && Object_IsLoaded(&globalCtx->objectCtx, objBankIndex)) {
+                    self->lightBeams[i] = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_MIR_RAY, sMirRayPoss[i].x,
                                                       sMirRayPoss[i].y, sMirRayPoss[i].z, 0, 0, 0, sMirRayParamss[i]);
 
-                    if (this->lightBeams[i] == NULL) {
+                    if (self->lightBeams[i] == NULL) {
                         // "Mir Ray generation failed"
                         osSyncPrintf("Error : Mir Ray 発生失敗 (%s %d)\n", "../z_bg_jya_bigmirror.c", 310);
                     }
                 }
             } else {
-                if (this->lightBeams[i] != NULL) {
-                    Actor_Kill(this->lightBeams[i]);
-                    this->lightBeams[i] = NULL;
+                if (self->lightBeams[i] != NULL) {
+                    Actor_Kill(self->lightBeams[i]);
+                    self->lightBeams[i] = NULL;
                 }
             }
         }
     }
-    this->mirRayObjIndex = objBankIndex;
+    self->mirRayObjIndex = objBankIndex;
 }
 
 void BgJyaBigmirror_Init(Actor* thisx, GlobalContext* globalCtx) {
-    BgJyaBigmirror* this = THIS;
+    BgJyaBigmirror* self = THIS;
 
     if (sIsSpawned) {
-        Actor_Kill(&this->actor);
+        Actor_Kill(&self->actor);
         return;
     }
 
-    Actor_SetScale(&this->actor, 0.1f);
-    this->cobraInfo[0].rotY = sCobraSpawnData[0].initRotY;
-    this->cobraInfo[1].rotY = sCobraSpawnData[1].initRotY;
-    this->actor.room = -1;
+    Actor_SetScale(&self->actor, 0.1f);
+    self->cobraInfo[0].rotY = sCobraSpawnData[0].initRotY;
+    self->cobraInfo[1].rotY = sCobraSpawnData[1].initRotY;
+    self->actor.room = -1;
     sIsSpawned = true;
-    this->spawned = true;
-    this->mirRayObjIndex = -1;
+    self->spawned = true;
+    self->mirRayObjIndex = -1;
 
     // "jya Bigmirror"
-    osSyncPrintf("(jya 大鏡)(arg_data 0x%04x)\n", this->actor.params);
+    osSyncPrintf("(jya 大鏡)(arg_data 0x%04x)\n", self->actor.params);
 }
 
 void BgJyaBigmirror_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    BgJyaBigmirror* this = THIS;
+    BgJyaBigmirror* self = THIS;
 
-    if (this->spawned) {
+    if (self->spawned) {
         sIsSpawned = false;
     }
 }
@@ -211,18 +211,18 @@ void BgJyaBigmirror_Update(Actor* thisx, GlobalContext* globalCtx) {
 
 void BgJyaBigmirror_DrawLightBeam(Actor* thisx, GlobalContext* globalCtx) {
     static Vec3s D_80893F4C = { 0, 0, 0 };
-    BgJyaBigmirror* this = THIS;
+    BgJyaBigmirror* self = THIS;
     Actor* lift;
 
     OPEN_DISPS(globalCtx->state.gfxCtx, "../z_bg_jya_bigmirror.c", 435);
     func_80093D84(globalCtx->state.gfxCtx);
     lift = Actor_Find(&globalCtx->actorCtx, ACTOR_BG_JYA_LIFT, ACTORCAT_BG);
     if (lift != NULL) {
-        this->liftHeight = lift->world.pos.y;
+        self->liftHeight = lift->world.pos.y;
     }
-    func_800D1694(this->actor.world.pos.x, this->actor.world.pos.y + 40.0f, this->actor.world.pos.z,
-                  &this->actor.shape.rot);
-    Matrix_Scale(0.1f, (this->liftHeight * -(1.0f / 1280.0f)) + (1779.4f / 1280.0f), 0.1f, MTXMODE_APPLY);
+    func_800D1694(self->actor.world.pos.x, self->actor.world.pos.y + 40.0f, self->actor.world.pos.z,
+                  &self->actor.shape.rot);
+    Matrix_Scale(0.1f, (self->liftHeight * -(1.0f / 1280.0f)) + (1779.4f / 1280.0f), 0.1f, MTXMODE_APPLY);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx, "../z_bg_jya_bigmirror.c", 457),
               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, gBigMirror1DL);
@@ -240,16 +240,16 @@ void BgJyaBigmirror_DrawLightBeam(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void BgJyaBigmirror_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    BgJyaBigmirror* this = THIS;
+    BgJyaBigmirror* self = THIS;
 
-    if (this->puzzleFlags & BIGMIR_PUZZLE_IN_1ST_TOP_ROOM) {
+    if (self->puzzleFlags & BIGMIR_PUZZLE_IN_1ST_TOP_ROOM) {
         Gfx_DrawDListOpa(globalCtx, gBigMirror3DL);
         Gfx_DrawDListXlu(globalCtx, gBigMirror4DL);
     }
 
-    if ((this->puzzleFlags &
+    if ((self->puzzleFlags &
          (BIGMIR_PUZZLE_IN_STATUE_ROOM | BIGMIR_PUZZLE_IN_1ST_TOP_ROOM | BIGMIR_PUZZLE_IN_2ND_TOP_ROOM)) &&
-        (this->puzzleFlags & BIGMIR_PUZZLE_COBRA2_SOLVED) && (this->puzzleFlags & BIGMIR_PUZZLE_COBRA1_SOLVED)) {
-        BgJyaBigmirror_DrawLightBeam(&this->actor, globalCtx);
+        (self->puzzleFlags & BIGMIR_PUZZLE_COBRA2_SOLVED) && (self->puzzleFlags & BIGMIR_PUZZLE_COBRA1_SOLVED)) {
+        BgJyaBigmirror_DrawLightBeam(&self->actor, globalCtx);
     }
 }

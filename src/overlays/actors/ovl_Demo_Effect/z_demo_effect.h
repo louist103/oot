@@ -107,7 +107,7 @@ typedef struct DemoEffect {
     /* 0x019C */ DemoEffectFunc updateFunc;
 } DemoEffect; // size = 0x01A0
 
-// These names come from the objects that correspond to this actor type.
+// These names come from the objects that correspond to self actor type.
 typedef enum {
     /* 0x00 */ DEMO_EFFECT_CRYSTAL_LIGHT,
     /* 0x01 */ DEMO_EFFECT_FIRE_BALL,
@@ -131,7 +131,7 @@ typedef enum {
     /* 0x13 */ DEMO_EFFECT_JEWEL_KOKIRI,
     /* 0x14 */ DEMO_EFFECT_JEWEL_GORON,
     /* 0x15 */ DEMO_EFFECT_JEWEL_ZORA,
-    /* 0x16 */ DEMO_EFFECT_DUST, // Object is jewel, but this is really the dust in the ToT light arrow cutscene.
+    /* 0x16 */ DEMO_EFFECT_DUST, // Object is jewel, but self is really the dust in the ToT light arrow cutscene.
     /* 0x17 */ DEMO_EFFECT_LIGHTARROW,
     /* 0x18 */ DEMO_EFFECT_TIMEWARP_TIMEBLOCK_LARGE,
     /* 0x19 */ DEMO_EFFECT_TIMEWARP_TIMEBLOCK_SMALL,

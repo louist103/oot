@@ -256,7 +256,7 @@ void KaleidoScope_SetupPlayerPreRender(GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx, "../z_kaleido_scope_PAL.c", 509);
 }
 
-void KaleidoScope_ProcessPlayerPreRender(void) {
+void KaleidoScope_ProcessPlayerPreRender() {
     Sleep_Msec(50);
     PreRender_Calc(&sPlayerPreRender);
     PreRender_Destroy(&sPlayerPreRender);

@@ -47,31 +47,31 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 void EnMFire1_Init(Actor* thisx, GlobalContext* globalCtx) {
-    EnMFire1* this = THIS;
+    EnMFire1* self = THIS;
     s32 pad;
 
-    if (this->actor.params < 0) {
-        Actor_ChangeCategory(globalCtx, &globalCtx->actorCtx, &this->actor, ACTORCAT_ITEMACTION);
+    if (self->actor.params < 0) {
+        Actor_ChangeCategory(globalCtx, &globalCtx->actorCtx, &self->actor, ACTORCAT_ITEMACTION);
     }
 
-    Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+    Collider_InitCylinder(globalCtx, &self->collider);
+    Collider_SetCylinder(globalCtx, &self->collider, &self->actor, &sCylinderInit);
 }
 
 void EnMFire1_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    EnMFire1* this = THIS;
+    EnMFire1* self = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    Collider_DestroyCylinder(globalCtx, &self->collider);
 }
 
 void EnMFire1_Update(Actor* thisx, GlobalContext* globalCtx) {
-    EnMFire1* this = THIS;
+    EnMFire1* self = THIS;
     s32 pad;
 
-    if (Math_StepToF(&this->timer, 1.0f, 0.2f)) {
-        Actor_Kill(&this->actor);
+    if (Math_StepToF(&self->timer, 1.0f, 0.2f)) {
+        Actor_Kill(&self->actor);
     } else {
-        Collider_UpdateCylinder(&this->actor, &this->collider);
-        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        Collider_UpdateCylinder(&self->actor, &self->collider);
+        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
     }
 }

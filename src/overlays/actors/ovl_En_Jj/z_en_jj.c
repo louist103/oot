@@ -25,10 +25,10 @@ void EnJj_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnJj_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void EnJj_UpdateStaticCollision(Actor* thisx, GlobalContext* globalCtx);
-void EnJj_WaitToOpenMouth(EnJj* this, GlobalContext* globalCtx);
-void EnJj_WaitForFish(EnJj* this, GlobalContext* globalCtx);
-void EnJj_BeginCutscene(EnJj* this, GlobalContext* globalCtx);
-void EnJj_RemoveDust(EnJj* this, GlobalContext* globalCtx);
+void EnJj_WaitToOpenMouth(EnJj* self, GlobalContext* globalCtx);
+void EnJj_WaitForFish(EnJj* self, GlobalContext* globalCtx);
+void EnJj_BeginCutscene(EnJj* self, GlobalContext* globalCtx);
+void EnJj_RemoveDust(EnJj* self, GlobalContext* globalCtx);
 
 const ActorInit En_Jj_InitVars = {
     ACTOR_EN_JJ,
@@ -75,80 +75,80 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 1100, ICHAIN_STOP),
 };
 
-void EnJj_SetupAction(EnJj* this, EnJjActionFunc actionFunc) {
-    this->actionFunc = actionFunc;
+void EnJj_SetupAction(EnJj* self, EnJjActionFunc actionFunc) {
+    self->actionFunc = actionFunc;
 }
 
 void EnJj_Init(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
-    EnJj* this = THIS;
+    EnJj* self = THIS;
     CollisionHeader* colHeader = NULL;
 
-    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    ActorShape_Init(&this->dyna.actor.shape, 0.0f, NULL, 0.0f);
+    Actor_ProcessInitChain(&self->dyna.actor, sInitChain);
+    ActorShape_Init(&self->dyna.actor.shape, 0.0f, NULL, 0.0f);
 
-    switch (this->dyna.actor.params) {
+    switch (self->dyna.actor.params) {
         case JABUJABU_MAIN:
-            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gJabuJabuSkel, &gJabuJabuAnim, this->jointTable,
-                               this->morphTable, 22);
-            Animation_PlayLoop(&this->skelAnime, &gJabuJabuAnim);
-            this->unk_30A = 0;
-            this->eyeIndex = 0;
-            this->blinkTimer = 0;
-            this->extraBlinkCounter = 0;
-            this->extraBlinkTotal = 0;
+            SkelAnime_InitFlex(globalCtx, &self->skelAnime, &gJabuJabuSkel, &gJabuJabuAnim, self->jointTable,
+                               self->morphTable, 22);
+            Animation_PlayLoop(&self->skelAnime, &gJabuJabuAnim);
+            self->unk_30A = 0;
+            self->eyeIndex = 0;
+            self->blinkTimer = 0;
+            self->extraBlinkCounter = 0;
+            self->extraBlinkTotal = 0;
 
             if (gSaveContext.eventChkInf[3] & 0x400) { // Fish given
-                EnJj_SetupAction(this, EnJj_WaitToOpenMouth);
+                EnJj_SetupAction(self, EnJj_WaitToOpenMouth);
             } else {
-                EnJj_SetupAction(this, EnJj_WaitForFish);
+                EnJj_SetupAction(self, EnJj_WaitForFish);
             }
 
-            this->bodyCollisionActor = (DynaPolyActor*)Actor_SpawnAsChild(
-                &globalCtx->actorCtx, &this->dyna.actor, globalCtx, ACTOR_EN_JJ, this->dyna.actor.world.pos.x - 10.0f,
-                this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, 0, this->dyna.actor.world.rot.y, 0,
+            self->bodyCollisionActor = (DynaPolyActor*)Actor_SpawnAsChild(
+                &globalCtx->actorCtx, &self->dyna.actor, globalCtx, ACTOR_EN_JJ, self->dyna.actor.world.pos.x - 10.0f,
+                self->dyna.actor.world.pos.y, self->dyna.actor.world.pos.z, 0, self->dyna.actor.world.rot.y, 0,
                 JABUJABU_COLLISION);
-            DynaPolyActor_Init(&this->dyna, 0);
+            DynaPolyActor_Init(&self->dyna, 0);
             CollisionHeader_GetVirtual(&gJabuJabuHeadCol, &colHeader);
-            this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
-            Collider_InitCylinder(globalCtx, &this->collider);
-            Collider_SetCylinder(globalCtx, &this->collider, &this->dyna.actor, &sCylinderInit);
-            this->dyna.actor.colChkInfo.mass = MASS_IMMOVABLE;
+            self->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &self->dyna.actor, colHeader);
+            Collider_InitCylinder(globalCtx, &self->collider);
+            Collider_SetCylinder(globalCtx, &self->collider, &self->dyna.actor, &sCylinderInit);
+            self->dyna.actor.colChkInfo.mass = MASS_IMMOVABLE;
             break;
 
         case JABUJABU_COLLISION:
-            DynaPolyActor_Init(&this->dyna, 0);
+            DynaPolyActor_Init(&self->dyna, 0);
             CollisionHeader_GetVirtual(&gJabuJabuBodyCol, &colHeader);
-            this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
-            func_8003ECA8(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
-            this->dyna.actor.update = EnJj_UpdateStaticCollision;
-            this->dyna.actor.draw = NULL;
-            Actor_SetScale(&this->dyna.actor, 0.087f);
+            self->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &self->dyna.actor, colHeader);
+            func_8003ECA8(globalCtx, &globalCtx->colCtx.dyna, self->dyna.bgId);
+            self->dyna.actor.update = EnJj_UpdateStaticCollision;
+            self->dyna.actor.draw = NULL;
+            Actor_SetScale(&self->dyna.actor, 0.087f);
             break;
 
         case JABUJABU_UNUSED_COLLISION:
-            DynaPolyActor_Init(&this->dyna, 0);
+            DynaPolyActor_Init(&self->dyna, 0);
             CollisionHeader_GetVirtual(&gJabuJabuUnusedCol, &colHeader);
-            this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
-            this->dyna.actor.update = EnJj_UpdateStaticCollision;
-            this->dyna.actor.draw = NULL;
-            Actor_SetScale(&this->dyna.actor, 0.087f);
+            self->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &self->dyna.actor, colHeader);
+            self->dyna.actor.update = EnJj_UpdateStaticCollision;
+            self->dyna.actor.draw = NULL;
+            Actor_SetScale(&self->dyna.actor, 0.087f);
             break;
     }
 }
 
 void EnJj_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    EnJj* this = THIS;
+    EnJj* self = THIS;
 
-    switch (this->dyna.actor.params) {
+    switch (self->dyna.actor.params) {
         case JABUJABU_MAIN:
-            DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
-            Collider_DestroyCylinder(globalCtx, &this->collider);
+            DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, self->dyna.bgId);
+            Collider_DestroyCylinder(globalCtx, &self->collider);
             break;
 
         case JABUJABU_COLLISION:
         case JABUJABU_UNUSED_COLLISION:
-            DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+            DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, self->dyna.bgId);
             break;
     }
 }
@@ -159,64 +159,64 @@ void EnJj_Destroy(Actor* thisx, GlobalContext* globalCtx) {
  * that many extra times at the end of every blinkTimer cycle, but the actor always sets it to zero, so only one
  * multiblink happens when extraBlinkCounter is nonzero.
  */
-void EnJj_Blink(EnJj* this) {
-    if (this->blinkTimer > 0) {
-        this->blinkTimer--;
+void EnJj_Blink(EnJj* self) {
+    if (self->blinkTimer > 0) {
+        self->blinkTimer--;
     } else {
-        this->eyeIndex++;
-        if (this->eyeIndex >= JABUJABU_EYE_MAX) {
-            this->eyeIndex = JABUJABU_EYE_OPEN;
-            if (this->extraBlinkCounter > 0) {
-                this->extraBlinkCounter--;
+        self->eyeIndex++;
+        if (self->eyeIndex >= JABUJABU_EYE_MAX) {
+            self->eyeIndex = JABUJABU_EYE_OPEN;
+            if (self->extraBlinkCounter > 0) {
+                self->extraBlinkCounter--;
             } else {
-                this->blinkTimer = Rand_S16Offset(20, 20);
-                this->extraBlinkCounter = this->extraBlinkTotal;
+                self->blinkTimer = Rand_S16Offset(20, 20);
+                self->extraBlinkCounter = self->extraBlinkTotal;
             }
         }
     }
 }
 
-void EnJj_OpenMouth(EnJj* this, GlobalContext* globalCtx) {
-    DynaPolyActor* bodyCollisionActor = this->bodyCollisionActor;
+void EnJj_OpenMouth(EnJj* self, GlobalContext* globalCtx) {
+    DynaPolyActor* bodyCollisionActor = self->bodyCollisionActor;
 
-    if (this->mouthOpenAngle >= -5200) {
-        this->mouthOpenAngle -= 102;
+    if (self->mouthOpenAngle >= -5200) {
+        self->mouthOpenAngle -= 102;
 
-        if (this->mouthOpenAngle < -2600) {
+        if (self->mouthOpenAngle < -2600) {
             func_8003EBF8(globalCtx, &globalCtx->colCtx.dyna, bodyCollisionActor->bgId);
         }
     }
 }
 
-void EnJj_WaitToOpenMouth(EnJj* this, GlobalContext* globalCtx) {
-    if (this->dyna.actor.xzDistToPlayer < 300.0f) {
-        EnJj_SetupAction(this, EnJj_OpenMouth);
+void EnJj_WaitToOpenMouth(EnJj* self, GlobalContext* globalCtx) {
+    if (self->dyna.actor.xzDistToPlayer < 300.0f) {
+        EnJj_SetupAction(self, EnJj_OpenMouth);
     }
 }
 
-void EnJj_WaitForFish(EnJj* this, GlobalContext* globalCtx) {
+void EnJj_WaitForFish(EnJj* self, GlobalContext* globalCtx) {
     static Vec3f feedingSpot = { -1589.0f, 53.0f, -43.0f };
     Player* player = GET_PLAYER(globalCtx);
 
     if ((Math_Vec3f_DistXZ(&feedingSpot, &player->actor.world.pos) < 300.0f) &&
         globalCtx->isPlayerDroppingFish(globalCtx)) {
-        this->cutsceneCountdownTimer = 100;
-        EnJj_SetupAction(this, EnJj_BeginCutscene);
+        self->cutsceneCountdownTimer = 100;
+        EnJj_SetupAction(self, EnJj_BeginCutscene);
     }
 
-    this->collider.dim.pos.x = -1245;
-    this->collider.dim.pos.y = 20;
-    this->collider.dim.pos.z = -48;
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    self->collider.dim.pos.x = -1245;
+    self->collider.dim.pos.y = 20;
+    self->collider.dim.pos.z = -48;
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
 }
 
-void EnJj_BeginCutscene(EnJj* this, GlobalContext* globalCtx) {
-    DynaPolyActor* bodyCollisionActor = this->bodyCollisionActor;
+void EnJj_BeginCutscene(EnJj* self, GlobalContext* globalCtx) {
+    DynaPolyActor* bodyCollisionActor = self->bodyCollisionActor;
 
-    if (this->cutsceneCountdownTimer > 0) {
-        this->cutsceneCountdownTimer--;
+    if (self->cutsceneCountdownTimer > 0) {
+        self->cutsceneCountdownTimer--;
     } else {
-        EnJj_SetupAction(this, EnJj_RemoveDust);
+        EnJj_SetupAction(self, EnJj_RemoveDust);
         globalCtx->csCtx.segment = &D_80A88164;
         gSaveContext.cutsceneTrigger = 1;
         func_8003EBF8(globalCtx, &globalCtx->colCtx.dyna, bodyCollisionActor->bgId);
@@ -226,58 +226,58 @@ void EnJj_BeginCutscene(EnJj* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnJj_CutsceneUpdate(EnJj* this, GlobalContext* globalCtx) {
+void EnJj_CutsceneUpdate(EnJj* self, GlobalContext* globalCtx) {
     switch (globalCtx->csCtx.npcActions[2]->action) {
         case 1:
-            if (this->unk_30A & 2) {
-                this->eyeIndex = 0;
-                this->blinkTimer = Rand_S16Offset(20, 20);
-                this->extraBlinkCounter = 0;
-                this->extraBlinkTotal = 0;
-                this->unk_30A ^= 2;
+            if (self->unk_30A & 2) {
+                self->eyeIndex = 0;
+                self->blinkTimer = Rand_S16Offset(20, 20);
+                self->extraBlinkCounter = 0;
+                self->extraBlinkTotal = 0;
+                self->unk_30A ^= 2;
             }
             break;
 
         case 2:
-            this->unk_30A |= 1;
+            self->unk_30A |= 1;
 
-            if (!(this->unk_30A & 8)) {
-                this->dust = Actor_SpawnAsChild(&globalCtx->actorCtx, &this->dyna.actor, globalCtx, ACTOR_EFF_DUST,
+            if (!(self->unk_30A & 8)) {
+                self->dust = Actor_SpawnAsChild(&globalCtx->actorCtx, &self->dyna.actor, globalCtx, ACTOR_EFF_DUST,
                                                 -1100.0f, 105.0f, -27.0f, 0, 0, 0, EFF_DUST_TYPE_0);
-                this->unk_30A |= 8;
+                self->unk_30A |= 8;
             }
             break;
 
         case 3:
-            if (!(this->unk_30A & 2)) {
-                this->eyeIndex = 0;
-                this->blinkTimer = 0;
-                this->extraBlinkCounter = 1;
-                this->extraBlinkTotal = 0;
-                this->unk_30A |= 2;
+            if (!(self->unk_30A & 2)) {
+                self->eyeIndex = 0;
+                self->blinkTimer = 0;
+                self->extraBlinkCounter = 1;
+                self->extraBlinkTotal = 0;
+                self->unk_30A |= 2;
             }
             break;
     }
 
-    if (this->unk_30A & 1) {
-        Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_JABJAB_BREATHE - SFX_FLAG);
+    if (self->unk_30A & 1) {
+        Audio_PlayActorSound2(&self->dyna.actor, NA_SE_EV_JABJAB_BREATHE - SFX_FLAG);
 
-        if (this->mouthOpenAngle >= -5200) {
-            this->mouthOpenAngle -= 102;
+        if (self->mouthOpenAngle >= -5200) {
+            self->mouthOpenAngle -= 102;
         }
     }
 }
 
-void EnJj_RemoveDust(EnJj* this, GlobalContext* globalCtx) {
+void EnJj_RemoveDust(EnJj* self, GlobalContext* globalCtx) {
     Actor* dust;
 
-    if (!(this->unk_30A & 4)) {
-        this->unk_30A |= 4;
-        dust = this->dust;
+    if (!(self->unk_30A & 4)) {
+        self->unk_30A |= 4;
+        dust = self->dust;
 
         if (dust != NULL) {
             Actor_Kill(dust);
-            this->dyna.actor.child = NULL;
+            self->dyna.actor.child = NULL;
         }
     }
 }
@@ -286,39 +286,39 @@ void EnJj_UpdateStaticCollision(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnJj_Update(Actor* thisx, GlobalContext* globalCtx) {
-    EnJj* this = THIS;
+    EnJj* self = THIS;
 
     if ((globalCtx->csCtx.state != CS_STATE_IDLE) && (globalCtx->csCtx.npcActions[2] != NULL)) {
-        EnJj_CutsceneUpdate(this, globalCtx);
+        EnJj_CutsceneUpdate(self, globalCtx);
     } else {
-        this->actionFunc(this, globalCtx);
+        self->actionFunc(self, globalCtx);
 
-        if (this->skelAnime.curFrame == 41.0f) {
-            Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_JABJAB_GROAN);
+        if (self->skelAnime.curFrame == 41.0f) {
+            Audio_PlayActorSound2(&self->dyna.actor, NA_SE_EV_JABJAB_GROAN);
         }
     }
 
-    EnJj_Blink(this);
-    SkelAnime_Update(&this->skelAnime);
-    Actor_SetScale(&this->dyna.actor, 0.087f);
+    EnJj_Blink(self);
+    SkelAnime_Update(&self->skelAnime);
+    Actor_SetScale(&self->dyna.actor, 0.087f);
 
     // Head
-    this->skelAnime.jointTable[10].z = this->mouthOpenAngle;
+    self->skelAnime.jointTable[10].z = self->mouthOpenAngle;
 }
 
 void EnJj_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     static void* eyeTextures[] = { gJabuJabuEyeOpenTex, gJabuJabuEyeHalfTex, gJabuJabuEyeClosedTex };
     GlobalContext* globalCtx = globalCtx2;
-    EnJj* this = THIS;
+    EnJj* self = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx, "../z_en_jj.c", 879);
 
     func_800943C8(globalCtx->state.gfxCtx);
-    Matrix_Translate(0.0f, (cosf(this->skelAnime.curFrame * (M_PI / 41.0f)) * 10.0f) - 10.0f, 0.0f, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, (cosf(self->skelAnime.curFrame * (M_PI / 41.0f)) * 10.0f) - 10.0f, 0.0f, MTXMODE_APPLY);
     Matrix_Scale(10.0f, 10.0f, 10.0f, MTXMODE_APPLY);
-    gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(eyeTextures[this->eyeIndex]));
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          NULL, NULL, this);
+    gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(eyeTextures[self->eyeIndex]));
+    SkelAnime_DrawFlexOpa(globalCtx, self->skelAnime.skeleton, self->skelAnime.jointTable, self->skelAnime.dListCount,
+                          NULL, NULL, self);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx, "../z_en_jj.c", 898);
 }

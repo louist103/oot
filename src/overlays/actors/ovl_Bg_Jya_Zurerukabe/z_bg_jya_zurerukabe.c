@@ -17,11 +17,11 @@ void BgJyaZurerukabe_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgJyaZurerukabe_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgJyaZurerukabe_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_8089B4C8(BgJyaZurerukabe* this, GlobalContext* globalCtx);
-void func_8089B7B4(BgJyaZurerukabe* this);
-void func_8089B7C4(BgJyaZurerukabe* this, GlobalContext* globalCtx);
-void func_8089B80C(BgJyaZurerukabe* this);
-void func_8089B870(BgJyaZurerukabe* this, GlobalContext* globalCtx);
+void func_8089B4C8(BgJyaZurerukabe* self, GlobalContext* globalCtx);
+void func_8089B7B4(BgJyaZurerukabe* self);
+void func_8089B7C4(BgJyaZurerukabe* self, GlobalContext* globalCtx);
+void func_8089B80C(BgJyaZurerukabe* self);
+void func_8089B870(BgJyaZurerukabe* self, GlobalContext* globalCtx);
 
 static f32 D_8089B9C0[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
 
@@ -61,22 +61,22 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 1000, ICHAIN_STOP),
 };
 
-void BgJyaZurerukabe_InitDynaPoly(BgJyaZurerukabe* this, GlobalContext* globalCtx, CollisionHeader* collision,
+void BgJyaZurerukabe_InitDynaPoly(BgJyaZurerukabe* self, GlobalContext* globalCtx, CollisionHeader* collision,
                                   s32 flag) {
     s32 pad;
     CollisionHeader* colHeader = NULL;
     s32 pad2;
 
-    DynaPolyActor_Init(&this->dyna, flag);
+    DynaPolyActor_Init(&self->dyna, flag);
     CollisionHeader_GetVirtual(collision, &colHeader);
-    this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
-    if (this->dyna.bgId == BG_ACTOR_MAX) {
+    self->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &self->dyna.actor, colHeader);
+    if (self->dyna.bgId == BG_ACTOR_MAX) {
         osSyncPrintf("Warning : move BG 登録失敗(%s %d)(name %d)(arg_data 0x%04x)\n", "../z_bg_jya_zurerukabe.c", 194,
-                     this->dyna.actor.id, this->dyna.actor.params);
+                     self->dyna.actor.id, self->dyna.actor.params);
     }
 }
 
-void func_8089B4C8(BgJyaZurerukabe* this, GlobalContext* globalCtx) {
+void func_8089B4C8(BgJyaZurerukabe* self, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if ((player->stateFlags1 == 0x200000) && (player->actor.wallPoly != NULL)) {
@@ -96,13 +96,13 @@ void func_8089B4C8(BgJyaZurerukabe* this, GlobalContext* globalCtx) {
             case 3:
             case 5:
                 if (fabsf(D_8089B9C0[D_8089BA30[i]]) > 1.0f) {
-                    func_8002F6D4(globalCtx, &this->dyna.actor, 1.5f, this->dyna.actor.shape.rot.y, 0.0f, 0);
+                    func_8002F6D4(globalCtx, &self->dyna.actor, 1.5f, self->dyna.actor.shape.rot.y, 0.0f, 0);
                 }
                 break;
             case 1:
             case 4:
                 if (fabsf(D_8089B9C0[D_8089BA30[i]] - D_8089B9C0[D_8089BA30[i + 1]]) > 1.0f) {
-                    func_8002F6D4(globalCtx, &this->dyna.actor, 1.5f, this->dyna.actor.shape.rot.y, 0.0f, 0);
+                    func_8002F6D4(globalCtx, &self->dyna.actor, 1.5f, self->dyna.actor.shape.rot.y, 0.0f, 0);
                 }
                 break;
         }
@@ -110,15 +110,15 @@ void func_8089B4C8(BgJyaZurerukabe* this, GlobalContext* globalCtx) {
 }
 
 void BgJyaZurerukabe_Init(Actor* thisx, GlobalContext* globalCtx) {
-    BgJyaZurerukabe* this = THIS;
+    BgJyaZurerukabe* self = THIS;
     s32 i;
 
-    BgJyaZurerukabe_InitDynaPoly(this, globalCtx, &gZurerukabeCol, DPM_UNK);
+    BgJyaZurerukabe_InitDynaPoly(self, globalCtx, &gZurerukabeCol, DPM_UNK);
     Actor_ProcessInitChain(thisx, sInitChain);
 
     for (i = 0; i < ARRAY_COUNT(D_8089B9F0); i++) {
-        if (fabsf(D_8089B9F0[i] - this->dyna.actor.home.pos.y) < 1.0f) {
-            this->unk_168 = i;
+        if (fabsf(D_8089B9F0[i] - self->dyna.actor.home.pos.y) < 1.0f) {
+            self->unk_168 = i;
             break;
         }
     }
@@ -126,63 +126,63 @@ void BgJyaZurerukabe_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (i == ARRAY_COUNT(D_8089B9F0)) {
         osSyncPrintf(VT_COL(RED, WHITE));
         osSyncPrintf("home pos が変更されたみたい(%s %d)(arg_data 0x%04x)\n", "../z_bg_jya_zurerukabe.c", 299,
-                     this->dyna.actor.params);
+                     self->dyna.actor.params);
         osSyncPrintf(VT_RST);
     }
 
-    this->unk_16E = D_8089B9F8[this->unk_168];
-    func_8089B7B4(this);
-    osSyncPrintf("(jya ずれる壁)(arg_data 0x%04x)\n", this->dyna.actor.params);
+    self->unk_16E = D_8089B9F8[self->unk_168];
+    func_8089B7B4(self);
+    osSyncPrintf("(jya ずれる壁)(arg_data 0x%04x)\n", self->dyna.actor.params);
 }
 
 void BgJyaZurerukabe_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    BgJyaZurerukabe* this = THIS;
+    BgJyaZurerukabe* self = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
-    D_8089B9C0[this->unk_168] = 0.0f;
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, self->dyna.bgId);
+    D_8089B9C0[self->unk_168] = 0.0f;
 }
 
-void func_8089B7B4(BgJyaZurerukabe* this) {
-    this->actionFunc = func_8089B7C4;
+void func_8089B7B4(BgJyaZurerukabe* self) {
+    self->actionFunc = func_8089B7C4;
 }
 
-void func_8089B7C4(BgJyaZurerukabe* this, GlobalContext* globalCtx) {
-    if (this->unk_16A <= 0) {
-        func_8089B80C(this);
+void func_8089B7C4(BgJyaZurerukabe* self, GlobalContext* globalCtx) {
+    if (self->unk_16A <= 0) {
+        func_8089B80C(self);
     }
-    D_8089B9C0[this->unk_168] = 0.0f;
+    D_8089B9C0[self->unk_168] = 0.0f;
 }
 
-void func_8089B80C(BgJyaZurerukabe* this) {
-    this->actionFunc = func_8089B870;
-    this->unk_16A = D_8089BA00[this->unk_168];
-    if (ABS(this->unk_16C) == 4) {
-        this->unk_16E = -this->unk_16E;
+void func_8089B80C(BgJyaZurerukabe* self) {
+    self->actionFunc = func_8089B870;
+    self->unk_16A = D_8089BA00[self->unk_168];
+    if (ABS(self->unk_16C) == 4) {
+        self->unk_16E = -self->unk_16E;
     }
-    this->unk_16C += this->unk_16E;
+    self->unk_16C += self->unk_16E;
 }
 
-void func_8089B870(BgJyaZurerukabe* this, GlobalContext* globalCtx) {
-    if (Math_StepToF(&this->dyna.actor.world.pos.x, this->dyna.actor.home.pos.x + (this->unk_16C * 75),
-                     D_8089BA08[this->unk_168])) {
-        func_8089B7B4(this);
+void func_8089B870(BgJyaZurerukabe* self, GlobalContext* globalCtx) {
+    if (Math_StepToF(&self->dyna.actor.world.pos.x, self->dyna.actor.home.pos.x + (self->unk_16C * 75),
+                     D_8089BA08[self->unk_168])) {
+        func_8089B7B4(self);
     }
 
-    D_8089B9C0[this->unk_168] = D_8089BA08[this->unk_168] * this->unk_16E;
-    func_8002F974(&this->dyna.actor, NA_SE_EV_ELEVATOR_MOVE - SFX_FLAG);
+    D_8089B9C0[self->unk_168] = D_8089BA08[self->unk_168] * self->unk_16E;
+    func_8002F974(&self->dyna.actor, NA_SE_EV_ELEVATOR_MOVE - SFX_FLAG);
 }
 
 void BgJyaZurerukabe_Update(Actor* thisx, GlobalContext* globalCtx) {
-    BgJyaZurerukabe* this = THIS;
+    BgJyaZurerukabe* self = THIS;
 
-    if (this->unk_16A > 0) {
-        this->unk_16A--;
+    if (self->unk_16A > 0) {
+        self->unk_16A--;
     }
 
-    this->actionFunc(this, globalCtx);
+    self->actionFunc(self, globalCtx);
 
-    if (this->unk_168 == 0) {
-        func_8089B4C8(this, globalCtx);
+    if (self->unk_168 == 0) {
+        func_8089B4C8(self, globalCtx);
     }
 }
 

@@ -10,13 +10,13 @@ void EnShopnuts_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnShopnuts_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnShopnuts_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void EnShopnuts_SetupWait(EnShopnuts* this);
-void EnShopnuts_Wait(EnShopnuts* this, GlobalContext* globalCtx);
-void EnShopnuts_LookAround(EnShopnuts* this, GlobalContext* globalCtx);
-void EnShopnuts_Stand(EnShopnuts* this, GlobalContext* globalCtx);
-void EnShopnuts_ThrowNut(EnShopnuts* this, GlobalContext* globalCtx);
-void EnShopnuts_Burrow(EnShopnuts* this, GlobalContext* globalCtx);
-void EnShopnuts_SpawnSalesman(EnShopnuts* this, GlobalContext* globalCtx);
+void EnShopnuts_SetupWait(EnShopnuts* self);
+void EnShopnuts_Wait(EnShopnuts* self, GlobalContext* globalCtx);
+void EnShopnuts_LookAround(EnShopnuts* self, GlobalContext* globalCtx);
+void EnShopnuts_Stand(EnShopnuts* self, GlobalContext* globalCtx);
+void EnShopnuts_ThrowNut(EnShopnuts* self, GlobalContext* globalCtx);
+void EnShopnuts_Burrow(EnShopnuts* self, GlobalContext* globalCtx);
+void EnShopnuts_SpawnSalesman(EnShopnuts* self, GlobalContext* globalCtx);
 
 const ActorInit En_Shopnuts_InitVars = {
     ACTOR_EN_SHOPNUTS,
@@ -59,225 +59,225 @@ static InitChainEntry sInitChain[] = {
 };
 
 void EnShopnuts_Init(Actor* thisx, GlobalContext* globalCtx) {
-    EnShopnuts* this = THIS;
+    EnShopnuts* self = THIS;
 
-    Actor_ProcessInitChain(&this->actor, sInitChain);
-    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 35.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gBusinessScrubSkel, &gBusinessScrubAnim_4574, this->jointTable,
-                       this->morphTable, 18);
-    Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
-    CollisionCheck_SetInfo(&this->actor.colChkInfo, NULL, &sColChkInfoInit);
-    Collider_UpdateCylinder(&this->actor, &this->collider);
+    Actor_ProcessInitChain(&self->actor, sInitChain);
+    ActorShape_Init(&self->actor.shape, 0.0f, ActorShadow_DrawCircle, 35.0f);
+    SkelAnime_InitFlex(globalCtx, &self->skelAnime, &gBusinessScrubSkel, &gBusinessScrubAnim_4574, self->jointTable,
+                       self->morphTable, 18);
+    Collider_InitCylinder(globalCtx, &self->collider);
+    Collider_SetCylinder(globalCtx, &self->collider, &self->actor, &sCylinderInit);
+    CollisionCheck_SetInfo(&self->actor.colChkInfo, NULL, &sColChkInfoInit);
+    Collider_UpdateCylinder(&self->actor, &self->collider);
 
-    if (((this->actor.params == 0x0002) && (gSaveContext.itemGetInf[0] & 0x800)) ||
-        ((this->actor.params == 0x0009) && (gSaveContext.infTable[25] & 4)) ||
-        ((this->actor.params == 0x000A) && (gSaveContext.infTable[25] & 8))) {
-        Actor_Kill(&this->actor);
+    if (((self->actor.params == 0x0002) && (gSaveContext.itemGetInf[0] & 0x800)) ||
+        ((self->actor.params == 0x0009) && (gSaveContext.infTable[25] & 4)) ||
+        ((self->actor.params == 0x000A) && (gSaveContext.infTable[25] & 8))) {
+        Actor_Kill(&self->actor);
     } else {
-        EnShopnuts_SetupWait(this);
+        EnShopnuts_SetupWait(self);
     }
 }
 
 void EnShopnuts_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    EnShopnuts* this = THIS;
+    EnShopnuts* self = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    Collider_DestroyCylinder(globalCtx, &self->collider);
 }
 
-void EnShopnuts_SetupWait(EnShopnuts* this) {
-    Animation_PlayOnceSetSpeed(&this->skelAnime, &gBusinessScrubAnim_139C, 0.0f);
-    this->animFlagAndTimer = Rand_S16Offset(100, 50);
-    this->collider.dim.height = 5;
-    this->collider.base.acFlags &= ~AC_ON;
-    this->actionFunc = EnShopnuts_Wait;
+void EnShopnuts_SetupWait(EnShopnuts* self) {
+    Animation_PlayOnceSetSpeed(&self->skelAnime, &gBusinessScrubAnim_139C, 0.0f);
+    self->animFlagAndTimer = Rand_S16Offset(100, 50);
+    self->collider.dim.height = 5;
+    self->collider.base.acFlags &= ~AC_ON;
+    self->actionFunc = EnShopnuts_Wait;
 }
 
-void EnShopnuts_SetupLookAround(EnShopnuts* this) {
-    Animation_PlayLoop(&this->skelAnime, &gBusinessScrubLookAroundAnim);
-    this->animFlagAndTimer = 2;
-    this->actionFunc = EnShopnuts_LookAround;
+void EnShopnuts_SetupLookAround(EnShopnuts* self) {
+    Animation_PlayLoop(&self->skelAnime, &gBusinessScrubLookAroundAnim);
+    self->animFlagAndTimer = 2;
+    self->actionFunc = EnShopnuts_LookAround;
 }
 
-void EnShopnuts_SetupThrowNut(EnShopnuts* this) {
-    Animation_PlayOnce(&this->skelAnime, &gBusinessScrubAnim_1EC);
-    this->actionFunc = EnShopnuts_ThrowNut;
+void EnShopnuts_SetupThrowNut(EnShopnuts* self) {
+    Animation_PlayOnce(&self->skelAnime, &gBusinessScrubAnim_1EC);
+    self->actionFunc = EnShopnuts_ThrowNut;
 }
 
-void EnShopnuts_SetupStand(EnShopnuts* this) {
-    Animation_MorphToLoop(&this->skelAnime, &gBusinessScrubAnim_4574, -3.0f);
-    if (this->actionFunc == EnShopnuts_ThrowNut) {
-        this->animFlagAndTimer = 2 | 0x1000; // sets timer and flag
+void EnShopnuts_SetupStand(EnShopnuts* self) {
+    Animation_MorphToLoop(&self->skelAnime, &gBusinessScrubAnim_4574, -3.0f);
+    if (self->actionFunc == EnShopnuts_ThrowNut) {
+        self->animFlagAndTimer = 2 | 0x1000; // sets timer and flag
     } else {
-        this->animFlagAndTimer = 1;
+        self->animFlagAndTimer = 1;
     }
-    this->actionFunc = EnShopnuts_Stand;
+    self->actionFunc = EnShopnuts_Stand;
 }
 
-void EnShopnuts_SetupBurrow(EnShopnuts* this) {
-    Animation_MorphToPlayOnce(&this->skelAnime, &gBusinessScrubAnim_39C, -5.0f);
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_NUTS_DOWN);
-    this->actionFunc = EnShopnuts_Burrow;
+void EnShopnuts_SetupBurrow(EnShopnuts* self) {
+    Animation_MorphToPlayOnce(&self->skelAnime, &gBusinessScrubAnim_39C, -5.0f);
+    Audio_PlayActorSound2(&self->actor, NA_SE_EN_NUTS_DOWN);
+    self->actionFunc = EnShopnuts_Burrow;
 }
 
-void EnShopnuts_SetupSpawnSalesman(EnShopnuts* this) {
-    Animation_MorphToPlayOnce(&this->skelAnime, &gBusinessScrubRotateAnim, -3.0f);
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_NUTS_DAMAGE);
-    this->collider.base.acFlags &= ~AC_ON;
-    this->actionFunc = EnShopnuts_SpawnSalesman;
+void EnShopnuts_SetupSpawnSalesman(EnShopnuts* self) {
+    Animation_MorphToPlayOnce(&self->skelAnime, &gBusinessScrubRotateAnim, -3.0f);
+    Audio_PlayActorSound2(&self->actor, NA_SE_EN_NUTS_DAMAGE);
+    self->collider.base.acFlags &= ~AC_ON;
+    self->actionFunc = EnShopnuts_SpawnSalesman;
 }
 
-void EnShopnuts_Wait(EnShopnuts* this, GlobalContext* globalCtx) {
+void EnShopnuts_Wait(EnShopnuts* self, GlobalContext* globalCtx) {
     s32 hasSlowPlaybackSpeed = false;
 
-    if (this->skelAnime.playSpeed < 0.5f) {
+    if (self->skelAnime.playSpeed < 0.5f) {
         hasSlowPlaybackSpeed = true;
     }
-    if (hasSlowPlaybackSpeed && (this->animFlagAndTimer != 0)) {
-        this->animFlagAndTimer--;
+    if (hasSlowPlaybackSpeed && (self->animFlagAndTimer != 0)) {
+        self->animFlagAndTimer--;
     }
-    if (Animation_OnFrame(&this->skelAnime, 9.0f)) {
-        this->collider.base.acFlags |= AC_ON;
-    } else if (Animation_OnFrame(&this->skelAnime, 8.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_NUTS_UP);
+    if (Animation_OnFrame(&self->skelAnime, 9.0f)) {
+        self->collider.base.acFlags |= AC_ON;
+    } else if (Animation_OnFrame(&self->skelAnime, 8.0f)) {
+        Audio_PlayActorSound2(&self->actor, NA_SE_EN_NUTS_UP);
     }
 
-    this->collider.dim.height = ((CLAMP(this->skelAnime.curFrame, 9.0f, 13.0f) - 9.0f) * 9.0f) + 5.0f;
-    if (!hasSlowPlaybackSpeed && (this->actor.xzDistToPlayer < 120.0f)) {
-        EnShopnuts_SetupBurrow(this);
-    } else if (SkelAnime_Update(&this->skelAnime)) {
-        if (this->actor.xzDistToPlayer < 120.0f) {
-            EnShopnuts_SetupBurrow(this);
-        } else if ((this->animFlagAndTimer == 0) && (this->actor.xzDistToPlayer > 320.0f)) {
-            EnShopnuts_SetupLookAround(this);
+    self->collider.dim.height = ((CLAMP(self->skelAnime.curFrame, 9.0f, 13.0f) - 9.0f) * 9.0f) + 5.0f;
+    if (!hasSlowPlaybackSpeed && (self->actor.xzDistToPlayer < 120.0f)) {
+        EnShopnuts_SetupBurrow(self);
+    } else if (SkelAnime_Update(&self->skelAnime)) {
+        if (self->actor.xzDistToPlayer < 120.0f) {
+            EnShopnuts_SetupBurrow(self);
+        } else if ((self->animFlagAndTimer == 0) && (self->actor.xzDistToPlayer > 320.0f)) {
+            EnShopnuts_SetupLookAround(self);
         } else {
-            EnShopnuts_SetupStand(this);
+            EnShopnuts_SetupStand(self);
         }
     }
     if (hasSlowPlaybackSpeed &&
-        ((this->actor.xzDistToPlayer > 160.0f) && (fabsf(this->actor.yDistToPlayer) < 120.0f)) &&
-        ((this->animFlagAndTimer == 0) || (this->actor.xzDistToPlayer < 480.0f))) {
-        this->skelAnime.playSpeed = 1.0f;
+        ((self->actor.xzDistToPlayer > 160.0f) && (fabsf(self->actor.yDistToPlayer) < 120.0f)) &&
+        ((self->animFlagAndTimer == 0) || (self->actor.xzDistToPlayer < 480.0f))) {
+        self->skelAnime.playSpeed = 1.0f;
     }
 }
 
-void EnShopnuts_LookAround(EnShopnuts* this, GlobalContext* globalCtx) {
-    SkelAnime_Update(&this->skelAnime);
-    if (Animation_OnFrame(&this->skelAnime, 0.0f) && (this->animFlagAndTimer != 0)) {
-        this->animFlagAndTimer--;
+void EnShopnuts_LookAround(EnShopnuts* self, GlobalContext* globalCtx) {
+    SkelAnime_Update(&self->skelAnime);
+    if (Animation_OnFrame(&self->skelAnime, 0.0f) && (self->animFlagAndTimer != 0)) {
+        self->animFlagAndTimer--;
     }
-    if ((this->actor.xzDistToPlayer < 120.0f) || (this->animFlagAndTimer == 0)) {
-        EnShopnuts_SetupBurrow(this);
-    }
-}
-
-void EnShopnuts_Stand(EnShopnuts* this, GlobalContext* globalCtx) {
-    SkelAnime_Update(&this->skelAnime);
-    if (Animation_OnFrame(&this->skelAnime, 0.0f) && (this->animFlagAndTimer != 0)) {
-        this->animFlagAndTimer--;
-    }
-    if (!(this->animFlagAndTimer & 0x1000)) {
-        Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 2, 0xE38);
-    }
-    if ((this->actor.xzDistToPlayer < 120.0f) || (this->animFlagAndTimer == 0x1000)) {
-        EnShopnuts_SetupBurrow(this);
-    } else if (this->animFlagAndTimer == 0) {
-        EnShopnuts_SetupThrowNut(this);
+    if ((self->actor.xzDistToPlayer < 120.0f) || (self->animFlagAndTimer == 0)) {
+        EnShopnuts_SetupBurrow(self);
     }
 }
 
-void EnShopnuts_ThrowNut(EnShopnuts* this, GlobalContext* globalCtx) {
+void EnShopnuts_Stand(EnShopnuts* self, GlobalContext* globalCtx) {
+    SkelAnime_Update(&self->skelAnime);
+    if (Animation_OnFrame(&self->skelAnime, 0.0f) && (self->animFlagAndTimer != 0)) {
+        self->animFlagAndTimer--;
+    }
+    if (!(self->animFlagAndTimer & 0x1000)) {
+        Math_ApproachS(&self->actor.shape.rot.y, self->actor.yawTowardsPlayer, 2, 0xE38);
+    }
+    if ((self->actor.xzDistToPlayer < 120.0f) || (self->animFlagAndTimer == 0x1000)) {
+        EnShopnuts_SetupBurrow(self);
+    } else if (self->animFlagAndTimer == 0) {
+        EnShopnuts_SetupThrowNut(self);
+    }
+}
+
+void EnShopnuts_ThrowNut(EnShopnuts* self, GlobalContext* globalCtx) {
     Vec3f spawnPos;
 
-    Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 2, 0xE38);
-    if (this->actor.xzDistToPlayer < 120.0f) {
-        EnShopnuts_SetupBurrow(this);
-    } else if (SkelAnime_Update(&this->skelAnime)) {
-        EnShopnuts_SetupStand(this);
-    } else if (Animation_OnFrame(&this->skelAnime, 6.0f)) {
-        spawnPos.x = this->actor.world.pos.x + (Math_SinS(this->actor.shape.rot.y) * 23.0f);
-        spawnPos.y = this->actor.world.pos.y + 12.0f;
-        spawnPos.z = this->actor.world.pos.z + (Math_CosS(this->actor.shape.rot.y) * 23.0f);
+    Math_ApproachS(&self->actor.shape.rot.y, self->actor.yawTowardsPlayer, 2, 0xE38);
+    if (self->actor.xzDistToPlayer < 120.0f) {
+        EnShopnuts_SetupBurrow(self);
+    } else if (SkelAnime_Update(&self->skelAnime)) {
+        EnShopnuts_SetupStand(self);
+    } else if (Animation_OnFrame(&self->skelAnime, 6.0f)) {
+        spawnPos.x = self->actor.world.pos.x + (Math_SinS(self->actor.shape.rot.y) * 23.0f);
+        spawnPos.y = self->actor.world.pos.y + 12.0f;
+        spawnPos.z = self->actor.world.pos.z + (Math_CosS(self->actor.shape.rot.y) * 23.0f);
         if (Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_NUTSBALL, spawnPos.x, spawnPos.y, spawnPos.z,
-                        this->actor.shape.rot.x, this->actor.shape.rot.y, this->actor.shape.rot.z, 2) != NULL) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_NUTS_THROW);
+                        self->actor.shape.rot.x, self->actor.shape.rot.y, self->actor.shape.rot.z, 2) != NULL) {
+            Audio_PlayActorSound2(&self->actor, NA_SE_EN_NUTS_THROW);
         }
     }
 }
 
-void EnShopnuts_Burrow(EnShopnuts* this, GlobalContext* globalCtx) {
-    if (SkelAnime_Update(&this->skelAnime)) {
-        EnShopnuts_SetupWait(this);
+void EnShopnuts_Burrow(EnShopnuts* self, GlobalContext* globalCtx) {
+    if (SkelAnime_Update(&self->skelAnime)) {
+        EnShopnuts_SetupWait(self);
     } else {
-        this->collider.dim.height = ((4.0f - CLAMP_MAX(this->skelAnime.curFrame, 4.0f)) * 10.0f) + 5.0f;
+        self->collider.dim.height = ((4.0f - CLAMP_MAX(self->skelAnime.curFrame, 4.0f)) * 10.0f) + 5.0f;
     }
-    if (Animation_OnFrame(&this->skelAnime, 4.0f)) {
-        this->collider.base.acFlags &= ~AC_ON;
+    if (Animation_OnFrame(&self->skelAnime, 4.0f)) {
+        self->collider.base.acFlags &= ~AC_ON;
     }
 }
 
-void EnShopnuts_SpawnSalesman(EnShopnuts* this, GlobalContext* globalCtx) {
-    if (SkelAnime_Update(&this->skelAnime)) {
-        Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_DNS, this->actor.world.pos.x, this->actor.world.pos.y,
-                    this->actor.world.pos.z, this->actor.shape.rot.x, this->actor.shape.rot.y, this->actor.shape.rot.z,
-                    this->actor.params);
-        Actor_Kill(&this->actor);
+void EnShopnuts_SpawnSalesman(EnShopnuts* self, GlobalContext* globalCtx) {
+    if (SkelAnime_Update(&self->skelAnime)) {
+        Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_DNS, self->actor.world.pos.x, self->actor.world.pos.y,
+                    self->actor.world.pos.z, self->actor.shape.rot.x, self->actor.shape.rot.y, self->actor.shape.rot.z,
+                    self->actor.params);
+        Actor_Kill(&self->actor);
     } else {
-        Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 2, 0xE38);
+        Math_ApproachS(&self->actor.shape.rot.y, self->actor.yawTowardsPlayer, 2, 0xE38);
     }
 }
 
-void EnShopnuts_ColliderCheck(EnShopnuts* this, GlobalContext* globalCtx) {
-    if (this->collider.base.acFlags & AC_HIT) {
-        this->collider.base.acFlags &= ~AC_HIT;
-        Actor_SetDropFlag(&this->actor, &this->collider.info, 1);
-        EnShopnuts_SetupSpawnSalesman(this);
+void EnShopnuts_ColliderCheck(EnShopnuts* self, GlobalContext* globalCtx) {
+    if (self->collider.base.acFlags & AC_HIT) {
+        self->collider.base.acFlags &= ~AC_HIT;
+        Actor_SetDropFlag(&self->actor, &self->collider.info, 1);
+        EnShopnuts_SetupSpawnSalesman(self);
     } else if (globalCtx->actorCtx.unk_02 != 0) {
-        EnShopnuts_SetupSpawnSalesman(this);
+        EnShopnuts_SetupSpawnSalesman(self);
     }
 }
 
 void EnShopnuts_Update(Actor* thisx, GlobalContext* globalCtx) {
-    EnShopnuts* this = THIS;
+    EnShopnuts* self = THIS;
 
-    EnShopnuts_ColliderCheck(this, globalCtx);
-    this->actionFunc(this, globalCtx);
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, this->collider.dim.radius, this->collider.dim.height, 4);
-    if (this->collider.base.acFlags & AC_ON) {
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    EnShopnuts_ColliderCheck(self, globalCtx);
+    self->actionFunc(self, globalCtx);
+    Actor_UpdateBgCheckInfo(globalCtx, &self->actor, 20.0f, self->collider.dim.radius, self->collider.dim.height, 4);
+    if (self->collider.base.acFlags & AC_ON) {
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
     }
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-    if (this->actionFunc == EnShopnuts_Wait) {
-        Actor_SetFocus(&this->actor, this->skelAnime.curFrame);
-    } else if (this->actionFunc == EnShopnuts_Burrow) {
-        Actor_SetFocus(&this->actor,
-                       20.0f - ((this->skelAnime.curFrame * 20.0f) / Animation_GetLastFrame(&gBusinessScrubAnim_39C)));
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
+    if (self->actionFunc == EnShopnuts_Wait) {
+        Actor_SetFocus(&self->actor, self->skelAnime.curFrame);
+    } else if (self->actionFunc == EnShopnuts_Burrow) {
+        Actor_SetFocus(&self->actor,
+                       20.0f - ((self->skelAnime.curFrame * 20.0f) / Animation_GetLastFrame(&gBusinessScrubAnim_39C)));
     } else {
-        Actor_SetFocus(&this->actor, 20.0f);
+        Actor_SetFocus(&self->actor, 20.0f);
     }
 }
 
 s32 EnShopnuts_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
                                 void* thisx) {
-    EnShopnuts* this = THIS;
+    EnShopnuts* self = THIS;
 
-    if ((limbIndex == 9) && (this->actionFunc == EnShopnuts_ThrowNut)) {
+    if ((limbIndex == 9) && (self->actionFunc == EnShopnuts_ThrowNut)) {
         *dList = NULL;
     }
     return 0;
 }
 
 void EnShopnuts_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx) {
-    EnShopnuts* this = THIS;
+    EnShopnuts* self = THIS;
 
     f32 curFrame;
     f32 x;
     f32 y;
     f32 z;
 
-    if ((limbIndex == 9) && (this->actionFunc == EnShopnuts_ThrowNut)) {
+    if ((limbIndex == 9) && (self->actionFunc == EnShopnuts_ThrowNut)) {
         OPEN_DISPS(globalCtx->state.gfxCtx, "../z_en_shopnuts.c", 682);
-        curFrame = this->skelAnime.curFrame;
+        curFrame = self->skelAnime.curFrame;
         if (curFrame <= 6.0f) {
             y = 1.0f - (curFrame * 0.0833f);
             x = z = (curFrame * 0.1167f) + 1.0f;
@@ -302,8 +302,8 @@ void EnShopnuts_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
 }
 
 void EnShopnuts_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    EnShopnuts* this = THIS;
+    EnShopnuts* self = THIS;
 
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          EnShopnuts_OverrideLimbDraw, EnShopnuts_PostLimbDraw, this);
+    SkelAnime_DrawFlexOpa(globalCtx, self->skelAnime.skeleton, self->skelAnime.jointTable, self->skelAnime.dListCount,
+                          EnShopnuts_OverrideLimbDraw, EnShopnuts_PostLimbDraw, self);
 }

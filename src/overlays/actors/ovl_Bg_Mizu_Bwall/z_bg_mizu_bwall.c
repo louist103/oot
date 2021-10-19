@@ -17,9 +17,9 @@ void BgMizuBwall_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgMizuBwall_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgMizuBwall_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void BgMizuBwall_Idle(BgMizuBwall* this, GlobalContext* globalCtx);
-void BgMizuBwall_Break(BgMizuBwall* this, GlobalContext* globalCtx);
-void BgMizuBwall_DoNothing(BgMizuBwall* this, GlobalContext* globalCtx);
+void BgMizuBwall_Idle(BgMizuBwall* self, GlobalContext* globalCtx);
+void BgMizuBwall_Break(BgMizuBwall* self, GlobalContext* globalCtx);
+void BgMizuBwall_DoNothing(BgMizuBwall* self, GlobalContext* globalCtx);
 
 const ActorInit Bg_Mizu_Bwall_InitVars = {
     ACTOR_BG_MIZU_BWALL,
@@ -173,31 +173,31 @@ void BgMizuBwall_RotateVec3f(Vec3f* out, Vec3f* in, f32 sin, f32 cos) {
 
 void BgMizuBwall_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
-    BgMizuBwall* this = THIS;
+    BgMizuBwall* self = THIS;
     CollisionHeader* colHeader = NULL;
 
-    Actor_ProcessInitChain(&this->dyna.actor, D_8089D854);
-    this->yRot = this->dyna.actor.world.pos.y;
-    this->dList = sDLists[(u16)this->dyna.actor.params & 0xF];
-    DynaPolyActor_Init(&this->dyna, DPM_PLAYER);
-    CollisionHeader_GetVirtual(sColHeaders[(u16)this->dyna.actor.params & 0xF], &colHeader);
-    this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
+    Actor_ProcessInitChain(&self->dyna.actor, D_8089D854);
+    self->yRot = self->dyna.actor.world.pos.y;
+    self->dList = sDLists[(u16)self->dyna.actor.params & 0xF];
+    DynaPolyActor_Init(&self->dyna, DPM_PLAYER);
+    CollisionHeader_GetVirtual(sColHeaders[(u16)self->dyna.actor.params & 0xF], &colHeader);
+    self->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &self->dyna.actor, colHeader);
 
-    switch ((u16)this->dyna.actor.params & 0xF) {
+    switch ((u16)self->dyna.actor.params & 0xF) {
         case MIZUBWALL_FLOOR:
-            if (Flags_GetSwitch(globalCtx, ((u16)this->dyna.actor.params >> 8) & 0x3F)) {
-                func_8003EBF8(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
-                this->dList = NULL;
-                this->actionFunc = BgMizuBwall_DoNothing;
+            if (Flags_GetSwitch(globalCtx, ((u16)self->dyna.actor.params >> 8) & 0x3F)) {
+                func_8003EBF8(globalCtx, &globalCtx->colCtx.dyna, self->dyna.bgId);
+                self->dList = NULL;
+                self->actionFunc = BgMizuBwall_DoNothing;
             } else {
-                Collider_InitTris(globalCtx, &this->collider);
-                if (!Collider_SetTris(globalCtx, &this->collider, &this->dyna.actor, &sTrisInitFloor, this->elements)) {
+                Collider_InitTris(globalCtx, &self->collider);
+                if (!Collider_SetTris(globalCtx, &self->collider, &self->dyna.actor, &sTrisInitFloor, self->elements)) {
                     osSyncPrintf("Error : コリジョンデータセット失敗(%s %d)(arg_data 0x%04x)\n", "../z_bg_mizu_bwall.c",
-                                 484, this->dyna.actor.params);
-                    Actor_Kill(&this->dyna.actor);
+                                 484, self->dyna.actor.params);
+                    Actor_Kill(&self->dyna.actor);
                 } else {
-                    f32 sin = Math_SinS(this->dyna.actor.shape.rot.y);
-                    f32 cos = Math_CosS(this->dyna.actor.shape.rot.y);
+                    f32 sin = Math_SinS(self->dyna.actor.shape.rot.y);
+                    f32 cos = Math_CosS(self->dyna.actor.shape.rot.y);
                     s32 i;
                     s32 j;
                     Vec3f offset;
@@ -209,31 +209,31 @@ void BgMizuBwall_Init(Actor* thisx, GlobalContext* globalCtx) {
                             offset.y = sTrisInitFloor.elements[i].dim.vtx[j].y;
                             offset.z = sTrisInitFloor.elements[i].dim.vtx[j].z + 2.0f;
                             BgMizuBwall_RotateVec3f(&vtx[j], &offset, sin, cos);
-                            vtx[j].x += this->dyna.actor.world.pos.x;
-                            vtx[j].y += this->dyna.actor.world.pos.y;
-                            vtx[j].z += this->dyna.actor.world.pos.z;
+                            vtx[j].x += self->dyna.actor.world.pos.x;
+                            vtx[j].y += self->dyna.actor.world.pos.y;
+                            vtx[j].z += self->dyna.actor.world.pos.z;
                         }
-                        Collider_SetTrisVertices(&this->collider, i, &vtx[0], &vtx[1], &vtx[2]);
+                        Collider_SetTrisVertices(&self->collider, i, &vtx[0], &vtx[1], &vtx[2]);
                     }
-                    this->actionFunc = BgMizuBwall_Idle;
+                    self->actionFunc = BgMizuBwall_Idle;
                 }
             }
             break;
         case MIZUBWALL_RUTO_ROOM:
-            if (Flags_GetSwitch(globalCtx, ((u16)this->dyna.actor.params >> 8) & 0x3F)) {
-                func_8003EBF8(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
-                this->dList = NULL;
-                this->actionFunc = BgMizuBwall_DoNothing;
+            if (Flags_GetSwitch(globalCtx, ((u16)self->dyna.actor.params >> 8) & 0x3F)) {
+                func_8003EBF8(globalCtx, &globalCtx->colCtx.dyna, self->dyna.bgId);
+                self->dList = NULL;
+                self->actionFunc = BgMizuBwall_DoNothing;
             } else {
-                Collider_InitTris(globalCtx, &this->collider);
-                if (!Collider_SetTris(globalCtx, &this->collider, &this->dyna.actor, &sTrisInitRutoWall,
-                                      this->elements)) {
+                Collider_InitTris(globalCtx, &self->collider);
+                if (!Collider_SetTris(globalCtx, &self->collider, &self->dyna.actor, &sTrisInitRutoWall,
+                                      self->elements)) {
                     osSyncPrintf("Error : コリジョンデータセット失敗(%s %d)(arg_data 0x%04x)\n", "../z_bg_mizu_bwall.c",
-                                 558, this->dyna.actor.params);
-                    Actor_Kill(&this->dyna.actor);
+                                 558, self->dyna.actor.params);
+                    Actor_Kill(&self->dyna.actor);
                 } else {
-                    f32 sin = Math_SinS(this->dyna.actor.shape.rot.y);
-                    f32 cos = Math_CosS(this->dyna.actor.shape.rot.y);
+                    f32 sin = Math_SinS(self->dyna.actor.shape.rot.y);
+                    f32 cos = Math_CosS(self->dyna.actor.shape.rot.y);
                     s32 i;
                     s32 j;
                     Vec3f offset;
@@ -245,31 +245,31 @@ void BgMizuBwall_Init(Actor* thisx, GlobalContext* globalCtx) {
                             offset.y = sTrisInitRutoWall.elements[i].dim.vtx[j].y;
                             offset.z = sTrisInitRutoWall.elements[i].dim.vtx[j].z + 2.0f;
                             BgMizuBwall_RotateVec3f(&vtx[j], &offset, sin, cos);
-                            vtx[j].x += this->dyna.actor.world.pos.x;
-                            vtx[j].y += this->dyna.actor.world.pos.y;
-                            vtx[j].z += this->dyna.actor.world.pos.z;
+                            vtx[j].x += self->dyna.actor.world.pos.x;
+                            vtx[j].y += self->dyna.actor.world.pos.y;
+                            vtx[j].z += self->dyna.actor.world.pos.z;
                         }
-                        Collider_SetTrisVertices(&this->collider, i, &vtx[0], &vtx[1], &vtx[2]);
+                        Collider_SetTrisVertices(&self->collider, i, &vtx[0], &vtx[1], &vtx[2]);
                     }
-                    this->actionFunc = BgMizuBwall_Idle;
+                    self->actionFunc = BgMizuBwall_Idle;
                 }
             }
             break;
         case MIZUBWALL_UNUSED:
-            if (Flags_GetSwitch(globalCtx, ((u16)this->dyna.actor.params >> 8) & 0x3F)) {
-                func_8003EBF8(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
-                this->dList = NULL;
-                this->actionFunc = BgMizuBwall_DoNothing;
+            if (Flags_GetSwitch(globalCtx, ((u16)self->dyna.actor.params >> 8) & 0x3F)) {
+                func_8003EBF8(globalCtx, &globalCtx->colCtx.dyna, self->dyna.bgId);
+                self->dList = NULL;
+                self->actionFunc = BgMizuBwall_DoNothing;
             } else {
-                Collider_InitTris(globalCtx, &this->collider);
-                if (!Collider_SetTris(globalCtx, &this->collider, &this->dyna.actor, &sTrisInitUnusedWall,
-                                      this->elements)) {
+                Collider_InitTris(globalCtx, &self->collider);
+                if (!Collider_SetTris(globalCtx, &self->collider, &self->dyna.actor, &sTrisInitUnusedWall,
+                                      self->elements)) {
                     osSyncPrintf("Error : コリジョンデータセット失敗(%s %d)(arg_data 0x%04x)\n", "../z_bg_mizu_bwall.c",
-                                 638, this->dyna.actor.params);
-                    Actor_Kill(&this->dyna.actor);
+                                 638, self->dyna.actor.params);
+                    Actor_Kill(&self->dyna.actor);
                 } else {
-                    f32 sin = Math_SinS(this->dyna.actor.shape.rot.y);
-                    f32 cos = Math_CosS(this->dyna.actor.shape.rot.y);
+                    f32 sin = Math_SinS(self->dyna.actor.shape.rot.y);
+                    f32 cos = Math_CosS(self->dyna.actor.shape.rot.y);
                     s32 i;
                     s32 j;
                     Vec3f offset;
@@ -283,31 +283,31 @@ void BgMizuBwall_Init(Actor* thisx, GlobalContext* globalCtx) {
                             offset.y = sTrisInitFloor.elements[i].dim.vtx[j].y;
                             offset.z = sTrisInitFloor.elements[i].dim.vtx[j].z;
                             BgMizuBwall_RotateVec3f(&vtx[j], &offset, sin, cos);
-                            vtx[j].x += this->dyna.actor.world.pos.x;
-                            vtx[j].y += this->dyna.actor.world.pos.y;
-                            vtx[j].z += this->dyna.actor.world.pos.z;
+                            vtx[j].x += self->dyna.actor.world.pos.x;
+                            vtx[j].y += self->dyna.actor.world.pos.y;
+                            vtx[j].z += self->dyna.actor.world.pos.z;
                         }
-                        Collider_SetTrisVertices(&this->collider, i, &vtx[0], &vtx[1], &vtx[2]);
+                        Collider_SetTrisVertices(&self->collider, i, &vtx[0], &vtx[1], &vtx[2]);
                     }
-                    this->actionFunc = BgMizuBwall_Idle;
+                    self->actionFunc = BgMizuBwall_Idle;
                 }
             }
             break;
         case MIZUBWALL_STINGER_ROOM_1:
-            if (Flags_GetSwitch(globalCtx, ((u16)this->dyna.actor.params >> 8) & 0x3F)) {
-                func_8003EBF8(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
-                this->dList = NULL;
-                this->actionFunc = BgMizuBwall_DoNothing;
+            if (Flags_GetSwitch(globalCtx, ((u16)self->dyna.actor.params >> 8) & 0x3F)) {
+                func_8003EBF8(globalCtx, &globalCtx->colCtx.dyna, self->dyna.bgId);
+                self->dList = NULL;
+                self->actionFunc = BgMizuBwall_DoNothing;
             } else {
-                Collider_InitTris(globalCtx, &this->collider);
-                if (!Collider_SetTris(globalCtx, &this->collider, &this->dyna.actor, &sTrisInitStingerWall,
-                                      this->elements)) {
+                Collider_InitTris(globalCtx, &self->collider);
+                if (!Collider_SetTris(globalCtx, &self->collider, &self->dyna.actor, &sTrisInitStingerWall,
+                                      self->elements)) {
                     osSyncPrintf("Error : コリジョンデータセット失敗(%s %d)(arg_data 0x%04x)\n", "../z_bg_mizu_bwall.c",
-                                 724, this->dyna.actor.params);
-                    Actor_Kill(&this->dyna.actor);
+                                 724, self->dyna.actor.params);
+                    Actor_Kill(&self->dyna.actor);
                 } else {
-                    f32 sin = Math_SinS(this->dyna.actor.shape.rot.y);
-                    f32 cos = Math_CosS(this->dyna.actor.shape.rot.y);
+                    f32 sin = Math_SinS(self->dyna.actor.shape.rot.y);
+                    f32 cos = Math_CosS(self->dyna.actor.shape.rot.y);
                     s32 i;
                     s32 j;
                     Vec3f offset;
@@ -321,31 +321,31 @@ void BgMizuBwall_Init(Actor* thisx, GlobalContext* globalCtx) {
                             offset.y = sTrisInitFloor.elements[i].dim.vtx[j].y;
                             offset.z = sTrisInitFloor.elements[i].dim.vtx[j].z + 2.0f;
                             BgMizuBwall_RotateVec3f(&vtx[j], &offset, sin, cos);
-                            vtx[j].x += this->dyna.actor.world.pos.x;
-                            vtx[j].y += this->dyna.actor.world.pos.y;
-                            vtx[j].z += this->dyna.actor.world.pos.z;
+                            vtx[j].x += self->dyna.actor.world.pos.x;
+                            vtx[j].y += self->dyna.actor.world.pos.y;
+                            vtx[j].z += self->dyna.actor.world.pos.z;
                         }
-                        Collider_SetTrisVertices(&this->collider, i, &vtx[0], &vtx[1], &vtx[2]);
+                        Collider_SetTrisVertices(&self->collider, i, &vtx[0], &vtx[1], &vtx[2]);
                     }
-                    this->actionFunc = BgMizuBwall_Idle;
+                    self->actionFunc = BgMizuBwall_Idle;
                 }
             }
             break;
         case MIZUBWALL_STINGER_ROOM_2:
-            if (Flags_GetSwitch(globalCtx, ((u16)this->dyna.actor.params >> 8) & 0x3F)) {
-                func_8003EBF8(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
-                this->dList = NULL;
-                this->actionFunc = BgMizuBwall_DoNothing;
+            if (Flags_GetSwitch(globalCtx, ((u16)self->dyna.actor.params >> 8) & 0x3F)) {
+                func_8003EBF8(globalCtx, &globalCtx->colCtx.dyna, self->dyna.bgId);
+                self->dList = NULL;
+                self->actionFunc = BgMizuBwall_DoNothing;
             } else {
-                Collider_InitTris(globalCtx, &this->collider);
-                if (!Collider_SetTris(globalCtx, &this->collider, &this->dyna.actor, &sTrisInitStingerWall,
-                                      this->elements)) {
+                Collider_InitTris(globalCtx, &self->collider);
+                if (!Collider_SetTris(globalCtx, &self->collider, &self->dyna.actor, &sTrisInitStingerWall,
+                                      self->elements)) {
                     osSyncPrintf("Error : コリジョンデータセット失敗(%s %d)(arg_data 0x%04x)\n", "../z_bg_mizu_bwall.c",
-                                 798, this->dyna.actor.params);
-                    Actor_Kill(&this->dyna.actor);
+                                 798, self->dyna.actor.params);
+                    Actor_Kill(&self->dyna.actor);
                 } else {
-                    f32 sin = Math_SinS(this->dyna.actor.shape.rot.y);
-                    f32 cos = Math_CosS(this->dyna.actor.shape.rot.y);
+                    f32 sin = Math_SinS(self->dyna.actor.shape.rot.y);
+                    f32 cos = Math_CosS(self->dyna.actor.shape.rot.y);
                     s32 i;
                     s32 j;
                     Vec3f offset;
@@ -359,13 +359,13 @@ void BgMizuBwall_Init(Actor* thisx, GlobalContext* globalCtx) {
                             offset.y = sTrisInitFloor.elements[i].dim.vtx[j].y;
                             offset.z = sTrisInitFloor.elements[i].dim.vtx[j].z + 2.0f;
                             BgMizuBwall_RotateVec3f(&vtx[j], &offset, sin, cos);
-                            vtx[j].x += this->dyna.actor.world.pos.x;
-                            vtx[j].y += this->dyna.actor.world.pos.y;
-                            vtx[j].z += this->dyna.actor.world.pos.z;
+                            vtx[j].x += self->dyna.actor.world.pos.x;
+                            vtx[j].y += self->dyna.actor.world.pos.y;
+                            vtx[j].z += self->dyna.actor.world.pos.z;
                         }
-                        Collider_SetTrisVertices(&this->collider, i, &vtx[0], &vtx[1], &vtx[2]);
+                        Collider_SetTrisVertices(&self->collider, i, &vtx[0], &vtx[1], &vtx[2]);
                     }
-                    this->actionFunc = BgMizuBwall_Idle;
+                    self->actionFunc = BgMizuBwall_Idle;
                 }
             }
             break;
@@ -374,62 +374,62 @@ void BgMizuBwall_Init(Actor* thisx, GlobalContext* globalCtx) {
 
 void BgMizuBwall_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
-    BgMizuBwall* this = THIS;
+    BgMizuBwall* self = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
-    Collider_DestroyTris(globalCtx, &this->collider);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, self->dyna.bgId);
+    Collider_DestroyTris(globalCtx, &self->collider);
 }
 
-void BgMizuBwall_SetAlpha(BgMizuBwall* this, GlobalContext* globalCtx) {
+void BgMizuBwall_SetAlpha(BgMizuBwall* self, GlobalContext* globalCtx) {
     f32 waterLevel = globalCtx->colCtx.colHeader->waterBoxes[2].ySurface;
 
     if (globalCtx->colCtx.colHeader->waterBoxes) {}
 
     if (waterLevel < WATER_TEMPLE_WATER_F1_Y) {
-        this->scrollAlpha1 = 255;
+        self->scrollAlpha1 = 255;
     } else if (waterLevel < WATER_TEMPLE_WATER_F2_Y) {
-        this->scrollAlpha1 = 255 - (s32)((waterLevel - WATER_TEMPLE_WATER_F1_Y) /
+        self->scrollAlpha1 = 255 - (s32)((waterLevel - WATER_TEMPLE_WATER_F1_Y) /
                                          (WATER_TEMPLE_WATER_F2_Y - WATER_TEMPLE_WATER_F1_Y) * (255 - 160));
     } else {
-        this->scrollAlpha1 = 160;
+        self->scrollAlpha1 = 160;
     }
 
     if (waterLevel < WATER_TEMPLE_WATER_F2_Y) {
-        this->scrollAlpha2 = 255;
+        self->scrollAlpha2 = 255;
     } else if (waterLevel < WATER_TEMPLE_WATER_F3_Y) {
-        this->scrollAlpha2 = 255 - (s32)((waterLevel - WATER_TEMPLE_WATER_F2_Y) /
+        self->scrollAlpha2 = 255 - (s32)((waterLevel - WATER_TEMPLE_WATER_F2_Y) /
                                          (WATER_TEMPLE_WATER_F3_Y - WATER_TEMPLE_WATER_F2_Y) * (255 - 160));
     } else {
-        this->scrollAlpha2 = 160;
+        self->scrollAlpha2 = 160;
     }
 
     if (waterLevel < WATER_TEMPLE_WATER_B1_Y) {
-        this->scrollAlpha3 = 255;
+        self->scrollAlpha3 = 255;
     } else if (waterLevel < WATER_TEMPLE_WATER_F1_Y) {
-        this->scrollAlpha3 = 255 - (s32)((waterLevel - WATER_TEMPLE_WATER_B1_Y) /
+        self->scrollAlpha3 = 255 - (s32)((waterLevel - WATER_TEMPLE_WATER_B1_Y) /
                                          (WATER_TEMPLE_WATER_F1_Y - WATER_TEMPLE_WATER_B1_Y) * (255 - 160));
     } else {
-        this->scrollAlpha3 = 160;
+        self->scrollAlpha3 = 160;
     }
 
-    this->scrollAlpha4 = this->scrollAlpha3;
+    self->scrollAlpha4 = self->scrollAlpha3;
 }
 
-void BgMizuBwall_SpawnDebris(BgMizuBwall* this, GlobalContext* globalCtx) {
+void BgMizuBwall_SpawnDebris(BgMizuBwall* self, GlobalContext* globalCtx) {
     s32 i;
     s32 pad;
     s16 rand1;
     s16 rand2;
-    Vec3f* thisPos = &this->dyna.actor.world.pos;
+    Vec3f* thisPos = &self->dyna.actor.world.pos;
     Vec3f debrisPos;
     f32 tempx;
     f32 tempz;
-    f32 sin = Math_SinS(this->dyna.actor.shape.rot.y);
-    f32 cos = Math_CosS(this->dyna.actor.shape.rot.y);
+    f32 sin = Math_SinS(self->dyna.actor.shape.rot.y);
+    f32 cos = Math_CosS(self->dyna.actor.shape.rot.y);
     Vec3f debrisOffsets[15];
 
     for (i = 0; i < ARRAY_COUNT(debrisOffsets); i++) {
-        switch ((u16)this->dyna.actor.params & 0xF) {
+        switch ((u16)self->dyna.actor.params & 0xF) {
             case MIZUBWALL_FLOOR:
                 debrisOffsets[i].x = (Rand_ZeroOne() * 80.0f) - 40.0f;
                 debrisOffsets[i].y = Rand_ZeroOne() * 0;
@@ -466,43 +466,43 @@ void BgMizuBwall_SpawnDebris(BgMizuBwall* this, GlobalContext* globalCtx) {
     }
 }
 
-void BgMizuBwall_Idle(BgMizuBwall* this, GlobalContext* globalCtx) {
-    BgMizuBwall_SetAlpha(this, globalCtx);
-    if (this->collider.base.acFlags & AC_HIT) {
-        this->collider.base.acFlags &= ~AC_HIT;
-        Flags_SetSwitch(globalCtx, ((u16)this->dyna.actor.params >> 8) & 0x3F);
-        this->breakTimer = 1;
-        func_8003EBF8(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
-        this->dList = NULL;
-        BgMizuBwall_SpawnDebris(this, globalCtx);
-        Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_WALL_BROKEN);
+void BgMizuBwall_Idle(BgMizuBwall* self, GlobalContext* globalCtx) {
+    BgMizuBwall_SetAlpha(self, globalCtx);
+    if (self->collider.base.acFlags & AC_HIT) {
+        self->collider.base.acFlags &= ~AC_HIT;
+        Flags_SetSwitch(globalCtx, ((u16)self->dyna.actor.params >> 8) & 0x3F);
+        self->breakTimer = 1;
+        func_8003EBF8(globalCtx, &globalCtx->colCtx.dyna, self->dyna.bgId);
+        self->dList = NULL;
+        BgMizuBwall_SpawnDebris(self, globalCtx);
+        Audio_PlayActorSound2(&self->dyna.actor, NA_SE_EV_WALL_BROKEN);
         Audio_PlaySoundGeneral(NA_SE_SY_CORRECT_CHIME, &D_801333D4, 4, &D_801333E0, &D_801333E0, &D_801333E8);
-        this->actionFunc = BgMizuBwall_Break;
-    } else if (this->dyna.actor.xzDistToPlayer < 600.0f) {
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        self->actionFunc = BgMizuBwall_Break;
+    } else if (self->dyna.actor.xzDistToPlayer < 600.0f) {
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &self->collider.base);
     }
 }
 
-void BgMizuBwall_Break(BgMizuBwall* this, GlobalContext* globalCtx) {
-    if (this->breakTimer > 0) {
-        this->breakTimer--;
+void BgMizuBwall_Break(BgMizuBwall* self, GlobalContext* globalCtx) {
+    if (self->breakTimer > 0) {
+        self->breakTimer--;
     } else {
-        this->actionFunc = BgMizuBwall_DoNothing;
+        self->actionFunc = BgMizuBwall_DoNothing;
     }
 }
 
-void BgMizuBwall_DoNothing(BgMizuBwall* this, GlobalContext* globalCtx) {
+void BgMizuBwall_DoNothing(BgMizuBwall* self, GlobalContext* globalCtx) {
 }
 
 void BgMizuBwall_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
-    BgMizuBwall* this = THIS;
+    BgMizuBwall* self = THIS;
 
-    this->actionFunc(this, globalCtx);
+    self->actionFunc(self, globalCtx);
 }
 
 void BgMizuBwall_Draw(Actor* thisx, GlobalContext* globalCtx2) {
-    BgMizuBwall* this = THIS;
+    BgMizuBwall* self = THIS;
     GlobalContext* globalCtx = globalCtx2;
     u32 frames;
 
@@ -513,20 +513,20 @@ void BgMizuBwall_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     func_80093D18(globalCtx->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08,
                Gfx_TwoTexScrollEnvColor(globalCtx->state.gfxCtx, 0, 1 * frames, 0, 0x20, 0x20, 1, 0, 0, 0x20, 0x20, 0,
-                                        0, 0, this->scrollAlpha1));
+                                        0, 0, self->scrollAlpha1));
     gSPSegment(POLY_OPA_DISP++, 0x09,
                Gfx_TwoTexScrollEnvColor(globalCtx->state.gfxCtx, 0, 1 * frames, 0, 0x20, 0x20, 1, 0, 0, 0x20, 0x20, 0,
-                                        0, 0, this->scrollAlpha2));
+                                        0, 0, self->scrollAlpha2));
     gSPSegment(POLY_OPA_DISP++, 0x0A,
                Gfx_TwoTexScrollEnvColor(globalCtx->state.gfxCtx, 0, 1 * frames, 0, 0x20, 0x20, 1, 0, 0, 0x20, 0x20, 0,
-                                        0, 0, this->scrollAlpha3));
+                                        0, 0, self->scrollAlpha3));
     gSPSegment(POLY_OPA_DISP++, 0x0B,
                Gfx_TwoTexScrollEnvColor(globalCtx->state.gfxCtx, 0, 3 * frames, 0, 0x20, 0x20, 1, 0, 0, 0x20, 0x20, 0,
-                                        0, 0, this->scrollAlpha4));
+                                        0, 0, self->scrollAlpha4));
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx, "../z_bg_mizu_bwall.c", 1129), 2);
 
-    if (this->dList != NULL) {
-        gSPDisplayList(POLY_OPA_DISP++, this->dList);
+    if (self->dList != NULL) {
+        gSPDisplayList(POLY_OPA_DISP++, self->dList);
     }
     CLOSE_DISPS(globalCtx->state.gfxCtx, "../z_bg_mizu_bwall.c", 1136);
 }

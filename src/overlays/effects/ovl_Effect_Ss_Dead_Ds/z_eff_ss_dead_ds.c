@@ -17,35 +17,35 @@
 #define rAlphaStep regs[10]
 #define rHalfOfLife regs[11]
 
-u32 EffectSsDeadDs_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx);
-void EffectSsDeadDs_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this);
-void EffectSsDeadDs_Update(GlobalContext* globalCtx, u32 index, EffectSs* this);
+u32 EffectSsDeadDs_Init(GlobalContext* globalCtx, u32 index, EffectSs* self, void* initParamsx);
+void EffectSsDeadDs_Draw(GlobalContext* globalCtx, u32 index, EffectSs* self);
+void EffectSsDeadDs_Update(GlobalContext* globalCtx, u32 index, EffectSs* self);
 
 EffectSsInit Effect_Ss_Dead_Ds_InitVars = {
     EFFECT_SS_DEAD_DS,
     EffectSsDeadDs_Init,
 };
 
-u32 EffectSsDeadDs_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx) {
+u32 EffectSsDeadDs_Init(GlobalContext* globalCtx, u32 index, EffectSs* self, void* initParamsx) {
     EffectSsDeadDsInitParams* initParams = (EffectSsDeadDsInitParams*)initParamsx;
 
-    this->pos = initParams->pos;
-    this->velocity = initParams->velocity;
-    this->accel = initParams->accel;
-    this->life = initParams->life;
-    this->rScaleStep = initParams->scaleStep;
-    this->rHalfOfLife = initParams->life / 2;
-    this->rAlphaStep = initParams->alpha / this->rHalfOfLife;
-    this->draw = EffectSsDeadDs_Draw;
-    this->update = EffectSsDeadDs_Update;
-    this->rScale = initParams->scale;
-    this->rAlpha = initParams->alpha;
-    this->rTimer = 0;
+    self->pos = initParams->pos;
+    self->velocity = initParams->velocity;
+    self->accel = initParams->accel;
+    self->life = initParams->life;
+    self->rScaleStep = initParams->scaleStep;
+    self->rHalfOfLife = initParams->life / 2;
+    self->rAlphaStep = initParams->alpha / self->rHalfOfLife;
+    self->draw = EffectSsDeadDs_Draw;
+    self->update = EffectSsDeadDs_Update;
+    self->rScale = initParams->scale;
+    self->rAlpha = initParams->alpha;
+    self->rTimer = 0;
 
     return 1;
 }
 
-void EffectSsDeadDs_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
+void EffectSsDeadDs_Draw(GlobalContext* globalCtx, u32 index, EffectSs* self) {
     s32 pad;
     f32 scale;
     s32 pad1;
@@ -57,46 +57,46 @@ void EffectSsDeadDs_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx, "../z_eff_ss_dead_ds.c", 157);
 
-    scale = this->rScale * 0.01f;
+    scale = self->rScale * 0.01f;
     func_80094BC4(globalCtx->state.gfxCtx);
-    gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 0, 0, 0, this->rAlpha);
+    gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 0, 0, 0, self->rAlpha);
     gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, 0);
-    pos = this->pos;
+    pos = self->pos;
 
-    if (this->rTimer == 0) {
+    if (self->rTimer == 0) {
         Vec3s rpy;
         Vec3f sp44;
 
-        sp44.x = pos.x - this->velocity.x;
-        sp44.y = pos.y - this->velocity.y;
-        sp44.z = pos.z - this->velocity.z;
+        sp44.x = pos.x - self->velocity.x;
+        sp44.y = pos.y - self->velocity.y;
+        sp44.z = pos.z - self->velocity.z;
 
-        if (BgCheck_EntitySphVsWall1(&globalCtx->colCtx, &this->pos, &pos, &sp44, 1.5f, &floorPoly, 1.0f)) {
-            func_80038A28(floorPoly, this->pos.x, this->pos.y, this->pos.z, &mf);
+        if (BgCheck_EntitySphVsWall1(&globalCtx->colCtx, &self->pos, &pos, &sp44, 1.5f, &floorPoly, 1.0f)) {
+            func_80038A28(floorPoly, self->pos.x, self->pos.y, self->pos.z, &mf);
             Matrix_Put(&mf);
         } else {
             pos.y++;
             temp = BgCheck_EntityRaycastFloor1(&globalCtx->colCtx, &floorPoly, &pos);
 
             if (floorPoly != NULL) {
-                func_80038A28(floorPoly, this->pos.x, temp + 1.5f, this->pos.z, &mf);
+                func_80038A28(floorPoly, self->pos.x, temp + 1.5f, self->pos.z, &mf);
                 Matrix_Put(&mf);
             } else {
-                Matrix_Translate(this->pos.x, this->pos.y, this->pos.z, MTXMODE_NEW);
+                Matrix_Translate(self->pos.x, self->pos.y, self->pos.z, MTXMODE_NEW);
                 Matrix_Get(&mf);
             }
         }
 
         Matrix_MtxFToZYXRotS(&mf, &rpy, 0);
-        this->rRoll = rpy.x;
-        this->rPitch = rpy.y;
-        this->rYaw = rpy.z;
-        this->pos.y = mf.yw;
-        this->rTimer++;
+        self->rRoll = rpy.x;
+        self->rPitch = rpy.y;
+        self->rYaw = rpy.z;
+        self->pos.y = mf.yw;
+        self->rTimer++;
     }
 
-    Matrix_Translate(this->pos.x, this->pos.y, this->pos.z, MTXMODE_NEW);
-    Matrix_RotateRPY(this->rRoll, this->rPitch, this->rYaw, MTXMODE_APPLY);
+    Matrix_Translate(self->pos.x, self->pos.y, self->pos.z, MTXMODE_NEW);
+    Matrix_RotateRPY(self->rRoll, self->rPitch, self->rYaw, MTXMODE_APPLY);
     Matrix_RotateX(1.57f, MTXMODE_APPLY);
     Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx, "../z_eff_ss_dead_ds.c", 246),
@@ -108,17 +108,17 @@ void EffectSsDeadDs_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
     CLOSE_DISPS(globalCtx->state.gfxCtx, "../z_eff_ss_dead_ds.c", 255);
 }
 
-void EffectSsDeadDs_Update(GlobalContext* globalCtx, u32 index, EffectSs* this) {
-    if (this->life < this->rHalfOfLife) {
+void EffectSsDeadDs_Update(GlobalContext* globalCtx, u32 index, EffectSs* self) {
+    if (self->life < self->rHalfOfLife) {
 
-        this->rScale += this->rScaleStep;
-        if (this->rScale < 0) {
-            this->rScale = 0;
+        self->rScale += self->rScaleStep;
+        if (self->rScale < 0) {
+            self->rScale = 0;
         }
 
-        this->rAlpha -= this->rAlphaStep;
-        if (this->rAlpha < 0) {
-            this->rAlpha = 0;
+        self->rAlpha -= self->rAlphaStep;
+        if (self->rAlpha < 0) {
+            self->rAlpha = 0;
         }
     }
 }
