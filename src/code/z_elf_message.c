@@ -136,6 +136,7 @@ u16 ElfMessage_GetTextFromMsgs(ElfMessage* msg) {
 }
 
 u16 ElfMessage_GetSariaText(GlobalContext* globalCtx) {
+    #if 0
     Player* player = GET_PLAYER(globalCtx);
     ElfMessage* msgs;
 
@@ -150,6 +151,7 @@ u16 ElfMessage_GetSariaText(GlobalContext* globalCtx) {
     }
 
     return ElfMessage_GetTextFromMsgs(msgs);
+    #endif
 }
 
 u16 ElfMessage_GetCUpText(GlobalContext* globalCtx) {

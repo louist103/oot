@@ -5,7 +5,6 @@
  */
 
 #include "z_eff_ss_ice_smoke.h"
-#include "objects/object_fz/object_fz.h"
 
 #define rObjBankIdx regs[0]
 #define rAlpha regs[1]
@@ -26,7 +25,6 @@ u32 EffectSsIceSmoke_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, v
     s32 objBankIdx;
     void* oldSeg6;
 
-    objBankIdx = Object_GetIndex(&globalCtx->objectCtx, OBJECT_FZ);
 
     if ((objBankIdx > -1) && Object_IsLoaded(&globalCtx->objectCtx, objBankIdx)) {
         oldSeg6 = gSegments[6];
@@ -61,14 +59,12 @@ void EffectSsIceSmoke_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) 
 
     OPEN_DISPS(globalCtx->state.gfxCtx, "../z_eff_ss_ice_smoke.c", 155);
 
-    objBankIdx = Object_GetIndex(&globalCtx->objectCtx, OBJECT_FZ);
 
     if ((objBankIdx > -1) && Object_IsLoaded(&globalCtx->objectCtx, objBankIdx)) {
         gDPPipeSync(POLY_XLU_DISP++);
         func_80093D84(globalCtx->state.gfxCtx);
         gSegments[6] = VIRTUAL_TO_PHYSICAL(object);
         gSPSegment(POLY_XLU_DISP++, 0x06, object);
-        gSPDisplayList(POLY_XLU_DISP++, SEGMENTED_TO_VIRTUAL(gFreezardSteamStartDL));
         gDPPipeSync(POLY_XLU_DISP++);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 195, 235, 235, this->rAlpha);
         gSPSegment(
@@ -83,7 +79,6 @@ void EffectSsIceSmoke_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) 
 
         if (mtx != NULL) {
             gSPMatrix(POLY_XLU_DISP++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, SEGMENTED_TO_VIRTUAL(gFreezardSteamDL));
         }
     } else {
         this->life = -1;
@@ -95,7 +90,6 @@ void EffectSsIceSmoke_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) 
 void EffectSsIceSmoke_Update(GlobalContext* globalCtx, u32 index, EffectSs* this) {
     s32 objBankIdx;
 
-    objBankIdx = Object_GetIndex(&globalCtx->objectCtx, OBJECT_FZ);
 
     if ((objBankIdx > -1) && Object_IsLoaded(&globalCtx->objectCtx, objBankIdx)) {
         if (this->rAlpha < 100) {

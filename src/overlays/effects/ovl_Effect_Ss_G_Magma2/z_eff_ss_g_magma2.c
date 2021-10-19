@@ -5,7 +5,6 @@
  */
 
 #include "z_eff_ss_g_magma2.h"
-#include "objects/object_kingdodongo/object_kingdodongo.h"
 
 #define rPrimColorR regs[0]
 #define rPrimColorG regs[1]
@@ -35,22 +34,17 @@ EffectSsInit Effect_Ss_G_Magma2_InitVars = {
 };
 
 u32 EffectSsGMagma2_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx) {
-    s32 objBankIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_KINGDODONGO);
     s32 pad;
 
-    if ((objBankIndex >= 0) && Object_IsLoaded(&globalCtx->objectCtx, objBankIndex)) {
         Vec3f zeroVec = { 0.0f, 0.0f, 0.0f };
         EffectSsGMagma2InitParams* initParams = (EffectSsGMagma2InitParams*)initParamsx;
 
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(globalCtx->objectCtx.status[objBankIndex].segment);
-        this->rObjBankIdx = objBankIndex;
         this->pos = initParams->pos;
         this->velocity = zeroVec;
         this->accel = zeroVec;
         this->life = 100;
         this->draw = EffectSsGMagma2_Draw;
         this->update = EffectSsGMagma2_Update;
-        this->gfx = SEGMENTED_TO_VIRTUAL(object_kingdodongo_DL_025A90);
         this->rTexIdx = 0;
         this->rDrawMode = initParams->drawMode;
         this->rUpdateRate = initParams->updateRate;
@@ -63,7 +57,6 @@ u32 EffectSsGMagma2_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, vo
         this->rEnvColorA = initParams->envColor.a;
 
         return 1;
-    }
 
     return 0;
 }

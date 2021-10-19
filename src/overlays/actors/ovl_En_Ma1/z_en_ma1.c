@@ -263,10 +263,10 @@ void EnMa1_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(22), &sColChkInfoInit);
 
-    if (!func_80AA08C4(this, globalCtx)) {
-        Actor_Kill(&this->actor);
-        return;
-    }
+    //if (!func_80AA08C4(this, globalCtx)) {
+    //    Actor_Kill(&this->actor);
+    //    return;
+    //}
 
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
     Actor_SetScale(&this->actor, 0.01f);

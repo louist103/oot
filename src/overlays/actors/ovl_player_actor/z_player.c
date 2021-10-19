@@ -7,16 +7,7 @@
 #include "ultra64.h"
 #include "global.h"
 
-#include "overlays/actors/ovl_Bg_Heavy_Block/z_bg_heavy_block.h"
-#include "overlays/actors/ovl_Door_Shutter/z_door_shutter.h"
-#include "overlays/actors/ovl_En_Boom/z_en_boom.h"
-#include "overlays/actors/ovl_En_Arrow/z_en_arrow.h"
-#include "overlays/actors/ovl_En_Box/z_en_box.h"
-#include "overlays/actors/ovl_En_Door/z_en_door.h"
 #include "overlays/actors/ovl_En_Elf/z_en_elf.h"
-#include "overlays/actors/ovl_En_Fish/z_en_fish.h"
-#include "overlays/actors/ovl_En_Horse/z_en_horse.h"
-#include "overlays/effects/ovl_Effect_Ss_Fhg_Flash/z_eff_ss_fhg_flash.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/object_link_child/object_link_child.h"
 
@@ -497,6 +488,7 @@ static u16 D_8085361C[] = {
 };
 
 static GetItemEntry sGetItemTable[] = {
+    #if 0
     GET_ITEM(ITEM_BOMBS_5, OBJECT_GI_BOMB_1, GID_BOMB, 0x32, 0x59, CHEST_ANIM_SHORT),
     GET_ITEM(ITEM_NUTS_5, OBJECT_GI_NUTS, GID_NUTS, 0x34, 0x0C, CHEST_ANIM_SHORT),
     GET_ITEM(ITEM_BOMBCHU, OBJECT_GI_BOMB_2, GID_BOMBCHU, 0x33, 0x80, CHEST_ANIM_SHORT),
@@ -622,6 +614,7 @@ static GetItemEntry sGetItemTable[] = {
     GET_ITEM(ITEM_BULLET_BAG_50, OBJECT_GI_DEKUPOUCH, GID_BULLET_BAG_50, 0x6C, 0x80, CHEST_ANIM_LONG),
     GET_ITEM_NONE,
     GET_ITEM_NONE,
+    #endif
 };
 
 static LinkAnimationHeader* D_80853914[] = {
@@ -1027,8 +1020,8 @@ static s8 D_80854164[][6] = {
 };
 
 static ExplosiveInfo sExplosiveInfos[] = {
-    { ITEM_BOMB, ACTOR_EN_BOM },
-    { ITEM_BOMBCHU, ACTOR_EN_BOM_CHU },
+    { ITEM_BOMB, 0 },
+    { ITEM_BOMBCHU, 0 },
 };
 
 static struct_80854190 D_80854190[] = {
@@ -1749,9 +1742,9 @@ void func_80833910(GlobalContext* globalCtx, Player* this) {
     this->stateFlags1 |= 8;
     this->unk_860 = -3;
 
-    this->heldActor =
-        Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_ARMS_HOOK, this->actor.world.pos.x,
-                           this->actor.world.pos.y, this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0, 0);
+    //this->heldActor =
+    //    Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_ARMS_HOOK, this->actor.world.pos.x,
+    //                       this->actor.world.pos.y, this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0, 0);
 }
 
 void func_80833984(GlobalContext* globalCtx, Player* this) {
@@ -1986,18 +1979,18 @@ void func_80834298(Player* this, GlobalContext* globalCtx) {
 }
 
 s32 func_80834380(GlobalContext* globalCtx, Player* this, s32* itemPtr, s32* typePtr) {
-    if (LINK_IS_ADULT) {
-        *itemPtr = ITEM_BOW;
-        if (this->stateFlags1 & 0x800000) {
-            *typePtr = ARROW_NORMAL_HORSE;
-        } else {
-            *typePtr = this->heldItemActionParam - 6;
-        }
-    } else {
-        *itemPtr = ITEM_SLINGSHOT;
-        *typePtr = ARROW_SEED;
-    }
-
+    //if (LINK_IS_ADULT) {
+    //    *itemPtr = ITEM_BOW;
+    //    if (this->stateFlags1 & 0x800000) {
+    //        *typePtr = ARROW_NORMAL_HORSE;
+    //    } else {
+    //        *typePtr = this->heldItemActionParam - 6;
+    //    }
+    //} else {
+    //    *itemPtr = ITEM_SLINGSHOT;
+    //    *typePtr = ARROW_SEED;
+    //}
+//
     if (gSaveContext.minigameState == 1) {
         return globalCtx->interfaceCtx.hbaAmmo;
     } else if (globalCtx->shootingGalleryStatus != 0) {
@@ -2008,6 +2001,7 @@ s32 func_80834380(GlobalContext* globalCtx, Player* this, s32* itemPtr, s32* typ
 }
 
 s32 func_8083442C(Player* this, GlobalContext* globalCtx) {
+    #if 0
     s32 item;
     s32 arrowType;
     s32 magicArrowType;
@@ -2042,7 +2036,7 @@ s32 func_8083442C(Player* this, GlobalContext* globalCtx) {
 
         return 1;
     }
-
+#endif
     return 0;
 }
 
@@ -2492,11 +2486,11 @@ s32 func_808356E8(Player* this, GlobalContext* globalCtx) {
             LinkAnimation_PlayLoop(globalCtx, &this->skelAnime2, &gPlayerAnim_002E10);
         }
 
-        if ((heldActor->id == ACTOR_EN_NIW) && (this->actor.velocity.y <= 0.0f)) {
-            this->actor.minVelocityY = -2.0f;
-            this->actor.gravity = -0.5f;
-            this->fallStartHeight = this->actor.world.pos.y;
-        }
+        //if ((heldActor->id == ACTOR_EN_NIW) && (this->actor.velocity.y <= 0.0f)) {
+        //    this->actor.minVelocityY = -2.0f;
+        //    this->actor.gravity = -0.5f;
+        //    this->fallStartHeight = this->actor.world.pos.y;
+        //}
 
         return 1;
     }
@@ -2556,6 +2550,7 @@ s32 func_808358F0(Player* this, GlobalContext* globalCtx) {
 }
 
 s32 func_808359FC(Player* this, GlobalContext* globalCtx) {
+    #if 0
     if (LinkAnimation_Update(globalCtx, &this->skelAnime2)) {
         func_80833638(this, func_80835B60);
         this->unk_834 = 0;
@@ -2580,7 +2575,7 @@ s32 func_808359FC(Player* this, GlobalContext* globalCtx) {
             func_80832698(this, NA_SE_VO_LI_SWORD_N);
         }
     }
-
+#endif
     return 1;
 }
 
@@ -3205,10 +3200,10 @@ void func_80837530(GlobalContext* globalCtx, Player* this, s32 arg2) {
 
     this->stateFlags1 |= 0x1000;
 
-    if (this->actor.category == ACTORCAT_PLAYER) {
-        Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_M_THUNDER, this->bodyPartsPos[0].x,
-                    this->bodyPartsPos[0].y, this->bodyPartsPos[0].z, 0, 0, 0, Player_GetSwordHeld(this) | arg2);
-    }
+    //if (this->actor.category == ACTORCAT_PLAYER) {
+    //    Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_M_THUNDER, this->bodyPartsPos[0].x,
+    //                this->bodyPartsPos[0].y, this->bodyPartsPos[0].z, 0, 0, 0, Player_GetSwordHeld(this) | arg2);
+    //}
 }
 
 s32 func_808375D8(Player* this) {
@@ -3569,12 +3564,12 @@ s32 func_8083816C(s32 arg0) {
 }
 
 void func_8083819C(Player* this, GlobalContext* globalCtx) {
-    if (this->currentShield == PLAYER_SHIELD_DEKU) {
-        Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_ITEM_SHIELD, this->actor.world.pos.x,
-                    this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 1);
-        Inventory_DeleteEquipment(globalCtx, EQUIP_SHIELD);
-        func_8010B680(globalCtx, 0x305F, NULL);
-    }
+    //if (this->currentShield == PLAYER_SHIELD_DEKU) {
+    //    Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_ITEM_SHIELD, this->actor.world.pos.x,
+    //                this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 1);
+    //    Inventory_DeleteEquipment(globalCtx, EQUIP_SHIELD);
+    //    func_8010B680(globalCtx, 0x305F, NULL);
+    //}
 }
 
 void func_8083821C(Player* this) {
@@ -4100,6 +4095,7 @@ s32 func_80839768(GlobalContext* globalCtx, Player* this, Vec3f* arg2, Collision
 }
 
 s32 func_80839800(Player* this, GlobalContext* globalCtx) {
+    #if 0
     DoorShutter* doorShutter;
     EnDoor* door; // Can also be DoorKiller*
     s32 doorDirection;
@@ -4264,7 +4260,7 @@ s32 func_80839800(Player* this, GlobalContext* globalCtx) {
             return 1;
         }
     }
-
+#endif
     return 0;
 }
 
@@ -4333,6 +4329,7 @@ s32 func_8083A0D4(Player* this) {
 }
 
 void func_8083A0F4(GlobalContext* globalCtx, Player* this) {
+    #if 0
     if (func_8083A0D4(this)) {
         Actor* interactRangeActor = this->interactRangeActor;
         s32 interactActorId = interactRangeActor->id;
@@ -4371,6 +4368,7 @@ void func_8083A0F4(GlobalContext* globalCtx, Player* this) {
         func_80839F90(this, globalCtx);
         this->stateFlags1 &= ~0x800;
     }
+    #endif
 }
 
 void func_8083A2F8(GlobalContext* globalCtx, Player* this) {
@@ -5761,6 +5759,7 @@ static struct_80854578 D_80854578[] = {
 };
 
 s32 func_8083E0FC(Player* this, GlobalContext* globalCtx) {
+    #if 0
     EnHorse* rideActor = (EnHorse*)this->rideActor;
     f32 unk_04;
     f32 unk_08;
@@ -5801,7 +5800,7 @@ s32 func_8083E0FC(Player* this, GlobalContext* globalCtx) {
         func_800304B0(globalCtx);
         return 1;
     }
-
+#endif
     return 0;
 }
 
@@ -5879,6 +5878,7 @@ void func_8083E4C4(GlobalContext* globalCtx, Player* this, GetItemEntry* giEntry
 }
 
 s32 func_8083E5A8(Player* this, GlobalContext* globalCtx) {
+    #if 0
     Actor* interactedActor;
 
     if (iREG(67) || (((interactedActor = this->interactRangeActor) != NULL) &&
@@ -5985,7 +5985,7 @@ s32 func_8083E5A8(Player* this, GlobalContext* globalCtx) {
             }
         }
     }
-
+#endif 
     return 0;
 }
 
@@ -5995,11 +5995,11 @@ void func_8083EA94(Player* this, GlobalContext* globalCtx) {
 }
 
 s32 func_8083EAF0(Player* this, Actor* actor) {
-    if ((actor != NULL) && !(actor->flags & 0x800000) &&
-        ((this->linearVelocity < 1.1f) || (actor->id == ACTOR_EN_BOM_CHU))) {
-        return 0;
-    }
-
+    //if ((actor != NULL) && !(actor->flags & 0x800000) &&
+    //    ((this->linearVelocity < 1.1f) || (actor->id == ACTOR_EN_BOM_CHU))) {
+    //    return 0;
+    //}
+//
     return 1;
 }
 
@@ -6313,21 +6313,21 @@ s32 func_8083F7BC(Player* this, GlobalContext* globalCtx) {
                 if ((this->actor.wallBgId != BGCHECK_SCENE) &&
                     ((wallPolyActor = DynaPoly_GetActor(&globalCtx->colCtx, this->actor.wallBgId)) != NULL)) {
 
-                    if (wallPolyActor->actor.id == ACTOR_BG_HEAVY_BLOCK) {
-                        if (Player_GetStrength() < PLAYER_STR_GOLD_G) {
-                            return 0;
-                        }
-
-                        func_80836898(globalCtx, this, func_8083A0F4);
-                        this->stateFlags1 |= 0x800;
-                        this->interactRangeActor = &wallPolyActor->actor;
-                        this->getItemId = GI_NONE;
-                        this->currentYaw = this->actor.wallYaw + 0x8000;
-                        func_80832224(this);
-
-                        return 1;
-                    }
-
+                    //if (wallPolyActor->actor.id == ACTOR_BG_HEAVY_BLOCK) {
+                    //    if (Player_GetStrength() < PLAYER_STR_GOLD_G) {
+                    //        return 0;
+                    //    }
+//
+                    //    func_80836898(globalCtx, this, func_8083A0F4);
+                    //    this->stateFlags1 |= 0x800;
+                    //    this->interactRangeActor = &wallPolyActor->actor;
+                    //    this->getItemId = GI_NONE;
+                    //    this->currentYaw = this->actor.wallYaw + 0x8000;
+                    //    func_80832224(this);
+//
+                    //    return 1;
+                    //}
+//
                     this->unk_3C4 = &wallPolyActor->actor;
                 } else {
                     this->unk_3C4 = NULL;
@@ -7570,9 +7570,9 @@ s32 func_80842DF4(GlobalContext* globalCtx, Player* this) {
             if (this->swordAnimation < 0x18) {
                 Actor* at = this->swordQuads[temp1 ? 1 : 0].base.at;
 
-                if ((at != NULL) && (at->id != ACTOR_EN_KANBAN)) {
-                    func_80832630(globalCtx);
-                }
+                //if ((at != NULL) && (at->id != ACTOR_EN_KANBAN)) {
+                //    func_80832630(globalCtx);
+                //}
             }
 
             if ((func_80842AC4(globalCtx, this) == 0) && (this->heldItemActionParam != PLAYER_AP_HAMMER)) {
@@ -7842,7 +7842,7 @@ void func_80843AE8(GlobalContext* globalCtx, Player* this) {
         }
     } else if (this->unk_84F != 0) {
         this->unk_850 = 60;
-        Player_SpawnFairy(globalCtx, this, &this->actor.world.pos, &D_808545E4, FAIRY_REVIVE_DEATH);
+        //Player_SpawnFairy(globalCtx, this, &this->actor.world.pos, &D_808545E4, FAIRY_REVIVE_DEATH);
         func_8002F7DC(&this->actor, NA_SE_EV_FIATY_HEAL - SFX_FLAG);
         OnePointCutscene_Init(globalCtx, 9908, 125, &this->actor, MAIN_CAM);
     } else if (globalCtx->gameOverCtx.state == GAMEOVER_DEATH_WAIT_GROUND) {
@@ -7887,9 +7887,9 @@ void func_80843CEC(Player* this, GlobalContext* globalCtx) {
 void func_80843E14(Player* this, u16 sfxId) {
     func_80832698(this, sfxId);
 
-    if ((this->heldActor != NULL) && (this->heldActor->id == ACTOR_EN_RU1)) {
-        Audio_PlayActorSound2(this->heldActor, NA_SE_VO_RT_FALL);
-    }
+    //if ((this->heldActor != NULL) && (this->heldActor->id == ACTOR_EN_RU1)) {
+    //    Audio_PlayActorSound2(this->heldActor, NA_SE_VO_RT_FALL);
+    //}
 }
 
 static FallImpactInfo D_80854600[] = {
@@ -7983,10 +7983,10 @@ void func_8084411C(Player* this, GlobalContext* globalCtx) {
         if (this->stateFlags1 & 0x800) {
             Actor* heldActor = this->heldActor;
 
-            if (!func_80835644(globalCtx, this, heldActor) && (heldActor->id == ACTOR_EN_NIW) &&
-                CHECK_BTN_ANY(sControlInput->press.button, BTN_A | BTN_B | BTN_CLEFT | BTN_CRIGHT | BTN_CDOWN)) {
-                func_8084409C(globalCtx, this, this->linearVelocity + 2.0f, this->actor.velocity.y + 2.0f);
-            }
+            //if (!func_80835644(globalCtx, this, heldActor) && (heldActor->id == ACTOR_EN_NIW) &&
+            //    CHECK_BTN_ANY(sControlInput->press.button, BTN_A | BTN_B | BTN_CLEFT | BTN_CRIGHT | BTN_CDOWN)) {
+            //    func_8084409C(globalCtx, this, this->linearVelocity + 2.0f, this->actor.velocity.y + 2.0f);
+            //}
         }
 
         LinkAnimation_Update(globalCtx, &this->skelAnime);
@@ -8092,7 +8092,7 @@ void func_80844708(Player* this, GlobalContext* globalCtx) {
     s32 pad;
     f32 sp38;
     s16 sp36;
-
+#if 0
     this->stateFlags2 |= 0x20;
 
     cylinderOc = NULL;
@@ -8161,6 +8161,7 @@ void func_80844708(Player* this, GlobalContext* globalCtx) {
             }
         }
     }
+    #endif
 }
 
 void func_80844A44(Player* this, GlobalContext* globalCtx) {
@@ -8718,7 +8719,7 @@ void func_80846120(Player* this, GlobalContext* globalCtx) {
         return;
     }
 
-    if (LinkAnimation_OnFrame(&this->skelAnime, 41.0f)) {
+    /*if (LinkAnimation_OnFrame(&this->skelAnime, 41.0f)) {
         BgHeavyBlock* heavyBlock = (BgHeavyBlock*)this->interactRangeActor;
 
         this->heldActor = &heavyBlock->dyna.actor;
@@ -8726,7 +8727,7 @@ void func_80846120(Player* this, GlobalContext* globalCtx) {
         heavyBlock->dyna.actor.parent = &this->actor;
         func_8002DBD0(&heavyBlock->dyna.actor, &heavyBlock->unk_164, &this->leftHandPos);
         return;
-    }
+    }*/
 
     if (LinkAnimation_OnFrame(&this->skelAnime, 229.0f)) {
         Actor* heldActor = this->heldActor;
@@ -8818,14 +8819,14 @@ void func_808464B0(Player* this, GlobalContext* globalCtx) {
     if (LinkAnimation_OnFrame(&this->skelAnime, 4.0f)) {
         Actor* heldActor = this->heldActor;
 
-        if (!func_80835644(globalCtx, this, heldActor)) {
-            heldActor->velocity.y = 0.0f;
-            heldActor->speedXZ = 0.0f;
-            func_80834644(globalCtx, this);
-            if (heldActor->id == ACTOR_EN_BOM_CHU) {
-                func_8083B8F4(this, globalCtx);
-            }
-        }
+        //if (!func_80835644(globalCtx, this, heldActor)) {
+        //    heldActor->velocity.y = 0.0f;
+        //    heldActor->speedXZ = 0.0f;
+        //    func_80834644(globalCtx, this);
+        //    if (heldActor->id == ACTOR_EN_BOM_CHU) {
+        //        func_8083B8F4(this, globalCtx);
+        //    }
+        //}
     }
 }
 
@@ -8984,11 +8985,11 @@ void func_808469BC(GlobalContext* globalCtx, Player* this) {
     this->stateFlags1 |= 0x20000000;
 }
 
-static s16 D_80854700[] = { ACTOR_MAGIC_WIND, ACTOR_MAGIC_DARK, ACTOR_MAGIC_FIRE };
+//static s16 D_80854700[] = { ACTOR_MAGIC_WIND, ACTOR_MAGIC_DARK, ACTOR_MAGIC_FIRE };
 
 Actor* func_80846A00(GlobalContext* globalCtx, Player* this, s32 arg2) {
-    return Actor_Spawn(&globalCtx->actorCtx, globalCtx, D_80854700[arg2], this->actor.world.pos.x,
-                       this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 0);
+    //return Actor_Spawn(&globalCtx->actorCtx, globalCtx, D_80854700[arg2], this->actor.world.pos.x,
+    //                   this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 0);
 }
 
 void func_80846A68(GlobalContext* globalCtx, Player* this) {
@@ -9240,15 +9241,13 @@ void func_808473D4(GlobalContext* globalCtx, Player* this) {
                 }
             } else if ((func_8084E3C4 != this->func_674) && !(this->stateFlags2 & 0x40000)) {
                 if ((this->doorType != PLAYER_DOORTYPE_NONE) &&
-                    (!(this->stateFlags1 & 0x800) || ((heldActor != NULL) && (heldActor->id == ACTOR_EN_RU1)))) {
+                    (!(this->stateFlags1 & 0x800) || ((heldActor != NULL) && (heldActor->id == 0)))) {
                     doAction = 4;
                 } else if ((!(this->stateFlags1 & 0x800) || (heldActor == NULL)) && (interactRangeActor != NULL) &&
                            ((!sp1C && (this->getItemId == GI_NONE)) ||
                             ((this->getItemId < 0) && !(this->stateFlags1 & 0x8000000)))) {
                     if (this->getItemId < 0) {
                         doAction = 4;
-                    } else if ((interactRangeActor->id == ACTOR_BG_TOKI_SWD) && LINK_IS_ADULT) {
-                        doAction = 0xC;
                     } else {
                         doAction = 0x11;
                     }
@@ -9256,7 +9255,7 @@ void func_808473D4(GlobalContext* globalCtx, Player* this) {
                     doAction = 0x11;
                 } else if ((this->stateFlags2 & 4) || (!(this->stateFlags1 & 0x800000) && (this->rideActor != NULL))) {
                     doAction = 0xB;
-                } else if ((this->stateFlags1 & 0x800000) && !EN_HORSE_CHECK_4((EnHorse*)this->rideActor) &&
+                } else if ((this->stateFlags1 & 0x800000)  &&
                            (func_8084D3E4 != this->func_674)) {
                     if ((this->stateFlags2 & 2) && (this->targetActor != NULL)) {
                         if (this->targetActor->category == ACTORCAT_NPC) {
@@ -9279,7 +9278,7 @@ void func_808473D4(GlobalContext* globalCtx, Player* this) {
                 } else if (this->stateFlags2 & 0x10000) {
                     doAction = 2;
                 } else if ((this->stateFlags1 & 0x800) && (this->getItemId == GI_NONE) && (heldActor != NULL)) {
-                    if ((this->actor.bgCheckFlags & 1) || (heldActor->id == ACTOR_EN_NIW)) {
+                    if ((this->actor.bgCheckFlags & 1)) {
                         if (func_8083EAF0(this, heldActor) == 0) {
                             doAction = 0xC;
                         } else {
@@ -9763,7 +9762,7 @@ void func_80848B44(GlobalContext* globalCtx, Player* this) {
         shockPos.y = (Rand_CenteredFloat(5.0f) + randBodyPart->y) - this->actor.world.pos.y;
         shockPos.z = (Rand_CenteredFloat(5.0f) + randBodyPart->z) - this->actor.world.pos.z;
 
-        EffectSsFhgFlash_SpawnShock(globalCtx, &this->actor, &shockPos, shockScale, FHGFLASH_SHOCK_PLAYER);
+        //EffectSsFhgFlash_SpawnShock(globalCtx, &this->actor, &shockPos, shockScale, FHGFLASH_SHOCK_PLAYER);
         func_8002F8F0(&this->actor, NA_SE_PL_SPARK - SFX_FLAG);
     }
 }
@@ -10032,17 +10031,17 @@ void Player_UpdateCommon(Player* this, GlobalContext* globalCtx, Input* input) {
             this->unk_A7A = 0;
 
             if (!(this->stateFlags1 & 1) && (this->stateFlags1 & 0x800000)) {
-                EnHorse* rideActor = (EnHorse*)this->rideActor;
+                //EnHorse* rideActor = (EnHorse*)this->rideActor;
                 CollisionPoly* sp5C;
                 s32 sp58;
                 Vec3f sp4C;
 
-                if (!(rideActor->actor.bgCheckFlags & 1)) {
-                    func_808396F4(globalCtx, this, &D_80854814, &sp4C, &sp5C, &sp58);
-                } else {
-                    sp5C = rideActor->actor.floorPoly;
-                    sp58 = rideActor->actor.floorBgId;
-                }
+                //if (!(rideActor->actor.bgCheckFlags & 1)) {
+                //    func_808396F4(globalCtx, this, &D_80854814, &sp4C, &sp5C, &sp58);
+                //} else {
+                //    sp5C = rideActor->actor.floorPoly;
+                //    sp58 = rideActor->actor.floorBgId;
+                //}
 
                 if ((sp5C != NULL) && func_80839034(globalCtx, this, sp5C, sp58)) {
                     if (DREG(25) != 0) {
@@ -10262,7 +10261,7 @@ void Player_Update(Actor* thisx, GlobalContext* globalCtx) {
     Actor* dog;
 
     if (func_8084FCAC(this, globalCtx)) {
-        if (gSaveContext.dogParams < 0) {
+        /*if (gSaveContext.dogParams < 0) {
             if (Object_GetIndex(&globalCtx->objectCtx, OBJECT_DOG) < 0) {
                 gSaveContext.dogParams = 0;
             } else {
@@ -10276,7 +10275,7 @@ void Player_Update(Actor* thisx, GlobalContext* globalCtx) {
                     dog->room = 0;
                 }
             }
-        }
+        }*/
 
         if ((this->interactRangeActor != NULL) && (this->interactRangeActor->update == NULL)) {
             this->interactRangeActor = NULL;
@@ -11207,25 +11206,26 @@ static Vec3f D_8085492C[] = {
 };
 
 s32 func_8084C89C(GlobalContext* globalCtx, Player* this, s32 arg2, f32* arg3) {
-    EnHorse* rideActor = (EnHorse*)this->rideActor;
+    //EnHorse* rideActor = (EnHorse*)this->rideActor;
     f32 sp50;
     f32 sp4C;
     Vec3f sp40;
     Vec3f sp34;
     CollisionPoly* sp30;
     s32 sp2C;
-
-    sp50 = rideActor->actor.world.pos.y + 20.0f;
-    sp4C = rideActor->actor.world.pos.y - 20.0f;
-
-    *arg3 = func_8083973C(globalCtx, this, &D_808548FC[arg2], &sp40);
-
-    return (sp4C < *arg3) && (*arg3 < sp50) &&
-           !func_80839768(globalCtx, this, &D_80854914[arg2], &sp30, &sp2C, &sp34) &&
-           !func_80839768(globalCtx, this, &D_8085492C[arg2], &sp30, &sp2C, &sp34);
+return 0;
+    //sp50 = rideActor->actor.world.pos.y + 20.0f;
+    //sp4C = rideActor->actor.world.pos.y - 20.0f;
+//
+    //*arg3 = func_8083973C(globalCtx, this, &D_808548FC[arg2], &sp40);
+//
+    //return (sp4C < *arg3) && (*arg3 < sp50) &&
+    //       !func_80839768(globalCtx, this, &D_80854914[arg2], &sp30, &sp2C, &sp34) &&
+    //       !func_80839768(globalCtx, this, &D_8085492C[arg2], &sp30, &sp2C, &sp34);
 }
 
 s32 func_8084C9BC(Player* this, GlobalContext* globalCtx) {
+    #if 0
     EnHorse* rideActor = (EnHorse*)this->rideActor;
     s32 sp38;
     f32 sp34;
@@ -11257,7 +11257,7 @@ s32 func_8084C9BC(Player* this, GlobalContext* globalCtx) {
             }
         }
     }
-
+#endif
     return 0;
 }
 
@@ -11325,6 +11325,7 @@ static struct_80832924 D_808549A4[] = {
 };
 
 void func_8084CC98(Player* this, GlobalContext* globalCtx) {
+    #if 0
     EnHorse* rideActor = (EnHorse*)this->rideActor;
     u8* arr;
 
@@ -11494,6 +11495,7 @@ void func_8084CC98(Player* this, GlobalContext* globalCtx) {
             }
         }
     }
+    #endif
 }
 
 static struct_80832924 D_808549C4[] = {
@@ -11506,21 +11508,7 @@ void func_8084D3E4(Player* this, GlobalContext* globalCtx) {
     this->stateFlags2 |= 0x40;
     func_8084CBF4(this, 1.0f, 10.0f);
 
-    if (LinkAnimation_Update(globalCtx, &this->skelAnime)) {
-        EnHorse* rideActor = (EnHorse*)this->rideActor;
-
-        func_8083C0E8(this, globalCtx);
-        this->stateFlags1 &= ~0x800000;
-        this->actor.parent = NULL;
-        AREG(6) = 0;
-
-        if (Flags_GetEventChkInf(0x18) || (DREG(1) != 0)) {
-            gSaveContext.horseData.pos.x = rideActor->actor.world.pos.x;
-            gSaveContext.horseData.pos.y = rideActor->actor.world.pos.y;
-            gSaveContext.horseData.pos.z = rideActor->actor.world.pos.z;
-            gSaveContext.horseData.angle = rideActor->actor.shape.rot.y;
-        }
-    } else {
+{
         Camera_ChangeSetting(Gameplay_GetCamera(globalCtx, 0), CAM_SET_NORMAL0);
 
         if (this->mountSide < 0) {
@@ -11916,9 +11904,9 @@ void func_8084E3C4(Player* this, GlobalContext* globalCtx) {
         this->stateFlags1 |= 0x30000000;
         this->stateFlags2 |= 0x8000000;
 
-        if (Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_DEMO_KANKYO, 0.0f, 0.0f, 0.0f, 0, 0, 0, 0xF) == NULL) {
-            Environment_WarpSongLeave(globalCtx);
-        }
+        //if (Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_DEMO_KANKYO, 0.0f, 0.0f, 0.0f, 0, 0, 0, 0xF) == NULL) {
+        //    Environment_WarpSongLeave(globalCtx);
+        //}
 
         gSaveContext.seqIndex = 0xFF;
         gSaveContext.nightSeqIndex = 0xFF;
@@ -11930,8 +11918,8 @@ void func_8084E604(Player* this, GlobalContext* globalCtx) {
         func_8083A098(this, &gPlayerAnim_003050, globalCtx);
     } else if (LinkAnimation_OnFrame(&this->skelAnime, 3.0f)) {
         Inventory_ChangeAmmo(ITEM_NUT, -1);
-        Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ARROW, this->bodyPartsPos[15].x, this->bodyPartsPos[15].y,
-                    this->bodyPartsPos[15].z, 4000, this->actor.shape.rot.y, 0, 10);
+        //Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ARROW, this->bodyPartsPos[15].x, this->bodyPartsPos[15].y,
+        //            this->bodyPartsPos[15].z, 4000, this->actor.shape.rot.y, 0, 10);
         func_80832698(this, NA_SE_VO_LI_SWORD_N);
     }
 
@@ -11977,9 +11965,9 @@ void func_8084E6D4(Player* this, GlobalContext* globalCtx) {
                 this->stateFlags1 &= ~0xC00;
 
                 if (this->getItemId != GI_ICE_TRAP) {
-                    Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x,
-                                this->actor.world.pos.y + 100.0f, this->actor.world.pos.z, 0, 0, 0, 0);
-                    func_8083C0E8(this, globalCtx);
+                //    Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x,
+                //                this->actor.world.pos.y + 100.0f, this->actor.world.pos.z, 0, 0, 0, 0);
+                //    func_8083C0E8(this, globalCtx);
                 } else {
                     this->actor.colChkInfo.damage = 0;
                     func_80837C0C(globalCtx, this, 3, 0.0f, 0.0f, 0, 20);
@@ -12109,12 +12097,7 @@ void func_8084EAC0(Player* this, GlobalContext* globalCtx) {
     }
 }
 
-static BottleCatchInfo D_80854A04[] = {
-    { ACTOR_EN_ELF, ITEM_FAIRY, 0x2A, 0x46 },
-    { ACTOR_EN_FISH, ITEM_FISH, 0x1F, 0x47 },
-    { ACTOR_EN_ICE_HONO, ITEM_BLUE_FIRE, 0x20, 0x5D },
-    { ACTOR_EN_INSECT, ITEM_BUG, 0x21, 0x7A },
-};
+
 
 void func_8084ECA4(Player* this, GlobalContext* globalCtx) {
     struct_80854554* sp24;
@@ -12128,7 +12111,6 @@ void func_8084ECA4(Player* this, GlobalContext* globalCtx) {
     if (LinkAnimation_Update(globalCtx, &this->skelAnime)) {
         if (this->unk_84F != 0) {
             if (this->unk_850 == 0) {
-                func_8010B680(globalCtx, D_80854A04[this->unk_84F - 1].textId, &this->actor);
                 func_800F5C64(0x922);
                 this->unk_850 = 1;
             } else if (func_8010BDBC(&globalCtx->msgCtx) == 2) {
@@ -12151,7 +12133,6 @@ void func_8084ECA4(Player* this, GlobalContext* globalCtx) {
                     }
 
                     if (this->interactRangeActor != NULL) {
-                        catchInfo = &D_80854A04[0];
                         for (i = 0; i < 4; i++, catchInfo++) {
                             if (this->interactRangeActor->id == catchInfo->actorId) {
                                 break;
@@ -12188,7 +12169,7 @@ void func_8084EED8(Player* this, GlobalContext* globalCtx) {
     }
 
     if (LinkAnimation_OnFrame(&this->skelAnime, 37.0f)) {
-        Player_SpawnFairy(globalCtx, this, &this->leftHandPos, &D_80854A1C, FAIRY_REVIVE_BOTTLE);
+        //Player_SpawnFairy(globalCtx, this, &this->leftHandPos, &D_80854A1C, FAIRY_REVIVE_BOTTLE);
         Player_UpdateBottleHeld(globalCtx, this, ITEM_BOTTLE, PLAYER_AP_BOTTLE);
         func_8002F7DC(&this->actor, NA_SE_EV_BOTTLE_CAP_OPEN);
         func_8002F7DC(&this->actor, NA_SE_EV_FIATY_HEAL - SFX_FLAG);
@@ -12197,11 +12178,6 @@ void func_8084EED8(Player* this, GlobalContext* globalCtx) {
     }
 }
 
-static BottleDropInfo D_80854A28[] = {
-    { ACTOR_EN_FISH, FISH_DROPPED },
-    { ACTOR_EN_ICE_HONO, 0 },
-    { ACTOR_EN_INSECT, 2 },
-};
 
 static struct_80832924 D_80854A34[] = {
     { NA_SE_VO_LI_AUTO_JUMP, 0x2026 },
@@ -12218,12 +12194,7 @@ void func_8084EFC0(Player* this, GlobalContext* globalCtx) {
     }
 
     if (LinkAnimation_OnFrame(&this->skelAnime, 76.0f)) {
-        BottleDropInfo* dropInfo = &D_80854A28[this->itemActionParam - PLAYER_AP_BOTTLE_FISH];
 
-        Actor_Spawn(&globalCtx->actorCtx, globalCtx, dropInfo->actorId,
-                    (Math_SinS(this->actor.shape.rot.y) * 5.0f) + this->leftHandPos.x, this->leftHandPos.y,
-                    (Math_CosS(this->actor.shape.rot.y) * 5.0f) + this->leftHandPos.z, 0x4000, this->actor.shape.rot.y,
-                    0, dropInfo->actorParams);
 
         Player_UpdateBottleHeld(globalCtx, this, ITEM_BOTTLE, PLAYER_AP_BOTTLE);
         return;
@@ -12379,7 +12350,7 @@ void func_8084F608(Player* this, GlobalContext* globalCtx) {
 void func_8084F698(Player* this, GlobalContext* globalCtx) {
     func_80835C58(globalCtx, this, func_8084F608, 0);
     this->unk_850 = 40;
-    Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_DEMO_KANKYO, 0.0f, 0.0f, 0.0f, 0, 0, 0, 0x10);
+    //Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_DEMO_KANKYO, 0.0f, 0.0f, 0.0f, 0, 0, 0, 0x10);
 }
 
 void func_8084F710(Player* this, GlobalContext* globalCtx) {

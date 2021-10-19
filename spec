@@ -598,7 +598,7 @@ beginseg
     include "build/src/overlays/ovl_map_mark_data/z_map_mark_data.o"
     include "build/src/overlays/ovl_map_mark_data/ovl_map_mark_data_reloc.o"
 endseg
-
+/*
 beginseg
     name "ovl_En_Test"
     compress
@@ -976,14 +976,14 @@ beginseg
     include "build/src/overlays/actors/ovl_Bg_Ingate/z_bg_ingate.o"
     include "build/src/overlays/actors/ovl_Bg_Ingate/ovl_Bg_Ingate_reloc.o"
 endseg
-
+*/
 beginseg
     name "ovl_Bg_Jya_1flift"
     compress
     include "build/src/overlays/actors/ovl_Bg_Jya_1flift/z_bg_jya_1flift.o"
     include "build/src/overlays/actors/ovl_Bg_Jya_1flift/ovl_Bg_Jya_1flift_reloc.o"
 endseg
-
+/*
 beginseg
     name "ovl_Bg_Jya_Amishutter"
     compress
@@ -1760,7 +1760,7 @@ beginseg
     compress
     include "build/src/overlays/actors/ovl_Eff_Dust/z_eff_dust.o"
     include "build/src/overlays/actors/ovl_Eff_Dust/ovl_Eff_Dust_reloc.o"
-endseg
+endseg*/
 
 beginseg
     name "ovl_Effect_Ss_Blast"
@@ -2013,7 +2013,7 @@ beginseg
     include "build/src/overlays/effects/ovl_Effect_Ss_Stone1/z_eff_ss_stone1.o"
     include "build/src/overlays/effects/ovl_Effect_Ss_Stone1/ovl_Effect_Ss_Stone1_reloc.o"
 endseg
-
+/*
 beginseg
     name "ovl_Elf_Msg"
     compress
@@ -2173,7 +2173,7 @@ beginseg
     compress
     include "build/src/overlays/actors/ovl_En_Boom/z_en_boom.o"
     include "build/src/overlays/actors/ovl_En_Boom/ovl_En_Boom_reloc.o"
-endseg
+endseg*/
 
 beginseg
     name "ovl_En_Box"
@@ -2181,7 +2181,7 @@ beginseg
     include "build/src/overlays/actors/ovl_En_Box/z_en_box.o"
     include "build/src/overlays/actors/ovl_En_Box/ovl_En_Box_reloc.o"
 endseg
-
+/*
 beginseg
     name "ovl_En_Brob"
     compress
@@ -2391,6 +2391,7 @@ beginseg
     include "build/src/overlays/actors/ovl_En_Eiyer/z_en_eiyer.o"
     include "build/src/overlays/actors/ovl_En_Eiyer/ovl_En_Eiyer_reloc.o"
 endseg
+*/
 
 beginseg
     name "ovl_En_Elf"
@@ -2399,6 +2400,7 @@ beginseg
     include "build/src/overlays/actors/ovl_En_Elf/ovl_En_Elf_reloc.o"
 endseg
 
+/*
 beginseg
     name "ovl_En_Encount1"
     compress
@@ -2880,7 +2882,7 @@ beginseg
     compress
     include "build/src/overlays/actors/ovl_En_M_Thunder/z_en_m_thunder.o"
     include "build/src/overlays/actors/ovl_En_M_Thunder/ovl_En_M_Thunder_reloc.o"
-endseg
+endseg*/
 
 beginseg
     name "ovl_En_Ma1"
@@ -2888,7 +2890,7 @@ beginseg
     include "build/src/overlays/actors/ovl_En_Ma1/z_en_ma1.o"
     include "build/src/overlays/actors/ovl_En_Ma1/ovl_En_Ma1_reloc.o"
 endseg
-
+/*
 beginseg
     name "ovl_En_Ma2"
     compress
@@ -3858,7 +3860,7 @@ beginseg
     include "build/src/overlays/actors/ovl_Shot_Sun/z_shot_sun.o"
     include "build/src/overlays/actors/ovl_Shot_Sun/ovl_Shot_Sun_reloc.o"
 endseg
-
+*/
 beginseg
     name "gameplay_keep"
     compress
@@ -3913,7 +3915,7 @@ beginseg
     include "build/assets/objects/object_box/object_box.o"
     number 6
 endseg
-
+/*
 beginseg
     name "object_human"
     compress
@@ -4568,7 +4570,7 @@ beginseg
     romalign 0x1000
     include "build/assets/objects/object_toki_objects/object_toki_objects.o"
     number 6
-endseg
+endseg*/
 
 beginseg
     name "object_yukabyun"
@@ -4578,6 +4580,7 @@ beginseg
     number 6
 endseg
 
+/*
 beginseg
     name "object_zl2"
     compress
@@ -4761,28 +4764,11 @@ beginseg
     include "build/assets/objects/object_wood02/object_wood02.o"
     number 6
 endseg
-
-beginseg
-    name "object_lightbox"
-    compress
-    romalign 0x1000
-    include "build/assets/objects/object_lightbox/object_lightbox.o"
-    number 6
-endseg
-
 beginseg
     name "object_pu_box"
     compress
     romalign 0x1000
     include "build/assets/objects/object_pu_box/object_pu_box.o"
-    number 6
-endseg
-
-beginseg
-    name "object_trap"
-    compress
-    romalign 0x1000
-    include "build/assets/objects/object_trap/object_trap.o"
     number 6
 endseg
 
@@ -4833,6 +4819,7 @@ beginseg
     include "build/assets/objects/object_vm/object_vm.o"
     number 6
 endseg
+
 
 beginseg
     name "object_bv"
@@ -5081,6 +5068,7 @@ beginseg
     include "build/assets/objects/object_gi_key/object_gi_key.o"
     number 6
 endseg
+
 
 beginseg
     name "object_mir_ray"
@@ -5505,6 +5493,7 @@ beginseg
     include "build/assets/objects/object_gi_milk/object_gi_milk.o"
     number 6
 endseg
+*/
 
 beginseg
     name "object_ma1"
@@ -5514,6 +5503,7 @@ beginseg
     number 6
 endseg
 
+/*
 beginseg
     name "object_ganon"
     compress
@@ -5625,7 +5615,7 @@ beginseg
     include "build/assets/objects/object_spot15_obj/object_spot15_obj.o"
     number 6
 endseg
-
+*/
 beginseg
     name "object_jya_obj"
     compress
@@ -5633,7 +5623,7 @@ beginseg
     include "build/assets/objects/object_jya_obj/object_jya_obj.o"
     number 6
 endseg
-
+/*
 beginseg
     name "object_gi_clothes"
     compress
@@ -5827,7 +5817,7 @@ beginseg
     include "build/assets/objects/object_skj/object_skj.o"
     number 6
 endseg
-
+*/
 beginseg
     name "object_gi_bottle_letter"
     compress
@@ -5835,7 +5825,7 @@ beginseg
     include "build/assets/objects/object_gi_bottle_letter/object_gi_bottle_letter.o"
     number 6
 endseg
-
+/*
 beginseg
     name "object_bji"
     compress
@@ -6914,7 +6904,7 @@ beginseg
     romalign 0x1000
     include "build/assets/objects/object_zl4/object_zl4.o"
     number 6
-endseg
+endseg*/
 
 beginseg
     name "g_pn_01"
@@ -10191,7 +10181,7 @@ beginseg
     include "build/assets/scenes/misc/market_night/market_night_room_0.o"
     number 3
 endseg
-*/
+
 beginseg
     name "testroom_scene"
     compress
@@ -10239,7 +10229,7 @@ beginseg
     include "build/assets/scenes/test_levels/testroom/testroom_room_4.o"
     number 3
 endseg
-/*
+
 beginseg
     name "kenjyanoma_scene"
     compress

@@ -360,8 +360,8 @@ void EnBox_AppearInit(EnBox* this, GlobalContext* globalCtx) {
     if (func_8005B198() == this->dyna.actor.category || this->unk_1A8 != 0) {
         EnBox_SetupAction(this, EnBox_AppearAnimation);
         this->unk_1A8 = 0;
-        Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_DEMO_KANKYO, this->dyna.actor.home.pos.x,
-                    this->dyna.actor.home.pos.y, this->dyna.actor.home.pos.z, 0, 0, 0, 0x0011);
+        //Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_DEMO_KANKYO, this->dyna.actor.home.pos.x,
+        //            this->dyna.actor.home.pos.y, this->dyna.actor.home.pos.z, 0, 0, 0, 0x0011);
         Audio_PlaySoundGeneral(NA_SE_EV_TRE_BOX_APPEAR, &this->dyna.actor.projectedPos, 4, &D_801333E0, &D_801333E0,
                                &D_801333E8);
     }
@@ -411,10 +411,10 @@ void EnBox_WaitOpen(EnBox* this, GlobalContext* globalCtx) {
                 case ENBOX_TYPE_SWITCH_FLAG_FALL_SMALL:
                     break;
                 default:
-                    Actor_SpawnAsChild(&globalCtx->actorCtx, &this->dyna.actor, globalCtx, ACTOR_DEMO_TRE_LGT,
-                                       this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
-                                       this->dyna.actor.world.pos.z, this->dyna.actor.shape.rot.x,
-                                       this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z, 0xFFFF);
+                    //Actor_SpawnAsChild(&globalCtx->actorCtx, &this->dyna.actor, globalCtx, ACTOR_DEMO_TRE_LGT,
+                    //                   this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
+                    //                   this->dyna.actor.world.pos.z, this->dyna.actor.shape.rot.x,
+                    //                   this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z, 0xFFFF);
                     func_800F5C64(0x92B);
             }
         }

@@ -50,11 +50,6 @@ u32 EffectSsHahen_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void
         this->rObjId = -1;
     }
 
-    if ((this->rObjId == OBJECT_HAKA_OBJECTS) && (this->gfx == gEffFragments2DL)) {
-        this->draw = EffectSsHahen_DrawGray;
-    } else {
-        this->draw = EffectSsHahen_Draw;
-    }
 
     this->update = EffectSsHahen_Update;
     this->rUnused = initParams->unused;

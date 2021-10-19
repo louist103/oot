@@ -1,5 +1,4 @@
 #include "global.h"
-#include "overlays/actors/ovl_En_fHG/z_en_fhg.h"
 
 void func_800A6460(GlobalContext* globalCtx, PSkinAwb* skin, s32 limbIndex) {
     s32 i;
@@ -146,9 +145,7 @@ s32 func_800A6AC4(PSkinAwb* skin, MtxF* arg1, Actor* actor, s32 arg3) {
         jointRot++;
 
         if (arg3 == 0x23) {
-            EnfHG* horse = (EnfHG*)actor;
 
-            yRot += horse->turnRot;
         }
         SkinMatrix_SetRotateRPYTranslate(arg1, xRot, yRot, zRot, xTransl, yTransl, zTransl);
     } else {

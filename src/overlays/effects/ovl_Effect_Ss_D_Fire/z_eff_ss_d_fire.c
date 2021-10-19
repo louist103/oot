@@ -5,7 +5,6 @@
  */
 
 #include "z_eff_ss_d_fire.h"
-#include "objects/object_dodongo/object_dodongo.h"
 
 #define rScale regs[0]
 #define rTexIdx regs[1]
@@ -29,13 +28,12 @@ EffectSsInit Effect_Ss_D_Fire_InitVars = {
 
 u32 EffectSsDFire_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx) {
     EffectSsDFireInitParams* initParams = (EffectSsDFireInitParams*)initParamsx;
-    s32 objBankIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_DODONGO);
+    s32 objBankIndex = Object_GetIndex(&globalCtx->objectCtx, 0);
 
     if (objBankIndex >= 0) {
         this->pos = initParams->pos;
         this->velocity = initParams->velocity;
         this->accel = initParams->accel;
-        this->gfx = SEGMENTED_TO_VIRTUAL(gDodongoFireDL);
         this->life = initParams->life;
         this->rScale = initParams->scale;
         this->rScaleStep = initParams->scaleStep;
@@ -56,7 +54,6 @@ u32 EffectSsDFire_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void
     return 0;
 }
 
-static void* sTextures[] = { gDodongoFire0Tex, gDodongoFire1Tex, gDodongoFire2Tex, gDodongoFire3Tex };
 
 void EffectSsDFire_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
     GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
@@ -73,7 +70,7 @@ void EffectSsDFire_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
 
     OPEN_DISPS(gfxCtx, "../z_eff_ss_d_fire.c", 276);
 
-    if (Object_GetIndex(&globalCtx->objectCtx, OBJECT_DODONGO) > -1) {
+    if (Object_GetIndex(&globalCtx->objectCtx, 0) > -1) {
         gSegments[6] = VIRTUAL_TO_PHYSICAL(object);
         gSPSegment(POLY_XLU_DISP++, 0x06, object);
         scale = this->rScale / 100.0f;
@@ -91,7 +88,6 @@ void EffectSsDFire_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, this->rPrimColorR, this->rPrimColorG, this->rPrimColorB,
                             this->rPrimColorA);
             gSegments[6] = VIRTUAL_TO_PHYSICAL(object);
-            gSPSegment(POLY_XLU_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(sTextures[this->rTexIdx]));
             gSPDisplayList(POLY_XLU_DISP++, this->gfx);
         }
     }

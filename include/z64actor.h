@@ -310,6 +310,7 @@ typedef enum {
 #define DEFINE_ACTOR_INTERNAL(_0, enum, _2) enum,
 #define DEFINE_ACTOR_UNSET(enum) enum,
 
+
 typedef enum {
     #include "tables/actor_table.h"
     /* 0x0192 */ ACTOR_ID_MAX // originally "ACTOR_DLF_MAX"

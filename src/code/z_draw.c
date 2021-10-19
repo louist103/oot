@@ -1,4 +1,5 @@
 #include "global.h"
+#if 0
 #include "objects/object_gi_key/object_gi_key.h"
 #include "objects/object_gi_jewel/object_gi_jewel.h"
 #include "objects/object_gi_melody/object_gi_melody.h"
@@ -76,6 +77,7 @@
 #include "objects/object_gi_dekupouch/object_gi_dekupouch.h"
 #include "objects/object_gi_rupy/object_gi_rupy.h"
 #include "objects/object_gi_sword_1/object_gi_sword_1.h"
+#endif
 
 // "Get Item" Model Draw Functions
 void GetItem_DrawMaskOrBombchu(GlobalContext* globalCtx, s16 drawId);
@@ -111,6 +113,7 @@ typedef struct {
 } DrawItemTableEntry; // size = 0x24
 
 DrawItemTableEntry sDrawItemTable[] = {
+    #if 0
     // bottle, OBJECT_GI_BOTTLE
     { GetItem_DrawOpa0Xlu1, { gGiBottleStopperDL, gGiBottleDL } },
     // small key, OBJECT_GI_KEY
@@ -366,6 +369,7 @@ DrawItemTableEntry sDrawItemTable[] = {
     { GetItem_DrawOpa0, { gGiKokiriSwordDL } },
     // gold skulltula token, OBJECT_ST
     { GetItem_DrawSkullToken, { 0x06004DB0, 0x06004EB8 } }, // TODO symbols from this object
+#endif
 };
 
 /**

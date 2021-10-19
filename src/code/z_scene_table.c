@@ -909,7 +909,7 @@ SceneTableEntry gSceneTable[] = {
     {0},
     {0},
     {0},
-    UNTITLED_SCENE(testroom_scene, 0, 0, 0),
+    {0},
 };
 
 Gfx sDefaultDisplayList[] = {

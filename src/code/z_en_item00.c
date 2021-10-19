@@ -23,7 +23,7 @@ void EnItem00_DrawHeartContainer(EnItem00* this, GlobalContext* globalCtx);
 void EnItem00_DrawHeartPiece(EnItem00* this, GlobalContext* globalCtx);
 
 const ActorInit En_Item00_InitVars = {
-    ACTOR_EN_ITEM00,
+    0,
     ACTORCAT_MISC,
     FLAGS,
     OBJECT_GAMEPLAY_KEEP,
@@ -429,6 +429,7 @@ void EnItem00_Init(Actor* thisx, GlobalContext* globalCtx) {
             Actor_SetScale(&this->actor, 0.01f);
             this->scale = 0.01f;
             break;
+            #if 0
         case ITEM00_SHIELD_DEKU:
             this->actor.objBankIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_GI_SHIELD_1);
             Actor_SetObjectDependency(globalCtx, &this->actor);
@@ -457,6 +458,7 @@ void EnItem00_Init(Actor* thisx, GlobalContext* globalCtx) {
             shadowScale = 0.6f;
             this->actor.world.rot.x = 0x4000;
             break;
+            #endif
     }
 
     this->unk_156 = 0;
@@ -952,6 +954,7 @@ void EnItem00_Draw(Actor* thisx, GlobalContext* globalCtx) {
                 EnItem00_DrawHeartContainer(this, globalCtx);
                 break;
             case ITEM00_HEART:
+            #if 0
                 if (this->unk_15A < 0) {
                     if (this->unk_15A == -1) {
                         s8 bankIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_GI_HEART);
@@ -967,6 +970,8 @@ void EnItem00_Draw(Actor* thisx, GlobalContext* globalCtx) {
                     }
                     break;
                 }
+                #endif
+                break;
             case ITEM00_BOMBS_A:
             case ITEM00_BOMBS_B:
             case ITEM00_BOMBS_SPECIAL:
@@ -1132,6 +1137,7 @@ s16 func_8001F404(s16 dropId) {
 // External functions used by other actors to drop collectibles, which usually results in spawning an En_Item00 actor.
 
 EnItem00* Item_DropCollectible(GlobalContext* globalCtx, Vec3f* spawnPos, s16 params) {
+    #if 0
     s32 pad[2];
     EnItem00* spawnedActor = NULL;
     s16 param4000 = params & 0x4000;
@@ -1171,10 +1177,12 @@ EnItem00* Item_DropCollectible(GlobalContext* globalCtx, Vec3f* spawnPos, s16 pa
             }
         }
     }
-    return spawnedActor;
+    #endif
+    return NULL;
 }
 
 EnItem00* Item_DropCollectible2(GlobalContext* globalCtx, Vec3f* spawnPos, s16 params) {
+    #if 0
     EnItem00* spawnedActor = NULL;
     s32 pad;
     s16 param4000 = params & 0x4000;
@@ -1203,11 +1211,12 @@ EnItem00* Item_DropCollectible2(GlobalContext* globalCtx, Vec3f* spawnPos, s16 p
             }
         }
     }
-
-    return spawnedActor;
+#endif
+    return NULL;
 }
 
 void Item_DropCollectibleRandom(GlobalContext* globalCtx, Actor* fromActor, Vec3f* spawnPos, s16 params) {
+    #if 0
     s32 pad;
     EnItem00* spawnedActor;
     s16 dropQuantity;
@@ -1326,4 +1335,5 @@ void Item_DropCollectibleRandom(GlobalContext* globalCtx, Actor* fromActor, Vec3
             dropQuantity--;
         }
     }
+    #endif
 }

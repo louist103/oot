@@ -1,8 +1,7 @@
 #include "global.h"
 #include "vt.h"
 
-#include "overlays/actors/ovl_Arms_Hook/z_arms_hook.h"
-#include "overlays/actors/ovl_En_Part/z_en_part.h"
+
 #include "objects/gameplay_keep/gameplay_keep.h"
 
 static CollisionPoly* sCurCeilingPoly;
@@ -478,9 +477,7 @@ void func_8002C7BC(TargetContext* targetCtx, Player* player, Actor* actorArg, Gl
             func_8002BE98(targetCtx, actorArg->category, globalCtx);
             targetCtx->targetedActor = actorArg;
 
-            if (actorArg->id == ACTOR_EN_BOOM) {
-                targetCtx->unk_48 = 0;
-            }
+
 
             lockOnSfxId = ((actorArg->flags & 5) == 5) ? NA_SE_SY_LOCK_ON : NA_SE_SY_LOCK_ON_HUMAN;
             func_80078884(lockOnSfxId);
@@ -989,7 +986,7 @@ s32 func_8002DDF4(GlobalContext* globalCtx) {
 
     return player->stateFlags2 & 0x1000;
 }
-
+#if 0
 void func_8002DE04(GlobalContext* globalCtx, Actor* actorA, Actor* actorB) {
     ArmsHook* hookshot = (ArmsHook*)Actor_Find(&globalCtx->actorCtx, ACTOR_ARMS_HOOK, ACTORCAT_ITEMACTION);
 
@@ -1000,7 +997,7 @@ void func_8002DE04(GlobalContext* globalCtx, Actor* actorA, Actor* actorB) {
     actorB->flags |= 0x2000;
     actorA->flags &= ~0x2000;
 }
-
+#endif
 void func_8002DE74(GlobalContext* globalCtx, Player* player) {
     if ((globalCtx->roomCtx.curRoom.unk_03 != 4) && func_800C0CB8(globalCtx)) {
         Camera_ChangeSetting(Gameplay_GetCamera(globalCtx, MAIN_CAM), CAM_SET_HORSE0);
@@ -2016,12 +2013,6 @@ void Actor_UpdateAll(GlobalContext* globalCtx, ActorContext* actorCtx) {
         actorCtx->unk_02--;
     }
 
-    if (KREG(0) == -100) {
-        refActor = &GET_PLAYER(globalCtx)->actor;
-        KREG(0) = 0;
-        Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, refActor->world.pos.x,
-                    refActor->world.pos.y + 100.0f, refActor->world.pos.z, 0, 0, 0, 1);
-    }
 
     sp80 = &D_80116068[0];
 
@@ -2726,12 +2717,8 @@ Actor* Actor_Spawn(ActorContext* actorCtx, GlobalContext* globalCtx, s16 actorId
     actor->id = actorInit->id;
     actor->flags = actorInit->flags;
 
-    if (actorInit->id == ACTOR_EN_PART) {
-        actor->objBankIndex = rotZ;
-        rotZ = 0;
-    } else {
+
         actor->objBankIndex = objBankIndex;
-    }
 
     actor->init = actorInit->init;
     actor->destroy = actorInit->destroy;
@@ -3076,6 +3063,7 @@ void BodyBreak_SetInfo(BodyBreak* bodyBreak, s32 limbIndex, s32 minLimbIndex, s3
 }
 
 s32 BodyBreak_SpawnParts(Actor* actor, BodyBreak* bodyBreak, GlobalContext* globalCtx, s16 type) {
+    #if 0
     EnPart* spawnedEnPart;
     MtxF* mtx;
     s16 objBankIndex;
@@ -3116,7 +3104,7 @@ s32 BodyBreak_SpawnParts(Actor* actor, BodyBreak* bodyBreak, GlobalContext* glob
     ZeldaArena_FreeDebug(bodyBreak->matrices, "../z_actor.c", 7678);
     ZeldaArena_FreeDebug(bodyBreak->dLists, "../z_actor.c", 7679);
     ZeldaArena_FreeDebug(bodyBreak->objectIds, "../z_actor.c", 7680);
-
+#endif
     return true;
 }
 
@@ -3220,6 +3208,7 @@ void Actor_ChangeCategory(GlobalContext* globalCtx, ActorContext* actorCtx, Acto
  * Returns the actor if there will be collision, NULL otherwise.
  */
 Actor* Actor_GetProjectileActor(GlobalContext* globalCtx, Actor* refActor, f32 radius) {
+    #if 0
     Actor* actor;
     Vec3f spA8;
     f32 deltaX;
@@ -3259,7 +3248,7 @@ Actor* Actor_GetProjectileActor(GlobalContext* globalCtx, Actor* refActor, f32 r
             }
         }
     }
-
+#endif
     return NULL;
 }
 
@@ -4077,6 +4066,7 @@ void func_80035844(Vec3f* arg0, Vec3f* arg1, Vec3s* arg2, s32 arg3) {
  */
 Actor* func_800358DC(Actor* actor, Vec3f* spawnPos, Vec3s* spawnRot, f32* arg3, s32 timer, s16* unused,
                      GlobalContext* globalCtx, s16 params, s32 arg8) {
+                         #if 0
     EnPart* spawnedEnPart;
 
     spawnedEnPart =
@@ -4092,7 +4082,7 @@ Actor* func_800358DC(Actor* actor, Vec3f* spawnPos, Vec3s* spawnRot, f32* arg3, 
         spawnedEnPart->rotZSpeed = arg3[2];
         return &spawnedEnPart->actor;
     }
-
+#endif
     return NULL;
 }
 

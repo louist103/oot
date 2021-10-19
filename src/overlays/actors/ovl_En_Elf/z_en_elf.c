@@ -345,7 +345,6 @@ void EnElf_Init(Actor* thisx, GlobalContext* globalCtx) {
             func_80A01C38(this, 0);
             this->fairyFlags |= 4;
             thisx->update = func_80A053F0;
-            this->elfMsg = NULL;
             this->unk_2C7 = 0x14;
 
             if ((gSaveContext.naviTimer >= 25800) || (gSaveContext.naviTimer < 3000)) {
@@ -1398,9 +1397,6 @@ void func_80A053F0(Actor* thisx, GlobalContext* globalCtx) {
         thisx->update = func_80A052F4;
         func_80A01C38(this, 3);
 
-        if (this->elfMsg != NULL) {
-            this->elfMsg->actor.flags |= 0x100;
-        }
 
         thisx->flags &= ~0x10000;
     } else {
@@ -1424,7 +1420,6 @@ void func_80A053F0(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
 
-    this->elfMsg = NULL;
     this->timer++;
 
     if (this->unk_2A4 > 0.0f) {

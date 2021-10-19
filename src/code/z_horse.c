@@ -40,6 +40,7 @@ typedef struct {
 } HorseSpawn;
 
 void func_8006D0EC(GlobalContext* globalCtx, Player* player) {
+    #if 0
     s32 i;
     HorseSpawn horseSpawns[] = {
         { SCENE_SPOT00, -460, 100, 6640, 0, 2 }, { SCENE_SPOT06, -1929, -1025, 768, 0, 2 },
@@ -116,6 +117,7 @@ void func_8006D0EC(GlobalContext* globalCtx, Player* player) {
             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_HORSE, 0.0f, 0.0f, -60.0f, 0, 0x7360, 0, 1);
         }
     }
+    #endif
 }
 
 typedef struct {
@@ -127,6 +129,7 @@ typedef struct {
 } struct_8011F9B8;
 
 void func_8006D684(GlobalContext* globalCtx, Player* player) {
+    #if 0
     s32 pad;
     s32 i;
     Vec3s spawnPos;
@@ -232,6 +235,7 @@ void func_8006D684(GlobalContext* globalCtx, Player* player) {
             }
         }
     }
+    #endif
 }
 
 void func_8006DC68(GlobalContext* globalCtx, Player* player) {

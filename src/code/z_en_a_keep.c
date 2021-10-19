@@ -23,7 +23,7 @@ void func_8001D480(EnAObj* this, s16 params);
 void func_8001D5C8(EnAObj* this, s16 params);
 
 const ActorInit En_A_Obj_InitVars = {
-    ACTOR_EN_A_OBJ,
+    0,
     ACTORCAT_PROP,
     FLAGS,
     OBJECT_GAMEPLAY_KEEP,
