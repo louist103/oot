@@ -9,8 +9,6 @@
 
 #define FLAGS 0x00000015
 
-#define THIS ((EnDha*)thisx)
-
 void EnDha_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnDha_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDha_Update(Actor* thisx, GlobalContext* globalCtx);
