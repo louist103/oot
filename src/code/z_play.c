@@ -1353,7 +1353,6 @@ void Gameplay_Main(GameState* thisx) {
     if (1 && HREG(63)) {
         LOG_NUM("1", 1, "../z_play.c", 4583);
     }
-
     Gameplay_Draw(globalCtx);
 
     if (1 && HREG(63)) {

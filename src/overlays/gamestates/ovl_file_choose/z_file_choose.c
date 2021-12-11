@@ -1577,6 +1577,9 @@ static void (*gFileSelectUpdateFuncs[])(GameState*) = {
     FileChoose_SelectModeUpdate,
 };
 
+extern OSTime drawTimeBefore;
+extern OSTime drawTimeAfter;
+extern u8 gisInFileselect;
 void FileChoose_Main(GameState* thisx) {
     static void* controlsTextures[] = {
         gFileSelControlsENGTex,
@@ -1861,7 +1864,7 @@ void FileChoose_Init(GameState* thisx) {
     FileChooseContext* this = (FileChooseContext*)thisx;
     u32 size = (u32)_title_staticSegmentRomEnd - (u32)_title_staticSegmentRomStart;
     s32 pad;
-
+    gisInFileselect = true;
     SREG(30) = 1;
     osSyncPrintf("SIZE=%x\n", size);
 

@@ -138,12 +138,34 @@ void GameState_DrawInputDisplay(u16 input, Gfx** gfx) {
 
     *gfx = gfxP;
 }
-
+OSTime before;
+OSTime after;
+OSTime min =0xFFFFFFFFu;
+OSTime max;
+OSTime drawTimeBefore;
+OSTime drawTimeAfter;
+u8 gisInFileselect;
+void FileChoose_Main(GameState* thisx);
 void GameState_Draw(GameState* gameState, GraphicsContext* gfxCtx) {
     Gfx* newDList;
     Gfx* polyOpaP;
 
+    GfxPrint printer;
     OPEN_DISPS(gfxCtx, "../game.c", 746);
+    GfxPrint_Init(&printer);
+    GfxPrint_Open(&printer,OVERLAY_DISP);
+    GfxPrint_SetPos(&printer,5,3);
+    GfxPrint_SetColor(&printer,255,255,255,255);
+    GfxPrint_Printf(&printer, "MAX:%lli",OS_CYCLES_TO_USEC(max));
+    GfxPrint_SetPos(&printer,5,4);
+    GfxPrint_Printf(&printer, "min:%lli",OS_CYCLES_TO_USEC(min));
+    GfxPrint_SetPos(&printer,5,5);
+    GfxPrint_Printf(&printer,"UPDATE:%lli",OS_CYCLES_TO_USEC(after-before));
+    //if(gisInFileselect){
+        GfxPrint_SetPos(&printer, 24,5);
+        GfxPrint_Printf(&printer,"Draw:%lli",OS_CYCLES_TO_USEC(D_8016A540));
+    //}
+    OVERLAY_DISP = GfxPrint_Close(&printer);
 
     newDList = Graph_GfxPlusOne(polyOpaP = POLY_OPA_DISP);
     gSPDisplayList(OVERLAY_DISP++, newDList);
@@ -238,9 +260,15 @@ void GameState_Update(GameState* gameState) {
     GraphicsContext* gfxCtx = gameState->gfxCtx;
 
     GameState_SetFrameBuffer(gfxCtx);
-
+    before = osGetTime();
     gameState->main(gameState);
-
+    after = osGetTime();
+    if ((after-before) < min){
+        min = after-before;
+    }
+    if ((after-before) > max){
+        max = after-before;
+    }
     func_800C4344(gameState);
 
     if (SREG(63) == 1u) {

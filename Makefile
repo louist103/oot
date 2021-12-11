@@ -9,7 +9,7 @@ NON_MATCHING ?= 0
 # If ORIG_COMPILER is 1, compile with QEMU_IRIX and the original compiler
 ORIG_COMPILER ?= 0
 # If COMPILER is GCC, compile with GCC instead of IDO.
-COMPILER ?= ido
+COMPILER ?= gcc
 # Declare ZAPDFLAGS used for ZAPD's flags.
 ZAPDFLAGS ?=
 # Declare CPPFLAGS used for the preprocessor.
@@ -64,7 +64,7 @@ endif
 
 # Detect compiler and set variables appropriately.
 ifeq ($(COMPILER),gcc)
-  CC       := $(MIPS_BINUTILS_PREFIX)gcc
+  CC       := mips64-gcc
   CC_OLD   := $(CC)
 else 
 ifeq ($(COMPILER),ido)
@@ -88,7 +88,7 @@ ifeq ($(ORIG_COMPILER),1)
 endif
 
 AS         := $(MIPS_BINUTILS_PREFIX)as
-LD         := $(MIPS_BINUTILS_PREFIX)ld
+LD         := mips64-ld
 OBJCOPY    := $(MIPS_BINUTILS_PREFIX)objcopy
 OBJDUMP    := $(MIPS_BINUTILS_PREFIX)objdump
 EMULATOR = mupen64plus
