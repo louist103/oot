@@ -402,7 +402,7 @@ void EnDekubaba_SetupPrunedSomersault(EnDekubaba* this) {
     this->actor.world.rot.y = this->actor.shape.rot.y + 0x8000;
     this->collider.base.acFlags &= ~AC_ON;
     this->actor.speedXZ = this->size * 3.0f;
-    this->actor.flags |= ACTOR_FLAG_4 | ACTOR_FLAG_5;
+    this->actor.flags |= ACTOR_FLAG_ALWAYS_UPDATE | ACTOR_FLAG_ALWAYS_DRAW;
     this->actionFunc = EnDekubaba_PrunedSomersault;
 }
 
@@ -455,7 +455,7 @@ void EnDekubaba_SetupDeadStickDrop(EnDekubaba* this, GlobalContext* globalCtx) {
     this->actor.velocity.y = 0.0f;
     this->actor.shape.shadowScale = 3.0f;
     Actor_ChangeCategory(globalCtx, &globalCtx->actorCtx, &this->actor, ACTORCAT_MISC);
-    this->actor.flags &= ~ACTOR_FLAG_5;
+    this->actor.flags &= ~ACTOR_FLAG_ALWAYS_DRAW;
     this->timer = 200;
     this->actionFunc = EnDekubaba_DeadStickDrop;
 }

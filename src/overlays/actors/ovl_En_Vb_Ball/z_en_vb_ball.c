@@ -9,7 +9,7 @@
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "overlays/actors/ovl_Boss_Fd/z_boss_fd.h"
 
-#define FLAGS (ACTOR_FLAG_4 | ACTOR_FLAG_5)
+#define FLAGS (ACTOR_FLAG_ALWAYS_UPDATE | ACTOR_FLAG_ALWAYS_DRAW)
 
 void EnVbBall_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnVbBall_Destroy(Actor* thisx, GlobalContext* globalCtx);

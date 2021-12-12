@@ -10,7 +10,7 @@
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "vt.h"
 
-#define FLAGS (ACTOR_FLAG_0 | ACTOR_FLAG_2 | ACTOR_FLAG_4 | ACTOR_FLAG_5)
+#define FLAGS (ACTOR_FLAG_0 | ACTOR_FLAG_2 | ACTOR_FLAG_ALWAYS_UPDATE | ACTOR_FLAG_ALWAYS_DRAW)
 
 #define MO_WATER_LEVEL(globalCtx) globalCtx->colCtx.colHeader->waterBoxes[0].ySurface
 

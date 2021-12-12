@@ -1,7 +1,7 @@
 #include "z_en_bigokuta.h"
 #include "objects/object_bigokuta/object_bigokuta.h"
 
-#define FLAGS (ACTOR_FLAG_0 | ACTOR_FLAG_2 | ACTOR_FLAG_4 | ACTOR_FLAG_5)
+#define FLAGS (ACTOR_FLAG_0 | ACTOR_FLAG_2 | ACTOR_FLAG_ALWAYS_UPDATE | ACTOR_FLAG_ALWAYS_DRAW)
 
 void EnBigokuta_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnBigokuta_Destroy(Actor* thisx, GlobalContext* globalCtx);

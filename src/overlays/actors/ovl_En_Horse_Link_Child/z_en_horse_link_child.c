@@ -7,7 +7,7 @@
 #include "z_en_horse_link_child.h"
 #include "objects/object_horse_link_child/object_horse_link_child.h"
 
-#define FLAGS (ACTOR_FLAG_4 | ACTOR_FLAG_25)
+#define FLAGS (ACTOR_FLAG_ALWAYS_UPDATE | ACTOR_FLAG_25)
 
 void EnHorseLinkChild_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnHorseLinkChild_Destroy(Actor* thisx, GlobalContext* globalCtx);

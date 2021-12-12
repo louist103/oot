@@ -146,7 +146,7 @@ void EnOkuta_Init(Actor* thisx, GlobalContext* globalCtx) {
     } else {
         ActorShape_Init(&thisx->shape, 1100.0f, ActorShadow_DrawCircle, 18.0f);
         thisx->flags &= ~ACTOR_FLAG_0;
-        thisx->flags |= ACTOR_FLAG_4;
+        thisx->flags |= ACTOR_FLAG_ALWAYS_UPDATE;
         Collider_InitCylinder(globalCtx, &this->collider);
         Collider_SetCylinder(globalCtx, &this->collider, thisx, &sProjectileColliderInit);
         Actor_ChangeCategory(globalCtx, &globalCtx->actorCtx, thisx, ACTORCAT_PROP);

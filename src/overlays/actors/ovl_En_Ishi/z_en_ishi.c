@@ -381,7 +381,7 @@ void EnIshi_Wait(EnIshi* this, GlobalContext* globalCtx) {
 void EnIshi_SetupLiftedUp(EnIshi* this) {
     this->actionFunc = EnIshi_LiftedUp;
     this->actor.room = -1;
-    this->actor.flags |= ACTOR_FLAG_4;
+    this->actor.flags |= ACTOR_FLAG_ALWAYS_UPDATE;
 }
 
 void EnIshi_LiftedUp(EnIshi* this, GlobalContext* globalCtx) {

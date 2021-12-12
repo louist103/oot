@@ -216,7 +216,7 @@ void EnEiyer_SetupUnderground(EnEiyer* this) {
     }
 
     this->collider.base.acFlags |= AC_ON;
-    this->actor.flags &= ~ACTOR_FLAG_4;
+    this->actor.flags &= ~ACTOR_FLAG_ALWAYS_UPDATE;
     this->actor.flags |= ACTOR_FLAG_0;
 }
 
@@ -266,7 +266,7 @@ void EnEiyer_SetupDiveAttack(EnEiyer* this, GlobalContext* globalCtx) {
 void EnEiyer_SetupLand(EnEiyer* this) {
     Animation_MorphToPlayOnce(&this->skelanime, &gStingerDiveAnim, -3.0f);
     this->collider.base.atFlags &= ~AT_ON;
-    this->actor.flags |= ACTOR_FLAG_4;
+    this->actor.flags |= ACTOR_FLAG_ALWAYS_UPDATE;
 
     // Update BgCheck info, play sound, and spawn effect on the first frame of the land action
     this->timer = -1;

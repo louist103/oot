@@ -1,6 +1,6 @@
 #include "z_arms_hook.h"
 
-#define FLAGS (ACTOR_FLAG_4 | ACTOR_FLAG_5)
+#define FLAGS (ACTOR_FLAG_ALWAYS_UPDATE | ACTOR_FLAG_ALWAYS_DRAW)
 
 void ArmsHook_Init(Actor* thisx, GlobalContext* globalCtx);
 void ArmsHook_Destroy(Actor* thisx, GlobalContext* globalCtx);

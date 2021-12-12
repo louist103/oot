@@ -7,7 +7,7 @@
 #include "z_en_yukabyun.h"
 #include "objects/object_yukabyun/object_yukabyun.h"
 
-#define FLAGS ACTOR_FLAG_4
+#define FLAGS ACTOR_FLAG_ALWAYS_UPDATE
 
 void EnYukabyun_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnYukabyun_Destroy(Actor* thisx, GlobalContext* globalCtx);

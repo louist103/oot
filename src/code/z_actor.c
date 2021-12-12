@@ -2079,7 +2079,7 @@ void Actor_UpdateAll(GlobalContext* globalCtx, ActorContext* actorCtx) {
                 actor->yawTowardsPlayer = Actor_WorldYawTowardActor(actor, &player->actor);
                 actor->flags &= ~ACTOR_FLAG_24;
 
-                if ((DECR(actor->freezeTimer) == 0) && (actor->flags & (ACTOR_FLAG_4 | ACTOR_FLAG_6))) {
+                if ((DECR(actor->freezeTimer) == 0) && (actor->flags & (ACTOR_FLAG_ALWAYS_UPDATE | ACTOR_FLAG_6))) {
                     if (actor == player->unk_664) {
                         actor->isTargeted = true;
                     } else {
@@ -2382,7 +2382,7 @@ void func_800315AC(GlobalContext* globalCtx, ActorContext* actorCtx) {
             actor->isDrawn = false;
 
             if ((HREG(64) != 1) || ((HREG(65) != -1) && (HREG(65) != HREG(66))) || (HREG(71) == 0)) {
-                if ((actor->init == NULL) && (actor->draw != NULL) && (actor->flags & (ACTOR_FLAG_5 | ACTOR_FLAG_6))) {
+                if ((actor->init == NULL) && (actor->draw != NULL) && (actor->flags & (ACTOR_FLAG_ALWAYS_DRAW | ACTOR_FLAG_6))) {
                     if ((actor->flags & ACTOR_FLAG_7) &&
                         ((globalCtx->roomCtx.curRoom.showInvisActors == 0) || (globalCtx->actorCtx.unk_03 != 0) ||
                          (actor->room != globalCtx->roomCtx.curRoom.num))) {

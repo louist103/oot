@@ -10,7 +10,7 @@
 #include "objects/object_hidan_objects/object_hidan_objects.h"
 #include "objects/object_mizu_objects/object_mizu_objects.h"
 
-#define FLAGS ACTOR_FLAG_4
+#define FLAGS ACTOR_FLAG_ALWAYS_UPDATE
 
 #define DOOR_AJAR_SLAM_RANGE 120.0f
 #define DOOR_AJAR_OPEN_RANGE (2 * DOOR_AJAR_SLAM_RANGE)
@@ -145,7 +145,7 @@ void EnDoor_SetupType(EnDoor* this, GlobalContext* globalCtx) {
 
     if (Object_IsLoaded(&globalCtx->objectCtx, this->requiredObjBankIndex)) {
         doorType = this->actor.params >> 7 & 7;
-        this->actor.flags &= ~ACTOR_FLAG_4;
+        this->actor.flags &= ~ACTOR_FLAG_ALWAYS_UPDATE;
         this->actor.objBankIndex = this->requiredObjBankIndex;
         this->actionFunc = EnDoor_Idle;
         if (doorType == DOOR_EVENING) {

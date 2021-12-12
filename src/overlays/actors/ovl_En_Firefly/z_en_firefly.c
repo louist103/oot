@@ -214,7 +214,7 @@ void EnFirefly_SetupFall(EnFirefly* this) {
     this->actor.velocity.y = 0.0f;
     Animation_Change(&this->skelAnime, &gKeeseFlyAnim, 0.5f, 0.0f, 0.0f, ANIMMODE_LOOP_INTERP, -3.0f);
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_FFLY_DEAD);
-    this->actor.flags |= ACTOR_FLAG_4;
+    this->actor.flags |= ACTOR_FLAG_ALWAYS_UPDATE;
     Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 40);
     this->actionFunc = EnFirefly_Fall;
 }
@@ -261,7 +261,7 @@ void EnFirefly_SetupFrozenFall(EnFirefly* this, GlobalContext* globalCtx) {
     s32 i;
     Vec3f iceParticlePos;
 
-    this->actor.flags |= ACTOR_FLAG_4;
+    this->actor.flags |= ACTOR_FLAG_ALWAYS_UPDATE;
     this->auraType = KEESE_AURA_NONE;
     this->actor.speedXZ = 0.0f;
     Actor_SetColorFilter(&this->actor, 0, 0xFF, 0, 0xFF);

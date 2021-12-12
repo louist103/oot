@@ -15,7 +15,7 @@
 #include "objects/object_ganon/object_ganon.h"
 #include "objects/object_opening_demo1/object_opening_demo1.h"
 
-#define FLAGS ACTOR_FLAG_4
+#define FLAGS ACTOR_FLAG_ALWAYS_UPDATE
 
 void EnViewer_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnViewer_Destroy(Actor* thisx, GlobalContext* globalCtx);

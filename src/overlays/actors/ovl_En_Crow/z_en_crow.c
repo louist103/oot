@@ -180,7 +180,7 @@ void EnCrow_SetupDamaged(EnCrow* this, GlobalContext* globalCtx) {
     }
 
     this->collider.base.acFlags &= ~AC_ON;
-    this->actor.flags |= ACTOR_FLAG_4;
+    this->actor.flags |= ACTOR_FLAG_ALWAYS_UPDATE;
 
     this->actionFunc = EnCrow_Damaged;
 }
@@ -400,7 +400,7 @@ void EnCrow_Respawn(EnCrow* this, GlobalContext* globalCtx) {
         }
         if (Math_StepToF(&this->actor.scale.x, target, target * 0.1f)) {
             this->actor.flags |= ACTOR_FLAG_0;
-            this->actor.flags &= ~ACTOR_FLAG_4;
+            this->actor.flags &= ~ACTOR_FLAG_ALWAYS_UPDATE;
             this->actor.colChkInfo.health = 1;
             EnCrow_SetupFlyIdle(this);
         }

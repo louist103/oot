@@ -353,7 +353,7 @@ void func_80A4ED34(EnGs* this, GlobalContext* globalCtx) {
         func_8002F974(&this->actor, NA_SE_EV_FIRE_PILLAR - SFX_FLAG);
         if (this->unk_200++ >= 40) {
             this->unk_19E |= 0x10;
-            this->actor.flags |= ACTOR_FLAG_4;
+            this->actor.flags |= ACTOR_FLAG_ALWAYS_UPDATE;
             this->actor.uncullZoneForward = 12000.0f;
 
             this->actor.gravity = 0.3f;

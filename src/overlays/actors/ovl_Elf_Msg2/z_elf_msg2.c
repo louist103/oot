@@ -7,7 +7,7 @@
 #include "z_elf_msg2.h"
 #include "vt.h"
 
-#define FLAGS ACTOR_FLAG_4
+#define FLAGS ACTOR_FLAG_ALWAYS_UPDATE
 
 void ElfMsg2_Init(Actor* thisx, GlobalContext* globalCtx);
 void ElfMsg2_Destroy(Actor* thisx, GlobalContext* globalCtx);

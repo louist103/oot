@@ -10,7 +10,7 @@
 #include "objects/object_efc_tw/object_efc_tw.h"
 #include "objects/object_gi_jewel/object_gi_jewel.h"
 
-#define FLAGS (ACTOR_FLAG_4 | ACTOR_FLAG_5)
+#define FLAGS (ACTOR_FLAG_ALWAYS_UPDATE | ACTOR_FLAG_ALWAYS_DRAW)
 
 void DemoEffect_Init(Actor* thisx, GlobalContext* globalCtx);
 void DemoEffect_Destroy(Actor* thisx, GlobalContext* globalCtx);

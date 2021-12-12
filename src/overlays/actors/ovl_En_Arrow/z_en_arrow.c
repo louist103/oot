@@ -7,7 +7,7 @@
 #include "z_en_arrow.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_4 | ACTOR_FLAG_5)
+#define FLAGS (ACTOR_FLAG_ALWAYS_UPDATE | ACTOR_FLAG_ALWAYS_DRAW)
 
 void EnArrow_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnArrow_Destroy(Actor* thisx, GlobalContext* globalCtx);

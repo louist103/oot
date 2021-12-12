@@ -7,7 +7,7 @@
 #include "z_en_vase.h"
 #include "objects/object_vase/object_vase.h"
 
-#define FLAGS ACTOR_FLAG_4
+#define FLAGS ACTOR_FLAG_ALWAYS_UPDATE
 
 void EnVase_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnVase_Destroy(Actor* thisx, GlobalContext* globalCtx);

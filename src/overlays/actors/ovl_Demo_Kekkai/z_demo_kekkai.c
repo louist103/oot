@@ -8,7 +8,7 @@
 #include "objects/object_demo_kekkai/object_demo_kekkai.h"
 #include "scenes/dungeons/ganontika/ganontika_scene.h"
 
-#define FLAGS (ACTOR_FLAG_4 | ACTOR_FLAG_5)
+#define FLAGS (ACTOR_FLAG_ALWAYS_UPDATE | ACTOR_FLAG_ALWAYS_DRAW)
 
 void DemoKekkai_Init(Actor* thisx, GlobalContext* globalCtx);
 void DemoKekkai_Destroy(Actor* thisx, GlobalContext* globalCtx);

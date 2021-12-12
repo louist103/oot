@@ -9,7 +9,7 @@
 #include "scenes/overworld/spot02/spot02_scene.h"
 #include "vt.h"
 
-#define FLAGS (ACTOR_FLAG_4 | ACTOR_FLAG_25)
+#define FLAGS (ACTOR_FLAG_ALWAYS_UPDATE | ACTOR_FLAG_25)
 
 void EnOkarinaTag_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnOkarinaTag_Destroy(Actor* thisx, GlobalContext* globalCtx);

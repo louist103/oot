@@ -7,7 +7,7 @@
 #include "z_en_eg.h"
 #include "vt.h"
 
-#define FLAGS ACTOR_FLAG_4
+#define FLAGS ACTOR_FLAG_ALWAYS_UPDATE
 
 void EnEg_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnEg_Destroy(Actor* thisx, GlobalContext* globalCtx);

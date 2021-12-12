@@ -1,6 +1,6 @@
 #include "z_en_clear_tag.h"
 
-#define FLAGS (ACTOR_FLAG_0 | ACTOR_FLAG_2 | ACTOR_FLAG_4 | ACTOR_FLAG_5)
+#define FLAGS (ACTOR_FLAG_0 | ACTOR_FLAG_2 | ACTOR_FLAG_ALWAYS_UPDATE | ACTOR_FLAG_ALWAYS_DRAW)
 
 void EnClearTag_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnClearTag_Destroy(Actor* thisx, GlobalContext* globalCtx);

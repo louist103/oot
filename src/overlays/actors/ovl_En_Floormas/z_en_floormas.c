@@ -280,7 +280,7 @@ void EnFloormas_SetupLand(EnFloormas* this) {
 void EnFloormas_SetupSplit(EnFloormas* this) {
 
     Actor_SetScale(&this->actor, 0.004f);
-    this->actor.flags |= ACTOR_FLAG_4;
+    this->actor.flags |= ACTOR_FLAG_ALWAYS_UPDATE;
     if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_7)) {
         this->actor.draw = EnFloormas_DrawHighlighted;
     } else {
@@ -385,7 +385,7 @@ void EnFloormas_SetupSmWait(EnFloormas* this) {
     }
     this->actor.draw = NULL;
     this->actionFunc = EnFloormas_SmWait;
-    this->actor.flags &= ~(ACTOR_FLAG_0 | ACTOR_FLAG_4);
+    this->actor.flags &= ~(ACTOR_FLAG_0 | ACTOR_FLAG_ALWAYS_UPDATE);
 }
 
 void EnFloormas_SetupTakeDamage(EnFloormas* this) {
@@ -912,7 +912,7 @@ void EnFloormas_Merge(EnFloormas* this, GlobalContext* globalCtx) {
 
     if (SkelAnime_Update(&this->skelAnime) != 0) {
         if (this->actor.scale.x >= 0.01f) {
-            this->actor.flags &= ~ACTOR_FLAG_4;
+            this->actor.flags &= ~ACTOR_FLAG_ALWAYS_UPDATE;
             EnFloormas_MakeVulnerable(this);
             this->actor.params = 0;
             this->collider.info.bumperFlags |= BUMP_HOOKABLE;

@@ -9,7 +9,7 @@
 #include "objects/object_ik/object_ik.h"
 #include "vt.h"
 
-#define FLAGS ACTOR_FLAG_4
+#define FLAGS ACTOR_FLAG_ALWAYS_UPDATE
 
 typedef void (*EnIkDrawFunc)(struct EnIk*, GlobalContext*);
 

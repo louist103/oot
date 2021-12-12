@@ -187,7 +187,7 @@ void EnInsect_Init(Actor* thisx, GlobalContext* globalCtx2) {
 
     if (this->unk_314 & 4) {
         this->unk_31C = Rand_S16Offset(200, 40);
-        this->actor.flags |= ACTOR_FLAG_4;
+        this->actor.flags |= ACTOR_FLAG_ALWAYS_UPDATE;
     }
 
     if (temp_s2 == 2 || temp_s2 == 3) {

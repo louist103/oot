@@ -7,7 +7,7 @@
 #include "z_en_okarina_effect.h"
 #include "vt.h"
 
-#define FLAGS (ACTOR_FLAG_4 | ACTOR_FLAG_25)
+#define FLAGS (ACTOR_FLAG_ALWAYS_UPDATE | ACTOR_FLAG_25)
 
 void EnOkarinaEffect_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnOkarinaEffect_Destroy(Actor* thisx, GlobalContext* globalCtx);

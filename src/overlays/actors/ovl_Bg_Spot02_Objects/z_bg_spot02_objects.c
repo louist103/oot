@@ -7,7 +7,7 @@
 #include "z_bg_spot02_objects.h"
 #include "objects/object_spot02_objects/object_spot02_objects.h"
 
-#define FLAGS (ACTOR_FLAG_4 | ACTOR_FLAG_5)
+#define FLAGS (ACTOR_FLAG_ALWAYS_UPDATE | ACTOR_FLAG_ALWAYS_DRAW)
 
 void BgSpot02Objects_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgSpot02Objects_Destroy(Actor* thisx, GlobalContext* globalCtx);

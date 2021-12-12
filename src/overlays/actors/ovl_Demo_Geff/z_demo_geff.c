@@ -8,7 +8,7 @@
 #include "objects/object_geff/object_geff.h"
 #include "vt.h"
 
-#define FLAGS (ACTOR_FLAG_4 | ACTOR_FLAG_5)
+#define FLAGS (ACTOR_FLAG_ALWAYS_UPDATE | ACTOR_FLAG_ALWAYS_DRAW)
 
 void DemoGeff_Init(Actor* thisx, GlobalContext* globalCtx);
 void DemoGeff_Destroy(Actor* thisx, GlobalContext* globalCtx);

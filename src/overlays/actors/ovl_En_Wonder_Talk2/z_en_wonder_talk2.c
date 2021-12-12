@@ -192,7 +192,7 @@ void func_80B3A3D4(EnWonderTalk2* this, GlobalContext* globalCtx) {
             if (this->talkMode == 4) {
                 this->unk_15A = true;
             }
-            this->actor.flags &= ~(ACTOR_FLAG_0 | ACTOR_FLAG_4);
+            this->actor.flags &= ~(ACTOR_FLAG_0 | ACTOR_FLAG_ALWAYS_UPDATE);
             func_8002DF54(globalCtx, NULL, 7);
             this->unk_156 = true;
             this->actionFunc = func_80B3A4F8;
@@ -253,7 +253,7 @@ void func_80B3A4F8(EnWonderTalk2* this, GlobalContext* globalCtx) {
             if (!this->unk_156) {
                 Message_StartTextbox(globalCtx, this->actor.textId, NULL);
                 func_8002DF54(globalCtx, NULL, 8);
-                this->actor.flags |= ACTOR_FLAG_0 | ACTOR_FLAG_4;
+                this->actor.flags |= ACTOR_FLAG_0 | ACTOR_FLAG_ALWAYS_UPDATE;
                 this->actionFunc = func_80B3A3D4;
             }
 

@@ -6,7 +6,7 @@
 
 #include "z_end_title.h"
 
-#define FLAGS (ACTOR_FLAG_4 | ACTOR_FLAG_5)
+#define FLAGS (ACTOR_FLAG_ALWAYS_UPDATE | ACTOR_FLAG_ALWAYS_DRAW)
 
 void EndTitle_Init(Actor* thisx, GlobalContext* globalCtx);
 void EndTitle_Destroy(Actor* thisx, GlobalContext* globalCtx);

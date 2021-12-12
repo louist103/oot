@@ -7,7 +7,7 @@
 #include "z_en_po_desert.h"
 #include "objects/object_po_field/object_po_field.h"
 
-#define FLAGS (ACTOR_FLAG_4 | ACTOR_FLAG_7 | ACTOR_FLAG_12)
+#define FLAGS (ACTOR_FLAG_ALWAYS_UPDATE | ACTOR_FLAG_7 | ACTOR_FLAG_12)
 
 void EnPoDesert_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnPoDesert_Destroy(Actor* thisx, GlobalContext* globalCtx);

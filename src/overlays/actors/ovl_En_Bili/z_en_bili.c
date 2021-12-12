@@ -219,7 +219,7 @@ void EnBili_SetupBurnt(EnBili* this) {
     this->timer = 20;
     this->collider.base.atFlags &= ~AT_ON;
     this->collider.base.acFlags &= ~AC_ON;
-    this->actor.flags |= ACTOR_FLAG_4;
+    this->actor.flags |= ACTOR_FLAG_ALWAYS_UPDATE;
     this->actor.speedXZ = 0.0f;
     Actor_SetColorFilter(&this->actor, 0x4000, 0xC8, 0x2000, 0x14);
     this->actionFunc = EnBili_Burnt;
@@ -587,7 +587,7 @@ void EnBili_UpdateDamage(EnBili* this, GlobalContext* globalCtx) {
             }
 
             if (this->collider.info.acHitInfo->toucher.dmgFlags & 0x1F820) { // DMG_ARROW
-                this->actor.flags |= ACTOR_FLAG_4;
+                this->actor.flags |= ACTOR_FLAG_ALWAYS_UPDATE;
             }
         }
     }
