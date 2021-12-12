@@ -9,7 +9,7 @@
 #include "scenes/overworld/spot06/spot06_scene.h"
 #include "vt.h"
 
-#define FLAGS (ACTOR_FLAG_0 | ACTOR_FLAG_3)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_3)
 
 void ShotSun_Init(Actor* thisx, GlobalContext* globalCtx);
 void ShotSun_Destroy(Actor* thisx, GlobalContext* globalCtx);
@@ -61,7 +61,7 @@ void ShotSun_Init(Actor* thisx, GlobalContext* globalCtx) {
     params = this->actor.params & 0xFF;
     if (params == 0x40 || params == 0x41) {
         this->unk_1A4 = 0;
-        this->actor.flags |= ACTOR_FLAG_ALWAYS_UPDATE;
+        this->actor.flags |= ACTOR_FLAG_NO_UPDATE_CULLING;
         this->actor.flags |= ACTOR_FLAG_25;
         this->actionFunc = func_80BADF0C;
         this->actor.flags |= ACTOR_FLAG_27;
@@ -69,7 +69,7 @@ void ShotSun_Init(Actor* thisx, GlobalContext* globalCtx) {
         Collider_InitCylinder(globalCtx, &this->collider);
         Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
         this->actionFunc = ShotSun_UpdateHyliaSun;
-        this->actor.flags &= ~ACTOR_FLAG_0;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     }
 }
 

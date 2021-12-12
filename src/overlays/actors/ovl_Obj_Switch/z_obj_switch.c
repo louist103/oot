@@ -8,7 +8,7 @@
 #include "objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
 #include "vt.h"
 
-#define FLAGS ACTOR_FLAG_ALWAYS_UPDATE
+#define FLAGS ACTOR_FLAG_NO_UPDATE_CULLING
 
 // type:        (this->dyna.actor.params & 7)
 // subtype:     (this->dyna.actor.params >> 4 & 7)
@@ -306,7 +306,7 @@ void ObjSwitch_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (type == OBJSWITCH_TYPE_CRYSTAL_TARGETABLE) {
-        this->dyna.actor.flags |= ACTOR_FLAG_0;
+        this->dyna.actor.flags |= ACTOR_FLAG_TARGETABLE;
         this->dyna.actor.targetMode = 4;
     }
 

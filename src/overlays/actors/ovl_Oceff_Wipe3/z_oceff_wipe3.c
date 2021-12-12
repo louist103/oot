@@ -7,7 +7,7 @@
 #include "z_oceff_wipe3.h"
 #include "vt.h"
 
-#define FLAGS (ACTOR_FLAG_ALWAYS_UPDATE | ACTOR_FLAG_25)
+#define FLAGS (ACTOR_FLAG_NO_UPDATE_CULLING | ACTOR_FLAG_25)
 
 void OceffWipe3_Init(Actor* thisx, GlobalContext* globalCtx);
 void OceffWipe3_Destroy(Actor* thisx, GlobalContext* globalCtx);

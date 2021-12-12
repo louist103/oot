@@ -2,7 +2,7 @@
 #include "overlays/actors/ovl_En_Skjneedle/z_en_skjneedle.h"
 #include "objects/object_skj/object_skj.h"
 
-#define FLAGS (ACTOR_FLAG_0 | ACTOR_FLAG_2 | ACTOR_FLAG_ALWAYS_UPDATE | ACTOR_FLAG_25)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_2 | ACTOR_FLAG_NO_UPDATE_CULLING | ACTOR_FLAG_25)
 
 void EnSkj_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnSkj_Destroy(Actor* thisx, GlobalContext* globalCtx);
@@ -381,7 +381,7 @@ void EnSkj_Init(Actor* thisx, GlobalContext* globalCtx2) {
             this->actor.destroy = NULL;
             this->actor.draw = NULL;
             this->actor.update = EnSkj_SariasSongShortStumpUpdate;
-            this->actor.flags &= ~(ACTOR_FLAG_0 | ACTOR_FLAG_2);
+            this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_2);
             this->actor.flags |= 0;
             Actor_ChangeCategory(globalCtx, &globalCtx->actorCtx, thisx, ACTORCAT_PROP);
             break;
@@ -392,7 +392,7 @@ void EnSkj_Init(Actor* thisx, GlobalContext* globalCtx2) {
             this->actor.destroy = NULL;
             this->actor.draw = NULL;
             this->actor.update = EnSkj_OcarinaMinigameShortStumpUpdate;
-            this->actor.flags &= ~(ACTOR_FLAG_0 | ACTOR_FLAG_2);
+            this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_2);
             this->actor.flags |= 0;
             Actor_ChangeCategory(globalCtx, &globalCtx->actorCtx, thisx, ACTORCAT_PROP);
             this->actor.focus.pos.x = 1230.0f;
@@ -414,8 +414,8 @@ void EnSkj_Init(Actor* thisx, GlobalContext* globalCtx2) {
             SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gSkullKidSkel, &gSkullKidPlayFluteAnim, this->jointTable,
                                this->morphTable, 19);
             if ((type >= 0) && (type < 3)) {
-                this->actor.flags &= ~(ACTOR_FLAG_0 | ACTOR_FLAG_2);
-                this->actor.flags |= ACTOR_FLAG_0 | ACTOR_FLAG_3;
+                this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_2);
+                this->actor.flags |= ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_3;
                 Actor_ChangeCategory(globalCtx, &globalCtx->actorCtx, &this->actor, ACTORCAT_NPC);
             }
 
@@ -1213,14 +1213,14 @@ void EnSkj_SariasSongWaitForTextClear(EnSkj* this, GlobalContext* globalCtx) {
 }
 
 void EnSkj_OcarinaGameSetupWaitForPlayer(EnSkj* this) {
-    this->actor.flags &= ~ACTOR_FLAG_0;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     EnSkj_ChangeAnim(this, SKJ_ANIM_WAIT);
     EnSkj_SetupAction(this, SKJ_ACTION_OCARINA_GAME_WAIT_FOR_PLAYER);
 }
 
 void EnSkj_OcarinaGameWaitForPlayer(EnSkj* this, GlobalContext* globalCtx) {
     if (this->playerInRange) {
-        this->actor.flags |= ACTOR_FLAG_0;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         EnSkj_SetupAction(this, SKJ_ACTION_OCARINA_GAME_IDLE);
     }
 }

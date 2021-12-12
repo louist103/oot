@@ -6,7 +6,7 @@
 
 #include "z_magic_fire.h"
 
-#define FLAGS (ACTOR_FLAG_ALWAYS_UPDATE | ACTOR_FLAG_25)
+#define FLAGS (ACTOR_FLAG_NO_UPDATE_CULLING | ACTOR_FLAG_25)
 
 void MagicFire_Init(Actor* thisx, GlobalContext* globalCtx);
 void MagicFire_Destroy(Actor* thisx, GlobalContext* globalCtx);

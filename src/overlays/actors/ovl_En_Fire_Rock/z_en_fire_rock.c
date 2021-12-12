@@ -3,7 +3,7 @@
 #include "vt.h"
 #include "objects/object_efc_star_field/object_efc_star_field.h"
 
-#define FLAGS (ACTOR_FLAG_ALWAYS_UPDATE | ACTOR_FLAG_ALWAYS_DRAW)
+#define FLAGS (ACTOR_FLAG_NO_UPDATE_CULLING | ACTOR_FLAG_NO_DRAW_CULLING)
 
 void EnFireRock_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnFireRock_Destroy(Actor* thisx, GlobalContext* globalCtx);

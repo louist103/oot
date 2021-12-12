@@ -8,7 +8,7 @@
 #include "objects/object_haka_objects/object_haka_objects.h"
 #include "objects/object_ice_objects/object_ice_objects.h"
 
-#define FLAGS (ACTOR_FLAG_0 | ACTOR_FLAG_ALWAYS_UPDATE)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_NO_UPDATE_CULLING)
 
 typedef enum {
     /* 0 */ SCYTHE_TRAP_SHADOW_TEMPLE,
@@ -170,7 +170,7 @@ void BgHakaSgami_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     if (thisx->params == SCYTHE_TRAP_SHADOW_TEMPLE) {
         this->requiredObjBankIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_HAKA_OBJECTS);
-        thisx->flags &= ~ACTOR_FLAG_0;
+        thisx->flags &= ~ACTOR_FLAG_TARGETABLE;
     } else {
         this->requiredObjBankIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_ICE_OBJECTS);
         this->colliderScytheCenter.dim.radius = 30;
@@ -200,7 +200,7 @@ void BgHakaSgami_SetupSpin(BgHakaSgami* this, GlobalContext* globalCtx) {
         this->actor.objBankIndex = this->requiredObjBankIndex;
         this->actor.draw = BgHakaSgami_Draw;
         this->timer = SCYTHE_SPIN_TIME;
-        this->actor.flags &= ~ACTOR_FLAG_ALWAYS_UPDATE;
+        this->actor.flags &= ~ACTOR_FLAG_NO_UPDATE_CULLING;
         this->actionFunc = BgHakaSgami_Spin;
     }
 }

@@ -12,7 +12,7 @@
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/object_tsubo/object_tsubo.h"
 
-#define FLAGS (ACTOR_FLAG_ALWAYS_UPDATE | ACTOR_FLAG_ALWAYS_DRAW)
+#define FLAGS (ACTOR_FLAG_NO_UPDATE_CULLING | ACTOR_FLAG_NO_DRAW_CULLING)
 
 typedef enum {
     /* 0 */ MOVE_TARGET,

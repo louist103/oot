@@ -1,6 +1,6 @@
 #include "global.h"
 
-#define FLAGS (ACTOR_FLAG_0 | ACTOR_FLAG_2 | ACTOR_FLAG_ALWAYS_UPDATE | ACTOR_FLAG_ALWAYS_DRAW | ACTOR_FLAG_25 | ACTOR_FLAG_26)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_2 | ACTOR_FLAG_NO_UPDATE_CULLING | ACTOR_FLAG_NO_DRAW_CULLING | ACTOR_FLAG_25 | ACTOR_FLAG_26)
 
 void (*sPlayerCallInitFunc)(Actor* thisx, GlobalContext* globalCtx);
 void (*sPlayerCallDestroyFunc)(Actor* thisx, GlobalContext* globalCtx);

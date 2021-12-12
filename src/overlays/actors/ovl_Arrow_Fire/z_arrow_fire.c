@@ -7,7 +7,7 @@
 #include "z_arrow_fire.h"
 #include "overlays/actors/ovl_En_Arrow/z_en_arrow.h"
 
-#define FLAGS (ACTOR_FLAG_ALWAYS_UPDATE | ACTOR_FLAG_25)
+#define FLAGS (ACTOR_FLAG_NO_UPDATE_CULLING | ACTOR_FLAG_25)
 
 void ArrowFire_Init(Actor* thisx, GlobalContext* globalCtx);
 void ArrowFire_Destroy(Actor* thisx, GlobalContext* globalCtx);

@@ -7,7 +7,7 @@
 #include "z_eff_dust.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_ALWAYS_UPDATE | ACTOR_FLAG_ALWAYS_DRAW)
+#define FLAGS (ACTOR_FLAG_NO_UPDATE_CULLING | ACTOR_FLAG_NO_DRAW_CULLING)
 
 void EffDust_Init(Actor* thisx, GlobalContext* globalCtx);
 void EffDust_Destroy(Actor* thisx, GlobalContext* globalCtx);

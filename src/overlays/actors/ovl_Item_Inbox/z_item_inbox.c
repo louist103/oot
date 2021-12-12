@@ -6,7 +6,7 @@
 
 #include "z_item_inbox.h"
 
-#define FLAGS (ACTOR_FLAG_0 | ACTOR_FLAG_3)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_3)
 
 void ItemInbox_Init(Actor* thisx, GlobalContext* globalCtx);
 void ItemInbox_Destroy(Actor* thisx, GlobalContext* globalCtx);

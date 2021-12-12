@@ -6,7 +6,7 @@
 
 #include "z_en_river_sound.h"
 
-#define FLAGS (ACTOR_FLAG_ALWAYS_UPDATE | ACTOR_FLAG_ALWAYS_DRAW)
+#define FLAGS (ACTOR_FLAG_NO_UPDATE_CULLING | ACTOR_FLAG_NO_DRAW_CULLING)
 
 void EnRiverSound_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnRiverSound_Destroy(Actor* thisx, GlobalContext* globalCtx);

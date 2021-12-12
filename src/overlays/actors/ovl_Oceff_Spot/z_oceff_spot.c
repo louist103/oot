@@ -7,7 +7,7 @@
 #include "z_oceff_spot.h"
 #include "vt.h"
 
-#define FLAGS (ACTOR_FLAG_ALWAYS_UPDATE | ACTOR_FLAG_25)
+#define FLAGS (ACTOR_FLAG_NO_UPDATE_CULLING | ACTOR_FLAG_25)
 
 void OceffSpot_Init(Actor* thisx, GlobalContext* globalCtx);
 void OceffSpot_Destroy(Actor* thisx, GlobalContext* globalCtx);

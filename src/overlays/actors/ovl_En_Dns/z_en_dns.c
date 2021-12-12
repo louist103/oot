@@ -8,7 +8,7 @@
 #include "objects/object_shopnuts/object_shopnuts.h"
 #include "vt.h"
 
-#define FLAGS (ACTOR_FLAG_0 | ACTOR_FLAG_3)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_3)
 
 void EnDns_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnDns_Destroy(Actor* thisx, GlobalContext* globalCtx);
@@ -410,7 +410,7 @@ void func_809EFF98(EnDns* this, GlobalContext* globalCtx) {
             this->dnsItemEntry->setRupeesAndFlags(this);
             this->dropCollectible = 1;
             this->maintainCollider = 0;
-            this->actor.flags &= ~ACTOR_FLAG_0;
+            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             EnDns_Change(this, 1);
             this->actionFunc = EnDns_SetupBurrow;
         }
@@ -418,7 +418,7 @@ void func_809EFF98(EnDns* this, GlobalContext* globalCtx) {
         this->dnsItemEntry->setRupeesAndFlags(this);
         this->dropCollectible = 1;
         this->maintainCollider = 0;
-        this->actor.flags &= ~ACTOR_FLAG_0;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         EnDns_Change(this, 1);
         this->actionFunc = EnDns_SetupBurrow;
     }
@@ -427,7 +427,7 @@ void func_809EFF98(EnDns* this, GlobalContext* globalCtx) {
 void func_809F008C(EnDns* this, GlobalContext* globalCtx) {
     if ((Message_GetState(&globalCtx->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(globalCtx)) {
         this->maintainCollider = 0;
-        this->actor.flags &= ~ACTOR_FLAG_0;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         EnDns_Change(this, 1);
         this->actionFunc = EnDns_SetupBurrow;
     }

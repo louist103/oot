@@ -1,7 +1,7 @@
 #include "z_efc_erupc.h"
 #include "objects/object_efc_erupc/object_efc_erupc.h"
 
-#define FLAGS (ACTOR_FLAG_ALWAYS_UPDATE | ACTOR_FLAG_ALWAYS_DRAW)
+#define FLAGS (ACTOR_FLAG_NO_UPDATE_CULLING | ACTOR_FLAG_NO_DRAW_CULLING)
 
 void EfcErupc_Init(Actor* thisx, GlobalContext* globalCtx);
 void EfcErupc_Destroy(Actor* thisx, GlobalContext* globalCtx);

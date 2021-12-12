@@ -8,7 +8,7 @@
 #include "vt.h"
 #include "objects/object_ta/object_ta.h"
 
-#define FLAGS (ACTOR_FLAG_0 | ACTOR_FLAG_3)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_3)
 
 void EnTa_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnTa_Destroy(Actor* thisx, GlobalContext* globalCtx);
@@ -180,7 +180,7 @@ void EnTa_Init(Actor* thisx, GlobalContext* globalCtx2) {
                     Actor_Kill(&this->actor);
                 } else {
                     if (IS_DAY) {
-                        this->actor.flags |= ACTOR_FLAG_ALWAYS_UPDATE;
+                        this->actor.flags |= ACTOR_FLAG_NO_UPDATE_CULLING;
                         this->unk_2C4[0] = this->unk_2C4[1] = this->unk_2C4[2] = 7;
                         this->superCuccos[0] = (EnNiw*)Actor_Spawn(
                             &globalCtx->actorCtx, globalCtx, ACTOR_EN_NIW, this->actor.world.pos.x + 5.0f,
@@ -453,7 +453,7 @@ void func_80B14AF4(EnTa* this, GlobalContext* globalCtx) {
         Audio_PlayActorSound2(&this->actor, NA_SE_VO_TA_CRY_1);
         func_80B13AA0(this, func_80B14A54, func_80B167C0);
         this->unk_2CC = 65;
-        this->actor.flags |= ACTOR_FLAG_ALWAYS_UPDATE;
+        this->actor.flags |= ACTOR_FLAG_NO_UPDATE_CULLING;
     }
 }
 

@@ -12,7 +12,7 @@
 #include "objects/object_dns/object_dns.h"
 #include "objects/object_dnk/object_dnk.h"
 
-#define FLAGS ACTOR_FLAG_ALWAYS_UPDATE
+#define FLAGS ACTOR_FLAG_NO_UPDATE_CULLING
 
 void EnNutsball_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnNutsball_Destroy(Actor* thisx, GlobalContext* globalCtx);

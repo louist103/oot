@@ -8,7 +8,7 @@
 #include "objects/object_poh/object_poh.h"
 #include "objects/object_po_composer/object_po_composer.h"
 
-#define FLAGS (ACTOR_FLAG_0 | ACTOR_FLAG_2 | ACTOR_FLAG_ALWAYS_UPDATE | ACTOR_FLAG_12)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_2 | ACTOR_FLAG_NO_UPDATE_CULLING | ACTOR_FLAG_12)
 
 void EnPoh_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnPoh_Destroy(Actor* thisx, GlobalContext* globalCtx);
@@ -315,7 +315,7 @@ void func_80ADE368(EnPoh* this) {
 
 void EnPoh_SetupInitialAction(EnPoh* this) {
     this->lightColor.a = 0;
-    this->actor.flags &= ~ACTOR_FLAG_0;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     if (this->infoIdx == EN_POH_INFO_NORMAL) {
         Animation_PlayOnceSetSpeed(&this->skelAnime, &gPoeAppearAnim, 0.0f);
         this->actionFunc = func_80ADEF38;
@@ -333,7 +333,7 @@ void func_80ADE48C(EnPoh* this) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->unk_198 = 0;
     this->actor.naviEnemyId = 0xFF;
-    this->actor.flags &= ~ACTOR_FLAG_0;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->actionFunc = func_80ADF15C;
 }
 
@@ -372,7 +372,7 @@ void EnPoh_SetupDeath(EnPoh* this, GlobalContext* globalCtx) {
     this->actor.draw = EnPoh_DrawSoul;
     this->actor.shape.shadowDraw = NULL;
     Actor_SetScale(&this->actor, 0.01f);
-    this->actor.flags |= ACTOR_FLAG_ALWAYS_UPDATE;
+    this->actor.flags |= ACTOR_FLAG_NO_UPDATE_CULLING;
     this->actor.gravity = -1.0f;
     this->actor.shape.yOffset = 1500.0f;
     this->actor.world.pos.y -= 15.0f;
@@ -435,7 +435,7 @@ void EnPoh_Talk(EnPoh* this, GlobalContext* globalCtx) {
     }
     this->unk_198 = 200;
     this->unk_195 = 32;
-    this->actor.flags |= ACTOR_FLAG_0;
+    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     this->actionFunc = func_80ADFE80;
 }
 
@@ -578,7 +578,7 @@ void func_80ADEF38(EnPoh* this, GlobalContext* globalCtx) {
     if (SkelAnime_Update(&this->skelAnime)) {
         this->lightColor.a = 255;
         this->visibilityTimer = Rand_S16Offset(700, 300);
-        this->actor.flags |= ACTOR_FLAG_0;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         EnPoh_SetupIdle(this);
     } else if (this->skelAnime.curFrame > 10.0f) {
         this->lightColor.a = ((this->skelAnime.curFrame - 10.0f) * 0.05f) * 255.0f;
@@ -593,7 +593,7 @@ void EnPoh_ComposerAppear(EnPoh* this, GlobalContext* globalCtx) {
     if (SkelAnime_Update(&this->skelAnime)) {
         this->lightColor.a = 255;
         this->visibilityTimer = Rand_S16Offset(700, 300);
-        this->actor.flags |= ACTOR_FLAG_0;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         EnPoh_SetupIdle(this);
     } else {
         this->lightColor.a = CLAMP_MAX((s32)(this->skelAnime.curFrame * 25.5f), 255);
@@ -927,7 +927,7 @@ void EnPoh_Update(Actor* thisx, GlobalContext* globalCtx) {
             this->colliderCyl.dim.height = 55;
             this->colliderCyl.dim.yShift = 15;
         }
-        this->actor.flags &= ~ACTOR_FLAG_ALWAYS_UPDATE;
+        this->actor.flags &= ~ACTOR_FLAG_NO_UPDATE_CULLING;
         EnPoh_SetupInitialAction(this);
     }
 }

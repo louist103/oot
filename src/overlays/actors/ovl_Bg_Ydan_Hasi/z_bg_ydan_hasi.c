@@ -7,7 +7,7 @@
 #include "z_bg_ydan_hasi.h"
 #include "objects/object_ydan_objects/object_ydan_objects.h"
 
-#define FLAGS (ACTOR_FLAG_ALWAYS_UPDATE | ACTOR_FLAG_ALWAYS_DRAW)
+#define FLAGS (ACTOR_FLAG_NO_UPDATE_CULLING | ACTOR_FLAG_NO_DRAW_CULLING)
 
 void BgYdanHasi_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgYdanHasi_Destroy(Actor* thisx, GlobalContext* globalCtx);

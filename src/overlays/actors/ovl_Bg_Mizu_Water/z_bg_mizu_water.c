@@ -7,7 +7,7 @@
 #include "z_bg_mizu_water.h"
 #include "objects/object_mizu_objects/object_mizu_objects.h"
 
-#define FLAGS (ACTOR_FLAG_ALWAYS_UPDATE | ACTOR_FLAG_ALWAYS_DRAW)
+#define FLAGS (ACTOR_FLAG_NO_UPDATE_CULLING | ACTOR_FLAG_NO_DRAW_CULLING)
 
 void BgMizuWater_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgMizuWater_Destroy(Actor* thisx, GlobalContext* globalCtx);

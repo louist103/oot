@@ -8,7 +8,7 @@
 #include "vt.h"
 #include "objects/object_gla/object_gla.h"
 
-#define FLAGS (ACTOR_FLAG_0 | ACTOR_FLAG_3 | ACTOR_FLAG_ALWAYS_UPDATE)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_3 | ACTOR_FLAG_NO_UPDATE_CULLING)
 
 #define GE2_STATE_ANIMCOMPLETE (1 << 1)
 #define GE2_STATE_KO (1 << 2)
@@ -294,7 +294,7 @@ void EnGe2_KnockedOut(EnGe2* this, GlobalContext* globalCtx) {
     s32 effectAngle;
     Vec3f effectPos;
 
-    this->actor.flags &= ~ACTOR_FLAG_0;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     if (this->stateFlags & GE2_STATE_ANIMCOMPLETE) {
         effectAngle = (globalCtx->state.frames) * 0x2800;
         effectPos.x = this->actor.focus.pos.x + (Math_CosS(effectAngle) * 5.0f);

@@ -4,7 +4,7 @@
 #include "objects/object_efc_star_field/object_efc_star_field.h"
 #include "objects/object_toki_objects/object_toki_objects.h"
 
-#define FLAGS (ACTOR_FLAG_ALWAYS_UPDATE | ACTOR_FLAG_ALWAYS_DRAW)
+#define FLAGS (ACTOR_FLAG_NO_UPDATE_CULLING | ACTOR_FLAG_NO_DRAW_CULLING)
 
 void DemoKankyo_Init(Actor* thisx, GlobalContext* globalCtx);
 void DemoKankyo_Destroy(Actor* thisx, GlobalContext* globalCtx);

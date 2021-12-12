@@ -484,7 +484,7 @@ void func_8002C7BC(TargetContext* targetCtx, Player* player, Actor* actorArg, Gl
                 targetCtx->unk_48 = 0;
             }
 
-            lockOnSfxId = CHECK_FLAG_ALL(actorArg->flags, ACTOR_FLAG_0 | ACTOR_FLAG_2) ? NA_SE_SY_LOCK_ON
+            lockOnSfxId = CHECK_FLAG_ALL(actorArg->flags, ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_2) ? NA_SE_SY_LOCK_ON
                                                                                        : NA_SE_SY_LOCK_ON_HUMAN;
             func_80078884(lockOnSfxId);
         }
@@ -763,7 +763,7 @@ s32 func_8002D53C(GlobalContext* globalCtx, TitleCardContext* titleCtx) {
 void Actor_Kill(Actor* actor) {
     actor->draw = NULL;
     actor->update = NULL;
-    actor->flags &= ~ACTOR_FLAG_0;
+    actor->flags &= ~ACTOR_FLAG_TARGETABLE;
 }
 
 void Actor_SetWorldToHome(Actor* actor) {
@@ -1472,7 +1472,7 @@ u32 func_8002F090(Actor* actor, f32 arg1) {
 }
 
 s32 func_8002F0C8(Actor* actor, Player* player, s32 flag) {
-    if ((actor->update == NULL) || !(actor->flags & ACTOR_FLAG_0)) {
+    if ((actor->update == NULL) || !(actor->flags & ACTOR_FLAG_TARGETABLE)) {
         return true;
     }
 
@@ -2079,7 +2079,7 @@ void Actor_UpdateAll(GlobalContext* globalCtx, ActorContext* actorCtx) {
                 actor->yawTowardsPlayer = Actor_WorldYawTowardActor(actor, &player->actor);
                 actor->flags &= ~ACTOR_FLAG_24;
 
-                if ((DECR(actor->freezeTimer) == 0) && (actor->flags & (ACTOR_FLAG_ALWAYS_UPDATE | ACTOR_FLAG_6))) {
+                if ((DECR(actor->freezeTimer) == 0) && (actor->flags & (ACTOR_FLAG_NO_UPDATE_CULLING | ACTOR_FLAG_NOT_CULLED))) {
                     if (actor == player->unk_664) {
                         actor->isTargeted = true;
                     } else {
@@ -2373,16 +2373,16 @@ void func_800315AC(GlobalContext* globalCtx, ActorContext* actorCtx) {
 
             if ((HREG(64) != 1) || ((HREG(65) != -1) && (HREG(65) != HREG(66))) || (HREG(70) == 0)) {
                 if (func_800314B0(globalCtx, actor)) {
-                    actor->flags |= ACTOR_FLAG_6;
+                    actor->flags |= ACTOR_FLAG_NOT_CULLED;
                 } else {
-                    actor->flags &= ~ACTOR_FLAG_6;
+                    actor->flags &= ~ACTOR_FLAG_NOT_CULLED;
                 }
             }
 
             actor->isDrawn = false;
 
             if ((HREG(64) != 1) || ((HREG(65) != -1) && (HREG(65) != HREG(66))) || (HREG(71) == 0)) {
-                if ((actor->init == NULL) && (actor->draw != NULL) && (actor->flags & (ACTOR_FLAG_ALWAYS_DRAW | ACTOR_FLAG_6))) {
+                if ((actor->init == NULL) && (actor->draw != NULL) && (actor->flags & (ACTOR_FLAG_NO_DRAW_CULLING | ACTOR_FLAG_NOT_CULLED))) {
                     if ((actor->flags & ACTOR_FLAG_7) &&
                         ((globalCtx->roomCtx.curRoom.showInvisActors == 0) || (globalCtx->actorCtx.unk_03 != 0) ||
                          (actor->room != globalCtx->roomCtx.curRoom.num))) {
@@ -2890,11 +2890,11 @@ void func_800328D4(GlobalContext* globalCtx, ActorContext* actorCtx, Player* pla
     sp84 = player->unk_664;
 
     while (actor != NULL) {
-        if ((actor->update != NULL) && ((Player*)actor != player) && CHECK_FLAG_ALL(actor->flags, ACTOR_FLAG_0)) {
+        if ((actor->update != NULL) && ((Player*)actor != player) && CHECK_FLAG_ALL(actor->flags, ACTOR_FLAG_TARGETABLE)) {
 
             // This block below is for determining the closest actor to player in determining the volume
             // used while playing enemy bgm music
-            if ((actorCategory == ACTORCAT_ENEMY) && CHECK_FLAG_ALL(actor->flags, ACTOR_FLAG_0 | ACTOR_FLAG_2) &&
+            if ((actorCategory == ACTORCAT_ENEMY) && CHECK_FLAG_ALL(actor->flags, ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_2) &&
                 (actor->xyzDistToPlayerSq < SQ(500.0f)) && (actor->xyzDistToPlayerSq < sbgmEnemyDistSq)) {
                 actorCtx->targetCtx.bgmEnemy = actor;
                 sbgmEnemyDistSq = actor->xyzDistToPlayerSq;
@@ -3846,10 +3846,10 @@ s16 func_80034DD4(Actor* actor, GlobalContext* globalCtx, s16 arg2, f32 arg3) {
     }
 
     if (arg3 < var) {
-        actor->flags &= ~ACTOR_FLAG_0;
+        actor->flags &= ~ACTOR_FLAG_TARGETABLE;
         Math_SmoothStepToS(&arg2, 0, 6, 0x14, 1);
     } else {
-        actor->flags |= ACTOR_FLAG_0;
+        actor->flags |= ACTOR_FLAG_TARGETABLE;
         Math_SmoothStepToS(&arg2, 0xFF, 6, 0x14, 1);
     }
 

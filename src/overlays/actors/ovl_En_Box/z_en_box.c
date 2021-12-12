@@ -133,7 +133,7 @@ void EnBox_Init(Actor* thisx, GlobalContext* globalCtx2) {
         EnBox_SetupAction(this, EnBox_FallOnSwitchFlag);
         this->alpha = 0;
         this->movementFlags |= ENBOX_MOVE_IMMOBILE;
-        this->dyna.actor.flags |= ACTOR_FLAG_ALWAYS_UPDATE;
+        this->dyna.actor.flags |= ACTOR_FLAG_NO_UPDATE_CULLING;
     } else if ((this->type == ENBOX_TYPE_ROOM_CLEAR_BIG || this->type == ENBOX_TYPE_ROOM_CLEAR_SMALL) &&
                !Flags_GetClear(globalCtx, this->dyna.actor.room)) {
         EnBox_SetupAction(this, EnBox_AppearOnRoomClear);
@@ -141,7 +141,7 @@ void EnBox_Init(Actor* thisx, GlobalContext* globalCtx2) {
         this->movementFlags |= ENBOX_MOVE_IMMOBILE;
         this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y - 50.0f;
         this->alpha = 0;
-        this->dyna.actor.flags |= ACTOR_FLAG_ALWAYS_UPDATE;
+        this->dyna.actor.flags |= ACTOR_FLAG_NO_UPDATE_CULLING;
     } else if (this->type == ENBOX_TYPE_9 || this->type == ENBOX_TYPE_10) {
         EnBox_SetupAction(this, func_809C9700);
         this->dyna.actor.flags |= ACTOR_FLAG_25;
@@ -149,14 +149,14 @@ void EnBox_Init(Actor* thisx, GlobalContext* globalCtx2) {
         this->movementFlags |= ENBOX_MOVE_IMMOBILE;
         this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y - 50.0f;
         this->alpha = 0;
-        this->dyna.actor.flags |= ACTOR_FLAG_ALWAYS_UPDATE;
+        this->dyna.actor.flags |= ACTOR_FLAG_NO_UPDATE_CULLING;
     } else if (this->type == ENBOX_TYPE_SWITCH_FLAG_BIG && !Flags_GetSwitch(globalCtx, this->switchFlag)) {
         EnBox_SetupAction(this, EnBox_AppearOnSwitchFlag);
         func_8003EBF8(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
         this->movementFlags |= ENBOX_MOVE_IMMOBILE;
         this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y - 50.0f;
         this->alpha = 0;
-        this->dyna.actor.flags |= ACTOR_FLAG_ALWAYS_UPDATE;
+        this->dyna.actor.flags |= ACTOR_FLAG_NO_UPDATE_CULLING;
     } else {
         if (this->type == ENBOX_TYPE_4 || this->type == ENBOX_TYPE_6) {
             this->dyna.actor.flags |= ACTOR_FLAG_7;

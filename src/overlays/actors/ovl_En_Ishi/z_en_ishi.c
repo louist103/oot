@@ -10,7 +10,7 @@
 
 #include "vt.h"
 
-#define FLAGS ACTOR_FLAG_23
+#define FLAGS ACTOR_FLAG_NO_DROP
 
 void EnIshi_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnIshi_Destroy(Actor* thisx, GlobalContext* globalCtx);
@@ -381,7 +381,7 @@ void EnIshi_Wait(EnIshi* this, GlobalContext* globalCtx) {
 void EnIshi_SetupLiftedUp(EnIshi* this) {
     this->actionFunc = EnIshi_LiftedUp;
     this->actor.room = -1;
-    this->actor.flags |= ACTOR_FLAG_ALWAYS_UPDATE;
+    this->actor.flags |= ACTOR_FLAG_NO_UPDATE_CULLING;
 }
 
 void EnIshi_LiftedUp(EnIshi* this, GlobalContext* globalCtx) {

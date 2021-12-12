@@ -7,7 +7,7 @@
 #include "z_en_st.h"
 #include "objects/object_st/object_st.h"
 
-#define FLAGS (ACTOR_FLAG_0 | ACTOR_FLAG_2 | ACTOR_FLAG_ALWAYS_UPDATE | ACTOR_FLAG_ALWAYS_DRAW)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_2 | ACTOR_FLAG_NO_UPDATE_CULLING | ACTOR_FLAG_NO_DRAW_CULLING)
 
 void EnSt_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnSt_Destroy(Actor* thisx, GlobalContext* globalCtx);
@@ -448,7 +448,7 @@ s32 EnSt_CheckHitBackside(EnSt* this, GlobalContext* globalCtx) {
         return false;
     }
     Enemy_StartFinishingBlow(globalCtx, &this->actor);
-    this->actor.flags &= ~ACTOR_FLAG_0;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->groundBounces = 3;
     this->deathTimer = 20;
     this->actor.gravity = -1.0f;
