@@ -1,5 +1,6 @@
 #include "global.h"
 #include "vt.h"
+#include "profiler.h"
 
 s32 gScreenWidth = SCREEN_WIDTH;
 s32 gScreenHeight = SCREEN_HEIGHT;
@@ -65,6 +66,7 @@ void Main(void* arg) {
     }
     osSyncPrintf("debug_InitArena(%08x, %08x)\n", debugHeap, debugHeapSize);
     DebugArena_Init(debugHeap, debugHeapSize);
+    Profilers_Init();
     func_800636C0();
 
     R_ENABLE_ARENA_DBG = 0;

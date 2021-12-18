@@ -1,5 +1,6 @@
 #include "global.h"
 #include "vt.h"
+#include "profiler.h"
 
 void* D_8012D1F0 = NULL;
 UNK_TYPE D_8012D1F4 = 0; // unused
@@ -838,7 +839,9 @@ void Gameplay_Update(GlobalContext* globalCtx) {
                         LOG_NUM("1", 1, "../z_play.c", 3618);
                     }
 
+                    Profiler_CPU_Begin("CollisionCheck_OC()");
                     CollisionCheck_OC(globalCtx, &globalCtx->colChkCtx);
+                    Profiler_CPU_End();
 
                     if (1 && HREG(63)) {
                         LOG_NUM("1", 1, "../z_play.c", 3624);
@@ -855,10 +858,11 @@ void Gameplay_Update(GlobalContext* globalCtx) {
                     if (1 && HREG(63)) {
                         LOG_NUM("1", 1, "../z_play.c", 3637);
                     }
-
+                    Profiler_CPU_Begin("ActorUpdateAll");
                     if (globalCtx->unk_11DE9 == 0) {
                         Actor_UpdateAll(globalCtx, &globalCtx->actorCtx);
                     }
+                    Profiler_CPU_End();
 
                     if (1 && HREG(63)) {
                         LOG_NUM("1", 1, "../z_play.c", 3643);
@@ -876,13 +880,17 @@ void Gameplay_Update(GlobalContext* globalCtx) {
                         LOG_NUM("1", 1, "../z_play.c", 3651);
                     }
 
+                    Profiler_CPU_Begin("Effect_UpdateAll");
                     Effect_UpdateAll(globalCtx);
+                    Profiler_CPU_End();
 
                     if (1 && HREG(63)) {
                         LOG_NUM("1", 1, "../z_play.c", 3657);
                     }
 
+                    Profiler_CPU_Begin("EffectSs_UpdateAll");
                     EffectSs_UpdateAll(globalCtx);
+                    Profiler_CPU_End();
 
                     if (1 && HREG(63)) {
                         LOG_NUM("1", 1, "../z_play.c", 3662);
@@ -1322,6 +1330,8 @@ void Gameplay_Main(GameState* thisx) {
     GlobalContext* globalCtx = (GlobalContext*)thisx;
 
     D_8012D1F8 = &globalCtx->state.input[0];
+    Profiler_CPU_Clear();
+    Profiler_CPU_Begin("Gameplay_Main()");
 
     DebugDisplay_Init();
 
@@ -1347,17 +1357,22 @@ void Gameplay_Main(GameState* thisx) {
     }
 
     if ((HREG(80) != 10) || (HREG(81) != 0)) {
+        Profiler_CPU_Begin("Gameplay_Update()");
         Gameplay_Update(globalCtx);
+        Profiler_CPU_End();
     }
 
     if (1 && HREG(63)) {
         LOG_NUM("1", 1, "../z_play.c", 4583);
     }
+    Profiler_CPU_Begin("Gameplay_Draw()");
     Gameplay_Draw(globalCtx);
+    Profiler_CPU_End();
 
     if (1 && HREG(63)) {
         LOG_NUM("1", 1, "../z_play.c", 4587);
     }
+    Profiler_CPU_End();
 }
 
 // original name: "Game_play_demo_mode_check"

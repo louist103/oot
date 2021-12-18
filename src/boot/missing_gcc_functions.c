@@ -3,9 +3,9 @@
 // Define functions needed for the GCC build here.
 
 // Self-hosted memcmp.
-int memcmp(void *s1, const void *s2, size_t n) {
-    u8 *m1 = (u8 *)s1;
-    u8 *m2 = (u8 *)s2;
+int memcmp(void* s1, const void* s2, size_t n) {
+    u8* m1 = (u8*)s1;
+    u8* m2 = (u8*)s2;
     int i;
     for (i = 0; i < n; i++) {
         if (m1[i] < m2[i]) {
@@ -17,10 +17,10 @@ int memcmp(void *s1, const void *s2, size_t n) {
     return 0;
 }
 
-void *memset(void *str, int c, size_t n) {
-    u8 *m1 = (u8 *)str;
+void* memset(void* str, int c, size_t n) {
+    u8* m1 = (u8*)str;
     int i;
-    for(i = 0; i < n; i++) {
+    for (i = 0; i < n; i++) {
         m1[i] = c;
     }
     return str;
@@ -60,7 +60,7 @@ f64 __floatdidf(s32 c) {
 
 // These functions convert c, an unsigned integer, to floating point.
 f32 __floatundisf(u32 c) {
-    return (f32)c;    
+    return (f32)c;
 }
 
 f64 __floatundidf(u32 c) {

@@ -33,6 +33,42 @@ InputCombo inputCombos[REG_GROUPS] = {
 
 char regChar[] = " SOPQMYDUIZCNKXcsiWAVHGmnBdkb";
 
+#define SECONDS_PER_CYCLE 0.00000002133f
+
+#define FPS_COUNTER_X_POS 24
+#define FPS_COUNTER_Y_POS 190
+
+OSTime gLastOSTime = 0;
+float gFrameTime = 0.0f;
+u16 gFrames = 0;
+u16 gFPS = 0;
+
+void OSTimeToFrameTime(OSTime diff) {
+    gFrameTime += diff * SECONDS_PER_CYCLE;
+    gFrames++;
+}
+
+void RenderFPS(GfxPrint* gfxPrint) {
+    // if(gRenderFPS)
+    {
+        OSTime newTime = osGetTime();
+        OSTimeToFrameTime(newTime - gLastOSTime);
+
+        // If frame time is longer or equal to a second, update FPS counter.
+        if (gFrameTime >= 1.0f) {
+            gFPS = gFrames;
+            gFrames = 0;
+            gFrameTime -= 1.0f;
+        }
+
+        GfxPrint_SetColor(gfxPrint, 0xFF, 0xFF, 0xFF, 0xFF);
+        GfxPrint_SetPos(gfxPrint, 0, 0);
+        GfxPrint_Printf(gfxPrint, "FPS: %i", gFPS);
+
+        gLastOSTime = newTime;
+    }
+}
+
 // initialize GameInfo
 void func_800636C0(void) {
     s32 i;
@@ -228,6 +264,8 @@ void func_80063D7C(GraphicsContext* gfxCtx) {
     if (gGameInfo->regPage != 0) {
         func_80063C04(&printer);
     }
+    RenderFPS(&printer);
+    Profiler_Draw(&printer);
 
     D_8011E0B0 = 0;
     sp7C = GfxPrint_Close(&printer);

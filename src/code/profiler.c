@@ -4,11 +4,11 @@
 #include <variables.h>
 
 Profiler profilerCPU;
-Profiler profilerGPU; // INCOMPLETE
+// Profiler profilerGPU; // INCOMPLETE
 
 static s32 profilerInitHack = 0;
 
-#define MS_PER_CYCLE 0.00000002133f * 1000.0
+#define MS_PER_CYCLE 0.00000002133f * 1000.0f
 
 void Profiler_Init(Profiler* profiler, u16 capacity, StackType stackType) {
     s32 i;
