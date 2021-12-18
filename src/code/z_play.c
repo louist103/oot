@@ -970,8 +970,9 @@ void Gameplay_Update(GlobalContext* globalCtx) {
             if (1 && HREG(63)) {
                 LOG_NUM("1", 1, "../z_play.c", 3742);
             }
-
+            Profiler_CPU_Begin("Interface_Update");
             Interface_Update(globalCtx);
+            Profiler_CPU_End();
 
             if (1 && HREG(63)) {
                 LOG_NUM("1", 1, "../z_play.c", 3765);
@@ -1019,7 +1020,7 @@ skip:
         if (1 && HREG(63)) {
             LOG_NUM("1", 1, "../z_play.c", 3806);
         }
-
+        Profiler_CPU_Begin("Camera");
         for (i = 0; i < NUM_CAMS; i++) {
             if ((i != globalCtx->nextCamera) && (globalCtx->cameraPtrs[i] != NULL)) {
                 if (1 && HREG(63)) {
@@ -1031,7 +1032,7 @@ skip:
         }
 
         Camera_Update(globalCtx->cameraPtrs[globalCtx->nextCamera]);
-
+        Profiler_CPU_End();
         if (1 && HREG(63)) {
             LOG_NUM("1", 1, "../z_play.c", 3814);
         }

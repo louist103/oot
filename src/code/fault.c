@@ -997,7 +997,7 @@ void Fault_ThreadEntry(void* arg) {
             Fault_Wait5Seconds();
         } else {
             Fault_DrawCornerRec(0xF801);
-            Fault_WaitForButtonCombo();
+          //  Fault_WaitForButtonCombo();
         }
 
         sFaultStructPtr->faultActive = true;

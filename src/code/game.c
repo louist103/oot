@@ -1,5 +1,6 @@
 #include "global.h"
 #include "vt.h"
+#include "profiler.h"
 
 SpeedMeter D_801664D0;
 struct_801664F0 D_801664F0;
@@ -139,15 +140,58 @@ void GameState_DrawInputDisplay(u16 input, Gfx** gfx) {
     *gfx = gfxP;
 }
 
+#define SECONDS_PER_CYCLE 0.00000002133f
+
+#define FPS_COUNTER_X_POS 24
+#define FPS_COUNTER_Y_POS 190
+
+OSTime gLastOSTime = 0;
+float gFrameTime = 0.0f;
+u16 gFrames = 0;
+u16 gFPS = 0;
+
+void OSTimeToFrameTime(OSTime diff) {
+    gFrameTime += diff * SECONDS_PER_CYCLE;
+    gFrames++;
+}
+
+void RenderFPS(GfxPrint* gfxPrint) {
+    // if(gRenderFPS)
+    {
+        OSTime newTime = osGetTime();
+        OSTimeToFrameTime(newTime - gLastOSTime);
+
+        // If frame time is longer or equal to a second, update FPS counter.
+        if (gFrameTime >= 1.0f) {
+            gFPS = gFrames;
+            gFrames = 0;
+            gFrameTime -= 1.0f;
+        }
+
+        GfxPrint_SetColor(gfxPrint, 0xFF, 0xFF, 0xFF, 0xFF);
+        GfxPrint_SetPos(gfxPrint, 2, 2);
+        GfxPrint_Printf(gfxPrint, "FPS: %i", gFPS);
+
+        gLastOSTime = newTime;
+    }
+}
+
 void GameState_Draw(GameState* gameState, GraphicsContext* gfxCtx) {
     Gfx* newDList;
     Gfx* polyOpaP;
 
     OPEN_DISPS(gfxCtx, "../game.c", 746);
-
     newDList = Graph_GfxPlusOne(polyOpaP = POLY_OPA_DISP);
     gSPDisplayList(OVERLAY_DISP++, newDList);
 
+    {
+        GfxPrint printer;
+        GfxPrint_Init(&printer);
+        GfxPrint_Open(&printer,newDList);
+        RenderFPS(&printer);
+        Profiler_Draw(&printer);
+        newDList = GfxPrint_Close(&printer);
+    }
     if (R_ENABLE_FB_FILTER == 1) {
         GameState_SetFBFilter(&newDList);
     }

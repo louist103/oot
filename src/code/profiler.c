@@ -2,6 +2,7 @@
 #include <z64.h>
 #include <ultra64.h>
 #include <variables.h>
+#include <functions.h>
 
 Profiler profilerCPU;
 // Profiler profilerGPU; // INCOMPLETE
@@ -85,8 +86,8 @@ void Profiler_ClearEntry(Profiler* profiler, ProfilerEntry* entry) {
 
 void Profiler_Draw(GfxPrint* gfxPrint) {
     ProfilerEntry* root = Profiler_CPU_GetRoot();
-    // GfxPrint_SetColor(gfxPrint, 0xFF, 0xFF, 0xFF, 0xFF);
-    // GfxPrint_SetPos(gfxPrint, 2, 3);
+     GfxPrint_SetColor(gfxPrint, 0xFF, 0xFF, 0xFF, 0xFF);
+     GfxPrint_SetPos(gfxPrint, 3, 4);
     // GfxPrint_Printf(gfxPrint, "PROFILER CPU HEAD: %s, Cnt: %i", root->name, root->childCount);
 
     // HACK: Fix the root node elapsed time
@@ -109,10 +110,9 @@ s32 Profiler_DrawChild(GfxPrint* gfxPrint, ProfilerEntry* entry, s32 index, s32 
         return 0;
 
     elapsedMS = (f32)(entry->endTime - entry->startTime) * MS_PER_CYCLE;
-
     if (entry->parent != NULL) {
         GfxPrint_SetColor(gfxPrint, 0xFF, 0xFF, 0xFF, 0xFF);
-        GfxPrint_SetPos(gfxPrint, 0 + (depth * 1), 1 + index + depth);
+        GfxPrint_SetPos(gfxPrint, 2 + (depth * 1), 2 + index + depth);
         GfxPrint_Printf(gfxPrint, "%s %.3f ms", entry->name, elapsedMS);
     }
 

@@ -66,10 +66,10 @@ void Main(void* arg) {
     }
     osSyncPrintf("debug_InitArena(%08x, %08x)\n", debugHeap, debugHeapSize);
     DebugArena_Init(debugHeap, debugHeapSize);
-    Profilers_Init();
     func_800636C0();
 
     R_ENABLE_ARENA_DBG = 0;
+    Profilers_Init();
 
     osCreateMesgQueue(&sSiIntMsgQ, sSiIntMsgBuf, 1);
     osSetEventMesg(5, &sSiIntMsgQ, 0);
