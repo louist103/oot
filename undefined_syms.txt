@@ -52,8 +52,8 @@ D_A4800018 = 0xA4800018; // SI_STATUS_REG
 
 // until ZAPD can handle non-aligned textures,
 // we can't use the built assets tied to some symbols
-gKm1Skel = 0x060000F0;
-gKw1Skel = 0x060000F0;
+//gKm1Skel = 0x060000F0;
+//gKw1Skel = 0x060000F0;
 object_ahg_Skel_0000F0 = 0x060000F0;
 object_bji_Skel_0000F0 = 0x060000F0;
 object_boj_Skel_0000F0 = 0x060000F0;
