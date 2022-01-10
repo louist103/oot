@@ -148,9 +148,6 @@ static s16 sAnimationObjects[] = {
     OBJECT_EC, OBJECT_EC, OBJECT_EC, OBJECT_EC, OBJECT_EC, OBJECT_EC, OBJECT_GM, OBJECT_MA2,
 };
 
-extern FlexSkeletonHeader object_bji_Skel_0000F0;
-extern FlexSkeletonHeader object_ahg_Skel_0000F0;
-
 void DemoEc_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     DemoEc* this = (DemoEc*)thisx;
 
