@@ -23,7 +23,9 @@
         <Texture Name="object_boj_Tex_00037C" OutName="tex_0000037C" Format="ci8" Width="8" Height="8" Offset="0x37C"/>
         <Texture Name="object_boj_Tex_0003BC" OutName="tex_000003BC" Format="ci8" Width="32" Height="16" Offset="0x3BC"/>
         <Texture Name="object_boj_Tex_0005BC" OutName="tex_000005BC" Format="ci8" Width="8" Height="8" Offset="0x5BC"/>
-        <Blob Name="object_boj_Blob_0005FC" Size="0x300" Offset="0x5FC"/>
+        <Texture Name="object_boj_Tex_0005FC" OutName="tex_000005FC" Format="ci8" Width="16" Height="16" Offset="0x5FC" TlutOffset="0xFC"/>
+        <Texture Name="object_boj_Tex_0006FC" OutName="tex_000006FC" Format="ci8" Width="16" Height="16" Offset="0x6FC" TlutOffset="0xFC"/>
+        <Texture Name="object_boj_Tex_0007FC" OutName="tex_000007FC" Format="ci8" Width="16" Height="16" Offset="0x7FC" TlutOffset="0xFC"/>
         <Texture Name="object_boj_Tex_0008FC" OutName="tex_000008FC" Format="ci8" Width="8" Height="8" Offset="0x8FC"/>
         <Texture Name="object_boj_Tex_00093C" OutName="tex_0000093C" Format="i8" Width="16" Height="16" Offset="0x93C"/>
         <Texture Name="object_boj_Tex_000A3C" OutName="tex_00000A3C" Format="ci8" Width="8" Height="8" Offset="0xA3C"/>

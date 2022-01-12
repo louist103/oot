@@ -487,7 +487,7 @@ void DemoEc_UpdateDancingKokiriGirl(DemoEc* this, GlobalContext* globalCtx) {
 }
 
 void DemoEc_DrawKokiriGirl(DemoEc* this, GlobalContext* globalCtx) {
-    static void* eyeTextures[] = { 0x06000F4C, 0x06001A0C, 0x06001E0C };
+    static void* eyeTextures[] = { gKw1EyeOpenTex, gKw1EyeHalfTex, gKw1EyeClosedTex };
     static u8 color1[] = { 70, 190, 60, 255 };
     static u8 color2[] = { 100, 30, 0, 255 };
     s32 eyeTexIndex = this->eyeTexIndex;

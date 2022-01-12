@@ -49,8 +49,6 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(targetArrowOffset, 500, ICHAIN_STOP),
 };
 
-extern FlexSkeletonHeader object_boj_Skel_0000F0;
-
 void EnGuest_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnGuest* this = (EnGuest*)thisx;
 
@@ -215,9 +213,9 @@ s32 EnGuest_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
 
 void EnGuest_Draw(Actor* thisx, GlobalContext* globalCtx) {
     static void* D_80A50BA4[] = {
-        0x060005FC,
-        0x060006FC,
-        0x060007FC,
+        object_boj_Tex_0005FC,
+        object_boj_Tex_0006FC,
+        object_boj_Tex_0007FC,
     };
     EnGuest* this = (EnGuest*)thisx;
     s32 pad;
@@ -226,8 +224,8 @@ void EnGuest_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     func_80093D18(globalCtx->state.gfxCtx);
 
-    gSPSegment(POLY_OPA_DISP++, 0x08, func_80A50708(globalCtx->state.gfxCtx, 0xFF, 0xFF, 0xFF, 0xFF));
-    gSPSegment(POLY_OPA_DISP++, 0x09, func_80A50708(globalCtx->state.gfxCtx, 0xA0, 0x3C, 0xDC, 0xFF));
+    gSPSegment(POLY_OPA_DISP++, 0x08, func_80A50708(globalCtx->state.gfxCtx, 255, 255, 255, 255));
+    gSPSegment(POLY_OPA_DISP++, 0x09, func_80A50708(globalCtx->state.gfxCtx, 160, 60, 220, 255));
     gSPSegment(POLY_OPA_DISP++, 0x0A, SEGMENTED_TO_VIRTUAL(D_80A50BA4[this->unk_30E]));
 
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,

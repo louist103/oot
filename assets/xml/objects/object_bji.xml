@@ -25,7 +25,11 @@
         <Texture Name="object_bji_Tex_00047C" OutName="tex_0000047C" Format="ci8" Width="8" Height="8" Offset="0x47C"/>
         <Texture Name="object_bji_Tex_0004BC" OutName="tex_000004BC" Format="ci8" Width="8" Height="8" Offset="0x4BC"/>
         <Texture Name="object_bji_Tex_0004FC" OutName="tex_000004FC" Format="i8" Width="16" Height="16" Offset="0x4FC"/>
-        <Blob Name="object_bji_Blob_0005FC" Size="0xC00" Offset="0x5FC"/>
+
+        <Texture Name="object_bji_Tex_0005FC" OutName="tex_000005FC" Format="ci8" Width="32" Height="32" Offset="0x5FC" TlutOffset="0xFC"/>
+        <Texture Name="object_bji_Tex_0009FC" OutName="tex_000009FC" Format="ci8" Width="32" Height="32" Offset="0x9FC" TlutOffset="0xFC"/>
+        <Texture Name="object_bji_Tex_000DFC" OutName="tex_00000DFC" Format="ci8" Width="32" Height="32" Offset="0xDFC" TlutOffset="0xFC"/>
+
         <Texture Name="object_bji_Tex_0011FC" OutName="tex_000011FC" Format="i8" Width="8" Height="8" Offset="0x11FC"/>
 
         <DList Name="object_bji_DL_002560" Offset="0x2560"/>

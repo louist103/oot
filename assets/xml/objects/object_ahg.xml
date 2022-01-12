@@ -23,6 +23,11 @@
         <Texture Name="object_ahg_Tex_0003FC" OutName="tex_000003FC" Format="ci8" Width="16" Height="16" Offset="0x3FC"/>
         <Texture Name="object_ahg_Tex_0004FC" OutName="tex_000004FC" Format="ci8" Width="8" Height="8" Offset="0x4FC"/>
         <Texture Name="object_ahg_Tex_00053C" OutName="tex_0000053C" Format="ci8" Width="8" Height="8" Offset="0x53C"/>
+
+        <Texture Name="object_ahg_Tex_0005FC" OutName="tex_000005FC" Format="ci8" Width="16" Height="16" Offset="0x57C"/>
+        <Texture Name="object_ahg_Tex_0006FC" OutName="tex_000006FC" Format="ci8" Width="16" Height="16" Offset="0x67C"/>
+        <Texture Name="object_ahg_Tex_0007FC" OutName="tex_000007FC" Format="ci8" Width="16" Height="16" Offset="0x77C"/>
+
         <Texture Name="object_ahg_Tex_00087C" OutName="tex_0000087C" Format="ci8" Width="16" Height="16" Offset="0x87C"/>
         <Texture Name="object_ahg_Tex_00097C" OutName="tex_0000097C" Format="i8" Width="8" Height="8" Offset="0x97C"/>
         <Texture Name="object_ahg_Tex_0009BC" OutName="tex_000009BC" Format="i8" Width="8" Height="8" Offset="0x9BC"/>
