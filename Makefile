@@ -9,7 +9,7 @@ NON_MATCHING ?= 0
 # If ORIG_COMPILER is 1, compile with QEMU_IRIX and the original compiler
 ORIG_COMPILER ?= 0
 # If COMPILER is "gcc", compile with GCC instead of IDO.
-COMPILER ?= ido
+COMPILER ?= clang
 
 CFLAGS ?=
 CPPFLAGS ?=
@@ -21,7 +21,7 @@ ifneq ($(COMPILER),ido)
   endif
 endif
 
-ifeq ($(COMPILER),gcc)
+ifeq ($(COMPILER),clang)
   CFLAGS += -DCOMPILER_GCC
   CPPFLAGS += -DCOMPILER_GCC
   NON_MATCHING := 1
@@ -64,16 +64,10 @@ ifneq ($(shell type $(MIPS_BINUTILS_PREFIX)ld >/dev/null 2>/dev/null; echo $$?),
 endif
 
 # Detect compiler and set variables appropriately.
-ifeq ($(COMPILER),gcc)
-  CC       := $(MIPS_BINUTILS_PREFIX)gcc
-else 
-ifeq ($(COMPILER),ido)
-  CC       := tools/ido_recomp/$(DETECTED_OS)/7.1/cc
-  CC_OLD   := tools/ido_recomp/$(DETECTED_OS)/5.3/cc
-else
-$(error Unsupported compiler. Please use either ido or gcc as the COMPILER variable.)
-endif
-endif
+
+CC       := tools/ido_recomp/$(DETECTED_OS)/7.1/cc
+CC_OLD   := tools/ido_recomp/$(DETECTED_OS)/5.3/cc
+
 
 # if ORIG_COMPILER is 1, check that either QEMU_IRIX is set or qemu-irix package installed
 ifeq ($(ORIG_COMPILER),1)
@@ -106,22 +100,13 @@ ELF2ROM    := tools/elf2rom
 ZAPD       := tools/ZAPD/ZAPD.out
 FADO       := tools/fado/fado.elf
 
-ifeq ($(COMPILER),gcc)
-  OPTFLAGS := -Os -ffast-math -fno-unsafe-math-optimizations
-else
-  OPTFLAGS := -O2
-endif
+OPTFLAGS := -O2
 
 ASFLAGS := -march=vr4300 -32 -Iinclude
 
-ifeq ($(COMPILER),gcc)
-  CFLAGS += -G 0 -nostdinc $(INC) -DAVOID_UB -march=vr4300 -mfix4300 -mabi=32 -mno-abicalls -mdivide-breaks -fno-zero-initialized-in-bss -fno-toplevel-reorder -ffreestanding -fno-common -fno-merge-constants -mno-explicit-relocs -mno-split-addresses $(CHECK_WARNINGS) -funsigned-char
-  MIPS_VERSION := -mips3
-else 
-  # we support Microsoft extensions such as anonymous structs, which the compiler does support but warns for their usage. Surpress the warnings with -woff.
-  CFLAGS += -G 0 -non_shared -Xfullwarn -Xcpluscomm $(INC) -Wab,-r4300_mul -woff 649,838,712 
-  MIPS_VERSION := -mips2
-endif
+# we support Microsoft extensions such as anonymous structs, which the compiler does support but warns for their usage. Surpress the warnings with -woff.
+CFLAGS += -G 0 -non_shared -Xfullwarn -Xcpluscomm $(INC) -Wab,-r4300_mul -woff 649,838,712 
+MIPS_VERSION := -mips2
 
 ifeq ($(COMPILER),ido)
   CC_CHECK  = gcc -fno-builtin -fsyntax-only -funsigned-char -std=gnu90 -D_LANGUAGE_C -DNON_MATCHING $(INC) $(CHECK_WARNINGS)
@@ -139,7 +124,7 @@ endif
 #### Files ####
 
 # ROM image
-ROM := zelda_ocarina_mq_dbg.z64
+ROM := oot_clang.z64
 ELF := $(ROM:.z64=.elf)
 # description of ROM segments
 SPEC := spec
@@ -180,7 +165,6 @@ TEXTURE_FILES_OUT := $(foreach f,$(TEXTURE_FILES_PNG:.png=.inc.c),build/$f) \
 # create build directories
 $(shell mkdir -p build/baserom build/assets/text $(foreach dir,$(SRC_DIRS) $(ASM_DIRS) $(ASSET_BIN_DIRS),build/$(dir)))
 
-ifeq ($(COMPILER),ido)
 build/src/code/fault.o: CFLAGS += -trapuv
 build/src/code/fault.o: OPTFLAGS := -O2 -g3
 build/src/code/fault_drawer.o: CFLAGS += -trapuv
@@ -214,14 +198,23 @@ build/src/libultra/rmon/%.o: CC := $(CC_OLD)
 build/src/code/jpegutils.o: CC := $(CC_OLD)
 build/src/code/jpegdecoder.o: CC := $(CC_OLD)
 
+build/src/gcc_fix/missing_gcc_functions.o: CC := mips-linux-gnu-gcc
+build/src/gcc_fix/missing_gcc_functions.o: CFLAGS := -G 0 -nostdinc $(INC) -DAVOID_UB -march=vr4300 -mfix4300 -mabi=32 -mno-abicalls -mdivide-breaks -fno-zero-initialized-in-bss -fno-toplevel-reorder -ffreestanding -fno-common -fno-merge-constants -mno-explicit-relocs -mno-split-addresses $(CHECK_WARNINGS) -funsigned-char
+build/src/gcc_fix/missing_gcc_functions.o: MIPS_VERSION := -mips3
+
 build/src/boot/%.o: CC := python3 tools/asm_processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
 build/src/code/%.o: CC := python3 tools/asm_processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
 build/src/overlays/%.o: CC := python3 tools/asm_processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
 
 build/assets/%.o: CC := python3 tools/asm_processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
-else
-build/src/libultra/libc/ll.o: OPTFLAGS := -Ofast
-build/src/%.o: CC := $(CC) -fexec-charset=euc-jp
+
+include gcc_safe_files.mk
+
+ifeq ($(COMPILER),clang)
+  $(SAFE_C_FILES): CC = clang -c
+  $(SAFE_C_FILES): CFLAGS := -G 0 -nostdinc  -DNON_MATCHING=1 -DNON_EQUIVALENT=1 -DAVOID_UB=1 -target mips-linux-gnu -mabi=32 -mcpu=mips2 -mno-abicalls  -funsigned-char -ffreestanding -fwrapv -fno-inline-functions -fno-inline-small-functions -fno-common -fno-zero-initialized-in-bss -fno-stack-protector -D_LANGUAGE_C $(INC) $(CHECK_WARNINGS) -c
+  $(SAFE_C_FILES): MIPS_VERSION := -mips2
+  $(SAFE_C_FILES): OPTFLAGS := -Os -g0
 endif
 
 #### Main Targets ###
