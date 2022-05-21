@@ -9,10 +9,10 @@
 
 #define FLAGS (ACTOR_FLAG_0 | ACTOR_FLAG_2 | ACTOR_FLAG_4)
 
-void EnDha_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnDha_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnDha_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnDha_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnDha_Init(Actor* thisx, PlayState* play);
+void EnDha_Destroy(Actor* thisx, PlayState* play);
+void EnDha_Update(Actor* thisx, PlayState* play);
+void EnDha_Draw(Actor* thisx, PlayState* play);
 
 /*
 const ActorInit En_Dha_InitVars = {
