@@ -28,18 +28,18 @@ glabel func_809ED0C4
 .L809ED118:
 /* 00898 809ED118 260401D0 */  addiu   $a0, $s0, 0x01D0           ## $a0 = 000001D0
 .L809ED11C:
-/* 0089C 809ED11C 0C01E1A7 */  jal     Math_SmoothScaleMaxMinS
+/* 0089C 809ED11C 0C01E1A7 */  jal     Math_SmoothStepToS
               
 /* 008A0 809ED120 AFA00010 */  sw      $zero, 0x0010($sp)         
 /* 008A4 809ED124 260401CE */  addiu   $a0, $s0, 0x01CE           ## $a0 = 000001CE
 /* 008A8 809ED128 2405C000 */  addiu   $a1, $zero, 0xC000         ## $a1 = FFFFC000
 /* 008AC 809ED12C 24060001 */  addiu   $a2, $zero, 0x0001         ## $a2 = 00000001
 /* 008B0 809ED130 240707D0 */  addiu   $a3, $zero, 0x07D0         ## $a3 = 000007D0
-/* 008B4 809ED134 0C01E1A7 */  jal     Math_SmoothScaleMaxMinS
+/* 008B4 809ED134 0C01E1A7 */  jal     Math_SmoothStepToS
               
 /* 008B8 809ED138 AFA00010 */  sw      $zero, 0x0010($sp)         
 /* 008BC 809ED13C A7A2004E */  sh      $v0, 0x004E($sp)           
-/* 008C0 809ED140 0C02927F */  jal     SkelAnime_FrameUpdateMatrix
+/* 008C0 809ED140 0C02927F */  jal     SkelAnime_Update
               
 /* 008C4 809ED144 2604014C */  addiu   $a0, $s0, 0x014C           ## $a0 = 0000014C
 /* 008C8 809ED148 87A9004E */  lh      $t1, 0x004E($sp)           

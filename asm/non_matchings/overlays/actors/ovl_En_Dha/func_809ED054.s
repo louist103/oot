@@ -12,7 +12,7 @@ glabel func_809ED054
 /* 007FC 809ED07C 240539AA */  addiu   $a1, $zero, 0x39AA         ## $a1 = 000039AA
 /* 00800 809ED080 10610006 */  beq     $v1, $at, .L809ED09C       
 /* 00804 809ED084 00000000 */  nop
-/* 00808 809ED088 0C00BE0A */  jal     Audio_PlayActorSound2
+/* 00808 809ED088 0C00BE0A */  jal     Actor_PlaySfx
               
 /* 0080C 809ED08C AFA40018 */  sw      $a0, 0x0018($sp)           
 /* 00810 809ED090 8FA40018 */  lw      $a0, 0x0018($sp)           

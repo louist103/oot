@@ -22,7 +22,7 @@ glabel func_809ED27C
 /* 00A4C 809ED2CC 24190008 */  addiu   $t9, $zero, 0x0008         ## $t9 = 00000008
 /* 00A50 809ED2D0 AFB90010 */  sw      $t9, 0x0010($sp)           
 /* 00A54 809ED2D4 240600FF */  addiu   $a2, $zero, 0x00FF         ## $a2 = 000000FF
-/* 00A58 809ED2D8 0C00D09B */  jal     func_8003426C              
+/* 00A58 809ED2D8 0C00D09B */  jal     Actor_SetColorFilter              
 /* 00A5C 809ED2DC 00003825 */  or      $a3, $zero, $zero          ## $a3 = 00000000
 /* 00A60 809ED2E0 0C00D58A */  jal     Actor_ApplyDamage
               
@@ -42,7 +42,7 @@ glabel func_809ED27C
 /* 00A94 809ED314 10000008 */  beq     $zero, $zero, .L809ED338   
 /* 00A98 809ED318 8E020118 */  lw      $v0, 0x0118($s0)           ## 00000118
 .L809ED31C:
-/* 00A9C 809ED31C 0C00BE0A */  jal     Audio_PlayActorSound2
+/* 00A9C 809ED31C 0C00BE0A */  jal     Actor_PlaySfx
               
 /* 00AA0 809ED320 240539A9 */  addiu   $a1, $zero, 0x39A9         ## $a1 = 000039A9
 /* 00AA4 809ED324 24090009 */  addiu   $t1, $zero, 0x0009         ## $t1 = 00000009
